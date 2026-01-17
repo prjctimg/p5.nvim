@@ -35,7 +35,7 @@
 📖 FUNCTION DOCUMENTATION
 
 
-🔧 clear()                                                *p5.clear()*
+🔧 clear()                                                *p5.clear()|io*
 ─────────────
 
 📝 Clears all data from the print stream.    ` function setup() { createCanvas(100, 100);  background(200);  // Style the text. textAlign(LEFT, CENTER); textFont('Courier New'); textSize(12);  // Display instructions. text('Double-click to save', 5, 50, 90);  describe('The text "Double-click to save" written in black on a gray background.'); }  // Save the file when the user double-clicks. function doubleClicked() { // Create a p5.PrintWriter object. let myWriter = createWriter('numbers.txt');  // Add some data to the print stream. myWriter.print('Hello p5*js!');  // Clear the print stream. myWriter.clear();  // Save the file and close the print stream. myWriter.close(); } `
@@ -57,7 +57,7 @@
 🔗 See also: |p5.io|
 
 
-🔧 close()                                                *p5.close()*
+🔧 close()                                                *p5.close()|io*
 ─────────────
 
 📝 Saves the file and closes the print stream.    ` function setup() { createCanvas(100, 100);  background(200);  // Style the text. textAlign(LEFT, CENTER); textFont('Courier New'); textSize(12);  // Display instructions. text('Double-click to save', 5, 50, 90);  describe('The text "Double-click to save" written in black on a gray background.'); }  // Save the file when the user double-clicks. function doubleClicked() { // Create a p5.PrintWriter object. let myWriter = createWriter('cat.txt');  // Add some data to the print stream. // ASCII art courtesy Wikipedia: // https://en.wikipedia.org/wiki/ASCII_art myWriter.print(' (\\_/) '); myWriter.print("(='.'=)"); myWriter.print('(")_(")');  // Save the file and close the print stream. myWriter.close(); } `
@@ -339,7 +339,7 @@
 🔗 See also: |p5.io|
 
 
-🔧 print()                                                *p5.print()*
+🔧 print()                                                *p5.print()|io*
 ─────────────
 
 📝 Writes data to the print stream with new lines added.  The parameter, `data`, is the data to write. `data` can be a number or string, as in `myWriter.print('hi')`, or an array of numbers and strings, as in `myWriter.print([1, 2, 3])`. A comma will be inserted between array array elements when they're added to the print stream.  or array of strings and numbers.   ` function setup() { createCanvas(100, 100);  background(200);  // Style the text. textAlign(LEFT, CENTER); textFont('Courier New'); textSize(12);  // Display instructions. text('Double-click to save', 5, 50, 90);  describe('The text "Double-click to save" written in black on a gray background.'); }  // Save the file when the user double-clicks. function doubleClicked() { // Create a p5.PrintWriter object. let myWriter = createWriter('numbers.txt');  // Add some data to the print stream. myWriter.print('1,2,3,'); myWriter.print(['4', '5', '6']);  // Save the file and close the print stream. myWriter.close(); } `
@@ -364,7 +364,7 @@
 🔗 See also: |p5.io|
 
 
-🔧 save()                                                *p5.save()*
+🔧 save()                                                *p5.save()|io*
 ────────────
 
 📝 Saves a given element(image, text, json, csv, wav, or html) to the client's computer. The first parameter can be a pointer to element we want to save. The element can be one of [p5.Element](#/p5.Element),an Array of Strings, an Array of JSON, a JSON object, a [p5.Table ](#/p5.Table), a [p5.Image](#/p5.Image), or a p5.SoundFile (requires p5.sound). The second parameter is a filename (including extension).The third parameter is for options specific to this type of object. This method will save a file that fits the given parameters. If it is called without specifying an element, by default it will save the whole canvas as an image file. You can optionally specify a filename as the first parameter in such a case. **Note that it is not recommended to call this method within draw, as it will open a new save dialog on every render.**  save canvas as an image with either png or jpg extension depending on the filename. If object is provided, will save depending on the object and filename (see examples above). parameter, then the second parameter indicates the filename, and should include an appropriate file extension (see examples above). filetype. For example, when saving JSON, `true` indicates that the output will be optimized for filesize, rather than readability.  ` // Saves the canvas as an image cnv = createCanvas(300, 300); save(cnv, 'myCanvas.jpg');  // Saves the canvas as an image by default save('myCanvas.jpg'); describe('An example for saving a canvas as an image.'); `  ` // Saves p5.Image as an image img = createImage(10, 10); save(img, 'myImage.png'); describe('An example for saving a p5.Image element as an image.'); `  ` // Saves p5.Renderer object as an image obj = createGraphics(100, 100); save(obj, 'myObject.png'); describe('An example for saving a p5.Renderer element.'); `  ` let myTable = new p5.Table(); // Saves table as html file save(myTable, 'myTable.html');  // Comma Separated Values save(myTable, 'myTable.csv');  // Tab Separated Values save(myTable, 'myTable.tsv');  describe(`An example showing how to save a table in formats of HTML, CSV and TSV.`); `  ` let myJSON = { a: 1, b: true };  // Saves pretty JSON save(myJSON, 'my.json');  // Optimizes JSON filesize save(myJSON, 'my.json', true);  describe('An example for saving JSON to a txt file with some extra arguments.'); `  ` // Saves array of strings to text file with line breaks after each item let arrayOfStrings = ['a', 'b']; save(arrayOfStrings, 'my.txt'); describe(`An example for saving an array of strings to text file with line breaks.`); `
@@ -477,7 +477,7 @@
 🔗 See also: |p5.io|
 
 
-🔧 write()                                                *p5.write()*
+🔧 write()                                                *p5.write()|io*
 ─────────────
 
 📝 Writes data to the print stream without adding new lines.  The parameter, `data`, is the data to write. `data` can be a number or string, as in `myWriter.write('hi')`, or an array of numbers and strings, as in `myWriter.write([1, 2, 3])`. A comma will be inserted between array array elements when they're added to the print stream.  or array of strings and numbers.   ` function setup() { createCanvas(100, 100);  background(200);  // Style the text. textAlign(LEFT, CENTER); textFont('Courier New'); textSize(12);  // Display instructions. text('Double-click to save', 5, 50, 90);  describe('The text "Double-click to save" written in black on a gray background.'); }  // Save the file when the user double-clicks. function doubleClicked() { // Create a p5.PrintWriter object. let myWriter = createWriter('numbers.txt');  // Add some data to the print stream. myWriter.write('1,2,3,'); myWriter.write(['4', '5', '6']);  // Save the file and close the print stream. myWriter.close(); } `

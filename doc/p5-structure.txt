@@ -84,7 +84,7 @@
 🔗 See also: |p5.structure|
 
 
-🔧 draw()                                                *p5.draw()*
+🔧 draw()                                                *p5.draw()|structure*
 ────────────
 
 📝 A function that's called repeatedly while the sketch runs.  Declaring the function `draw()` sets a code block to run repeatedly once the sketch starts. It’s used to create animations and respond to user inputs:  ```js function draw() { // Code to run repeatedly. } ```  This is often called the "draw loop" because p5.js calls the code in `draw()` in a loop behind the scenes. By default, `draw()` tries to run 60 times per second. The actual rate depends on many factors. The drawing rate, called the "frame rate", can be controlled by calling [frameRate()](#/p5/frameRate). The number of times `draw()` has run is stored in the system variable [frameCount()](#/p5/frameCount).  Code placed within `draw()` begins looping after [setup()](#/p5/setup) runs. `draw()` will run until the user closes the sketch. `draw()` can be stopped by calling the [noLoop()](#/p5/noLoop) function. `draw()` can be resumed by calling the [loop()](#/p5/loop) function.    ` function setup() { createCanvas(100, 100);  // Paint the background once. background(200);  describe( 'A white circle on a gray background. The circle follows the mouse as the user moves, leaving a trail.' ); }  function draw() { // Draw circles repeatedly. circle(mouseX, mouseY, 40); } `    ` function setup() { createCanvas(100, 100);  describe( 'A white circle on a gray background. The circle follows the mouse as the user moves.' ); }  function draw() { // Paint the background repeatedly. background(200);  // Draw circles repeatedly. circle(mouseX, mouseY, 40); } `    ` // Double-click the canvas to change the circle's color.  function setup() { createCanvas(100, 100);  describe( 'A white circle on a gray background. The circle follows the mouse as the user moves. The circle changes color to pink when the user double-clicks.' ); }  function draw() { // Paint the background repeatedly. background(200);  // Draw circles repeatedly. circle(mouseX, mouseY, 40); }  // Change the fill color when the user double-clicks. function doubleClicked() { fill('deeppink'); } `
@@ -388,7 +388,7 @@
 🔗 See also: |p5.structure|
 
 
-🔧 print()                                                *p5.print()*
+🔧 print()                                                *p5.print()|structure*
 ─────────────
 
 📝 Displays text in the web browser's console.  `print()` is helpful for printing values while debugging. Each call to `print()` creates a new line of text.  Note: Call `print('\n')` to print a blank line. Calling `print()` without an argument opens the browser's dialog for printing documents.   ` function setup() { // Prints "hello, world" to the console. print('hello, world'); } `    ` function setup() { let name = 'ada'; // Prints "hello, ada" to the console. print(`hello, ${name}`); } `
