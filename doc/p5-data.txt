@@ -1,0 +1,732 @@
+🎨 *p5.data*	Data structures and utility functions 📚
+==============================================================================
+🚀 p5.js Data Reference
+
+📅 Generated on: January 17, 2026
+🏷️  p5.js version: 2.2.0
+
+	*help-topic*p5.data
+
+📋 TABLE OF CONTENTS                                        *p5.data-contents*
+
+1. 🎯 Functions (26 total)
+
+   • |boolean()|
+   • |byte()|
+   • |char()|
+   • |clearStorage()|
+   • |day()|
+   • |float()|
+   • |getItem()|
+   • |hex()|
+   • |hour()|
+   • |int()|
+   • |millis()|
+   • |minute()|
+   • |month()|
+   • |nf()|
+   • |nfc()|
+   • |nfp()|
+   • |nfs()|
+   • |removeItem()|
+   • |second()|
+   • |shuffle()|
+   • |splitTokens()|
+   • |storeItem()|
+   • |str()|
+   • |unchar()|
+   • |unhex()|
+   • |year()|
+
+📖 FUNCTION DOCUMENTATION
+
+
+🔧 boolean()                                                *p5.boolean()*
+───────────────
+
+📝 Converts a `String` or `Number` to a `Boolean`.  `boolean()` converts values to `true` or `false`.  The parameter, `n`, is the value to convert. If `n` is a string, then `boolean('true')` will return `true` and every other string value will return `false`. If `n` is a number, then `boolean(0)` will return `false` and every other numeric value will return `true`. If an array is passed, as `in boolean([0, 1, 'true', 'blue'])`, then an array of Boolean values will be returned.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a number variable. let original = 0;  // Convert the number to a Boolean value. let converted = boolean(original);  // Style the circle based on the converted value. if (converted === true) { fill('blue'); } else { fill('red'); }  // Draw the circle. circle(50, 50, 40);  describe('A red circle on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a string variable. let original = 'true';  // Convert the string to a Boolean value. let converted = boolean(original);  // Style the circle based on the converted value. if (converted === true) { fill('blue'); } else { fill('red'); }  // Draw the circle. circle(50, 50, 40);  describe('A blue circle on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of values. let original = [0, 'hi', 123, 'true'];  // Convert the array to a Boolean values. let converted = boolean(original);  // Iterate over the array of converted Boolean values. for (let i = 0; i
+
+📋 Parameters:
+   • {String|Boolean|Number} n - value to convert.
+
+↩️  Returns:
+   Boolean - converted Boolean value.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a number variable.
+    let original = 0;
+    // Convert the number to a Boolean value.
+    let converted = boolean(original);
+    // Style the circle based on the converted value.
+    if (converted === true) {
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 byte()                                                *p5.byte()*
+────────────
+
+📝 Converts a `Boolean`, `String`, or `Number` to its byte value.  `byte()` converts a value to an integer (whole number) between -128 and 127. Values greater than 127 wrap around while negative values are unchanged. For example, 128 becomes -128 and -129 remains the same.  The parameter, `n`, is the value to convert. If `n` is a Boolean, as in `byte(false)` or `byte(true)`, the number 0 (`false`) or 1 (`true`) will be returned. If `n` is a string or number, as in `byte('256')` or `byte(256)`, then the byte value will be returned. Decimal values are ignored. If an array is passed, as in `byte([true, 123, '456'])`, then an array of byte values will be returned.  Note: If a value can't be converted to a number, as in `byte('giraffe')`, then the value `NaN` (not a number) will be returned.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a Boolean variable. let original = true;  // Convert the Boolean to its byte value. let converted = byte(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} : ${converted}`, 50, 50);  describe('The text "true : 1" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a string variable. let original = '256';  // Convert the string to its byte value. let converted = byte(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} : ${converted}`, 50, 50);  describe('The text "256 : 0" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a number variable. let original = 256;  // Convert the number to its byte value. let converted = byte(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} : ${converted}`, 50, 50);  describe('The text "256 : 0" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of values. let original = [false, '64', 383];  // Convert the array elements to their byte values. let converted = byte(original);  // Iterate over the converted array elements. for (let i = 0; i
+
+📋 Parameters:
+   • {String|Boolean|Number} n - value to convert.
+
+↩️  Returns:
+   Number - converted byte value.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a Boolean variable.
+    let original = true;
+    // Convert the Boolean to its byte value.
+    let converted = byte(original);
+    // Style the text.
+    textAlign(CENTER, CENTER);
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 char()                                                *p5.char()*
+────────────
+
+📝 Converts a `Number` or `String` to a single-character `String`.  `char()` converts numbers to their single-character string representations.  The parameter, `n`, is the value to convert. If a number is passed, as in `char(65)`, the corresponding single-character string is returned. If a string is passed, as in `char('65')`, the string is converted to an integer (whole number) and the corresponding single-character string is returned. If an array is passed, as in `char([65, 66, 67])`, an array of single-character strings is returned.  See MDN for more information about conversions.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a number variable. let original = 65;  // Convert the number to a char. let converted = char(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} : ${converted}`, 50, 50);  describe('The text "65 : A" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a string variable. let original = '65';  // Convert the string to a char. let converted = char(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} : ${converted}`, 50, 50);  describe('The text "65 : A" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of numbers. let original = ['65', 66, '67'];  // Convert the string to a char. let converted = char(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Iterate over elements of the converted array. for (let i = 0; i
+
+📋 Parameters:
+   • {String|Number} n - value to convert.
+
+↩️  Returns:
+   String - converted single-character string.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a number variable.
+    let original = 65;
+    // Convert the number to a char.
+    let converted = char(original);
+    // Style the text.
+    textAlign(CENTER, CENTER);
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 clearStorage()                                                *p5.clearStorage()*
+────────────────────
+
+📝 Removes all items in the web browser's local storage.  Web browsers can save small amounts of data using the built-in localStorage object. Data stored in `localStorage` can be retrieved at any point, even after refreshing a page or restarting the browser. Data are stored as key-value pairs. Calling `clearStorage()` removes all data from `localStorage`.  Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.    ` // Double-click to clear localStorage.  function setup() { createCanvas(100, 100);  // Store the player's name. storeItem('name', 'Feist');  // Store the player's score. storeItem('score', 1234);  describe( 'The text "Feist: 1234" written in black on a gray background. The text "null: null" appears when the user double-clicks.' ); }  function draw() { background(200);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Retrieve the name. let name = getItem('name');  // Retrieve the score. let score = getItem('score');  // Display the score. text(`${name}: ${score}`, 50, 50); }  // Clear localStorage when the user double-clicks. function doubleClicked() { clearStorage(); } `
+
+💡 Example:
+>
+  `
+  // Double-click to clear localStorage.
+  function setup() {
+    createCanvas(100, 100);
+    // Store the player's name.
+    storeItem('name', 'Feist');
+    // Store the player's score.
+    storeItem('score', 1234);
+    describe(
+      'The text "Feist: 1234" written in black on a gray background. The text "null: null" appears when the user double-clicks.'
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 day()                                                *p5.day()*
+───────────
+
+📝 Returns the current day as a number from 1–31.    ` function setup() { createCanvas(100, 100);  background(200);  // Get the current day. let d = day();  // Style the text. textAlign(LEFT, CENTER); textSize(12); textFont('Courier New');  // Display the day. text(`Current day: ${d}`, 20, 50, 60);  describe(`The text 'Current day: ${d}' written in black on a gray background.`); } `
+
+↩️  Returns:
+   Integer - current day between 1 and 31.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Get the current day.
+    let d = day();
+    // Style the text.
+    textAlign(LEFT, CENTER);
+    textSize(12);
+    textFont('Courier New');
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 float()                                                *p5.float()*
+─────────────
+
+📝 Converts a `String` to a floating point (decimal) `Number`.  `float()` converts strings that resemble numbers, such as `'12.34'`, into numbers.  The parameter, `str`, is the string value to convert. For example, calling `float('12.34')` returns the number `12.34`.  If an array of strings is passed, as in `float(['12.34', '56.78'])`, then an array of numbers will be returned.  Note: If a string can't be converted to a number, as in `float('giraffe')`, then the value `NaN` (not a number) will be returned.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a string variable. let original = '12.3';  // Convert the string to a number. let converted = float(original);  // Double the converted value. let twice = converted * 2;  // Style the text. textAlign(CENTER, CENTER); textSize(12);  // Display the original and converted values. text(`${original} × 2 = ${twice}`, 50, 50);  describe('The text "12.3 × 2 = 24.6" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of strings. let original = ['60', '30', '15'];  // Convert the strings to numbers. let diameters = float(original);  for (let d of diameters) { // Draw a circle. circle(50, 50, d); }  describe('Three white, concentric circles on a gray background.'); } `
+
+📋 Parameters:
+   • {String} str - string to convert.
+
+↩️  Returns:
+   Number - converted number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a string variable.
+    let original = '12.3';
+    // Convert the string to a number.
+    let converted = float(original);
+    // Double the converted value.
+    let twice = converted * 2;
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 getItem()                                                *p5.getItem()*
+───────────────
+
+📝 Returns a value in the web browser's local storage.  Web browsers can save small amounts of data using the built-in localStorage object. Data stored in `localStorage` can be retrieved at any point, even after refreshing a page or restarting the browser. Data are stored as key-value pairs.  [storeItem()](#/p5/storeItem) makes it easy to store values in `localStorage` and `getItem()` makes it easy to retrieve them.  The first parameter, `key`, is the name of the value to be stored as a string.  The second parameter, `value`, is the value to be retrieved a string. For example, calling `getItem('size')` retrieves the value with the key `size`.  Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.    ` function setup() { createCanvas(100, 100);  // Store the player's name. storeItem('name', 'Feist');  // Store the player's score. storeItem('score', 1234);  describe('The text "Feist: 1234" written in black on a gray background.'); }  function draw() { background(200);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Retrieve the name. let name = getItem('name');  // Retrieve the score. let score = getItem('score');  // Display the score. text(`${name}: ${score}`, 50, 50); } `    ` function setup() { createCanvas(100, 100);  // Create an object. let p = { x: 50, y: 50 };  // Store the object. storeItem('position', p);  describe('A white circle on a gray background.'); }  function draw() { background(200);  // Retrieve the object. let p = getItem('position');  // Draw the circle. circle(p.x, p.y, 30); } `    ` function setup() { createCanvas(100, 100);  // Create a p5.Color object. let c = color('deeppink');  // Store the object. storeItem('color', c);  describe('A pink circle on a gray background.'); }  function draw() { background(200);  // Retrieve the object. let c = getItem('color');  // Style the circle. fill(c);  // Draw the circle. circle(50, 50, 30); } `
+
+📋 Parameters:
+   • {String} key - name of the value.
+
+↩️  Returns:
+   String|Number|Boolean|Object|Array - stored item.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    // Store the player's name.
+    storeItem('name', 'Feist');
+    // Store the player's score.
+    storeItem('score', 1234);
+    describe('The text "Feist: 1234" written in black on a gray background.');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 hex()                                                *p5.hex()*
+───────────
+
+📝 Converts a `Number` to a `String` with its hexadecimal value.  `hex()` converts a number to a string with its hexadecimal number value. Hexadecimal (hex) numbers are base-16, which means there are 16 unique digits. Hex extends the numbers 0–9 with the letters A–F. For example, the number `11` (eleven) in base-10 is written as the letter `B` in hex.  The first parameter, `n`, is the number to convert. For example, `hex(20)`, returns the string `'00000014'`. If an array is passed, as in `hex([1, 10, 100])`, an array of hexadecimal strings is returned.  The second parameter, `digits`, is optional. If a number is passed, as in `hex(20, 2)`, it sets the number of hexadecimal digits to display. For example, calling `hex(20, 2)` returns the string `'14'`.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a number variable. let original = 20;  // Convert the number to a hex string. let converted = hex(original);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Display the original and converted values. text(`${original} = ${converted}`, 50, 50);  describe('The text "20 = 00000014" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a number variable. let original = 20;  // Convert the number to a hex string. // Only display two hex digits. let converted = hex(original, 2);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} = ${converted}`, 50, 50);  describe('The text "20 = 14" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of numbers. let original = [1, 10, 100];  // Convert the numbers to hex strings. // Only use two hex digits. let converted = hex(original, 2);  // Style the text. textAlign(RIGHT, CENTER); textSize(16);  // Iterate over the converted values. for (let i = 0; i
+
+📋 Parameters:
+   • {Number} n - value to convert.
+
+↩️  Returns:
+   String - converted hexadecimal value.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a number variable.
+    let original = 20;
+    // Convert the number to a hex string.
+    let converted = hex(original);
+    // Style the text.
+    textAlign(CENTER, CENTER);
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 hour()                                                *p5.hour()*
+────────────
+
+📝 Returns the current hour as a number from 0–23.    ` function setup() { createCanvas(100, 100);  background(200);  // Get the current hour. let h = hour();  // Style the text. textAlign(LEFT, CENTER); textSize(12); textFont('Courier New');  // Display the hour. text(`Current hour: ${h}`, 20, 50, 60);  describe(`The text 'Current hour: ${h}' written in black on a gray background.`); } `
+
+↩️  Returns:
+   Integer - current hour between 0 and 23.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Get the current hour.
+    let h = hour();
+    // Style the text.
+    textAlign(LEFT, CENTER);
+    textSize(12);
+    textFont('Courier New');
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 int()                                                *p5.int()*
+───────────
+
+📝 Converts a `Boolean`, `String`, or decimal `Number` to an integer.  `int()` converts values to integers. Integers are positive or negative numbers without decimals. If the original value has decimals, as in -34.56, they're removed to produce an integer such as -34.  The parameter, `n`, is the value to convert. If `n` is a Boolean, as in `int(false)` or `int(true)`, then the number 0 (`false`) or 1 (`true`) will be returned. If `n` is a string or number, as in `int('45')` or `int(67.89)`, then an integer will be returned. If an array is passed, as in `int([12.34, 56.78])`, then an array of integers will be returned.  Note: If a value can't be converted to a number, as in `int('giraffe')`, then the value `NaN` (not a number) will be returned.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a Boolean variable. let original = false;  // Convert the Boolean to an integer. let converted = int(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} : ${converted}`, 50, 50);  describe('The text "false : 0" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a string variable. let original = '12.34';  // Convert the string to an integer. let converted = int(original);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Display the original and converted values. text(`${original} ≈ ${converted}`, 50, 50);  describe('The text "12.34 ≈ 12" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a decimal number variable. let original = 12.34;  // Convert the decimal number to an integer. let converted = int(original);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Display the original and converted values. text(`${original} ≈ ${converted}`, 50, 50);  describe('The text "12.34 ≈ 12" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of strings. let original = ['60', '30', '15'];  // Convert the strings to integers. let diameters = int(original);  for (let d of diameters) { // Draw a circle. circle(50, 50, d); }  describe('Three white, concentric circles on a gray background.'); } `
+
+📋 Parameters:
+   • {String|Boolean|Number} n - value to convert.
+
+↩️  Returns:
+   Number - converted number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a Boolean variable.
+    let original = false;
+    // Convert the Boolean to an integer.
+    let converted = int(original);
+    // Style the text.
+    textAlign(CENTER, CENTER);
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 millis()                                                *p5.millis()*
+──────────────
+
+📝 Returns the number of milliseconds since a sketch started running.  `millis()` keeps track of how long a sketch has been running in milliseconds (thousandths of a second). This information is often helpful for timing events and animations.  If a sketch has a [setup()](#/p5/setup) function, then `millis()` begins tracking time before the code in [setup()](#/p5/setup) runs.  If a sketch includes asynchronous loading using `async`/`await`, then `millis()` begins tracking time as soon as the asynchronous code starts running.   ` function setup() { createCanvas(100, 100);  background(200);  // Get the number of milliseconds the sketch has run. let ms = millis();  // Style the text. textAlign(LEFT, CENTER); textSize(10); textFont('Courier New');  // Display how long it took setup() to be called. text(`Startup time: ${round(ms, 2)} ms`, 5, 50, 90);  describe( `The text 'Startup time: ${round(ms, 2)} ms' written in black on a gray background.` ); } `    ` function setup() { createCanvas(100, 100);  describe('The text "Running time: S sec" written in black on a gray background. The number S increases as the sketch runs.'); }  function draw() { background(200);  // Get the number of seconds the sketch has run. let s = millis() / 1000;  // Style the text. textAlign(LEFT, CENTER); textSize(10); textFont('Courier New');  // Display how long the sketch has run. text(`Running time: ${nf(s, 1, 1)} sec`, 5, 50, 90); } `    ` function setup() { createCanvas(100, 100);  describe('A white circle oscillates left and right on a gray background.'); }  function draw() { background(200);  // Get the number of seconds the sketch has run. let s = millis() / 1000;  // Calculate an x-coordinate. let x = 30 * sin(s) + 50;  // Draw the circle. circle(x, 50, 30); } `    ` async function setup() { // Load the GeoJSON. await loadJSON('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson'); createCanvas(100, 100);  background(200);  // Get the number of milliseconds the sketch has run. let ms = millis();  // Style the text. textAlign(LEFT, CENTER); textFont('Courier New'); textSize(11);  // Display how long it took to load the data. text(`It took ${round(ms, 2)} ms to load the data`, 5, 50, 100);  describe( `The text "It took ${round(ms, 2)} ms to load the data" written in black on a gray background.` ); } `
+
+↩️  Returns:
+   Number - number of milliseconds since starting the sketch.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Get the number of milliseconds the sketch has run.
+    let ms = millis();
+    // Style the text.
+    textAlign(LEFT, CENTER);
+    textSize(10);
+    textFont('Courier New');
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 minute()                                                *p5.minute()*
+──────────────
+
+📝 Returns the current minute as a number from 0–59.    ` function setup() { createCanvas(100, 100);  background(200);  // Get the current minute. let m = minute();  // Style the text. textAlign(LEFT, CENTER); textSize(12); textFont('Courier New');  // Display the minute. text(`Current minute: ${m}`, 10, 50, 80);  describe(`The text 'Current minute: ${m}' written in black on a gray background.`); } `
+
+↩️  Returns:
+   Integer - current minute between 0 and 59.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Get the current minute.
+    let m = minute();
+    // Style the text.
+    textAlign(LEFT, CENTER);
+    textSize(12);
+    textFont('Courier New');
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 month()                                                *p5.month()*
+─────────────
+
+📝 Returns the current month as a number from 1–12.    ` function setup() { createCanvas(100, 100);  background(200);  // Get the current month. let m = month();  // Style the text. textAlign(LEFT, CENTER); textSize(12); textFont('Courier New');  // Display the month. text(`Current month: ${m}`, 10, 50, 80);  describe(`The text 'Current month: ${m}' written in black on a gray background.`); } `
+
+↩️  Returns:
+   Integer - current month between 1 and 12.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Get the current month.
+    let m = month();
+    // Style the text.
+    textAlign(LEFT, CENTER);
+    textSize(12);
+    textFont('Courier New');
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 nf()                                                *p5.nf()*
+──────────
+
+📝 Converts a `Number` into a `String` with a given number of digits.  `nf()` converts numbers such as `123.45` into strings formatted with a set number of digits, as in `'123.4500'`.  The first parameter, `num`, is the number to convert to a string. For example, calling `nf(123.45)` returns the string `'123.45'`. If an array of numbers is passed, as in `nf([123.45, 67.89])`, an array of formatted strings will be returned.  The second parameter, `left`, is optional. If a number is passed, as in `nf(123.45, 4)`, it sets the minimum number of digits to include to the left of the decimal place. If `left` is larger than the number of digits in `num`, then unused digits will be set to 0. For example, calling `nf(123.45, 4)` returns the string `'0123.45'`.  The third parameter, `right`, is also optional. If a number is passed, as in `nf(123.45, 4, 1)`, it sets the minimum number of digits to include to the right of the decimal place. If `right` is smaller than the number of decimal places in `num`, then `num` will be rounded to the given number of decimal places. For example, calling `nf(123.45, 4, 1)` returns the string `'0123.5'`. If right is larger than the number of decimal places in `num`, then unused decimal places will be set to 0. For example, calling `nf(123.45, 4, 3)` returns the string `'0123.450'`.  When the number is negative, for example, calling `nf(-123.45, 5, 2)` returns the string `'-00123.45'`.  the decimal point. of the decimal point.   ` function setup() { createCanvas(100, 100);  background(200);  // Style the text. textAlign(LEFT, CENTER); textSize(16);  // Create a number variable. let number = 123.45;  // Display the number as a string. let formatted = nf(number); text(formatted, 20, 20);  let negative = nf(-number, 4, 2); text(negative, 20, 40);  // Display the number with four digits // to the left of the decimal. let left = nf(number, 4); text(left, 20, 60);  // Display the number with four digits // to the left of the decimal and one // to the right. let right = nf(number, 4, 1); text(right, 20, 80);  describe( 'The numbers "123.45", "-0123.45", "0123.45", and "0123.5" written on four separate lines. The text is in black on a gray background.' ); } `
+
+📋 Parameters:
+   • {Number|String} num - number to format.
+
+↩️  Returns:
+   String - formatted string.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Style the text.
+    textAlign(LEFT, CENTER);
+    textSize(16);
+    // Create a number variable.
+    let number = 123.45;
+    // Display the number as a string.
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 nfc()                                                *p5.nfc()*
+───────────
+
+📝 Converts a `Number` into a `String` with commas to mark units of 1,000.  `nfc()` converts numbers such as 12345 into strings formatted with commas to mark the thousands place, as in `'12,345'`.  The first parameter, `num`, is the number to convert to a string. For example, calling `nfc(12345)` returns the string `'12,345'`.  The second parameter, `right`, is optional. If a number is passed, as in `nfc(12345, 1)`, it sets the minimum number of digits to include to the right of the decimal place. If `right` is smaller than the number of decimal places in `num`, then `num` will be rounded to the given number of decimal places. For example, calling `nfc(12345.67, 1)` returns the string `'12,345.7'`. If `right` is larger than the number of decimal places in `num`, then unused decimal places will be set to 0. For example, calling `nfc(12345.67, 3)` returns the string `'12,345.670'`.  of the decimal point.   ` function setup() { createCanvas(100, 100);  background(200);  // Style the text. textAlign(LEFT, CENTER); textSize(16);  // Create a number variable. let number = 12345;  // Display the number as a string. let commas = nfc(number); text(commas, 15, 33);  // Display the number with four digits // to the left of the decimal. let decimals = nfc(number, 2); text(decimals, 15, 67);  describe( 'The numbers "12,345" and "12,345.00" written on separate lines. The text is in black on a gray background.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of numbers. let numbers = [12345, 6789];  // Convert the numbers to formatted strings. let formatted = nfc(numbers);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Iterate over the array. for (let i = 0; i
+
+↩️  Returns:
+   String - formatted string.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Style the text.
+    textAlign(LEFT, CENTER);
+    textSize(16);
+    // Create a number variable.
+    let number = 12345;
+    // Display the number as a string.
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 nfp()                                                *p5.nfp()*
+───────────
+
+📝 Converts a `Number` into a `String` with a plus or minus sign.  `nfp()` converts numbers such as 123 into strings formatted with a `+` or `-` symbol to mark whether they're positive or negative, as in `'+123'`.  The first parameter, `num`, is the number to convert to a string. For example, calling `nfp(123.45)` returns the string `'+123.45'`. If an array of numbers is passed, as in `nfp([123.45, -6.78])`, an array of formatted strings will be returned.  The second parameter, `left`, is optional. If a number is passed, as in `nfp(123.45, 4)`, it sets the minimum number of digits to include to the left of the decimal place. If `left` is larger than the number of digits in `num`, then unused digits will be set to 0. For example, calling `nfp(123.45, 4)` returns the string `'+0123.45'`.  The third parameter, `right`, is also optional. If a number is passed, as in `nfp(123.45, 4, 1)`, it sets the minimum number of digits to include to the right of the decimal place. If `right` is smaller than the number of decimal places in `num`, then `num` will be rounded to the given number of decimal places.  For example, calling `nfp(123.45, 4, 1)` returns the string `'+0123.5'`. If `right` is larger than the number of decimal places in `num`, then unused decimal places will be set to 0.  For example, calling `nfp(123.45, 4, 3)` returns the string `'+0123.450'`.  decimal point. decimal point.   ` function setup() { createCanvas(100, 100);  background(200);  // Create number variables. let positive = 123; let negative = -123;  // Convert the positive number to a formatted string. let p = nfp(positive);  // Convert the negative number to a formatted string // with four digits to the left of the decimal // and two digits to the right of the decimal. let n = nfp(negative, 4, 2);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Display the original and formatted numbers. text(`${positive} : ${p}`, 50, 33); text(`${negative} : ${n}`, 50, 67);  describe( 'The text "123 : +123" and "-123 : -123.00" written on separate lines. The text is in black on a gray background.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create number variables. let numbers = [123, -4.56];  // Convert the numbers to formatted strings // with four digits to the left of the decimal // and one digit to the right of the decimal. let formatted = nfp(numbers, 4, 1);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Iterate over the array. for (let i = 0; i
+
+📋 Parameters:
+   • {Number} num - number to format.
+
+↩️  Returns:
+   String - formatted string.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create number variables.
+    let positive = 123;
+    let negative = -123;
+    // Convert the positive number to a formatted string.
+    let p = nfp(positive);
+    // Convert the negative number to a formatted string
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 nfs()                                                *p5.nfs()*
+───────────
+
+📝 Converts a positive `Number` into a `String` with an extra space in front.  `nfs()` converts positive numbers such as 123.45 into strings formatted with an extra space in front, as in ' 123.45'. Doing so can be helpful for aligning positive and negative numbers.  The first parameter, `num`, is the number to convert to a string. For example, calling `nfs(123.45)` returns the string `' 123.45'`.  The second parameter, `left`, is optional. If a number is passed, as in `nfs(123.45, 4)`, it sets the minimum number of digits to include to the left of the decimal place. If `left` is larger than the number of digits in `num`, then unused digits will be set to 0. For example, calling `nfs(123.45, 4)` returns the string `' 0123.45'`.  The third parameter, `right`, is also optional. If a number is passed, as in `nfs(123.45, 4, 1)`, it sets the minimum number of digits to include to the right of the decimal place. If `right` is smaller than the number of decimal places in `num`, then `num` will be rounded to the given number of decimal places.  For example, calling `nfs(123.45, 4, 1)` returns the string `' 0123.5'`. If `right` is larger than the number of decimal places in `num`, then unused decimal places will be set to 0.  For example, calling `nfs(123.45, 4, 3)` returns the string `' 0123.450'`.  decimal point. decimal point.   ` function setup() { createCanvas(100, 100);  background(200);  // Create number variables. let positive = 123; let negative = -123;  // Convert the positive number to a formatted string. let formatted = nfs(positive);  // Style the text. textAlign(CENTER, CENTER); textFont('Courier New'); textSize(16);  // Display the negative number and the formatted positive number. text(negative, 50, 33); text(formatted, 50, 67);  describe( 'The numbers -123 and 123 written on separate lines. The numbers align vertically. The text is in black on a gray background.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a number variable. let number = 123.45;  // Convert the positive number to a formatted string. // Use four digits to the left of the decimal and // one digit to the right. let formatted = nfs(number, 4, 1);  // Style the text. textAlign(CENTER, CENTER); textFont('Courier New'); textSize(16);  // Display a negative version of the number and // the formatted positive version. text('-0123.5', 50, 33); text(formatted, 50, 67);  describe( 'The numbers "-0123.5" and "0123.5" written on separate lines. The numbers align vertically. The text is in black on a gray background.' ); } `
+
+📋 Parameters:
+   • {Number} num - number to format.
+
+↩️  Returns:
+   String - formatted string.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create number variables.
+    let positive = 123;
+    let negative = -123;
+    // Convert the positive number to a formatted string.
+    let formatted = nfs(positive);
+    // Style the text.
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 removeItem()                                                *p5.removeItem()*
+──────────────────
+
+📝 Removes an item from the web browser's local storage.  Web browsers can save small amounts of data using the built-in localStorage object. Data stored in `localStorage` can be retrieved at any point, even after refreshing a page or restarting the browser. Data are stored as key-value pairs.  [storeItem()](#/p5/storeItem) makes it easy to store values in `localStorage` and `removeItem()` makes it easy to delete them.  The parameter, `key`, is the name of the value to remove as a string. For example, calling `removeItem('size')` removes the item with the key `size`.  Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.    ` // Double-click to remove an item from localStorage.  function setup() { createCanvas(100, 100);  // Store the player's name. storeItem('name', 'Feist');  // Store the player's score. storeItem('score', 1234);  describe( 'The text "Feist: 1234" written in black on a gray background. The text "Feist: null" appears when the user double-clicks.' ); }  function draw() { background(200);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Retrieve the name. let name = getItem('name');  // Retrieve the score. let score = getItem('score');  // Display the score. text(`${name}: ${score}`, 50, 50); }  // Remove the word from localStorage when the user double-clicks. function doubleClicked() { removeItem('score'); } `
+
+📋 Parameters:
+   • {String} key - name of the value to remove.
+
+💡 Example:
+>
+  `
+  // Double-click to remove an item from localStorage.
+  function setup() {
+    createCanvas(100, 100);
+    // Store the player's name.
+    storeItem('name', 'Feist');
+    // Store the player's score.
+    storeItem('score', 1234);
+    describe(
+      'The text "Feist: 1234" written in black on a gray background. The text "Feist: null" appears when the user double-clicks.'
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 second()                                                *p5.second()*
+──────────────
+
+📝 Returns the current second as a number from 0–59.    ` function setup() { createCanvas(100, 100);  background(200);  // Get the current second. let s = second();  // Style the text. textAlign(LEFT, CENTER); textSize(12); textFont('Courier New');  // Display the second. text(`Current second: ${s}`, 10, 50, 80);  describe(`The text 'Current second: ${s}' written in black on a gray background.`); } `
+
+↩️  Returns:
+   Integer - current second between 0 and 59.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Get the current second.
+    let s = second();
+    // Style the text.
+    textAlign(LEFT, CENTER);
+    textSize(12);
+    textFont('Courier New');
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 shuffle()                                                *p5.shuffle()*
+───────────────
+
+📝 Shuffles the elements of an array.  The first parameter, `array`, is the array to be shuffled. For example, calling `shuffle(myArray)` will shuffle the elements of `myArray`. By default, the original array won’t be modified. Instead, a copy will be created, shuffled, and returned.  The second parameter, `modify`, is optional. If `true` is passed, as in `shuffle(myArray, true)`, then the array will be shuffled in place without making a copy.    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of colors. let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];  // Create a shuffled copy of the array. let shuffledColors = shuffle(colors);  // Draw  a row of circles using the original array. for (let i = 0; i    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of colors. let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];  // Shuffle the array. shuffle(colors, true);  // Draw  a row of circles using the original array. for (let i = 0; i
+
+↩️  Returns:
+   Array - shuffled array.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create an array of colors.
+    let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+    // Create a shuffled copy of the array.
+    let shuffledColors = shuffle(colors);
+    // Draw  a row of circles using the original array.
+    for (let i = 0; i 
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 splitTokens()                                                *p5.splitTokens()*
+───────────────────
+
+📝 Splits a `String` into pieces and returns an array containing the pieces.  `splitTokens()` is an enhanced version of [split()](#/p5/split). It can split a string when any characters from a list are detected.  The first parameter, `value`, is the string to split.  The second parameter, `delim`, is optional. It sets the character(s) that should be used to split the string. `delim` can be a single string, as in `splitTokens('rock...paper...scissors...shoot', '...')`, or an array of strings, as in `splitTokens('rock;paper,scissors...shoot, [';', ',', '...'])`. By default, if no `delim` characters are specified, then any whitespace character is used to split. Whitespace characters include tab (`\t`), line feed (`\n`), carriage return (`\r`), form feed (`\f`), and space.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a string variable. let string = 'rock paper scissors shoot';  // Split the string at each space. let words = splitTokens(string);  // Print the array to the console. print(words);  // Style the text. textAlign(CENTER, CENTER); textFont('Courier New'); textSize(12);  // Iterate over the words array. for (let i = 0; i    ` function setup() { createCanvas(100, 100);  background(200);  // Create a string variable. let string = 'rock...paper...scissors...shoot';  // Split the string at each ... let words = splitTokens(string, '...');  // Print the array to the console. print(words);  // Style the text. textAlign(CENTER, CENTER); textFont('Courier New'); textSize(12);  // Iterate over the words array. for (let i = 0; i    ` function setup() { createCanvas(100, 100);  background(200);  // Create a string variable. let string = 'rock;paper,scissors...shoot';  // Split the string at each semicolon, comma, or ... let words = splitTokens(string, [';', ',', '...']);  // Print the array to the console. print(words);  // Style the text. textAlign(CENTER, CENTER); textFont('Courier New'); textSize(12);  // Iterate over the words array. for (let i = 0; i
+
+↩️  Returns:
+   String[] - separated strings.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a string variable.
+    let string = 'rock paper scissors shoot';
+    // Split the string at each space.
+    let words = splitTokens(string);
+    // Print the array to the console.
+    print(words);
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 storeItem()                                                *p5.storeItem()*
+─────────────────
+
+📝 Stores a value in the web browser's local storage.  Web browsers can save small amounts of data using the built-in localStorage object. Data stored in `localStorage` can be retrieved at any point, even after refreshing a page or restarting the browser. Data are stored as key-value pairs.  `storeItem()` makes it easy to store values in `localStorage` and [getItem()](#/p5/getItem) makes it easy to retrieve them.  The first parameter, `key`, is the name of the value to be stored as a string.  The second parameter, `value`, is the value to be stored. Values can have any type.  Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.    ` function setup() { createCanvas(100, 100);  // Store the player's name. storeItem('name', 'Feist');  // Store the player's score. storeItem('score', 1234);  describe('The text "Feist: 1234" written in black on a gray background.'); }  function draw() { background(200);  // Style the text. textAlign(CENTER, CENTER); textSize(14);  // Retrieve the name. let name = getItem('name');  // Retrieve the score. let score = getItem('score');  // Display the score. text(`${name}: ${score}`, 50, 50); } `    ` function setup() { createCanvas(100, 100);  // Create an object. let p = { x: 50, y: 50 };  // Store the object. storeItem('position', p);  describe('A white circle on a gray background.'); }  function draw() { background(200);  // Retrieve the object. let p = getItem('position');  // Draw the circle. circle(p.x, p.y, 30); } `   function setup() { createCanvas(100, 100);  // Create a p5.Color object. let c = color('deeppink');  // Store the object. storeItem('color', c);  describe('A pink circle on a gray background.'); }  function draw() { background(200);  // Retrieve the object. let c = getItem('color');  // Style the circle. fill(c);  // Draw the circle. circle(50, 50, 30); } `
+
+📋 Parameters:
+   • {String} key - name of the value.
+   • {String|Number|Boolean|Object|Array} value - value to be stored.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    // Store the player's name.
+    storeItem('name', 'Feist');
+    // Store the player's score.
+    storeItem('score', 1234);
+    describe('The text "Feist: 1234" written in black on a gray background.');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 str()                                                *p5.str()*
+───────────
+
+📝 Converts a `Boolean` or `Number` to `String`.  `str()` converts values to strings. See the [String](#/p5/String) reference page for guidance on using template literals instead.  The parameter, `n`, is the value to convert. If `n` is a Boolean, as in `str(false)` or `str(true)`, then the value will be returned as a string, as in `'false'` or `'true'`. If `n` is a number, as in `str(123)`, then its value will be returned as a string, as in `'123'`. If an array is passed, as in `str([12.34, 56.78])`, then an array of strings will be returned.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a Boolean variable. let original = false;  // Convert the Boolean to a string. let converted = str(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} : ${converted}`, 50, 50);  describe('The text "false : false" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a number variable. let original = 123;  // Convert the number to a string. let converted = str(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} = ${converted}`, 50, 50);  describe('The text "123 = 123" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of numbers. let original = [12, 34, 56];  // Convert the numbers to strings. let strings = str(original);  // Create an empty string variable. let final = '';  // Concatenate all the strings. for (let s of strings) { final += s; }  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the concatenated string. text(final, 50, 50);  describe('The text "123456" written in black on a gray background.'); } `
+
+📋 Parameters:
+   • {String|Boolean|Number} n - value to convert.
+
+↩️  Returns:
+   String - converted string.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a Boolean variable.
+    let original = false;
+    // Convert the Boolean to a string.
+    let converted = str(original);
+    // Style the text.
+    textAlign(CENTER, CENTER);
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 unchar()                                                *p5.unchar()*
+──────────────
+
+📝 Converts a single-character `String` to a `Number`.  `unchar()` converts single-character strings to their corresponding integer (whole number).  The parameter, `n`, is the character to convert. For example, `unchar('A')`, returns the number 65. If an array is passed, as in `unchar(['A', 'B', 'C'])`, an array of integers is returned.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a string variable. let original = 'A';  // Convert the string to a number. let converted = unchar(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} : ${converted}`, 50, 50);  describe('The text "A : 65" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of characters. let original = ['A', 'B', 'C'];  // Convert the string to a number. let converted = unchar(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Iterate over elements of the converted array. for (let i = 0; i
+
+📋 Parameters:
+   • {String} n - value to convert.
+
+↩️  Returns:
+   Number - converted number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a string variable.
+    let original = 'A';
+    // Convert the string to a number.
+    let converted = unchar(original);
+    // Style the text.
+    textAlign(CENTER, CENTER);
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 unhex()                                                *p5.unhex()*
+─────────────
+
+📝 Converts a `String` with a hexadecimal value to a  `Number`.  `unhex()` converts a string with its hexadecimal number value to a number. Hexadecimal (hex) numbers are base-16, which means there are 16 unique digits. Hex extends the numbers 0–9 with the letters A–F. For example, the number `11` (eleven) in base-10 is written as the letter `B` in hex.  The first parameter, `n`, is the hex string to convert. For example, `unhex('FF')`, returns the number 255. If an array is passed, as in `unhex(['00', '80', 'FF'])`, an array of numbers is returned.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a a hex string variable let original = 'FF';  // Convert the hex string to a number. let converted = unhex(original);  // Style the text. textAlign(CENTER, CENTER); textSize(16);  // Display the original and converted values. text(`${original} = ${converted}`, 50, 50);  describe('The text "FF = 255" written in black on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of numbers. let original = ['00', '80', 'FF'];  // Convert the numbers to hex strings. // Only use two hex digits. let converted = unhex(original, 2);  // Style the text. textAlign(RIGHT, CENTER); textSize(16);  // Iterate over the converted values. for (let i = 0; i
+
+📋 Parameters:
+   • {String} n - value to convert.
+
+↩️  Returns:
+   Number - converted number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a a hex string variable
+    let original = 'FF';
+    // Convert the hex string to a number.
+    let converted = unhex(original);
+    // Style the text.
+    textAlign(CENTER, CENTER);
+>
+
+🔗 See also: |p5.data|
+
+
+🔧 year()                                                *p5.year()*
+────────────
+
+📝 Returns the current year as a number such as 1999.    ` function setup() { createCanvas(100, 100);  background(200);  // Get the current year. let y = year();  // Style the text. textAlign(LEFT, CENTER); textSize(12); textFont('Courier New');  // Display the year. text(`Current year: ${y}`, 10, 50, 80);  describe(`The text 'Current year: ${y}' written in black on a gray background.`); } `
+
+↩️  Returns:
+   Integer - current year.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Get the current year.
+    let y = year();
+    // Style the text.
+    textAlign(LEFT, CENTER);
+    textSize(12);
+    textFont('Courier New');
+>
+
+🔗 See also: |p5.data|
+
+==============================================================================
+🤖 Generated by p5.man - neovim help generator for p5.js
+🌐 https://github.com/prjctimg/p5.man

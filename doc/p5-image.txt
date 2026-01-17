@@ -1,0 +1,411 @@
+🎨 *p5.image*	Image loading, display, and pixel manipulation 📚
+==============================================================================
+🚀 p5.js Image Reference
+
+📅 Generated on: January 17, 2026
+🏷️  p5.js version: 2.2.0
+
+	*help-topic*p5.image
+
+📋 TABLE OF CONTENTS                                        *p5.image-contents*
+
+1. 🎯 Functions (17 total)
+
+   • |blend()|
+   • |copy()|
+   • |createImage()|
+   • |filter()|
+   • |get()|
+   • |getFilterGraphicsLayer()|
+   • |image()|
+   • |imageMode()|
+   • |loadImage()|
+   • |loadPixels()|
+   • |noTint()|
+   • |saveCanvas()|
+   • |saveFrames()|
+   • |saveGif()|
+   • |set()|
+   • |tint()|
+   • |updatePixels()|
+
+📖 FUNCTION DOCUMENTATION
+
+
+🔧 blend()                                                *p5.blend()*
+─────────────
+
+📝 Copies a region of pixels from one image to another.  The first parameter, `srcImage`, is the [p5.Image](#/p5.Image) object to blend.  The next four parameters, `sx`, `sy`, `sw`, and `sh` determine the region to blend from the source image. `(sx, sy)` is the top-left corner of the region. `sw` and `sh` are the regions width and height.  The next four parameters, `dx`, `dy`, `dw`, and `dh` determine the region of the canvas to blend into. `(dx, dy)` is the top-left corner of the region. `dw` and `dh` are the regions width and height.  The tenth parameter, `blendMode`, sets the effect used to blend the images' colors. The options are `BLEND`, `DARKEST`, `LIGHTEST`, `DIFFERENCE`, `MULTIPLY`, `EXCLUSION`, `SCREEN`, `REPLACE`, `OVERLAY`, `HARD_LIGHT`, `SOFT_LIGHT`, `DODGE`, `BURN`, `ADD`, or `NORMAL`  BLEND, DARKEST, LIGHTEST, DIFFERENCE, MULTIPLY, EXCLUSION, SCREEN, REPLACE, OVERLAY, HARD_LIGHT, SOFT_LIGHT, DODGE, BURN, ADD or NORMAL.   ` let img0; let img1;  async function setup() { // Load the images. img0 = await loadImage('assets/rockies.jpg'); img1 = await loadImage('assets/bricks_third.jpg');  createCanvas(100, 100);  // Use the mountains as the background. background(img0);  // Display the bricks. image(img1, 0, 0);  // Display the bricks faded into the landscape. blend(img1, 0, 0, 33, 100, 67, 0, 33, 100, LIGHTEST);  describe('A wall of bricks in front of a mountain landscape. The same wall of bricks appears faded on the right of the image.'); } `    ` let img0; let img1;  async function setup() { // Load the images. img0 = await loadImage('assets/rockies.jpg'); img1 = await loadImage('assets/bricks_third.jpg');  createCanvas(100, 100);  // Use the mountains as the background. background(img0);  // Display the bricks. image(img1, 0, 0);  // Display the bricks partially transparent. blend(img1, 0, 0, 33, 100, 67, 0, 33, 100, DARKEST);  describe('A wall of bricks in front of a mountain landscape. The same wall of bricks appears transparent on the right of the image.'); } `    ` let img0; let img1;  async function setup() { // Load the images. img0 = await loadImage('assets/rockies.jpg'); img1 = await loadImage('assets/bricks_third.jpg');  createCanvas(100, 100);  // Use the mountains as the background. background(img0);  // Display the bricks. image(img1, 0, 0);  // Display the bricks washed out into the landscape. blend(img1, 0, 0, 33, 100, 67, 0, 33, 100, ADD);  describe('A wall of bricks in front of a mountain landscape. The same wall of bricks appears washed out on the right of the image.'); } `
+
+💡 Example:
+>
+  `
+  let img0;
+  let img1;
+  async function setup() {
+    // Load the images.
+    img0 = await loadImage('assets/rockies.jpg');
+    img1 = await loadImage('assets/bricks_third.jpg');
+    createCanvas(100, 100);
+    // Use the mountains as the background.
+    background(img0);
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 copy()                                                *p5.copy()*
+────────────
+
+📝 Copies pixels from a source image to a region of the canvas.  The first parameter, `srcImage`, is the [p5.Image](#/p5.Image) object to blend. The source image can be the canvas itself or a [p5.Image](#/p5.Image) object. `copy()` will scale pixels from the source region if it isn't the same size as the destination region.  The next four parameters, `sx`, `sy`, `sw`, and `sh` determine the region to copy from the source image. `(sx, sy)` is the top-left corner of the region. `sw` and `sh` are the region's width and height.  The next four parameters, `dx`, `dy`, `dw`, and `dh` determine the region of the canvas to copy into. `(dx, dy)` is the top-left corner of the region. `dw` and `dh` are the region's width and height.    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/rockies.jpg');  createCanvas(100, 100);  // Use the mountains as the background. background(img);  // Copy a region of pixels to another spot. copy(img, 7, 22, 10, 10, 35, 25, 50, 50);  // Outline the copied region. stroke(255); noFill(); square(7, 22, 10);  describe('An image of a mountain landscape. A square region is outlined in white. A larger square contains a pixelated view of the outlined region.'); } `
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load the image.
+    img = await loadImage('assets/rockies.jpg');
+    createCanvas(100, 100);
+    // Use the mountains as the background.
+    background(img);
+    // Copy a region of pixels to another spot.
+    copy(img, 7, 22, 10, 10, 35, 25, 50, 50);
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 createImage()                                                *p5.createImage()*
+───────────────────
+
+📝 Creates a new [p5.Image](#/p5.Image) object.  `createImage()` uses the `width` and `height` parameters to set the new [p5.Image](#/p5.Image) object's dimensions in pixels. The new [p5.Image](#/p5.Image) can be modified by updating its [pixels](#/p5.Image/pixels) array or by calling its [get()](#/p5.Image/get) and [set()](#/p5.Image/set) methods. The [loadPixels()](#/p5.Image/loadPixels) method must be called before reading or modifying pixel values. The [updatePixels()](#/p5.Image/updatePixels) method must be called for updates to take effect.  Note: The new [p5.Image](#/p5.Image) object is transparent by default.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a p5.Image object. let img = createImage(66, 66);  // Load the image's pixels into memory. img.loadPixels();  // Set all the image's pixels to black. for (let x = 0; x    ` function setup() { createCanvas(100, 100);  background(200);  // Create a p5.Image object. let img = createImage(66, 66);  // Load the image's pixels into memory. img.loadPixels();  // Create a color gradient. for (let x = 0; x    ` function setup() { createCanvas(100, 100);  background(200);  // Create a p5.Image object. let img = createImage(66, 66);  // Load the pixels into memory. img.loadPixels(); // Get the current pixel density. let d = pixelDensity();  // Calculate the pixel that is halfway through the image's pixel array. let halfImage = 4 * (d * img.width) * (d * img.height / 2);  // Set half of the image's pixels to black. for (let i = 0; i
+
+↩️  Returns:
+   p5.Image - new [p5.Image](#/p5.Image) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a p5.Image object.
+    let img = createImage(66, 66);
+    // Load the image's pixels into memory.
+    img.loadPixels();
+    // Set all the image's pixels to black.
+    for (let x = 0; x 
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 filter()                                                *p5.filter()*
+──────────────
+
+📝 Applies an image filter to the canvas.  The preset options are:  `INVERT` Inverts the colors in the image. No parameter is used.  `GRAY` Converts the image to grayscale. No parameter is used.  `THRESHOLD` Converts the image to black and white. Pixels with a grayscale value above a given threshold are converted to white. The rest are converted to black. The threshold must be between 0.0 (black) and 1.0 (white). If no value is specified, 0.5 is used.  `OPAQUE` Sets the alpha channel to entirely opaque. No parameter is used.  `POSTERIZE` Limits the number of colors in the image. Each color channel is limited to the number of colors specified. Values between 2 and 255 are valid, but results are most noticeable with lower values. The default value is 4.  `BLUR` Blurs the image. The level of blurring is specified by a blur radius. Larger values increase the blur. The default value is 4. A gaussian blur is used in `P2D` mode. A box blur is used in `WEBGL` mode.  `ERODE` Reduces the light areas. No parameter is used.  `DILATE` Increases the light areas. No parameter is used.  `filter()` uses WebGL in the background by default because it's faster. This can be disabled in `P2D` mode by adding a `false` argument, as in `filter(BLUR, false)`. This may be useful to keep computation off the GPU or to work around a lack of WebGL support.  In WebgL mode, `filter()` can also use custom shaders. See [createFilterShader()](#/p5/createFilterShader) for more information.   POSTERIZE, BLUR, ERODE, DILATE or BLUR. WebGL filters (GPU) or original image filters (CPU); defaults to `true`.   ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Apply the INVERT filter. filter(INVERT);  describe('A blue brick wall.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Apply the GRAY filter. filter(GRAY);  describe('A brick wall drawn in grayscale.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Apply the THRESHOLD filter. filter(THRESHOLD);  describe('A brick wall drawn in black and white.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Apply the OPAQUE filter. filter(OPAQUE);  describe('A red brick wall.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Apply the POSTERIZE filter. filter(POSTERIZE, 3);  describe('An image of a red brick wall drawn with limited color palette.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Apply the BLUR filter. filter(BLUR, 3);  describe('A blurry image of a red brick wall.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Apply the DILATE filter. filter(DILATE);  describe('A red brick wall with bright lines between each brick.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Apply the ERODE filter. filter(ERODE);  describe('A red brick wall with faint lines between each brick.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Apply the BLUR filter. // Don't use WebGL. filter(BLUR, 3, false);  describe('A blurry image of a red brick wall.'); } `
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load the image.
+    img = await loadImage('assets/bricks.jpg');
+    createCanvas(100, 100);
+    // Display the image.
+    image(img, 0, 0);
+    // Apply the INVERT filter.
+    filter(INVERT);
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 get()                                                *p5.get()*
+───────────
+
+📝 Gets a pixel or a region of pixels from the canvas.  `get()` is easy to use but it's not as fast as [pixels](#/p5/pixels). Use [pixels](#/p5/pixels) to read many pixel values.  The version of `get()` with no parameters returns the entire canvas.  The version of `get()` with two parameters interprets them as coordinates. It returns an array with the `[R, G, B, A]` values of the pixel at the given point.  The version of `get()` with four parameters interprets them as coordinates and dimensions. It returns a subsection of the canvas as a [p5.Image](#/p5.Image) object. The first two parameters are the coordinates for the upper-left corner of the subsection. The last two parameters are the width and height of the subsection.  Use [p5.Image.get()](#/p5.Image/get) to work directly with [p5.Image](#/p5.Image) objects.   ` let img;  async function setup() { // Load the image. img = await loadImage('assets/rockies.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Get the entire canvas. let c = get();  // Display half the canvas. image(c, 50, 0);  describe('Two identical mountain landscapes shown side-by-side.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/rockies.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Get the color of a pixel. let c = get(50, 90);  // Style the square with the pixel's color. fill(c); noStroke();  // Display the square. square(25, 25, 50);  describe('A mountain landscape with an olive green square in its center.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/rockies.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0);  // Get a region of the image. let c = get(0, 0, 50, 50);  // Display the region. image(c, 50, 50);  describe('A mountain landscape drawn on top of another mountain landscape.'); } `
+
+↩️  Returns:
+   p5.Image - subsection as a [p5.Image](#/p5.Image) object.
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load the image.
+    img = await loadImage('assets/rockies.jpg');
+    createCanvas(100, 100);
+    // Display the image.
+    image(img, 0, 0);
+    // Get the entire canvas.
+    let c = get();
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 getFilterGraphicsLayer()                                                *p5.getFilterGraphicsLayer()*
+──────────────────────────────
+
+🔗 See also: |p5.image|
+
+
+🔧 image()                                                *p5.image()*
+─────────────
+
+📝 Draws an image to the canvas.  The first parameter, `img`, is the source image to be drawn. `img` can be any of the following objects: - [p5.Image](#/p5.Image) - [p5.Element](#/p5.Element) - [p5.Texture](#/p5.Texture) - [p5.Framebuffer](#/p5.Framebuffer) - [p5.FramebufferTexture](#/p5.FramebufferTexture)  The second and third parameters, `dx` and `dy`, set the coordinates of the destination image's top left corner. See [imageMode()](#/p5/imageMode) for other ways to position images.  ```js example let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100);  background(50);  // Draw the image. image(img, 0, 0);  describe('An image of the underside of a white umbrella with a gridded ceiling above.'); } ```  Here's a diagram that explains how optional parameters work in `image()`:    The fourth and fifth parameters, `dw` and `dh`, are optional. They set the the width and height to draw the destination image. By default, `image()` draws the full source image at its original size.  The sixth and seventh parameters, `sx` and `sy`, are also optional. These coordinates define the top left corner of a subsection to draw from the source image.  The eighth and ninth parameters, `sw` and `sh`, are also optional. They define the width and height of a subsection to draw from the source image. By default, `image()` draws the full subsection that begins at `(sx, sy)` and extends to the edges of the source image.  The ninth parameter, `fit`, is also optional. It enables a subsection of the source image to be drawn without affecting its aspect ratio. If `CONTAIN` is passed, the full subsection will appear within the destination rectangle. If `COVER` is passed, the subsection will completely cover the destination rectangle. This may have the effect of zooming into the subsection.  The tenth and eleventh paremeters, `xAlign` and `yAlign`, are also optional. They determine how to align the fitted subsection. `xAlign` can be set to either `LEFT`, `RIGHT`, or `CENTER`. `yAlign` can be set to either `TOP`, `BOTTOM`, or `CENTER`. By default, both `xAlign` and `yAlign` are set to `CENTER`.    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100);  background(50);  // Draw the image. image(img, 10, 10);  describe('An image of the underside of a white umbrella with a gridded ceiling above. The image has dark gray borders on its left and top.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100);  background(50);  // Draw the image 50x50. image(img, 0, 0, 50, 50);  describe('An image of the underside of a white umbrella with a gridded ceiling above. The image is drawn in the top left corner of a dark gray square.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100);  background(50);  // Draw the center of the image. image(img, 25, 25, 50, 50, 25, 25, 50, 50);  describe('An image of a gridded ceiling drawn in the center of a dark gray square.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/moonwalk.jpg'); createCanvas(100, 100);  background(50);  // Draw the image and scale it to fit within the canvas. image(img, 0, 0, width, height, 0, 0, img.width, img.height, CONTAIN);  describe('An image of an astronaut on the moon. The top and bottom borders of the image are dark gray.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense50.png');  createCanvas(100, 100);  background(50);  // Draw the image and scale it to cover the canvas. image(img, 0, 0, width, height, 0, 0, img.width, img.height, COVER);  describe('A pixelated image of the underside of a white umbrella with a gridded ceiling above.'); } `
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load the image.
+    img = await loadImage('assets/laDefense.jpg');
+    createCanvas(100, 100);
+    background(50);
+    // Draw the image.
+    image(img, 10, 10);
+    describe('An image of the underside of a white umbrella with a gridded ceiling above. The image has dark gray borders on its left and top.');
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 imageMode()                                                *p5.imageMode()*
+─────────────────
+
+📝 Changes the location from which images are drawn when [image()](#/p5/image) is called.  By default, the first two parameters of [image()](#/p5/image) are the x- and y-coordinates of the image's upper-left corner. The next parameters are its width and height. This is the same as calling `imageMode(CORNER)`.  `imageMode(CORNERS)` also uses the first two parameters of [image()](#/p5/image) as the x- and y-coordinates of the image's top-left corner. The third and fourth parameters are the coordinates of its bottom-right corner.  `imageMode(CENTER)` uses the first two parameters of [image()](#/p5/image) as the x- and y-coordinates of the image's center. The next parameters are its width and height.     ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  background(200);  // Use CORNER mode. imageMode(CORNER);  // Display the image. image(img, 10, 10, 50, 50);  describe('A square image of a brick wall is drawn at the top left of a gray square.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  background(200);  // Use CORNERS mode. imageMode(CORNERS);  // Display the image. image(img, 10, 10, 90, 40);  describe('An image of a brick wall is drawn on a gray square. The image is squeezed into a small rectangular area.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  background(200);  // Use CENTER mode. imageMode(CENTER);  // Display the image. image(img, 50, 50, 80, 80);  describe('A square image of a brick wall is drawn on a gray square.'); } `
+
+📋 Parameters:
+   • {(CORNER|CORNERS|CENTER)} mode - either CORNER, CORNERS, or CENTER.
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load the image.
+    img = await loadImage('assets/bricks.jpg');
+    createCanvas(100, 100);
+    background(200);
+    // Use CORNER mode.
+    imageMode(CORNER);
+    // Display the image.
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 loadImage()                                                *p5.loadImage()*
+─────────────────
+
+📝 Loads an image to create a [p5.Image](#/p5.Image) object.  `loadImage()` interprets the first parameter one of three ways. If the path to an image file is provided, `loadImage()` will load it. Paths to local files should be relative, such as `'assets/thundercat.jpg'`. URLs such as `'https://example.com/thundercat.jpg'` may be blocked due to browser security. Raw image data can also be passed as a base64 encoded image in the form `'data:image/png;base64,arandomsequenceofcharacters'`. The `path` parameter can also be defined as a [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) object for more advanced usage.  The second parameter is optional. If a function is passed, it will be called once the image has loaded. The callback function can optionally use the new [p5.Image](#/p5.Image) object. The return value of the function will be used as the final return value of `loadImage()`.  The third parameter is also optional. If a function is passed, it will be called if the image fails to load. The callback function can optionally use the event error. The return value of the function will be used as the final return value of `loadImage()`.  This function returns a `Promise` and should be used in an `async` setup with `await`. See the examples for the usage syntax.  [p5.Image](#/p5.Image) once it loads. error if the image fails to load.   ` let img;  // Load the image and create a p5.Image object. async function setup() { img = await loadImage('assets/laDefense.jpg'); createCanvas(100, 100);  // Draw the image. image(img, 0, 0);  describe('Image of the underside of a white umbrella and a gridded ceiling.'); } `    ` async function setup() { // Call handleImage() once the image loads. await loadImage('assets/laDefense.jpg', handleImage);  describe('Image of the underside of a white umbrella and a gridded ceiling.'); }  // Display the image. function handleImage(img) { image(img, 0, 0); } `    ` async function setup() { // Call handleImage() once the image loads or // call handleError() if an error occurs. await loadImage('assets/laDefense.jpg', handleImage, handleError); }  // Display the image. function handleImage(img) { image(img, 0, 0);  describe('Image of the underside of a white umbrella and a gridded ceiling.'); }  // Log the error. function handleError(event) { console.error('Oops!', event); } `
+
+↩️  Returns:
+   Promise - the [p5.Image](#/p5.Image) object.
+
+💡 Example:
+>
+  `
+  let img;
+  // Load the image and create a p5.Image object.
+  async function setup() {
+    img = await loadImage('assets/laDefense.jpg');
+    createCanvas(100, 100);
+    // Draw the image.
+    image(img, 0, 0);
+    describe('Image of the underside of a white umbrella and a gridded ceiling.');
+  }
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 loadPixels()                                                *p5.loadPixels()*
+──────────────────
+
+📝 Loads the current value of each pixel on the canvas into the [pixels](#/p5/pixels) array.  `loadPixels()` must be called before reading from or writing to [pixels](#/p5/pixels).   ` let img;  async function setup() { // Load the image. img = await loadImage('assets/rockies.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0, 100, 100);  // Get the pixel density. let d = pixelDensity();  // Calculate the halfway index in the pixels array. let halfImage = 4 * (d * width) * (d * height / 2);  // Load the pixels array. loadPixels();  // Copy the top half of the canvas to the bottom. for (let i = 0; i
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load the image.
+    img = await loadImage('assets/rockies.jpg');
+    createCanvas(100, 100);
+    // Display the image.
+    image(img, 0, 0, 100, 100);
+    // Get the pixel density.
+    let d = pixelDensity();
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 noTint()                                                *p5.noTint()*
+──────────────
+
+📝 Removes the current tint set by [tint()](#/p5/tint).  `noTint()` restores images to their original colors.    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100);  // Left. // Tint with a CSS color string. tint('red'); image(img, 0, 0);  // Right. // Remove the tint. noTint(); image(img, 50, 0);  describe('Two images of an umbrella and a ceiling side-by-side. The image on the left has a red tint.'); } `
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load the image.
+    img = await loadImage('assets/laDefense.jpg');
+    createCanvas(100, 100);
+    // Left.
+    // Tint with a CSS color string.
+    tint('red');
+    image(img, 0, 0);
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 saveCanvas()                                                *p5.saveCanvas()*
+──────────────────
+
+📝 Saves the current canvas as an image.  By default, `saveCanvas()` saves the canvas as a PNG image called `untitled.png`.  The first parameter, `filename`, is optional. It's a string that sets the file's name. If a file extension is included, as in `saveCanvas('drawing.png')`, then the image will be saved using that format.  The second parameter, `extension`, is also optional. It sets the files format. Either `'png'`, `'webp'`, or `'jpg'` can be used. For example, `saveCanvas('drawing', 'jpg')` saves the canvas to a file called `drawing.jpg`.  Note: The browser will either save the file immediately or prompt the user with a dialogue window.  specific HTML5 canvas element.   ` function setup() { createCanvas(100, 100); background(255);  // Save the canvas to 'untitled.png'. saveCanvas();  describe('A white square.'); } `    ` function setup() { createCanvas(100, 100);  background(255);  // Save the canvas to 'myCanvas.jpg'. saveCanvas('myCanvas.jpg');  describe('A white square.'); } `    ` function setup() { createCanvas(100, 100);  background(255);  // Save the canvas to 'myCanvas.jpg'. saveCanvas('myCanvas', 'jpg');  describe('A white square.'); } `    ` function setup() { let cnv = createCanvas(100, 100);  background(255);  // Save the canvas to 'untitled.png'. saveCanvas(cnv);  describe('A white square.'); } `    ` function setup() { let cnv = createCanvas(100, 100);  background(255);  // Save the canvas to 'myCanvas.jpg'. saveCanvas(cnv, 'myCanvas.jpg');  describe('A white square.'); } `    ` function setup() { let cnv = createCanvas(100, 100);  background(255);  // Save the canvas to 'myCanvas.jpg'. saveCanvas(cnv, 'myCanvas', 'jpg');  describe('A white square.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(255);
+    // Save the canvas to 'untitled.png'.
+    saveCanvas();
+    describe('A white square.');
+  }
+  `
+  
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 saveFrames()                                                *p5.saveFrames()*
+──────────────────
+
+📝 Captures a sequence of frames from the canvas that can be saved as images.  `saveFrames()` creates an array of frame objects. Each frame is stored as an object with its file type, file name, and image data as a string. For example, the first saved frame might have the following properties:  `{ ext: 'png', filenmame: 'frame0', imageData: 'data:image/octet-stream;base64, abc123' }`.  The first parameter, `filename`, sets the prefix for the file names. For example, setting the prefix to `'frame'` would generate the image files `frame0.png`, `frame1.png`, and so on.  The second parameter, `extension`, sets the file type to either `'png'` or `'jpg'`.  The third parameter, `duration`, sets the duration to record in seconds. The maximum duration is 15 seconds.  The fourth parameter, `framerate`, sets the number of frames to record per second. The maximum frame rate value is 22. Limits are placed on `duration` and `framerate` to avoid using too much memory. Recording large canvases can easily crash sketches or even web browsers.  The fifth parameter, `callback`, is optional. If a function is passed, image files won't be saved by default. The callback function can be used to process an array containing the data for each captured frame. The array of image data contains a sequence of objects with three properties for each frame: `imageData`, `filename`, and `extension`.  Note: Frames are downloaded as individual image files by default.  to handle the image data. This function should accept an array as argument. The array will contain the specified number of frames of objects. Each object has three properties: `imageData`, `filename`, and `extension`.  ` function setup() { createCanvas(100, 100);  describe('A square repeatedly changes color from blue to pink.'); }  function draw() { let r = frameCount % 255; let g = 50; let b = 100; background(r, g, b); }  // Save the frames when the user presses the 's' key. function keyPressed() { if (key === 's') { saveFrames('frame', 'png', 1, 5); } } `    ` function setup() { createCanvas(100, 100);  describe('A square repeatedly changes color from blue to pink.'); }  function draw() { let r = frameCount % 255; let g = 50; let b = 100; background(r, g, b); }  // Print 5 frames when the user presses the mouse. function mousePressed() { saveFrames('frame', 'png', 1, 5, printFrames); }  // Prints an array of objects containing raw image data, filenames, and extensions. function printFrames(frames) { for (let frame of frames) { print(frame); } } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A square repeatedly changes color from blue to pink.');
+  }
+  function draw() {
+    let r = frameCount % 255;
+    let g = 50;
+    let b = 100;
+    background(r, g, b);
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 saveGif()                                                *p5.saveGif()*
+───────────────
+
+📝 Generates a gif from a sketch and saves it to a file.  `saveGif()` may be called in [setup()](#/p5/setup) or at any point while a sketch is running.  The first parameter, `fileName`, sets the gif's file name.  The second parameter, `duration`, sets the gif's duration in seconds.  The third parameter, `options`, is optional. If an object is passed, `saveGif()` will use its properties to customize the gif. `saveGif()` recognizes the properties `delay`, `units`, `silent`, `notificationDuration`, and `notificationID`.    ` function setup() { createCanvas(100, 100);  describe('A circle drawn in the middle of a gray square. The circle changes color from black to white, then repeats.'); }  function draw() { background(200);  // Style the circle. let c = frameCount % 255; fill(c);  // Display the circle. circle(50, 50, 25); }  // Save a 5-second gif when the user presses the 's' key. function keyPressed() { if (key === 's') { saveGif('mySketch', 5); } } `    ` function setup() { createCanvas(100, 100);  describe('A circle drawn in the middle of a gray square. The circle changes color from black to white, then repeats.'); }  function draw() { background(200);  // Style the circle. let c = frameCount % 255; fill(c);  // Display the circle. circle(50, 50, 25); }  // Save a 5-second gif when the user presses the 's' key. // Wait 1 second after the key press before recording. function keyPressed() { if (key === 's') { saveGif('mySketch', 5, { delay: 1 }); } } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A circle drawn in the middle of a gray square. The circle changes color from black to white, then repeats.');
+  }
+  function draw() {
+    background(200);
+    // Style the circle.
+    let c = frameCount % 255;
+    fill(c);
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 set()                                                *p5.set()*
+───────────
+
+📝 Sets the color of a pixel or draws an image to the canvas.  `set()` is easy to use but it's not as fast as [pixels](#/p5/pixels). Use [pixels](#/p5/pixels) to set many pixel values.  `set()` interprets the first two parameters as x- and y-coordinates. It interprets the last parameter as a grayscale value, a `[R, G, B, A]` pixel array, a [p5.Color](#/p5.Color) object, or a [p5.Image](#/p5.Image) object. If an image is passed, the first two parameters set the coordinates for the image's upper-left corner, regardless of the current [imageMode()](#/p5/imageMode).  [updatePixels()](#/p5/updatePixels) must be called after using `set()` for changes to appear.  [p5.Color](#/p5.Color) object | [p5.Image](#/p5.Image) to copy.  ` function setup() { createCanvas(100, 100);  background(200);  // Set four pixels to black. set(30, 20, 0); set(85, 20, 0); set(85, 75, 0); set(30, 75, 0);  // Update the canvas. updatePixels();  describe('Four black dots arranged in a square drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create a p5.Color object. let black = color(0);  // Set four pixels to black. set(30, 20, black); set(85, 20, black); set(85, 75, black); set(30, 75, black);  // Update the canvas. updatePixels();  describe('Four black dots arranged in a square drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(255);  // Draw a horizontal color gradient. for (let x = 0; x    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/rockies.jpg');  createCanvas(100, 100);  // Use the image to set all pixels. set(0, 0, img);  // Update the canvas. updatePixels();  describe('An image of a mountain landscape.'); } `
+
+📋 Parameters:
+   • {Number} x - x-coordinate of the pixel.
+   • {Number} y - y-coordinate of the pixel.
+   • {Number|Number[]|Object} c - grayscale value | pixel array |
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Set four pixels to black.
+    set(30, 20, 0);
+    set(85, 20, 0);
+    set(85, 75, 0);
+    set(30, 75, 0);
+    // Update the canvas.
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 tint()                                                *p5.tint()*
+────────────
+
+📝 Tints images using a color.  The version of `tint()` with one parameter interprets it one of four ways. If the parameter is a number, it's interpreted as a grayscale value. If the parameter is a string, it's interpreted as a CSS color string. An array of `[R, G, B, A]` values or a [p5.Color](#/p5.Color) object can also be used to set the tint color.  The version of `tint()` with two parameters uses the first one as a grayscale value and the second as an alpha value. For example, calling `tint(255, 128)` will make an image 50% transparent.  The version of `tint()` with three parameters interprets them as RGB or HSB values, depending on the current [colorMode()](#/p5/colorMode). The optional fourth parameter sets the alpha value. For example, `tint(255, 0, 0, 100)` will give images a red tint and make them transparent.    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100);  // Left image. image(img, 0, 0);  // Right image. // Tint with a CSS color string. tint('red'); image(img, 50, 0);  describe('Two images of an umbrella and a ceiling side-by-side. The image on the right has a red tint.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100);  // Left image. image(img, 0, 0);  // Right image. // Tint with RGB values. tint(255, 0, 0); image(img, 50, 0);  describe('Two images of an umbrella and a ceiling side-by-side. The image on the right has a red tint.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100);  // Left. image(img, 0, 0);  // Right. // Tint with RGBA values. tint(255, 0, 0, 100); image(img, 50, 0);  describe('Two images of an umbrella and a ceiling side-by-side. The image on the right has a transparent red tint.'); } `    ` let img;  async function setup() { // Load the image. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100);  // Left. image(img, 0, 0);  // Right. // Tint with grayscale and alpha values. tint(255, 180); image(img, 50, 0);  describe('Two images of an umbrella and a ceiling side-by-side. The image on the right is transparent.'); } `
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load the image.
+    img = await loadImage('assets/laDefense.jpg');
+    createCanvas(100, 100);
+    // Left image.
+    image(img, 0, 0);
+    // Right image.
+    // Tint with a CSS color string.
+>
+
+🔗 See also: |p5.image|
+
+
+🔧 updatePixels()                                                *p5.updatePixels()*
+────────────────────
+
+📝 Updates the canvas with the RGBA values in the [pixels](#/p5/pixels) array.  `updatePixels()` only needs to be called after changing values in the [pixels](#/p5/pixels) array. Such changes can be made directly after calling [loadPixels()](#/p5/loadPixels) or by calling [set()](#/p5/set).  to update. to update.  ` let img;  async function setup() { // Load the image. img = await loadImage('assets/rockies.jpg');  createCanvas(100, 100);  // Display the image. image(img, 0, 0, 100, 100);  // Get the pixel density. let d = pixelDensity();  // Calculate the halfway index in the pixels array. let halfImage = 4 * (d * width) * (d * height / 2);  // Load the pixels array. loadPixels();  // Copy the top half of the canvas to the bottom. for (let i = 0; i
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load the image.
+    img = await loadImage('assets/rockies.jpg');
+    createCanvas(100, 100);
+    // Display the image.
+    image(img, 0, 0, 100, 100);
+    // Get the pixel density.
+    let d = pixelDensity();
+>
+
+🔗 See also: |p5.image|
+
+==============================================================================
+🤖 Generated by p5.man - neovim help generator for p5.js
+🌐 https://github.com/prjctimg/p5.man

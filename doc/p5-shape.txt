@@ -1,0 +1,1124 @@
+🎨 *p5.shape*	Shape drawing functions and primitives 📚
+==============================================================================
+🚀 p5.js Shape Reference
+
+📅 Generated on: January 17, 2026
+🏷️  p5.js version: 2.2.0
+
+	*help-topic*p5.shape
+
+📋 TABLE OF CONTENTS                                        *p5.shape-contents*
+
+1. 🎯 Functions (45 total)
+
+   • |arc()|
+   • |beginContour()|
+   • |beginShape()|
+   • |bezier()|
+   • |bezierOrder()|
+   • |bezierPoint()|
+   • |bezierTangent()|
+   • |bezierVertex()|
+   • |box()|
+   • |buildGeometry()|
+   • |circle()|
+   • |cone()|
+   • |curveDetail()|
+   • |cylinder()|
+   • |ellipse()|
+   • |ellipseMode()|
+   • |ellipsoid()|
+   • |endContour()|
+   • |endShape()|
+   • |freeGeometry()|
+   • |line()|
+   • |normal()|
+   • |noSmooth()|
+   • |plane()|
+   • |point()|
+   • |quad()|
+   • |rect()|
+   • |rectMode()|
+   • |smooth()|
+   • |sphere()|
+   • |spline()|
+   • |splinePoint()|
+   • |splineProperties()|
+   • |splineProperty()|
+   • |splineTangent()|
+   • |splineVertex()|
+   • |square()|
+   • |strokeCap()|
+   • |strokeJoin()|
+   • |strokeMode()|
+   • |strokeWeight()|
+   • |torus()|
+   • |triangle()|
+   • |vertex()|
+   • |vertexProperty()|
+
+📖 FUNCTION DOCUMENTATION
+
+
+🔧 arc()                                                *p5.arc()*
+───────────
+
+📝 Draws an arc.  An arc is a section of an ellipse defined by the `x`, `y`, `w`, and `h` parameters. `x` and `y` set the location of the arc's center. `w` and `h` set the arc's width and height. See [ellipse()](#/p5/ellipse) and [ellipseMode()](#/p5/ellipseMode) for more details.  The fifth and sixth parameters, `start` and `stop`, set the angles between which to draw the arc. Arcs are always drawn clockwise from `start` to `stop`. Angles are always given in radians.  The seventh parameter, `mode`, is optional. It determines the arc's fill style. The fill modes are a semi-circle (`OPEN`), a closed semi-circle (`CHORD`), or a closed pie segment (`PIE`).  The eighth parameter, `detail`, is also optional. It determines how many vertices are used to draw the arc in WebGL mode. The default value is 25.  the arc. either CHORD, PIE, or OPEN. specify the number of vertices that makes up the perimeter of the arc. Default value is 25. Won't draw a stroke for a detail of more than 50.   ` function setup() { createCanvas(100, 100);  background(200);  arc(50, 50, 80, 80, 0, PI + HALF_PI);  describe('A white circle on a gray canvas. The top-right quarter of the circle is missing.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  arc(50, 50, 80, 40, 0, PI + HALF_PI);  describe('A white ellipse on a gray canvas. The top-right quarter of the ellipse is missing.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Bottom-right. arc(50, 55, 50, 50, 0, HALF_PI);  noFill();  // Bottom-left. arc(50, 55, 60, 60, HALF_PI, PI);  // Top-left. arc(50, 55, 70, 70, PI, PI + QUARTER_PI);  // Top-right. arc(50, 55, 80, 80, PI + QUARTER_PI, TWO_PI);  describe( 'A shattered outline of an circle with a quarter of a white circle at the bottom-right.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Default fill mode. arc(50, 50, 80, 80, 0, PI + QUARTER_PI);  describe('A white circle with the top-right third missing. The bottom is outlined in black.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // OPEN fill mode. arc(50, 50, 80, 80, 0, PI + QUARTER_PI, OPEN);  describe( 'A white circle missing a section from the top-right. The bottom is outlined in black.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // CHORD fill mode. arc(50, 50, 80, 80, 0, PI + QUARTER_PI, CHORD);  describe('A white circle with a black outline missing a section from the top-right.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // PIE fill mode. arc(50, 50, 80, 80, 0, PI + QUARTER_PI, PIE);  describe('A white circle with a black outline. The top-right third is missing.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  // PIE fill mode. arc(0, 0, 80, 80, 0, PI + QUARTER_PI, PIE);  describe('A white circle with a black outline. The top-right third is missing.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  // PIE fill mode with 5 vertices. arc(0, 0, 80, 80, 0, PI + QUARTER_PI, PIE, 5);  describe('A white circle with a black outline. The top-right third is missing.'); } `    ` function setup() { createCanvas(100, 100);  describe('A yellow circle on a black background. The circle opens and closes its mouth.'); }  function draw() { background(0);  // Style the arc. noStroke(); fill(255, 255, 0);  // Update start and stop angles. let biteSize = PI / 16; let startAngle = biteSize * sin(frameCount * 0.1) + biteSize; let endAngle = TWO_PI - startAngle;  // Draw the arc. arc(50, 50, 80, 80, startAngle, endAngle, PIE); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Bottom-right.
+    arc(50, 55, 50, 50, 0, HALF_PI);
+    noFill();
+    // Bottom-left.
+    arc(50, 55, 60, 60, HALF_PI, PI);
+    // Top-left.
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 beginContour()                                                *p5.beginContour()*
+────────────────────
+
+📝 Begins creating a hole within a flat shape.  The `beginContour()` and [endContour()](#/p5/endContour) functions allow for creating negative space within custom shapes that are flat. `beginContour()` begins adding vertices to a negative space and [endContour()](#/p5/endContour) stops adding them. `beginContour()` and [endContour()](#/p5/endContour) must be called between [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape).  Transformations such as [translate()](#/p5/translate), [rotate()](#/p5/rotate), and [scale()](#/p5/scale) don't work between `beginContour()` and [endContour()](#/p5/endContour). It's also not possible to use other shapes, such as [ellipse()](#/p5/ellipse) or [rect()](#/p5/rect), between `beginContour()` and [endContour()](#/p5/endContour).  Note: The vertices that define a negative space must "wind" in the opposite direction from the outer shape. First, draw vertices for the outer shape clockwise order. Then, draw vertices for the negative space in counter-clockwise order.    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. beginShape();  // Exterior vertices, clockwise winding. vertex(10, 10); vertex(90, 10); vertex(90, 90); vertex(10, 90);  // Interior vertices, counter-clockwise winding. beginContour(); vertex(30, 30); vertex(30, 70); vertex(70, 70); vertex(70, 30); endContour(CLOSE);  // Stop drawing the shape. endShape(CLOSE);  describe('A white square with a square hole in its center drawn on a gray background.'); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white square with a square hole in its center drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Start drawing the shape. beginShape();  // Exterior vertices, clockwise winding. vertex(-40, -40); vertex(40, -40); vertex(40, 40); vertex(-40, 40);  // Interior vertices, counter-clockwise winding. beginContour(); vertex(-20, -20); vertex(-20, 20); vertex(20, 20); vertex(20, -20); endContour(CLOSE);  // Stop drawing the shape. endShape(CLOSE); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Start drawing the shape.
+    beginShape();
+    // Exterior vertices, clockwise winding.
+    vertex(10, 10);
+    vertex(90, 10);
+    vertex(90, 90);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 beginShape()                                                *p5.beginShape()*
+──────────────────
+
+📝 Begins adding vertices to a custom shape.  The `beginShape()` and [endShape()](#/p5/endShape) functions allow for creating custom shapes in 2D or 3D. `beginShape()` begins adding vertices to a custom shape and [endShape()](#/p5/endShape) stops adding them.  The parameter, `kind`, sets the kind of shape to make. The available kinds are:  - `PATH` (the default) to draw shapes by tracing out the path along their edges. - `POINTS` to draw a series of points. - `LINES` to draw a series of unconnected line segments. - `TRIANGLES` to draw a series of separate triangles. - `TRIANGLE_FAN` to draw a series of connected triangles sharing the first vertex in a fan-like fashion. - `TRIANGLE_STRIP` to draw a series of connected triangles in strip fashion. - `QUADS` to draw a series of separate quadrilaterals (quads). - `QUAD_STRIP` to draw quad strip using adjacent edges to form the next quad.  After calling `beginShape()`, shapes can be built by calling [vertex()](#/p5/vertex), [bezierVertex()](#/p5/bezierVertex), and/or [splineVertex()](#/p5/splineVertex). Calling [endShape()](#/p5/endShape) will stop adding vertices to the shape. Each shape will be outlined with the current stroke color and filled with the current fill color.  Transformations such as [translate()](#/p5/translate), [rotate()](#/p5/rotate), and [scale()](#/p5/scale) don't work between `beginShape()` and [endShape()](#/p5/endShape). It's also not possible to use other shapes, such as [ellipse()](#/p5/ellipse) or [rect()](#/p5/rect), between `beginShape()` and [endShape()](#/p5/endShape).  TRIANGLE_STRIP, QUADS, QUAD_STRIP or PATH. Defaults to PATH.   ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. beginShape();  // Add vertices. vertex(30, 20); vertex(85, 20); vertex(85, 75); vertex(30, 75);  // Stop drawing the shape. endShape(CLOSE);  describe('A white square on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. // Only draw the vertices (points). beginShape(POINTS);  // Add vertices. vertex(30, 20); vertex(85, 20); vertex(85, 75); vertex(30, 75);  // Stop drawing the shape. endShape();  describe('Four black dots that form a square are drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. // Only draw lines between alternating pairs of vertices. beginShape(LINES);  // Add vertices. vertex(30, 20); vertex(85, 20); vertex(85, 75); vertex(30, 75);  // Stop drawing the shape. endShape();  describe('Two horizontal black lines on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Style the shape. noFill();  // Start drawing the shape. beginShape();  // Add vertices. vertex(30, 20); vertex(85, 20); vertex(85, 75); vertex(30, 75);  // Stop drawing the shape. endShape();  describe('Three black lines form a sideways U shape on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Style the shape. noFill();  // Start drawing the shape. beginShape();  // Add vertices. vertex(30, 20); vertex(85, 20); vertex(85, 75); vertex(30, 75);  // Stop drawing the shape. // Connect the first and last vertices. endShape(CLOSE);  describe('A black outline of a square drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. // Draw a series of triangles. beginShape(TRIANGLES);  // Left triangle. vertex(30, 75); vertex(40, 20); vertex(50, 75);  // Right triangle. vertex(60, 20); vertex(70, 75); vertex(80, 20);  // Stop drawing the shape. endShape();  describe('Two white triangles drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. // Draw a series of triangles. beginShape(TRIANGLE_STRIP);  // Add vertices. vertex(30, 75); vertex(40, 20); vertex(50, 75); vertex(60, 20); vertex(70, 75); vertex(80, 20); vertex(90, 75);  // Stop drawing the shape. endShape();  describe('Five white triangles that are interleaved drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. // Draw a series of triangles that share their first vertex. beginShape(TRIANGLE_FAN);  // Add vertices. vertex(57.5, 50); vertex(57.5, 15); vertex(92, 50); vertex(57.5, 85); vertex(22, 50); vertex(57.5, 15);  // Stop drawing the shape. endShape();  describe('Four white triangles form a square are drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. // Draw a series of quadrilaterals. beginShape(QUADS);  // Left rectangle. vertex(30, 20); vertex(30, 75); vertex(50, 75); vertex(50, 20);  // Right rectangle. vertex(65, 20); vertex(65, 75); vertex(85, 75); vertex(85, 20);  // Stop drawing the shape. endShape();  describe('Two white rectangles drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. // Draw a series of quadrilaterals. beginShape(QUAD_STRIP);  // Add vertices. vertex(30, 20); vertex(30, 75); vertex(50, 20); vertex(50, 75); vertex(65, 20); vertex(65, 75); vertex(85, 20); vertex(85, 75);  // Stop drawing the shape. endShape();  describe('Three white rectangles that share edges are drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  // Start drawing the shape. // Draw a series of quadrilaterals. beginShape(PATH);  // Add the vertices. vertex(-30, -30, 0); vertex(30, -30, 0); vertex(30, -10, 0); vertex(-10, -10, 0); vertex(-10, 10, 0); vertex(30, 10, 0); vertex(30, 30, 0); vertex(-30, 30, 0);  // Stop drawing the shape. // Connect the first and last vertices. endShape(CLOSE);  describe('A blocky C shape drawn in white on a gray background.'); } `    ` // Click and drag with the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A blocky C shape drawn in red, blue, and green on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Start drawing the shape. // Draw a series of quadrilaterals. beginShape(PATH);  // Add the vertices. fill('red'); stroke('red'); vertex(-30, -30, 0); vertex(30, -30, 0); vertex(30, -10, 0); fill('green'); stroke('green'); vertex(-10, -10, 0); vertex(-10, 10, 0); vertex(30, 10, 0); fill('blue'); stroke('blue'); vertex(30, 30, 0); vertex(-30, 30, 0);  // Stop drawing the shape. // Connect the first and last vertices. endShape(CLOSE); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Start drawing the shape.
+    beginShape();
+    // Add vertices.
+    vertex(30, 20);
+    vertex(85, 20);
+    vertex(85, 75);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 bezier()                                                *p5.bezier()*
+──────────────
+
+📝 Draws a Bézier curve.  Bézier curves can form shapes and curves that slope gently. They're defined by two anchor points and two control points. Bézier curves provide more control than the spline curves created with the [spline()](#/p5/spline) function.  The first two parameters, `x1` and `y1`, set the first anchor point. The first anchor point is where the curve starts.  The next four parameters, `x2`, `y2`, `x3`, and `y3`, set the two control points. The control points "pull" the curve towards them.  The seventh and eighth parameters, `x4` and `y4`, set the last anchor point. The last anchor point is where the curve ends.  Bézier curves can also be drawn in 3D using WebGL mode. The 3D version of `bezier()` has twelve arguments because each point has x-, y-, and z-coordinates.    ` function setup() { createCanvas(100, 100);  background(200);  // Draw the anchor points in black. stroke(0); strokeWeight(5); point(85, 20); point(15, 80);  // Draw the control points in red. stroke(255, 0, 0); point(10, 10); point(90, 90);  // Draw a black bezier curve. noFill(); stroke(0); strokeWeight(1); bezier(85, 20, 10, 10, 90, 90, 15, 80);  // Draw red lines from the anchor points to the control points. stroke(255, 0, 0); line(85, 20, 10, 10); line(15, 80, 90, 90);  describe( 'A gray square with three curves. A black s-curve has two straight, red lines that extend from its ends. The endpoints of all the curves are marked with dots.' ); } `    ` // Click the mouse near the red dot in the top-left corner // and drag to change the curve's shape.  let x2 = 10; let y2 = 10; let isChanging = false;  function setup() { createCanvas(100, 100);  describe( 'A gray square with three curves. A black s-curve has two straight, red lines that extend from its ends. The endpoints of all the curves are marked with dots.' ); }  function draw() { background(200);  // Draw the anchor points in black. stroke(0); strokeWeight(5); point(85, 20); point(15, 80);  // Draw the control points in red. stroke(255, 0, 0); point(x2, y2); point(90, 90);  // Draw a black bezier curve. noFill(); stroke(0); strokeWeight(1); bezier(85, 20, x2, y2, 90, 90, 15, 80);  // Draw red lines from the anchor points to the control points. stroke(255, 0, 0); line(85, 20, x2, y2); line(15, 80, 90, 90); }  // Start changing the first control point if the user clicks near it. function mousePressed() { if (dist(mouseX, mouseY, x2, y2)    ` function setup() { createCanvas(100, 100);  background('skyblue');  // Draw the red balloon. fill('red'); bezier(50, 60, 5, 15, 95, 15, 50, 60);  // Draw the balloon string. line(50, 60, 50, 80);  describe('A red balloon in a blue sky.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A red balloon in a blue sky. The balloon rotates slowly, revealing that it is flat.'); }  function draw() { background('skyblue');  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Draw the red balloon. fill('red'); bezier(0, 0, 0, -45, -45, 0, 45, -45, 0, 0, 0, 0);  // Draw the balloon string. line(0, 0, 0, 0, 20, 0); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Draw the anchor points in black.
+    stroke(0);
+    strokeWeight(5);
+    point(85, 20);
+    point(15, 80);
+    // Draw the control points in red.
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 bezierOrder()                                                *p5.bezierOrder()*
+───────────────────
+
+📝 Influences the shape of the Bézier curve segment in a custom shape. By default, this is 3; the other possible parameter is 2. This results in quadratic Bézier curves.  `bezierVertex()` adds a curved segment to custom shapes. The Bézier curves it creates are defined like those made by the [bezier()](#/p5/bezier) function. `bezierVertex()` must be called between the [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape) functions. There must be at least one call to [bezierVertex()](#/p5/vertex), before a number of `bezierVertex()` calls that is a multiple of the parameter set by [bezierOrder(...)](#/p5/bezierOrder) (default 3).  Each curve of order 3 requires three calls to `bezierVertex`, so 2 curves would need 7 calls to `bezierVertex()`: (1 one initial anchor point, two sets of 3 curves describing the curves) With `bezierOrder(2)`, two curves would need 5 calls: 1 + 2 + 2.  Bézier curves can also be drawn in 3D using WebGL mode.  Note: `bezierVertex()` won’t work when an argument is passed to [beginShape()](#/p5/beginShape).    ` function setup() { createCanvas(100, 100);  background(200);  // Style the shape. noFill();  // Start drawing the shape. beginShape();  // set the order to 2 for a quadratic Bézier curve bezierOrder(2);  // Add the first anchor point. bezierVertex(30, 20);  // Add the Bézier vertex. bezierVertex(80, 20); bezierVertex(50, 50);  // Stop drawing the shape. endShape();  describe('A black curve drawn on a gray square. The curve starts at the top-left corner and ends at the center.'); } `
+
+📋 Parameters:
+   • {Number} order - The new order to set. Can be either 2 or 3, by default 3
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Style the shape.
+    noFill();
+    // Start drawing the shape.
+    beginShape();
+    // set the order to 2 for a quadratic Bézier curve
+    bezierOrder(2);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 bezierPoint()                                                *p5.bezierPoint()*
+───────────────────
+
+📝 Calculates coordinates along a Bézier curve using interpolation.  `bezierPoint()` calculates coordinates along a Bézier curve using the anchor and control points. It expects points in the same order as the [bezier()](#/p5/bezier) function. `bezierPoint()` works one axis at a time. Passing the anchor and control points' x-coordinates will calculate the x-coordinate of a point on the curve. Passing the anchor and control points' y-coordinates will calculate the y-coordinate of a point on the curve.  The first parameter, `a`, is the coordinate of the first anchor point.  The second and third parameters, `b` and `c`, are the coordinates of the control points.  The fourth parameter, `d`, is the coordinate of the last anchor point.  The fifth parameter, `t`, is the amount to interpolate along the curve. 0 is the first anchor point, 1 is the second anchor point, and 0.5 is halfway between them.    ` function setup() { createCanvas(100, 100);  background(200);  // Set the coordinates for the curve's anchor and control points. let x1 = 85; let x2 = 10; let x3 = 90; let x4 = 15; let y1 = 20; let y2 = 10; let y3 = 90; let y4 = 80;  // Style the curve. noFill();  // Draw the curve. bezier(x1, y1, x2, y2, x3, y3, x4, y4);  // Draw circles along the curve's path. fill(255);  // Top-right. let x = bezierPoint(x1, x2, x3, x4, 0); let y = bezierPoint(y1, y2, y3, y4, 0); circle(x, y, 5);  // Center. x = bezierPoint(x1, x2, x3, x4, 0.5); y = bezierPoint(y1, y2, y3, y4, 0.5); circle(x, y, 5);  // Bottom-left. x = bezierPoint(x1, x2, x3, x4, 1); y = bezierPoint(y1, y2, y3, y4, 1); circle(x, y, 5);  describe('A black s-curve on a gray square. The endpoints and center of the curve are marked with white circles.'); } `    ` function setup() { createCanvas(100, 100);  describe('A black s-curve on a gray square. A white circle moves back and forth along the curve.'); }  function draw() { background(200);  // Set the coordinates for the curve's anchor and control points. let x1 = 85; let x2 = 10; let x3 = 90; let x4 = 15; let y1 = 20; let y2 = 10; let y3 = 90; let y4 = 80;  // Draw the curve. noFill(); bezier(x1, y1, x2, y2, x3, y3, x4, y4);  // Calculate the circle's coordinates. let t = 0.5 * sin(frameCount * 0.01) + 0.5; let x = bezierPoint(x1, x2, x3, x4, t); let y = bezierPoint(y1, y2, y3, y4, t);  // Draw the circle. fill(255); circle(x, y, 5); } `
+
+📋 Parameters:
+   • {Number} a - coordinate of first anchor point.
+   • {Number} b - coordinate of first control point.
+   • {Number} c - coordinate of second control point.
+   • {Number} d - coordinate of second anchor point.
+   • {Number} t - amount to interpolate between 0 and 1.
+
+↩️  Returns:
+   Number - coordinate of the point on the curve.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Set the coordinates for the curve's anchor and control points.
+    let x1 = 85;
+    let x2 = 10;
+    let x3 = 90;
+    let x4 = 15;
+    let y1 = 20;
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 bezierTangent()                                                *p5.bezierTangent()*
+─────────────────────
+
+📝 Calculates coordinates along a line that's tangent to a Bézier curve.  Tangent lines skim the surface of a curve. A tangent line's slope equals the curve's slope at the point where it intersects.  `bezierTangent()` calculates coordinates along a tangent line using the Bézier curve's anchor and control points. It expects points in the same order as the [bezier()](#/p5/bezier) function. `bezierTangent()` works one axis at a time. Passing the anchor and control points' x-coordinates will calculate the x-coordinate of a point on the tangent line. Passing the anchor and control points' y-coordinates will calculate the y-coordinate of a point on the tangent line.  The first parameter, `a`, is the coordinate of the first anchor point.  The second and third parameters, `b` and `c`, are the coordinates of the control points.  The fourth parameter, `d`, is the coordinate of the last anchor point.  The fifth parameter, `t`, is the amount to interpolate along the curve. 0 is the first anchor point, 1 is the second anchor point, and 0.5 is halfway between them.    ` function setup() { createCanvas(100, 100);  background(200);  // Set the coordinates for the curve's anchor and control points. let x1 = 85; let x2 = 10; let x3 = 90; let x4 = 15; let y1 = 20; let y2 = 10; let y3 = 90; let y4 = 80;  // Style the curve. noFill();  // Draw the curve. bezier(x1, y1, x2, y2, x3, y3, x4, y4);  // Draw tangents along the curve's path. fill(255);  // Top-right circle. stroke(0); let x = bezierPoint(x1, x2, x3, x4, 0); let y = bezierPoint(y1, y2, y3, y4, 0); circle(x, y, 5);  // Top-right tangent line. // Scale the tangent point to draw a shorter line. stroke(255, 0, 0); let tx = 0.1 * bezierTangent(x1, x2, x3, x4, 0); let ty = 0.1 * bezierTangent(y1, y2, y3, y4, 0); line(x + tx, y + ty, x - tx, y - ty);  // Center circle. stroke(0); x = bezierPoint(x1, x2, x3, x4, 0.5); y = bezierPoint(y1, y2, y3, y4, 0.5); circle(x, y, 5);  // Center tangent line. // Scale the tangent point to draw a shorter line. stroke(255, 0, 0); tx = 0.1 * bezierTangent(x1, x2, x3, x4, 0.5); ty = 0.1 * bezierTangent(y1, y2, y3, y4, 0.5); line(x + tx, y + ty, x - tx, y - ty);  // Bottom-left circle. stroke(0); x = bezierPoint(x1, x2, x3, x4, 1); y = bezierPoint(y1, y2, y3, y4, 1); circle(x, y, 5);  // Bottom-left tangent. // Scale the tangent point to draw a shorter line. stroke(255, 0, 0); tx = 0.1 * bezierTangent(x1, x2, x3, x4, 1); ty = 0.1 * bezierTangent(y1, y2, y3, y4, 1); line(x + tx, y + ty, x - tx, y - ty);  describe( 'A black s-curve on a gray square. The endpoints and center of the curve are marked with white circles. Red tangent lines extend from the white circles.' ); } `
+
+📋 Parameters:
+   • {Number} a - coordinate of first anchor point.
+   • {Number} b - coordinate of first control point.
+   • {Number} c - coordinate of second control point.
+   • {Number} d - coordinate of second anchor point.
+   • {Number} t - amount to interpolate between 0 and 1.
+
+↩️  Returns:
+   Number - coordinate of a point on the tangent line.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Set the coordinates for the curve's anchor and control points.
+    let x1 = 85;
+    let x2 = 10;
+    let x3 = 90;
+    let x4 = 15;
+    let y1 = 20;
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 bezierVertex()                                                *p5.bezierVertex()*
+────────────────────
+
+📝 Adds a Bézier curve segment to a custom shape.  `bezierVertex()` adds a curved segment to custom shapes. The Bézier curves it creates are defined like those made by the [bezier()](#/p5/bezier) function. `bezierVertex()` must be called between the [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape) functions. Bézier need a starting point. Building a shape only with Bézier curves needs one initial call to [bezierVertex()](#/p5/vertex), before a number of `bezierVertex()` calls that is a multiple of the parameter set by [bezierOrder(...)](#/p5/bezierOrder) (default 3). But shapes can mix different types of vertices, so if there are some previous vertices, then the initial anchor is not needed, only the multiples of 3 (or the Bézier order) calls to `bezierVertex` for each curve.  Each curve of order 3 requires three calls to `bezierVertex`, so 2 curves would need 7 calls to `bezierVertex()`: (1 one initial anchor point, two sets of 3 curves describing the curves) With `bezierOrder(2)`, two curves would need 5 calls: 1 + 2 + 2.  Bézier curves can also be drawn in 3D using WebGL mode.  Note: `bezierVertex()` won’t work when an argument is passed to [beginShape()](#/p5/beginShape).    ` function setup() { createCanvas(100, 100);  background(200);  // Style the shape. noFill();  // Start drawing the shape. beginShape();  // Add the first anchor point. bezierVertex(30, 20);  // Add the Bézier vertex. bezierVertex(80, 0); bezierVertex(80, 75); bezierVertex(30, 75);  // Stop drawing the shape. endShape();  describe('A black C curve on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Draw the anchor points in black. stroke(0); strokeWeight(5); point(30, 20); point(30, 75);  // Draw the control points in red. stroke(255, 0, 0); point(80, 0); point(80, 75);  // Style the shape. noFill(); stroke(0); strokeWeight(1);  // Start drawing the shape. beginShape();  // Add the first anchor point. bezierVertex(30, 20);  // Add the Bézier vertex. bezierVertex(80, 0); bezierVertex(80, 75); bezierVertex(30, 75);  // Stop drawing the shape. endShape();  // Draw red lines from the anchor points to the control points. stroke(255, 0, 0); line(30, 20, 80, 0); line(30, 75, 80, 75);  describe( 'A gray square with three curves. A black curve has two straight, red lines that extend from its ends. The endpoints of all the curves are marked with dots.' ); } `    ` // Click the mouse near the red dot in the top-right corner // and drag to change the curve's shape.  let x2 = 80; let y2 = 0; let isChanging = false;  function setup() { createCanvas(100, 100);  describe( 'A gray square with three curves. A black curve has two straight, red lines that extend from its ends. The endpoints of all the curves are marked with dots.' ); }  function draw() { background(200);  // Draw the anchor points in black. stroke(0); strokeWeight(5); point(30, 20); point(30, 75);  // Draw the control points in red. stroke(255, 0, 0); point(x2, y2); point(80, 75);  // Style the shape. noFill(); stroke(0); strokeWeight(1);  // Start drawing the shape. beginShape();  // Add the first anchor point. bezierVertex(30, 20);  // Add the Bézier vertex. bezierVertex(x2, y2); bezierVertex(80, 75); bezierVertex(30, 75);  // Stop drawing the shape. endShape();  // Draw red lines from the anchor points to the control points. stroke(255, 0, 0); line(30, 20, x2, y2); line(30, 75, 80, 75); }  // Start changing the first control point if the user clicks near it. function mousePressed() { if (dist(mouseX, mouseY, x2, y2)    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. beginShape();  // Add the first anchor point. bezierVertex(30, 20);  // Add the Bézier vertices. bezierVertex(80, 0); bezierVertex(80, 75); bezierVertex(30, 75);  bezierVertex(50, 80); bezierVertex(60, 25); bezierVertex(30, 20);  // Stop drawing the shape. endShape();  describe('A crescent moon shape drawn in white on a gray background.'); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A crescent moon shape drawn in white on a blue background. When the user drags the mouse, the scene rotates and a second moon is revealed.'); }  function draw() { background('midnightblue');  // Enable orbiting with the mouse. orbitControl();  // Style the moons. noStroke(); fill('lemonchiffon');  // Draw the first moon. beginShape(); bezierVertex(-20, -30, 0);  bezierVertex(30, -50, 0); bezierVertex(30, 25, 0); bezierVertex(-20, 25, 0);  bezierVertex(0, 30, 0); bezierVertex(10, -25, 0); bezierVertex(-20, -30, 0); endShape();  // Draw the second moon. beginShape();  bezierVertex(-20, -30, -20);  bezierVertex(30, -50, -20); bezierVertex(30, 25, -20); bezierVertex(-20, 25, -20);  bezierVertex(0, 30, -20); bezierVertex(10, -25, -20); bezierVertex(-20, -30, -20);  endShape(); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Style the shape.
+    noFill();
+    // Start drawing the shape.
+    beginShape();
+    // Add the first anchor point.
+    bezierVertex(30, 20);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 box()                                                *p5.box()*
+───────────
+
+📝 Draws a box (rectangular prism).  A box is a 3D shape with six faces. Each face makes a 90˚ with four neighboring faces.  The first parameter, `width`, is optional. If a `Number` is passed, as in `box(20)`, it sets the box’s width and height. By default, `width` is 50.  The second parameter, `height`, is also optional. If a `Number` is passed, as in `box(20, 30)`, it sets the box’s height. By default, `height` is set to the box’s `width`.  The third parameter, `depth`, is also optional. If a `Number` is passed, as in `box(20, 30, 40)`, it sets the box’s depth. By default, `depth` is set to the box’s `height`.  The fourth parameter, `detailX`, is also optional. If a `Number` is passed, as in `box(20, 30, 40, 5)`, it sets the number of triangle subdivisions to use along the x-axis. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailX` is 1.  The fifth parameter, `detailY`, is also optional. If a number is passed, as in `box(20, 30, 40, 5, 7)`, it sets the number of triangle subdivisions to use along the y-axis. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailY` is 1.  Note: `box()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white box on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the box. box(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white box on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the box. // Set its width and height to 30. box(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white box on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the box. // Set its width to 30 and height to 50. box(30, 50); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white box on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the box. // Set its width to 30, height to 50, and depth to 10. box(30, 50, 10); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white box on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 buildGeometry()                                                *p5.buildGeometry()*
+─────────────────────
+
+📝 Creates a custom [p5.Geometry](#/p5.Geometry) object from simpler 3D shapes.  `buildGeometry()` helps with creating complex 3D shapes from simpler ones such as [sphere()](#/p5/sphere). It can help to make sketches more performant. For example, if a complex 3D shape doesn’t change while a sketch runs, then it can be created with `buildGeometry()`. Creating a [p5.Geometry](#/p5.Geometry) object once and then drawing it will run faster than repeatedly drawing the individual pieces.  The parameter, `callback`, is a function with the drawing instructions for the new [p5.Geometry](#/p5.Geometry) object. It will be called once to create the new 3D shape.  See [beginGeometry()](#/p5/beginGeometry) and [endGeometry()](#/p5/endGeometry) for another way to build 3D shapes.  Note: `buildGeometry()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  let shape;  function setup() { createCanvas(100, 100, WEBGL);  // Create the p5.Geometry object. shape = buildGeometry(createShape);  describe('A white cone drawn on a gray background.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. lights();  // Style the p5.Geometry object. noStroke();  // Draw the p5.Geometry object. model(shape); }  // Create p5.Geometry object from a single cone. function createShape() { cone(); } `    ` // Click and drag the mouse to view the scene from different angles.  let shape;  function setup() { createCanvas(100, 100, WEBGL);  // Create the arrow. shape = buildGeometry(createArrow);  describe('A white arrow drawn on a gray background.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. lights();  // Style the arrow. noStroke();  // Draw the arrow. model(shape); }  function createArrow() { // Add shapes to the p5.Geometry object. push(); rotateX(PI); cone(10); translate(0, -10, 0); cylinder(3, 20); pop(); } `    ` // Click and drag the mouse to view the scene from different angles.  let shape;  function setup() { createCanvas(100, 100, WEBGL);  // Create the p5.Geometry object. shape = buildGeometry(createArrow);  describe('Two white arrows drawn on a gray background. The arrow on the right rotates slowly.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. lights();  // Style the arrows. noStroke();  // Draw the p5.Geometry object. model(shape);  // Translate and rotate the coordinate system. translate(30, 0, 0); rotateZ(frameCount * 0.01);  // Draw the p5.Geometry object again. model(shape); }  function createArrow() { // Add shapes to the p5.Geometry object. push(); rotateX(PI); cone(10); translate(0, -10, 0); cylinder(3, 20); pop(); } `    ` // Click and drag the mouse to view the scene from different angles.  let button; let particles;  function setup() { createCanvas(100, 100, WEBGL);  // Create a button to reset the particle system. button = createButton('Reset');  // Call resetModel() when the user presses the button. button.mousePressed(resetModel);  // Add the original set of particles. resetModel();  describe('A set of white spheres on a gray background. The spheres are positioned randomly. Their positions reset when the user presses the Reset button.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. lights();  // Style the particles. noStroke();  // Draw the particles. model(particles); }  function resetModel() { // If the p5.Geometry object has already been created, // free those resources. if (particles) { freeGeometry(particles); }  // Create a new p5.Geometry object with random spheres. particles = buildGeometry(createParticles); }  function createParticles() { for (let i = 0; i
+
+📋 Parameters:
+   • {Function} callback - function that draws the shape.
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  let shape;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    // Create the p5.Geometry object.
+    shape = buildGeometry(createShape);
+    describe('A white cone drawn on a gray background.');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 circle()                                                *p5.circle()*
+──────────────
+
+📝 Draws a circle.  A circle is a round shape defined by the `x`, `y`, and `d` parameters. `x` and `y` set the location of its center. `d` sets its width and height (diameter). Every point on the circle's edge is the same distance, `0.5 * d`, from its center. `0.5 * d` (half the diameter) is the circle's radius. See [ellipseMode()](#/p5/ellipseMode) for other ways to set its position.    ` function setup() { createCanvas(100, 100);  background(200);  circle(50, 50, 25);  describe('A white circle with black outline in the middle of a gray canvas.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  circle(0, 0, 25);  describe('A white circle with black outline in the middle of a gray canvas.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    background(200);
+    circle(0, 0, 25);
+    describe('A white circle with black outline in the middle of a gray canvas.');
+  }
+  `
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 cone()                                                *p5.cone()*
+────────────
+
+📝 Draws a cone.  A cone is a 3D shape with triangular faces that connect a flat bottom to a single point. Cones with few faces look like pyramids. Cones with many faces have smooth surfaces.  The first parameter, `radius`, is optional. If a `Number` is passed, as in `cone(20)`, it sets the radius of the cone’s base. By default, `radius` is 50.  The second parameter, `height`, is also optional. If a `Number` is passed, as in `cone(20, 30)`, it sets the cone’s height. By default, `height` is set to the cone’s `radius`.  The third parameter, `detailX`, is also optional. If a `Number` is passed, as in `cone(20, 30, 5)`, it sets the number of edges used to form the cone's base. Using more edges makes the base look more like a circle. By default, `detailX` is 24.  The fourth parameter, `detailY`, is also optional. If a `Number` is passed, as in `cone(20, 30, 5, 7)`, it sets the number of triangle subdivisions to use along the y-axis connecting the base to the tip. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailY` is 1.  The fifth parameter, `cap`, is also optional. If a `false` is passed, as in `cone(20, 30, 5, 7, false)` the cone’s base won’t be drawn. By default, `cap` is `true`.  Note: `cone()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cone on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cone. cone(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cone on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cone. // Set its radius and height to 30. cone(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cone on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cone. // Set its radius to 30 and height to 50. cone(30, 50); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cone on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cone. // Set its radius to 30 and height to 50. // Set its detailX to 5. cone(30, 50, 5); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white pyramid on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cone. // Set its radius to 30 and height to 50. // Set its detailX to 5. cone(30, 50, 5); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cone on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cone. // Set its radius to 30 and height to 50. // Set its detailX to 24 and detailY to 2. cone(30, 50, 24, 2); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cone on a gray background. Its base is missing.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cone. // Set its radius to 30 and height to 50. // Set its detailX to 24 and detailY to 1. // Don't draw its base. cone(30, 50, 24, 1, false); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white cone on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 curveDetail()                                                *p5.curveDetail()*
+───────────────────
+
+📝 Sets the number of segments used to draw spline curves in WebGL mode.  In WebGL mode, smooth shapes are drawn using many flat segments. Adding more flat segments makes shapes appear smoother.  The parameter, `detail`, is the density of segments to use while drawing a spline curve.  Note: `curveDetail()` has no effect in 2D mode.     ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  // Set the curveDetail() to 0.5 curveDetail(0.5);  // Do not show all the vertices splineProperty('ends', EXCLUDE)  // Draw a black spline curve. noFill(); strokeWeight(1); stroke(0); spline(-45, -24, 0, 23, -26, 0, 23, 11, 0, -35, 15, 0);  // Draw red spline curves from the anchor points to the control points. spline(255, 0, 0); spline(-45, -24, 0, -45, -24, 0, 23, -26, 0, 23, 11, 0); spline(23, -26, 0, 23, 11, 0, -35, 15, 0, -35, 15, 0);  // Draw the anchor points in black. strokeWeight(5); stroke(0); point(23, -26); point(23, 11);  // Draw the control points in red. stroke(255, 0, 0); point(-45, -24); point(-35, 15);  describe( 'A gray square with a jagged curve drawn in three segments. The curve is a sideways U shape with red segments on top and bottom, and a black segment on the right. The endpoints of all the segments are marked with dots.' ); } `
+
+📋 Parameters:
+   • {Number} resolution - number of segments to use. Default is 1/4
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    background(200);
+    // Set the curveDetail() to 0.5
+    curveDetail(0.5);
+    // Do not show all the vertices
+    splineProperty('ends', EXCLUDE)
+    // Draw a black spline curve.
+    noFill();
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 cylinder()                                                *p5.cylinder()*
+────────────────
+
+📝 Draws a cylinder.  A cylinder is a 3D shape with triangular faces that connect a flat bottom to a flat top. Cylinders with few faces look like boxes. Cylinders with many faces have smooth surfaces.  The first parameter, `radius`, is optional. If a `Number` is passed, as in `cylinder(20)`, it sets the radius of the cylinder’s base. By default, `radius` is 50.  The second parameter, `height`, is also optional. If a `Number` is passed, as in `cylinder(20, 30)`, it sets the cylinder’s height. By default, `height` is set to the cylinder’s `radius`.  The third parameter, `detailX`, is also optional. If a `Number` is passed, as in `cylinder(20, 30, 5)`, it sets the number of edges used to form the cylinder's top and bottom. Using more edges makes the top and bottom look more like circles. By default, `detailX` is 24.  The fourth parameter, `detailY`, is also optional. If a `Number` is passed, as in `cylinder(20, 30, 5, 2)`, it sets the number of triangle subdivisions to use along the y-axis, between cylinder's the top and bottom. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailY` is 1.  The fifth parameter, `bottomCap`, is also optional. If a `false` is passed, as in `cylinder(20, 30, 5, 2, false)` the cylinder’s bottom won’t be drawn. By default, `bottomCap` is `true`.  The sixth parameter, `topCap`, is also optional. If a `false` is passed, as in `cylinder(20, 30, 5, 2, false, false)` the cylinder’s top won’t be drawn. By default, `topCap` is `true`.  Note: `cylinder()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cylinder on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cylinder. cylinder(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cylinder on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cylinder. // Set its radius and height to 30. cylinder(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cylinder on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cylinder. // Set its radius to 30 and height to 50. cylinder(30, 50); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white box on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cylinder. // Set its radius to 30 and height to 50. // Set its detailX to 5. cylinder(30, 50, 5); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cylinder on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cylinder. // Set its radius to 30 and height to 50. // Set its detailX to 24 and detailY to 2. cylinder(30, 50, 24, 2); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cylinder on a gray background. Its top is missing.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cylinder. // Set its radius to 30 and height to 50. // Set its detailX to 24 and detailY to 1. // Don't draw its bottom. cylinder(30, 50, 24, 1, false); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white cylinder on a gray background. Its top and bottom are missing.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the cylinder. // Set its radius to 30 and height to 50. // Set its detailX to 24 and detailY to 1. // Don't draw its bottom or top. cylinder(30, 50, 24, 1, false, false); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white cylinder on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 ellipse()                                                *p5.ellipse()*
+───────────────
+
+📝 Draws an ellipse (oval).  An ellipse is a round shape defined by the `x`, `y`, `w`, and `h` parameters. `x` and `y` set the location of its center. `w` and `h` set its width and height. See [ellipseMode()](#/p5/ellipseMode) for other ways to set its position.  If no height is set, the value of width is used for both the width and height. If a negative height or width is specified, the absolute value is taken.  The fifth parameter, `detail`, is also optional. It determines how many vertices are used to draw the ellipse in WebGL mode. The default value is 25.    ` function setup() { createCanvas(100, 100);  background(200);  ellipse(50, 50, 80, 80);  describe('A white circle on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  ellipse(50, 50, 80);  describe('A white circle on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  ellipse(50, 50, 80, 40);  describe('A white ellipse on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  ellipse(0, 0, 80, 40);  describe('A white ellipse on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  // Use 6 vertices. ellipse(0, 0, 80, 40, 6);  describe('A white hexagon on a gray canvas.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    background(200);
+    // Use 6 vertices.
+    ellipse(0, 0, 80, 40, 6);
+    describe('A white hexagon on a gray canvas.');
+  }
+  `
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 ellipseMode()                                                *p5.ellipseMode()*
+───────────────────
+
+📝 Changes where ellipses, circles, and arcs are drawn.  By default, the first two parameters of [ellipse()](#/p5/ellipse), [circle()](#/p5/circle), and [arc()](#/p5/arc) are the x- and y-coordinates of the shape's center. The next parameters set the shape's width and height. This is the same as calling `ellipseMode(CENTER)`.  `ellipseMode(RADIUS)` also uses the first two parameters to set the x- and y-coordinates of the shape's center. The next parameters are half of the shapes's width and height. Calling `ellipse(0, 0, 10, 15)` draws a shape with a width of 20 and height of 30.  `ellipseMode(CORNER)` uses the first two parameters as the upper-left corner of the shape. The next parameters are its width and height.  `ellipseMode(CORNERS)` uses the first two parameters as the location of one corner of the ellipse's bounding box. The next parameters are the location of the opposite corner.  The argument passed to `ellipseMode()` must be written in ALL CAPS because the constants `CENTER`, `RADIUS`, `CORNER`, and `CORNERS` are defined this way. JavaScript is a case-sensitive language.    ` function setup() { createCanvas(100, 100);  background(200);  // White ellipse. ellipseMode(RADIUS); fill(255); ellipse(50, 50, 30, 30);  // Gray ellipse. ellipseMode(CENTER); fill(100); ellipse(50, 50, 30, 30);  describe('A white circle with a gray circle at its center. Both circles have black outlines.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // White ellipse. ellipseMode(CORNER); fill(255); ellipse(25, 25, 50, 50);  // Gray ellipse. ellipseMode(CORNERS); fill(100); ellipse(25, 25, 50, 50);  describe('A white circle with a gray circle at its top-left corner. Both circles have black outlines.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // White ellipse.
+    ellipseMode(RADIUS);
+    fill(255);
+    ellipse(50, 50, 30, 30);
+    // Gray ellipse.
+    ellipseMode(CENTER);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 ellipsoid()                                                *p5.ellipsoid()*
+─────────────────
+
+📝 Draws an ellipsoid.  An ellipsoid is a 3D shape with triangular faces that connect to form a round surface. Ellipsoids with few faces look like crystals. Ellipsoids with many faces have smooth surfaces and look like eggs. `ellipsoid()` defines a shape by its radii. This is different from [ellipse()](#/p5/ellipse) which uses diameters (width and height).  The first parameter, `radiusX`, is optional. If a `Number` is passed, as in `ellipsoid(20)`, it sets the radius of the ellipsoid along the x-axis. By default, `radiusX` is 50.  The second parameter, `radiusY`, is also optional. If a `Number` is passed, as in `ellipsoid(20, 30)`, it sets the ellipsoid’s radius along the y-axis. By default, `radiusY` is set to the ellipsoid’s `radiusX`.  The third parameter, `radiusZ`, is also optional. If a `Number` is passed, as in `ellipsoid(20, 30, 40)`, it sets the ellipsoid’s radius along the z-axis. By default, `radiusZ` is set to the ellipsoid’s `radiusY`.  The fourth parameter, `detailX`, is also optional. If a `Number` is passed, as in `ellipsoid(20, 30, 40, 5)`, it sets the number of triangle subdivisions to use along the x-axis. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailX` is 24.  The fifth parameter, `detailY`, is also optional. If a `Number` is passed, as in `ellipsoid(20, 30, 40, 5, 7)`, it sets the number of triangle subdivisions to use along the y-axis. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailY` is 16.  Note: `ellipsoid()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white sphere on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the ellipsoid. // Set its radiusX to 30. ellipsoid(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white ellipsoid on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the ellipsoid. // Set its radiusX to 30. // Set its radiusY to 40. ellipsoid(30, 40); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white ellipsoid on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the ellipsoid. // Set its radiusX to 30. // Set its radiusY to 40. // Set its radiusZ to 50. ellipsoid(30, 40, 50); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white ellipsoid on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the ellipsoid. // Set its radiusX to 30. // Set its radiusY to 40. // Set its radiusZ to 50. // Set its detailX to 4. ellipsoid(30, 40, 50, 4); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white ellipsoid on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the ellipsoid. // Set its radiusX to 30. // Set its radiusY to 40. // Set its radiusZ to 50. // Set its detailX to 4. // Set its detailY to 3. ellipsoid(30, 40, 50, 4, 3); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white sphere on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 endContour()                                                *p5.endContour()*
+──────────────────
+
+📝 Stops creating a hole within a flat shape.  The [beginContour()](#/p5/beginContour) and `endContour()` functions allow for creating negative space within custom shapes that are flat. [beginContour()](#/p5/beginContour) begins adding vertices to a negative space and `endContour()` stops adding them. [beginContour()](#/p5/beginContour) and `endContour()` must be called between [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape).  By default, the controur has an `OPEN` end, and to close it, call `endContour(CLOSE)`. The CLOSE contour mode closes splines smoothly.  Transformations such as [translate()](#/p5/translate), [rotate()](#/p5/rotate), and [scale()](#/p5/scale) don't work between [beginContour()](#/p5/beginContour) and `endContour()`. It's also not possible to use other shapes, such as [ellipse()](#/p5/ellipse) or [rect()](#/p5/rect), between [beginContour()](#/p5/beginContour) and `endContour()`.  Note: The vertices that define a negative space must "wind" in the opposite direction from the outer shape. First, draw vertices for the outer shape clockwise order. Then, draw vertices for the negative space in counter-clockwise order.    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. beginShape();  // Exterior vertices, clockwise winding. vertex(10, 10); vertex(90, 10); vertex(90, 90); vertex(10, 90);  // Interior vertices, counter-clockwise winding. beginContour(); vertex(30, 30); vertex(30, 70); vertex(70, 70); vertex(70, 30); endContour(CLOSE);  // Stop drawing the shape. endShape(CLOSE);  describe('A white square with a square hole in its center drawn on a gray background.'); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white square with a square hole in its center drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Start drawing the shape. beginShape();  // Exterior vertices, clockwise winding. vertex(-40, -40); vertex(40, -40); vertex(40, 40); vertex(-40, 40);  // Interior vertices, counter-clockwise winding. beginContour(); vertex(-20, -20); vertex(-20, 20); vertex(20, 20); vertex(20, -20); endContour(CLOSE);  // Stop drawing the shape. endShape(CLOSE); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Start drawing the shape.
+    beginShape();
+    // Exterior vertices, clockwise winding.
+    vertex(10, 10);
+    vertex(90, 10);
+    vertex(90, 90);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 endShape()                                                *p5.endShape()*
+────────────────
+
+📝 Concludes the vertices of a custom shape.  The [beginShape()](#/p5/beginShape) and `endShape()` functions allow for creating custom shapes in 2D or 3D. [beginShape()](#/p5/beginShape) begins adding vertices to a custom shape and `endShape()` stops adding them.  The first parameter, `mode`, is optional. By default, the first and last vertices of a shape aren't connected. If the constant `CLOSE` is passed, as in `endShape(CLOSE)`, then the first and last vertices will be connected. When CLOSE mode is used for splines (with `splineVeertex()`), the shape is ended smoothly.   The second parameter, `count`, is also optional. In WebGL mode, it’s more efficient to draw many copies of the same shape using a technique called instancing. The `count` parameter tells WebGL mode how many copies to draw. For example, calling `endShape(CLOSE, 400)` after drawing a custom shape will make it efficient to draw 400 copies. This feature requires writing a custom shader.  After calling [beginShape()](#/p5/beginShape), shapes can be built by calling [vertex()](#/p5/vertex), [bezierVertex()](#/p5/bezierVertex) and/or [splineVertex()](#/p5/splineVertex). Calling `endShape()` will stop adding vertices to the shape. Each shape will be outlined with the current stroke color and filled with the current fill color.  Transformations such as [translate()](#/p5/translate), [rotate()](#/p5/rotate), and [scale()](#/p5/scale) don't work between [beginShape()](#/p5/beginShape) and `endShape()`. It's also not possible to use other shapes, such as [ellipse()](#/p5/ellipse) or [rect()](#/p5/rect), between [beginShape()](#/p5/beginShape) and `endShape()`.    ` function setup() { createCanvas(100, 100);  background(200);  // Style the shapes. noFill();  // Left triangle. beginShape(); vertex(20, 20); vertex(45, 20); vertex(45, 80); endShape(CLOSE);  // Right triangle. beginShape(); vertex(50, 20); vertex(75, 20); vertex(75, 80); endShape();  describe( 'Two sets of black lines drawn on a gray background. The three lines on the left form a right triangle. The two lines on the right form a right angle.' ); } `    ` function setup() { createCanvas(200, 100);  background(240);  noFill(); stroke(0);  // Open shape (left) beginShape(); vertex(20, 20); vertex(80, 20); vertex(80, 80); endShape();  // Not closed  // Closed shape (right) beginShape(); vertex(120, 20); vertex(180, 20); vertex(180, 80); endShape(CLOSE);  // Closed  describe( 'Two right-angled shapes on a light gray background. The left shape is open with three lines. The right shape is closed, forming a triangle.' ); } `    ` function setup() { createCanvas(100, 100); background(200);  beginShape();  splineVertex(32, 91); splineVertex(21, 17); splineVertex(68, 19); splineVertex(82, 91);  endShape(CLOSE);  describe( 'A curvy four-sided slightly lopsided blob.' ); }  `   ` // Note: A "uniform" is a global variable within a shader program.  // Create a string with the vertex shader program. // The vertex shader is called for each vertex. let vertSrc = `#version 300 es  precision mediump float;  in vec3 aPosition; flat out int instanceID;  uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix;  void main() {  // Copy the instance ID to the fragment shader. instanceID = gl_InstanceID; vec4 positionVec4 = vec4(aPosition, 1.0);  // gl_InstanceID represents a numeric value for each instance. // Using gl_InstanceID allows us to move each instance separately. // Here we move each instance horizontally by ID * 23. float xOffset = float(gl_InstanceID) * 23.0;  // Apply the offset to the final position. gl_Position = uProjectionMatrix * uModelViewMatrix * (positionVec4 - vec4(xOffset, 0.0, 0.0, 0.0)); } `;  // Create a string with the fragment shader program. // The fragment shader is called for each pixel. let fragSrc = `#version 300 es  precision mediump float;  out vec4 outColor; flat in int instanceID; uniform float numInstances;  void main() { vec4 red = vec4(1.0, 0.0, 0.0, 1.0); vec4 blue = vec4(0.0, 0.0, 1.0, 1.0);  // Normalize the instance ID. float normId = float(instanceID) / numInstances;  // Mix between two colors using the normalized instance ID. outColor = mix(red, blue, normId); } `;  function setup() { createCanvas(100, 100, WEBGL);  // Create a p5.Shader object. let myShader = createShader(vertSrc, fragSrc);  background(220);  // Compile and apply the p5.Shader. shader(myShader);  // Set the numInstances uniform. myShader.setUniform('numInstances', 4);  // Translate the origin to help align the drawing. translate(25, -10);  // Style the shapes. noStroke();  // Draw the shapes. beginShape(); vertex(0, 0); vertex(0, 20); vertex(20, 20); vertex(20, 0); vertex(0, 0); endShape(CLOSE, 4);  describe('A row of four squares. Their colors transition from purple on the left to red on the right'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Style the shapes.
+    noFill();
+    // Left triangle.
+    beginShape();
+    vertex(20, 20);
+    vertex(45, 20);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 freeGeometry()                                                *p5.freeGeometry()*
+────────────────────
+
+📝 Clears a [p5.Geometry](#/p5.Geometry) object from the graphics processing unit (GPU) memory.  [p5.Geometry](#/p5.Geometry) objects can contain lots of data about their vertices, surface normals, colors, and so on. Complex 3D shapes can use lots of memory which is a limited resource in many GPUs. Calling `freeGeometry()` can improve performance by freeing a [p5.Geometry](#/p5.Geometry) object’s resources from GPU memory. `freeGeometry()` works with [p5.Geometry](#/p5.Geometry) objects created with [beginGeometry()](#/p5/beginGeometry) and [endGeometry()](#/p5/endGeometry), [buildGeometry()](#/p5/buildGeometry), and [loadModel()](#/p5/loadModel).  The parameter, `geometry`, is the [p5.Geometry](#/p5.Geometry) object to be freed.  Note: A [p5.Geometry](#/p5.Geometry) object can still be drawn after its resources are cleared from GPU memory. It may take longer to draw the first time it’s redrawn.  Note: `freeGeometry()` can only be used in WebGL mode.    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  // Create a p5.Geometry object. beginGeometry(); cone(); let shape = endGeometry();  // Draw the shape. model(shape);  // Free the shape's resources. freeGeometry(shape); } `    ` // Click and drag the mouse to view the scene from different angles.  let button; let particles;  function setup() { createCanvas(100, 100, WEBGL);  // Create a button to reset the particle system. button = createButton('Reset');  // Call resetModel() when the user presses the button. button.mousePressed(resetModel);  // Add the original set of particles. resetModel(); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. lights();  // Style the particles. noStroke();  // Draw the particles. model(particles); }  function resetModel() { // If the p5.Geometry object has already been created, // free those resources. if (particles) { freeGeometry(particles); }  // Create a new p5.Geometry object with random spheres. particles = buildGeometry(createParticles); }  function createParticles() { for (let i = 0; i
+
+📋 Parameters:
+   • {p5.Geometry} geometry - 3D shape whose resources should be freed.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    background(200);
+    // Create a p5.Geometry object.
+    beginGeometry();
+    cone();
+    let shape = endGeometry();
+    // Draw the shape.
+    model(shape);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 line()                                                *p5.line()*
+────────────
+
+📝 Draws a straight line between two points.  A line's default width is one pixel. The version of `line()` with four parameters draws the line in 2D. To color a line, use the [stroke()](#/p5/stroke) function. To change its width, use the [strokeWeight()](#/p5/strokeWeight) function. A line can't be filled, so the [fill()](#/p5/fill) function won't affect the line's color.  The version of `line()` with six parameters allows the line to be drawn in 3D space. Doing so requires adding the `WEBGL` argument to [createCanvas()](#/p5/createCanvas).    ` function setup() { createCanvas(100, 100);  background(200);  line(30, 20, 85, 75);  describe( 'A black line on a gray canvas running from top-center to bottom-right.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Style the line. stroke('magenta'); strokeWeight(5);  line(30, 20, 85, 75);  describe( 'A thick, magenta line on a gray canvas running from top-center to bottom-right.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Top. line(30, 20, 85, 20);  // Right. stroke(126); line(85, 20, 85, 75);  // Bottom. stroke(255); line(85, 75, 30, 75);  describe( 'Three lines drawn in grayscale on a gray canvas. They form the top, right, and bottom sides of a square.' ); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  line(-20, -30, 35, 25);  describe( 'A black line on a gray canvas running from top-center to bottom-right.' ); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A black line connecting two spheres. The scene spins slowly.'); }  function draw() { background(200);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Draw a line. line(0, 0, 0, 30, 20, -10);  // Draw the center sphere. sphere(10);  // Translate to the second point. translate(30, 20, -10);  // Draw the bottom-right sphere. sphere(10); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    background(200);
+    line(-20, -30, 35, 25);
+    describe(
+      'A black line on a gray canvas running from top-center to bottom-right.'
+    );
+  }
+  `
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 normal()                                                *p5.normal()*
+──────────────
+
+📝 Sets the normal vector for vertices in a custom 3D shape.  3D shapes created with [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape) are made by connecting sets of points called vertices. Each vertex added with [vertex()](#/p5/vertex) has a normal vector that points away from it. The normal vector controls how light reflects off the shape.  `normal()` can be called two ways with different parameters to define the normal vector's components.  The first way to call `normal()` has three parameters, `x`, `y`, and `z`. If `Number`s are passed, as in `normal(1, 2, 3)`, they set the x-, y-, and z-components of the normal vector.  The second way to call `normal()` has one parameter, `vector`. If a [p5.Vector](#/p5.Vector) object is passed, as in `normal(myVector)`, its components will be used to set the normal vector.  `normal()` changes the normal vector of vertices added to a custom shape with [vertex()](#/p5/vertex). `normal()` must be called between the [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape) functions, just like [vertex()](#/p5/vertex). The normal vector set by calling `normal()` will affect all following vertices until `normal()` is called again:  ```js beginShape();  // Set the vertex normal. normal(-0.4, -0.4, 0.8);  // Add a vertex. vertex(-30, -30, 0);  // Set the vertex normal. normal(0, 0, 1);  // Add vertices. vertex(30, -30, 0); vertex(30, 30, 0);  // Set the vertex normal. normal(0.4, -0.4, 0.8);  // Add a vertex. vertex(-30, 30, 0);  endShape(); ```    ` // Click the and drag the mouse to view the scene from a different angle.  function setup() { createCanvas(100, 100, WEBGL);  describe( 'A colorful square on a black background. The square changes color and rotates when the user drags the mouse. Parts of its surface reflect light in different directions.' ); }  function draw() { background(0);  // Enable orbiting with the mouse. orbitControl();  // Style the shape. normalMaterial(); noStroke();  // Draw the shape. beginShape(); vertex(-30, -30, 0); vertex(30, -30, 0); vertex(30, 30, 0); vertex(-30, 30, 0); endShape(); } `    ` // Click the and drag the mouse to view the scene from a different angle.  function setup() { createCanvas(100, 100, WEBGL);  describe( 'A colorful square on a black background. The square changes color and rotates when the user drags the mouse. Parts of its surface reflect light in different directions.' ); }  function draw() { background(0);  // Enable orbiting with the mouse. orbitControl();  // Style the shape. normalMaterial(); noStroke();  // Draw the shape. // Use normal() to set vertex normals. beginShape(); normal(-0.4, -0.4, 0.8); vertex(-30, -30, 0);  normal(0, 0, 1); vertex(30, -30, 0); vertex(30, 30, 0);  normal(0.4, -0.4, 0.8); vertex(-30, 30, 0); endShape(); } `    ` // Click the and drag the mouse to view the scene from a different angle.  function setup() { createCanvas(100, 100, WEBGL);  describe( 'A colorful square on a black background. The square changes color and rotates when the user drags the mouse. Parts of its surface reflect light in different directions.' ); }  function draw() { background(0);  // Enable orbiting with the mouse. orbitControl();  // Style the shape. normalMaterial(); noStroke();  // Create p5.Vector objects. let n1 = createVector(-0.4, -0.4, 0.8); let n2 = createVector(0, 0, 1); let n3 = createVector(0.4, -0.4, 0.8);  // Draw the shape. // Use normal() to set vertex normals. beginShape(); normal(n1); vertex(-30, -30, 0);  normal(n2); vertex(30, -30, 0); vertex(30, 30, 0);  normal(n3); vertex(-30, 30, 0); endShape(); } `
+
+💡 Example:
+>
+  `
+  // Click the and drag the mouse to view the scene from a different angle.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe(
+      'A colorful square on a black background. The square changes color and rotates when the user drags the mouse. Parts of its surface reflect light in different directions.'
+    );
+  }
+  function draw() {
+    background(0);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 noSmooth()                                                *p5.noSmooth()*
+────────────────
+
+📝 Draws certain features with jagged (aliased) edges.  [smooth()](#/p5/smooth) is active by default. In 2D mode, `noSmooth()` is helpful for scaling up images without blurring. The functions don't affect shapes or fonts.  In WebGL mode, `noSmooth()` causes all shapes to be drawn with jagged (aliased) edges. The functions don't affect images or fonts.    ` let heart;  async function setup() { // Load a pixelated heart image from an image data string. heart = await loadImage('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAEZJREFUGFd9jcsNACAIQ9tB2MeR3YdBMBBq8CIXPi2vBICIiOwkOedatllqWO6Y8yOWoyuNf1GZwgmf+RRG2YXr+xVFmA8HZ9Mx/KGPMtcAAAAASUVORK5CYII='); createCanvas(100, 100);  background(50);  // Antialiased hearts. image(heart, 10, 10); image(heart, 20, 10, 16, 16); image(heart, 40, 10, 32, 32);  // Aliased hearts. noSmooth(); image(heart, 10, 60); image(heart, 20, 60, 16, 16); image(heart, 40, 60, 32, 32); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  circle(0, 0, 80);  describe('A white circle on a gray background.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  // Disable smoothing. noSmooth();  background(200);  circle(0, 0, 80);  describe('A pixelated white circle on a gray background.'); } `
+
+💡 Example:
+>
+  `
+  let heart;
+  async function setup() {
+    // Load a pixelated heart image from an image data string.
+    heart = await loadImage('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAEZJREFUGFd9jcsNACAIQ9tB2MeR3YdBMBBq8CIXPi2vBICIiOwkOedatllqWO6Y8yOWoyuNf1GZwgmf+RRG2YXr+xVFmA8HZ9Mx/KGPMtcAAAAASUVORK5CYII=');
+    createCanvas(100, 100);
+    background(50);
+    // Antialiased hearts.
+    image(heart, 10, 10);
+    image(heart, 20, 10, 16, 16);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 plane()                                                *p5.plane()*
+─────────────
+
+📝 Draws a plane.  A plane is a four-sided, flat shape with every angle measuring 90˚. It’s similar to a rectangle and offers advanced drawing features in WebGL mode.  The first parameter, `width`, is optional. If a `Number` is passed, as in `plane(20)`, it sets the plane’s width and height. By default, `width` is 50.  The second parameter, `height`, is also optional. If a `Number` is passed, as in `plane(20, 30)`, it sets the plane’s height. By default, `height` is set to the plane’s `width`.  The third parameter, `detailX`, is also optional. If a `Number` is passed, as in `plane(20, 30, 5)` it sets the number of triangle subdivisions to use along the x-axis. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailX` is 1.  The fourth parameter, `detailY`, is also optional. If a `Number` is passed, as in `plane(20, 30, 5, 7)` it sets the number of triangle subdivisions to use along the y-axis. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailY` is 1.  Note: `plane()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white plane on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the plane. plane(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white plane on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the plane. // Set its width and height to 30. plane(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white plane on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the plane. // Set its width to 30 and height to 50. plane(30, 50); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white plane on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 point()                                                *p5.point()*
+─────────────
+
+📝 Draws a single point in space.  A point's default width is one pixel. To color a point, use the [stroke()](#/p5/stroke) function. To change its width, use the [strokeWeight()](#/p5/strokeWeight) function. A point can't be filled, so the [fill()](#/p5/fill) function won't affect the point's color.  The version of `point()` with two parameters allows the point's location to be set with its x- and y-coordinates, as in `point(10, 20)`.  The version of `point()` with three parameters allows the point to be drawn in 3D space with x-, y-, and z-coordinates, as in `point(10, 20, 30)`. Doing so requires adding the `WEBGL` argument to [createCanvas()](#/p5/createCanvas).  The version of `point()` with one parameter allows the point's location to be set with a [p5.Vector](#/p5/p5.Vector) object.   ` function setup() { createCanvas(100, 100);  background(200);  // Making point to 5 pixels strokeWeight(5);  // Top-left. point(30, 20);  // Top-right. point(85, 20);  // Bottom-right. point(85, 75);  // Bottom-left. point(30, 75);  describe( 'Four small, black points drawn on a gray canvas. The points form the corners of a square.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Making point to 5 pixels. strokeWeight(5);  // Top-left. point(30, 20);  // Top-right. point(70, 20);  // Style the next points. stroke('purple'); strokeWeight(10);  // Bottom-right. point(70, 80);  // Bottom-left. point(30, 80);  describe( 'Four points drawn on a gray canvas. Two are black and two are purple. The points form the corners of a square.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Making point to 5 pixels. strokeWeight(5);  // Top-left. let a = createVector(30, 20); point(a);  // Top-right. let b = createVector(70, 20); point(b);  // Bottom-right. let c = createVector(70, 80); point(c);  // Bottom-left. let d = createVector(30, 80); point(d);  describe( 'Four small, black points drawn on a gray canvas. The points form the corners of a square.' ); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('Two purple points drawn on a gray canvas.'); }  function draw() { background(200);  // Style the points. stroke('purple'); strokeWeight(10);  // Top-left. point(-20, -30);  // Bottom-right. point(20, 30); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('Two purple points drawn on a gray canvas. The scene spins slowly.'); }  function draw() { background(200);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Style the points. stroke('purple'); strokeWeight(10);  // Top-left. point(-20, -30, 0);  // Bottom-right. point(20, 30, -50); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Making point to 5 pixels
+    strokeWeight(5);
+    // Top-left.
+    point(30, 20);
+    // Top-right.
+    point(85, 20);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 quad()                                                *p5.quad()*
+────────────
+
+📝 Draws a quadrilateral (four-sided shape).  Quadrilaterals include rectangles, squares, rhombuses, and trapezoids. The first pair of parameters `(x1, y1)` sets the quad's first point. The next three pairs of parameters set the coordinates for its next three points `(x2, y2)`, `(x3, y3)`, and `(x4, y4)`. Points should be added in either clockwise or counter-clockwise order.  The version of `quad()` with twelve parameters allows the quad to be drawn in 3D space. Doing so requires adding the `WEBGL` argument to [createCanvas()](#/p5/createCanvas).  The thirteenth and fourteenth parameters are optional. In WebGL mode, they set the number of segments used to draw the quadrilateral in the x- and y-directions. They're both 2 by default.   ` function setup() { createCanvas(100, 100);  background(200);  quad(20, 20, 80, 20, 80, 80, 20, 80);  describe('A white square with a black outline drawn on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  quad(20, 30, 80, 30, 80, 70, 20, 70);  describe('A white rectangle with a black outline drawn on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  quad(50, 62, 86, 50, 50, 38, 14, 50);  describe('A white rhombus with a black outline drawn on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  quad(20, 50, 80, 30, 80, 70, 20, 70);  describe('A white trapezoid with a black outline drawn on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  quad(-30, -30, 30, -30, 30, 30, -30, 30);  describe('A white square with a black outline drawn on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A wavy white surface spins around on gray canvas.'); }  function draw() { background(200);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Draw the quad. quad(-30, -30, 0, 30, -30, 0, 30, 30, 20, -30, 30, -20); } `
+
+📋 Parameters:
+   • {Number} x1 - the x-coordinate of the first point.
+   • {Number} y1 - the y-coordinate of the first point.
+   • {Number} x2 - the x-coordinate of the second point.
+   • {Number} y2 - the y-coordinate of the second point.
+   • {Number} x3 - the x-coordinate of the third point.
+   • {Number} y3 - the y-coordinate of the third point.
+   • {Number} x4 - the x-coordinate of the fourth point.
+   • {Number} y4 - the y-coordinate of the fourth point.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    quad(20, 20, 80, 20, 80, 80, 20, 80);
+    describe('A white square with a black outline drawn on a gray canvas.');
+  }
+  `
+  
+  
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 rect()                                                *p5.rect()*
+────────────
+
+📝 Draws a rectangle.  A rectangle is a four-sided shape defined by the `x`, `y`, `w`, and `h` parameters. `x` and `y` set the location of its top-left corner. `w` sets its width and `h` sets its height. Every angle in the rectangle measures 90˚. See [rectMode()](#/p5/rectMode) for other ways to define rectangles.  The version of `rect()` with five parameters creates a rounded rectangle. The fifth parameter sets the radius for all four corners.  The version of `rect()` with eight parameters also creates a rounded rectangle. Each of the last four parameters set the radius of a corner. The radii start with the top-left corner and move clockwise around the rectangle. If any of these parameters are omitted, they are set to the value of the last radius that was set.    ` function setup() { createCanvas(100, 100);  background(200);  rect(30, 20, 55, 55);  describe('A white square with a black outline on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  rect(30, 20, 55, 40);  describe('A white rectangle with a black outline on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Give all corners a radius of 20. rect(30, 20, 55, 50, 20);  describe('A white rectangle with a black outline and round edges on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Give each corner a unique radius. rect(30, 20, 55, 50, 20, 15, 10, 5);  describe('A white rectangle with a black outline and round edges of different radii.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  rect(-20, -30, 55, 55);  describe('A white square with a black outline on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A white square spins around on gray canvas.'); }  function draw() { background(200);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Draw the rectangle. rect(-20, -30, 55, 55); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    rect(30, 20, 55, 55);
+    describe('A white square with a black outline on a gray canvas.');
+  }
+  `
+  
+  
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 rectMode()                                                *p5.rectMode()*
+────────────────
+
+📝 Changes where rectangles and squares are drawn.  By default, the first two parameters of [rect()](#/p5/rect) and [square()](#/p5/square), are the x- and y-coordinates of the shape's upper left corner. The next parameters set the shape's width and height. This is the same as calling `rectMode(CORNER)`.  `rectMode(CORNERS)` also uses the first two parameters as the location of one of the corners. The next parameters are the location of the opposite corner. This mode only works for [rect()](#/p5/rect).  `rectMode(CENTER)` uses the first two parameters as the x- and y-coordinates of the shape's center. The next parameters are its width and height.  `rectMode(RADIUS)` also uses the first two parameters as the x- and y-coordinates of the shape's center. The next parameters are half of the shape's width and height.  The argument passed to `rectMode()` must be written in ALL CAPS because the constants `CENTER`, `RADIUS`, `CORNER`, and `CORNERS` are defined this way. JavaScript is a case-sensitive language.    ` function setup() { createCanvas(100, 100);  background(200);  rectMode(CORNER); fill(255); rect(25, 25, 50, 50);  rectMode(CORNERS); fill(100); rect(25, 25, 50, 50);  describe('A small gray square drawn at the top-left corner of a white square.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  rectMode(RADIUS); fill(255); rect(50, 50, 30, 30);  rectMode(CENTER); fill(100); rect(50, 50, 30, 30);  describe('A small gray square drawn at the center of a white square.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  rectMode(CORNER); fill(255); square(25, 25, 50);  describe('A white square.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  rectMode(RADIUS); fill(255); square(50, 50, 30);  rectMode(CENTER); fill(100); square(50, 50, 30);  describe('A small gray square drawn at the center of a white square.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    rectMode(CORNER);
+    fill(255);
+    rect(25, 25, 50, 50);
+    rectMode(CORNERS);
+    fill(100);
+    rect(25, 25, 50, 50);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 smooth()                                                *p5.smooth()*
+──────────────
+
+📝 Draws certain features with smooth (antialiased) edges.  `smooth()` is active by default. In 2D mode, [noSmooth()](#/p5/noSmooth) is helpful for scaling up images without blurring. The functions don't affect shapes or fonts.  In WebGL mode, [noSmooth()](#/p5/noSmooth) causes all shapes to be drawn with jagged (aliased) edges. The functions don't affect images or fonts.    ` let heart;  async function setup() { // Load a pixelated heart image from an image data string. heart = await loadImage('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAEZJREFUGFd9jcsNACAIQ9tB2MeR3YdBMBBq8CIXPi2vBICIiOwkOedatllqWO6Y8yOWoyuNf1GZwgmf+RRG2YXr+xVFmA8HZ9Mx/KGPMtcAAAAASUVORK5CYII=');  createCanvas(100, 100);  background(50);  // Antialiased hearts. image(heart, 10, 10); image(heart, 20, 10, 16, 16); image(heart, 40, 10, 32, 32);  // Aliased hearts. noSmooth(); image(heart, 10, 60); image(heart, 20, 60, 16, 16); image(heart, 40, 60, 32, 32); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  circle(0, 0, 80);  describe('A white circle on a gray background.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  // Disable smoothing. noSmooth();  background(200);  circle(0, 0, 80);  describe('A pixelated white circle on a gray background.'); } `
+
+💡 Example:
+>
+  `
+  let heart;
+  async function setup() {
+    // Load a pixelated heart image from an image data string.
+    heart = await loadImage('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAEZJREFUGFd9jcsNACAIQ9tB2MeR3YdBMBBq8CIXPi2vBICIiOwkOedatllqWO6Y8yOWoyuNf1GZwgmf+RRG2YXr+xVFmA8HZ9Mx/KGPMtcAAAAASUVORK5CYII=');
+    createCanvas(100, 100);
+    background(50);
+    // Antialiased hearts.
+    image(heart, 10, 10);
+    image(heart, 20, 10, 16, 16);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 sphere()                                                *p5.sphere()*
+──────────────
+
+📝 Draws a sphere.  A sphere is a 3D shape with triangular faces that connect to form a round surface. Spheres with few faces look like crystals. Spheres with many faces have smooth surfaces and look like balls.  The first parameter, `radius`, is optional. If a `Number` is passed, as in `sphere(20)`, it sets the radius of the sphere. By default, `radius` is 50.  The second parameter, `detailX`, is also optional. If a `Number` is passed, as in `sphere(20, 5)`, it sets the number of triangle subdivisions to use along the x-axis. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailX` is 24.  The third parameter, `detailY`, is also optional. If a `Number` is passed, as in `sphere(20, 5, 2)`, it sets the number of triangle subdivisions to use along the y-axis. All 3D shapes are made by connecting triangles to form their surfaces. By default, `detailY` is 16.  Note: `sphere()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white sphere on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the sphere. sphere(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white sphere on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the sphere. // Set its radius to 30. sphere(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white sphere on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the sphere. // Set its radius to 30. // Set its detailX to 6. sphere(30, 6); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white sphere on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the sphere. // Set its radius to 30. // Set its detailX to 24. // Set its detailY to 4. sphere(30, 24, 4); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white sphere on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 spline()                                                *p5.spline()*
+──────────────
+
+📝 Draws a curve using a Catmull-Rom spline.  Spline curves can form shapes and curves that slope gently. They’re like cables that are attached to a set of points. By default (`ends: INCLUDE`), the curve passes through all four points you provide, in order `p0(x1,y1)` -> `p1(x2,y2)` -> `p2(x3,y3)` -> `p3(x4,y4)`. Think of them as points on a curve. If you switch to `ends: EXCLUDE`, p0 and p3 act like control points and only the middle span `p1->p2` is drawn.  Spline curves can also be drawn in 3D using WebGL mode. The 3D version of `spline()` has twelve arguments because each point has x-, y-, and z-coordinates.     ` function setup() { createCanvas(200, 200); background(240); noFill();  stroke(0); strokeWeight(2); spline(40, 60, 100, 40, 120, 120, 60, 140);  strokeWeight(5); point(40, 60); point(100, 40); point(120, 120); point(60, 140);  describe('A black spline passes smoothly through four points'); } `    ` function setup() { createCanvas(200, 200); background(245);  // Ensure the curve includes both end spans p0->p1 and p2->p3 splineProperty('ends', INCLUDE);  // Control / anchor points const p0 = createVector(30, 160); const p1 = createVector(60, 40); const p2 = createVector(140, 40); const p3 = createVector(170, 160);  // Draw the spline that passes through ALL four points (INCLUDE) noFill(); stroke(0); strokeWeight(2); spline(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);  // Draw markers + labels fill(255); stroke(0); const r = 6; circle(p0.x, p0.y, r); circle(p1.x, p1.y, r); circle(p2.x, p2.y, r); circle(p3.x, p3.y, r);  noStroke(); fill(0); text('p0', p0.x - 14, p0.y + 14); text('p1', p1.x - 14, p1.y - 8); text('p2', p2.x + 4, p2.y - 8); text('p3', p3.x + 4, p3.y + 14);  describe('A black Catmull-Rom spline passes through p0, p1, p2, p3 with endpoints included.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Exclude the ends—skip the outer spans (p0→p1 and p2→p3) so only the middle span (p1→p2) is drawn. splineProperty('ends', EXCLUDE);  // Draw a black spline curve. noFill(); strokeWeight(1); stroke(0); spline(5, 26, 73, 24, 73, 61, 15, 65);  // Draw red spline curves from the points. stroke(255, 0, 0); spline(5, 26, 5, 26, 73, 24, 73, 61); spline(73, 24, 73, 61, 15, 65, 15, 65);  // Draw the points in black. strokeWeight(5); stroke(0); point(73, 24); point(73, 61);  // Draw the points in red. stroke(255, 0, 0); point(5, 26); point(15, 65);  describe( 'A gray square with a curve drawn in three segments. The curve is a sideways U shape with red segments on top and bottom, and a black segment on the right. The endpoints of all the segments are marked with dots.' ); } `    ` let x1 = 5; let y1 = 26; let isChanging = false;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a curve drawn in three segments. The curve is a sideways U shape with red segments on top and bottom, and a black segment on the right. The endpoints of all the segments are marked with dots.' ); }  function draw() { background(200);  // Exclude the ends—skip the outer spans (p0→p1 and p2→p3) so only the middle span (p1→p2) is drawn. splineProperty('ends', EXCLUDE);  // Draw a black spline curve. noFill(); strokeWeight(1); stroke(0); spline(x1, y1, 73, 24, 73, 61, 15, 65);  // Draw red spline curves from the points. stroke(255, 0, 0); spline(x1, y1, x1, y1, 73, 24, 73, 61); spline(73, 24, 73, 61, 15, 65, 15, 65);  // Draw the anchor points in black. strokeWeight(5); stroke(0); point(73, 24); point(73, 61);  // Draw the points in red. stroke(255, 0, 0); point(x1, y1); point(15, 65); }  // Start changing the first point if the user clicks near it. function mousePressed() { if (dist(mouseX, mouseY, x1, y1)    ` function setup() { createCanvas(100, 100);  background('skyblue');  // Exclude the ends—skip the outer spans (p0→p1 and p2→p3) so only the middle span (p1→p2) is drawn. splineProperty('ends', EXCLUDE);  // Draw the red balloon. fill('red'); spline(-150, 275, 50, 60, 50, 60, 250, 275);  // Draw the balloon string. line(50, 60, 50, 80);  describe('A red balloon in a blue sky.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A red balloon in a blue sky.'); }  function draw() { background('skyblue');  // Exclude the ends—skip the outer spans (p0→p1 and p2→p3) so only the middle span (p1→p2) is drawn. splineProperty('ends', EXCLUDE);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Draw the red balloon. fill('red'); spline(-200, 225, 0, 0, 10, 0, 0, 10, 0, 200, 225, 0);  // Draw the balloon string. line(0, 10, 0, 0, 30, 0); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(200, 200);
+    background(240);
+    noFill();
+    stroke(0);
+    strokeWeight(2);
+    spline(40, 60, 100, 40, 120, 120, 60, 140);
+    strokeWeight(5);
+    point(40, 60);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 splinePoint()                                                *p5.splinePoint()*
+───────────────────
+
+📝 Calculates coordinates along a spline curve using interpolation.  `splinePoint()` calculates coordinates along a spline curve using four points p0, p1, p2, p3. It expects points in the same order as the [spline()](#/p5/spline) function. `splinePoint()` works one axis at a time. Passing the points' x-coordinates will calculate the x-coordinate of a point on the curve. Passing the points' y-coordinates will calculate the y-coordinate of a point on the curve.  The first parameter, `a`, is the coordinate of point p0.  The second and third parameters, `b` and `c`, are the coordinates of points p1 and p2.  The fourth parameter, `d`, is the coordinate of point p3.  The fifth parameter, `t`, is the amount to interpolate along the span from p1 to p2. `t = 0` is p1, `t = 1` is p2, and `t = 0.5` is halfway between them.    ` function setup() { createCanvas(100, 100);  background(200);   // Set the coordinates for the curve's four points (p0, p1, p2, p3). let x1 = 5; let y1 = 26; let x2 = 73; let y2 = 24; let x3 = 73; let y3 = 61; let x4 = 15; let y4 = 65;  // Draw the curve. noFill(); spline(x1, y1, x2, y2, x3, y3, x4, y4);  // Draw circles along the curve's path. fill(255);  // Top. let x = splinePoint(x1, x2, x3, x4, 0); let y = splinePoint(y1, y2, y3, y4, 0); circle(x, y, 5);  // Center. x = splinePoint(x1, x2, x3, x4, 0.5); y = splinePoint(y1, y2, y3, y4, 0.5); circle(x, y, 5);  // Bottom. x = splinePoint(x1, x2, x3, x4, 1); y = splinePoint(y1, y2, y3, y4, 1); circle(x, y, 5);  describe('A black curve on a gray square. The endpoints and center of the curve are marked with white circles.'); } `    ` function setup() { createCanvas(100, 100);  describe('A black curve on a gray square. A white circle moves back and forth along the curve.'); }  function draw() { background(200);  // Set the coordinates for the curve's four points (p0, p1, p2, p3). let x1 = 5; let y1 = 26; let x2 = 73; let y2 = 24; let x3 = 73; let y3 = 61; let x4 = 15; let y4 = 65;  // Draw the curve. noFill(); spline(x1, y1, x2, y2, x3, y3, x4, y4);  // Calculate the circle's coordinates. let t = 0.5 * sin(frameCount * 0.01) + 0.5; let x = splinePoint(x1, x2, x3, x4, t); let y = splinePoint(y1, y2, y3, y4, t);  // Draw the circle. fill(255); circle(x, y, 5); } `    ` let p0, p1, p2, p3;  function setup() { createCanvas(200, 200); splineProperty('ends', INCLUDE); // make endpoints part of the curve  // Four points forming a gentle arch p0 = createVector(30, 160); p1 = createVector(60, 50); p2 = createVector(140, 50); p3 = createVector(170, 160);  describe('Black spline through p0–p3. A red dot marks the location at parameter t on p1->p2 using splinePoint.'); }  function draw() { background(245);  // Draw the spline for context noFill(); stroke(0); strokeWeight(2); spline(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);  // Map mouse X to t in [0, 1] (span p1->p2) let t = constrain(map(mouseX, 0, width, 0, 1), 0, 1);  // Evaluate the curve point by axis (splinePoint works one axis at a time) let x = splinePoint(p0.x, p1.x, p2.x, p3.x, t); let y = splinePoint(p0.y, p1.y, p2.y, p3.y, t);  // Marker at the evaluated position noStroke(); fill('red'); circle(x, y, 8);  // Draw control/anchor points stroke(0); strokeWeight(1); fill(255); const r = 6; circle(p0.x, p0.y, r); circle(p1.x, p1.y, r); circle(p2.x, p2.y, r); circle(p3.x, p3.y, r);  // Labels + UI hint noStroke(); fill(20); textSize(10); text('p0', p0.x - 12, p0.y + 14); text('p1', p1.x - 12, p1.y - 8); text('p2', p2.x + 4, p2.y - 8); text('p3', p3.x + 4, p3.y + 14); text('t = ' + nf(t, 1, 2) + ' (p1→p2)', 8, 16); } `
+
+📋 Parameters:
+   • {Number} a - coordinate of point p0.
+   • {Number} b - coordinate of point p1.
+   • {Number} c - coordinate of point p2.
+   • {Number} d - coordinate of point p3.
+   • {Number} t - amount to interpolate between 0 and 1.
+
+↩️  Returns:
+   Number - coordinate of a point on the curve.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Set the coordinates for the curve's four points (p0, p1, p2, p3).
+    let x1 = 5;
+    let y1 = 26;
+    let x2 = 73;
+    let y2 = 24;
+    let x3 = 73;
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 splineProperties()                                                *p5.splineProperties()*
+────────────────────────
+
+📝 Sets multiple properties for spline curves at once.  `splineProperties()` accepts an object with key-value pairs to configure how spline curves are drawn. This is a convenient way to set multiple spline properties with a single function call, rather than calling [splineProperty()](#/p5/splineProperty) multiple times.  The properties object can include: - `tightness`: A number that controls how tightly the curve fits to the vertex points. The default value is 0. Positive values make the curve tighter (straighter), while negative values make it looser. Values between -5 and 5 work best. - `ends`: Controls whether to draw the end segments of the spline. Set to `EXCLUDE` to skip drawing the segments between the first and second points and between the second-to-last and last points. This is useful when you want to use the first and last points as control points only.  `splineProperties()` affects curves drawn with [splineVertex()](#/p5/splineVertex) within [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape), as well as curves drawn with [spline()](#/p5/spline). The properties remain active until changed by another call to `splineProperties()` or [splineProperty()](#/p5/splineProperty).    ` function setup() { createCanvas(100, 100); background(220);  // Set spline tightness using splineProperties splineProperties({ tightness: 0.5 });  // Draw a spline curve noFill(); stroke(0); strokeWeight(2);  beginShape(); splineVertex(20, 80); splineVertex(30, 30); splineVertex(70, 30); splineVertex(80, 80); endShape();  // Show vertex points fill(255, 0, 0); noStroke(); circle(20, 80, 6); circle(30, 30, 6); circle(70, 30, 6); circle(80, 80, 6);  describe('A smooth curved line with tightness 0.5 connecting four red points.'); } `    ` function setup() { createCanvas(100, 100); background(220);  // Exclude end segments - first and last points become control points splineProperties({ tightness: 0, ends: EXCLUDE });  // Draw curve only between middle points noFill(); stroke(0); strokeWeight(2);  beginShape(); splineVertex(10, 50);  // Control point (affects curve but not drawn to) splineVertex(30, 20);  // Start of visible curve splineVertex(70, 80);  // End of visible curve splineVertex(90, 50);  // Control point (affects curve but not drawn to) endShape();  // Show all points fill(200, 0, 0); noStroke(); circle(10, 50, 6);  // Control point circle(90, 50, 6);  // Control point  fill(0, 0, 255); circle(30, 20, 6);  // Visible curve point circle(70, 80, 6);  // Visible curve point  describe('A curved line between two blue points, with red control points at the ends.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(220);
+    // Exclude end segments - first and last points become control points
+    splineProperties({
+      tightness: 0,
+      ends: EXCLUDE
+    });
+    // Draw curve only between middle points
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 splineProperty()                                                *p5.splineProperty()*
+──────────────────────
+
+📝 Gets or sets a given spline property.  Use `splineProperty()` to adjust the behavior of splines created with `splineVertex()` or `spline()`. You can control two key aspects of a spline: its end behavior (`ends`) and its curvature (`tightness`).  By default, the ends property is set to `INCLUDE`, which means the spline passes through every point, including the endpoints. You can also set it to `EXCLUDE` i.e. `splineProperty('ends', EXCLUDE)`, which makes the spline pass through all points except the endpoints.  `INCLUDE` case will have the spline passing through all points, like this:  ```js splineProperty('ends', INCLUDE); // no need to set this, as it is the default spline(25, 46, 93, 44, 93, 81, 35, 85);  point(25, 46); point(93, 44); point(93, 81); point(35, 85); ```     EXCLUDE case will have the spline passing through the middle points, like this:   ```js splineProperty('ends', EXCLUDE); spline(25, 46, 93, 44, 93, 81, 35, 85);  point(25, 46); point(93, 44); point(93, 81); point(35, 85); ```    By default, the tightness property is set to `0`, producing a smooth curve that passes evenly through the vertices. Negative values make the curve looser, while positive values make it tighter. Common values range between -1 and 1, though values outside this range can also be used for different effects.  For example, To set tightness, use `splineProperty('tightness', t)`, (default: t = 0).  Here's the example showing negetive value of tightness, which creates a rounder bulge:  ```js splineProperty('tightness', -5) stroke(0); strokeWeight(2); spline(25, 46, 93, 44, 93, 81, 35, 85); ```  Here's the example showing positive value of tightness, which makes the curve tighter and more angular:  ```js splineProperty('tightness', 5) stroke(0); strokeWeight(2); spline(25, 46, 93, 44, 93, 81, 35, 85); ```   In all cases, the splines in p5.js are cardinal splines. When tightness is 0, these splines are often known as [Catmull-Rom splines](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull%E2%80%93Rom_spline)    ` // Move the mouse left and right to see the curve change.  let t;  function setup() { createCanvas(100, 100); }  function draw() { background(240);  t = map(mouseX, 0, width, -5, 5, true); splineProperty('tightness', t);  noFill(); stroke(0); strokeWeight(2);  beginShape(); splineVertex(10, 26); splineVertex(83, 24);  splineVertex(83, 61); splineVertex(25, 65); endShape();  push(); strokeWeight(5); point(10, 26); point(83, 24); point(83, 61); point(25, 65); pop();  fill(0); noStroke(); textSize(10); text(`tightness: ${round(t, 1)}`, 15, 90); describe('A black spline forms a sideways U shape through four points. The spline passes through the points more loosely as the mouse moves left of center (negative tightness), and more tightly as it moves right of center (positive tightness). The tightness is displayed at the bottom.'); } `    ` function setup() { createCanvas(360, 140); background(240); noFill();  // Right panel: ends = INCLUDE (all spans). push(); translate(10, 10); stroke(220); rect(0, 0, 160, 120); fill(30); textSize(11); text('ends: INCLUDE (all spans)', 8, 16); noFill();  splineProperty('ends', INCLUDE); stroke(0); strokeWeight(2); spline(25, 46, 93, 44, 93, 81, 35, 85);  // vertices strokeWeight(5); stroke(0); point(25, 46); point(93, 44); point(93, 81); point(35, 85); pop();  // Right panel: ends = EXCLUDE (middle only). push(); translate(190, 10); stroke(220); rect(0, 0, 160, 120); noStroke(); fill(30); text('ends: EXCLUDE ', 18, 16); noFill();  splineProperty('ends', EXCLUDE); stroke(0); strokeWeight(2); spline(25, 46, 93, 44, 93, 81, 35, 85);  // vertices strokeWeight(5); stroke(0); point(25, 46); point(93, 44); point(93, 81); point(35, 85); pop();  describe('Left panel shows spline with ends INCLUDE (three spans). Right panel shows EXCLUDE (only the middle span). Four black points mark the vertices.'); } `     ` let vertexA; let vertexB; let vertexC; let vertexD; let vertexE; let vertexF;  let markerRadius;  let vectorAB; let vectorFE;  let endOfTangentB; let endOfTangentE;  function setup() { createCanvas(100, 100);  // Initialize variables // Adjusting vertices A and F affects the slopes at B and E  vertexA = createVector(35, 85); vertexB = createVector(25, 70); vertexC = createVector(30, 30); vertexD = createVector(70, 30); vertexE = createVector(75, 70); vertexF = createVector(65, 85);  markerRadius = 4;  vectorAB = p5.Vector.sub(vertexB, vertexA); vectorFE = p5.Vector.sub(vertexE, vertexF);  endOfTangentB = p5.Vector.add(vertexC, vectorAB); endOfTangentE = p5.Vector.add(vertexD, vectorFE);  splineProperty(`ends`, EXCLUDE);  // Draw figure  background(220);  noFill();  beginShape(); splineVertex(vertexA.x, vertexA.y); splineVertex(vertexB.x, vertexB.y); splineVertex(vertexC.x, vertexC.y); splineVertex(vertexD.x, vertexD.y); splineVertex(vertexE.x, vertexE.y); splineVertex(vertexF.x, vertexF.y); endShape();  stroke('red'); line(vertexA.x, vertexA.y, vertexC.x, vertexC.y); line(vertexB.x, vertexB.y, endOfTangentB.x, endOfTangentB.y);  stroke('blue'); line(vertexD.x, vertexD.y, vertexF.x, vertexF.y); line(vertexE.x, vertexE.y, endOfTangentE.x, endOfTangentE.y);  fill('white'); stroke('black'); circle(vertexA.x, vertexA.y, markerRadius); circle(vertexB.x, vertexB.y, markerRadius); circle(vertexC.x, vertexC.y, markerRadius); circle(vertexD.x, vertexD.y, markerRadius); circle(vertexE.x, vertexE.y, markerRadius); circle(vertexF.x, vertexF.y, markerRadius);  fill('black'); noStroke(); text('A', vertexA.x - 15, vertexA.y + 5); text('B', vertexB.x - 15, vertexB.y + 5); text('C', vertexC.x - 5, vertexC.y - 5); text('D', vertexD.x - 5, vertexD.y - 5); text('E', vertexE.x + 5, vertexE.y + 5); text('F', vertexF.x + 5, vertexF.y + 5);  describe('On a gray background, a black spline passes through vertices A, B, C, D, E, and F, shown as white circles. A red line segment joining vertices A and C has the same slope as the red tangent segment at B. Similarly, the blue line segment joining vertices D and F has the same slope as the blue tangent at E.'); } `
+
+💡 Example:
+>
+  `
+  let vertexA;
+  let vertexB;
+  let vertexC;
+  let vertexD;
+  let vertexE;
+  let vertexF;
+  let markerRadius;
+  let vectorAB;
+  let vectorFE;
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 splineTangent()                                                *p5.splineTangent()*
+─────────────────────
+
+📝 Calculates coordinates along a line that's tangent to a spline curve.  Tangent lines skim the surface of a curve. A tangent line's slope equals the curve's slope at the point where it intersects.  `splineTangent()` calculates coordinates along a tangent line using four points p0, p1, p2, p3. It expects points in the same order as the [spline()](#/p5/spline) function. `splineTangent()` works one axis at a time. Passing the points' x-coordinates returns the x-component of the tangent vector; passing the points' y-coordinates returns the y-component. The first parameter, `a`, is the coordinate of point p0.  The second and third parameters, `b` and `c`, are the coordinates of points p1 and p2.  The fourth parameter, `d`, is the coordinate of point p3.  The fifth parameter, `t`, is the amount to interpolate along the span from p1 to p2. `t = 0` is p1, `t = 1` is p2, and `t = 0.5` is halfway between them.    ` function setup() { createCanvas(120, 120); describe('A black spline on a gray canvas. A red dot moves along the curve on its own. A short line shows the tangent direction at the dot.'); }  function draw() { background(240);  const x1 = 15, y1 = 40; const x2 = 90, y2 = 25; const x3 = 95, y3 = 95; const x4 = 30, y4 = 110;  noFill(); stroke(0); strokeWeight(2); spline(x1, y1, x2, y2, x3, y3, x4, y4);  const t = 0.5 + 0.5 * sin(frameCount * 0.03);  const px = splinePoint(x1, x2, x3, x4, t); const py = splinePoint(y1, y2, y3, y4, t);  let tx = splineTangent(x1, x2, x3, x4, t); let ty = splineTangent(y1, y2, y3, y4, t);  const m = Math.hypot(tx, ty) || 1; tx = (tx / m) * 16; ty = (ty / m) * 16;  stroke(0); strokeWeight(2); line(px, py, px + tx, py + ty);  noStroke(); fill('red'); circle(px, py, 7); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Set the coordinates for the curve's four points (p0, p1, p2, p3). let x1 = 5; let y1 = 26; let x2 = 73; let y2 = 24; let x3 = 73; let y3 = 61; let x4 = 15; let y4 = 65;  // Draw the curve. noFill(); spline(x1, y1, x2, y2, x3, y3, x4, y4);  // Draw tangents along the curve's path. fill(255);  // Top circle. stroke(0); let x = splinePoint(x1, x2, x3, x4, 0); let y = splinePoint(y1, y2, y3, y4, 0); circle(x, y, 5);  // Top tangent line. // Scale the tangent point to draw a shorter line. stroke(255, 0, 0); let tx = 0.2 * splineTangent(x1, x2, x3, x4, 0); let ty = 0.2 * splineTangent(y1, y2, y3, y4, 0); line(x + tx, y + ty, x - tx, y - ty);  // Center circle. stroke(0); x = splinePoint(x1, x2, x3, x4, 0.5); y = splinePoint(y1, y2, y3, y4, 0.5); circle(x, y, 5);  // Center tangent line. // Scale the tangent point to draw a shorter line. stroke(255, 0, 0); tx = 0.2 * splineTangent(x1, x2, x3, x4, 0.5); ty = 0.2 * splineTangent(y1, y2, y3, y4, 0.5); line(x + tx, y + ty, x - tx, y - ty);  // Bottom circle. stroke(0); x = splinePoint(x1, x2, x3, x4, 1); y = splinePoint(y1, y2, y3, y4, 1); circle(x, y, 5);  // Bottom tangent line. // Scale the tangent point to draw a shorter line. stroke(255, 0, 0); tx = 0.2 * splineTangent(x1, x2, x3, x4, 1); ty = 0.2 * splineTangent(y1, y2, y3, y4, 1); line(x + tx, y + ty, x - tx, y - ty);  describe( 'A black curve on a gray square. A white circle moves back and forth along the curve.' ); } `
+
+📋 Parameters:
+   • {Number} a - coordinate of point p0.
+   • {Number} b - coordinate of point p1.
+   • {Number} c - coordinate of point p2.
+   • {Number} d - coordinate of point p3.
+   • {Number} t - amount to interpolate between 0 and 1.
+
+↩️  Returns:
+   Number - coordinate of a point on the tangent line.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(120, 120);
+    describe('A black spline on a gray canvas. A red dot moves along the curve on its own. A short line shows the tangent direction at the dot.');
+  }
+  function draw() {
+    background(240);
+    const x1 = 15, y1 = 40;
+    const x2 = 90, y2 = 25;
+    const x3 = 95, y3 = 95;
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 splineVertex()                                                *p5.splineVertex()*
+────────────────────
+
+📝 Connects points with a smooth curve (a spline).  `splineVertex()` adds a curved segment to custom shapes. The curve it creates follows the same rules as the ones made with the [spline()](#/p5/spline) function. `splineVertex()` must be called between the [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape) functions.  Spline curves can form shapes and curves that slope gently. They’re like cables that are attached to a set of points. `splineVertex()` draws a smooth curve through the points you give it. [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape) in order to draw a curve:   If you provide three points, the spline will pass through them. It works the same way with any number of points.    ```js beginShape();  // Add the first point. splineVertex(25, 80);  // Add the second point. splineVertex(20, 30);  // Add the last point. splineVertex(85, 60);  endShape(); ```     Passing in `CLOSE` to `endShape()` closes the spline smoothly. ```js beginShape();  // Add the first point. splineVertex(25, 80);  // Add the second point. splineVertex(20, 30);  // Add the second point. splineVertex(85, 60);  endShape(CLOSE); ```     By default (`ends: INCLUDE`), the curve passes through all the points you add with `splineVertex()`, similar to the [spline()](#/p5/spline) function. To draw only the middle span p1->p2 (skipping p0->p1 and p2->p3), set `splineProperty('ends', EXCLUDE)`. You don’t need to duplicate vertices to draw those spans.  Spline curves can also be drawn in 3D using WebGL mode. The 3D version of `splineVertex()` has three arguments because each point has x-, y-, and z-coordinates. By default, the vertex’s z-coordinate is set to 0.  Note: `splineVertex()` won’t work when an argument is passed to [beginShape()](#/p5/beginShape).    ` function setup() { createCanvas(100, 100);  background(220); noFill(); strokeWeight(1);  beginShape(); splineVertex(25, 80); splineVertex(20, 30); splineVertex(85, 60); endShape();  strokeWeight(5); stroke(0);  point(25, 80); point(20, 30); point(85, 60);  describe( 'On a gray background, a black spline passes through three marked points.' ); }  `    ` function setup() { createCanvas(100, 100); background(220);  beginShape(); splineVertex(25, 80); splineVertex(20, 30); splineVertex(85, 60); endShape(CLOSE);  describe( 'On a gray background, a closed black spline with a white interior forms a triangular shape with smooth corners.' ); }  `    ` let ringInnerRadius, ringWidth; let radius, dRadius; let theta, dTheta; let time, dTime; let vertexCount, unit, offset;  function setup() { createCanvas(400, 400);  vertexCount = 15; unit = createVector(1, 0); dTheta = TAU / vertexCount; dTime = 0.004;  ringInnerRadius = 25; ringWidth = 5 * ringInnerRadius;  offset = width;  describe( 'A white blob with a black outline changes its shape over time.' ); }  function draw() { background(220); strokeWeight(2); translate(width / 2, height / 2);  time = dTime * frameCount;  beginShape(); for (let i = 0; i    ` let vertexA; let vertexB; let vertexC; let vertexD; let vertexE; let vertexF;  let markerRadius;  let vectorAB; let vectorFE;  let endOfTangentB; let endOfTangentE;  function setup() { createCanvas(100, 100);  // Initialize variables // Adjusting vertices A and F affects the slopes at B and E  vertexA = createVector(35, 85); vertexB = createVector(25, 70); vertexC = createVector(30, 30); vertexD = createVector(70, 30); vertexE = createVector(75, 70); vertexF = createVector(65, 85);  markerRadius = 4;  vectorAB = p5.Vector.sub(vertexB, vertexA); vectorFE = p5.Vector.sub(vertexE, vertexF);  endOfTangentB = p5.Vector.add(vertexC, vectorAB); endOfTangentE = p5.Vector.add(vertexD, vectorFE);  splineProperty(`ends`, EXCLUDE);  // Draw figure  background(220);  noFill();  beginShape(); splineVertex(vertexA.x, vertexA.y); splineVertex(vertexB.x, vertexB.y); splineVertex(vertexC.x, vertexC.y); splineVertex(vertexD.x, vertexD.y); splineVertex(vertexE.x, vertexE.y); splineVertex(vertexF.x, vertexF.y); endShape();  stroke('red'); line(vertexA.x, vertexA.y, vertexC.x, vertexC.y); line(vertexB.x, vertexB.y, endOfTangentB.x, endOfTangentB.y);  stroke('blue'); line(vertexD.x, vertexD.y, vertexF.x, vertexF.y); line(vertexE.x, vertexE.y, endOfTangentE.x, endOfTangentE.y);  fill('white'); stroke('black'); circle(vertexA.x, vertexA.y, markerRadius); circle(vertexB.x, vertexB.y, markerRadius); circle(vertexC.x, vertexC.y, markerRadius); circle(vertexD.x, vertexD.y, markerRadius); circle(vertexE.x, vertexE.y, markerRadius); circle(vertexF.x, vertexF.y, markerRadius);  fill('black'); noStroke(); text('A', vertexA.x - 15, vertexA.y + 5); text('B', vertexB.x - 15, vertexB.y + 5); text('C', vertexC.x - 5, vertexC.y - 5); text('D', vertexD.x - 5, vertexD.y - 5); text('E', vertexE.x + 5, vertexE.y + 5); text('F', vertexF.x + 5, vertexF.y + 5);  describe('On a gray background, a black spline passes through vertices A, B, C, D, E, and F, shown as white circles. A red line segment joining vertices A and C has the same slope as the red tangent segment at B. Similarly, the blue line segment joining vertices D and F has the same slope as the blue tangent at E.'); } `
+
+📋 Parameters:
+   • {Number} x - x-coordinate of the vertex
+   • {Number} y - y-coordinate of the vertex
+
+💡 Example:
+>
+  `
+  let vertexA;
+  let vertexB;
+  let vertexC;
+  let vertexD;
+  let vertexE;
+  let vertexF;
+  let markerRadius;
+  let vectorAB;
+  let vectorFE;
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 square()                                                *p5.square()*
+──────────────
+
+📝 Draws a square.  A square is a four-sided shape defined by the `x`, `y`, and `s` parameters. `x` and `y` set the location of its top-left corner. `s` sets its width and height. Every angle in the square measures 90˚ and all its sides are the same length. See [rectMode()](#/p5/rectMode) for other ways to define squares.  The version of `square()` with four parameters creates a rounded square. The fourth parameter sets the radius for all four corners.  The version of `square()` with seven parameters also creates a rounded square. Each of the last four parameters set the radius of a corner. The radii start with the top-left corner and move clockwise around the square. If any of these parameters are omitted, they are set to the value of the last radius that was set.    ` function setup() { createCanvas(100, 100);  background(200);  square(30, 20, 55);  describe('A white square with a black outline in on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Give all corners a radius of 20. square(30, 20, 55, 20);  describe( 'A white square with a black outline and round edges on a gray canvas.' ); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Give each corner a unique radius. square(30, 20, 55, 20, 15, 10, 5);  describe('A white square with a black outline and round edges of different radii.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  square(-20, -30, 55);  describe('A white square with a black outline in on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A white square spins around on gray canvas.'); }  function draw() { background(200);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Draw the square. square(-20, -30, 55); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    square(30, 20, 55);
+    describe('A white square with a black outline in on a gray canvas.');
+  }
+  `
+  
+  
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 strokeCap()                                                *p5.strokeCap()*
+─────────────────
+
+📝 Sets the style for rendering the ends of lines.  The caps for line endings are either rounded (`ROUND`), squared (`SQUARE`), or extended (`PROJECT`). The default cap is `ROUND`.  The argument passed to `strokeCap()` must be written in ALL CAPS because the constants `ROUND`, `SQUARE`, and `PROJECT` are defined this way. JavaScript is a case-sensitive language.   ` function setup() { createCanvas(100, 100);  background(200);  strokeWeight(12);  // Top. strokeCap(ROUND); line(20, 30, 80, 30);  // Middle. strokeCap(SQUARE); line(20, 50, 80, 50);  // Bottom. strokeCap(PROJECT); line(20, 70, 80, 70);  describe( 'Three horizontal lines. The top line has rounded ends, the middle line has squared ends, and the bottom line has longer, squared ends.' ); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    strokeWeight(12);
+    // Top.
+    strokeCap(ROUND);
+    line(20, 30, 80, 30);
+    // Middle.
+    strokeCap(SQUARE);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 strokeJoin()                                                *p5.strokeJoin()*
+──────────────────
+
+📝 Sets the style of the joints that connect line segments.  Joints are either mitered (`MITER`), beveled (`BEVEL`), or rounded (`ROUND`). The default joint is `MITER` in 2D mode and `ROUND` in WebGL mode.  The argument passed to `strokeJoin()` must be written in ALL CAPS because the constants `MITER`, `BEVEL`, and `ROUND` are defined this way. JavaScript is a case-sensitive language.   ` function setup() { createCanvas(100, 100);  background(200);  // Style the line. noFill(); strokeWeight(10); strokeJoin(MITER);  // Draw the line. beginShape(); vertex(35, 20); vertex(65, 50); vertex(35, 80); endShape();  describe('A right-facing arrowhead shape with a pointed tip in center of canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Style the line. noFill(); strokeWeight(10); strokeJoin(BEVEL);  // Draw the line. beginShape(); vertex(35, 20); vertex(65, 50); vertex(35, 80); endShape();  describe('A right-facing arrowhead shape with a flat tip in center of canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Style the line. noFill(); strokeWeight(10); strokeJoin(ROUND);  // Draw the line. beginShape(); vertex(35, 20); vertex(65, 50); vertex(35, 80); endShape();  describe('A right-facing arrowhead shape with a rounded tip in center of canvas.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Style the line.
+    noFill();
+    strokeWeight(10);
+    strokeJoin(MITER);
+    // Draw the line.
+    beginShape();
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 strokeMode()                                                *p5.strokeMode()*
+──────────────────
+
+📝 Sets the stroke rendering mode to balance performance and visual features when drawing lines.  `strokeMode()` offers two modes:  - `SIMPLE`: Optimizes for speed by disabling caps, joins, and stroke color features. Use this mode for faster line rendering when these visual details are unnecessary. - `FULL`: Enables caps, joins, and stroke color for lines. This mode provides enhanced visuals but may reduce performance due to additional processing.  Choose the mode that best suits your application's needs to either improve rendering speed or enhance visual quality.  - `'SIMPLE'`: Fast rendering without caps, joins, or stroke color. - `'FULL'`: Detailed rendering with caps, joins, and stroke color.   ` function setup() { createCanvas(300, 300, WEBGL); describe('A sphere with red stroke and a red, wavy line on a gray background. The wavy line have caps, joins and colors.'); }  function draw() { background(128); strokeMode(FULL); // Enables detailed rendering with caps, joins, and stroke color. push(); strokeWeight(1); translate(0, -50, 0); sphere(50); pop(); orbitControl();  noFill(); strokeWeight(15); stroke('red'); beginShape(); bezierOrder(2); // Sets the order of the Bezier curve. bezierVertex(80, 80); bezierVertex(50, -40); bezierVertex(-80, 80); endShape(); } `    ` function setup() { createCanvas(300, 300, WEBGL); describe('A sphere with red stroke and a  wavy line without full curve decorations without caps and color on a gray background.'); }  function draw() { background(128); strokeMode(SIMPLE); // Simplifies stroke rendering for better performance.  // Draw sphere push(); strokeWeight(1); translate(0, -50, 0); sphere(50); pop(); orbitControl();  // Draw modified wavy red line noFill(); strokeWeight(15); stroke('red'); beginShape(); bezierOrder(2); // Sets the order of the Bezier curve. bezierVertex(80, 80); bezierVertex(50, -40); bezierVertex(-80, 80); endShape(); } `
+
+📋 Parameters:
+   • {String} mode - - The stroke mode to set. Possible values are:
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(300, 300, WEBGL);
+    describe('A sphere with red stroke and a red, wavy line on a gray background. The wavy line have caps, joins and colors.');
+  }
+  function draw() {
+    background(128);
+    strokeMode(FULL); // Enables detailed rendering with caps, joins, and stroke color.
+    push();
+    strokeWeight(1);
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 strokeWeight()                                                *p5.strokeWeight()*
+────────────────────
+
+📝 Sets the width of the stroke used for points, lines, and the outlines of shapes.  Note: `strokeWeight()` is affected by transformations, especially calls to [scale()](#/p5/scale).   ` function setup() { createCanvas(100, 100);  background(200);  // Top. line(20, 20, 80, 20);  // Middle. strokeWeight(4); line(20, 40, 80, 40);  // Bottom. strokeWeight(10); line(20, 70, 80, 70);  describe('Three horizontal black lines. The top line is thin, the middle is medium, and the bottom is thick.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Top. line(20, 20, 80, 20);  // Scale by a factor of 5. scale(5);  // Bottom. Coordinates are adjusted for scaling. line(4, 8, 16, 8);  describe('Two horizontal black lines. The top line is thin and the bottom is five times thicker than the top.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Top.
+    line(20, 20, 80, 20);
+    // Middle.
+    strokeWeight(4);
+    line(20, 40, 80, 40);
+    // Bottom.
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 torus()                                                *p5.torus()*
+─────────────
+
+📝 Draws a torus.  A torus is a 3D shape with triangular faces that connect to form a ring. Toruses with few faces look flattened. Toruses with many faces have smooth surfaces.  The first parameter, `radius`, is optional. If a `Number` is passed, as in `torus(30)`, it sets the radius of the ring. By default, `radius` is 50.  The second parameter, `tubeRadius`, is also optional. If a `Number` is passed, as in `torus(30, 15)`, it sets the radius of the tube. By default, `tubeRadius` is 10.  The third parameter, `detailX`, is also optional. If a `Number` is passed, as in `torus(30, 15, 5)`, it sets the number of edges used to draw the hole of the torus. Using more edges makes the hole look more like a circle. By default, `detailX` is 24.  The fourth parameter, `detailY`, is also optional. If a `Number` is passed, as in `torus(30, 15, 5, 7)`, it sets the number of triangle subdivisions to use while filling in the torus’ height. By default, `detailY` is 16.  Note: `torus()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white torus on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the torus. torus(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white torus on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the torus. // Set its radius to 30. torus(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white torus on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the torus. // Set its radius to 30 and tubeRadius to 15. torus(30, 15); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white torus on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the torus. // Set its radius to 30 and tubeRadius to 15. // Set its detailX to 5. torus(30, 15, 5); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white torus on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the torus. // Set its radius to 30 and tubeRadius to 15. // Set its detailX to 5. // Set its detailY to 3. torus(30, 15, 5, 3); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white torus on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 triangle()                                                *p5.triangle()*
+────────────────
+
+📝 Draws a triangle.  A triangle is a three-sided shape defined by three points. The first two parameters specify the triangle's first point `(x1, y1)`. The middle two parameters specify its second point `(x2, y2)`. And the last two parameters specify its third point `(x3, y3)`.    ` function setup() { createCanvas(100, 100);  background(200);  triangle(30, 75, 58, 20, 86, 75);  describe('A white triangle with a black outline on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  triangle(-20, 25, 8, -30, 36, 25);  describe('A white triangle with a black outline on a gray canvas.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A white triangle spins around on a gray canvas.'); }  function draw() { background(200);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Draw the triangle. triangle(-20, 25, 8, -30, 36, 25); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    triangle(30, 75, 58, 20, 86, 75);
+    describe('A white triangle with a black outline on a gray canvas.');
+  }
+  `
+  
+  
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 vertex()                                                *p5.vertex()*
+──────────────
+
+📝 Adds a vertex to a custom shape.  `vertex()` sets the coordinates of vertices drawn between the [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape) functions.  The first two parameters, `x` and `y`, set the x- and y-coordinates of the vertex.  The third parameter, `z`, is optional. It sets the z-coordinate of the vertex in WebGL mode. By default, `z` is 0.  The fourth and fifth parameters, `u` and `v`, are also optional. They set the u- and v-coordinates for the vertex’s texture when used with [endShape()](#/p5/endShape). By default, `u` and `v` are both 0.    ` function setup() { createCanvas(100, 100);  background(200);  // Style the shape. strokeWeight(3);  // Start drawing the shape. // Only draw the vertices. beginShape(POINTS);  // Add the vertices. vertex(30, 20); vertex(85, 20); vertex(85, 75); vertex(30, 75);  // Stop drawing the shape. endShape();  describe('Four black dots that form a square are drawn on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Start drawing the shape. beginShape();  // Add vertices. vertex(30, 20); vertex(85, 20); vertex(85, 75); vertex(30, 75);  // Stop drawing the shape. endShape(CLOSE);  describe('A white square on a gray background.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  // Start drawing the shape. beginShape();  // Add vertices. vertex(-20, -30, 0); vertex(35, -30, 0); vertex(35, 25, 0); vertex(-20, 25, 0);  // Stop drawing the shape. endShape(CLOSE);  describe('A white square on a gray background.'); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A white square spins around slowly on a gray background.'); }  function draw() { background(200);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Start drawing the shape. beginShape();  // Add vertices. vertex(-20, -30, 0); vertex(35, -30, 0); vertex(35, 25, 0); vertex(-20, 25, 0);  // Stop drawing the shape. endShape(CLOSE); } `    ` let img;  async function setup() { // Load an image to apply as a texture. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100, WEBGL);  describe('A photograph of a ceiling rotates slowly against a gray background.'); }  function draw() { background(200);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Style the shape. noStroke();  // Apply the texture. texture(img); textureMode(NORMAL);  // Start drawing the shape beginShape();  // Add vertices. vertex(-20, -30, 0, 0, 0); vertex(35, -30, 0, 1, 0); vertex(35, 25, 0, 1, 1); vertex(-20, 25, 0, 0, 1);  // Stop drawing the shape. endShape(); } `    ` let vid; function setup() { // Load a video and create a p5.MediaElement object. vid = createVideo('/assets/fingers.mov'); createCanvas(100, 100, WEBGL);  // Hide the video. vid.hide();  // Set the video to loop. vid.loop();  describe('A rectangle with video as texture'); }  function draw() { background(0);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Set the texture mode. textureMode(NORMAL);  // Apply the video as a texture. texture(vid);  // Draw a custom shape using uv coordinates. beginShape(); vertex(-40, -40, 0, 0); vertex(40, -40, 1, 0); vertex(40, 40, 1, 1); vertex(-40, 40, 0, 1); endShape(); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Style the shape.
+    strokeWeight(3);
+    // Start drawing the shape.
+    // Only draw the vertices.
+    beginShape(POINTS);
+    // Add the vertices.
+>
+
+🔗 See also: |p5.shape|
+
+
+🔧 vertexProperty()                                                *p5.vertexProperty()*
+──────────────────────
+
+📝 Sets the shader's vertex property or attribute variables.  A vertex property, or vertex attribute, is a variable belonging to a vertex in a shader. p5.js provides some default properties, such as `aPosition`, `aNormal`, `aVertexColor`, etc. These are set using [vertex()](#/p5/vertex), [normal()](#/p5/normal) and [fill()](#/p5/fill) respectively. Custom properties can also be defined within [beginShape()](#/p5/beginShape) and [endShape()](#/p5/endShape).  The first parameter, `propertyName`, is a string with the property's name. This is the same variable name which should be declared in the shader, such as `in vec3 aProperty`, similar to .`setUniform()`.  The second parameter, `data`, is the value assigned to the shader variable. This value will be applied to subsequent vertices created with [vertex()](#/p5/vertex). It can be a Number or an array of numbers, and in the shader program the type can be declared according to the WebGL specification. Common types include `float`, `vec2`, `vec3`, `vec4` or matrices.  See also the [vertexProperty()](#/p5/vertexProperty) method on [Geometry](#/p5/Geometry) objects.    ` const vertSrc = `#version 300 es precision mediump float; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix;  in vec3 aPosition; in vec2 aOffset;  void main(){ vec4 positionVec4 = vec4(aPosition.xyz, 1.0); positionVec4.xy += aOffset; gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4; } `;  const fragSrc = `#version 300 es precision mediump float; out vec4 outColor; void main(){ outColor = vec4(0.0, 1.0, 1.0, 1.0); } `;  function setup(){ createCanvas(100, 100, WEBGL);  // Create and use the custom shader. const myShader = createShader(vertSrc, fragSrc); shader(myShader);  describe('A wobbly, cyan circle on a gray background.'); }  function draw(){ // Set the styles background(125); noStroke();  // Draw the circle. beginShape(); for (let i = 0; i    ` let myShader; const cols = 10; const rows = 10; const cellSize = 6;  const vertSrc = `#version 300 es precision mediump float; uniform mat4 uProjectionMatrix; uniform mat4 uModelViewMatrix;  in vec3 aPosition; in vec3 aNormal; in vec3 aVertexColor; in float aDistance;  out vec3 vVertexColor;  void main(){ vec4 positionVec4 = vec4(aPosition, 1.0); positionVec4.xyz += aDistance * aNormal * 2.0;; vVertexColor = aVertexColor; gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4; } `;  const fragSrc = `#version 300 es precision mediump float;  in vec3 vVertexColor; out vec4 outColor;  void main(){ outColor = vec4(vVertexColor, 1.0); } `;  function setup(){ createCanvas(100, 100, WEBGL);  // Create and apply the custom shader. myShader = createShader(vertSrc, fragSrc); shader(myShader); noStroke(); describe('A blue grid, which moves away from the mouse position, on a gray background.'); }  function draw(){ background(200);  // Draw the grid in the middle of the screen. translate(-cols*cellSize/2, -rows*cellSize/2); beginShape(QUADS); for (let i = 0; i
+
+📋 Parameters:
+   • {String} attributeName - the name of the vertex attribute.
+   • {Number|Number[]} data - the data tied to the vertex attribute.
+
+💡 Example:
+>
+  `
+  const vertSrc = `#version 300 es
+   precision mediump float;
+   uniform mat4 uModelViewMatrix;
+   uniform mat4 uProjectionMatrix;
+   in vec3 aPosition;
+   in vec2 aOffset;
+   void main(){
+     vec4 positionVec4 = vec4(aPosition.xyz, 1.0);
+     positionVec4.xy += aOffset;
+>
+
+🔗 See also: |p5.shape|
+
+==============================================================================
+🤖 Generated by p5.man - neovim help generator for p5.js
+🌐 https://github.com/prjctimg/p5.man

@@ -1,0 +1,445 @@
+🎨 *p5.events*	Event handling for mouse, keyboard, and touch 📚
+==============================================================================
+🚀 p5.js Events Reference
+
+📅 Generated on: January 17, 2026
+🏷️  p5.js version: 2.2.0
+
+	*help-topic*p5.events
+
+📋 TABLE OF CONTENTS                                        *p5.events-contents*
+
+1. 🎯 Functions (18 total)
+
+   • |deviceMoved()|
+   • |deviceShaken()|
+   • |deviceTurned()|
+   • |doubleClicked()|
+   • |exitPointerLock()|
+   • |keyIsDown()|
+   • |keyPressed()|
+   • |keyReleased()|
+   • |keyTyped()|
+   • |mouseClicked()|
+   • |mouseDragged()|
+   • |mouseMoved()|
+   • |mousePressed()|
+   • |mouseReleased()|
+   • |mouseWheel()|
+   • |requestPointerLock()|
+   • |setMoveThreshold()|
+   • |setShakeThreshold()|
+
+📖 FUNCTION DOCUMENTATION
+
+
+🔧 deviceMoved()                                                *p5.deviceMoved()*
+───────────────────
+
+📝 The [deviceMoved()](#/p5/deviceMoved) function is called when the device is moved by more than the threshold value along X, Y or Z axis. The default threshold is set to 0.5. The threshold value can be changed using [setMoveThreshold()](https://p5js.org/reference/p5/setMoveThreshold).   ` // Run this example on a mobile device // Move the device around // to change the value.  let value = 0; function draw() { fill(value); rect(25, 25, 50, 50); describe(`50-by-50 black rect in center of canvas. turns white on mobile when device moves`); } function deviceMoved() { value = value + 5; if (value > 255) { value = 0; } } `
+
+💡 Example:
+>
+  `
+  // Run this example on a mobile device
+  // Move the device around
+  // to change the value.
+  let value = 0;
+  function draw() {
+    fill(value);
+    rect(25, 25, 50, 50);
+    describe(`50-by-50 black rect in center of canvas.
+      turns white on mobile when device moves`);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 deviceShaken()                                                *p5.deviceShaken()*
+────────────────────
+
+📝 The [deviceShaken()](#/p5/deviceShaken) function is called when the device total acceleration changes of accelerationX and accelerationY values is more than the threshold value. The default threshold is set to 30. The threshold value can be changed using [setShakeThreshold()](https://p5js.org/reference/p5/setShakeThreshold).   ` // Run this example on a mobile device // Shake the device to change the value.  let value = 0; function draw() { fill(value); rect(25, 25, 50, 50); describe(`50-by-50 black rect in center of canvas. turns white on mobile when device shakes`); } function deviceShaken() { value = value + 5; if (value > 255) { value = 0; } } `
+
+💡 Example:
+>
+  `
+  // Run this example on a mobile device
+  // Shake the device to change the value.
+  let value = 0;
+  function draw() {
+    fill(value);
+    rect(25, 25, 50, 50);
+    describe(`50-by-50 black rect in center of canvas.
+      turns white on mobile when device shakes`);
+  }
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 deviceTurned()                                                *p5.deviceTurned()*
+────────────────────
+
+📝 The [deviceTurned()](#/p5/deviceTurned) function is called when the device rotates by more than 90 degrees continuously.  The axis that triggers the [deviceTurned()](#/p5/deviceTurned) method is stored in the turnAxis variable. The [deviceTurned()](#/p5/deviceTurned) method can be locked to trigger on any axis: X, Y or Z by comparing the turnAxis variable to 'X', 'Y' or 'Z'.   ` // Run this example on a mobile device // Rotate the device by 90 degrees // to change the value.  let value = 0; function draw() { fill(value); rect(25, 25, 50, 50); describe(`50-by-50 black rect in center of canvas. turns white on mobile when device turns`); } function deviceTurned() { if (value === 0) { value = 255; } else if (value === 255) { value = 0; } } `   ` // Run this example on a mobile device // Rotate the device by 90 degrees in the // X-axis to change the value.  let value = 0; function draw() { fill(value); rect(25, 25, 50, 50); describe(`50-by-50 black rect in center of canvas. turns white on mobile when x-axis turns`); } function deviceTurned() { if (turnAxis === 'X') { if (value === 0) { value = 255; } else if (value === 255) { value = 0; } } } `
+
+💡 Example:
+>
+  `
+  // Run this example on a mobile device
+  // Rotate the device by 90 degrees
+  // to change the value.
+  let value = 0;
+  function draw() {
+    fill(value);
+    rect(25, 25, 50, 50);
+    describe(`50-by-50 black rect in center of canvas.
+      turns white on mobile when device turns`);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 doubleClicked()                                                *p5.doubleClicked()*
+─────────────────────
+
+📝 A function that's called once when a mouse button is clicked twice quickly.  Declaring the function `doubleClicked()` sets a code block to run automatically when the user presses and releases the mouse button twice quickly:  ```js function doubleClicked() { // Code to run. } ```  The mouse system variables, such as [mouseX](#/p5/mouseX) and [mouseY](#/p5/mouseY), will be updated with their most recent value when `doubleClicked()` is called by p5.js:  ```js function doubleClicked() { if (mouseX  50) { // Code to run if the mouse is near the bottom. } } ```  The parameter, `event`, is optional. `doubleClicked()` is always passed a MouseEvent object with properties that describe the double-click event:  ```js function doubleClicked(event) { // Code to run that uses the event. console.log(event); } ```  On touchscreen devices, code placed in `doubleClicked()` will run after two touches that occur within a short time.  Browsers may have default behaviors attached to various mouse events. For example, some browsers highlight text when the user moves the mouse while pressing a mouse button. To prevent any default behavior for this event, add `return false;` to the end of the function.    ` let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square changes color when the user double-clicks.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Toggle the square's color when the user double-clicks. function doubleClicked() { if (value === 0) { value = 255; } else { value = 0; } // Uncomment to prevent any default behavior. // return false; } `    ` let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black circle at its center. When the user double-clicks on the circle, it changes color to white.' ); }  function draw() { background(200);  // Style the circle. fill(value);  // Draw the circle. circle(50, 50, 80); }  // Reassign value to 255 when the user double-clicks on the circle. function doubleClicked() { if (dist(50, 50, mouseX, mouseY)
+
+💡 Example:
+>
+  `
+  let value = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a black square at its center. The inner square changes color when the user double-clicks.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 exitPointerLock()                                                *p5.exitPointerLock()*
+───────────────────────
+
+📝 Exits a pointer lock started with [requestPointerLock](#/p5/requestPointerLock).  Calling `requestPointerLock()` locks the values of [mouseX](#/p5/mouseX), [mouseY](#/p5/mouseY), [pmouseX](#/p5/pmouseX), and [pmouseY](#/p5/pmouseY). Calling `exitPointerLock()` resumes updating the mouse system variables.  Note: Most browsers require an input, such as a click, before calling `requestPointerLock()`. It’s recommended to call `requestPointerLock()` in an event function such as [doubleClicked()](#/p5/doubleClicked).    ` let isLocked = false;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a word at its center. The word changes between "Unlocked" and "Locked" when the user double-clicks.' ); }  function draw() { background(200);  // Style the text. textAlign(CENTER); textSize(16);  // Tell the user whether the pointer is locked. if (isLocked === true) { text('Locked', 50, 50); } else { text('Unlocked', 50, 50); } }  // Toggle the pointer lock when the user double-clicks. function doubleClicked() { if (isLocked === true) { exitPointerLock(); isLocked = false; } else { requestPointerLock(); isLocked = true; } } `
+
+💡 Example:
+>
+  `
+  let isLocked = false;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a word at its center. The word changes between "Unlocked" and "Locked" when the user double-clicks.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 keyIsDown()                                                *p5.keyIsDown()*
+─────────────────
+
+📝 Returns `true` if the key it’s checking is pressed and `false` if not.  `keyIsDown()` is helpful when checking for multiple different key presses. For example, `keyIsDown()` can be used to check if both `LEFT_ARROW` and `UP_ARROW` are pressed:  ```js if (keyIsDown(LEFT_ARROW) && keyIsDown(UP_ARROW)) { // Move diagonally. } ```  `keyIsDown()` can check for key presses using strings based on KeyboardEvent.key or KeyboardEvent.code values, such as `keyIsDown('x')` or `keyIsDown('ArrowLeft')`.  Note: In p5.js 2.0 and newer, numeric keycodes (such as 88 for 'X') are no longer supported. This is a breaking change from previous versions.  You can still use the p5 constants like `LEFT_ARROW` which now map to string values internally rather than numeric codes.    ` // Click on the canvas to begin detecting key presses.  let x = 50; let y = 50;  function setup() { createCanvas(100, 100);  background(200);  describe( 'A gray square with a black circle at its center. The circle moves when the user presses an arrow key. It leaves a trail as it moves.' ); }  function draw() { // Update x and y if an arrow key is pressed. if (keyIsDown(LEFT_ARROW) === true) { x -= 1; }  if (keyIsDown(RIGHT_ARROW) === true) { x += 1; }  if (keyIsDown(UP_ARROW) === true) { y -= 1; }  if (keyIsDown(DOWN_ARROW) === true) { y += 1; }  // Style the circle. fill(0);  // Draw the circle. circle(x, y, 5); } `    ` // Click on the canvas to begin detecting key presses.  let x = 50; let y = 50;  function setup() { createCanvas(100, 100);  background(200);  describe( 'A gray square with a black circle at its center. The circle moves when the user presses an arrow key. It leaves a trail as it moves.' ); }  function draw() { // Update x and y if an arrow key is pressed. if (keyIsDown('ArrowLeft') === true) { x -= 1; }  if (keyIsDown('ArrowRight') === true) { x += 1; }  if (keyIsDown('ArrowUp') === true) { y -= 1; }  if (keyIsDown('ArrowDown') === true) { y += 1; }  // Style the circle. fill(0);  // Draw the circle. circle(x, y, 5); } `
+
+📋 Parameters:
+   • {Number|String} code - key to check.
+
+↩️  Returns:
+   Boolean - whether the key is down or not.
+
+💡 Example:
+>
+  `
+  // Click on the canvas to begin detecting key presses.
+  let x = 50;
+  let y = 50;
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    describe(
+      'A gray square with a black circle at its center. The circle moves when the user presses an arrow key. It leaves a trail as it moves.'
+    );
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 keyPressed()                                                *p5.keyPressed()*
+──────────────────
+
+📝 A function that's called once when any key is pressed.  Declaring the function `keyPressed()` sets a code block to run once automatically when the user presses any key:  ```js function keyPressed() { // Code to run. } ```  The [key](#/p5/key) and [keyCode](#/p5/keyCode) variables will be updated with the most recently typed value when `keyPressed()` is called by p5.js:  ```js function keyPressed() { if (key === 'c') { // Code to run. }  if (keyCode === 13) { // Enter key // Code to run. } } ```  The parameter, `event`, is optional. `keyPressed()` is always passed a KeyboardEvent object with properties that describe the key press event:  ```js function keyPressed(event) { // Code to run that uses the event. console.log(event); } ```  Browsers may have default behaviors attached to various key events. For example, some browsers may jump to the bottom of a web page when the `SPACE` key is pressed. To prevent any default behavior for this event, add `return false;` to the end of the function.    ` // Click on the canvas to begin detecting key presses.  let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square changes color when the user presses a key.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Toggle the background color when the user presses a key. function keyPressed() { if (value === 0) { value = 255; } else { value = 0; } // Uncomment to prevent any default behavior. // return false; } `    ` // Click on the canvas to begin detecting key presses.  let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a white square at its center. The inner square turns black when the user presses the "b" key. It turns white when the user presses the "a" key.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Reassign value when the user presses the 'a' or 'b' key. function keyPressed() { if (key === 'a') { value = 255; } else if (key === 'b') { value = 0; } // Uncomment to prevent any default behavior. // return false; } `    ` // Click on the canvas to begin detecting key presses.  let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square turns white when the user presses the left arrow key. It turns black when the user presses the right arrow key.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Toggle the background color when the user presses an arrow key. function keyPressed() { if (keyCode === 37) { // Left arrow key value = 255; } else if (keyCode === 39) { // Right arrow key value = 0; } // Uncomment to prevent any default behavior. // return false; } `
+
+💡 Example:
+>
+  `
+  // Click on the canvas to begin detecting key presses.
+  let value = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a black square at its center. The inner square changes color when the user presses a key.'
+    );
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 keyReleased()                                                *p5.keyReleased()*
+───────────────────
+
+📝 A function that's called once when any key is released.  Declaring the function `keyReleased()` sets a code block to run once automatically when the user releases any key:  ```js function keyReleased() { // Code to run. } ```  The [key](#/p5/key) and [keyCode](#/p5/keyCode) variables will be updated with the most recently released value when `keyReleased()` is called by p5.js:  ```js function keyReleased() { if (key === 'c') { // Code to run. }  if (keyCode === 13) { // Enter key // Code to run. } } ```  The parameter, `event`, is optional. `keyReleased()` is always passed a KeyboardEvent object with properties that describe the key press event:  ```js function keyReleased(event) { // Code to run that uses the event. console.log(event); } ```  Browsers may have default behaviors attached to various key events. To prevent any default behavior for this event, add `return false;` to the end of the function.    ` // Click on the canvas to begin detecting key presses.  let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square changes color when the user releases a key.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Toggle value when the user releases a key. function keyReleased() { if (value === 0) { value = 255; } else { value = 0; } // Uncomment to prevent any default behavior. // return false; } `    ` // Click on the canvas to begin detecting key presses.  let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square becomes white when the user releases the "w" key.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Set value to 255 the user releases the 'w' key. function keyReleased() { if (key === 'w') { value = 255; } // Uncomment to prevent any default behavior. // return false; } `    ` // Click on the canvas to begin detecting key presses.  let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square turns white when the user presses and releases the left arrow key. It turns black when the user presses and releases the right arrow key.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Toggle the background color when the user releases an arrow key. function keyReleased() { if (keyCode === 37) { // Left arrow key value = 255; } else if (keyCode === 39) { // Right arrow key value = 0; } // Uncomment to prevent any default behavior. // return false; } `
+
+💡 Example:
+>
+  `
+  // Click on the canvas to begin detecting key presses.
+  let value = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a black square at its center. The inner square changes color when the user releases a key.'
+    );
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 keyTyped()                                                *p5.keyTyped()*
+────────────────
+
+📝 A function that's called once when keys with printable characters are pressed.  Declaring the function `keyTyped()` sets a code block to run once automatically when the user presses any key with a printable character such as `a` or 1. Modifier keys such as `SHIFT`, `CONTROL`, and the arrow keys will be ignored:  ```js function keyTyped() { // Code to run. } ```  The [key](#/p5/key) and [keyCode](#/p5/keyCode) variables will be updated with the most recently released value when `keyTyped()` is called by p5.js:  ```js function keyTyped() { // Check for the "c" character using key. if (key === 'c') { // Code to run. }  // Check for "c" using keyCode. if (keyCode === 67) { // 67 is the ASCII code for 'c' // Code to run. } } ```  The parameter, `event`, is optional. `keyTyped()` is always passed a KeyboardEvent object with properties that describe the key press event:  ```js function keyReleased(event) { // Code to run that uses the event. console.log(event); } ```  Note: Use the [keyPressed()](#/p5/keyPressed) function and [keyCode](#/p5/keyCode) system variable to respond to modifier keys such as `ALT`.  Browsers may have default behaviors attached to various key events. To prevent any default behavior for this event, add `return false;` to the end of the function.    ` // Click on the canvas to begin detecting key presses. // Note: Pressing special keys such as SPACE have no effect.  let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a white square at its center. The inner square changes color when the user presses a key.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Toggle the square's color when the user types a printable key. function keyTyped() { if (value === 0) { value = 255; } else { value = 0; } // Uncomment to prevent any default behavior. // return false; } `    ` // Click on the canvas to begin detecting key presses.  let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a white square at its center. The inner square turns black when the user types the "b" key. It turns white when the user types the "a" key.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Reassign value when the user types the 'a' or 'b' key. function keyTyped() { if (key === 'a') { value = 255; } else if (key === 'b') { value = 0; } // Uncomment to prevent any default behavior. // return false; } `
+
+💡 Example:
+>
+  `
+  // Click on the canvas to begin detecting key presses.
+  // Note: Pressing special keys such as SPACE have no effect.
+  let value = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a white square at its center. The inner square changes color when the user presses a key.'
+    );
+  }
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 mouseClicked()                                                *p5.mouseClicked()*
+────────────────────
+
+📝 A function that's called once after a mouse button is pressed and released.  Declaring the function `mouseClicked()` sets a code block to run automatically when the user releases a mouse button after having pressed it:  ```js function mouseClicked() { // Code to run. } ```  The mouse system variables, such as [mouseX](#/p5/mouseX) and [mouseY](#/p5/mouseY), will be updated with their most recent value when `mouseClicked()` is called by p5.js:  ```js function mouseClicked() { if (mouseX  50) { // Code to run if the mouse is near the bottom. } } ```  The parameter, `event`, is optional. `mouseClicked()` is always passed a MouseEvent object with properties that describe the mouse click event:  ```js function mouseClicked(event) { // Code to run that uses the event. console.log(event); } ```  On touchscreen devices, `mouseClicked()` will run when a user’s touch ends.  Browsers may have default behaviors attached to various mouse events. For example, some browsers highlight text when the user moves the mouse while pressing a mouse button. To prevent any default behavior for this event, add `return false;` to the end of the function.  Note: [mousePressed()](#/p5/mousePressed), [mouseReleased()](#/p5/mouseReleased), and `mouseClicked()` are all related. [mousePressed()](#/p5/mousePressed) runs as soon as the user clicks the mouse. [mouseReleased()](#/p5/mouseReleased) runs as soon as the user releases the mouse click. `mouseClicked()` runs immediately after [mouseReleased()](#/p5/mouseReleased).    ` let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square changes color when the user presses and releases a mouse button.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  // Toggle the square's color when the user clicks. function mouseClicked() { if (value === 0) { value = 255; } else { value = 0; } // Uncomment to prevent any default behavior. // return false; } `    ` function setup() { createCanvas(100, 100);  // Style the circle. fill('orange'); stroke('royalblue'); strokeWeight(10);  describe( 'An orange circle with a thick, blue border drawn on a gray background. When the user presses and holds the mouse, the border becomes thin and pink. When the user releases the mouse, the border becomes thicker and changes color to blue.' ); }  function draw() { background(220);  // Draw the circle. circle(50, 50, 20); }  // Set the stroke color and weight as soon as the user clicks. function mousePressed() { stroke('deeppink'); strokeWeight(3); }  // Set the stroke and fill colors as soon as the user releases // the mouse. function mouseReleased() { stroke('royalblue');  // This is never visible because fill() is called // in mouseClicked() which runs immediately after // mouseReleased(); fill('limegreen'); }  // Set the fill color and stroke weight after // mousePressed() and mouseReleased() are called. function mouseClicked() { fill('orange'); strokeWeight(10); } `
+
+💡 Example:
+>
+  `
+  let value = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a black square at its center. The inner square changes color when the user presses and releases a mouse button.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 mouseDragged()                                                *p5.mouseDragged()*
+────────────────────
+
+📝 A function that's called when the mouse moves while a button is pressed.  Declaring the function `mouseDragged()` sets a code block to run automatically when the user clicks and drags the mouse:  ```js function mouseDragged() { // Code to run. } ```  The mouse system variables, such as [mouseX](#/p5/mouseX) and [mouseY](#/p5/mouseY), will be updated with their most recent value when `mouseDragged()` is called by p5.js:  ```js function mouseDragged() { if (mouseX  50) { // Code to run if the mouse is near the bottom. } } ```  The parameter, `event`, is optional. `mouseDragged()` is always passed a MouseEvent object with properties that describe the mouse drag event:  ```js function mouseDragged(event) { // Code to run that uses the event. console.log(event); } ```  On touchscreen devices, `mouseDragged()` will run when a user moves a touch point.  Browsers may have default behaviors attached to various mouse events. For example, some browsers highlight text when the user moves the mouse while pressing a mouse button. To prevent any default behavior for this event, add `return false;` to the end of the function.    ` let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square becomes lighter as the user drags the mouse.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  function mouseDragged() { // Update the grayscale value. value += 5;  // Reset the grayscale value. if (value > 255) { value = 0; } // Uncomment to prevent any default behavior. // return false; } `
+
+💡 Example:
+>
+  `
+  let value = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a black square at its center. The inner square becomes lighter as the user drags the mouse.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 mouseMoved()                                                *p5.mouseMoved()*
+──────────────────
+
+📝 A function that's called when the mouse moves.  Declaring the function `mouseMoved()` sets a code block to run automatically when the user moves the mouse without clicking any mouse buttons:  ```js function mouseMoved() { // Code to run. } ```  The mouse system variables, such as [mouseX](#/p5/mouseX) and [mouseY](#/p5/mouseY), will be updated with their most recent value when `mouseMoved()` is called by p5.js:  ```js function mouseMoved() { if (mouseX  50) { // Code to run if the mouse is near the bottom. } } ```  The parameter, `event`, is optional. `mouseMoved()` is always passed a MouseEvent object with properties that describe the mouse move event:  ```js function mouseMoved(event) { // Code to run that uses the event. console.log(event); } ```  Browsers may have default behaviors attached to various mouse events. For example, some browsers highlight text when the user moves the mouse while pressing a mouse button. To prevent any default behavior for this event, add `return false;` to the end of the function.    ` let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square becomes lighter as the mouse moves.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  function mouseMoved() { // Update the grayscale value. value += 5;  // Reset the grayscale value. if (value > 255) { value = 0; } // Uncomment to prevent any default behavior. // return false; } `
+
+💡 Example:
+>
+  `
+  let value = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a black square at its center. The inner square becomes lighter as the mouse moves.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 mousePressed()                                                *p5.mousePressed()*
+────────────────────
+
+📝 A function that's called once when a mouse button is pressed.  Declaring the function `mousePressed()` sets a code block to run automatically when the user presses a mouse button:  ```js function mousePressed() { // Code to run. } ```  The mouse system variables, such as [mouseX](#/p5/mouseX) and [mouseY](#/p5/mouseY), will be updated with their most recent value when `mousePressed()` is called by p5.js:  ```js function mousePressed() { if (mouseX  50) { // Code to run if the mouse is near the bottom. } } ```  The parameter, `event`, is optional. `mousePressed()` is always passed a MouseEvent object with properties that describe the mouse press event:  ```js function mousePressed(event) { // Code to run that uses the event. console.log(event); } ```  On touchscreen devices, `mousePressed()` will run when a user’s touch begins.  Browsers may have default behaviors attached to various mouse events. For example, some browsers highlight text when the user moves the mouse while pressing a mouse button. To prevent any default behavior for this event, add `return false;` to the end of the function.  Note: `mousePressed()`, [mouseReleased()](#/p5/mouseReleased), and [mouseClicked()](#/p5/mouseClicked) are all related. `mousePressed()` runs as soon as the user clicks the mouse. [mouseReleased()](#/p5/mouseReleased) runs as soon as the user releases the mouse click. [mouseClicked()](#/p5/mouseClicked) runs immediately after [mouseReleased()](#/p5/mouseReleased).    ` let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square becomes lighter when the user presses a mouse button.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  function mousePressed() { // Update the grayscale value. value += 5;  // Reset the grayscale value. if (value > 255) { value = 0; } // Uncomment to prevent any default behavior. // return false; } `    ` function setup() { createCanvas(100, 100);  // Style the circle. fill('orange'); stroke('royalblue'); strokeWeight(10);  describe( 'An orange circle with a thick, blue border drawn on a gray background. When the user presses and holds the mouse, the border becomes thin and pink. When the user releases the mouse, the border becomes thicker and changes color to blue.' ); }  function draw() { background(220);  // Draw the circle. circle(50, 50, 20); }  // Set the stroke color and weight as soon as the user clicks. function mousePressed() { stroke('deeppink'); strokeWeight(3); }  // Set the stroke and fill colors as soon as the user releases // the mouse. function mouseReleased() { stroke('royalblue');  // This is never visible because fill() is called // in mouseClicked() which runs immediately after // mouseReleased(); fill('limegreen'); }  // Set the fill color and stroke weight after // mousePressed() and mouseReleased() are called. function mouseClicked() { fill('orange'); strokeWeight(10); } `
+
+💡 Example:
+>
+  `
+  let value = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a black square at its center. The inner square becomes lighter when the user presses a mouse button.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 mouseReleased()                                                *p5.mouseReleased()*
+─────────────────────
+
+📝 A function that's called once when a mouse button is released.  Declaring the function `mouseReleased()` sets a code block to run automatically when the user releases a mouse button after having pressed it:  ```js function mouseReleased() { // Code to run. } ```  The mouse system variables, such as [mouseX](#/p5/mouseX) and [mouseY](#/p5/mouseY), will be updated with their most recent value when `mouseReleased()` is called by p5.js:  ```js function mouseReleased() { if (mouseX  50) { // Code to run if the mouse is near the bottom. } } ```  The parameter, `event`, is optional. `mouseReleased()` is always passed a MouseEvent object with properties that describe the mouse release event:  ```js function mouseReleased(event) { // Code to run that uses the event. console.log(event); } ```  On touchscreen devices, `mouseReleased()` will run when a user’s touch ends.  Browsers may have default behaviors attached to various mouse events. For example, some browsers highlight text when the user moves the mouse while pressing a mouse button. To prevent any default behavior for this event, add `return false;` to the end of the function.  Note: [mousePressed()](#/p5/mousePressed), `mouseReleased()`, and [mouseClicked()](#/p5/mouseClicked) are all related. [mousePressed()](#/p5/mousePressed) runs as soon as the user clicks the mouse. `mouseReleased()` runs as soon as the user releases the mouse click. [mouseClicked()](#/p5/mouseClicked) runs immediately after `mouseReleased()`.    ` let value = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with a black square at its center. The inner square becomes lighter when the user presses and releases a mouse button.' ); }  function draw() { background(200);  // Style the square. fill(value);  // Draw the square. square(25, 25, 50); }  function mouseReleased() { // Update the grayscale value. value += 5;  // Reset the grayscale value. if (value > 255) { value = 0; } // Uncomment to prevent any default behavior. // return false; } `    ` function setup() { createCanvas(100, 100);  // Style the circle. fill('orange'); stroke('royalblue'); strokeWeight(10);  describe( 'An orange circle with a thick, blue border drawn on a gray background. When the user presses and holds the mouse, the border becomes thin and pink. When the user releases the mouse, the border becomes thicker and changes color to blue.' ); }  function draw() { background(220);  // Draw the circle. circle(50, 50, 20); }  // Set the stroke color and weight as soon as the user clicks. function mousePressed() { stroke('deeppink'); strokeWeight(3); }  // Set the stroke and fill colors as soon as the user releases // the mouse. function mouseReleased() { stroke('royalblue');  // This is never visible because fill() is called // in mouseClicked() which runs immediately after // mouseReleased(); fill('limegreen'); }  // Set the fill color and stroke weight after // mousePressed() and mouseReleased() are called. function mouseClicked() { fill('orange'); strokeWeight(10); } `
+
+💡 Example:
+>
+  `
+  let value = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with a black square at its center. The inner square becomes lighter when the user presses and releases a mouse button.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 mouseWheel()                                                *p5.mouseWheel()*
+──────────────────
+
+📝 A function that's called once when the mouse wheel moves.  Declaring the function `mouseWheel()` sets a code block to run automatically when the user scrolls with the mouse wheel:  ```js function mouseWheel() { // Code to run. } ```  The mouse system variables, such as [mouseX](#/p5/mouseX) and [mouseY](#/p5/mouseY), will be updated with their most recent value when `mouseWheel()` is called by p5.js:  ```js function mouseWheel() { if (mouseX  50) { // Code to run if the mouse is near the bottom. } } ```  The parameter, `event`, is optional. `mouseWheel()` is always passed a MouseEvent object with properties that describe the mouse scroll event:  ```js function mouseWheel(event) { // Code to run that uses the event. console.log(event); } ```  The `event` object has many properties including `delta`, a `Number` containing the distance that the user scrolled. For example, `event.delta` might have the value 5 when the user scrolls up. `event.delta` is positive if the user scrolls up and negative if they scroll down. The signs are opposite on macOS with "natural" scrolling enabled.  Browsers may have default behaviors attached to various mouse events. For example, some browsers highlight text when the user moves the mouse while pressing a mouse button. To prevent any default behavior for this event, add `return false;` to the end of the function.  Note: On Safari, `mouseWheel()` may only work as expected if `return false;` is added at the end of the function.    ` let circleSize = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square. A white circle at its center grows up when the user scrolls the mouse wheel.' ); }  function draw() { background(200);  // Draw the circle circle(circleSize, 50, 50); }  // Increment circleSize when the user scrolls the mouse wheel. function mouseWheel() { circleSize += 1; // Uncomment to prevent any default behavior. // return false; } `    ` let direction = '';  function setup() { createCanvas(100, 100);  describe( 'A gray square. An arrow at its center points up when the user scrolls up. The arrow points down when the user scrolls down.' ); }  function draw() { background(200);  // Style the text. textAlign(CENTER); textSize(16);  // Draw an arrow that points where // the mouse last scrolled. text(direction, 50, 50); }  // Change direction when the user scrolls the mouse wheel. function mouseWheel(event) { if (event.delta > 0) { direction = '▲'; } else { direction = '▼'; } // Uncomment to prevent any default behavior. // return false; } `
+
+💡 Example:
+>
+  `
+  let circleSize = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square. A white circle at its center grows up when the user scrolls the mouse wheel.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 requestPointerLock()                                                *p5.requestPointerLock()*
+──────────────────────────
+
+📝 Locks the mouse pointer to its current position and makes it invisible.  `requestPointerLock()` allows the mouse to move forever without leaving the screen. Calling `requestPointerLock()` locks the values of [mouseX](#/p5/mouseX), [mouseY](#/p5/mouseY), [pmouseX](#/p5/pmouseX), and [pmouseY](#/p5/pmouseY). [movedX](#/p5/movedX) and [movedY](#/p5/movedY) continue updating and can be used to get the distance the mouse moved since the last frame was drawn. Calling [exitPointerLock()](#/p5/exitPointerLock) resumes updating the mouse system variables.  Note: Most browsers require an input, such as a click, before calling `requestPointerLock()`. It’s recommended to call `requestPointerLock()` in an event function such as [doubleClicked()](#/p5/doubleClicked).    ` let score = 0;  function setup() { createCanvas(100, 100);  describe( 'A gray square with the text "Score: X" at its center. The score increases when the user moves the mouse upward. It decreases when the user moves the mouse downward.' ); }  function draw() { background(200);  // Update the score. score -= movedY;  // Style the text. textAlign(CENTER); textSize(16);  // Display the score. text(`Score: ${score}`, 50, 50); }  // Lock the pointer when the user double-clicks. function doubleClicked() { requestPointerLock(); } `
+
+💡 Example:
+>
+  `
+  let score = 0;
+  function setup() {
+    createCanvas(100, 100);
+    describe(
+      'A gray square with the text "Score: X" at its center. The score increases when the user moves the mouse upward. It decreases when the user moves the mouse downward.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 setMoveThreshold()                                                *p5.setMoveThreshold()*
+────────────────────────
+
+📝 The [setMoveThreshold()](#/p5/setMoveThreshold) function is used to set the movement threshold for the [deviceMoved()](#/p5/deviceMoved) function. The default threshold is set to 0.5.   ` // Run this example on a mobile device // You will need to move the device incrementally further // the closer the square's color gets to white in order to change the value.  let value = 0; let threshold = 0.5; function setup() { setMoveThreshold(threshold); } function draw() { fill(value); rect(25, 25, 50, 50); describe(`50-by-50 black rect in center of canvas. turns white on mobile when device moves`); } function deviceMoved() { value = value + 5; threshold = threshold + 0.1; if (value > 255) { value = 0; threshold = 30; } setMoveThreshold(threshold); } `
+
+📋 Parameters:
+   • {Number} value - The threshold value
+
+💡 Example:
+>
+  `
+  // Run this example on a mobile device
+  // You will need to move the device incrementally further
+  // the closer the square's color gets to white in order to change the value.
+  let value = 0;
+  let threshold = 0.5;
+  function setup() {
+    setMoveThreshold(threshold);
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.events|
+
+
+🔧 setShakeThreshold()                                                *p5.setShakeThreshold()*
+─────────────────────────
+
+📝 The [setShakeThreshold()](#/p5/setShakeThreshold) function is used to set the movement threshold for the [deviceShaken()](#/p5/deviceShaken) function. The default threshold is set to 30.   ` // Run this example on a mobile device // You will need to shake the device more firmly // the closer the box's fill gets to white in order to change the value.  let value = 0; let threshold = 30; function setup() { setShakeThreshold(threshold); } function draw() { fill(value); rect(25, 25, 50, 50); describe(`50-by-50 black rect in center of canvas. turns white on mobile when device is being shaked`); } function deviceMoved() { value = value + 5; threshold = threshold + 5; if (value > 255) { value = 0; threshold = 30; } setShakeThreshold(threshold); } `
+
+📋 Parameters:
+   • {Number} value - The threshold value
+
+💡 Example:
+>
+  `
+  // Run this example on a mobile device
+  // You will need to shake the device more firmly
+  // the closer the box's fill gets to white in order to change the value.
+  let value = 0;
+  let threshold = 30;
+  function setup() {
+    setShakeThreshold(threshold);
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.events|
+
+==============================================================================
+🤖 Generated by p5.man - neovim help generator for p5.js
+🌐 https://github.com/prjctimg/p5.man

@@ -1,0 +1,561 @@
+🎨 *p5.foundation*	JavaScript foundation concepts for p5.js 📚
+==============================================================================
+🚀 p5.js Foundation Reference
+
+📅 Generated on: January 17, 2026
+🏷️  p5.js version: 2.2.0
+
+	*help-topic*p5.foundation
+
+📋 TABLE OF CONTENTS                                        *p5.foundation-contents*
+
+1. 🎯 Functions (35 total)
+
+   • |_error()|
+   • |_friendlyAutoplayError()|
+   • |_friendlyError()|
+   • |_friendlyFileLoadError()|
+   • |_friendlyParamError()|
+   • |_report()|
+   • |afterFragment()|
+   • |afterVertex()|
+   • |beforeFragment()|
+   • |beforeVertex()|
+   • |checkForUserDefinedFunctions()|
+   • |combineColors()|
+   • |computeEditDistance()|
+   • |defineMisusedAtTopLevelCode()|
+   • |describe()|
+   • |describeElement()|
+   • |extractUserDefinedVariablesAndFuncs()|
+   • |fesErrorMonitor()|
+   • |fetchScript()|
+   • |generateZodSchemasForFunc()|
+   • |getCameraInputs()|
+   • |getColor()|
+   • |getFinalColor()|
+   • |getObjectInputs()|
+   • |getPixelInputs()|
+   • |getUserCode()|
+   • |getWorldInputs()|
+   • |gridOutput()|
+   • |handleMisspelling()|
+   • |helpForMisusedAtTopLevelCode()|
+   • |mapToReference()|
+   • |printFriendlyStack()|
+   • |processStack()|
+   • |shouldDiscard()|
+   • |textOutput()|
+
+📖 FUNCTION DOCUMENTATION
+
+
+🔧 _error()                                                *p5._error()*
+──────────────
+
+📝 Throws an error with helpful p5 context. Similar to _report, but this will stop other code execution to prevent downstream errors from being logged.
+
+🔗 See also: |p5.foundation|
+
+
+🔧 _friendlyAutoplayError()                                                *p5._friendlyAutoplayError()*
+──────────────────────────────
+
+📝 This is called internally if there is an error with autoplay. Generates and prints a friendly error message [fes.autoplay].
+
+🔗 See also: |p5.foundation|
+
+
+🔧 _friendlyError()                                                *p5._friendlyError()*
+──────────────────────
+
+📝 This is a generic method that can be called from anywhere in the p5 library to alert users to a common error.
+
+🔗 See also: |p5.foundation|
+
+
+🔧 _friendlyFileLoadError()                                                *p5._friendlyFileLoadError()*
+──────────────────────────────
+
+📝 Called internally if there is an error during file loading.  Generates and prints a friendly error message using key: "fes.fileLoadError.[*]".
+
+🔗 See also: |p5.foundation|
+
+
+🔧 _friendlyParamError()                                                *p5._friendlyParamError()*
+───────────────────────────
+
+📝 Prints a friendly error message after parameter validation, if validation has failed.
+
+📋 Parameters:
+   • {z.ZodError} zodErrorObj - - The Zod error object containing validation errors.
+   • {String} func - - Name of the function. Expect global functions like `sin` and class methods like `p5.Vector.add`
+
+🔗 See also: |p5.foundation|
+
+
+🔧 _report()                                                *p5._report()*
+───────────────
+
+📝 Prints out a fancy, colorful message to the console log Attaches Friendly Errors prefix [fes.pre] to the message.
+
+🔗 See also: |p5.foundation|
+
+
+🔧 afterFragment()                                                *p5.afterFragment()*
+─────────────────────
+
+📝 Registers a callback to run custom code at the very end of the fragment shader. This hook can be used inside [baseColorShader()](#/p5/baseColorShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to perform cleanup or final per-pixel effects after all color calculations are done. The callback receives no arguments.  This hook is available in: - [baseColorShader()](#/p5/baseColorShader) - [baseMaterialShader()](#/p5/baseMaterialShader) - [baseNormalShader()](#/p5/baseNormalShader) - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which is called after each fragment is processed.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseColorShader().modify(() => { getFinalColor(color => { // Add a purple tint to the color color.b += 0.2; return color; }); afterFragment(() => { // This hook runs after the final color is set for each fragment. // You could use this for debugging or advanced effects. }); }); } function draw() { background(240); shader(myShader); noStroke(); fill('purple'); sphere(60); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseColorShader().modify(() => {
+      getFinalColor(color => {
+        // Add a purple tint to the color
+        color.b += 0.2;
+        return color;
+      });
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 afterVertex()                                                *p5.afterVertex()*
+───────────────────
+
+📝 Registers a callback to run custom code at the very end of the vertex shader. This hook can be used inside [baseColorShader()](#/p5/baseColorShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to perform cleanup or final calculations after all vertex processing is done. The callback receives no arguments.  Note: This hook is currently limited to per-vertex operations; storing variables for later use is not supported.  This hook is available in: - [baseColorShader()](#/p5/baseColorShader) - [baseMaterialShader()](#/p5/baseMaterialShader) - [baseNormalShader()](#/p5/baseNormalShader) - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which is called after each vertex is processed.
+
+🔗 See also: |p5.foundation|
+
+
+🔧 beforeFragment()                                                *p5.beforeFragment()*
+──────────────────────
+
+📝 Registers a callback to run custom code at the very start of the fragment shader. This hook can be used inside [baseColorShader()](#/p5/baseColorShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to set up variables or perform calculations that affect every pixel before color calculations begin. The callback receives no arguments.  This hook is available in: - [baseColorShader()](#/p5/baseColorShader) - [baseMaterialShader()](#/p5/baseMaterialShader) - [baseNormalShader()](#/p5/baseNormalShader) - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which is called before each fragment is processed.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseColorShader().modify(() => { beforeFragment(() => { // Set a value for use in getFinalColor this.brightness = 0.5 + 0.5 * sin(millis() * 0.001); }); getFinalColor(color => { // Use the value set in beforeFragment to tint the color color.r *= this.brightness; // Tint red channel return color; }); }); } function draw() { background(220); shader(myShader); noStroke(); fill('teal'); box(100); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseColorShader().modify(() => {
+      beforeFragment(() => {
+        // Set a value for use in getFinalColor
+        this.brightness = 0.5 + 0.5 * sin(millis() * 0.001);
+      });
+      getFinalColor(color => {
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 beforeVertex()                                                *p5.beforeVertex()*
+────────────────────
+
+📝 Registers a callback to run custom code at the very start of the vertex shader. This hook can be used inside [baseColorShader()](#/p5/baseColorShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to set up variables or perform calculations that affect every vertex before processing begins. The callback receives no arguments.  Note: This hook is currently limited to per-vertex operations; storing variables for later use is not supported.  This hook is available in: - [baseColorShader()](#/p5/baseColorShader) - [baseMaterialShader()](#/p5/baseMaterialShader) - [baseNormalShader()](#/p5/baseNormalShader) - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which is called before each vertex is processed.
+
+🔗 See also: |p5.foundation|
+
+
+🔧 checkForUserDefinedFunctions()                                                *p5.checkForUserDefinedFunctions()*
+────────────────────────────────────
+
+📝 Checks capitalization for user defined functions.  Generates and prints a friendly error message using key: "fes.checkUserDefinedFns".  "global mode" and to a p5 instance in "instance mode"
+
+📋 Parameters:
+   • {*} context - Current default context. Set to window in
+
+🔗 See also: |p5.foundation|
+
+
+🔧 combineColors()                                                *p5.combineColors()*
+─────────────────────
+
+📝 Registers a callback to customize how color components are combined in the fragment shader. This hook can be used inside [baseMaterialShader()](#/p5/baseMaterialShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to control the final color output of a material. The callback receives an object with the following properties:  - `baseColor`: a three-component vector representing the base color (red, green, blue). - `diffuse`: a single number representing the diffuse reflection. - `ambientColor`: a three-component vector representing the ambient color. - `ambient`: a single number representing the ambient reflection. - `specularColor`: a three-component vector representing the specular color. - `specular`: a single number representing the specular reflection. - `emissive`: a three-component vector representing the emissive color. - `opacity`: a single number representing the opacity.  The callback should return a vector with four components (red, green, blue, alpha) for the final color.  This hook is available in: - [baseMaterialShader()](#/p5/baseMaterialShader)  A callback function which receives the object described above and returns a vector with four components for the final color.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseMaterialShader().modify(() => { combineColors(components => { // Custom color combination: add a green tint using vector properties return [ components.baseColor * components.diffuse + components.ambientColor * components.ambient + components.specularColor * components.specular + components.emissive + [0, 0.2, 0], // Green tint for visibility components.opacity ]; }); }); } function draw() { background(255); shader(myShader); lights(); noStroke(); fill('white'); sphere(50); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseMaterialShader().modify(() => {
+      combineColors(components => {
+        // Custom color combination: add a green tint using vector properties
+        return [
+          components.baseColor * components.diffuse +
+            components.ambientColor * components.ambient +
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 computeEditDistance()                                                *p5.computeEditDistance()*
+───────────────────────────
+
+📝 Measures dissimilarity between two strings by calculating the Levenshtein distance.  If the "distance" between them is small enough, it is reasonable to think that one is the misspelled version of the other.  Specifically, this uses the Wagner–Fischer algorithm.  indicates that the words are similar
+
+📋 Parameters:
+   • {String} w1 - the first word
+   • {String} w2 - the second word
+
+🔗 See also: |p5.foundation|
+
+
+🔧 defineMisusedAtTopLevelCode()                                                *p5.defineMisusedAtTopLevelCode()*
+───────────────────────────────────
+
+📝 A helper function for populating misusedAtTopLevel list.
+
+🔗 See also: |p5.foundation|
+
+
+🔧 describe()                                                *p5.describe()*
+────────────────
+
+📝 Creates a screen reader-accessible description of the canvas.  The first parameter, `text`, is the description of the canvas.  The second parameter, `display`, is optional. It determines how the description is displayed. If `LABEL` is passed, as in `describe('A description.', LABEL)`, the description will be visible in a div element next to the canvas. If `FALLBACK` is passed, as in `describe('A description.', FALLBACK)`, the description will only be visible to screen readers. This is the default mode.  Read [Writing accessible canvas descriptions](/learn/accessible-labels.html) to learn more about making sketches accessible.    ` function setup() { background('pink');  // Draw a heart. fill('red'); noStroke(); circle(67, 67, 20); circle(83, 67, 20); triangle(91, 73, 75, 95, 59, 73);  // Add a general description of the canvas. describe('A pink square with a red heart in the bottom-right corner.'); } `    ` function setup() { background('pink');  // Draw a heart. fill('red'); noStroke(); circle(67, 67, 20); circle(83, 67, 20); triangle(91, 73, 75, 95, 59, 73);  // Add a general description of the canvas // and display it for debugging. describe('A pink square with a red heart in the bottom-right corner.', LABEL); } `    `  function setup(){ createCanvas(100, 100); };  function draw() { background(200);  // The expression // frameCount % 100 // causes x to increase from 0 // to 99, then restart from 0. let x = frameCount % 100;  // Draw the circle. fill(0, 255, 0); circle(x, 50, 40);  // Add a general description of the canvas. describe(`A green circle at (${x}, 50) moves from left to right on a gray square.`); } `    `  function setup(){ createCanvas(100, 100); }  function draw() { background(200);  // The expression // frameCount % 100 // causes x to increase from 0 // to 99, then restart from 0. let x = frameCount % 100;  // Draw the circle. fill(0, 255, 0); circle(x, 50, 40);  // Add a general description of the canvas // and display it for debugging. describe(`A green circle at (${x}, 50) moves from left to right on a gray square.`, LABEL); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    background('pink');
+    // Draw a heart.
+    fill('red');
+    noStroke();
+    circle(67, 67, 20);
+    circle(83, 67, 20);
+    triangle(91, 73, 75, 95, 59, 73);
+    // Add a general description of the canvas.
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 describeElement()                                                *p5.describeElement()*
+───────────────────────
+
+📝 Creates a screen reader-accessible description of elements in the canvas.  Elements are shapes or groups of shapes that create meaning together. For example, a few overlapping circles could make an "eye" element.  The first parameter, `name`, is the name of the element.  The second parameter, `text`, is the description of the element.  The third parameter, `display`, is optional. It determines how the description is displayed. If `LABEL` is passed, as in `describe('A description.', LABEL)`, the description will be visible in a div element next to the canvas. Using `LABEL` creates unhelpful duplicates for screen readers. Only use `LABEL` during development. If `FALLBACK` is passed, as in `describe('A description.', FALLBACK)`, the description will only be visible to screen readers. This is the default mode.  Read [Writing accessible canvas descriptions](/learn/accessible-labels.html) to learn more about making sketches accessible.    ` function setup() { background('pink');  // Describe the first element // and draw it. describeElement('Circle', 'A yellow circle in the top-left corner.'); noStroke(); fill('yellow'); circle(25, 25, 40);  // Describe the second element // and draw it. describeElement('Heart', 'A red heart in the bottom-right corner.'); fill('red'); circle(66.6, 66.6, 20); circle(83.2, 66.6, 20); triangle(91.2, 72.6, 75, 95, 58.6, 72.6);  // Add a general description of the canvas. describe('A red heart and yellow circle over a pink background.'); } `    ` function setup() { background('pink');  // Describe the first element // and draw it. Display the // description for debugging. describeElement('Circle', 'A yellow circle in the top-left corner.', LABEL); noStroke(); fill('yellow'); circle(25, 25, 40);  // Describe the second element // and draw it. Display the // description for debugging. describeElement('Heart', 'A red heart in the bottom-right corner.', LABEL); fill('red'); circle(66.6, 66.6, 20); circle(83.2, 66.6, 20); triangle(91.2, 72.6, 75, 95, 58.6, 72.6);  // Add a general description of the canvas. describe('A red heart and yellow circle over a pink background.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    background('pink');
+    // Describe the first element
+    // and draw it.
+    describeElement('Circle', 'A yellow circle in the top-left corner.');
+    noStroke();
+    fill('yellow');
+    circle(25, 25, 40);
+    // Describe the second element
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 extractUserDefinedVariablesAndFuncs()                                                *p5.extractUserDefinedVariablesAndFuncs()*
+───────────────────────────────────────────
+
+📝 Extracts the user-defined variables and functions from the user code with the help of Espree parser.
+
+📋 Parameters:
+   • {String} code - - The code to extract variables and functions from.
+
+🔗 See also: |p5.foundation|
+
+
+🔧 fesErrorMonitor()                                                *p5.fesErrorMonitor()*
+───────────────────────
+
+📝 Handles "global" errors that the browser catches.  Called when an error event happens and detects the type of error.  Generates and prints a friendly error message using key: "fes.globalErrors.syntax.[*]", "fes.globalErrors.reference.[*]", "fes.globalErrors.type.[*]".
+
+📋 Parameters:
+   • {*} e - Event object to extract error details from
+
+🔗 See also: |p5.foundation|
+
+
+🔧 fetchScript()                                                *p5.fetchScript()*
+───────────────────
+
+📝 Fetches the contents of a script element in the user's sketch.
+
+🔗 See also: |p5.foundation|
+
+
+🔧 generateZodSchemasForFunc()                                                *p5.generateZodSchemasForFunc()*
+─────────────────────────────────
+
+📝 This is a helper function that generates Zod schemas for a function based on the parameter data from `docs/parameterData.json`.  Example parameter data for function `background`: "background": { "overloads": [ ["p5.Color"], ["String", "Number?"], ["Number", "Number?"], ["Number", "Number", "Number", "Number?"], ["Number[]"], ["p5.Image", "Number?"] ] } Where each array in `overloads` represents a set of valid overloaded parameters, and `?` is a shorthand for `Optional`.
+
+📋 Parameters:
+   • {String} func - - Name of the function. Expect global functions like `sin` and class methods like `p5.Vector.add`
+
+🔗 See also: |p5.foundation|
+
+
+🔧 getCameraInputs()                                                *p5.getCameraInputs()*
+───────────────────────
+
+📝 Registers a callback to adjust vertex properties after the model has been transformed by the camera, but before projection, in the vertex shader. This hook can be used inside [baseColorShader()](#/p5/baseColorShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to create effects that depend on the camera's view. The callback receives an object with the following properties:  - `position`: a three-component vector representing the position after camera transformation. - `normal`: a three-component vector representing the normal after camera transformation. - `texCoord`: a two-component vector representing the texture coordinates. - `color`: a four-component vector representing the color of the vertex (red, green, blue, alpha).  Return the modified object to update the vertex.  This hook is available in: - [baseColorShader()](#/p5/baseColorShader) - [baseMaterialShader()](#/p5/baseMaterialShader) - [baseNormalShader()](#/p5/baseNormalShader) - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which receives the vertex object and should return it after making any changes.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseColorShader().modify(() => { getCameraInputs(inputs => { // Move vertices in camera space based on their x position let t = uniformFloat(() => millis()); inputs.position.y += 30 * sin(inputs.position.x * 0.05 + t * 0.001); // Tint all vertices blue inputs.color.b = 1; return inputs; }); }); } function draw() { background(200); shader(myShader); noStroke(); fill('red'); sphere(50); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseColorShader().modify(() => {
+      getCameraInputs(inputs => {
+        // Move vertices in camera space based on their x position
+        let t = uniformFloat(() => millis());
+        inputs.position.y += 30 * sin(inputs.position.x * 0.05 + t * 0.001);
+        // Tint all vertices blue
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 getColor()                                                *p5.getColor()*
+────────────────
+
+📝 Registers a callback to set the final color for each pixel in a filter shader. This hook can be used inside [baseFilterShader()](#/p5/baseFilterShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to control the output color for each pixel. The callback receives the following arguments: - `inputs`: an object with the following properties: - `texCoord`: a two-component vector representing the texture coordinates (u, v). - `canvasSize`: a two-component vector representing the canvas size in pixels (width, height). - `texelSize`: a two-component vector representing the size of a single texel in texture space. - `canvasContent`: a texture containing the sketch's contents before the filter is applied.  Return a four-component vector `[r, g, b, a]` for the pixel.  This hook is available in: - [baseFilterShader()](#/p5/baseFilterShader)  A callback function which receives the inputs object and canvasContent, and should return a color array.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseFilterShader().modify(() => { getColor((inputs, canvasContent) => { // Warp the texture coordinates for a wavy effect let warped = [inputs.texCoord.x, inputs.texCoord.y + 0.1 * sin(inputs.texCoord.x * 10.0)]; return getTexture(canvasContent, warped); }); }); } function draw() { background(180); // Draw something to the canvas fill('yellow'); circle(0, 0, 150); filter(myShader); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseFilterShader().modify(() => {
+      getColor((inputs, canvasContent) => {
+        // Warp the texture coordinates for a wavy effect
+        let warped = [inputs.texCoord.x, inputs.texCoord.y + 0.1 * sin(inputs.texCoord.x * 10.0)];
+        return getTexture(canvasContent, warped);
+      });
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 getFinalColor()                                                *p5.getFinalColor()*
+─────────────────────
+
+📝 Registers a callback to change the final color of each pixel after all lighting and mixing is done in the fragment shader. This hook can be used inside [baseColorShader()](#/p5/baseColorShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to adjust the color before it appears on the screen. The callback receives a four component vector representing red, green, blue, and alpha.  Return a new color array to change the output color.  This hook is available in: - [baseColorShader()](#/p5/baseColorShader) - [baseMaterialShader()](#/p5/baseMaterialShader) - [baseNormalShader()](#/p5/baseNormalShader) - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which receives the color array and should return a color array.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseColorShader().modify(() => { getFinalColor(color => { // Add a blue tint to the output color color.b += 0.4; return color; }); }); } function draw() { background(230); shader(myShader); noStroke(); fill('green'); circle(0, 0, 100); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseColorShader().modify(() => {
+      getFinalColor(color => {
+        // Add a blue tint to the output color
+        color.b += 0.4;
+        return color;
+      });
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 getObjectInputs()                                                *p5.getObjectInputs()*
+───────────────────────
+
+📝 Registers a callback to modify the properties of each vertex before any transformations are applied in the vertex shader. This hook can be used inside [baseColorShader()](#/p5/baseColorShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to move, color, or otherwise modify the raw model data. The callback receives an object with the following properties:  - `position`: a three-component vector representing the original position of the vertex. - `normal`: a three-component vector representing the direction the surface is facing. - `texCoord`: a two-component vector representing the texture coordinates. - `color`: a four-component vector representing the color of the vertex (red, green, blue, alpha).  Return the modified object to update the vertex.  This hook is available in: - [baseColorShader()](#/p5/baseColorShader) - [baseMaterialShader()](#/p5/baseMaterialShader) - [baseNormalShader()](#/p5/baseNormalShader) - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which receives the vertex object and should return it after making any changes.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseColorShader().modify(() => { let t = uniformFloat(() => millis()); getObjectInputs(inputs => { // Create a sine wave along the x axis in object space inputs.position.y += sin(t * 0.001 + inputs.position.x); return inputs; }); }); } function draw() { background(220); shader(myShader); noStroke(); fill('orange'); sphere(50); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseColorShader().modify(() => {
+      let t = uniformFloat(() => millis());
+      getObjectInputs(inputs => {
+        // Create a sine wave along the x axis in object space
+        inputs.position.y += sin(t * 0.001 + inputs.position.x);
+        return inputs;
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 getPixelInputs()                                                *p5.getPixelInputs()*
+──────────────────────
+
+📝 Registers a callback to modify the properties of each fragment (pixel) before the final color is calculated in the fragment shader. This hook can be used inside [baseMaterialShader()](#/p5/baseMaterialShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to adjust per-pixel data before lighting/mixing.  The callback receives an `Inputs` object. Available fields depend on the shader:  - In [baseMaterialShader()](#/p5/baseMaterialShader): - `normal`: a three-component vector representing the surface normal. - `texCoord`: a two-component vector representing the texture coordinates (u, v). - `ambientLight`: a three-component vector representing the ambient light color. - `ambientMaterial`: a three-component vector representing the material's ambient color. - `specularMaterial`: a three-component vector representing the material's specular color. - `emissiveMaterial`: a three-component vector representing the material's emissive color. - `color`: a four-component vector representing the base color (red, green, blue, alpha). - `shininess`: a number controlling specular highlights. - `metalness`: a number controlling the metalness factor.  - In [baseStrokeShader()](#/p5/baseStrokeShader): - `color`: a four-component vector representing the stroke color (red, green, blue, alpha). - `tangent`: a two-component vector representing the stroke tangent. - `center`: a two-component vector representing the cap/join center. - `position`: a two-component vector representing the current fragment position. - `strokeWeight`: a number representing the stroke weight in pixels.  Return the modified object to update the fragment.  This hook is available in: - [baseMaterialShader()](#/p5/baseMaterialShader) - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which receives the fragment inputs object and should return it after making any changes.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseMaterialShader().modify(() => { let t = uniformFloat(() => millis()); getPixelInputs(inputs => { // Animate alpha (transparency) based on x position inputs.color.a = 0.5 + 0.5 * sin(inputs.texCoord.x * 10.0 + t * 0.002); return inputs; }); }); } function draw() { background(240); shader(myShader); lights(); noStroke(); fill('purple'); circle(0, 0, 100); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseMaterialShader().modify(() => {
+      let t = uniformFloat(() => millis());
+      getPixelInputs(inputs => {
+        // Animate alpha (transparency) based on x position
+        inputs.color.a = 0.5 + 0.5 * sin(inputs.texCoord.x * 10.0 + t * 0.002);
+        return inputs;
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 getUserCode()                                                *p5.getUserCode()*
+───────────────────
+
+📝 Extracts the user's code from the script fetched. Note that this method assumes that the user's code is always the last script element in the sketch.
+
+🔗 See also: |p5.foundation|
+
+
+🔧 getWorldInputs()                                                *p5.getWorldInputs()*
+──────────────────────
+
+📝 Registers a callback to modify the world-space properties of each vertex in a shader. This hook can be used inside [baseColorShader()](#/p5/baseColorShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to customize vertex positions, normals, texture coordinates, and colors before rendering. "World space" refers to the coordinate system of the 3D scene, before any camera or projection transformations are applied.  The callback receives a vertex object with the following properties: - `position`: a three-component vector representing the original position of the vertex. - `normal`: a three-component vector representing the direction the surface is facing. - `texCoord`: a two-component vector representing the texture coordinates. - `color`: a four-component vector representing the color of the vertex (red, green, blue, alpha).  This hook is available in: - [baseMaterialShader()](#/p5/baseMaterialShader) - [baseNormalShader()](#/p5/baseNormalShader) - [baseColorShader()](#/p5/baseColorShader) - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which receives a vertex object containing position (vec3), normal (vec3), texCoord (vec2), and color (vec4) properties. The function should return the modified vertex object.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseMaterialShader().modify(() => { let t = uniformFloat(() => millis()); getWorldInputs(inputs => { // Move the vertex up and down in a wave in world space // In world space, moving the object (e.g., with translate()) will affect these coordinates // The sphere is ~50 units tall here, so 20 gives a noticeable wave inputs.position.y += 20 * sin(t * 0.001 + inputs.position.x * 0.05); return inputs; }); }); } function draw() { background(255); shader(myShader); lights(); noStroke(); fill('red'); sphere(50); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseMaterialShader().modify(() => {
+      let t = uniformFloat(() => millis());
+      getWorldInputs(inputs => {
+        // Move the vertex up and down in a wave in world space
+        // In world space, moving the object (e.g., with translate()) will affect these coordinates
+        // The sphere is ~50 units tall here, so 20 gives a noticeable wave
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 gridOutput()                                                *p5.gridOutput()*
+──────────────────
+
+📝 Creates a screen reader-accessible description of shapes on the canvas.  `gridOutput()` adds a general description, table of shapes, and list of shapes to the web page. The general description includes the canvas size, canvas color, and number of shapes. For example, `gray canvas, 100 by 100 pixels, contains 2 shapes:  1 circle 1 square`.  `gridOutput()` uses its table of shapes as a grid. Each shape in the grid is placed in a cell whose row and column correspond to the shape's location on the canvas. The grid cells describe the color and type of shape at that location. For example, `red circle`. These descriptions can be selected individually to get more details. This is different from [textOutput()](#/p5/textOutput), which uses its table as a list.  A list of shapes follows the table. The list describes the color, type, location, and area of each shape. For example, `red circle, location = middle, area = 3 %`.  The `display` parameter is optional. It determines how the description is displayed. If `LABEL` is passed, as in `gridOutput(LABEL)`, the description will be visible in a div element next to the canvas. Using `LABEL` creates unhelpful duplicates for screen readers. Only use `LABEL` during development. If `FALLBACK` is passed, as in `gridOutput(FALLBACK)`, the description will only be visible to screen readers. This is the default mode.  Read [Writing accessible canvas descriptions](/learn/accessible-labels.html) to learn more about making sketches accessible.    ` function setup() { // Add the grid description. gridOutput();  // Draw a couple of shapes. background(200); fill(255, 0, 0); circle(20, 20, 20); fill(0, 0, 255); square(50, 50, 50);  // Add a general description of the canvas. describe('A red circle and a blue square on a gray background.'); } `    ` function setup() { // Add the grid description and // display it for debugging. gridOutput(LABEL);  // Draw a couple of shapes. background(200); fill(255, 0, 0); circle(20, 20, 20); fill(0, 0, 255); square(50, 50, 50);  // Add a general description of the canvas. describe('A red circle and a blue square on a gray background.'); } `    `  function setup() { createCanvas(100, 100); }  function draw() { // Add the grid description. gridOutput();  // Draw a moving circle. background(200); let x = frameCount * 0.1; fill(255, 0, 0); circle(x, 20, 20); fill(0, 0, 255); square(50, 50, 50);  // Add a general description of the canvas. describe('A red circle moves from left to right above a blue square.'); } `    `  function setup(){ createCanvas(100, 100); }  function draw() { // Add the grid description and // display it for debugging. gridOutput(LABEL);  // Draw a moving circle. background(200); let x = frameCount * 0.1; fill(255, 0, 0); circle(x, 20, 20); fill(0, 0, 255); square(50, 50, 50);  // Add a general description of the canvas. describe('A red circle moves from left to right above a blue square.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    // Add the grid description.
+    gridOutput();
+    // Draw a couple of shapes.
+    background(200);
+    fill(255, 0, 0);
+    circle(20, 20, 20);
+    fill(0, 0, 255);
+    square(50, 50, 50);
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 handleMisspelling()                                                *p5.handleMisspelling()*
+─────────────────────────
+
+📝 Compares the symbol caught in the ReferenceError to everything in misusedAtTopLevel ( all public p5 properties ).  Generates and prints a friendly error message using key: "fes.misspelling".
+
+📋 Parameters:
+   • {String} errSym - Symbol to whose spelling to check
+   • {Error} error - ReferenceError object
+
+🔗 See also: |p5.foundation|
+
+
+🔧 helpForMisusedAtTopLevelCode()                                                *p5.helpForMisusedAtTopLevelCode()*
+────────────────────────────────────
+
+📝 Detects browser level error event for p5 constants/functions used outside of setup() and draw().  Generates and prints a friendly error message using key: "fes.misusedTopLevel".
+
+📋 Parameters:
+   • {Event} e - Error event
+   • {Boolean} log - false
+
+🔗 See also: |p5.foundation|
+
+
+🔧 mapToReference()                                                *p5.mapToReference()*
+──────────────────────
+
+📝 Takes a message and a p5 function func, and adds a link pointing to the reference documentation of func at the end of the message
+
+📋 Parameters:
+   • {String} message - the words to be said
+
+🔗 See also: |p5.foundation|
+
+
+🔧 printFriendlyStack()                                                *p5.printFriendlyStack()*
+──────────────────────────
+
+📝 Prints a friendly stacktrace for user-written functions for "global" errors  Generates and prints a friendly error message using key: "fes.globalErrors.stackTop", "fes.globalErrors.stackSubseq".
+
+🔗 See also: |p5.foundation|
+
+
+🔧 processStack()                                                *p5.processStack()*
+────────────────────
+
+📝 Takes a stacktrace array and filters out all frames that show internal p5 details.  Generates and prints a friendly error message using key: "fes.wrongPreload", "fes.libraryError".  The processed stack is used to find whether the error happened internally within the library, and if the error was due to a non-loadX() method being used in preload.  "Internally" here means that the exact location of the error (the top of the stack) is a piece of code written in the p5.js library (which may or may not have been called from the user's sketch).   isInternal: a boolean value indicating whether the error happened internally friendlyStack: the filtered (simplified) stacktrace
+
+🔗 See also: |p5.foundation|
+
+
+🔧 shouldDiscard()                                                *p5.shouldDiscard()*
+─────────────────────
+
+📝 Registers a callback to decide whether to discard (skip drawing) a fragment (pixel) in the fragment shader. This hook can be used inside [baseStrokeShader()](#/p5/baseStrokeShader).modify() and similar shader [modify()](#/p5.Shader/modify) calls to create effects like round points or custom masking. The callback receives a boolean: - `willDiscard`: true if the fragment would be discarded by default  Return true to discard the fragment, or false to keep it.  This hook is available in: - [baseStrokeShader()](#/p5/baseStrokeShader)  A callback function which receives a boolean and should return a boolean.   ` let myShader; function setup() { createCanvas(200, 200, WEBGL); myShader = baseStrokeShader().modify({ 'bool shouldDiscard': '(bool outside) { return outside; }' }); } function draw() { background(255); strokeShader(myShader); strokeWeight(30); line(-width/3, 0, width/3, 0); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseStrokeShader().modify({
+       'bool shouldDiscard': '(bool outside) { return outside; }'
+    });
+  }
+  function draw() {
+    background(255);
+>
+
+🔗 See also: |p5.foundation|
+
+
+🔧 textOutput()                                                *p5.textOutput()*
+──────────────────
+
+📝 Creates a screen reader-accessible description of shapes on the canvas.  `textOutput()` adds a general description, list of shapes, and table of shapes to the web page. The general description includes the canvas size, canvas color, and number of shapes. For example, `Your output is a, 100 by 100 pixels, gray canvas containing the following 2 shapes:`.  A list of shapes follows the general description. The list describes the color, location, and area of each shape. For example, `a red circle at middle covering 3% of the canvas`. Each shape can be selected to get more details.  `textOutput()` uses its table of shapes as a list. The table describes the shape, color, location, coordinates and area. For example, `red circle location = middle area = 3%`. This is different from [gridOutput()](#/p5/gridOutput), which uses its table as a grid.  The `display` parameter is optional. It determines how the description is displayed. If `LABEL` is passed, as in `textOutput(LABEL)`, the description will be visible in a div element next to the canvas. Using `LABEL` creates unhelpful duplicates for screen readers. Only use `LABEL` during development. If `FALLBACK` is passed, as in `textOutput(FALLBACK)`, the description will only be visible to screen readers. This is the default mode.  Read [Writing accessible canvas descriptions](/learn/accessible-labels.html) to learn more about making sketches accessible.    ` function setup() { // Add the text description. textOutput();  // Draw a couple of shapes. background(200); fill(255, 0, 0); circle(20, 20, 20); fill(0, 0, 255); square(50, 50, 50);  // Add a general description of the canvas. describe('A red circle and a blue square on a gray background.'); } `    ` function setup() { // Add the text description and // display it for debugging. textOutput(LABEL);  // Draw a couple of shapes. background(200); fill(255, 0, 0); circle(20, 20, 20); fill(0, 0, 255); square(50, 50, 50);  // Add a general description of the canvas. describe('A red circle and a blue square on a gray background.'); } `    `  function setup(){ createCanvas(100, 100); }  function draw() { // Add the text description. textOutput();  // Draw a moving circle. background(200); let x = frameCount * 0.1; fill(255, 0, 0); circle(x, 20, 20); fill(0, 0, 255); square(50, 50, 50);  // Add a general description of the canvas. describe('A red circle moves from left to right above a blue square.'); } `    `  function setup(){ createCanvas(100, 100); }  function draw() { // Add the text description and // display it for debugging. textOutput(LABEL);  // Draw a moving circle. background(200); let x = frameCount * 0.1; fill(255, 0, 0); circle(x, 20, 20); fill(0, 0, 255); square(50, 50, 50);  // Add a general description of the canvas. describe('A red circle moves from left to right above a blue square.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    // Add the text description.
+    textOutput();
+    // Draw a couple of shapes.
+    background(200);
+    fill(255, 0, 0);
+    circle(20, 20, 20);
+    fill(0, 0, 255);
+    square(50, 50, 50);
+>
+
+🔗 See also: |p5.foundation|
+
+==============================================================================
+🤖 Generated by p5.man - neovim help generator for p5.js
+🌐 https://github.com/prjctimg/p5.man

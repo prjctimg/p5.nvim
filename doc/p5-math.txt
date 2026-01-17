@@ -1,0 +1,991 @@
+🎨 *p5.math*	Mathematical functions and vector operations 📚
+==============================================================================
+🚀 p5.js Math Reference
+
+📅 Generated on: January 17, 2026
+🏷️  p5.js version: 2.2.0
+
+	*help-topic*p5.math
+
+📋 TABLE OF CONTENTS                                        *p5.math-contents*
+
+1. 🎯 Functions (40 total)
+
+   • |_fromDegrees()|
+   • |_fromRadians()|
+   • |_toDegrees()|
+   • |_toRadians()|
+   • |abs()|
+   • |acos()|
+   • |angleMode()|
+   • |asin()|
+   • |atan()|
+   • |atan2()|
+   • |ceil()|
+   • |constrain()|
+   • |cos()|
+   • |createMatrix()|
+   • |createVector()|
+   • |degrees()|
+   • |dist()|
+   • |exp()|
+   • |floor()|
+   • |fract()|
+   • |lerp()|
+   • |log()|
+   • |mag()|
+   • |map()|
+   • |max()|
+   • |min()|
+   • |noise()|
+   • |noiseDetail()|
+   • |noiseSeed()|
+   • |norm()|
+   • |pow()|
+   • |radians()|
+   • |random()|
+   • |randomGaussian()|
+   • |randomSeed()|
+   • |round()|
+   • |sin()|
+   • |sq()|
+   • |sqrt()|
+   • |tan()|
+
+📖 FUNCTION DOCUMENTATION
+
+
+🔧 _fromDegrees()                                                *p5._fromDegrees()*
+────────────────────
+
+📝 converts angles from DEGREES into the current angleMode
+
+🔗 See also: |p5.math|
+
+
+🔧 _fromRadians()                                                *p5._fromRadians()*
+────────────────────
+
+📝 converts angles from RADIANS into the current angleMode
+
+🔗 See also: |p5.math|
+
+
+🔧 _toDegrees()                                                *p5._toDegrees()*
+──────────────────
+
+📝 converts angles from the current angleMode to DEGREES
+
+🔗 See also: |p5.math|
+
+
+🔧 _toRadians()                                                *p5._toRadians()*
+──────────────────
+
+📝 converts angles from the current angleMode to RADIANS
+
+🔗 See also: |p5.math|
+
+
+🔧 abs()                                                *p5.abs()*
+───────────
+
+📝 Calculates the absolute value of a number.  A number's absolute value is its distance from zero on the number line. -5 and 5 are both five units away from zero, so calling `abs(-5)` and `abs(5)` both return 5. The absolute value of a number is always positive.    ` function setup() { createCanvas(100, 100);  describe('A gray square with a vertical black line that divides it in half. A white rectangle gets taller when the user moves the mouse away from the line.'); }  function draw() { background(200);  // Divide the canvas. line(50, 0, 50, 100);  // Calculate the mouse's distance from the middle. let h = abs(mouseX - 50);  // Draw a rectangle based on the mouse's distance // from the middle. rect(0, 100 - h, 100, h); } `
+
+↩️  Returns:
+   Number - absolute value of given number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A gray square with a vertical black line that divides it in half. A white rectangle gets taller when the user moves the mouse away from the line.');
+  }
+  function draw() {
+    background(200);
+    // Divide the canvas.
+    line(50, 0, 50, 100);
+    // Calculate the mouse's distance from the middle.
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 acos()                                                *p5.acos()*
+────────────
+
+📝 Calculates the arc cosine of a number.  `acos()` is the inverse of [cos()](#/p5/cos). It expects arguments in the range -1 to 1. By default, `acos()` returns values in the range 0 to &pi; (about 3.14). If the [angleMode()](#/p5/angleMode) is `DEGREES`, then values are returned in the range 0 to 180.    ` function setup() { createCanvas(100, 100);  background(200);  // Calculate cos() and acos() values. let a = PI; let c = cos(a); let ac = acos(c);  // Display the values. text(`${round(a, 3)}`, 35, 25); text(`${round(c, 3)}`, 35, 50); text(`${round(ac, 3)}`, 35, 75);  describe('The numbers 3.142, -1, and 3.142 written on separate rows.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Calculate cos() and acos() values. let a = PI + QUARTER_PI; let c = cos(a); let ac = acos(c);  // Display the values. text(`${round(a, 3)}`, 35, 25); text(`${round(c, 3)}`, 35, 50); text(`${round(ac, 3)}`, 35, 75);  describe('The numbers 3.927, -0.707, and 2.356 written on separate rows.'); } `
+
+↩️  Returns:
+   Number - arc cosine of the given value.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Calculate cos() and acos() values.
+    let a = PI;
+    let c = cos(a);
+    let ac = acos(c);
+    // Display the values.
+    text(`${round(a, 3)}`, 35, 25);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 angleMode()                                                *p5.angleMode()*
+─────────────────
+
+📝 Changes the unit system used to measure angles.  Degrees and radians are both units for measuring angles. There are 360˚ in one full rotation. A full rotation is 2 &times; &pi; (about 6.28) radians.  Functions such as [rotate()](#/p5/rotate) and [sin()](#/p5/sin) expect angles measured radians by default. Calling `angleMode(DEGREES)` switches to degrees. Calling `angleMode(RADIANS)` switches back to radians.  Calling `angleMode()` with no arguments returns current angle mode, which is either `RADIANS` or `DEGREES`.   ` function setup() { createCanvas(100, 100);  background(200);  // Rotate 1/8 turn. rotate(QUARTER_PI);  // Draw a line. line(0, 0, 80, 0);  describe('A diagonal line radiating from the top-left corner of a square.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Use degrees. angleMode(DEGREES);  // Rotate 1/8 turn. rotate(45);  // Draw a line. line(0, 0, 80, 0);  describe('A diagonal line radiating from the top-left corner of a square.'); } `    ` function setup() { createCanvas(100, 100);  background(50);  // Calculate the angle to rotate. let angle = TWO_PI / 7;  // Move the origin to the center. translate(50, 50);  // Style the flower. noStroke(); fill(255, 50);  // Draw the flower. for (let i = 0; i    ` function setup() { createCanvas(100, 100);  background(50);  // Use degrees. angleMode(DEGREES);  // Calculate the angle to rotate. let angle = 360 / 7;  // Move the origin to the center. translate(50, 50);  // Style the flower. noStroke(); fill(255, 50);  // Draw the flower. for (let i = 0; i    ` function setup() { createCanvas(100, 100);  describe('A white ball on a string oscillates left and right.'); }  function draw() { background(200);  // Calculate the coordinates. let x = 30 * cos(frameCount * 0.05) + 50; let y = 50;  // Draw the oscillator. line(50, y, x, y); circle(x, y, 20); } `    ` function setup() { createCanvas(100, 100);  // Use degrees. angleMode(DEGREES);  describe('A white ball on a string oscillates left and right.'); }  function draw() { background(200);  // Calculate the coordinates. let x = 30 * cos(frameCount * 2.86) + 50; let y = 50;  // Draw the oscillator. line(50, y, x, y); circle(x, y, 20); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Draw the upper line. rotate(PI / 6); line(0, 0, 80, 0);  // Use degrees. angleMode(DEGREES);  // Draw the lower line. rotate(30); line(0, 0, 80, 0);  describe('Two diagonal lines radiating from the top-left corner of a square. The lines are oriented 30 degrees from the edges of the square and 30 degrees apart from each other.'); } `
+
+📋 Parameters:
+   • {(RADIANS|DEGREES)} mode - either RADIANS or DEGREES.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Rotate 1/8 turn.
+    rotate(QUARTER_PI);
+    // Draw a line.
+    line(0, 0, 80, 0);
+    describe('A diagonal line radiating from the top-left corner of a square.');
+  }
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 asin()                                                *p5.asin()*
+────────────
+
+📝 Calculates the arc sine of a number.  `asin()` is the inverse of [sin()](#/p5/sin). It expects input values in the range of -1 to 1. By default, `asin()` returns values in the range -&pi; &divide; 2 (about -1.57) to &pi; &divide; 2 (about 1.57). If the [angleMode()](#/p5/angleMode) is `DEGREES` then values are returned in the range -90 to 90.    ` function setup() { createCanvas(100, 100);  background(200);  // Calculate sin() and asin() values. let a = PI / 3; let s = sin(a); let as = asin(s);  // Display the values. text(`${round(a, 3)}`, 35, 25); text(`${round(s, 3)}`, 35, 50); text(`${round(as, 3)}`, 35, 75);  describe('The numbers 1.047, 0.866, and 1.047 written on separate rows.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Calculate sin() and asin() values. let a = PI + PI / 3; let s = sin(a); let as = asin(s);  // Display the values. text(`${round(a, 3)}`, 35, 25); text(`${round(s, 3)}`, 35, 50); text(`${round(as, 3)}`, 35, 75);  describe('The numbers 4.189, -0.866, and -1.047 written on separate rows.'); } `
+
+↩️  Returns:
+   Number - arc sine of the given value.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Calculate sin() and asin() values.
+    let a = PI / 3;
+    let s = sin(a);
+    let as = asin(s);
+    // Display the values.
+    text(`${round(a, 3)}`, 35, 25);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 atan()                                                *p5.atan()*
+────────────
+
+📝 Calculates the arc tangent of a number.  `atan()` is the inverse of [tan()](#/p5/tan). It expects input values in the range of -Infinity to Infinity. By default, `atan()` returns values in the range -&pi; &divide; 2 (about -1.57) to &pi; &divide; 2 (about 1.57). If the [angleMode()](#/p5/angleMode) is `DEGREES` then values are returned in the range -90 to 90.    ` function setup() { createCanvas(100, 100);  background(200);  // Calculate tan() and atan() values. let a = PI / 3; let t = tan(a); let at = atan(t);  // Display the values. text(`${round(a, 3)}`, 35, 25); text(`${round(t, 3)}`, 35, 50); text(`${round(at, 3)}`, 35, 75);  describe('The numbers 1.047, 1.732, and 1.047 written on separate rows.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Calculate tan() and atan() values. let a = PI + PI / 3; let t = tan(a); let at = atan(t);  // Display the values. text(`${round(a, 3)}`, 35, 25); text(`${round(t, 3)}`, 35, 50); text(`${round(at, 3)}`, 35, 75);  describe('The numbers 4.189, 1.732, and 1.047 written on separate rows.'); } `
+
+↩️  Returns:
+   Number - arc tangent of the given value.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Calculate tan() and atan() values.
+    let a = PI / 3;
+    let t = tan(a);
+    let at = atan(t);
+    // Display the values.
+    text(`${round(a, 3)}`, 35, 25);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 atan2()                                                *p5.atan2()*
+─────────────
+
+📝 Calculates the angle formed by a point, the origin, and the positive x-axis.  `atan2()` is most often used for orienting geometry to the mouse's position, as in `atan2(mouseY, mouseX)`. The first parameter is the point's y-coordinate and the second parameter is its x-coordinate.  By default, `atan2()` returns values in the range -&pi; (about -3.14) to &pi; (3.14). If the [angleMode()](#/p5/angleMode) is `DEGREES`, then values are returned in the range -180 to 180.    ` function setup() { createCanvas(100, 100);  describe('A rectangle at the top-left of the canvas rotates with mouse movements.'); }  function draw() { background(200);  // Calculate the angle between the mouse // and the origin. let a = atan2(mouseY, mouseX);  // Rotate. rotate(a);  // Draw the shape. rect(0, 0, 60, 10); } `    ` function setup() { createCanvas(100, 100);  describe('A rectangle at the center of the canvas rotates with mouse movements.'); }  function draw() { background(200);  // Translate the origin to the center. translate(50, 50);  // Get the mouse's coordinates relative to the origin. let x = mouseX - 50; let y = mouseY - 50;  // Calculate the angle between the mouse and the origin. let a = atan2(y, x);  // Rotate. rotate(a);  // Draw the shape. rect(-30, -5, 60, 10); } `
+
+↩️  Returns:
+   Number - arc tangent of the given point.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A rectangle at the top-left of the canvas rotates with mouse movements.');
+  }
+  function draw() {
+    background(200);
+    // Calculate the angle between the mouse
+    // and the origin.
+    let a = atan2(mouseY, mouseX);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 ceil()                                                *p5.ceil()*
+────────────
+
+📝 Calculates the closest integer value that is greater than or equal to a number.  For example, calling `ceil(9.03)` and `ceil(9.97)` both return the value 10.    ` function setup() { createCanvas(100, 100);  background(200);  // Use RGB color with values from 0 to 1. colorMode(RGB, 1);  noStroke();  // Draw the left rectangle. let r = 0.3; fill(r, 0, 0); rect(0, 0, 50, 100);  // Round r up to 1. r = ceil(r);  // Draw the right rectangle. fill(r, 0, 0); rect(50, 0, 50, 100);  describe('Two rectangles. The one on the left is dark red and the one on the right is bright red.'); } `
+
+↩️  Returns:
+   Integer - rounded up number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Use RGB color with values from 0 to 1.
+    colorMode(RGB, 1);
+    noStroke();
+    // Draw the left rectangle.
+    let r = 0.3;
+    fill(r, 0, 0);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 constrain()                                                *p5.constrain()*
+─────────────────
+
+📝 Constrains a number between a minimum and maximum value.    ` function setup() { createCanvas(100, 100);  describe('A black dot drawn on a gray square follows the mouse from left to right. Its movement is constrained to the middle third of the square.'); }  function draw() { background(200);  let x = constrain(mouseX, 33, 67); let y = 50;  strokeWeight(5); point(x, y); } `    ` function setup() { createCanvas(100, 100);  describe('Two vertical lines. Two circles move horizontally with the mouse. One circle stops at the vertical lines.'); }  function draw() { background(200);  // Set boundaries and draw them. let leftWall = 25; let rightWall = 75; line(leftWall, 0, leftWall, 100); line(rightWall, 0, rightWall, 100);  // Draw a circle that follows the mouse freely. fill(255); circle(mouseX, 33, 9);  // Draw a circle that's constrained. let xc = constrain(mouseX, leftWall, rightWall); fill(0); circle(xc, 67, 9); } `
+
+↩️  Returns:
+   Number - constrained number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A black dot drawn on a gray square follows the mouse from left to right. Its movement is constrained to the middle third of the square.');
+  }
+  function draw() {
+    background(200);
+    let x = constrain(mouseX, 33, 67);
+    let y = 50;
+    strokeWeight(5);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 cos()                                                *p5.cos()*
+───────────
+
+📝 Calculates the cosine of an angle.  `cos()` is useful for many geometric tasks in creative coding. The values returned oscillate between -1 and 1 as the input angle increases. `cos()` calculates the cosine of an angle, using radians by default, or according to if [angleMode()](#/p5/angleMode) setting (RADIANS or DEGREES).    ` function setup() { createCanvas(100, 100);  describe('A white ball on a string oscillates left and right.'); }  function draw() { background(200);  // Calculate the coordinates. let x = 30 * cos(frameCount * 0.05) + 50; let y = 50;  // Draw the oscillator. line(50, y, x, y); circle(x, y, 20); } `    ` function setup() { createCanvas(100, 100);  background(200);  describe('A series of black dots form a wave pattern.'); }  function draw() { // Calculate the coordinates. let x = frameCount; let y = 30 * cos(x * 0.1) + 50;  // Draw the point. point(x, y); } `    ` function setup() { createCanvas(100, 100);  background(200);  describe('A series of black dots form an infinity symbol.'); }  function draw() { // Calculate the coordinates. let x = 30 * cos(frameCount * 0.1) + 50; let y = 10 * sin(frameCount * 0.2) + 50;  // Draw the point. point(x, y); } `
+
+↩️  Returns:
+   Number - cosine of the angle.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A white ball on a string oscillates left and right.');
+  }
+  function draw() {
+    background(200);
+    // Calculate the coordinates.
+    let x = 30 * cos(frameCount * 0.05) + 50;
+    let y = 50;
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 createMatrix()                                                *p5.createMatrix()*
+────────────────────
+
+📝 Creates a new [p5.Matrix](#/p5.Matrix) object.  A matrix is a mathematical concept that is useful in many fields, including computer graphics. In p5.js, matrices are used to perform transformations on shapes and images. The `createMatrix` method can take a column-major array representation of a square matrix as an argument. In the current implementation we only use squared matrices.     ` function setup() { let matrix = createMatrix([1, 2, 3, 4, 5, 6, 7, 8, 9]); } `
+
+📋 Parameters:
+   • {Array<Number>} components - Column-major array representation of the square matrix.
+
+↩️  Returns:
+   p5.Matrix - new [p5.Matrix](#/p5.Matrix) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    let matrix = createMatrix([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  }
+  `
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 createVector()                                                *p5.createVector()*
+────────────────────
+
+📝 Creates a new [p5.Vector](#/p5.Vector) object.  A vector can be thought of in different ways. In one view, a vector is like an arrow pointing in space. Vectors have both magnitude (length) and direction. This view is helpful for programming motion.  A vector's components determine its magnitude and direction. For example, calling `createVector(3, 4)` creates a new [p5.Vector](#/p5.Vector) object with an x-component of 3 and a y-component of 4. From the origin, this vector's tip is 3 units to the right and 4 units down.  You can also pass N dimensions to the `createVector` function. For example, calling `createVector(1, 2, 3, 4)` creates a vector with four components. This allows for flexibility in representing vectors in higher-dimensional spaces.  Calling `createVector()` **with no arguments** is **deprecated** and will emit a friendly warning. Use `createVector(0)`, `createVector(0, 0)`, or `createVector(0, 0, 0)` instead.  [p5.Vector](#/p5.Vector) objects are often used to program motion because they simplify the math. For example, a moving ball has a position and a velocity. Position describes where the ball is in space. The ball's position vector extends from the origin to the ball's center. Velocity describes the ball's speed and the direction it's moving. If the ball is moving straight up, its velocity vector points straight up. Adding the ball's velocity vector to its position vector moves it, as in `pos.add(vel)`. Vector math relies on methods inside the [p5.Vector](#/p5.Vector) class.    ` function setup() { createCanvas(100, 100);  background(200);  // Create p5.Vector objects. let p1 = createVector(25, 25); let p2 = createVector(50, 50); let p3 = createVector(75, 75);  // Draw the dots. strokeWeight(5); point(p1); point(p2); point(p3);  describe('Three black dots form a diagonal line from top left to bottom right.'); } `    ` let pos; let vel;  function setup() { createCanvas(100, 100);  // Create p5.Vector objects. pos = createVector(50, 100); vel = createVector(0, -1);  describe('A black dot moves from bottom to top on a gray square. The dot reappears at the bottom when it reaches the top.'); }  function draw() { background(200);  // Add velocity to position. pos.add(vel);  // If the dot reaches the top of the canvas, // restart from the bottom. if (pos.y
+
+📋 Parameters:
+   • {...Number} x - Zero or more numbers, representing each component of the vector.
+
+↩️  Returns:
+   p5.Vector - new [p5.Vector](#/p5.Vector) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create p5.Vector objects.
+    let p1 = createVector(25, 25);
+    let p2 = createVector(50, 50);
+    let p3 = createVector(75, 75);
+    // Draw the dots.
+    strokeWeight(5);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 degrees()                                                *p5.degrees()*
+───────────────
+
+📝 Converts an angle measured in radians to its value in degrees.  Degrees and radians are both units for measuring angles. There are 360˚ in one full rotation. A full rotation is 2 &times; &pi; (about 6.28) radians.  The same angle can be expressed in with either unit. For example, 90° is a quarter of a full rotation. The same angle is 2 &times; &pi; &divide; 4 (about 1.57) radians.    ` function setup() { createCanvas(100, 100);  background(200);  // Calculate the angle conversion. let rad = QUARTER_PI; let deg = degrees(rad);  // Display the conversion. text(`${round(rad, 2)} rad = ${deg}˚`, 10, 50);  describe('The text "0.79 rad = 45˚".'); } `
+
+↩️  Returns:
+   Number - converted angle.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Calculate the angle conversion.
+    let rad = QUARTER_PI;
+    let deg = degrees(rad);
+    // Display the conversion.
+    text(`${round(rad, 2)} rad = ${deg}˚`, 10, 50);
+    describe('The text "0.79 rad = 45˚".');
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 dist()                                                *p5.dist()*
+────────────
+
+📝 Calculates the distance between two points.  The version of `dist()` with four parameters calculates distance in two dimensions.  The version of `dist()` with six parameters calculates distance in three dimensions.  Use [p5.Vector.dist()](#/p5.Vector/dist) to calculate the distance between two [p5.Vector](#/p5.Vector) objects.    ` function setup() { createCanvas(100, 100);  background(200);  // Set the coordinates. let x1 = 10; let y1 = 50; let x2 = 90; let y2 = 50;  // Draw the points and a line connecting them. line(x1, y1, x2, y2); strokeWeight(5); point(x1, y1); point(x2, y2);  // Calculate the distance. let d = dist(x1, y1, x2, y2);  // Style the text. textAlign(CENTER); textSize(16);  // Display the distance. text(d, 43, 40);  describe('Two dots connected by a horizontal line. The number 80 is written above the center of the line.'); } `
+
+↩️  Returns:
+   Number - distance between the two points.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Set the coordinates.
+    let x1 = 10;
+    let y1 = 50;
+    let x2 = 90;
+    let y2 = 50;
+    // Draw the points and a line connecting them.
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 exp()                                                *p5.exp()*
+───────────
+
+📝 Calculates the value of Euler's number e (2.71828...) raised to the power of a number.    ` function setup() { createCanvas(100, 100);  background(200);  // Top-left. let d = exp(1); circle(10, 10, d);  // Left-center. d = exp(2); circle(20, 20, d);  // Right-center. d = exp(3); circle(40, 40, d);  // Bottom-right. d = exp(4); circle(80, 80, d);  describe('A series of circles that grow exponentially from top left to bottom right.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  describe('A series of black dots that grow exponentially from left to right.'); }  function draw() { // Invert the y-axis. scale(1, -1); translate(0, -100);  // Calculate the coordinates. let x = frameCount; let y = 0.005 * exp(x * 0.1);  // Draw a point. point(x, y); } `
+
+↩️  Returns:
+   Number - e^n
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Top-left.
+    let d = exp(1);
+    circle(10, 10, d);
+    // Left-center.
+    d = exp(2);
+    circle(20, 20, d);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 floor()                                                *p5.floor()*
+─────────────
+
+📝 Calculates the closest integer value that is less than or equal to the value of a number.    ` function setup() { createCanvas(100, 100);  // Use RGB color with values from 0 to 1. colorMode(RGB, 1);  noStroke();  // Draw the left rectangle. let r = 0.8; fill(r, 0, 0); rect(0, 0, 50, 100);  // Round r down to 0. r = floor(r);  // Draw the right rectangle. fill(r, 0, 0); rect(50, 0, 50, 100);  describe('Two rectangles. The one on the left is bright red and the one on the right is black.'); } `
+
+↩️  Returns:
+   Integer - rounded down number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    // Use RGB color with values from 0 to 1.
+    colorMode(RGB, 1);
+    noStroke();
+    // Draw the left rectangle.
+    let r = 0.8;
+    fill(r, 0, 0);
+    rect(0, 0, 50, 100);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 fract()                                                *p5.fract()*
+─────────────
+
+📝 Calculates the fractional part of a number.  A number's fractional part includes its decimal values. For example, `fract(12.34)` returns 0.34.    ` function setup() { createCanvas(100, 100);  background(200);  // Style the text. textAlign(CENTER); textSize(16);  // Original number. let n = 56.78; text(n, 50, 33);  // Fractional part. let f = fract(n); text(f, 50, 67);  describe('The number 56.78 written above the number 0.78.'); } `
+
+📋 Parameters:
+   • {Number} n - number whose fractional part will be found.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Style the text.
+    textAlign(CENTER);
+    textSize(16);
+    // Original number.
+    let n = 56.78;
+    text(n, 50, 33);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 lerp()                                                *p5.lerp()*
+────────────
+
+📝 Calculates a number between two numbers at a specific increment.  The `amt` parameter is the amount to interpolate between the two numbers. 0.0 is equal to the first number, 0.1 is very near the first number, 0.5 is half-way in between, and 1.0 is equal to the second number. The `lerp()` function is convenient for creating motion along a straight path and for drawing dotted lines.  If the value of `amt` is less than 0 or more than 1, `lerp()` will return a number outside of the original interval. For example, calling `lerp(0, 10, 1.5)` will return 15.    ` function setup() { createCanvas(100, 100);  background(200);  // Declare variables for coordinates. let a = 20; let b = 80; let c = lerp(a, b, 0.2); let d = lerp(a, b, 0.5); let e = lerp(a, b, 0.8);  strokeWeight(5);  // Draw the original points in black. stroke(0); point(a, 50); point(b, 50);  // Draw the lerped points in gray. stroke(100); point(c, 50); point(d, 50); point(e, 50);  describe('Five points in a horizontal line. The outer points are black and the inner points are gray.'); } `    ` let x = 50; let y = 50; let targetX = 50; let targetY = 50;  function setup() { createCanvas(100, 100);  background(200);  describe('A white circle at the center of a gray canvas. The circle moves to where the user clicks, then moves smoothly back to the center.'); }  function draw() { background(220);  // Move x and y toward the target. x = lerp(x, targetX, 0.05); y = lerp(y, targetY, 0.05);  // Draw the circle. circle(x, y, 20); }  // Set x and y when the user clicks the mouse. function mouseClicked() { x = mouseX; y = mouseY; } `
+
+↩️  Returns:
+   Number - lerped value.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Declare variables for coordinates.
+    let a = 20;
+    let b = 80;
+    let c = lerp(a, b, 0.2);
+    let d = lerp(a, b, 0.5);
+    let e = lerp(a, b, 0.8);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 log()                                                *p5.log()*
+───────────
+
+📝 Calculates the natural logarithm (the base-e logarithm) of a number.  `log()` expects the `n` parameter to be a value greater than 0 because the natural logarithm is defined that way.    ` function setup() { createCanvas(100, 100);  background(200);  // Top-left. let d = log(50); circle(33, 33, d);  // Bottom-right. d = log(500000000); circle(67, 67, d);  describe('Two white circles. The circle at the top-left is small. The circle at the bottom-right is about five times larger.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  describe('A series of black dots that get higher slowly from left to right.'); }  function draw() { // Invert the y-axis. scale(1, -1); translate(0, -100);  // Calculate coordinates. let x = frameCount; let y = 15 * log(x);  // Draw a point. point(x, y); } `
+
+↩️  Returns:
+   Number - natural logarithm of n.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Top-left.
+    let d = log(50);
+    circle(33, 33, d);
+    // Bottom-right.
+    d = log(500000000);
+    circle(67, 67, d);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 mag()                                                *p5.mag()*
+───────────
+
+📝 Calculates the magnitude, or length, of a vector.  A vector can be thought of in different ways. In one view, a vector is a point in space. The vector's components, `x` and `y`, are the point's coordinates `(x, y)`. A vector's magnitude is the distance from the origin `(0, 0)` to `(x, y)`. `mag(x, y)` is a shortcut for calling `dist(0, 0, x, y)`.  A vector can also be thought of as an arrow pointing in space. This view is helpful for programming motion. See [p5.Vector](#/p5.Vector) for more details.  Use [p5.Vector.mag()](#/p5.Vector/mag) to calculate the magnitude of a [p5.Vector](#/p5.Vector) object.    ` function setup() { createCanvas(100, 100);  background(200);  // Set the vector's components. let x = 30; let y = 40;  // Calculate the magnitude. let m = mag(x, y);  // Style the text. textSize(16);  // Display the vector and its magnitude. line(0, 0, x, y); text(m, x, y);  describe('A diagonal line is drawn from the top left of the canvas. The number 50 is written at the end of the line.'); } `
+
+↩️  Returns:
+   Number - magnitude of vector.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Set the vector's components.
+    let x = 30;
+    let y = 40;
+    // Calculate the magnitude.
+    let m = mag(x, y);
+    // Style the text.
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 map()                                                *p5.map()*
+───────────
+
+📝 Re-maps a number from one range to another.  For example, calling `map(2, 0, 10, 0, 100)` returns 20. The first three arguments set the original value to 2 and the original range from 0 to 10. The last two arguments set the target range from 0 to 100. 20's position in the target range [0, 100] is proportional to 2's position in the original range [0, 10].  The sixth parameter, `withinBounds`, is optional. By default, `map()` can return values outside of the target range. For example, `map(11, 0, 10, 0, 100)` returns 110. Passing `true` as the sixth parameter constrains the remapped value to the target range. For example, `map(11, 0, 10, 0, 100, true)` returns 100.    ` function setup() { createCanvas(100, 100);  describe('Two horizontal lines. The top line grows horizontally as the mouse moves to the right. The bottom line also grows horizontally but is scaled to stay on the left half of the canvas.'); }  function draw() { background(200);  // Draw the top line. line(0, 25, mouseX, 25);  // Remap mouseX from [0, 100] to [0, 50]. let x = map(mouseX, 0, 100, 0, 50);  // Draw the bottom line. line(0, 75, 0, x); } `    ` function setup() { createCanvas(100, 100);  describe('A circle changes color from black to white as the mouse moves from left to right.'); }  function draw() { background(200);  // Remap mouseX from [0, 100] to [0, 255] let c = map(mouseX, 0, 100, 0, 255);  // Style the circle. fill(c);  // Draw the circle. circle(50, 50, 20); } `
+
+↩️  Returns:
+   Number - remapped number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('Two horizontal lines. The top line grows horizontally as the mouse moves to the right. The bottom line also grows horizontally but is scaled to stay on the left half of the canvas.');
+  }
+  function draw() {
+    background(200);
+    // Draw the top line.
+    line(0, 25, mouseX, 25);
+    // Remap mouseX from [0, 100] to [0, 50].
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 max()                                                *p5.max()*
+───────────
+
+📝 Returns the largest value in a sequence of numbers.  The version of `max()` with one parameter interprets it as an array of numbers and returns the largest number.  The version of `max()` with two or more parameters interprets them as individual numbers and returns the largest number.    ` function setup() { createCanvas(100, 100);  background(200);  // Calculate the maximum of 10, 5, and 20. let m = max(10, 5, 20);  // Style the text. textAlign(CENTER); textSize(16);  // Display the max. text(m, 50, 50);  describe('The number 20 written in the middle of a gray square.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of numbers. let numbers = [10, 5, 20];  // Calculate the maximum of the array. let m = max(numbers);  // Style the text. textAlign(CENTER); textSize(16);  // Display the max. text(m, 50, 50);  describe('The number 20 written in the middle of a gray square.'); } `
+
+↩️  Returns:
+   Number - maximum number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Calculate the maximum of 10, 5, and 20.
+    let m = max(10, 5, 20);
+    // Style the text.
+    textAlign(CENTER);
+    textSize(16);
+    // Display the max.
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 min()                                                *p5.min()*
+───────────
+
+📝 Returns the smallest value in a sequence of numbers.  The version of `min()` with one parameter interprets it as an array of numbers and returns the smallest number.  The version of `min()` with two or more parameters interprets them as individual numbers and returns the smallest number.    ` function setup() { createCanvas(100, 100);  background(200);  // Calculate the minimum of 10, 5, and 20. let m = min(10, 5, 20);  // Style the text. textAlign(CENTER); textSize(16);  // Display the min. text(m, 50, 50);  describe('The number 5 written in the middle of a gray square.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of numbers. let numbers = [10, 5, 20];  // Calculate the minimum of the array. let m = min(numbers);  // Style the text. textAlign(CENTER); textSize(16);  // Display the min. text(m, 50, 50);  describe('The number 5 written in the middle of a gray square.'); } `
+
+↩️  Returns:
+   Number - minimum number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Calculate the minimum of 10, 5, and 20.
+    let m = min(10, 5, 20);
+    // Style the text.
+    textAlign(CENTER);
+    textSize(16);
+    // Display the min.
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 noise()                                                *p5.noise()*
+─────────────
+
+📝 Returns random numbers that can be tuned to feel organic.  Values returned by [random()](#/p5/random) and [randomGaussian()](#/p5/randomGaussian) can change by large amounts between function calls. By contrast, values returned by `noise()` can be made "smooth". Calls to `noise()` with similar inputs will produce similar outputs. `noise()` is used to create textures, motion, shapes, terrains, and so on. Ken Perlin invented `noise()` while animating the original *Tron* film in the 1980s.  `noise()` always returns values between 0 and 1. It returns the same value for a given input while a sketch is running. `noise()` produces different results each time a sketch runs. The [noiseSeed()](#/p5/noiseSeed) function can be used to generate the same sequence of Perlin noise values each time a sketch runs.  The character of the noise can be adjusted in two ways. The first way is to scale the inputs. `noise()` interprets inputs as coordinates. The sequence of noise values will be smoother when the input coordinates are closer. The second way is to use the [noiseDetail()](#/p5/noiseDetail) function.  The version of `noise()` with one parameter computes noise values in one dimension. This dimension can be thought of as space, as in `noise(x)`, or time, as in `noise(t)`.  The version of `noise()` with two parameters computes noise values in two dimensions. These dimensions can be thought of as space, as in `noise(x, y)`, or space and time, as in `noise(x, t)`.  The version of `noise()` with three parameters computes noise values in three dimensions. These dimensions can be thought of as space, as in `noise(x, y, z)`, or space and time, as in `noise(x, y, t)`.    ` function setup() { createCanvas(100, 100);  describe('A black dot moves randomly on a gray square.'); }  function draw() { background(200);  // Calculate the coordinates. let x = 100 * noise(0.005 * frameCount); let y = 100 * noise(0.005 * frameCount + 10000);  // Draw the point. strokeWeight(5); point(x, y); } `    ` function setup() { createCanvas(100, 100);  describe('A black dot moves randomly on a gray square.'); }  function draw() { background(200);  // Set the noise level and scale. let noiseLevel = 100; let noiseScale = 0.005;  // Scale the input coordinate. let nt = noiseScale * frameCount;  // Compute the noise values. let x = noiseLevel * noise(nt); let y = noiseLevel * noise(nt + 10000);  // Draw the point. strokeWeight(5); point(x, y); } `    ` function setup() { createCanvas(100, 100);  describe('A hilly terrain drawn in gray against a black sky.'); }  function draw() { // Set the noise level and scale. let noiseLevel = 100; let noiseScale = 0.02;  // Scale the input coordinate. let x = frameCount; let nx = noiseScale * x;  // Compute the noise value. let y = noiseLevel * noise(nx);  // Draw the line. line(x, 0, x, y); } `    ` function setup() { createCanvas(100, 100);  describe('A calm sea drawn in gray against a black sky.'); }  function draw() { background(200);  // Set the noise level and scale. let noiseLevel = 100; let noiseScale = 0.002;  // Iterate from left to right. for (let x = 0; x    ` function setup() { createCanvas(100, 100);  background(200);  // Set the noise level and scale. let noiseLevel = 255; let noiseScale = 0.01;  // Iterate from top to bottom. for (let y = 0; y    ` function setup() { createCanvas(100, 100);  describe('A gray cloudy pattern that changes.'); }  function draw() { // Set the noise level and scale. let noiseLevel = 255; let noiseScale = 0.009;  // Iterate from top to bottom. for (let y = 0; y
+
+↩️  Returns:
+   Number - Perlin noise value at specified coordinates.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A black dot moves randomly on a gray square.');
+  }
+  function draw() {
+    background(200);
+    // Calculate the coordinates.
+    let x = 100 * noise(0.005 * frameCount);
+    let y = 100 * noise(0.005 * frameCount + 10000);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 noiseDetail()                                                *p5.noiseDetail()*
+───────────────────
+
+📝 Adjusts the character of the noise produced by the [noise()](#/p5/noise) function.  Perlin noise values are created by adding layers of noise together. The noise layers, called octaves, are similar to harmonics in music. Lower octaves contribute more to the output signal. They define the overall intensity of the noise. Higher octaves create finer-grained details.  By default, noise values are created by combining four octaves. Each higher octave contributes half as much (50% less) compared to its predecessor. `noiseDetail()` changes the number of octaves and the falloff amount. For example, calling `noiseDetail(6, 0.25)` ensures that [noise()](#/p5/noise) will use six octaves. Each higher octave will contribute 25% as much (75% less) compared to its predecessor. Falloff values between 0 and 1 are valid. However, falloff values greater than 0.5 might result in noise values greater than 1.    ` function setup() { createCanvas(100, 100);  // Set the noise level and scale. let noiseLevel = 255; let noiseScale = 0.02;  // Iterate from top to bottom. for (let y = 0; y
+
+📋 Parameters:
+   • {Number} lod - number of octaves to be used by the noise.
+   • {Number} falloff - falloff factor for each octave.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    // Set the noise level and scale.
+    let noiseLevel = 255;
+    let noiseScale = 0.02;
+    // Iterate from top to bottom.
+    for (let y = 0; y
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 noiseSeed()                                                *p5.noiseSeed()*
+─────────────────
+
+📝 Sets the seed value for the [noise()](#/p5/noise) function.  By default, [noise()](#/p5/noise) produces different results each time a sketch is run. Calling `noiseSeed()` with a constant argument, such as `noiseSeed(99)`, makes [noise()](#/p5/noise) produce the same results each time a sketch is run.    ` function setup() { createCanvas(100, 100);  background(200);  // Set the noise seed for consistent results. noiseSeed(99);  describe('A black rectangle that grows randomly, first to the right and then to the left.'); }  function draw() { // Set the noise level and scale. let noiseLevel = 100; let noiseScale = 0.005;  // Scale the input coordinate. let nt = noiseScale * frameCount;  // Compute the noise value. let x = noiseLevel * noise(nt);  // Draw the line. line(x, 0, x, height); } `
+
+📋 Parameters:
+   • {Number} seed - seed value.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Set the noise seed for consistent results.
+    noiseSeed(99);
+    describe('A black rectangle that grows randomly, first to the right and then to the left.');
+  }
+  function draw() {
+    // Set the noise level and scale.
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 norm()                                                *p5.norm()*
+────────────
+
+📝 Maps a number from one range to a value between 0 and 1.  For example, `norm(2, 0, 10)` returns 0.2. 2's position in the original range [0, 10] is proportional to 0.2's position in the range [0, 1]. This is the same as calling `map(2, 0, 10, 0, 1)`.  Numbers outside of the original range are not constrained between 0 and 1. Out-of-range values are often intentional and useful.    ` function setup() { createCanvas(100, 100);  // Use RGB color with values from 0 to 1. colorMode(RGB, 1);  describe('A square changes color from black to red as the mouse moves from left to right.'); }  function draw() { // Calculate the redValue. let redValue = norm(mouseX, 0, 100);  // Paint the background. background(redValue, 0, 0); } `
+
+↩️  Returns:
+   Number - normalized number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    // Use RGB color with values from 0 to 1.
+    colorMode(RGB, 1);
+    describe('A square changes color from black to red as the mouse moves from left to right.');
+  }
+  function draw() {
+    // Calculate the redValue.
+    let redValue = norm(mouseX, 0, 100);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 pow()                                                *p5.pow()*
+───────────
+
+📝 Calculates exponential expressions such as 23.  For example, `pow(2, 3)` evaluates the expression 2 &times; 2 &times; 2. `pow(2, -3)` evaluates 1 &#247; (2 &times; 2 &times; 2).    ` function setup() { createCanvas(100, 100);  background(200);  // Set the base of the exponent. let base = 3;  // Top-left. let d = pow(base, 1); circle(10, 10, d);  // Left-center. d = pow(base, 2); circle(20, 20, d);  // Right-center. d = pow(base, 3); circle(40, 40, d);  // Bottom-right. d = pow(base, 4); circle(80, 80, d);  describe('A series of circles that grow exponentially from top left to bottom right.'); } `
+
+↩️  Returns:
+   Number - n^e.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Set the base of the exponent.
+    let base = 3;
+    // Top-left.
+    let d = pow(base, 1);
+    circle(10, 10, d);
+    // Left-center.
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 radians()                                                *p5.radians()*
+───────────────
+
+📝 Converts an angle measured in degrees to its value in radians.  Degrees and radians are both units for measuring angles. There are 360˚ in one full rotation. A full rotation is 2 &times; &pi; (about 6.28) radians.  The same angle can be expressed in with either unit. For example, 90° is a quarter of a full rotation. The same angle is 2 &times; &pi; &divide; 4 (about 1.57) radians.    ` function setup() { createCanvas(100, 100);  background(200);  // Caclulate the angle conversion. let deg = 45; let rad = radians(deg);  // Display the angle conversion. text(`${deg}˚ = ${round(rad, 3)} rad`, 10, 50);  describe('The text "45˚ = 0.785 rad".'); } `
+
+↩️  Returns:
+   Number - converted angle.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Caclulate the angle conversion.
+    let deg = 45;
+    let rad = radians(deg);
+    // Display the angle conversion.
+    text(`${deg}˚ = ${round(rad, 3)} rad`, 10, 50);
+    describe('The text "45˚ = 0.785 rad".');
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 random()                                                *p5.random()*
+──────────────
+
+📝 Returns a random number or a random element from an array.  `random()` follows uniform distribution, which means that all outcomes are equally likely. When `random()` is used to generate numbers, all numbers in the output range are equally likely to be returned. When `random()` is used to select elements from an array, all elements are equally likely to be chosen.  By default, `random()` produces different results each time a sketch runs. The [randomSeed()](#/p5/randomSeed) function can be used to generate the same sequence of numbers or choices each time a sketch runs.  The version of `random()` with no parameters returns a random number from 0 up to but not including 1.  The version of `random()` with one parameter works one of two ways. If the argument passed is a number, `random()` returns a random number from 0 up to but not including the number. For example, calling `random(5)` returns values between 0 and 5. If the argument passed is an array, `random()` returns a random element from that array. For example, calling `random(['🦁', '🐯', '🐻'])` returns either a lion, tiger, or bear emoji.  The version of `random()` with two parameters returns a random number from a given range. The arguments passed set the range's lower and upper bounds. For example, calling `random(-5, 10.2)` returns values from -5 up to but not including 10.2.    ` function setup() { createCanvas(100, 100);  background(200);  // Get random coordinates between 0 and 100. let x = random(0, 100); let y = random(0, 100);  // Draw a point. strokeWeight(5); point(x, y);  describe('A black dot appears in a random position on a gray square.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Get random coordinates between 0 and 100. let x = random(100); let y = random(100);  // Draw the point. strokeWeight(5); point(x, y);  describe('A black dot appears in a random position on a gray square.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an array of emoji strings. let animals = ['🦁', '🐯', '🐻'];  // Choose a random element from the array. let choice = random(animals);  // Style the text. textAlign(CENTER); textSize(20);  // Display the emoji. text(choice, 50, 50);  describe('An animal face is displayed at random. Either a lion, tiger, or bear.'); } `    ` function setup() { createCanvas(100, 100);  // Slow the frame rate. frameRate(5);  describe('A black dot moves around randomly on a gray square.'); }  function draw() { background(200);  // Get random coordinates between 0 and 100. let x = random(100); let y = random(100);  // Draw the point. strokeWeight(5); point(x, y); } `    ` function setup() { createCanvas(100, 100);  // Slow the frame rate. frameRate(5);  describe('A black dot moves around randomly in the middle of a gray square.'); }  function draw() { background(200);  // Get random coordinates between 45 and 55. let x = random(45, 55); let y = random(45, 55);  // Draw the point. strokeWeight(5); point(x, y); } `    ` let x = 50; let y = 50;  function setup() { createCanvas(100, 100);  background(200);  describe('A black dot moves around randomly leaving a trail.'); }  function draw() { // Update x and y randomly. x += random(-1, 1); y += random(-1, 1);  // Draw the point. point(x, y); } `
+
+↩️  Returns:
+   Number - random number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Get random coordinates between 0 and 100.
+    let x = random(0, 100);
+    let y = random(0, 100);
+    // Draw a point.
+    strokeWeight(5);
+    point(x, y);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 randomGaussian()                                                *p5.randomGaussian()*
+──────────────────────
+
+📝 Returns a random number fitting a Gaussian, or normal, distribution.  Normal distributions look like bell curves when plotted. Values from a normal distribution cluster around a central value called the mean. The cluster's standard deviation describes its spread.  By default, `randomGaussian()` produces different results each time a sketch runs. The [randomSeed()](#/p5/randomSeed) function can be used to generate the same sequence of numbers each time a sketch runs.  There's no minimum or maximum value that `randomGaussian()` might return. Values far from the mean are very unlikely and values near the mean are very likely.  The version of `randomGaussian()` with no parameters returns values with a mean of 0 and standard deviation of 1.  The version of `randomGaussian()` with one parameter interprets the argument passed as the mean. The standard deviation is 1.  The version of `randomGaussian()` with two parameters interprets the first argument passed as the mean and the second as the standard deviation.   ` function setup() { createCanvas(100, 100);  background(200);  describe('Three horizontal black lines are filled in randomly. The top line spans entire canvas. The middle line is very short. The bottom line spans two-thirds of the canvas.'); }  function draw() { // Style the circles. noStroke(); fill(0, 10);  // Uniform distribution between 0 and 100. let x = random(100); let y = 25; circle(x, y, 5);  // Gaussian distribution with a mean of 50 and sd of 1. x = randomGaussian(50); y = 50; circle(x, y, 5);  // Gaussian distribution with a mean of 50 and sd of 10. x = randomGaussian(50, 10); y = 75; circle(x, y, 5); } `
+
+↩️  Returns:
+   Number - random number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    describe('Three horizontal black lines are filled in randomly. The top line spans entire canvas. The middle line is very short. The bottom line spans two-thirds of the canvas.');
+  }
+  function draw() {
+    // Style the circles.
+    noStroke();
+    fill(0, 10);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 randomSeed()                                                *p5.randomSeed()*
+──────────────────
+
+📝 Sets the seed value for the [random()](#/p5/random) and [randomGaussian()](#/p5/randomGaussian) functions.  By default, [random()](#/p5/random) and [randomGaussian()](#/p5/randomGaussian) produce different results each time a sketch is run. Calling `randomSeed()` with a constant argument, such as `randomSeed(99)`, makes these functions produce the same results each time a sketch is run.    ` function setup() { createCanvas(100, 100);  background(200);  // Get random coordinates. let x = random(0, 100); let y = random(0, 100);  // Draw the white circle. circle(x, y, 10);  // Set a random seed for consistency. randomSeed(99);  // Get random coordinates. x = random(0, 100); y = random(0, 100);  // Draw the black circle. fill(0); circle(x, y, 10);  describe('A white circle appears at a random position. A black circle appears at (27.4, 25.8).'); } `
+
+📋 Parameters:
+   • {Number} seed - seed value.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Get random coordinates.
+    let x = random(0, 100);
+    let y = random(0, 100);
+    // Draw the white circle.
+    circle(x, y, 10);
+    // Set a random seed for consistency.
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 round()                                                *p5.round()*
+─────────────
+
+📝 Calculates the integer closest to a number.  For example, `round(133.8)` returns the value 134.  The second parameter, `decimals`, is optional. It sets the number of decimal places to use when rounding. For example, `round(12.34, 1)` returns 12.3. `decimals` is 0 by default.    ` function setup() { createCanvas(100, 100);  background(200);  // Round a number. let x = round(4.2);  // Style the text. textAlign(CENTER); textSize(16);  // Display the rounded number. text(x, 50, 50);  describe('The number 4 written in middle of the canvas.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Round a number to 2 decimal places. let x = round(12.782383, 2);  // Style the text. textAlign(CENTER); textSize(16);  // Display the rounded number. text(x, 50, 50);  describe('The number 12.78 written in middle of canvas.'); } `
+
+↩️  Returns:
+   Integer - rounded number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Round a number.
+    let x = round(4.2);
+    // Style the text.
+    textAlign(CENTER);
+    textSize(16);
+    // Display the rounded number.
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 sin()                                                *p5.sin()*
+───────────
+
+📝 Calculates the sine of an angle.  `sin()` is useful for many geometric tasks in creative coding. The values returned oscillate between -1 and 1 as the input angle increases. `sin()` calculates the sine of an angle, using radians by default, or according to if [angleMode()](#/p5/angleMode) setting (RADIANS or DEGREES).    ` function setup() { createCanvas(100, 100);  describe('A white ball on a string oscillates up and down.'); }  function draw() { background(200);  // Calculate the coordinates. let x = 50; let y = 30 * sin(frameCount * 0.05) + 50;  // Draw the oscillator. line(50, y, x, y); circle(x, y, 20); } `    ` function setup() { createCanvas(100, 100);  background(200);  describe('A series of black dots form a wave pattern.'); }  function draw() { // Calculate the coordinates. let x = frameCount; let y = 30 * sin(x * 0.1) + 50;  // Draw the point. point(x, y); } `    ` function setup() { createCanvas(100, 100);  background(200);  describe('A series of black dots form an infinity symbol.'); }  function draw() { // Calculate the coordinates. let x = 30 * cos(frameCount * 0.1) + 50; let y = 10 * sin(frameCount * 0.2) + 50;  // Draw the point. point(x, y); } `
+
+↩️  Returns:
+   Number - sine of the angle.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A white ball on a string oscillates up and down.');
+  }
+  function draw() {
+    background(200);
+    // Calculate the coordinates.
+    let x = 50;
+    let y = 30 * sin(frameCount * 0.05) + 50;
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 sq()                                                *p5.sq()*
+──────────
+
+📝 Calculates the square of a number.  Squaring a number means multiplying the number by itself. For example, `sq(3)` evaluates 3 &times; 3 which is 9. `sq(-3)` evaluates -3 &times; -3 which is also 9. Multiplying two negative numbers produces a positive number. The value returned by `sq()` is always positive.    ` function setup() { createCanvas(100, 100);  background(200);  // Top-left. let d = sq(3); circle(33, 33, d);  // Bottom-right. d = sq(6); circle(67, 67, d);  describe('Two white circles. The circle at the top-left is small. The circle at the bottom-right is four times larger.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  describe('A series of black dots that get higher quickly from left to right.'); }  function draw() { // Invert the y-axis. scale(1, -1); translate(0, -100);  // Calculate the coordinates. let x = frameCount; let y = 0.01 * sq(x);  // Draw the point. point(x, y); } `
+
+↩️  Returns:
+   Number - squared number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Top-left.
+    let d = sq(3);
+    circle(33, 33, d);
+    // Bottom-right.
+    d = sq(6);
+    circle(67, 67, d);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 sqrt()                                                *p5.sqrt()*
+────────────
+
+📝 Calculates the square root of a number.  A number's square root can be multiplied by itself to produce the original number. For example, `sqrt(9)` returns 3 because 3 &times; 3 = 9. `sqrt()` always returns a positive value. `sqrt()` doesn't work with negative arguments such as `sqrt(-9)`.    ` function setup() { createCanvas(100, 100);  background(200);  // Top-left. let d = sqrt(16); circle(33, 33, d);  // Bottom-right. d = sqrt(1600); circle(67, 67, d);  describe('Two white circles. The circle at the top-left is small. The circle at the bottom-right is ten times larger.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  describe('A series of black dots that get higher slowly from left to right.'); }  function draw() { // Invert the y-axis. scale(1, -1); translate(0, -100);  // Calculate the coordinates. let x = frameCount; let y = 5 * sqrt(x);  // Draw the point. point(x, y); } `
+
+↩️  Returns:
+   Number - square root of number.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Top-left.
+    let d = sqrt(16);
+    circle(33, 33, d);
+    // Bottom-right.
+    d = sqrt(1600);
+    circle(67, 67, d);
+>
+
+🔗 See also: |p5.math|
+
+
+🔧 tan()                                                *p5.tan()*
+───────────
+
+📝 Calculates the tangent of an angle.  `tan()` is useful for many geometric tasks in creative coding. The values returned range from -Infinity to Infinity and repeat periodically as the input angle increases. `tan()` calculates the tan of an angle, using radians by default, or according to if [angleMode()](#/p5/angleMode) setting (RADIANS or DEGREES).    ` function setup() { createCanvas(100, 100);  background(200);  describe('A series of identical curves drawn with black dots. Each curve starts from the top of the canvas, continues down at a slight angle, flattens out at the middle of the canvas, then continues to the bottom.'); }  function draw() { // Calculate the coordinates. let x = frameCount; let y = 5 * tan(x * 0.1) + 50;  // Draw the point. point(x, y); } `
+
+↩️  Returns:
+   Number - tangent of the angle.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    describe('A series of identical curves drawn with black dots. Each curve starts from the top of the canvas, continues down at a slight angle, flattens out at the middle of the canvas, then continues to the bottom.');
+  }
+  function draw() {
+    // Calculate the coordinates.
+    let x = frameCount;
+    let y = 5 * tan(x * 0.1) + 50;
+>
+
+🔗 See also: |p5.math|
+
+==============================================================================
+🤖 Generated by p5.man - neovim help generator for p5.js
+🌐 https://github.com/prjctimg/p5.man

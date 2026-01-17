@@ -1,0 +1,536 @@
+🎨 *p5.dom*	DOM element creation and manipulation 📚
+==============================================================================
+🚀 p5.js DOM Reference
+
+📅 Generated on: January 17, 2026
+🏷️  p5.js version: 2.2.0
+
+	*help-topic*p5.dom
+
+📋 TABLE OF CONTENTS                                        *p5.dom-contents*
+
+1. 🎯 Functions (20 total)
+
+   • |createA()|
+   • |createAudio()|
+   • |createButton()|
+   • |createCapture()|
+   • |createCheckbox()|
+   • |createColorPicker()|
+   • |createDiv()|
+   • |createElement()|
+   • |createFileInput()|
+   • |createImg()|
+   • |createInput()|
+   • |createP()|
+   • |createRadio()|
+   • |createSelect()|
+   • |createSlider()|
+   • |createSpan()|
+   • |createVideo()|
+   • |removeElements()|
+   • |select()|
+   • |selectAll()|
+
+📖 FUNCTION DOCUMENTATION
+
+
+🔧 createA()                                                *p5.createA()*
+───────────────
+
+📝 Creates an `&lt;a&gt;&lt;/a&gt;` element that links to another web page.  The first parmeter, `href`, is a string that sets the URL of the linked page.  The second parameter, `html`, is a string that sets the inner HTML of the link. It's common to use text, images, or buttons as links.  The third parameter, `target`, is optional. It's a string that tells the web browser where to open the link. By default, links open in the current browser tab. Passing `'_blank'` will cause the link to open in a new browser tab. MDN describes a few other options.  either `'_blank'`, `'_self'`, `'_parent'`, or `'_top'`.   ` function setup() { createCanvas(100, 100);  background(200);  // Create an anchor element that links to p5js.org. let a = createA('https://p5js.org/', 'p5*js'); a.position(25, 35);  describe('The text "p5*js" written at the center of a gray square.'); } `    ` function setup() { background(200);  // Create an anchor tag that links to p5js.org. // Open the link in a new tab. let a = createA('https://p5js.org/', 'p5*js', '_blank'); a.position(25, 35);  describe('The text "p5*js" written at the center of a gray square.'); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create an anchor element that links to p5js.org.
+    let a = createA('https://p5js.org/', 'p5*js');
+    a.position(25, 35);
+    describe('The text "p5*js" written at the center of a gray square.');
+  }
+  `
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createAudio()                                                *p5.createAudio()*
+───────────────────
+
+📝 Creates a hidden `&lt;audio&gt;` element for simple audio playback.  `createAudio()` returns a new [p5.MediaElement](#/p5.MediaElement) object.  The first parameter, `src`, is the path the audio. If a single string is passed, as in `'assets/audio.mp3'`, a single audio is loaded. An array of strings can be used to load the same audio in different formats. For example, `['assets/audio.mp3', 'assets/video.wav']`. This is useful for ensuring that the audio can play across different browsers with different capabilities. See MDN for more information about supported formats.  The second parameter, `callback`, is optional. It's a function to call once the audio is ready to play.  for supporting different browsers.   ` function setup() { noCanvas();  // Load the audio. let beat = createAudio('assets/beat.mp3');  // Show the default audio controls. beat.showControls();  describe('An audio beat plays when the user double-clicks the square.'); } `
+
+↩️  Returns:
+   p5.MediaElement - new [p5.MediaElement](#/p5.MediaElement) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    noCanvas();
+    // Load the audio.
+    let beat = createAudio('assets/beat.mp3');
+    // Show the default audio controls.
+    beat.showControls();
+    describe('An audio beat plays when the user double-clicks the square.');
+  }
+  `
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createButton()                                                *p5.createButton()*
+────────────────────
+
+📝 Creates a `&lt;button&gt;&lt;/button&gt;` element.  The first parameter, `label`, is a string that sets the label displayed on the button.  The second parameter, `value`, is optional. It's a string that sets the button's value. See MDN for more details.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a button and place it beneath the canvas. let button = createButton('click me'); button.position(0, 100);  // Call repaint() when the button is pressed. button.mousePressed(repaint);  describe('A gray square with a button that says "click me" beneath it. The square changes color when the button is clicked.'); }  // Change the background color. function repaint() { let g = random(255); background(g); } `    ` let button;  function setup() { createCanvas(100, 100);  background(200);  // Create a button and set its value to 0. // Place the button beneath the canvas. button = createButton('click me', 'red'); button.position(0, 100);  // Call randomColor() when the button is pressed. button.mousePressed(randomColor);  describe('A red square with a button that says "click me" beneath it. The square changes color when the button is clicked.'); }  function draw() { // Use the button's value to set the background color. let c = button.value(); background(c); }  // Set the button's value to a random color. function randomColor() { let c = random(['red', 'green', 'blue', 'yellow']); button.value(c); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a button and place it beneath the canvas.
+    let button = createButton('click me');
+    button.position(0, 100);
+    // Call repaint() when the button is pressed.
+    button.mousePressed(repaint);
+    describe('A gray square with a button that says "click me" beneath it. The square changes color when the button is clicked.');
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createCapture()                                                *p5.createCapture()*
+─────────────────────
+
+📝 Creates a `&lt;video&gt;` element that "captures" the audio/video stream from the webcam and microphone.  `createCapture()` returns a new [p5.MediaElement](#/p5.MediaElement) object. Videos are shown by default. They can be hidden by calling `capture.hide()` and drawn to the canvas using [image()](#/p5/image).  The first parameter, `type`, is optional. It sets the type of capture to use. By default, `createCapture()` captures both audio and video. If `VIDEO` is passed, as in `createCapture(VIDEO)`, only video will be captured. If `AUDIO` is passed, as in `createCapture(AUDIO)`, only audio will be captured. A constraints object can also be passed to customize the stream. See the  W3C documentation for possible properties. Different browsers support different properties.  The 'flipped' property is an optional property which can be set to `{flipped:true}` to mirror the video output.If it is true then it means that video will be mirrored or flipped and if nothing is mentioned then by default it will be `false`.  The second parameter,`callback`, is optional. It's a function to call once the capture is ready for use. The callback function should have one parameter, `stream`, that's a MediaStream object.  Note: `createCapture()` only works when running a sketch locally or using HTTPS. Learn more here and here.  or a constraints object. Both video and audio audio streams are captured by default. default it is false. has loaded.   ` function setup() { noCanvas();  // Create the video capture. createCapture(VIDEO);  describe('A video stream from the webcam.'); } `    ` let capture;  function setup() { createCanvas(100, 100);  // Create the video capture and hide the element. capture = createCapture(VIDEO); capture.hide();  describe('A video stream from the webcam with inverted colors.'); }  function draw() { // Draw the video capture within the canvas. image(capture, 0, 0, width, width * capture.height / capture.width);  // Invert the colors in the stream. filter(INVERT); } `   ` let capture;  function setup() { createCanvas(100, 100);  // Create the video capture with mirrored output. capture = createCapture(VIDEO,{ flipped:true }); capture.size(100,100);  describe('A video stream from the webcam with flipped or mirrored output.'); }  `    ` function setup() { createCanvas(480, 120);  // Create a constraints object. let constraints = { video: { mandatory: { minWidth: 1280, minHeight: 720 }, optional: [{ maxFrameRate: 10 }] }, audio: false };  // Create the video capture. createCapture(constraints);  describe('A video stream from the webcam.'); } `
+
+↩️  Returns:
+   p5.MediaElement - new [p5.MediaElement](#/p5.MediaElement) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    noCanvas();
+    // Create the video capture.
+    createCapture(VIDEO);
+    describe('A video stream from the webcam.');
+  }
+  `
+  
+  
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createCheckbox()                                                *p5.createCheckbox()*
+──────────────────────
+
+📝 Creates a checkbox `&lt;input&gt;&lt;/input&gt;` element.  Checkboxes extend the [p5.Element](#/p5.Element) class with a `checked()` method. Calling `myBox.checked()` returns `true` if it the box is checked and `false` if not.  The first parameter, `label`, is optional. It's a string that sets the label to display next to the checkbox.  The second parameter, `value`, is also optional. It's a boolean that sets the checkbox's value.    ` let checkbox;  function setup() { createCanvas(100, 100);  // Create a checkbox and place it beneath the canvas. checkbox = createCheckbox(); checkbox.position(0, 70);  describe('A black square with a checkbox beneath it. The square turns white when the box is checked.'); }  function draw() { // Use the checkbox to set the background color. if (checkbox.checked()) { background(255); } else { background(0); } } `    ` let checkbox;  function setup() { createCanvas(100, 100);  // Create a checkbox and place it beneath the canvas. // Label the checkbox "white". checkbox = createCheckbox(' white'); checkbox.position(0, 70);  describe('A black square with a checkbox labeled "white" beneath it. The square turns white when the box is checked.'); }  function draw() { // Use the checkbox to set the background color. if (checkbox.checked()) { background(255); } else { background(0); } } `    ` let checkbox;  function setup() { createCanvas(100, 100);  // Create a checkbox and place it beneath the canvas. // Label the checkbox "white" and set its value to true. checkbox = createCheckbox(' white', true); checkbox.position(0, 70);  describe('A white square with a checkbox labeled "white" beneath it. The square turns black when the box is unchecked.'); }  function draw() { // Use the checkbox to set the background color. if (checkbox.checked()) { background(255); } else { background(0); } } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  let checkbox;
+  function setup() {
+    createCanvas(100, 100);
+    // Create a checkbox and place it beneath the canvas.
+    checkbox = createCheckbox();
+    checkbox.position(0, 70);
+    describe('A black square with a checkbox beneath it. The square turns white when the box is checked.');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createColorPicker()                                                *p5.createColorPicker()*
+─────────────────────────
+
+📝 Creates a color picker element.  The parameter, `value`, is optional. If a color string or [p5.Color](#/p5.Color) object is passed, it will set the default color.  Color pickers extend the [p5.Element](#/p5.Element) class with a couple of helpful methods for managing colors: - `myPicker.value()` returns the current color as a hex string in the format `'#rrggbb'`. - `myPicker.color()` returns the current color as a [p5.Color](#/p5.Color) object.    ` let myPicker;  function setup() { createCanvas(100, 100);  // Create a color picker and set its position. myPicker = createColorPicker('deeppink'); myPicker.position(0, 100);  describe('A pink square with a color picker beneath it. The square changes color when the user picks a new color.'); }  function draw() { // Use the color picker to paint the background. let c = myPicker.color(); background(c); } `    ` let myPicker;  function setup() { createCanvas(100, 100);  // Create a color picker and set its position. myPicker = createColorPicker('deeppink'); myPicker.position(0, 100);  describe('A number with the format "#rrggbb" is displayed on a pink canvas. The background color and number change when the user picks a new color.'); }  function draw() { // Use the color picker to paint the background. let c = myPicker.value(); background(c);  // Display the current color as a hex string. text(c, 25, 55); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  let myPicker;
+  function setup() {
+    createCanvas(100, 100);
+    // Create a color picker and set its position.
+    myPicker = createColorPicker('deeppink');
+    myPicker.position(0, 100);
+    describe('A pink square with a color picker beneath it. The square changes color when the user picks a new color.');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createDiv()                                                *p5.createDiv()*
+─────────────────
+
+📝 Creates a `&lt;div&gt;&lt;/div&gt;` element.  `&lt;div&gt;&lt;/div&gt;` elements are commonly used as containers for other elements.  The parameter `html` is optional. It accepts a string that sets the inner HTML of the new `&lt;div&gt;&lt;/div&gt;`.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a div element and set its position. let div = createDiv('p5*js'); div.position(25, 35);  describe('A gray square with the text "p5*js" written in its center.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an h3 element within the div. let div = createDiv('p5*js'); div.position(20, 5);  describe('A gray square with the text "p5*js" written in its center.'); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a div element and set its position.
+    let div = createDiv('p5*js');
+    div.position(25, 35);
+    describe('A gray square with the text "p5*js" written in its center.');
+  }
+  `
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createElement()                                                *p5.createElement()*
+─────────────────────
+
+📝 Creates a new [p5.Element](#/p5.Element) object.  The first parameter, `tag`, is a string an HTML tag such as `'h5'`.  The second parameter, `content`, is optional. It's a string that sets the HTML content to insert into the new element. New elements have no content by default.    ` function setup() { createCanvas(100, 100);  background(200);  // Create an h5 element with nothing in it. createElement('h5');  describe('A gray square.'); } `    ` function setup() { createCanvas(100, 100);  background(200);  // Create an h5 element with the content "p5*js". let h5 = createElement('h5', 'p5*js');  // Set the element's style and position. h5.style('color', 'deeppink'); h5.position(30, 15);  describe('The text "p5*js" written in pink in the middle of a gray square.'); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create an h5 element with nothing in it.
+    createElement('h5');
+    describe('A gray square.');
+  }
+  `
+  
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createFileInput()                                                *p5.createFileInput()*
+───────────────────────
+
+📝 Creates an `&lt;input&gt;&lt;/input&gt;` element of type `'file'`.  `createFileInput()` allows users to select local files for use in a sketch. It returns a [p5.File](#/p5.File) object.  The first parameter, `callback`, is a function that's called when the file loads. The callback function should have one parameter, `file`, that's a [p5.File](#/p5.File) object.  The second parameter, `multiple`, is optional. It's a boolean value that allows loading multiple files if set to `true`. If `true`, `callback` will be called once per file.    ` // Use the file input to select an image to // load and display. let input; let img;  function setup() { createCanvas(200, 200);  // Create a file input and place it beneath // the canvas. input = createFileInput(handleImage); input.position(0, 100);  describe('A gray square with a file input beneath it. If the user selects an image file to load, it is displayed on the square.'); }  function draw() { background(200);  // Draw the image if loaded. if (img) { image(img, 0, 0, width, height); } }  // Create an image if the file is an image. function handleImage(file) { if (file.type === 'image') { img = createImg(file.data, ''); img.hide(); } else { img = null; } } `    ` // Use the file input to select multiple images // to load and display. let input; let images = [];  function setup() { // Create a file input and place it beneath // the canvas. Allow it to load multiple files. input = createFileInput(handleImage, true); input.position(0, 100); }  function draw() { background(200);  // Draw the images if loaded. Each image // is drawn 20 pixels lower than the // previous image. for (let i = 0; i
+
+↩️  Returns:
+   p5.Element - The new input element.
+
+💡 Example:
+>
+  `
+  // Use the file input to select an image to
+  // load and display.
+  let input;
+  let img;
+  function setup() {
+    createCanvas(200, 200);
+    // Create a file input and place it beneath
+    // the canvas.
+    input = createFileInput(handleImage);
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createImg()                                                *p5.createImg()*
+─────────────────
+
+📝 Creates an `&lt;img&gt;` element that can appear outside of the canvas.  The first parameter, `src`, is a string with the path to the image file. `src` should be a relative path, as in `'assets/image.png'`, or a URL, as in `'https://example.com/image.png'`.  The second parameter, `alt`, is a string with the alternate text for the image. An empty string `''` can be used for images that aren't displayed.  The third parameter, `crossOrigin`, is optional. It's a string that sets the crossOrigin property of the image. Use `'anonymous'` or `'use-credentials'` to fetch the image with cross-origin access.  The fourth parameter, `callback`, is also optional. It sets a function to call after the image loads. The new image is passed to the callback function as a [p5.Element](#/p5.Element) object.    ` function setup() { createCanvas(100, 100);  background(200);  let img = createImg( '/assets/cat.jpg', 'image of a cat' ); img.position(0, 10);  describe('A gray square with a magenta asterisk in its center.'); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    let img = createImg(
+      '/assets/cat.jpg',
+      'image of a cat'
+    );
+    img.position(0, 10);
+    describe('A gray square with a magenta asterisk in its center.');
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createInput()                                                *p5.createInput()*
+───────────────────
+
+📝 Creates a text `&lt;input&gt;&lt;/input&gt;` element.  Call `myInput.size()` to set the length of the text box.  The first parameter, `value`, is optional. It's a string that sets the input's default value. The input is blank by default.  The second parameter, `type`, is also optional. It's a string that specifies the type of text being input. See MDN for a full list of options. The default is `'text'`.    ` let myInput;  function setup() { createCanvas(100, 100);  // Create an input element and place it // beneath the canvas. myInput = createInput(); myInput.position(0, 100);  describe('A gray square with a text box beneath it. The text in the square changes when the user types something new in the input bar.'); }  function draw() { background(200);  // Use the input to display a message. let msg = myInput.value(); text(msg, 25, 55); } `    ` let myInput;  function setup() { createCanvas(100, 100);  // Create an input element and place it // beneath the canvas. Set its default // text to "hello!". myInput = createInput('hello!'); myInput.position(0, 100);  describe('The text "hello!" written at the center of a gray square. A text box beneath the square also says "hello!". The text in the square changes when the user types something new in the input bar.'); }  function draw() { background(200);  // Use the input to display a message. let msg = myInput.value(); text(msg, 25, 55); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  let myInput;
+  function setup() {
+    createCanvas(100, 100);
+    // Create an input element and place it
+    // beneath the canvas.
+    myInput = createInput();
+    myInput.position(0, 100);
+    describe('A gray square with a text box beneath it. The text in the square changes when the user types something new in the input bar.');
+  }
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createP()                                                *p5.createP()*
+───────────────
+
+📝 Creates a paragraph element.  `&lt;p&gt;&lt;/p&gt;` elements are commonly used for paragraph-length text.  The parameter `html` is optional. It accepts a string that sets the inner HTML of the new `&lt;p&gt;&lt;/p&gt;`.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a paragraph element and set its position. let p = createP('Tell me a story.'); p.position(5, 0);  describe('A gray square displaying the text "Tell me a story." written in black.'); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a paragraph element and set its position.
+    let p = createP('Tell me a story.');
+    p.position(5, 0);
+    describe('A gray square displaying the text "Tell me a story." written in black.');
+  }
+  `
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createRadio()                                                *p5.createRadio()*
+───────────────────
+
+📝 Creates a radio button element.  The parameter is optional. If a string is passed, as in `let myRadio = createSelect('food')`, then each radio option will have `"food"` as its `name` parameter: `&lt;input name="food"&gt;&lt;/input&gt;`. If an existing `&lt;div&gt;&lt;/div&gt;` or `&lt;span&gt;&lt;/span&gt;` element is passed, as in `let myRadio = createSelect(container)`, it will become the radio button's parent element.  Radio buttons extend the [p5.Element](#/p5.Element) class with a few helpful methods for managing options: - `myRadio.option(value, [label])` adds an option to the menu. The first paremeter, `value`, is a string that sets the option's value and label. The second parameter, `label`, is optional. If provided, it sets the label displayed for the `value`. If an option with `value` already exists, its label is changed and its value is returned. - `myRadio.value()` returns the currently-selected option's value. - `myRadio.selected()` returns the currently-selected option. - `myRadio.selected(value)` selects the given option and returns it as an `HTMLInputElement`. - `myRadio.disable(shouldDisable)` enables the entire radio button if `true` is passed and disables it if `false` is passed.  or `&lt;span&gt;&lt;/span&gt;`.   ` let style = document.createElement('style'); style.innerHTML = ` .p5-radio label { display: flex; align-items: center; } .p5-radio input { margin-right: 5px; } `; document.head.appendChild(style);  let myRadio;  function setup() { createCanvas(100, 100);  // Create a radio button element and place it // in the top-left corner. myRadio = createRadio(); myRadio.position(0, 0); myRadio.class('p5-radio'); myRadio.size(60);  // Add a few color options. myRadio.option('red'); myRadio.option('yellow'); myRadio.option('blue');  // Choose a default option. myRadio.selected('yellow');  describe('A yellow square with three color options listed, "red", "yellow", and "blue". The square changes color when the user selects a new option.'); }  function draw() { // Set the background color using the radio button. let g = myRadio.value(); background(g); } `    ` let myRadio;  function setup() { createCanvas(100, 100);  // Create a radio button element and place it // in the top-left corner. myRadio = createRadio(); myRadio.position(0, 0); myRadio.size(50);  // Add a few color options. // Color values are labeled with // emotions they evoke. myRadio.option('red', 'love'); myRadio.option('yellow', 'joy'); myRadio.option('blue', 'trust');  // Choose a default option. myRadio.selected('yellow');  describe('A yellow square with three options listed, "love", "joy", and "trust". The square changes color when the user selects a new option.'); }  function draw() { // Set the background color using the radio button. let c = myRadio.value(); background(c); } `    ` let myRadio;  function setup() { createCanvas(100, 100);  // Create a radio button element and place it // in the top-left corner. myRadio = createRadio(); myRadio.position(0, 0); myRadio.size(50);  // Add a few color options. myRadio.option('red'); myRadio.option('yellow'); myRadio.option('blue');  // Choose a default option. myRadio.selected('yellow');  // Create a button and place it beneath the canvas. let btn = createButton('disable'); btn.position(0, 100);  // Call disableRadio() when btn is pressed. btn.mousePressed(disableRadio);  describe('A yellow square with three options listed, "red", "yellow", and "blue". The square changes color when the user selects a new option. A "disable" button beneath the canvas disables the color options when pressed.'); }  function draw() { // Set the background color using the radio button. let c = myRadio.value(); background(c); }  // Disable myRadio. function disableRadio() { myRadio.disable(true); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  let style = document.createElement('style');
+  style.innerHTML = `
+  .p5-radio label {
+     display: flex;
+     align-items: center;
+   }
+   .p5-radio input {
+     margin-right: 5px;
+   }
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createSelect()                                                *p5.createSelect()*
+────────────────────
+
+📝 Creates a dropdown menu `&lt;select&gt;&lt;/select&gt;` element.  The parameter is optional. If `true` is passed, as in `let mySelect = createSelect(true)`, then the dropdown will support multiple selections. If an existing `&lt;select&gt;&lt;/select&gt;` element is passed, as in `let mySelect = createSelect(otherSelect)`, the existing element will be wrapped in a new [p5.Element](#/p5.Element) object.  Dropdowns extend the [p5.Element](#/p5.Element) class with a few helpful methods for managing options: - `mySelect.option(name, [value])` adds an option to the menu. The first paremeter, `name`, is a string that sets the option's name and value. The second parameter, `value`, is optional. If provided, it sets the value that corresponds to the key `name`. If an option with `name` already exists, its value is changed to `value`. - `mySelect.value()` returns the currently-selected option's value. - `mySelect.selected()` returns the currently-selected option. - `mySelect.selected(option)` selects the given option by default. - `mySelect.disable()` marks the whole dropdown element as disabled. - `mySelect.disable(option)` marks a given option as disabled. - `mySelect.enable()` marks the whole dropdown element as enabled. - `mySelect.enable(option)` marks a given option as enabled.    ` let mySelect;  function setup() { createCanvas(100, 100);  // Create a dropdown and place it beneath the canvas. mySelect = createSelect(); mySelect.position(0, 100);  // Add color options. mySelect.option('red'); mySelect.option('green'); mySelect.option('blue'); mySelect.option('yellow');  // Set the selected option to "red". mySelect.selected('red');  describe('A red square with a dropdown menu beneath it. The square changes color when a new color is selected.'); }  function draw() { // Use the selected value to paint the background. let c = mySelect.selected(); background(c); } `    ` let mySelect;  function setup() { createCanvas(100, 100);  // Create a dropdown and place it beneath the canvas. mySelect = createSelect(); mySelect.position(0, 100);  // Add color options. mySelect.option('red'); mySelect.option('green'); mySelect.option('blue'); mySelect.option('yellow');  // Set the selected option to "red". mySelect.selected('red');  // Disable the "yellow" option. mySelect.disable('yellow');  describe('A red square with a dropdown menu beneath it. The square changes color when a new color is selected.'); }  function draw() { // Use the selected value to paint the background. let c = mySelect.selected(); background(c); } `    ` let mySelect;  function setup() { createCanvas(100, 100);  // Create a dropdown and place it beneath the canvas. mySelect = createSelect(); mySelect.position(0, 100);  // Add color options with names and values. mySelect.option('one', 'red'); mySelect.option('two', 'green'); mySelect.option('three', 'blue'); mySelect.option('four', 'yellow');  // Set the selected option to "one". mySelect.selected('one');  describe('A red square with a dropdown menu beneath it. The square changes color when a new color is selected.'); }  function draw() { // Use the selected value to paint the background. let c = mySelect.selected(); background(c); } `    ` // Hold CTRL to select multiple options on Windows and Linux. // Hold CMD to select multiple options on macOS. let mySelect;  function setup() { createCanvas(100, 100);  // Create a dropdown and allow multiple selections. // Place it beneath the canvas. mySelect = createSelect(true); mySelect.position(0, 100);  // Add color options. mySelect.option('red'); mySelect.option('green'); mySelect.option('blue'); mySelect.option('yellow');  describe('A gray square with a dropdown menu beneath it. Colorful circles appear when their color is selected.'); }  function draw() { background(200);  // Use the selected value(s) to draw circles. let colors = mySelect.selected(); for (let i = 0; i
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  let mySelect;
+  function setup() {
+    createCanvas(100, 100);
+    // Create a dropdown and place it beneath the canvas.
+    mySelect = createSelect();
+    mySelect.position(0, 100);
+    // Add color options.
+    mySelect.option('red');
+    mySelect.option('green');
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createSlider()                                                *p5.createSlider()*
+────────────────────
+
+📝 Creates a slider `&lt;input&gt;&lt;/input&gt;` element.  Range sliders are useful for quickly selecting numbers from a given range.  The first two parameters, `min` and `max`, are numbers that set the slider's minimum and maximum.  The third parameter, `value`, is optional. It's a number that sets the slider's default value.  The fourth parameter, `step`, is also optional. It's a number that sets the spacing between each value in the slider's range. Setting `step` to 0 allows the slider to move smoothly from `min` to `max`.    ` let slider;  function setup() { createCanvas(100, 100);  // Create a slider and place it at the top of the canvas. slider = createSlider(0, 255); slider.position(10, 10); slider.size(80);  describe('A dark gray square with a range slider at the top. The square changes color when the slider is moved.'); }  function draw() { // Use the slider as a grayscale value. let g = slider.value(); background(g); } `    ` let slider;  function setup() { createCanvas(100, 100);  // Create a slider and place it at the top of the canvas. // Set its default value to 0. slider = createSlider(0, 255, 0); slider.position(10, 10); slider.size(80);  describe('A black square with a range slider at the top. The square changes color when the slider is moved.'); }  function draw() { // Use the slider as a grayscale value. let g = slider.value(); background(g); } `    ` let slider;  function setup() { createCanvas(100, 100);  // Create a slider and place it at the top of the canvas. // Set its default value to 0. // Set its step size to 50. slider = createSlider(0, 255, 0, 50); slider.position(10, 10); slider.size(80);  describe('A black square with a range slider at the top. The square changes color when the slider is moved.'); }  function draw() { // Use the slider as a grayscale value. let g = slider.value(); background(g); } `    ` let slider;  function setup() { createCanvas(100, 100);  // Create a slider and place it at the top of the canvas. // Set its default value to 0. // Set its step size to 0 so that it moves smoothly. slider = createSlider(0, 255, 0, 0); slider.position(10, 10); slider.size(80);  describe('A black square with a range slider at the top. The square changes color when the slider is moved.'); }  function draw() { // Use the slider as a grayscale value. let g = slider.value(); background(g); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  let slider;
+  function setup() {
+    createCanvas(100, 100);
+    // Create a slider and place it at the top of the canvas.
+    slider = createSlider(0, 255);
+    slider.position(10, 10);
+    slider.size(80);
+    describe('A dark gray square with a range slider at the top. The square changes color when the slider is moved.');
+  }
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createSpan()                                                *p5.createSpan()*
+──────────────────
+
+📝 Creates a `&lt;span&gt;&lt;/span&gt;` element.  `&lt;span&gt;&lt;/span&gt;` elements are commonly used as containers for inline elements. For example, a `&lt;span&gt;&lt;/span&gt;` can hold part of a sentence that's a different style.  The parameter `html` is optional. It accepts a string that sets the inner HTML of the new `&lt;span&gt;&lt;/span&gt;`.    ` function setup() { createCanvas(100, 100);  background(200);  // Create a span element and set its position. let span = createSpan('p5*js'); span.position(25, 35);  describe('A gray square with the text "p5*js" written in its center.'); } `    ` function setup() { background(200);  // Create a div element as a container. let div = createDiv();  // Place the div at the center. div.position(25, 35);  // Create a span element. let s1 = createSpan('p5');  // Create a second span element. let s2 = createSpan('*');  // Set the second span's font color. s2.style('color', 'deeppink');  // Create a third span element. let s3 = createSpan('js');  // Add all the spans to the container div. s1.parent(div); s2.parent(div); s3.parent(div);  describe('A gray square with the text "p5*js" written in black at its center. The asterisk is pink.'); } `
+
+↩️  Returns:
+   p5.Element - new [p5.Element](#/p5.Element) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a span element and set its position.
+    let span = createSpan('p5*js');
+    span.position(25, 35);
+    describe('A gray square with the text "p5*js" written in its center.');
+  }
+  `
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 createVideo()                                                *p5.createVideo()*
+───────────────────
+
+📝 Creates a `&lt;video&gt;` element for simple audio/video playback.  `createVideo()` returns a new [p5.MediaElement](#/p5.MediaElement) object. Videos are shown by default. They can be hidden by calling `video.hide()` and drawn to the canvas using [image()](#/p5/image).  The first parameter, `src`, is the path the video. If a single string is passed, as in `'assets/topsecret.mp4'`, a single video is loaded. An array of strings can be used to load the same video in different formats. For example, `['assets/topsecret.mp4', 'assets/topsecret.ogv', 'assets/topsecret.webm']`. This is useful for ensuring that the video can play across different browsers with different capabilities. See MDN for more information about supported formats.  The second parameter, `callback`, is optional. It's a function to call once the video is ready to play.  supporting different browsers.   ` function setup() { noCanvas();  // Load a video and add it to the page. // Note: this may not work in some browsers. let video = createVideo('assets/small.mp4');  // Show the default video controls. video.showControls();  describe('A video of a toy robot with playback controls beneath it.'); } `    ` function setup() { noCanvas();  // Load a video and add it to the page. // Provide an array options for different file formats. let video = createVideo( ['assets/small.mp4', 'assets/small.ogv', 'assets/small.webm'] );  // Show the default video controls. video.showControls();  describe('A video of a toy robot with playback controls beneath it.'); } `    ` let video;  function setup() { noCanvas();  // Load a video and add it to the page. // Provide an array options for different file formats. // Call mute() once the video loads. video = createVideo( ['assets/small.mp4', 'assets/small.ogv', 'assets/small.webm'], muteVideo );  // Show the default video controls. video.showControls();  describe('A video of a toy robot with playback controls beneath it.'); }  // Mute the video once it loads. function muteVideo() { video.volume(0); } `
+
+↩️  Returns:
+   p5.MediaElement - new [p5.MediaElement](#/p5.MediaElement) object.
+
+💡 Example:
+>
+  `
+  function setup() {
+    noCanvas();
+    // Load a video and add it to the page.
+    // Note: this may not work in some browsers.
+    let video = createVideo('assets/small.mp4');
+    // Show the default video controls.
+    video.showControls();
+    describe('A video of a toy robot with playback controls beneath it.');
+  }
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 removeElements()                                                *p5.removeElements()*
+──────────────────────
+
+📝 Removes all elements created by p5.js, including any event handlers.  There are two exceptions: canvas elements created by [createCanvas()](#/p5/createCanvas) and [p5.Render](#/p5.Renderer) objects created by [createGraphics()](#/p5/createGraphics).    ` function setup() { createCanvas(100, 100);  background(200);  // Create a paragraph element and place // it in the middle of the canvas. let p = createP('p5*js'); p.position(25, 25);  describe('A gray square with the text "p5*js" written in its center. The text disappears when the mouse is pressed.'); }  // Remove all elements when the mouse is pressed. function mousePressed() { removeElements(); } `    ` let slider;  function setup() { createCanvas(200, 200);  // Create a paragraph element and place // it at the top of the canvas. let p = createP('p5*js'); p.position(25, 25);  // Create a slider element and place it // beneath the canvas. slider = createSlider(0, 255, 200); slider.position(0, 100);  describe('A gray square with the text "p5*js" written in its center and a range slider beneath it. The square changes color when the slider is moved. The text and slider disappear when the square is double-clicked.'); }  function draw() { // Use the slider value to change the background color. let g = slider.value(); background(g); }  // Remove all elements when the mouse is double-clicked. function doubleClicked() { removeElements(); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Create a paragraph element and place
+    // it in the middle of the canvas.
+    let p = createP('p5*js');
+    p.position(25, 25);
+    describe('A gray square with the text "p5*js" written in its center. The text disappears when the mouse is pressed.');
+  }
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 select()                                                *p5.select()*
+──────────────
+
+📝 Searches the page for the first element that matches the given CSS selector string.  The selector string can be an ID, class, tag name, or a combination. `select()` returns a [p5.Element](#/p5.Element) object if it finds a match and `null` if not.  The second parameter, `container`, is optional. It specifies a container to search within. `container` can be CSS selector string, a [p5.Element](#/p5.Element) object, or an HTMLElement object.  HTMLElement to search within.   ` function setup() { createCanvas(100, 100); background(200);  // Select the canvas by its tag. let cnv = select('canvas'); cnv.style('border', '5px deeppink dashed');  describe('A gray square with a dashed pink border.'); } `    ` function setup() { let cnv = createCanvas(100, 100);  // Add a class attribute to the canvas. cnv.class('pinkborder');  background(200);  // Select the canvas by its class. cnv = select('.pinkborder');  // Style its border. cnv.style('border', '5px deeppink dashed');  describe('A gray square with a dashed pink border.'); } `    ` function setup() { let cnv = createCanvas(100, 100);  // Set the canvas' ID. cnv.id('mycanvas');  background(200);  // Select the canvas by its ID. cnv = select('#mycanvas');  // Style its border. cnv.style('border', '5px deeppink dashed');  describe('A gray square with a dashed pink border.'); } `
+
+↩️  Returns:
+   p5.Element|null - [p5.Element](#/p5.Element) containing the element.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Select the canvas by its tag.
+    let cnv = select('canvas');
+    cnv.style('border', '5px deeppink dashed');
+    describe('A gray square with a dashed pink border.');
+  }
+  `
+>
+
+🔗 See also: |p5.dom|
+
+
+🔧 selectAll()                                                *p5.selectAll()*
+─────────────────
+
+📝 Searches the page for all elements that matches the given CSS selector string.  The selector string can be an ID, class, tag name, or a combination. `selectAll()` returns an array of [p5.Element](#/p5.Element) objects if it finds any matches and an empty array if none are found.  The second parameter, `container`, is optional. It specifies a container to search within. `container` can be CSS selector string, a [p5.Element](#/p5.Element) object, or an HTMLElement object.  HTMLElement to search within.   ` function setup() { createCanvas(100, 100);  // Create three buttons. createButton('1'); createButton('2'); createButton('3');  // Select the buttons by their tag. let buttons = selectAll('button');  // Position the buttons. for (let i = 0; i    ` function setup() { // Create three buttons and position them. let b1 = createButton('1'); b1.position(0, 0); let b2 = createButton('2'); b2.position(0, 30); let b3 = createButton('3'); b3.position(0, 60);  // Add a class attribute to each button. b1.class('btn'); b2.class('btn btn-pink'); b3.class('btn');  // Select the buttons by their class. let buttons = selectAll('.btn'); let pinkButtons = selectAll('.btn-pink');  // Style the selected buttons. buttons.forEach(setFont); pinkButtons.forEach(setColor);  describe('Three buttons stacked vertically. The buttons are labeled, "1", "2", and "3". Buttons "1" and "3" are gray. Button "2" is pink.'); }  // Set a button's font to Comic Sans MS. function setFont(btn) { btn.style('font-family', 'Comic Sans MS'); }  // Set a button's background and font color. function setColor(btn) { btn.style('background', 'deeppink'); btn.style('color', 'white'); } `
+
+↩️  Returns:
+   p5.Element[] - array of [p5.Element](#/p5.Element)s containing any elements found.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    // Create three buttons.
+    createButton('1');
+    createButton('2');
+    createButton('3');
+    // Select the buttons by their tag.
+    let buttons = selectAll('button');
+    // Position the buttons.
+>
+
+🔗 See also: |p5.dom|
+
+==============================================================================
+🤖 Generated by p5.man - neovim help generator for p5.js
+🌐 https://github.com/prjctimg/p5.man

@@ -1,0 +1,566 @@
+🎨 *p5.structure*	Program structure and flow control 📚
+==============================================================================
+🚀 p5.js Structure Reference
+
+📅 Generated on: January 17, 2026
+🏷️  p5.js version: 2.2.0
+
+	*help-topic*p5.structure
+
+📋 TABLE OF CONTENTS                                        *p5.structure-contents*
+
+1. 🎯 Functions (22 total)
+
+   • |cursor()|
+   • |displayDensity()|
+   • |draw()|
+   • |frameRate()|
+   • |fullscreen()|
+   • |getTargetFrameRate()|
+   • |getURL()|
+   • |getURLParams()|
+   • |getURLPath()|
+   • |isLooping()|
+   • |loop()|
+   • |noCursor()|
+   • |noLoop()|
+   • |p5()|
+   • |pixelDensity()|
+   • |print()|
+   • |redraw()|
+   • |registerAddon()|
+   • |screenToWorld()|
+   • |setup()|
+   • |windowResized()|
+   • |worldToScreen()|
+
+📖 FUNCTION DOCUMENTATION
+
+
+🔧 cursor()                                                *p5.cursor()*
+──────────────
+
+📝 Changes the cursor's appearance.  The first parameter, `type`, sets the type of cursor to display. The built-in options are `ARROW`, `CROSS`, `HAND`, `MOVE`, `TEXT`, and `WAIT`. `cursor()` also recognizes standard CSS cursor properties passed as strings: `'help'`, `'wait'`, `'crosshair'`, `'not-allowed'`, `'zoom-in'`, and `'grab'`. If the path to an image is passed, as in `cursor('assets/target.png')`, then the image will be used as the cursor. Images must be in .cur, .gif, .jpg, .jpeg, or .png format and should be [at most 32 by 32 pixels large.](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor#icon_size_limits)  The parameters `x` and `y` are optional. If an image is used for the cursor, `x` and `y` set the location pointed to within the image. They are both 0 by default, so the cursor points to the image's top-left corner. `x` and `y` must be less than the image's width and height, respectively.  Native CSS properties: 'grab', 'progress', and so on. Path to cursor image.  ` function setup() { createCanvas(100, 100);  describe('A gray square. The cursor appears as crosshairs.'); }  function draw() { background(200);  // Set the cursor to crosshairs: + cursor(CROSS); } `    ` function setup() { createCanvas(100, 100);  describe('A gray square divided into quadrants. The cursor image changes when the mouse moves to each quadrant.'); }  function draw() { background(200);  // Divide the canvas into quadrants. line(50, 0, 50, 100); line(0, 50, 100, 50);  // Change cursor based on mouse position. if (mouseX  50 && mouseY  50 && mouseY > 50) { cursor('https://avatars0.githubusercontent.com/u/1617169?s=16'); } else { cursor('grab'); } } `    ` function setup() { createCanvas(100, 100);  describe('An image of three purple curves follows the mouse. The image shifts when the mouse is pressed.'); }  function draw() { background(200);  // Change the cursor's active spot // when the mouse is pressed. if (mouseIsPressed === true) { cursor('https://avatars0.githubusercontent.com/u/1617169?s=16', 8, 8); } else { cursor('https://avatars0.githubusercontent.com/u/1617169?s=16'); } } `
+
+📋 Parameters:
+   • {(ARROW|CROSS|HAND|MOVE|TEXT|WAIT|String)} type - Built-in: either ARROW, CROSS, HAND, MOVE, TEXT, or WAIT.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A gray square. The cursor appears as crosshairs.');
+  }
+  function draw() {
+    background(200);
+    // Set the cursor to crosshairs: +
+    cursor(CROSS);
+  }
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 displayDensity()                                                *p5.displayDensity()*
+──────────────────────
+
+📝 Returns the display's current pixel density.   ` function setup() { // Set the pixel density to 1. pixelDensity(1);  // Create a canvas and draw // a circle. createCanvas(100, 100); background(200); circle(50, 50, 70);  describe('A fuzzy white circle drawn on a gray background. The circle becomes sharper when the mouse is pressed.'); }  function mousePressed() { // Get the current display density. let d = displayDensity();  // Use the display density to set // the sketch's pixel density. pixelDensity(d);  // Paint the background and // draw a circle. background(200); circle(50, 50, 70); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    // Set the pixel density to 1.
+    pixelDensity(1);
+    // Create a canvas and draw
+    // a circle.
+    createCanvas(100, 100);
+    background(200);
+    circle(50, 50, 70);
+    describe('A fuzzy white circle drawn on a gray background. The circle becomes sharper when the mouse is pressed.');
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 draw()                                                *p5.draw()*
+────────────
+
+📝 A function that's called repeatedly while the sketch runs.  Declaring the function `draw()` sets a code block to run repeatedly once the sketch starts. It’s used to create animations and respond to user inputs:  ```js function draw() { // Code to run repeatedly. } ```  This is often called the "draw loop" because p5.js calls the code in `draw()` in a loop behind the scenes. By default, `draw()` tries to run 60 times per second. The actual rate depends on many factors. The drawing rate, called the "frame rate", can be controlled by calling [frameRate()](#/p5/frameRate). The number of times `draw()` has run is stored in the system variable [frameCount()](#/p5/frameCount).  Code placed within `draw()` begins looping after [setup()](#/p5/setup) runs. `draw()` will run until the user closes the sketch. `draw()` can be stopped by calling the [noLoop()](#/p5/noLoop) function. `draw()` can be resumed by calling the [loop()](#/p5/loop) function.    ` function setup() { createCanvas(100, 100);  // Paint the background once. background(200);  describe( 'A white circle on a gray background. The circle follows the mouse as the user moves, leaving a trail.' ); }  function draw() { // Draw circles repeatedly. circle(mouseX, mouseY, 40); } `    ` function setup() { createCanvas(100, 100);  describe( 'A white circle on a gray background. The circle follows the mouse as the user moves.' ); }  function draw() { // Paint the background repeatedly. background(200);  // Draw circles repeatedly. circle(mouseX, mouseY, 40); } `    ` // Double-click the canvas to change the circle's color.  function setup() { createCanvas(100, 100);  describe( 'A white circle on a gray background. The circle follows the mouse as the user moves. The circle changes color to pink when the user double-clicks.' ); }  function draw() { // Paint the background repeatedly. background(200);  // Draw circles repeatedly. circle(mouseX, mouseY, 40); }  // Change the fill color when the user double-clicks. function doubleClicked() { fill('deeppink'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    // Paint the background once.
+    background(200);
+    describe(
+      'A white circle on a gray background. The circle follows the mouse as the user moves, leaving a trail.'
+    );
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 frameRate()                                                *p5.frameRate()*
+─────────────────
+
+📝 Sets the number of frames to draw per second.  Calling `frameRate()` with one numeric argument, as in `frameRate(30)`, attempts to draw 30 frames per second (FPS). The target frame rate may not be achieved depending on the sketch's processing needs. Most computers default to a frame rate of 60 FPS. Frame rates of 24 FPS and above are fast enough for smooth animations.  Calling `frameRate()` without an argument returns the current frame rate. The value returned is an approximation.    ` function setup() { createCanvas(100, 100);  describe('A white circle on a gray background. The circle moves from left to right in a loop. It slows down when the mouse is pressed.'); }  function draw() { background(200);  // Set the x variable based // on the current frameCount. let x = frameCount % 100;  // If the mouse is pressed, // decrease the frame rate. if (mouseIsPressed === true) { frameRate(10); } else { frameRate(60); }  // Use x to set the circle's // position. circle(x, 50, 20); } `    ` function setup() { createCanvas(100, 100);  describe('A number written in black on a gray background. The number decreases when the mouse is pressed.'); }  function draw() { background(200);  // If the mouse is pressed, do lots // of math to slow down drawing. if (mouseIsPressed === true) { for (let i = 0; i
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A white circle on a gray background. The circle moves from left to right in a loop. It slows down when the mouse is pressed.');
+  }
+  function draw() {
+    background(200);
+    // Set the x variable based
+    // on the current frameCount.
+    let x = frameCount % 100;
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 fullscreen()                                                *p5.fullscreen()*
+──────────────────
+
+📝 Toggles full-screen mode or returns the current mode.  Calling `fullscreen(true)` makes the sketch full-screen. Calling `fullscreen(false)` makes the sketch its original size.  Calling `fullscreen()` without an argument returns `true` if the sketch is in full-screen mode and `false` if not.  Note: Due to browser restrictions, `fullscreen()` can only be called with user input such as a mouse press.   ` function setup() { background(200);  describe('A gray canvas that switches between default and full-screen display when clicked.'); }  // If the mouse is pressed, // toggle full-screen mode. function mousePressed() { if (mouseX > 0 && mouseX  0 && mouseY
+
+↩️  Returns:
+   Boolean - current fullscreen state.
+
+💡 Example:
+>
+  `
+  function setup() {
+    background(200);
+    describe('A gray canvas that switches between default and full-screen display when clicked.');
+  }
+  // If the mouse is pressed,
+  // toggle full-screen mode.
+  function mousePressed() {
+    if (mouseX > 0 && mouseX  0 && mouseY
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 getTargetFrameRate()                                                *p5.getTargetFrameRate()*
+──────────────────────────
+
+📝 Returns the target frame rate.  The value is either the system frame rate or the last value passed to [frameRate()](#/p5/frameRate).   ` function setup() { createCanvas(100, 100);  describe('The number 20 written in black on a gray background.'); }  function draw() { background(200);  // Set the frame rate to 20. frameRate(20);  // Get the target frame rate and // display it. let fps = getTargetFrameRate(); text(fps, 43, 54); } `
+
+↩️  Returns:
+   Number - _targetFrameRate
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('The number 20 written in black on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Set the frame rate to 20.
+    frameRate(20);
+    // Get the target frame rate and
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 getURL()                                                *p5.getURL()*
+──────────────
+
+📝 Returns the sketch's current URL as a `String`.   ` function setup() { background(200);  // Get the sketch's URL // and display it. let url = getURL(); textWrap(CHAR); text(url, 0, 40, 100);  describe('The URL "https://p5js.org/reference/p5/getURL" written in black on a gray background.'); } `
+
+↩️  Returns:
+   String - url
+
+💡 Example:
+>
+  `
+  function setup() {
+    background(200);
+    // Get the sketch's URL
+    // and display it.
+    let url = getURL();
+    textWrap(CHAR);
+    text(url, 0, 40, 100);
+    describe('The URL "https://p5js.org/reference/p5/getURL" written in black on a gray background.');
+  }
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 getURLParams()                                                *p5.getURLParams()*
+────────────────────
+
+📝 Returns the current URL parameters in an `Object`.  For example, calling `getURLParams()` in a sketch hosted at the URL `https://p5js.org?year=2014&month=May&day=15` returns `{ year: 2014, month: 'May', day: 15 }`.   ` // Imagine this sketch is hosted at the following URL: // https://p5js.org?year=2014&month=May&day=15  function setup() { background(200);  // Get the sketch's URL // parameters and display // them. let params = getURLParams(); text(params.day, 10, 20); text(params.month, 10, 40); text(params.year, 10, 60);  describe('The text "15", "May", and "2014" written in black on separate lines.'); } `   This example does not render anything.
+
+↩️  Returns:
+   Object - URL params
+
+💡 Example:
+>
+  `
+  // Imagine this sketch is hosted at the following URL:
+  // https://p5js.org?year=2014&month=May&day=15
+  function setup() {
+    background(200);
+    // Get the sketch's URL
+    // parameters and display
+    // them.
+    let params = getURLParams();
+    text(params.day, 10, 20);
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 getURLPath()                                                *p5.getURLPath()*
+──────────────────
+
+📝 Returns the current URL path as an `Array` of `String`s.  For example, consider a sketch hosted at the URL `https://example.com/sketchbook`. Calling `getURLPath()` returns `['sketchbook']`. For a sketch hosted at the URL `https://example.com/sketchbook/monday`, `getURLPath()` returns `['sketchbook', 'monday']`.   ` function setup() { background(200);  // Get the sketch's URL path // and display the first // part. let path = getURLPath(); text(path[0], 25, 54);  describe('The word "reference" written in black on a gray background.'); } `
+
+↩️  Returns:
+   String[] - path components.
+
+💡 Example:
+>
+  `
+  function setup() {
+    background(200);
+    // Get the sketch's URL path
+    // and display the first
+    // part.
+    let path = getURLPath();
+    text(path[0], 25, 54);
+    describe('The word "reference" written in black on a gray background.');
+  }
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 isLooping()                                                *p5.isLooping()*
+─────────────────
+
+📝 Returns `true` if the draw loop is running and `false` if not.  By default, [draw()](#/p5/draw) tries to run 60 times per second. Calling [noLoop()](#/p5/noLoop) stops [draw()](#/p5/draw) from repeating. The draw loop can be restarted by calling [loop()](#/p5/loop).  The `isLooping()` function can be used to check whether a sketch is looping, as in `isLooping() === true`.    ` function setup() { createCanvas(100, 100);  describe('A white circle drawn against a gray background. When the user double-clicks, the circle stops or resumes following the mouse.'); }  function draw() { background(200);  // Draw the circle at the mouse's position. circle(mouseX, mouseY, 20); }  // Toggle the draw loop when the user double-clicks. function doubleClicked() { if (isLooping() === true) { noLoop(); } else { loop(); } } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A white circle drawn against a gray background. When the user double-clicks, the circle stops or resumes following the mouse.');
+  }
+  function draw() {
+    background(200);
+    // Draw the circle at the mouse's position.
+    circle(mouseX, mouseY, 20);
+  }
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 loop()                                                *p5.loop()*
+────────────
+
+📝 Resumes the draw loop after [noLoop()](#/p5/noLoop) has been called.  By default, [draw()](#/p5/draw) tries to run 60 times per second. Calling [noLoop()](#/p5/noLoop) stops [draw()](#/p5/draw) from repeating. The draw loop can be restarted by calling `loop()`.  The [isLooping()](#/p5/isLooping) function can be used to check whether a sketch is looping, as in `isLooping() === true`.    ` function setup() { createCanvas(100, 100);  // Turn off the draw loop. noLoop();  describe( 'A white half-circle on the left edge of a gray square. The circle starts moving to the right when the user double-clicks.' ); }  function draw() { background(200);  // Calculate the circle's x-coordinate. let x = frameCount;  // Draw the circle. circle(x, 50, 20); }  // Resume the draw loop when the user double-clicks. function doubleClicked() { loop(); } `    ` let startButton; let stopButton;  function setup() { createCanvas(100, 100);  // Create the button elements and place them // beneath the canvas. startButton = createButton('▶'); startButton.position(0, 100); startButton.size(50, 20); stopButton = createButton('◾'); stopButton.position(50, 100); stopButton.size(50, 20);  // Set functions to call when the buttons are pressed. startButton.mousePressed(loop); stopButton.mousePressed(noLoop);  // Slow the frame rate. frameRate(5);  describe( 'A white circle moves randomly on a gray background. Play and stop buttons are shown beneath the canvas. The circle stops or starts moving when the user presses a button.' ); }  function draw() { background(200);  // Calculate the circle's coordinates. let x = random(0, 100); let y = random(0, 100);  // Draw the circle. // Normally, the circle would move from left to right. circle(x, y, 20); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    // Turn off the draw loop.
+    noLoop();
+    describe(
+      'A white half-circle on the left edge of a gray square. The circle starts moving to the right when the user double-clicks.'
+    );
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 noCursor()                                                *p5.noCursor()*
+────────────────
+
+📝 Hides the cursor from view.   ` function setup() { // Hide the cursor. noCursor(); }  function draw() { background(200);  circle(mouseX, mouseY, 10);  describe('A white circle on a gray background. The circle follows the mouse as it moves. The cursor is hidden.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    // Hide the cursor.
+    noCursor();
+  }
+  function draw() {
+    background(200);
+    circle(mouseX, mouseY, 10);
+    describe('A white circle on a gray background. The circle follows the mouse as it moves. The cursor is hidden.');
+  }
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 noLoop()                                                *p5.noLoop()*
+──────────────
+
+📝 Stops the code in [draw()](#/p5/draw) from running repeatedly.  By default, [draw()](#/p5/draw) tries to run 60 times per second. Calling `noLoop()` stops [draw()](#/p5/draw) from repeating. The draw loop can be restarted by calling [loop()](#/p5/loop). [draw()](#/p5/draw) can be run once by calling [redraw()](#/p5/redraw).  The [isLooping()](#/p5/isLooping) function can be used to check whether a sketch is looping, as in `isLooping() === true`.    ` function setup() { createCanvas(100, 100);  // Turn off the draw loop. noLoop();  describe('A white half-circle on the left edge of a gray square.'); }  function draw() { background(200);  // Calculate the circle's x-coordinate. let x = frameCount;  // Draw the circle. // Normally, the circle would move from left to right. circle(x, 50, 20); } `    ` // Double-click to stop the draw loop.  function setup() { createCanvas(100, 100);  // Slow the frame rate. frameRate(5);  describe('A white circle moves randomly on a gray background. It stops moving when the user double-clicks.'); }  function draw() { background(200);  // Calculate the circle's coordinates. let x = random(0, 100); let y = random(0, 100);  // Draw the circle. // Normally, the circle would move from left to right. circle(x, y, 20); }  // Stop the draw loop when the user double-clicks. function doubleClicked() { noLoop(); } `    ` let startButton; let stopButton;  function setup() { createCanvas(100, 100);  // Create the button elements and place them // beneath the canvas. startButton = createButton('▶'); startButton.position(0, 100); startButton.size(50, 20); stopButton = createButton('◾'); stopButton.position(50, 100); stopButton.size(50, 20);  // Set functions to call when the buttons are pressed. startButton.mousePressed(loop); stopButton.mousePressed(noLoop);  // Slow the frame rate. frameRate(5);  describe( 'A white circle moves randomly on a gray background. Play and stop buttons are shown beneath the canvas. The circle stops or starts moving when the user presses a button.' ); }  function draw() { background(200);  // Calculate the circle's coordinates. let x = random(0, 100); let y = random(0, 100);  // Draw the circle. // Normally, the circle would move from left to right. circle(x, y, 20); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    // Turn off the draw loop.
+    noLoop();
+    describe('A white half-circle on the left edge of a gray square.');
+  }
+  function draw() {
+    background(200);
+    // Calculate the circle's x-coordinate.
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 p5()                                                *p5.p5()*
+──────────
+
+📝 Creates a new sketch in "instance" mode.  All p5.js sketches are instances of the `p5` class. Put another way, all p5.js sketches are objects with methods including `pInst.setup()`, `pInst.draw()`, `pInst.circle()`, and `pInst.fill()`. By default, sketches run in "global mode" to hide some of this complexity.  In global mode, a default instance of the `p5` class is created automatically. The default `p5` instance searches the web page's source code for declarations of system functions such as `setup()`, `draw()`, and `mousePressed()`, then attaches those functions to itself as methods. Calling a function such as `circle()` in global mode actually calls the default `p5` object's `pInst.circle()` method.  It's often helpful to isolate the code within sketches from the rest of the code on a web page. Two common use cases are web pages that use other JavaScript libraries and web pages with multiple sketches. "Instance mode" makes it easy to support both of these scenarios.  Instance mode sketches support the same API as global mode sketches. They use a function to bundle, or encapsulate, an entire sketch. The function containing the sketch is then passed to the `p5()` constructor.  The first parameter, `sketch`, is a function that contains the sketch. For example, the statement `new p5(mySketch)` would create a new instance mode sketch from a function named `mySketch`. The function should have one parameter, `p`, that's a `p5` object.  The second parameter, `node`, is optional. If a string is passed, as in `new p5(mySketch, 'sketch-one')` the new instance mode sketch will become a child of the HTML element with the id `sketch-one`. If an HTML element is passed, as in `new p5(mySketch, myElement)`, then the new instance mode sketch will become a child of the `Element` object called `myElement`.    ` // Declare the function containing the sketch. function sketch(p) {  // Declare the setup() method. p.setup = function () { p.createCanvas(100, 100);  p.describe('A white circle drawn on a gray background.'); };  // Declare the draw() method. p.draw = function () { p.background(200);  // Draw the circle. p.circle(50, 50, 20); }; }  // Initialize the sketch. new p5(sketch); `    ` // Declare the function containing the sketch. function sketch(p) { // Create the sketch's variables within its scope. let x = 50; let y = 50;  // Declare the setup() method. p.setup = function () { p.createCanvas(100, 100);  p.describe('A white circle moves randomly on a gray background.'); };  // Declare the draw() method. p.draw = function () { p.background(200);  // Update x and y. x += p.random(-1, 1); y += p.random(-1, 1);  // Draw the circle. p.circle(x, y, 20); }; }  // Initialize the sketch. new p5(sketch); `    ` // Declare the function containing the sketch. function sketch(p) {  // Declare the setup() method. p.setup = function () { p.createCanvas(100, 100);  p.describe('A white circle drawn on a gray background.'); };  // Declare the draw() method. p.draw = function () { p.background(200);  // Draw the circle. p.circle(50, 50, 20); }; }  // Select the web page's body element. let body = document.querySelector('body');  // Initialize the sketch and attach it to the web page's body. new p5(sketch, body); `    ` // Declare the function containing the sketch. function sketch(p) {  // Declare the setup() method. p.setup = function () { p.createCanvas(100, 100);  p.describe( 'A white circle drawn on a gray background. The circle follows the mouse as the user moves.' ); };  // Declare the draw() method. p.draw = function () { p.background(200);  // Draw the circle. p.circle(p.mouseX, p.mouseY, 20); }; }  // Initialize the sketch. new p5(sketch); `    ` // Declare the function containing the sketch. function sketch(p) {  // Declare the setup() method. p.setup = function () { p.createCanvas(100, 100);  p.describe( 'A white circle drawn on a gray background. The circle follows the mouse as the user moves. The circle becomes black when the user double-clicks.' ); };  // Declare the draw() method. p.draw = function () { p.background(200);  // Draw the circle. p.circle(p.mouseX, p.mouseY, 20); };  // Declare the doubleClicked() method. p.doubleClicked = function () { // Change the fill color when the user double-clicks. p.fill(0); }; }  // Initialize the sketch. new p5(sketch); `
+
+📋 Parameters:
+   • {Object} sketch - function containing the sketch.
+   • {String|HTMLElement} node - ID or reference to the HTML element that will contain the sketch.
+
+💡 Example:
+>
+  `
+  // Declare the function containing the sketch.
+  function sketch(p) {
+    // Declare the setup() method.
+    p.setup = function () {
+      p.createCanvas(100, 100);
+      p.describe('A white circle drawn on a gray background.');
+    };
+    // Declare the draw() method.
+    p.draw = function () {
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 pixelDensity()                                                *p5.pixelDensity()*
+────────────────────
+
+📝 Sets the pixel density or returns the current density.  Computer displays are grids of little lights called *pixels*. A display's *pixel density* describes how many pixels it packs into an area. Displays with smaller pixels have a higher pixel density and create sharper images.  `pixelDensity()` sets the pixel scaling for high pixel density displays. By default, the pixel density is set to match the display's density. Calling `pixelDensity(1)` turn this off.  Calling `pixelDensity()` without an argument returns the current pixel density.   ` function setup() { // Set the pixel density to 1. pixelDensity(1);  // Create a canvas and draw // a circle. createCanvas(100, 100); background(200); circle(50, 50, 70);  describe('A fuzzy white circle on a gray canvas.'); } `    ` function setup() { // Set the pixel density to 3. pixelDensity(3);  // Create a canvas, paint the // background, and draw a // circle. createCanvas(100, 100); background(200); circle(50, 50, 70);  describe('A sharp white circle on a gray canvas.'); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    // Set the pixel density to 1.
+    pixelDensity(1);
+    // Create a canvas and draw
+    // a circle.
+    createCanvas(100, 100);
+    background(200);
+    circle(50, 50, 70);
+    describe('A fuzzy white circle on a gray canvas.');
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 print()                                                *p5.print()*
+─────────────
+
+📝 Displays text in the web browser's console.  `print()` is helpful for printing values while debugging. Each call to `print()` creates a new line of text.  Note: Call `print('\n')` to print a blank line. Calling `print()` without an argument opens the browser's dialog for printing documents.   ` function setup() { // Prints "hello, world" to the console. print('hello, world'); } `    ` function setup() { let name = 'ada'; // Prints "hello, ada" to the console. print(`hello, ${name}`); } `
+
+📋 Parameters:
+   • {Any} contents - content to print to the console.
+
+💡 Example:
+>
+  `
+  function setup() {
+    // Prints "hello, world" to the console.
+    print('hello, world');
+  }
+  `
+  
+  
+  `
+  function setup() {
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 redraw()                                                *p5.redraw()*
+──────────────
+
+📝 Runs the code in [draw()](#/p5/draw) once.  By default, [draw()](#/p5/draw) tries to run 60 times per second. Calling [noLoop()](#/p5/noLoop) stops [draw()](#/p5/draw) from repeating. Calling `redraw()` will execute the code in the [draw()](#/p5/draw) function a set number of times. `await` the result of `redraw` to make sure it has finished.  The parameter, `n`, is optional. If a number is passed, as in `redraw(5)`, then the draw loop will run the given number of times. By default, `n` is 1.    ` // Double-click the canvas to move the circle.  let x = 0;  function setup() { createCanvas(100, 100);  // Turn off the draw loop. noLoop();  describe( 'A white half-circle on the left edge of a gray square. The circle moves a little to the right when the user double-clicks.' ); }  function draw() { background(200);  // Draw the circle. circle(x, 50, 20);  // Increment x. x += 5; }  // Run the draw loop when the user double-clicks. async function doubleClicked() { await redraw(); } `    ` // Double-click the canvas to move the circle.  let x = 0;  function setup() { createCanvas(100, 100);  // Turn off the draw loop. noLoop();  describe( 'A white half-circle on the left edge of a gray square. The circle hops to the right when the user double-clicks.' ); }  function draw() { background(200);  // Draw the circle. circle(x, 50, 20);  // Increment x. x += 5; }  // Run the draw loop three times when the user double-clicks. async function doubleClicked() { await redraw(3); } `
+
+💡 Example:
+>
+  `
+  // Double-click the canvas to move the circle.
+  let x = 0;
+  function setup() {
+    createCanvas(100, 100);
+    // Turn off the draw loop.
+    noLoop();
+    describe(
+      'A white half-circle on the left edge of a gray square. The circle moves a little to the right when the user double-clicks.'
+    );
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 registerAddon()                                                *p5.registerAddon()*
+─────────────────────
+
+📝 Loads a p5.js library.  A library is a function that adds functionality to p5.js by adding methods and properties for sketches to use, or for automatically running code at different stages of the p5.js lifecycle. Take a look at the [contributor docs for creating libraries](/contribute/creating_libraries/) to learn more about creating libraries.    ` function myAddon(p5, fn, lifecycles) { fn.sayHello = function() { this.textAlign(this.CENTER, this.CENTER); this.text('Hello!', this.width / 2, this.height / 2); }; } p5.registerAddon(myAddon);  function setup() { createCanvas(100, 100);  background(200); sayHello(); // The sayHello method is now available!  describe('The text "Hello!"'); } `
+
+📋 Parameters:
+   • {Function} library - The library function to register
+
+💡 Example:
+>
+  `
+  function myAddon(p5, fn, lifecycles) {
+    fn.sayHello = function() {
+      this.textAlign(this.CENTER, this.CENTER);
+      this.text('Hello!', this.width / 2, this.height / 2);
+    };
+  }
+  p5.registerAddon(myAddon);
+  function setup() {
+    createCanvas(100, 100);
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 screenToWorld()                                                *p5.screenToWorld()*
+─────────────────────
+
+📝 Converts 2D screen coordinates to 3D world coordinates.  This function takes a vector and converts its coordinates from coordinates on the screen to coordinates in the currently drawn object. This can be useful for determining the mouse position relative to a 2D or 3D object.  If given, the Z component of the input coordinates is treated as "depth", or distance from the camera.   `  function setup() { createCanvas(100, 100); describe('A rotating square with a line passing through the mouse drawn across it.'); }  function draw() { background(220);  // Move to center and rotate translate(width/2, height/2); rotate(millis() / 1000); rect(-30, -30, 60);  // Compute the location of the mouse in the coordinates of the square let localMouse = screenToWorld(createVector(mouseX, mouseY));  // Draw a line parallel to the local Y axis, passing through the mouse line(localMouse.x, -30, localMouse.x, 30); }  `
+
+📋 Parameters:
+   • {Number|p5.Vector} x - The x coordinate in screen space. (Or a vector for all three coordinates.)
+   • {Number} y - The y coordinate in screen space.
+
+↩️  Returns:
+   p5.Vector - A vector containing the 3D world space coordinates.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    describe('A rotating square with a line passing through the mouse drawn across it.');
+  }
+  function draw() {
+    background(220);
+    // Move to center and rotate
+    translate(width/2, height/2);
+    rotate(millis() / 1000);
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 setup()                                                *p5.setup()*
+─────────────
+
+📝 A function that's called once when the sketch begins running.  Declaring the function `setup()` sets a code block to run once automatically when the sketch starts running. It's used to perform setup tasks such as creating the canvas and initializing variables:  ```js function setup() { // Code to run once at the start of the sketch. } ```  Code placed in `setup()` will run once before code placed in [draw()](#/p5/draw) begins looping. If `setup()` is declared `async` (e.g. `async function setup()`), execution pauses at each `await` until its promise resolves. For example, `font = await loadFont(...)` waits for the font asset to load because `loadFont()` function returns a promise, and the await keyword means the program will wait for the promise to resolve. This ensures that all assets are fully loaded before the sketch continues.   loading assets.  Note: `setup()` doesn’t have to be declared, but it’s common practice to do so.    ` function setup() { createCanvas(100, 100);  background(200);  // Draw the circle. circle(50, 50, 40);  describe('A white circle on a gray background.'); } `    ` function setup() { createCanvas(100, 100);  // Paint the background once. background(200);  describe( 'A white circle on a gray background. The circle follows the mouse as the user moves, leaving a trail.' ); }  function draw() { // Draw circles repeatedly. circle(mouseX, mouseY, 40); } `    ` let img;  async function setup() { img = await loadImage('assets/bricks.jpg');  createCanvas(100, 100);  // Draw the image. image(img, 0, 0);  describe( 'A white circle on a brick wall. The circle follows the mouse as the user moves, leaving a trail.' ); }  function draw() { // Style the circle. noStroke();  // Draw the circle. circle(mouseX, mouseY, 10); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100);
+    background(200);
+    // Draw the circle.
+    circle(50, 50, 40);
+    describe('A white circle on a gray background.');
+  }
+  `
+  
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 windowResized()                                                *p5.windowResized()*
+─────────────────────
+
+📝 A function that's called when the browser window is resized.  Code placed in the body of `windowResized()` will run when the browser window's size changes. It's a good place to call [resizeCanvas()](#/p5/resizeCanvas) or make other adjustments to accommodate the new window size.  The `event` parameter is optional. If added to the function declaration, it can be used for debugging or other purposes.   ` function setup() { createCanvas(windowWidth, windowHeight);  describe('A gray canvas with a white circle at its center. The canvas takes up the entire browser window. It changes size to match the browser window.'); }  function draw() { background(200);  // Draw a circle at the center. circle(width / 2, height / 2, 50); }  // Resize the canvas when the // browser's size changes. function windowResized() { resizeCanvas(windowWidth, windowHeight); } `  This example does not render anything.   ` function setup() { createCanvas(windowWidth, windowHeight); }  function draw() { background(200);  describe('A gray canvas that takes up the entire browser window. It changes size to match the browser window.'); }  function windowResized(event) { // Resize the canvas when the // browser's size changes. resizeCanvas(windowWidth, windowHeight);  // Print the resize event to the console for debugging. print(event); } `  This example does not render anything.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(windowWidth, windowHeight);
+    describe('A gray canvas with a white circle at its center. The canvas takes up the entire browser window. It changes size to match the browser window.');
+  }
+  function draw() {
+    background(200);
+    // Draw a circle at the center.
+    circle(width / 2, height / 2, 50);
+  }
+>
+
+🔗 See also: |p5.structure|
+
+
+🔧 worldToScreen()                                                *p5.worldToScreen()*
+─────────────────────
+
+📝 Converts 3D world coordinates to 2D screen coordinates.  This function takes a 3D vector and converts its coordinates from the world space to screen space. This can be useful for placing 2D elements in a 3D scene or for determining the screen position of 3D objects.   `  function setup() { createCanvas(150, 150); let vertices = [ createVector(-20, -20), createVector(20, -20), createVector(20, 20), createVector(-20, 20) ];  push(); translate(75, 55); rotate(PI / 4);  // Convert world coordinates to screen coordinates let screenPos = vertices.map(v => worldToScreen(v)); pop();  background(200);  stroke(0); fill(100, 150, 255, 100); beginShape(); screenPos.forEach(pos => vertex(pos.x, pos.y)); endShape(CLOSE);  screenPos.forEach((pos, i) => { fill(0); textSize(10); if (i === 0) { text(i + 1, pos.x + 3, pos.y - 7); } else if (i === 1) { text(i + 1, pos.x + 7, pos.y + 2); } else if (i === 2) { text(i + 1, pos.x - 2, pos.y + 12); } else if (i === 3) { text(i + 1, pos.x - 12, pos.y - 2); } });  fill(0); noStroke(); textSize(10); let legendY = height - 35; screenPos.forEach((pos, i) => { text(`Vertex ${i + 1}: (${pos.x.toFixed(1)}, ${pos.y.toFixed(1)})`, 5, legendY + i * 10); });  describe('A rotating square is transformed and drawn using screen coordinates.');  } `    ` let vertices;  function setup() { createCanvas(100, 100, WEBGL); vertices = [ createVector(-25, -25, -25), createVector(25, -25, -25), createVector(25, 25, -25), createVector(-25, 25, -25), createVector(-25, -25, 25), createVector(25, -25, 25), createVector(25, 25, 25), createVector(-25, 25, 25) ];  describe('A rotating cube with points mapped to 2D screen space and displayed as ellipses.');  }  function draw() { background(200);  // Animate rotation let rotationX = millis() / 1000; let rotationY = millis() / 1200;  push();  rotateX(rotationX); rotateY(rotationY);  // Convert world coordinates to screen coordinates let screenPos = vertices.map(v => worldToScreen(v));  pop();  screenPos.forEach((pos, i) => {  let screenX = pos.x - width / 2; let screenY = pos.y - height / 2; fill(0); noStroke(); ellipse(screenX, screenY, 3, 3); }); } `
+
+📋 Parameters:
+   • {Number|p5.Vector} x - The x coordinate in world space. (Or a vector for all three coordinates.)
+   • {Number} y - The y coordinate in world space.
+
+↩️  Returns:
+   p5.Vector - A vector containing the 2D screen coordinates.
+
+💡 Example:
+>
+  `
+  let vertices;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    vertices = [
+      createVector(-25, -25, -25),
+      createVector(25, -25, -25),
+      createVector(25, 25, -25),
+      createVector(-25, 25, -25),
+      createVector(-25, -25, 25),
+>
+
+🔗 See also: |p5.structure|
+
+==============================================================================
+🤖 Generated by p5.man - neovim help generator for p5.js
+🌐 https://github.com/prjctimg/p5.man

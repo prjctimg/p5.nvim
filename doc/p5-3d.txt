@@ -1,0 +1,1305 @@
+🎨 *p5.3d*	3D graphics and camera functions 📚
+==============================================================================
+🚀 p5.js 3D Reference
+
+📅 Generated on: January 17, 2026
+🏷️  p5.js version: 2.2.0
+
+	*help-topic*p5.3d
+
+📋 TABLE OF CONTENTS                                        *p5.3d-contents*
+
+1. 🎯 Functions (56 total)
+
+   • |_axesIcon()|
+   • |_grid()|
+   • |ambientLight()|
+   • |ambientMaterial()|
+   • |baseColorShader()|
+   • |baseFilterShader()|
+   • |baseMaterialShader()|
+   • |baseNormalShader()|
+   • |baseStrokeShader()|
+   • |camera()|
+   • |createCamera()|
+   • |createFilterShader()|
+   • |createModel()|
+   • |createShader()|
+   • |debugMode()|
+   • |directionalLight()|
+   • |emissiveMaterial()|
+   • |flipV()|
+   • |fromAxisAngle()|
+   • |frustum()|
+   • |imageLight()|
+   • |imageShader()|
+   • |lightFalloff()|
+   • |lights()|
+   • |linePerspective()|
+   • |loadFilterShader()|
+   • |loadModel()|
+   • |loadShader()|
+   • |metalness()|
+   • |model()|
+   • |mult()|
+   • |noDebugMode()|
+   • |noLights()|
+   • |normalMaterial()|
+   • |orbitControl()|
+   • |ortho()|
+   • |panorama()|
+   • |perspective()|
+   • |pointLight()|
+   • |resetShader()|
+   • |roll()|
+   • |rotateBy()|
+   • |saveObj()|
+   • |saveStl()|
+   • |setAttributes()|
+   • |setCamera()|
+   • |shader()|
+   • |shininess()|
+   • |specularColor()|
+   • |specularMaterial()|
+   • |spotLight()|
+   • |strokeShader()|
+   • |texture()|
+   • |textureMode()|
+   • |textureWrap()|
+   • |updatePixels()|
+
+📖 FUNCTION DOCUMENTATION
+
+
+🔧 _axesIcon()                                                *p5._axesIcon()*
+─────────────────
+
+📝 For use with debugMode
+
+🔗 See also: |p5.3d|
+
+
+🔧 _grid()                                                *p5._grid()*
+─────────────
+
+📝 For use with debugMode
+
+🔗 See also: |p5.3d|
+
+
+🔧 ambientLight()                                                *p5.ambientLight()*
+────────────────────
+
+📝 Creates a light that shines from all directions.  Ambient light does not come from one direction. Instead, 3D shapes are lit evenly from all sides. Ambient lights are almost always used in combination with other types of lights.  There are three ways to call `ambientLight()` with optional parameters to set the light’s color.  The first way to call `ambientLight()` has two parameters, `gray` and `alpha`. `alpha` is optional. Grayscale and alpha values between 0 and 255 can be passed to set the ambient light’s color, as in `ambientLight(50)` or `ambientLight(50, 30)`.  The second way to call `ambientLight()` has one parameter, color. A [p5.Color](#/p5.Color) object, an array of color values, or a CSS color string, as in `ambientLight('magenta')`, can be passed to set the ambient light’s color.  The third way to call `ambientLight()` has four parameters, `v1`, `v2`, `v3`, and `alpha`. `alpha` is optional. RGBA, HSBA, or HSLA values can be passed to set the ambient light’s colors, as in `ambientLight(255, 0, 0)` or `ambientLight(255, 0, 0, 30)`. Color values will be interpreted using the current [colorMode()](#/p5/colorMode).  [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode).   ` // Click and drag the mouse to view the scene from different angles. // Double-click the canvas to turn on the light.  let isLit = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A sphere drawn against a gray background. The sphere appears to change color when the user double-clicks.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Control the light. if (isLit === true) { // Use a grayscale value of 80. ambientLight(80); }  // Draw the sphere. sphere(30); }  // Turn on the ambient light when the user double-clicks. function doubleClicked() { isLit = true; } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A faded magenta sphere drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. // Use a p5.Color object. let c = color('orchid'); ambientLight(c);  // Draw the sphere. sphere(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A faded magenta sphere drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. // Use a CSS color string. ambientLight('#DA70D6');  // Draw the sphere. sphere(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A faded magenta sphere drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. // Use RGB values ambientLight(218, 112, 214);  // Draw the sphere. sphere(30); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  // Double-click the canvas to turn on the light.
+  let isLit = false;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A sphere drawn against a gray background. The sphere appears to change color when the user double-clicks.');
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 ambientMaterial()                                                *p5.ambientMaterial()*
+───────────────────────
+
+📝 Sets the ambient color of shapes’ surface material.  The `ambientMaterial()` color sets the components of the [ambientLight()](#/p5/ambientLight) color that shapes will reflect. For example, calling `ambientMaterial(255, 255, 0)` would cause a shape to reflect red and green light, but not blue light.  `ambientMaterial()` can be called three ways with different parameters to set the material’s color.  The first way to call `ambientMaterial()` has one parameter, `gray`. Grayscale values between 0 and 255, as in `ambientMaterial(50)`, can be passed to set the material’s color. Higher grayscale values make shapes appear brighter.  The second way to call `ambientMaterial()` has one parameter, `color`. A [p5.Color](#/p5.Color) object, an array of color values, or a CSS color string, as in `ambientMaterial('magenta')`, can be passed to set the material’s color.  The third way to call `ambientMaterial()` has three parameters, `v1`, `v2`, and `v3`. RGB, HSB, or HSL values, as in `ambientMaterial(255, 0, 0)`, can be passed to set the material’s colors. Color values will be interpreted using the current [colorMode()](#/p5/colorMode).  Note: `ambientMaterial()` can only be used in WebGL mode.  [colorMode()](#/p5/colorMode). current [colorMode()](#/p5/colorMode). current [colorMode()](#/p5/colorMode).   ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A magenta cube drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a magenta ambient light. ambientLight(255, 0, 255);  // Draw the box. box(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A purple cube drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a magenta ambient light. ambientLight(255, 0, 255);  // Add a dark gray ambient material. ambientMaterial(150);  // Draw the box. box(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A red cube drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a magenta ambient light. ambientLight(255, 0, 255);  // Add a yellow ambient material using RGB values. ambientMaterial(255, 255, 0);  // Draw the box. box(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A red cube drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a magenta ambient light. ambientLight(255, 0, 255);  // Add a yellow ambient material using a p5.Color object. let c = color(255, 255, 0); ambientMaterial(c);  // Draw the box. box(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A red cube drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a magenta ambient light. ambientLight(255, 0, 255);  // Add a yellow ambient material using a color string. ambientMaterial('yellow');  // Draw the box. box(); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A yellow cube drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a white ambient light. ambientLight(255, 255, 255);  // Add a yellow ambient material using a color string. ambientMaterial('yellow');  // Draw the box. box(); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A magenta cube drawn on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 baseColorShader()                                                *p5.baseColorShader()*
+───────────────────────
+
+📝 Get the shader used when no lights or materials are applied.  You can call [`baseColorShader().modify()`](#/p5.Shader/modify) and change any of the following hooks:   HookDescription   `void beforeVertex`    Called at the start of the vertex shader.     `Vertex getObjectInputs`    Update the vertex data of the model being drawn before any positioning has been applied. It takes in a `Vertex` struct, which includes: - `vec3 position`, the position of the vertex - `vec3 normal`, the direction facing out of the surface - `vec2 texCoord`, the texture coordinates associeted with the vertex - `vec4 color`, the per-vertex color The struct can be modified and returned.     `Vertex getWorldInputs`    Update the vertex data of the model being drawn after transformations such as `translate()` and `scale()` have been applied, but before the camera has been applied. It takes in a `Vertex` struct like, in the `getObjectInputs` hook above, that can be modified and returned.     `Vertex getCameraInputs`    Update the vertex data of the model being drawn as they appear relative to the camera. It takes in a `Vertex` struct like, in the `getObjectInputs` hook above, that can be modified and returned.     `void afterVertex`    Called at the end of the vertex shader.     `void beforeFragment`    Called at the start of the fragment shader.     `vec4 getFinalColor`    Update the final color after mixing. It takes in a `vec4 color` and must return a modified version.     `void afterFragment`    Called at the end of the fragment shader.     Most of the time, you will need to write your hooks in GLSL ES version 300. If you are using WebGL 1 instead of 2, write your hooks in GLSL ES 100 instead.  Call `baseColorShader().inspectHooks()` to see all the possible hooks and their default implementations.    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseColorShader().modify({ uniforms: { 'float time': () => millis() }, 'Vertex getWorldInputs': `(Vertex inputs) { inputs.position.y += 20. * sin(time * 0.001 + inputs.position.x * 0.05); return inputs; }` }); }  function draw() { background(255); shader(myShader); noStroke(); fill('red'); circle(0, 0, 50); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseColorShader().modify({
+      uniforms: {
+        'float time': () => millis()
+      },
+      'Vertex getWorldInputs': `(Vertex inputs) {
+        inputs.position.y +=
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 baseFilterShader()                                                *p5.baseFilterShader()*
+────────────────────────
+
+📝 Get the base shader for filters.  You can then call [`baseFilterShader().modify()`](#/p5.Shader/modify) and change the following hook:   HookDescription   `vec4 getColor`    Output the final color for the current pixel. It takes in two parameters: `FilterInputs inputs`, and `in sampler2D canvasContent`, and must return a color as a `vec4`.  `FilterInputs inputs` is a scruct with the following properties: - `vec2 texCoord`, the position on the canvas, with coordinates between 0 and 1. Calling `getTexture(canvasContent, texCoord)` returns the original color of the current pixel. - `vec2 canvasSize`, the width and height of the sketch. - `vec2 texelSize`, the size of one real pixel relative to the size of the whole canvas. This is equivalent to `1 / (canvasSize * pixelDensity)`.  `in sampler2D canvasContent` is a texture with the contents of the sketch, pre-filter. Call `getTexture(canvasContent, someCoordinate)` to retrieve the color of the sketch at that coordinate, with coordinate values between 0 and 1.     Most of the time, you will need to write your hooks in GLSL ES version 300. If you are using WebGL 1, write your hooks in GLSL ES 100 instead.    ` let img; let myShader;  async function setup() { img = await loadImage('assets/bricks.jpg'); createCanvas(100, 100, WEBGL); myShader = baseFilterShader().modify(() => { let time = uniformFloat(() => millis()); getColor((inputs, canvasContent) => { inputs.texCoord.y += 0.02 * sin(time * 0.001 + inputs.texCoord.x * 5); return texture(canvasContent, inputs.texCoord); }); }); }  function draw() { image(img, -50, -50); filter(myShader); describe('an image of bricks, distorting over time'); } `
+
+💡 Example:
+>
+  `
+  let img;
+  let myShader;
+  async function setup() {
+    img = await loadImage('assets/bricks.jpg');
+    createCanvas(100, 100, WEBGL);
+    myShader = baseFilterShader().modify(() => {
+      let time = uniformFloat(() => millis());
+      getColor((inputs, canvasContent) => {
+        inputs.texCoord.y +=
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 baseMaterialShader()                                                *p5.baseMaterialShader()*
+──────────────────────────
+
+📝 Get the default shader used with lights, materials, and textures.  You can call [`baseMaterialShader().modify()`](#/p5.Shader/modify) and change any of the following hooks:   HookDescription   `void beforeVertex`    Called at the start of the vertex shader.     `Vertex getObjectInputs`    Update the vertex data of the model being drawn before any positioning has been applied. It takes in a `Vertex` struct, which includes: - `vec3 position`, the position of the vertex - `vec3 normal`, the direction facing out of the surface - `vec2 texCoord`, the texture coordinates associeted with the vertex - `vec4 color`, the per-vertex color The struct can be modified and returned.     `Vertex getWorldInputs`    Update the vertex data of the model being drawn after transformations such as `translate()` and `scale()` have been applied, but before the camera has been applied. It takes in a `Vertex` struct like, in the `getObjectInputs` hook above, that can be modified and returned.     `Vertex getCameraInputs`    Update the vertex data of the model being drawn as they appear relative to the camera. It takes in a `Vertex` struct like, in the `getObjectInputs` hook above, that can be modified and returned.     `void afterVertex`    Called at the end of the vertex shader.     `void beforeFragment`    Called at the start of the fragment shader.     `Inputs getPixelInputs`    Update the per-pixel inputs of the material. It takes in an `Inputs` struct, which includes: - `vec3 normal`, the direction pointing out of the surface - `vec2 texCoord`, a vector where `x` and `y` are between 0 and 1 describing the spot on a texture the pixel is mapped to, as a fraction of the texture size - `vec3 ambientLight`, the ambient light color on the vertex - `vec4 color`, the base material color of the pixel - `vec3 ambientMaterial`, the color of the pixel when affected by ambient light - `vec3 specularMaterial`, the color of the pixel when reflecting specular highlights - `vec3 emissiveMaterial`, the light color emitted by the pixel - `float shininess`, a number representing how sharp specular reflections should be, from 1 to infinity - `float metalness`, a number representing how mirrorlike the material should be, between 0 and 1 The struct can be modified and returned.    `vec4 combineColors`    Take in a `ColorComponents` struct containing all the different components of light, and combining them into a single final color. The struct contains: - `vec3 baseColor`, the base color of the pixel - `float opacity`, the opacity between 0 and 1 that it should be drawn at - `vec3 ambientColor`, the color of the pixel when affected by ambient light - `vec3 specularColor`, the color of the pixel when affected by specular reflections - `vec3 diffuse`, the amount of diffused light hitting the pixel - `vec3 ambient`, the amount of ambient light hitting the pixel - `vec3 specular`, the amount of specular reflection hitting the pixel - `vec3 emissive`, the amount of light emitted by the pixel     `vec4 getFinalColor`    Update the final color after mixing. It takes in a `vec4 color` and must return a modified version.     `void afterFragment`    Called at the end of the fragment shader.     Most of the time, you will need to write your hooks in GLSL ES version 300. If you are using WebGL 1 instead of 2, write your hooks in GLSL ES 100 instead.  Call `baseMaterialShader().inspectHooks()` to see all the possible hooks and their default implementations.    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseMaterialShader().modify(() => { let time = uniformFloat(() => millis()); getWorldInputs((inputs) => { inputs.position.y += 20 * sin(time * 0.001 + inputs.position.x * 0.05); return inputs; }); }); }  function draw() { background(255); shader(myShader); lights(); noStroke(); fill('red'); sphere(50); } `    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseMaterialShader().modify({ declarations: 'vec3 myNormal;', 'Inputs getPixelInputs': `(Inputs inputs) { myNormal = inputs.normal; return inputs; }`, 'vec4 getFinalColor': `(vec4 color) { return mix( vec4(1.0, 1.0, 1.0, 1.0), color, abs(dot(myNormal, vec3(0.0, 0.0, 1.0))) ); }` }); }  function draw() { background(255); rotateY(millis() * 0.001); shader(myShader); lights(); noStroke(); fill('red'); torus(30); } `    ` let myShader; let environment;  async function setup() { environment = await loadImage('assets/outdoor_spheremap.jpg');  createCanvas(200, 200, WEBGL); myShader = baseMaterialShader().modify(() => { getPixelInputs((inputs) => { let factor = sin( TWO_PI * (inputs.texCoord.x + inputs.texCoord.y) ); inputs.shininess = mix(1, 100, factor); inputs.metalness = factor; return inputs; }) }); }  function draw() { panorama(environment); ambientLight(100); imageLight(environment); rotateY(millis() * 0.001); shader(myShader); noStroke(); fill(255); specularMaterial(150); sphere(50); } `    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseMaterialShader().modify(() => { getPixelInputs((inputs) => { inputs.normal.x += 0.2 * sin( sin(TWO_PI * dot(inputs.texCoord.yx, vec2(10, 25))) ); inputs.normal.y += 0.2 * sin( sin(TWO_PI * dot(inputs.texCoord, vec2(10, 25))) ); inputs.normal = normalize(inputs.normal); return inputs; }); }); }  function draw() { background(255); shader(myShader); ambientLight(150); pointLight( 255, 255, 255, 100*cos(frameCount*0.04), -50, 100*sin(frameCount*0.04) ); noStroke(); fill('red'); shininess(200); specularMaterial(255); sphere(50); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseMaterialShader().modify(() => {
+      getPixelInputs((inputs) => {
+        inputs.normal.x += 0.2 * sin(
+          sin(TWO_PI * dot(inputs.texCoord.yx, vec2(10, 25)))
+        );
+        inputs.normal.y += 0.2 * sin(
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 baseNormalShader()                                                *p5.baseNormalShader()*
+────────────────────────
+
+📝 Get the shader used by [`normalMaterial()`](#/p5/normalMaterial).  You can call [`baseNormalShader().modify()`](#/p5.Shader/modify) and change any of the following hooks:   HookDescription   `void beforeVertex`    Called at the start of the vertex shader.     `Vertex getObjectInputs`    Update the vertex data of the model being drawn before any positioning has been applied. It takes in a `Vertex` struct, which includes: - `vec3 position`, the position of the vertex - `vec3 normal`, the direction facing out of the surface - `vec2 texCoord`, the texture coordinates associeted with the vertex - `vec4 color`, the per-vertex color The struct can be modified and returned.     `Vertex getWorldInputs`    Update the vertex data of the model being drawn after transformations such as `translate()` and `scale()` have been applied, but before the camera has been applied. It takes in a `Vertex` struct like, in the `getObjectInputs` hook above, that can be modified and returned.     `Vertex getCameraInputs`    Update the vertex data of the model being drawn as they appear relative to the camera. It takes in a `Vertex` struct like, in the `getObjectInputs` hook above, that can be modified and returned.     `void afterVertex`    Called at the end of the vertex shader.     `void beforeFragment`    Called at the start of the fragment shader.     `vec4 getFinalColor`    Update the final color after mixing. It takes in a `vec4 color` and must return a modified version.     `void afterFragment`    Called at the end of the fragment shader.     Most of the time, you will need to write your hooks in GLSL ES version 300. If you are using WebGL 1 instead of 2, write your hooks in GLSL ES 100 instead.  Call `baseNormalShader().inspectHooks()` to see all the possible hooks and their default implementations.    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseNormalShader().modify({ uniforms: { 'float time': () => millis() }, 'Vertex getWorldInputs': `(Vertex inputs) { inputs.position.y += 20. * sin(time * 0.001 + inputs.position.x * 0.05); return inputs; }` }); }  function draw() { background(255); shader(myShader); noStroke(); sphere(50); } `    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseNormalShader().modify({ 'Vertex getCameraInputs': `(Vertex inputs) { inputs.normal = abs(inputs.normal); return inputs; }`, 'vec4 getFinalColor': `(vec4 color) { // Map the r, g, and b values of the old normal to new colors // instead of just red, green, and blue: vec3 newColor = color.r * vec3(89.0, 240.0, 232.0) / 255.0 + color.g * vec3(240.0, 237.0, 89.0) / 255.0 + color.b * vec3(205.0, 55.0, 222.0) / 255.0; newColor = newColor / (color.r + color.g + color.b); return vec4(newColor, 1.0) * color.a; }` }); }  function draw() { background(255); shader(myShader); noStroke(); rotateX(frameCount * 0.01); rotateY(frameCount * 0.015); box(100); } `
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseNormalShader().modify({
+      'Vertex getCameraInputs': `(Vertex inputs) {
+        inputs.normal = abs(inputs.normal);
+        return inputs;
+      }`,
+      'vec4 getFinalColor': `(vec4 color) {
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 baseStrokeShader()                                                *p5.baseStrokeShader()*
+────────────────────────
+
+📝 Get the shader used when drawing the strokes of shapes.  You can call [`baseStrokeShader().modify()`](#/p5.Shader/modify) and change any of the following hooks:   HookDescription   `void beforeVertex`    Called at the start of the vertex shader.     `StrokeVertex getObjectInputs`    Update the vertex data of the stroke being drawn before any positioning has been applied. It takes in a `StrokeVertex` struct, which includes: - `vec3 position`, the position of the vertex - `vec3 tangentIn`, the tangent coming in to the vertex - `vec3 tangentOut`, the tangent coming out of the vertex. In straight segments, this will be the same as `tangentIn`. In joins, it will be different. In caps, one of the tangents will be 0. - `vec4 color`, the per-vertex color - `float weight`, the stroke weight The struct can be modified and returned.     `StrokeVertex getWorldInputs`    Update the vertex data of the model being drawn after transformations such as `translate()` and `scale()` have been applied, but before the camera has been applied. It takes in a `StrokeVertex` struct like, in the `getObjectInputs` hook above, that can be modified and returned.     `StrokeVertex getCameraInputs`    Update the vertex data of the model being drawn as they appear relative to the camera. It takes in a `StrokeVertex` struct like, in the `getObjectInputs` hook above, that can be modified and returned.     `void afterVertex`    Called at the end of the vertex shader.     `void beforeFragment`    Called at the start of the fragment shader.     `Inputs getPixelInputs`    Update the inputs to the shader. It takes in a struct `Inputs inputs`, which includes: - `vec4 color`, the color of the stroke - `vec2 tangent`, the direction of the stroke in screen space - `vec2 center`, the coordinate of the center of the stroke in screen space p5.js pixels - `vec2 position`, the coordinate of the current pixel in screen space p5.js pixels - `float strokeWeight`, the thickness of the stroke in p5.js pixels     `bool shouldDiscard`    Caps and joins are made by discarded pixels in the fragment shader to carve away unwanted areas. Use this to change this logic. It takes in a `bool willDiscard` and must return a modified version.     `vec4 getFinalColor`    Update the final color after mixing. It takes in a `vec4 color` and must return a modified version.     `void afterFragment`    Called at the end of the fragment shader.     Most of the time, you will need to write your hooks in GLSL ES version 300. If you are using WebGL 1 instead of 2, write your hooks in GLSL ES 100 instead.  Call `baseStrokeShader().inspectHooks()` to see all the possible hooks and their default implementations.    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseStrokeShader().modify({ 'Inputs getPixelInputs': `(Inputs inputs) { float opacity = 1.0 - smoothstep( 0.0, 15.0, length(inputs.position - inputs.center) ); inputs.color *= opacity; return inputs; }` }); }  function draw() { background(255); strokeShader(myShader); strokeWeight(30); line( -width/3, sin(millis()*0.001) * height/4, width/3, sin(millis()*0.001 + 1) * height/4 ); } `    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseStrokeShader().modify({ uniforms: { 'float time': () => millis() }, 'StrokeVertex getWorldInputs': `(StrokeVertex inputs) { // Add a somewhat random offset to the weight // that varies based on position and time float scale = 0.8 + 0.2*sin(10.0 * sin( floor(time/250.) + inputs.position.x*0.01 + inputs.position.y*0.01 )); inputs.weight *= scale; return inputs; }` }); }  function draw() { background(255); strokeShader(myShader); myShader.setUniform('time', millis()); strokeWeight(10); beginShape(); for (let i = 0; i    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseStrokeShader().modify({ 'float random': `(vec2 p) { vec3 p3  = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }`, 'Inputs getPixelInputs': `(Inputs inputs) { // Replace alpha in the color with dithering by // randomly setting pixel colors to 0 based on opacity float a = inputs.color.a; inputs.color.a = 1.0; inputs.color *= random(inputs.position.xy) > a ? 0.0 : 1.0; return inputs; }` }); }  function draw() { background(255); strokeShader(myShader); strokeWeight(10); beginShape(); for (let i = 0; i
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseStrokeShader().modify({
+      'float random': `(vec2 p) {
+        vec3 p3  = fract(vec3(p.xyx) * .1031);
+        p3 += dot(p3, p3.yzx + 33.33);
+        return fract((p3.x + p3.y) * p3.z);
+      }`,
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 camera()                                                *p5.camera()*
+──────────────
+
+📝 Sets the position and orientation of the current camera in a 3D sketch.  `camera()` allows objects to be viewed from different angles. It has nine parameters that are all optional.  The first three parameters, `x`, `y`, and `z`, are the coordinates of the camera’s position. For example, calling `camera(0, 0, 0)` places the camera at the origin `(0, 0, 0)`. By default, the camera is placed at `(0, 0, 800)`.  The next three parameters, `centerX`, `centerY`, and `centerZ` are the coordinates of the point where the camera faces. For example, calling `camera(0, 0, 0, 10, 20, 30)` places the camera at the origin `(0, 0, 0)` and points it at `(10, 20, 30)`. By default, the camera points at the origin `(0, 0, 0)`.  The last three parameters, `upX`, `upY`, and `upZ` are the components of the "up" vector. The "up" vector orients the camera’s y-axis. For example, calling `camera(0, 0, 0, 10, 20, 30, 0, -1, 0)` places the camera at the origin `(0, 0, 0)`, points it at `(10, 20, 30)`, and sets the "up" vector to `(0, -1, 0)` which is like holding it upside-down. By default, the "up" vector is `(0, 1, 0)`.  Note: `camera()` can only be used in WebGL mode.    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A white cube on a gray background.'); }  function draw() { background(200);  // Move the camera to the top-right. camera(200, -400, 800);  // Draw the box. box(); } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A white cube apperas to sway left and right on a gray background.'); }  function draw() { background(200);  // Calculate the camera's x-coordinate. let x = 400 * cos(frameCount * 0.01);  // Orbit the camera around the box. camera(x, -400, 800);  // Draw the box. box(); } `    ` // Adjust the range sliders to change the camera's position.  let xSlider; let ySlider; let zSlider;  function setup() { createCanvas(100, 100, WEBGL);  // Create slider objects to set the camera's coordinates. xSlider = createSlider(-400, 400, 400); xSlider.position(0, 100); xSlider.size(100); ySlider = createSlider(-400, 400, -200); ySlider.position(0, 120); ySlider.size(100); zSlider = createSlider(0, 1600, 800); zSlider.position(0, 140); zSlider.size(100);  describe( 'A white cube drawn against a gray background. Three range sliders appear beneath the image. The camera position changes when the user moves the sliders.' ); }  function draw() { background(200);  // Get the camera's coordinates from the sliders. let x = xSlider.value(); let y = ySlider.value(); let z = zSlider.value();  // Move the camera. camera(x, y, z);  // Draw the box. box(); } `
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white cube on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Move the camera to the top-right.
+    camera(200, -400, 800);
+    // Draw the box.
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 createCamera()                                                *p5.createCamera()*
+────────────────────
+
+📝 Creates a new [p5.Camera](#/p5.Camera) object.  The new camera is initialized with a default position `(0, 0, 800)` and a default perspective projection. Its properties can be controlled with [p5.Camera](#/p5.Camera) methods such as `myCamera.lookAt(0, 0, 0)`.  Note: Every 3D sketch starts with a default camera initialized. This camera can be controlled with the functions [camera()](#/p5/camera), [perspective()](#/p5/perspective), [ortho()](#/p5/ortho), and [frustum()](#/p5/frustum) if it's the only camera in the scene.  Note: `createCamera()` can only be used in WebGL mode.    ` // Double-click to toggle between cameras.  let cam1; let cam2; let usingCam1 = true;  function setup() { createCanvas(100, 100, WEBGL);  // Create the first camera. // Keep its default settings. cam1 = createCamera();  // Create the second camera. // Place it at the top-left. // Point it at the origin. cam2 = createCamera(); cam2.setPosition(400, -400, 800); cam2.lookAt(0, 0, 0);  // Set the current camera to cam1. setCamera(cam1);  describe('A white cube on a gray background. The camera toggles between frontal and aerial views when the user double-clicks.'); }  function draw() { background(200);  // Draw the box. box(); }  // Toggle the current camera when the user double-clicks. function doubleClicked() { if (usingCam1 === true) { setCamera(cam2); usingCam1 = false; } else { setCamera(cam1); usingCam1 = true; } } `
+
+↩️  Returns:
+   p5.Camera - the new camera.
+
+💡 Example:
+>
+  `
+  // Double-click to toggle between cameras.
+  let cam1;
+  let cam2;
+  let usingCam1 = true;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    // Create the first camera.
+    // Keep its default settings.
+    cam1 = createCamera();
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 createFilterShader()                                                *p5.createFilterShader()*
+──────────────────────────
+
+📝 Creates a [p5.Shader](#/p5.Shader) object to be used with the [filter()](#/p5/filter) function.  `createFilterShader()` works like [createShader()](#/p5/createShader) but has a default vertex shader included. `createFilterShader()` is intended to be used along with [filter()](#/p5/filter) for filtering the contents of a canvas. A filter shader will be applied to the whole canvas instead of just [p5.Geometry](#/p5.Geometry) objects.  The parameter, `fragSrc`, sets the fragment shader. It’s a string that contains the fragment shader program written in GLSL.  The [p5.Shader](#/p5.Shader) object that's created has some uniforms that can be set: - `sampler2D tex0`, which contains the canvas contents as a texture. - `vec2 canvasSize`, which is the width and height of the canvas, not including pixel density. - `vec2 texelSize`, which is the size of a physical pixel including pixel density. This is calculated as `1.0 / (width * density)` for the pixel width and `1.0 / (height * density)` for the pixel height.  The [p5.Shader](#/p5.Shader) that's created also provides `varying vec2 vTexCoord`, a coordinate with values between 0 and 1. `vTexCoord` describes where on the canvas the pixel will be drawn.  For more info about filters and shaders, see Adam Ferriss' [repo of shader examples](https://github.com/aferriss/p5jsShaderExamples) or the [Introduction to Shaders](https://p5js.org/learn/getting-started-in-webgl-shaders.html) tutorial.    ` function setup() { let fragSrc = `precision highp float; void main() { gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0); }`;  createCanvas(100, 100, WEBGL); let s = createFilterShader(fragSrc); filter(s); describe('a yellow canvas'); } `    ` let img, s; async function setup() { img = await loadImage('assets/bricks.jpg'); let fragSrc = `precision highp float;  // x,y coordinates, given from the vertex shader varying vec2 vTexCoord;  // the canvas contents, given from filter() uniform sampler2D tex0; // other useful information from the canvas uniform vec2 texelSize; uniform vec2 canvasSize; // a custom variable from this sketch uniform float darkness;  void main() { // get the color at current pixel vec4 color = texture2D(tex0, vTexCoord); // set the output color color.b = 1.0; color *= darkness; gl_FragColor = vec4(color.rgb, 1.0); }`;  createCanvas(100, 100, WEBGL); s = createFilterShader(fragSrc); }  function draw() { image(img, -50, -50); s.setUniform('darkness', 0.5); filter(s); describe('a image of bricks tinted dark blue'); } `
+
+📋 Parameters:
+   • {String} fragSrc - source code for the fragment shader.
+
+💡 Example:
+>
+  `
+  function setup() {
+    let fragSrc = `precision highp float;
+    void main() {
+      gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+    }`;
+    createCanvas(100, 100, WEBGL);
+    let s = createFilterShader(fragSrc);
+    filter(s);
+    describe('a yellow canvas');
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 createModel()                                                *p5.createModel()*
+───────────────────
+
+📝 Load a 3d model from an OBJ or STL string.  OBJ and STL files lack a built-in sense of scale, causing models exported from different programs to vary in size. If your model doesn't display correctly, consider using `loadModel()` with `normalize` set to `true` to standardize its size. Further adjustments can be made using the `scale()` function.  Also, the support for colored STL files is not present. STL files with color will be rendered without color properties.  * Options can include: - `modelString`: Specifies the plain text string of either an stl or obj file to be loaded. - `fileType`: Defines the file extension of the model. - `normalize`: Enables standardized size scaling during loading if set to true. - `successCallback`: Callback for post-loading actions with the 3D model object. - `failureCallback`: Handles errors if model loading fails, receiving an event error. - `flipU`: Flips the U texture coordinates of the model. - `flipV`: Flips the V texture coordinates of the model.   (`.stl`, `.obj`). standardized size when loading once the model is loaded. Will be passed the 3D model object. the model fails to load.   ` const octahedron_model = ` v 0.000000E+00 0.000000E+00 40.0000 v 22.5000 22.5000 0.000000E+00 v 22.5000 -22.5000 0.000000E+00 v -22.5000 -22.5000 0.000000E+00 v -22.5000 22.5000 0.000000E+00 v 0.000000E+00 0.000000E+00 -40.0000 f     1 2 3 f     1 3 4 f     1 4 5 f     1 5 2 f     6 5 4 f     6 4 3 f     6 3 2 f     6 2 5 `; //draw a spinning octahedron let octahedron;  function setup() { createCanvas(100, 100, WEBGL); octahedron = createModel(octahedron_model, '.obj'); describe('Vertically rotating 3D octahedron.'); }  function draw() { background(200); rotateX(frameCount * 0.01); rotateY(frameCount * 0.01); model(octahedron); } `
+
+↩️  Returns:
+   p5.Geometry - the [p5.Geometry](#/p5.Geometry) object
+
+💡 Example:
+>
+  `
+  const octahedron_model = `
+  v 0.000000E+00 0.000000E+00 40.0000
+  v 22.5000 22.5000 0.000000E+00
+  v 22.5000 -22.5000 0.000000E+00
+  v -22.5000 -22.5000 0.000000E+00
+  v -22.5000 22.5000 0.000000E+00
+  v 0.000000E+00 0.000000E+00 -40.0000
+  f     1 2 3
+  f     1 3 4
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 createShader()                                                *p5.createShader()*
+────────────────────
+
+📝 Creates a new [p5.Shader](#/p5.Shader) object.  Shaders are programs that run on the graphics processing unit (GPU). They can process many pixels at the same time, making them fast for many graphics tasks. They’re written in a language called GLSL and run along with the rest of the code in a sketch.  Once the [p5.Shader](#/p5.Shader) object is created, it can be used with the [shader()](#/p5/shader) function, as in `shader(myShader)`. A shader program consists of two parts, a vertex shader and a fragment shader. The vertex shader affects where 3D geometry is drawn on the screen and the fragment shader affects color.  The first parameter, `vertSrc`, sets the vertex shader. It’s a string that contains the vertex shader program written in GLSL.  The second parameter, `fragSrc`, sets the fragment shader. It’s a string that contains the fragment shader program written in GLSL.  A shader can optionally describe *hooks,* which are functions in GLSL that users may choose to provide to customize the behavior of the shader using the [`modify()`](#/p5.Shader/modify) method of `p5.Shader`. These are added by describing the hooks in a third parameter, `options`, and referencing the hooks in your `vertSrc` or `fragSrc`. Hooks for the vertex or fragment shader are described under the `vertex` and `fragment` keys of `options`. Each one is an object. where each key is the type and name of a hook function, and each value is a string with the parameter list and default implementation of the hook. For example, to let users optionally run code at the start of the vertex shader, the options object could include:  ```js { vertex: { 'void beforeVertex': '() {}' } } ```  Then, in your vertex shader source, you can run a hook by calling a function with the same name prefixed by `HOOK_`. If you want to check if the default hook has been replaced, maybe to avoid extra overhead, you can check if the same name prefixed by `AUGMENTED_HOOK_` has been defined:  ```glsl void main() { // In most cases, just calling the hook is fine: HOOK_beforeVertex();  // Alternatively, for more efficiency: #ifdef AUGMENTED_HOOK_beforeVertex HOOK_beforeVertex(); #endif  // Add the rest of your shader code here! } ```  Note: Only filter shaders can be used in 2D mode. All shaders can be used in WebGL mode.  be augmented with hooks. It can include: vertex and fragment shaders.   ` // Note: A "uniform" is a global variable within a shader program.  // Create a string with the vertex shader program. // The vertex shader is called for each vertex. let vertSrc = ` precision highp float; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix; attribute vec3 aPosition; attribute vec2 aTexCoord; varying vec2 vTexCoord;  void main() { vTexCoord = aTexCoord; vec4 positionVec4 = vec4(aPosition, 1.0); gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4; } `;  // Create a string with the fragment shader program. // The fragment shader is called for each pixel. let fragSrc = ` precision highp float;  void main() { // Set each pixel's RGBA value to yellow. gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0); } `;  function setup() { createCanvas(100, 100, WEBGL);  // Create a p5.Shader object. let shaderProgram = createShader(vertSrc, fragSrc);  // Compile and apply the p5.Shader object. shader(shaderProgram);  // Style the drawing surface. noStroke();  // Add a plane as a drawing surface. plane(100, 100);  describe('A yellow square.'); } `    ` // Note: A "uniform" is a global variable within a shader program.  // Create a string with the vertex shader program. // The vertex shader is called for each vertex. let vertSrc = ` precision highp float; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix; attribute vec3 aPosition; attribute vec2 aTexCoord; varying vec2 vTexCoord;  void main() { vTexCoord = aTexCoord; vec4 positionVec4 = vec4(aPosition, 1.0); gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4; } `;  // Create a string with the fragment shader program. // The fragment shader is called for each pixel. let fragSrc = ` precision highp float; uniform vec2 p; uniform float r; const int numIterations = 500; varying vec2 vTexCoord;  void main() { vec2 c = p + gl_FragCoord.xy * r; vec2 z = c; float n = 0.0;  for (int i = numIterations; i > 0; i--) { if (z.x * z.x + z.y * z.y > 4.0) { n = float(i) / float(numIterations); break; } z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c; }  gl_FragColor = vec4( 0.5 - cos(n * 17.0) / 2.0, 0.5 - cos(n * 13.0) / 2.0, 0.5 - cos(n * 23.0) / 2.0, 1.0 ); } `;  function setup() { createCanvas(100, 100, WEBGL);  // Create a p5.Shader object. let mandelbrot = createShader(vertSrc, fragSrc);  // Compile and apply the p5.Shader object. shader(mandelbrot);  // Set the shader uniform p to an array. // p is the center point of the Mandelbrot image. mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);  // Set the shader uniform r to 0.005. // r is the size of the image in Mandelbrot-space. mandelbrot.setUniform('r', 0.005);  // Style the drawing surface. noStroke();  // Add a plane as a drawing surface. plane(100, 100);  describe('A black fractal image on a magenta background.'); } `    ` // Note: A "uniform" is a global variable within a shader program.  // Create a string with the vertex shader program. // The vertex shader is called for each vertex. let vertSrc = ` precision highp float; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix;  attribute vec3 aPosition; attribute vec2 aTexCoord; varying vec2 vTexCoord;  void main() { vTexCoord = aTexCoord; vec4 positionVec4 = vec4(aPosition, 1.0); gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4; } `;  // Create a string with the fragment shader program. // The fragment shader is called for each pixel. let fragSrc = ` precision highp float; uniform vec2 p; uniform float r; const int numIterations = 500; varying vec2 vTexCoord;  void main() { vec2 c = p + gl_FragCoord.xy * r; vec2 z = c; float n = 0.0;  for (int i = numIterations; i > 0; i--) { if (z.x * z.x + z.y * z.y > 4.0) { n = float(i) / float(numIterations); break; }  z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c; }  gl_FragColor = vec4( 0.5 - cos(n * 17.0) / 2.0, 0.5 - cos(n * 13.0) / 2.0, 0.5 - cos(n * 23.0) / 2.0, 1.0 ); } `;  let mandelbrot;  function setup() { createCanvas(100, 100, WEBGL);  // Create a p5.Shader object. mandelbrot = createShader(vertSrc, fragSrc);  // Apply the p5.Shader object. shader(mandelbrot);  // Set the shader uniform p to an array. // p is the center point of the Mandelbrot image. mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);  describe('A fractal image zooms in and out of focus.'); }  function draw() { // Set the shader uniform r to a value that oscillates // between 0 and 0.005. // r is the size of the image in Mandelbrot-space. let radius = 0.005 * (sin(frameCount * 0.01) + 1); mandelbrot.setUniform('r', radius);  // Style the drawing surface. noStroke();  // Add a plane as a drawing surface. plane(100, 100); } `    ` // A shader with hooks. let myShader;  // A shader with modified hooks. let modifiedShader;  // Create a string with the vertex shader program. // The vertex shader is called for each vertex. let vertSrc = ` precision highp float; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix;  attribute vec3 aPosition; attribute vec2 aTexCoord;  void main() { vec4 positionVec4 = vec4(aPosition, 1.0); gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4; } `;  // Create a fragment shader that uses a hook. let fragSrc = ` precision highp float; void main() { // Let users override the color gl_FragColor = HOOK_getColor(vec4(1., 0., 0., 1.)); } `;  function setup() { createCanvas(50, 50, WEBGL);  // Create a shader with hooks myShader = createShader(vertSrc, fragSrc, { fragment: { 'vec4 getColor': '(vec4 color) { return color; }' } });  // Make a version of the shader with a hook overridden modifiedShader = myShader.modify({ 'vec4 getColor': `(vec4 color) { return vec4(0., 0., 1., 1.); }` }); }  function draw() { noStroke();  push(); shader(myShader); translate(-width/3, 0); sphere(10); pop();  push(); shader(modifiedShader); translate(width/3, 0); sphere(10); pop(); } `
+
+📋 Parameters:
+   • {String} vertSrc - source code for the vertex shader.
+   • {String} fragSrc - source code for the fragment shader.
+
+💡 Example:
+>
+  `
+  // Note: A "uniform" is a global variable within a shader program.
+  // Create a string with the vertex shader program.
+  // The vertex shader is called for each vertex.
+  let vertSrc = `
+  precision highp float;
+  uniform mat4 uModelViewMatrix;
+  uniform mat4 uProjectionMatrix;
+  attribute vec3 aPosition;
+  attribute vec2 aTexCoord;
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 debugMode()                                                *p5.debugMode()*
+─────────────────
+
+📝 Adds a grid and an axes icon to clarify orientation in 3D sketches.  `debugMode()` adds a grid that shows where the “ground” is in a sketch. By default, the grid will run through the origin `(0, 0, 0)` of the sketch along the XZ plane. `debugMode()` also adds an axes icon that points along the positive x-, y-, and z-axes. Calling `debugMode()` displays the grid and axes icon with their default size and position.  There are four ways to call `debugMode()` with optional parameters to customize the debugging environment.  The first way to call `debugMode()` has one parameter, `mode`. If the system constant `GRID` is passed, as in `debugMode(GRID)`, then the grid will be displayed and the axes icon will be hidden. If the constant `AXES` is passed, as in `debugMode(AXES)`, then the axes icon will be displayed and the grid will be hidden.  The second way to call `debugMode()` has six parameters. The first parameter, `mode`, selects either `GRID` or `AXES` to be displayed. The next five parameters, `gridSize`, `gridDivisions`, `xOff`, `yOff`, and `zOff` are optional. They’re numbers that set the appearance of the grid (`gridSize` and `gridDivisions`) and the placement of the axes icon (`xOff`, `yOff`, and `zOff`). For example, calling `debugMode(20, 5, 10, 10, 10)` sets the `gridSize` to 20 pixels, the number of `gridDivisions` to 5, and offsets the axes icon by 10 pixels along the x-, y-, and z-axes.  The third way to call `debugMode()` has five parameters. The first parameter, `mode`, selects either `GRID` or `AXES` to be displayed. The next four parameters, `axesSize`, `xOff`, `yOff`, and `zOff` are optional. They’re numbers that set the appearance of the size of the axes icon (`axesSize`) and its placement (`xOff`, `yOff`, and `zOff`).  The fourth way to call `debugMode()` has nine optional parameters. The first five parameters, `gridSize`, `gridDivisions`, `gridXOff`, `gridYOff`, and `gridZOff` are numbers that set the appearance of the grid. For example, calling `debugMode(100, 5, 0, 0, 0)` sets the `gridSize` to 100, the number of `gridDivisions` to 5, and sets all the offsets to 0 so that the grid is centered at the origin. The next four parameters, `axesSize`, `xOff`, `yOff`, and `zOff` are numbers that set the appearance of the size of the axes icon (`axesSize`) and its placement (`axesXOff`, `axesYOff`, and `axesZOff`). For example, calling `debugMode(100, 5, 0, 0, 0, 50, 10, 10, 10)` sets the `gridSize` to 100, the number of `gridDivisions` to 5, and sets all the offsets to 0 so that the grid is centered at the origin. It then sets the `axesSize` to 50 and offsets the icon 10 pixels along each axis.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  // Enable debug mode. debugMode();  describe('A multicolor box on a gray background. A grid and axes icon are displayed near the box.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Style the box. normalMaterial();  // Draw the box. box(20, 40); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  // Enable debug mode. // Only display the axes icon. debugMode(AXES);  describe('A multicolor box on a gray background. A grid and axes icon are displayed near the box.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Style the box. normalMaterial();  // Draw the box. box(20, 40); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  // Enable debug mode. // Only display the grid and customize it: // - size: 50 // - divisions: 10 // - offsets: 0, 20, 0 debugMode(GRID, 50, 10, 0, 20, 0);  describe('A multicolor box on a gray background. A grid is displayed below the box.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Style the box. normalMaterial();  // Draw the box. box(20, 40); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  // Enable debug mode. // Display the grid and axes icon and customize them: // Grid // ---- // - size: 50 // - divisions: 10 // - offsets: 0, 20, 0 // Axes // ---- // - size: 50 // - offsets: 0, 0, 0 debugMode(50, 10, 0, 20, 0, 50, 0, 0, 0);  describe('A multicolor box on a gray background. A grid is displayed below the box. An axes icon is displayed at the center of the box.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Style the box. normalMaterial();  // Draw the box. box(20, 40); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    // Enable debug mode.
+    debugMode();
+    describe('A multicolor box on a gray background. A grid and axes icon are displayed near the box.');
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 directionalLight()                                                *p5.directionalLight()*
+────────────────────────
+
+📝 Creates a light that shines in one direction.  Directional lights don’t shine from a specific point. They’re like a sun that shines from somewhere offscreen. The light’s direction is set using three `(x, y, z)` values between -1 and 1. For example, setting a light’s direction as `(1, 0, 0)` will light [p5.Geometry](#/p5.Geometry) objects from the left since the light faces directly to the right. A maximum of 5 directional lights can be active at once.  There are four ways to call `directionalLight()` with parameters to set the light’s color and direction.  The first way to call `directionalLight()` has six parameters. The first three parameters, `v1`, `v2`, and `v3`, set the light’s color using the current [colorMode()](#/p5/colorMode). The last three parameters, `x`, `y`, and `z`, set the light’s direction. For example, `directionalLight(255, 0, 0, 1, 0, 0)` creates a red `(255, 0, 0)` light that shines to the right `(1, 0, 0)`.  The second way to call `directionalLight()` has four parameters. The first three parameters, `v1`, `v2`, and `v3`, set the light’s color using the current [colorMode()](#/p5/colorMode). The last parameter, `direction` sets the light’s direction using a [p5.Vector](#/p5.Vector) object. For example, `directionalLight(255, 0, 0, lightDir)` creates a red `(255, 0, 0)` light that shines in the direction the `lightDir` vector points.  The third way to call `directionalLight()` has four parameters. The first parameter, `color`, sets the light’s color using a [p5.Color](#/p5.Color) object or an array of color values. The last three parameters, `x`, `y`, and `z`, set the light’s direction. For example, `directionalLight(myColor, 1, 0, 0)` creates a light that shines to the right `(1, 0, 0)` with the color value of `myColor`.  The fourth way to call `directionalLight()` has two parameters. The first parameter, `color`, sets the light’s color using a [p5.Color](#/p5.Color) object or an array of color values. The second parameter, `direction`, sets the light’s direction using a [p5.Vector](#/p5.Vector) object. For example, `directionalLight(myColor, lightDir)` creates a light that shines in the direction the `lightDir` vector points with the color value of `myColor`.  [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode).   ` // Click and drag the mouse to view the scene from different angles. // Double-click to turn on the directional light.  let isLit = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A sphere drawn on a gray background. A red light starts shining from above when the user double-clicks.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Control the light. if (isLit === true) { // Add a red directional light from above. // Use RGB values and XYZ directions. directionalLight(255, 0, 0, 0, 1, 0); }  // Style the sphere. noStroke();  // Draw the sphere. sphere(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A sphere drawn on a gray background. The top of the sphere appears bright red. The color gets darker toward the bottom.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Add a red directional light from above. // Use a p5.Color object and XYZ directions. let c = color(255, 0, 0); directionalLight(c, 0, 1, 0);  // Style the sphere. noStroke();  // Draw the sphere. sphere(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A sphere drawn on a gray background. The top of the sphere appears bright red. The color gets darker toward the bottom.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Add a red directional light from above. // Use a p5.Color object and a p5.Vector object. let c = color(255, 0, 0); let lightDir = createVector(0, 1, 0); directionalLight(c, lightDir);  // Style the sphere. noStroke();  // Draw the sphere. sphere(30); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  // Double-click to turn on the directional light.
+  let isLit = false;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A sphere drawn on a gray background. A red light starts shining from above when the user double-clicks.');
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 emissiveMaterial()                                                *p5.emissiveMaterial()*
+────────────────────────
+
+📝 Sets the emissive color of shapes’ surface material.  The `emissiveMaterial()` color sets a color shapes display at full strength, regardless of lighting. This can give the appearance that a shape is glowing. However, emissive materials don’t actually emit light that can affect surrounding objects.  `emissiveMaterial()` can be called three ways with different parameters to set the material’s color.  The first way to call `emissiveMaterial()` has one parameter, `gray`. Grayscale values between 0 and 255, as in `emissiveMaterial(50)`, can be passed to set the material’s color. Higher grayscale values make shapes appear brighter.  The second way to call `emissiveMaterial()` has one parameter, `color`. A [p5.Color](#/p5.Color) object, an array of color values, or a CSS color string, as in `emissiveMaterial('magenta')`, can be passed to set the material’s color.  The third way to call `emissiveMaterial()` has four parameters, `v1`, `v2`, `v3`, and `alpha`. `alpha` is optional. RGBA, HSBA, or HSLA values can be passed to set the material’s colors, as in `emissiveMaterial(255, 0, 0)` or `emissiveMaterial(255, 0, 0, 30)`. Color values will be interpreted using the current [colorMode()](#/p5/colorMode).  Note: `emissiveMaterial()` can only be used in WebGL mode.  [colorMode()](#/p5/colorMode). current [colorMode()](#/p5/colorMode). current [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode).   ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A red cube drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a white ambient light. ambientLight(255, 255, 255);  // Add a red emissive material using RGB values. emissiveMaterial(255, 0, 0);  // Draw the box. box(); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A red cube drawn on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 flipV()                                                *p5.flipV()*
+─────────────
+
+📝 Flips the geometry’s texture v-coordinates.  In order for [texture()](#/p5/texture) to work, the geometry needs a way to map the points on its surface to the pixels in a rectangular image that's used as a texture. The geometry's vertex at coordinates `(x, y, z)` maps to the texture image's pixel at coordinates `(u, v)`.  The [myGeometry.uvs](#/p5.Geometry/uvs) array stores the `(u, v)` coordinates for each vertex in the order it was added to the geometry. Calling `myGeometry.flipV()` flips a geometry's v-coordinates so that the texture appears mirrored vertically.  For example, a plane's four vertices are added clockwise starting from the top-left corner. Here's how calling `myGeometry.flipV()` would change a plane's texture coordinates:  ```js // Print the original texture coordinates. // Output: [0, 0, 1, 0, 0, 1, 1, 1] console.log(myGeometry.uvs);  // Flip the v-coordinates. myGeometry.flipV();  // Print the flipped texture coordinates. // Output: [0, 1, 1, 1, 0, 0, 1, 0] console.log(myGeometry.uvs);  // Notice the swaps: // Left vertices: [0, 0]  [1, 0] // Right vertices: [1, 0]  [1, 1] ```    ` let img;  async function setup() { img = await loadImage('assets/laDefense.jpg'); createCanvas(100, 100, WEBGL);  background(200);  // Create p5.Geometry objects. let geom1 = buildGeometry(createShape); let geom2 = buildGeometry(createShape);  // Flip geom2's V texture coordinates. geom2.flipV();  // Left (original). push(); translate(-25, 0, 0); texture(img); noStroke(); model(geom1); pop();  // Right (flipped). push(); translate(25, 0, 0); texture(img); noStroke(); model(geom2); pop();  describe( 'Two photos of a ceiling on a gray background. The photos are mirror images of each other.' ); }  function createShape() { plane(40); } `
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    img = await loadImage('assets/laDefense.jpg');
+    createCanvas(100, 100, WEBGL);
+    background(200);
+    // Create p5.Geometry objects.
+    let geom1 = buildGeometry(createShape);
+    let geom2 = buildGeometry(createShape);
+    // Flip geom2's V texture coordinates.
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 fromAxisAngle()                                                *p5.fromAxisAngle()*
+─────────────────────
+
+📝 Returns a Quaternion for the axis angle representation of the rotation
+
+🔗 See also: |p5.3d|
+
+
+🔧 frustum()                                                *p5.frustum()*
+───────────────
+
+📝 Sets the frustum of the current camera in a 3D sketch.  In a frustum projection, shapes that are further from the camera appear smaller than shapes that are near the camera. This technique, called foreshortening, creates realistic 3D scenes.  `frustum()` changes the default camera’s perspective by changing its viewing frustum. The frustum is the volume of space that’s visible to the camera. The frustum’s shape is a pyramid with its top cut off. The camera is placed where the top of the pyramid should be and points towards the base of the pyramid. It views everything within the frustum.  The first four parameters, `left`, `right`, `bottom`, and `top`, set the coordinates of the frustum’s sides, bottom, and top. For example, calling `frustum(-100, 100, 200, -200)` creates a frustum that’s 200 pixels wide and 400 pixels tall. By default, these coordinates are set based on the sketch’s width and height, as in `ortho(-width / 20, width / 20, height / 20, -height / 20)`.  The last two parameters, `near` and `far`, set the distance of the frustum’s near and far plane from the camera. For example, calling `ortho(-100, 100, 200, -200, 50, 1000)` creates a frustum that’s 200 pixels wide, 400 pixels tall, starts 50 pixels from the camera, and ends 1,000 pixels from the camera. By default, near is set to `0.1 * 800`, which is 1/10th the default distance between the camera and the origin. `far` is set to `10 * 800`, which is 10 times the default distance between the camera and the origin.  Note: `frustum()` can only be used in WebGL mode.    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A row of white cubes on a gray background.'); }  function draw() { background(200);  // Apply the default frustum projection. frustum();  // Translate the origin toward the camera. translate(-10, 10, 600);  // Rotate the coordinate system. rotateY(-0.1); rotateX(-0.1);  // Draw the row of boxes. for (let i = 0; i    ` function setup() { createCanvas(100, 100, WEBGL); describe('A white cube on a gray background.'); }  function draw() { background(200);  // Adjust the frustum. // Center it. // Set its width and height to 20 pixels. // Place its near plane 300 pixels from the camera. // Place its far plane 350 pixels from the camera. frustum(-10, 10, -10, 10, 300, 350);  // Translate the origin toward the camera. translate(-10, 10, 600);  // Rotate the coordinate system. rotateY(-0.1); rotateX(-0.1);  // Draw the row of boxes. for (let i = 0; i
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A row of white cubes on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Apply the default frustum projection.
+    frustum();
+    // Translate the origin toward the camera.
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 imageLight()                                                *p5.imageLight()*
+──────────────────
+
+📝 Creates an ambient light from an image.  `imageLight()` simulates a light shining from all directions. The effect is like placing the sketch at the center of a giant sphere that uses the image as its texture. The image's diffuse light will be affected by [fill()](#/p5/fill) and the specular reflections will be affected by [specularMaterial()](#/p5/specularMaterial) and [shininess()](#/p5/shininess).  The parameter, `img`, is the [p5.Image](#/p5.Image) object to use as the light source.    ` // Click and drag the mouse to view the scene from different angles.  let img;  async function setup() { // Load an image and create a p5.Image object. img = await loadImage('assets/outdoor_spheremap.jpg');  createCanvas(100, 100, WEBGL);  describe('A sphere floating above a landscape. The surface of the sphere reflects the landscape.'); }  function draw() { // Enable orbiting with the mouse. orbitControl();  // Draw the image as a panorama (360˚ background). panorama(img);  // Add a soft ambient light. ambientLight(50);  // Add light from the image. imageLight(img);  // Style the sphere. specularMaterial(20); shininess(100); noStroke();  // Draw the sphere. sphere(30); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  let img;
+  async function setup() {
+    // Load an image and create a p5.Image object.
+    img = await loadImage('assets/outdoor_spheremap.jpg');
+    createCanvas(100, 100, WEBGL);
+    describe('A sphere floating above a landscape. The surface of the sphere reflects the landscape.');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 imageShader()                                                *p5.imageShader()*
+───────────────────
+
+📝 Sets the [p5.Shader](#/p5.Shader) object to apply for images.  This method allows the user to apply a custom shader to images, enabling advanced visual effects such as pixel manipulation, color adjustments, or dynamic behavior. The shader will be applied to the image drawn using the [image()](#/p5/image) function.  The shader will be used exclusively for: - `image()` calls, applying only when drawing 2D images. - This shader will NOT apply to images used in [texture()](#/p5/texture) or other 3D contexts. Any attempts to use the imageShader in these cases will be ignored.  to apply for images.   ` let img; let imgShader;  async function setup() { img = await loadImage('assets/outdoor_image.jpg');  createCanvas(200, 200, WEBGL); noStroke();  imgShader = createShader(` precision mediump float; attribute vec3 aPosition; attribute vec2 aTexCoord; varying vec2 vTexCoord; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix;  void main() { vTexCoord = aTexCoord; gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aPosition, 1.0); } `, ` precision mediump float; varying vec2 vTexCoord; uniform sampler2D uTexture; uniform vec2 uMousePos;  void main() { vec4 texColor = texture2D(uTexture, vTexCoord); // Adjust the color based on mouse position float r = uMousePos.x * texColor.r; float g = uMousePos.y * texColor.g; gl_FragColor = vec4(r, g, texColor.b, texColor.a); } `);  describe( 'An image on a gray background where the colors change based on the mouse position.' ); }  function draw() { background(220);  imageShader(imgShader);  // Map the mouse position to a range between 0 and 1 let mousePosX = map(mouseX, 0, width, 0, 1); let mousePosY = map(mouseY, 0, height, 0, 1);  // Pass the mouse position to the shader as a uniform imgShader.setUniform('uMousePos', [mousePosX, mousePosY]);  // Bind the image texture to the shader imgShader.setUniform('uTexture', img);  image(img, -width / 2, -height / 2, width, height); }  `    ` let img; let imgShader;  async function setup() { img = await loadImage('assets/outdoor_image.jpg');  createCanvas(200, 200, WEBGL); noStroke();  imgShader = createShader(` precision mediump float; attribute vec3 aPosition; attribute vec2 aTexCoord; varying vec2 vTexCoord; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix;  void main() { vTexCoord = aTexCoord; gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aPosition, 1.0); } `, ` precision mediump float; varying vec2 vTexCoord; uniform sampler2D uTexture; uniform vec2 uMousePos;  void main() { // Distance from the current pixel to the mouse float distFromMouse = distance(vTexCoord, uMousePos);  // Adjust pixelation based on distance (closer = more detail, farther = blockier) float pixelSize = mix(0.002, 0.05, distFromMouse); vec2 pixelatedCoord = vec2(floor(vTexCoord.x / pixelSize) * pixelSize, floor(vTexCoord.y / pixelSize) * pixelSize);  vec4 texColor = texture2D(uTexture, pixelatedCoord); gl_FragColor = texColor; } `);  describe('A static image with a grid-like, pixelated effect created by the shader. Each cell in the grid alternates visibility, producing a dithered visual effect.'); }  function draw() { background(220); imageShader(imgShader);  let mousePosX = map(mouseX, 0, width, 0, 1); let mousePosY = map(mouseY, 0, height, 0, 1);  imgShader.setUniform('uMousePos', [mousePosX, mousePosY]); imgShader.setUniform('uTexture', img); image(img, -width / 2, -height / 2, width, height); } `
+
+📋 Parameters:
+   • {p5.Shader} s - [p5.Shader](#/p5.Shader) object
+
+💡 Example:
+>
+  `
+  let img;
+  let imgShader;
+  async function setup() {
+    img = await loadImage('assets/outdoor_image.jpg');
+    createCanvas(200, 200, WEBGL);
+    noStroke();
+    imgShader = createShader(`
+      precision mediump float;
+      attribute vec3 aPosition;
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 lightFalloff()                                                *p5.lightFalloff()*
+────────────────────
+
+📝 Sets the falloff rate for [pointLight()](#/p5/pointLight) and [spotLight()](#/p5/spotLight).  A light’s falloff describes the intensity of its beam at a distance. For example, a lantern has a slow falloff, a flashlight has a medium falloff, and a laser pointer has a sharp falloff.  `lightFalloff()` has three parameters, `constant`, `linear`, and `quadratic`. They’re numbers used to calculate falloff at a distance, `d`, as follows:  `falloff = 1 / (constant + d * linear + (d * d) * quadratic)`  Note: `constant`, `linear`, and `quadratic` should always be set to values greater than 0.    ` // Click and drag the mouse to view the scene from different angles. // Double-click to change the falloff rate.  let useFalloff = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A sphere drawn against a gray background. The intensity of the light changes when the user double-clicks.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Set the light falloff. if (useFalloff === true) { lightFalloff(2, 0, 0); }  // Add a white point light from the front. pointLight(255, 255, 255, 0, 0, 100);  // Style the sphere. noStroke();  // Draw the sphere. sphere(30); }  // Change the falloff value when the user double-clicks. function doubleClicked() { useFalloff = true; } `
+
+📋 Parameters:
+   • {Number} constant - constant value for calculating falloff.
+   • {Number} linear - linear value for calculating falloff.
+   • {Number} quadratic - quadratic value for calculating falloff.
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  // Double-click to change the falloff rate.
+  let useFalloff = false;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A sphere drawn against a gray background. The intensity of the light changes when the user double-clicks.');
+  }
+  function draw() {
+    background(50);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 lights()                                                *p5.lights()*
+──────────────
+
+📝 Places an ambient and directional light in the scene. The lights are set to ambientLight(128, 128, 128) and directionalLight(128, 128, 128, 0, 0, -1).  Note: lights need to be called (whether directly or indirectly) within draw() to remain persistent in a looping program. Placing them in setup() will cause them to only have an effect the first time through the loop.    ` // Click and drag the mouse to view the scene from different angles. // Double-click to turn on the lights.  let isLit = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A white box drawn against a gray background. The quality of the light changes when the user double-clicks.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Control the lights. if (isLit === true) { lights(); }  // Draw the box. box(); }  // Turn on the lights when the user double-clicks. function doubleClicked() { isLit = true; } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white box drawn against a gray background.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. ambientLight(128, 128, 128); directionalLight(128, 128, 128, 0, 0, -1);  // Draw the box. box(); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  // Double-click to turn on the lights.
+  let isLit = false;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white box drawn against a gray background. The quality of the light changes when the user double-clicks.');
+  }
+  function draw() {
+    background(50);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 linePerspective()                                                *p5.linePerspective()*
+───────────────────────
+
+📝 Enables or disables perspective for lines in 3D sketches.  In WebGL mode, lines can be drawn with a thinner stroke when they’re further from the camera. Doing so gives them a more realistic appearance.  By default, lines are drawn differently based on the type of perspective being used: - `perspective()` and `frustum()` simulate a realistic perspective. In these modes, stroke weight is affected by the line’s distance from the camera. Doing so results in a more natural appearance. `perspective()` is the default mode for 3D sketches. - `ortho()` doesn’t simulate a realistic perspective. In this mode, stroke weights are consistent regardless of the line’s distance from the camera. Doing so results in a more predictable and consistent appearance.  `linePerspective()` can override the default line drawing mode.  The parameter, `enable`, is optional. It’s a `Boolean` value that sets the way lines are drawn. If `true` is passed, as in `linePerspective(true)`, then lines will appear thinner when they are further from the camera. If `false` is passed, as in `linePerspective(false)`, then lines will have consistent stroke weights regardless of their distance from the camera. By default, `linePerspective()` is enabled.  Calling `linePerspective()` without passing an argument returns `true` if it's enabled and `false` if not.  Note: `linePerspective()` can only be used in WebGL mode.    ` // Double-click the canvas to toggle the line perspective.  function setup() { createCanvas(100, 100, WEBGL);  describe( 'A white cube with black edges on a gray background. Its edges toggle between thick and thin when the user double-clicks.' ); }  function draw() { background(200);  // Translate the origin toward the camera. translate(-10, 10, 600);  // Rotate the coordinate system. rotateY(-0.1); rotateX(-0.1);  // Draw the row of boxes. for (let i = 0; i    ` // Double-click the canvas to toggle the line perspective.  function setup() { createCanvas(100, 100, WEBGL);  describe( 'A row of cubes with black edges on a gray background. Their edges toggle between thick and thin when the user double-clicks.' ); }  function draw() { background(200);  // Use an orthographic projection. ortho();  // Translate the origin toward the camera. translate(-10, 10, 600);  // Rotate the coordinate system. rotateY(-0.1); rotateX(-0.1);  // Draw the row of boxes. for (let i = 0; i
+
+📋 Parameters:
+   • {Boolean} enable - whether to enable line perspective.
+
+💡 Example:
+>
+  `
+  // Double-click the canvas to toggle the line perspective.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe(
+      'A white cube with black edges on a gray background. Its edges toggle between thick and thin when the user double-clicks.'
+    );
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 loadFilterShader()                                                *p5.loadFilterShader()*
+────────────────────────
+
+📝 Creates and loads a filter shader from an external file.  loaded. Will be passed the [p5.Shader](#/p5.Shader) object. loading the shader. Will be passed the error event.   ` let myShader;  async function setup() { myShader = await loadFilterShader('assets/basic.frag'); createCanvas(100, 100, WEBGL); noStroke(); }  function draw() { // shader() sets the active shader with our shader shader(myShader);  // rect gives us some geometry on the screen rect(-50, -50, width, height); } `  A rectangle with a shader applied to it.
+
+📋 Parameters:
+   • {String} fragFilename - path to the fragment shader file
+
+↩️  Returns:
+   Promise - a promise that resolves with a shader object
+
+💡 Example:
+>
+  `
+  let myShader;
+  async function setup() {
+    myShader = await loadFilterShader('assets/basic.frag');
+    createCanvas(100, 100, WEBGL);
+    noStroke();
+  }
+  function draw() {
+    // shader() sets the active shader with our shader
+    shader(myShader);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 loadModel()                                                *p5.loadModel()*
+─────────────────
+
+📝 Loads a 3D model to create a [p5.Geometry](#/p5.Geometry) object.  `loadModel()` can load 3D models from OBJ and STL files. Once the model is loaded, it can be displayed with the [model()](#/p5/model) function, as in `model(shape)`.  There are three ways to call `loadModel()` with optional parameters to help process the model.  The first parameter, `path`, is a `String` with the path to the file. Paths to local files should be relative, as in `loadModel('assets/model.obj')`. URLs such as `'https://example.com/model.obj'` may be blocked due to browser security. The `path` parameter can also be defined as a [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) object for more advanced usage. Note: When loading a `.obj` file that references materials stored in `.mtl` files, p5.js will attempt to load and apply those materials. To ensure that the `.obj` file reads the `.mtl` file correctly include the `.mtl` file alongside it.  The first way to call `loadModel()` has three optional parameters after the file path. The first optional parameter, `successCallback`, is a function to call once the model loads. For example, `loadModel('assets/model.obj', handleModel)` will call the `handleModel()` function once the model loads. The second optional parameter, `failureCallback`, is a function to call if the model fails to load. For example, `loadModel('assets/model.obj', handleModel, handleFailure)` will call the `handleFailure()` function if an error occurs while loading. The third optional parameter, `fileType`, is the model’s file extension as a string. For example, `loadModel('assets/model', handleModel, handleFailure, '.obj')` will try to load the file model as a `.obj` file.  The second way to call `loadModel()` has four optional parameters after the file path. The first optional parameter is a `Boolean` value. If `true` is passed, as in `loadModel('assets/model.obj', true)`, then the model will be resized to ensure it fits the canvas. The next three parameters are `successCallback`, `failureCallback`, and `fileType` as described above.  The third way to call `loadModel()` has one optional parameter after the file path. The optional parameter, `options`, is an `Object` with options, as in `loadModel('assets/model.obj', options)`. The `options` object can have the following properties:  ```js let options = { // Enables standardized size scaling during loading if set to true. normalize: true,  // Function to call once the model loads. successCallback: handleModel,  // Function to call if an error occurs while loading. failureCallback: handleError,  // Model's file extension. fileType: '.stl',  // Flips the U texture coordinates of the model. flipU: false,  // Flips the V texture coordinates of the model. flipV: false };  // Pass the options object to loadModel(). loadModel('assets/model.obj', options); ```  This function returns a `Promise` and should be used in an `async` setup with `await`. See the examples for the usage syntax.  Note: There’s no support for colored STL files. STL files with color will be rendered without color.  the [p5.Geometry](#/p5.Geometry) object.   ` // Click and drag the mouse to view the scene from different angles.  let shape;  // Load the file and create a p5.Geometry object. async function setup() { shape = await loadModel('assets/teapot.obj');  createCanvas(100, 100, WEBGL);  describe('A white teapot drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the shape. model(shape); } `    ` // Click and drag the mouse to view the scene from different angles.  let shape;  // Load the file and create a p5.Geometry object. // Normalize the geometry's size to fit the canvas. async function setup() { shape = await loadModel('assets/teapot.obj', true);  createCanvas(100, 100, WEBGL);  describe('A white teapot drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the shape. model(shape); } `    ` // Click and drag the mouse to view the scene from different angles.  let shape;  // Load the file and create a p5.Geometry object. async function setup() { await loadModel('assets/teapot.obj', true, handleModel);  createCanvas(100, 100, WEBGL);  describe('A white teapot drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the shape. model(shape); }  // Set the shape variable and log the geometry's // ID to the console. function handleModel(data) { shape = data; console.log(shape.gid); } `    ` // Click and drag the mouse to view the scene from different angles.  let shape;  // Load the file and create a p5.Geometry object. async function setup() { await loadModel('assets/teapot.obj', true, handleModel, handleError);  createCanvas(100, 100, WEBGL);  describe('A white teapot drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the shape. model(shape); }  // Set the shape variable and print the geometry's // ID to the console. function handleModel(data) { shape = data; console.log(shape.gid); }  // Print an error message if the file doesn't load. function handleError(error) { console.error('Oops!', error); } `    ` // Click and drag the mouse to view the scene from different angles.  let shape;  // Load the file and create a p5.Geometry object. async function setup() { await loadModel('assets/teapot.obj', '.obj', true, handleModel, handleError);  createCanvas(100, 100, WEBGL);  describe('A white teapot drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the shape. model(shape); }  // Set the shape variable and print the geometry's // ID to the console. function handleModel(data) { shape = data; console.log(shape.gid); }  // Print an error message if the file doesn't load. function handleError(error) { console.error('Oops!', error); } `    ` // Click and drag the mouse to view the scene from different angles.  let shape; let options = { fileType: '.obj', normalize: true, successCallback: handleModel, failureCallback: handleError };  // Load the file and create a p5.Geometry object. async function setup() { await loadModel('assets/teapot.obj', options);  createCanvas(100, 100, WEBGL);  describe('A white teapot drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the shape. model(shape); }  // Set the shape variable and print the geometry's // ID to the console. function handleModel(data) { shape = data; console.log(shape.gid); }  // Print an error message if the file doesn't load. function handleError(error) { console.error('Oops!', error); } `
+
+↩️  Returns:
+   Promise - the [p5.Geometry](#/p5.Geometry) object
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  let shape;
+  // Load the file and create a p5.Geometry object.
+  async function setup() {
+    shape = await loadModel('assets/teapot.obj');
+    createCanvas(100, 100, WEBGL);
+    describe('A white teapot drawn against a gray background.');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 loadShader()                                                *p5.loadShader()*
+──────────────────
+
+📝 Loads vertex and fragment shaders to create a [p5.Shader](#/p5.Shader) object.  Shaders are programs that run on the graphics processing unit (GPU). They can process many pixels at the same time, making them fast for many graphics tasks. They’re written in a language called GLSL and run along with the rest of the code in a sketch.  Once the [p5.Shader](#/p5.Shader) object is created, it can be used with the [shader()](#/p5/shader) function, as in `shader(myShader)`. A shader program consists of two files, a vertex shader and a fragment shader. The vertex shader affects where 3D geometry is drawn on the screen and the fragment shader affects color.  `loadShader()` loads the vertex and fragment shaders from their `.vert` and `.frag` files. For example, calling `loadShader('assets/shader.vert', 'assets/shader.frag')` loads both required shaders and returns a [p5.Shader](#/p5.Shader) object.  The third parameter, `successCallback`, is optional. If a function is passed, it will be called once the shader has loaded. The callback function can use the new [p5.Shader](#/p5.Shader) object as its parameter. The return value of the `successCallback()` function will be used as the final return value of `loadShader()`.  The fourth parameter, `failureCallback`, is also optional. If a function is passed, it will be called if the shader fails to load. The callback function can use the event error as its parameter. The return value of the ` failureCallback()` function will be used as the final return value of `loadShader()`.  This function returns a `Promise` and should be used in an `async` setup with `await`. See the examples for the usage syntax.  Note: Shaders can only be used in WebGL mode.  [p5.Shader](#/p5.Shader) object. `Error` event object.   ` // Note: A "uniform" is a global variable within a shader program.  let mandelbrot;  // Load the shader and create a p5.Shader object. async function setup() { mandelbrot = await loadShader('assets/shader.vert', 'assets/shader.frag');  createCanvas(100, 100, WEBGL);  // Compile and apply the p5.Shader object. shader(mandelbrot);  // Set the shader uniform p to an array. mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);  // Set the shader uniform r to the value 1.5. mandelbrot.setUniform('r', 1.5);  // Add a quad as a display surface for the shader. quad(-1, -1, 1, -1, 1, 1, -1, 1);  describe('A black fractal image on a magenta background.'); } `    ` // Note: A "uniform" is a global variable within a shader program.  let mandelbrot;  // Load the shader and create a p5.Shader object. async function setup() { mandelbrot = await loadShader('assets/shader.vert', 'assets/shader.frag');  createCanvas(100, 100, WEBGL);  // Use the p5.Shader object. shader(mandelbrot);  // Set the shader uniform p to an array. mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);  describe('A fractal image zooms in and out of focus.'); }  function draw() { // Set the shader uniform r to a value that oscillates between 0 and 2. mandelbrot.setUniform('r', sin(frameCount * 0.01) + 1);  // Add a quad as a display surface for the shader. quad(-1, -1, 1, -1, 1, 1, -1, 1); } `
+
+📋 Parameters:
+   • {String|Request} vertFilename - path of the vertex shader to be loaded.
+   • {String|Request} fragFilename - path of the fragment shader to be loaded.
+
+↩️  Returns:
+   Promise - new shader created from the vertex and fragment shader files.
+
+💡 Example:
+>
+  `
+  // Note: A "uniform" is a global variable within a shader program.
+  let mandelbrot;
+  // Load the shader and create a p5.Shader object.
+  async function setup() {
+    mandelbrot = await loadShader('assets/shader.vert', 'assets/shader.frag');
+    createCanvas(100, 100, WEBGL);
+    // Compile and apply the p5.Shader object.
+    shader(mandelbrot);
+    // Set the shader uniform p to an array.
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 metalness()                                                *p5.metalness()*
+─────────────────
+
+📝 Sets the amount of "metalness" of a [specularMaterial()](#/p5/specularMaterial).  `metalness()` can make materials appear more metallic. It affects the way materials reflect light sources including affects the way materials reflect light sources including [directionalLight()](#/p5/directionalLight), [pointLight()](#/p5/pointLight), [spotLight()](#/p5/spotLight), and [imageLight()](#/p5/imageLight).  The parameter, `metallic`, is a number that sets the amount of metalness. `metallic` must be greater than 1, which is its default value. Higher values, such as `metalness(100)`, make specular materials appear more metallic.    ` function setup() { createCanvas(100, 100, WEBGL);  describe( 'Two blue spheres drawn on a gray background. White light reflects from their surfaces as the mouse moves. The right sphere is more metallic than the left sphere.' ); }  function draw() { background(200);  // Turn on an ambient light. ambientLight(200);  // Get the mouse's coordinates. let mx = mouseX - 50; let my = mouseY - 50;  // Turn on a white point light that follows the mouse. pointLight(255, 255, 255, mx, my, 50);  // Style the spheres. noStroke(); fill(30, 30, 255); specularMaterial(255); shininess(20);  // Draw the left sphere with low metalness. translate(-25, 0, 0); metalness(1); sphere(20);  // Draw the right sphere with high metalness. translate(50, 0, 0); metalness(50); sphere(20); } `    ` // Click and drag the mouse to view the scene from different angles.  let img;  async function setup() { img = await loadImage('assets/outdoor_spheremap.jpg');  createCanvas(100 ,100 ,WEBGL);  describe( 'Two spheres floating above a landscape. The surface of the spheres reflect the landscape. The right sphere is more reflective than the left sphere.' ); }  function draw() { // Add the panorama. panorama(img);  // Enable orbiting with the mouse. orbitControl();  // Use the image as a light source. imageLight(img);  // Style the spheres. noStroke(); specularMaterial(50); shininess(200);  // Draw the left sphere with low metalness. translate(-25, 0, 0); metalness(1); sphere(20);  // Draw the right sphere with high metalness. translate(50, 0, 0); metalness(50); sphere(20); } `
+
+📋 Parameters:
+   • {Number} metallic - amount of metalness.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe(
+      'Two blue spheres drawn on a gray background. White light reflects from their surfaces as the mouse moves. The right sphere is more metallic than the left sphere.'
+    );
+  }
+  function draw() {
+    background(200);
+    // Turn on an ambient light.
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 model()                                                *p5.model()*
+─────────────
+
+📝 Draws a [p5.Geometry](#/p5.Geometry) object to the canvas.  The parameter, `model`, is the [p5.Geometry](#/p5.Geometry) object to draw. [p5.Geometry](#/p5.Geometry) objects can be built with [buildGeometry()](#/p5/buildGeometry), or [beginGeometry()](#/p5/beginGeometry) and [endGeometry()](#/p5/endGeometry). They can also be loaded from a file with [loadGeometry()](#/p5/loadGeometry).  Note: `model()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  let shape;  function setup() { createCanvas(100, 100, WEBGL);  // Create the p5.Geometry object. shape = buildGeometry(createShape);  describe('A white cone drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the p5.Geometry object. model(shape); }  // Create p5.Geometry object from a single cone. function createShape() { cone(); } `    ` // Click and drag the mouse to view the scene from different angles.  let shape;  function setup() { createCanvas(100, 100, WEBGL);  // Create the p5.Geometry object. shape = buildGeometry(createArrow);  describe('Two white arrows drawn on a gray background. The arrow on the right rotates slowly.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. lights();  // Style the arrows. noStroke();  // Draw the p5.Geometry object. model(shape);  // Translate and rotate the coordinate system. translate(30, 0, 0); rotateZ(frameCount * 0.01);  // Draw the p5.Geometry object again. model(shape); }  function createArrow() { // Add shapes to the p5.Geometry object. push(); rotateX(PI); cone(10); translate(0, -10, 0); cylinder(3, 20); pop(); } `    ` // Click and drag the mouse to view the scene from different angles.  let shape;  async function setup() { shape = await loadModel('assets/octahedron.obj');  createCanvas(100, 100, WEBGL);  describe('A white octahedron drawn against a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Draw the shape. model(shape); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  let shape;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    // Create the p5.Geometry object.
+    shape = buildGeometry(createShape);
+    describe('A white cone drawn on a gray background.');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 mult()                                                *p5.mult()*
+────────────
+
+📝 Multiplies a quaternion with other quaternion.
+
+🔗 See also: |p5.3d|
+
+
+🔧 noDebugMode()                                                *p5.noDebugMode()*
+───────────────────
+
+📝 Turns off [debugMode()](#/p5/debugMode) in a 3D sketch.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  // Enable debug mode. debugMode();  describe('A multicolor box on a gray background. A grid and axes icon are displayed near the box. They disappear when the user double-clicks.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Style the box. normalMaterial();  // Draw the box.  box(20, 40); }  // Disable debug mode when the user double-clicks. function doubleClicked() { noDebugMode(); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    // Enable debug mode.
+    debugMode();
+    describe('A multicolor box on a gray background. A grid and axes icon are displayed near the box. They disappear when the user double-clicks.');
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 noLights()                                                *p5.noLights()*
+────────────────
+
+📝 Removes all lights from the sketch.  Calling `noLights()` removes any lights created with [lights()](#/p5/lights), [ambientLight()](#/p5/ambientLight), [directionalLight()](#/p5/directionalLight), [pointLight()](#/p5/pointLight), or [spotLight()](#/p5/spotLight). These functions may be called after `noLights()` to create a new lighting scheme.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('Two spheres drawn against a gray background. The top sphere is white and the bottom sphere is red.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. lights();  // Style the spheres. noStroke();  // Draw the top sphere. push(); translate(0, -25, 0); sphere(20); pop();  // Turn off the lights. noLights();  // Add a red directional light that points into the screen. directionalLight(255, 0, 0, 0, 0, -1);  // Draw the bottom sphere. push(); translate(0, 25, 0); sphere(20); pop(); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('Two spheres drawn against a gray background. The top sphere is white and the bottom sphere is red.');
+  }
+  function draw() {
+    background(50);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 normalMaterial()                                                *p5.normalMaterial()*
+──────────────────────
+
+📝 Sets the current material as a normal material.  A normal material sets surfaces facing the x-axis to red, those facing the y-axis to green, and those facing the z-axis to blue. Normal material isn't affected by light. It’s often used as a placeholder material when debugging.  Note: `normalMaterial()` can only be used in WebGL mode.    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A multicolor torus drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Style the torus. normalMaterial();  // Draw the torus. torus(30); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A multicolor torus drawn on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 orbitControl()                                                *p5.orbitControl()*
+────────────────────
+
+📝 Allows the user to orbit around a 3D sketch using a mouse, trackpad, or touchscreen.  3D sketches are viewed through an imaginary camera. Calling `orbitControl()` within the [draw()](#/p5/draw) function allows the user to change the camera’s position:  ```js function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Rest of sketch. } ```  Left-clicking and dragging or swipe motion will rotate the camera position about the center of the sketch. Right-clicking and dragging or multi-swipe will pan the camera position without rotation. Using the mouse wheel (scrolling) or pinch in/out will move the camera further or closer from the center of the sketch.  The first three parameters, `sensitivityX`, `sensitivityY`, and `sensitivityZ`, are optional. They’re numbers that set the sketch’s sensitivity to movement along each axis. For example, calling `orbitControl(1, 2, -1)` keeps movement along the x-axis at its default value, makes the sketch twice as sensitive to movement along the y-axis, and reverses motion along the z-axis. By default, all sensitivity values are 1.  The fourth parameter, `options`, is also optional. It’s an object that changes the behavior of orbiting. For example, calling `orbitControl(1, 1, 1, options)` keeps the default sensitivity values while changing the behaviors set with `options`. The object can have the following properties:  ```js let options = { // Setting this to false makes mobile interactions smoother by // preventing accidental interactions with the page while orbiting. // By default, it's true. disableTouchActions: true,  // Setting this to true makes the camera always rotate in the // direction the mouse/touch is moving. // By default, it's false. freeRotation: false };  orbitControl(1, 1, 1, options); ```    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A multicolor box on a gray background. The camera angle changes when the user interacts using a mouse, trackpad, or touchscreen.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Style the box. normalMaterial();  // Draw the box. box(30, 50); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A multicolor box on a gray background. The camera angle changes when the user interacts using a mouse, trackpad, or touchscreen.'); }  function draw() { background(200);  // Enable orbiting with the mouse. // Make the interactions 3X sensitive. orbitControl(3, 3, 3);  // Style the box. normalMaterial();  // Draw the box. box(30, 50); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A multicolor box on a gray background. The camera angle changes when the user interacts using a mouse, trackpad, or touchscreen.'); }  function draw() { background(200);  // Create an options object. let options = { disableTouchActions: false, freeRotation: true };  // Enable orbiting with the mouse. // Prevent accidental touch actions on touchscreen devices // and enable free rotation. orbitControl(1, 1, 1, options);  // Style the box. normalMaterial();  // Draw the box. box(30, 50); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A multicolor box on a gray background. The camera angle changes when the user interacts using a mouse, trackpad, or touchscreen.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 ortho()                                                *p5.ortho()*
+─────────────
+
+📝 Sets an orthographic projection for the current camera in a 3D sketch.  In an orthographic projection, shapes with the same size always appear the same size, regardless of whether they are near or far from the camera.  `ortho()` changes the camera’s perspective by changing its viewing frustum from a truncated pyramid to a rectangular prism. The camera is placed in front of the frustum and views everything between the frustum’s near plane and its far plane. `ortho()` has six optional parameters to define the frustum.  The first four parameters, `left`, `right`, `bottom`, and `top`, set the coordinates of the frustum’s sides, bottom, and top. For example, calling `ortho(-100, 100, 200, -200)` creates a frustum that’s 200 pixels wide and 400 pixels tall. By default, these coordinates are set based on the sketch’s width and height, as in `ortho(-width / 2, width / 2, -height / 2, height / 2)`.  The last two parameters, `near` and `far`, set the distance of the frustum’s near and far plane from the camera. For example, calling `ortho(-100, 100, 200, 200, 50, 1000)` creates a frustum that’s 200 pixels wide, 400 pixels tall, starts 50 pixels from the camera, and ends 1,000 pixels from the camera. By default, `near` and `far` are set to 0 and `max(width, height) + 800`, respectively.  Note: `ortho()` can only be used in WebGL mode.    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A row of tiny, white cubes on a gray background. All the cubes appear the same size.'); }  function draw() { background(200);  // Apply an orthographic projection. ortho();  // Translate the origin toward the camera. translate(-10, 10, 600);  // Rotate the coordinate system. rotateY(-0.1); rotateX(-0.1);  // Draw the row of boxes. for (let i = 0; i    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A white cube on a gray background.'); }  function draw() { background(200);  // Apply an orthographic projection. // Center the frustum. // Set its width and height to 20. // Place its near plane 300 pixels from the camera. // Place its far plane 350 pixels from the camera. ortho(-10, 10, -10, 10, 300, 350);  // Translate the origin toward the camera. translate(-10, 10, 600);  // Rotate the coordinate system. rotateY(-0.1); rotateX(-0.1);  // Draw the row of boxes. for (let i = 0; i
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A row of tiny, white cubes on a gray background. All the cubes appear the same size.');
+  }
+  function draw() {
+    background(200);
+    // Apply an orthographic projection.
+    ortho();
+    // Translate the origin toward the camera.
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 panorama()                                                *p5.panorama()*
+────────────────
+
+📝 Creates an immersive 3D background.  `panorama()` transforms images containing 360˚ content, such as maps or HDRIs, into immersive 3D backgrounds that surround a sketch. Exploring the space requires changing the camera's perspective with functions such as [orbitControl()](#/p5/orbitControl) or [camera()](#/p5/camera).    ` // Click and drag the mouse to view the scene from different angles.  let img;  async function setup() { // Load an image and create a p5.Image object. img = await loadImage('assets/outdoor_spheremap.jpg');  createCanvas(100, 100, WEBGL);  describe('A sphere floating above a landscape. The surface of the sphere reflects the landscape. The full landscape is viewable in 3D as the user drags the mouse.'); }  function draw() { // Add the panorama. panorama(img);  // Enable orbiting with the mouse. orbitControl();  // Use the image as a light source. imageLight(img);  // Style the sphere. noStroke(); specularMaterial(50); shininess(200); metalness(100);  // Draw the sphere. sphere(30); } `
+
+📋 Parameters:
+   • {p5.Image} img - 360˚ image to use as the background.
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  let img;
+  async function setup() {
+    // Load an image and create a p5.Image object.
+    img = await loadImage('assets/outdoor_spheremap.jpg');
+    createCanvas(100, 100, WEBGL);
+    describe('A sphere floating above a landscape. The surface of the sphere reflects the landscape. The full landscape is viewable in 3D as the user drags the mouse.');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 perspective()                                                *p5.perspective()*
+───────────────────
+
+📝 Sets a perspective projection for the current camera in a 3D sketch.  In a perspective projection, shapes that are further from the camera appear smaller than shapes that are near the camera. This technique, called foreshortening, creates realistic 3D scenes. It’s applied by default in WebGL mode.  `perspective()` changes the camera’s perspective by changing its viewing frustum. The frustum is the volume of space that’s visible to the camera. Its shape is a pyramid with its top cut off. The camera is placed where the top of the pyramid should be and views everything between the frustum’s top (near) plane and its bottom (far) plane.  The first parameter, `fovy`, is the camera’s vertical field of view. It’s an angle that describes how tall or narrow a view the camera has. For example, calling `perspective(0.5)` sets the camera’s vertical field of view to 0.5 radians. By default, `fovy` is calculated based on the sketch’s height and the camera’s default z-coordinate, which is 800. The formula for the default `fovy` is `2 * atan(height / 2 / 800)`.  The second parameter, `aspect`, is the camera’s aspect ratio. It’s a number that describes the ratio of the top plane’s width to its height. For example, calling `perspective(0.5, 1.5)` sets the camera’s field of view to 0.5 radians and aspect ratio to 1.5, which would make shapes appear thinner on a square canvas. By default, aspect is set to `width / height`.  The third parameter, `near`, is the distance from the camera to the near plane. For example, calling `perspective(0.5, 1.5, 100)` sets the camera’s field of view to 0.5 radians, its aspect ratio to 1.5, and places the near plane 100 pixels from the camera. Any shapes drawn less than 100 pixels from the camera won’t be visible. By default, near is set to `0.1 * 800`, which is 1/10th the default distance between the camera and the origin.  The fourth parameter, `far`, is the distance from the camera to the far plane. For example, calling `perspective(0.5, 1.5, 100, 10000)` sets the camera’s field of view to 0.5 radians, its aspect ratio to 1.5, places the near plane 100 pixels from the camera, and places the far plane 10,000 pixels from the camera. Any shapes drawn more than 10,000 pixels from the camera won’t be visible. By default, far is set to `10 * 800`, which is 10 times the default distance between the camera and the origin.  Note: `perspective()` can only be used in WebGL mode.  `2 * atan(height / 2 / 800)`. `width / height`. Defaults to `0.1 * 800`. Defaults to `10 * 800`.   ` // Double-click to squeeze the box.  let isSqueezed = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A white rectangular prism on a gray background. The box appears to become thinner when the user double-clicks.'); }  function draw() { background(200);  // Place the camera at the top-right. camera(400, -400, 800);  if (isSqueezed === true) { // Set fovy to 0.2. // Set aspect to 1.5. perspective(0.2, 1.5); }  // Draw the box. box(); }  // Change the camera's perspective when the user double-clicks. function doubleClicked() { isSqueezed = true; } `    ` function setup() { createCanvas(100, 100, WEBGL);  describe('A white rectangular prism on a gray background. The prism moves away from the camera until it disappears.'); }  function draw() { background(200);  // Place the camera at the top-right. camera(400, -400, 800);  // Set fovy to 0.2. // Set aspect to 1.5. // Set near to 600. // Set far to 1200. perspective(0.2, 1.5, 600, 1200);  // Move the origin away from the camera. let x = -frameCount; let y = frameCount; let z = -2 * frameCount; translate(x, y, z);  // Draw the box. box(); } `
+
+💡 Example:
+>
+  `
+  // Double-click to squeeze the box.
+  let isSqueezed = false;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white rectangular prism on a gray background. The box appears to become thinner when the user double-clicks.');
+  }
+  function draw() {
+    background(200);
+    // Place the camera at the top-right.
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 pointLight()                                                *p5.pointLight()*
+──────────────────
+
+📝 Creates a light that shines from a point in all directions.  Point lights are like light bulbs that shine in all directions. They can be placed at different positions to achieve different lighting effects. A maximum of 5 point lights can be active at once.  There are four ways to call `pointLight()` with parameters to set the light’s color and position.  The first way to call `pointLight()` has six parameters. The first three parameters, `v1`, `v2`, and `v3`, set the light’s color using the current [colorMode()](#/p5/colorMode). The last three parameters, `x`, `y`, and `z`, set the light’s position. For example, `pointLight(255, 0, 0, 50, 0, 0)` creates a red `(255, 0, 0)` light that shines from the coordinates `(50, 0, 0)`.  The second way to call `pointLight()` has four parameters. The first three parameters, `v1`, `v2`, and `v3`, set the light’s color using the current [colorMode()](#/p5/colorMode). The last parameter, position sets the light’s position using a [p5.Vector](#/p5.Vector) object. For example, `pointLight(255, 0, 0, lightPos)` creates a red `(255, 0, 0)` light that shines from the position set by the `lightPos` vector.  The third way to call `pointLight()` has four parameters. The first parameter, `color`, sets the light’s color using a [p5.Color](#/p5.Color) object or an array of color values. The last three parameters, `x`, `y`, and `z`, set the light’s position. For example, `directionalLight(myColor, 50, 0, 0)` creates a light that shines from the coordinates `(50, 0, 0)` with the color value of `myColor`.  The fourth way to call `pointLight()` has two parameters. The first parameter, `color`, sets the light’s color using a [p5.Color](#/p5.Color) object or an array of color values. The second parameter, `position`, sets the light’s position using a [p5.Vector](#/p5.Vector) object. For example, `directionalLight(myColor, lightPos)` creates a light that shines from the position set by the `lightPos` vector with the color value of `myColor`.  [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode).    ` // Click and drag the mouse to view the scene from different angles. // Double-click to turn on the point light.  let isLit = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A sphere drawn on a gray background. A red light starts shining from above when the user double-clicks.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Control the light. if (isLit === true) { // Add a red point light from above. // Use RGB values and XYZ coordinates. pointLight(255, 0, 0, 0, -150, 0); }  // Style the sphere. noStroke();  // Draw the sphere. sphere(30); }  // Turn on the point light when the user double-clicks. function doubleClicked() { isLit = true; } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A sphere drawn on a gray background. The top of the sphere appears bright red. The color gets darker toward the bottom.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Add a red point light from above. // Use a p5.Color object and XYZ directions. let c = color(255, 0, 0); pointLight(c, 0, -150, 0);  // Style the sphere. noStroke();  // Draw the sphere. sphere(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A sphere drawn on a gray background. The top of the sphere appears bright red. The color gets darker toward the bottom.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Add a red point light from above. // Use a p5.Color object and a p5.Vector object. let c = color(255, 0, 0); let lightPos = createVector(0, -150, 0); pointLight(c, lightPos);  // Style the sphere. noStroke();  // Draw the sphere. sphere(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('Four spheres arranged in a square and drawn on a gray background. The spheres appear bright red toward the center of the square. The color gets darker toward the corners of the square.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Add a red point light that points to the center of the scene. // Use a p5.Color object and a p5.Vector object. let c = color(255, 0, 0); let lightPos = createVector(0, 0, 65); pointLight(c, lightPos);  // Style the spheres. noStroke();  // Draw a sphere up and to the left. push(); translate(-25, -25, 25); sphere(10); pop();  // Draw a box up and to the right. push(); translate(25, -25, 25); sphere(10); pop();  // Draw a sphere down and to the left. push(); translate(-25, 25, 25); sphere(10); pop();  // Draw a box down and to the right. push(); translate(25, 25, 25); sphere(10); pop(); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  // Double-click to turn on the point light.
+  let isLit = false;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A sphere drawn on a gray background. A red light starts shining from above when the user double-clicks.');
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 resetShader()                                                *p5.resetShader()*
+───────────────────
+
+📝 Restores the default shaders.  `resetShader()` deactivates any shaders previously applied by [shader()](#/p5/shader), [strokeShader()](#/p5/strokeShader), or [imageShader()](#/p5/imageShader).  Note: Shaders can only be used in WebGL mode.    ` // Create a string with the vertex shader program. // The vertex shader is called for each vertex. let vertSrc = ` attribute vec3 aPosition; attribute vec2 aTexCoord; uniform mat4 uProjectionMatrix; uniform mat4 uModelViewMatrix; varying vec2 vTexCoord;  void main() { vTexCoord = aTexCoord; vec4 position = vec4(aPosition, 1.0); gl_Position = uProjectionMatrix * uModelViewMatrix * position; } `;  // Create a string with the fragment shader program. // The fragment shader is called for each pixel. let fragSrc = ` precision mediump float; varying vec2 vTexCoord;  void main() { vec2 uv = vTexCoord; vec3 color = vec3(uv.x, uv.y, min(uv.x + uv.y, 1.0)); gl_FragColor = vec4(color, 1.0); } `;  let myShader;  function setup() { createCanvas(100, 100, WEBGL);  // Create a p5.Shader object. myShader = createShader(vertSrc, fragSrc);  describe( 'Two rotating cubes on a gray background. The left one has a blue-purple gradient on each face. The right one is red.' ); }  function draw() { background(200);  // Draw a box using the p5.Shader. // shader() sets the active shader to myShader. shader(myShader); push(); translate(-25, 0, 0); rotateX(frameCount * 0.01); rotateY(frameCount * 0.01); box(width / 4); pop();  // Draw a box using the default fill shader. // resetShader() restores the default fill shader. resetShader(); fill(255, 0, 0); push(); translate(25, 0, 0); rotateX(frameCount * 0.01); rotateY(frameCount * 0.01); box(width / 4); pop(); } `
+
+💡 Example:
+>
+  `
+  // Create a string with the vertex shader program.
+  // The vertex shader is called for each vertex.
+  let vertSrc = `
+  attribute vec3 aPosition;
+  attribute vec2 aTexCoord;
+  uniform mat4 uProjectionMatrix;
+  uniform mat4 uModelViewMatrix;
+  varying vec2 vTexCoord;
+  void main() {
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 roll()                                                *p5.roll()*
+────────────
+
+📝 Rotates the camera in a clockwise/counter-clockwise direction.  Rolling rotates the camera without changing its orientation. The rotation happens in the camera’s "local" space.  The parameter, `angle`, is the angle the camera should rotate. Passing a positive angle, as in `myCamera.roll(0.001)`, rotates the camera in counter-clockwise direction. Passing a negative angle, as in `myCamera.roll(-0.001)`, rotates the camera in clockwise direction.  Note: Angles are interpreted based on the current [angleMode()](#/p5/angleMode).  [angleMode](#/p5/angleMode) units.  ` let cam; let delta = 0.01;  function setup() { createCanvas(100, 100, WEBGL); normalMaterial(); // Create a p5.Camera object. cam = createCamera();  // Set the camera setCamera(cam); }  function draw() { background(200);  // Roll camera according to angle 'delta' cam.roll(delta);  translate(0, 0, 0); box(20); translate(0, 25, 0); box(20); translate(0, 26, 0); box(20); translate(0, 27, 0); box(20); translate(0, 28, 0); box(20); translate(0,29, 0); box(20); translate(0, 30, 0); box(20); } `   camera view rotates in counter clockwise direction with vertically stacked boxes in front of it.
+
+📋 Parameters:
+   • {Number} angle - amount to rotate camera in current
+
+💡 Example:
+>
+  `
+  let cam;
+  let delta = 0.01;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    normalMaterial();
+    // Create a p5.Camera object.
+    cam = createCamera();
+    // Set the camera
+    setCamera(cam);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 rotateBy()                                                *p5.rotateBy()*
+────────────────
+
+📝 Rotates the Quaternion by the quaternion passed which contains the axis of roation and angle of rotation  the axis of rotation and angle of rotation
+
+🔗 See also: |p5.3d|
+
+
+🔧 saveObj()                                                *p5.saveObj()*
+───────────────
+
+📝 The `saveObj()` function exports `p5.Geometry` objects as 3D models in the Wavefront .obj file format. This way, you can use the 3D shapes you create in p5.js in other software for rendering, animation, 3D printing, or more.  The exported .obj file will include the faces and vertices of the `p5.Geometry`, as well as its texture coordinates and normals, if it has them.  If not specified, the default file name will be 'model.obj'.  ` let myModel; let saveBtn; function setup() { createCanvas(200, 200, WEBGL); myModel = buildGeometry(function()) { for (let i = 0; i  myModel.saveObj());  describe('A few spheres rotating in space'); }  function draw() { background(0); noStroke(); lights(); rotateX(millis() * 0.001); rotateY(millis() * 0.002); model(myModel); } `
+
+💡 Example:
+>
+  `
+  let myModel;
+  let saveBtn;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myModel = buildGeometry(function()) {
+      for (let i = 0; i  myModel.saveObj());
+    describe('A few spheres rotating in space');
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 saveStl()                                                *p5.saveStl()*
+───────────────
+
+📝 The `saveStl()` function exports `p5.Geometry` objects as 3D models in the STL stereolithography file format. This way, you can use the 3D shapes you create in p5.js in other software for rendering, animation, 3D printing, or more.  The exported .stl file will include the faces, vertices, and normals of the `p5.Geometry`.  By default, this method saves a text-based .stl file. Alternatively, you can save a more compact but less human-readable binary .stl file by passing `{ binary: true }` as a second parameter.  If not specified, the default file name will be 'model.stl'.  ` let myModel; let saveBtn1; let saveBtn2; function setup() { createCanvas(200, 200, WEBGL); myModel = buildGeometry(function() { for (let i = 0; i
+
+💡 Example:
+>
+  `
+  let myModel;
+  let saveBtn1;
+  let saveBtn2;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myModel = buildGeometry(function() {
+      for (let i = 0; i
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 setAttributes()                                                *p5.setAttributes()*
+─────────────────────
+
+📝 Set attributes for the WebGL Drawing context. This is a way of adjusting how the WebGL renderer works to fine-tune the display and performance.  Note that this will reinitialize the drawing context if called after the WebGL canvas is made.  If an object is passed as the parameter, all attributes not declared in the object will be set to defaults.  The available attributes are: 
+ alpha - indicates if the canvas contains an alpha buffer default is true  depth - indicates whether the drawing buffer has a depth buffer of at least 16 bits - default is true  stencil - indicates whether the drawing buffer has a stencil buffer of at least 8 bits  antialias - indicates whether or not to perform anti-aliasing default is false (true in Safari)  premultipliedAlpha - indicates that the page compositor will assume the drawing buffer contains colors with pre-multiplied alpha default is true  preserveDrawingBuffer - if true the buffers will not be cleared and and will preserve their values until cleared or overwritten by author (note that p5 clears automatically on draw loop) default is true  perPixelLighting - if true, per-pixel lighting will be used in the lighting shader otherwise per-vertex lighting is used. default is true.  version - either 1 or 2, to specify which WebGL version to ask for. By default, WebGL 2 will be requested. If WebGL2 is not available, it will fall back to WebGL 1. You can check what version is used with by looking at the global `webglVersion` property.   ` function setup() { createCanvas(100, 100, WEBGL); }  function draw() { background(255); push(); rotateZ(frameCount * 0.02); rotateX(frameCount * 0.02); rotateY(frameCount * 0.02); fill(0, 0, 0); box(50); pop(); } `    ` // Now with the antialias attribute set to true. function setup() { setAttributes('antialias', true); createCanvas(100, 100, WEBGL); }  function draw() { background(255); push(); rotateZ(frameCount * 0.02); rotateX(frameCount * 0.02); rotateY(frameCount * 0.02); fill(0, 0, 0); box(50); pop(); } `    ` // press the mouse button to disable perPixelLighting function setup() { createCanvas(100, 100, WEBGL); noStroke(); fill(255); }  let lights = [ { c: '#f00', t: 1.12, p: 1.91, r: 0.2 }, { c: '#0f0', t: 1.21, p: 1.31, r: 0.2 }, { c: '#00f', t: 1.37, p: 1.57, r: 0.2 }, { c: '#ff0', t: 1.12, p: 1.91, r: 0.7 }, { c: '#0ff', t: 1.21, p: 1.31, r: 0.7 }, { c: '#f0f', t: 1.37, p: 1.57, r: 0.7 } ];  function draw() { let t = millis() / 1000 + 1000; background(0); directionalLight(color('#222'), 1, 1, 1);  for (let i = 0; i
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+  }
+  function draw() {
+    background(255);
+    push();
+    rotateZ(frameCount * 0.02);
+    rotateX(frameCount * 0.02);
+    rotateY(frameCount * 0.02);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 setCamera()                                                *p5.setCamera()*
+─────────────────
+
+📝 Sets the current (active) camera of a 3D sketch.  `setCamera()` allows for switching between multiple cameras created with [createCamera()](#/p5/createCamera).  Note: `setCamera()` can only be used in WebGL mode.    ` // Double-click to toggle between cameras.  let cam1; let cam2; let usingCam1 = true;  function setup() { createCanvas(100, 100, WEBGL);  // Create the first camera. // Keep its default settings. cam1 = createCamera();  // Create the second camera. // Place it at the top-left. // Point it at the origin. cam2 = createCamera(); cam2.setPosition(400, -400, 800); cam2.lookAt(0, 0, 0);  // Set the current camera to cam1. setCamera(cam1);  describe('A white cube on a gray background. The camera toggles between frontal and aerial views when the user double-clicks.'); }  function draw() { background(200);  // Draw the box. box(); }  // Toggle the current camera when the user double-clicks. function doubleClicked() { if (usingCam1 === true) { setCamera(cam2); usingCam1 = false; } else { setCamera(cam1); usingCam1 = true; } } `
+
+💡 Example:
+>
+  `
+  // Double-click to toggle between cameras.
+  let cam1;
+  let cam2;
+  let usingCam1 = true;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    // Create the first camera.
+    // Keep its default settings.
+    cam1 = createCamera();
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 shader()                                                *p5.shader()*
+──────────────
+
+📝 Sets the [p5.Shader](#/p5.Shader) object to apply while drawing.  Shaders are programs that run on the graphics processing unit (GPU). They can process many pixels or vertices at the same time, making them fast for many graphics tasks. They’re written in a language called GLSL and run along with the rest of the code in a sketch. [p5.Shader](#/p5.Shader) objects can be created using the [createShader()](#/p5/createShader) and [loadShader()](#/p5/loadShader) functions.  The parameter, `s`, is the [p5.Shader](#/p5.Shader) object to apply. For example, calling `shader(myShader)` applies `myShader` to process each pixel on the canvas. This only changes the fill (the inner part of shapes), but does not affect the outlines (strokes) or any images drawn using the `image()` function. The source code from a [p5.Shader](#/p5.Shader) object's fragment and vertex shaders will be compiled the first time it's passed to `shader()`. See MDN for more information about compiling shaders.  Calling [resetShader()](#/p5/resetShader) restores a sketch’s default shaders.  Note: Shaders can only be used in WebGL mode.   
+  If you want to apply shaders to strokes or images, use the following methods: - [strokeShader()](#/p5/strokeShader) : Applies a shader to the stroke (outline) of shapes, allowing independent control over the stroke rendering using shaders. - [imageShader()](#/p5/imageShader) : Applies a shader to images or textures, controlling how the shader modifies their appearance during rendering.  
+    to apply.   ` let fillShader;  let vertSrc = ` precision highp float; attribute vec3 aPosition; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix; varying vec3 vPosition;  void main() { vPosition = aPosition; gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aPosition, 1.0); } `;  let fragSrc = ` precision highp float; uniform vec3 uLightDir; varying vec3 vPosition;  void main() { vec3 lightDir = normalize(uLightDir); float brightness = dot(lightDir, normalize(vPosition)); brightness = clamp(brightness, 0.4, 1.0); vec3 color = vec3(0.3, 0.5, 1.0); color = color * brightness * 3.0; gl_FragColor = vec4(color, 1.0); } `;  function setup() { createCanvas(200, 200, WEBGL); fillShader = createShader(vertSrc, fragSrc); noStroke(); describe('A rotating torus with simulated directional lighting.'); }  function draw() { background(20, 20, 40); let lightDir = [0.5, 0.5, -1.0]; fillShader.setUniform('uLightDir', lightDir); shader(fillShader); rotateY(frameCount * 0.02); rotateX(frameCount * 0.02); //lights(); torus(25, 10, 30, 30); } `    ` let fillShader;  let vertSrc = ` precision highp float; attribute vec3 aPosition; uniform mat4 uProjectionMatrix; uniform mat4 uModelViewMatrix; varying vec3 vPosition; void main() { vPosition = aPosition; gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aPosition, 1.0); } `;  let fragSrc = ` precision highp float; uniform vec3 uLightPos; uniform vec3 uFillColor; varying vec3 vPosition; void main() { float brightness = dot(normalize(uLightPos), normalize(vPosition)); brightness = clamp(brightness, 0.0, 1.0); vec3 color = uFillColor * brightness; gl_FragColor = vec4(color, 1.0); } `;  function setup() { createCanvas(200, 200, WEBGL); fillShader = createShader(vertSrc, fragSrc); shader(fillShader); noStroke(); describe('A square affected by both fill color and lighting, with lights controlled by mouse.'); }  function draw() { let lightPos = [(mouseX - width / 2) / width, (mouseY - height / 2) / height, 1.0]; fillShader.setUniform('uLightPos', lightPos); let fillColor = [map(mouseX, 0, width, 0, 1), map(mouseY, 0, height, 0, 1), 0.5]; fillShader.setUniform('uFillColor', fillColor); plane(100, 100); } `    ` let myShader;  function setup() { createCanvas(200, 200, WEBGL);  myShader = baseMaterialShader().modify({ declarations: 'uniform float time;', 'vec4 getFinalColor': `(vec4 color) { float r = 0.2 + 0.5 * abs(sin(time + 0.0)); float g = 0.2 + 0.5 * abs(sin(time + 1.0)); float b = 0.2 + 0.5 * abs(sin(time + 2.0)); color.rgb = vec3(r, g, b); return color; }` });  noStroke(); describe('A 3D cube with dynamically changing colors on a beige background.'); }  function draw() { background(245, 245, 220); shader(myShader); myShader.setUniform('time', millis() / 1000.0);  box(50); } `
+
+📋 Parameters:
+   • {p5.Shader} s - [p5.Shader](#/p5.Shader) object
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseMaterialShader().modify({
+      declarations: 'uniform float time;',
+      'vec4 getFinalColor': `(vec4 color) {
+        float r = 0.2 + 0.5 * abs(sin(time + 0.0));
+        float g = 0.2 + 0.5 * abs(sin(time + 1.0));
+        float b = 0.2 + 0.5 * abs(sin(time + 2.0));
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 shininess()                                                *p5.shininess()*
+─────────────────
+
+📝 Sets the amount of gloss ("shininess") of a [specularMaterial()](#/p5/specularMaterial).  Shiny materials focus reflected light more than dull materials. `shininess()` affects the way materials reflect light sources including [directionalLight()](#/p5/directionalLight), [pointLight()](#/p5/pointLight), and [spotLight()](#/p5/spotLight).  The parameter, `shine`, is a number that sets the amount of shininess. `shine` must be greater than 1, which is its default value.    ` function setup() { createCanvas(100, 100, WEBGL);  describe( 'Two red spheres drawn on a gray background. White light reflects from their surfaces as the mouse moves. The right sphere is shinier than the left sphere.' ); }  function draw() { background(200);  // Turn on a red ambient light. ambientLight(255, 0, 0);  // Get the mouse's coordinates. let mx = mouseX - 50; let my = mouseY - 50;  // Turn on a white point light that follows the mouse. pointLight(255, 255, 255, mx, my, 50);  // Style the sphere. noStroke();  // Add a specular material with a grayscale value. specularMaterial(255);  // Draw the left sphere with low shininess. translate(-25, 0, 0); shininess(10); sphere(20);  // Draw the right sphere with high shininess. translate(50, 0, 0); shininess(100); sphere(20); } `
+
+📋 Parameters:
+   • {Number} shine - amount of shine.
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe(
+      'Two red spheres drawn on a gray background. White light reflects from their surfaces as the mouse moves. The right sphere is shinier than the left sphere.'
+    );
+  }
+  function draw() {
+    background(200);
+    // Turn on a red ambient light.
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 specularColor()                                                *p5.specularColor()*
+─────────────────────
+
+📝 Sets the specular color for lights.  `specularColor()` affects lights that bounce off a surface in a preferred direction. These lights include [directionalLight()](#/p5/directionalLight), [pointLight()](#/p5/pointLight), and [spotLight()](#/p5/spotLight). The function helps to create highlights on [p5.Geometry](#/p5.Geometry) objects that are styled with [specularMaterial()](#/p5/specularMaterial). If a geometry does not use [specularMaterial()](#/p5/specularMaterial), then `specularColor()` will have no effect.  Note: `specularColor()` doesn’t affect lights that bounce in all directions, including [ambientLight()](#/p5/ambientLight) and [imageLight()](#/p5/imageLight).  There are three ways to call `specularColor()` with optional parameters to set the specular highlight color.  The first way to call `specularColor()` has two optional parameters, `gray` and `alpha`. Grayscale and alpha values between 0 and 255, as in `specularColor(50)` or `specularColor(50, 80)`, can be passed to set the specular highlight color.  The second way to call `specularColor()` has one optional parameter, `color`. A [p5.Color](#/p5.Color) object, an array of color values, or a CSS color string can be passed to set the specular highlight color.  The third way to call `specularColor()` has four optional parameters, `v1`, `v2`, `v3`, and `alpha`. RGBA, HSBA, or HSLA values, as in `specularColor(255, 0, 0, 80)`, can be passed to set the specular highlight color. Color values will be interpreted using the current [colorMode()](#/p5/colorMode).  [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode).   ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A white sphere drawn on a gray background.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // No specular color. // Draw the sphere. sphere(30); } `    ` // Click and drag the mouse to view the scene from different angles. // Double-click the canvas to add a point light.  let isLit = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A sphere drawn on a gray background. A spotlight starts shining when the user double-clicks.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Style the sphere. noStroke(); specularColor(100); specularMaterial(255, 255, 255);  // Control the light. if (isLit === true) { // Add a white point light from the top-right. pointLight(255, 255, 255, 30, -20, 40); }  // Draw the sphere. sphere(30); }  // Turn on the point light when the user double-clicks. function doubleClicked() { isLit = true; } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A black sphere drawn on a gray background. An area on the surface of the sphere is highlighted in blue.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Add a specular highlight. // Use a p5.Color object. let c = color('dodgerblue'); specularColor(c);  // Add a white point light from the top-right. pointLight(255, 255, 255, 30, -20, 40);  // Style the sphere. noStroke();  // Add a white specular material. specularMaterial(255, 255, 255);  // Draw the sphere. sphere(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A black sphere drawn on a gray background. An area on the surface of the sphere is highlighted in blue.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Add a specular highlight. // Use a CSS color string. specularColor('#1E90FF');  // Add a white point light from the top-right. pointLight(255, 255, 255, 30, -20, 40);  // Style the sphere. noStroke();  // Add a white specular material. specularMaterial(255, 255, 255);  // Draw the sphere. sphere(30); } `    ` // Click and drag the mouse to view the scene from different angles.  function setup() { createCanvas(100, 100, WEBGL);  describe('A black sphere drawn on a gray background. An area on the surface of the sphere is highlighted in blue.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Add a specular highlight. // Use RGB values. specularColor(30, 144, 255);  // Add a white point light from the top-right. pointLight(255, 255, 255, 30, -20, 40);  // Style the sphere. noStroke();  // Add a white specular material. specularMaterial(255, 255, 255);  // Draw the sphere. sphere(30); } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white sphere drawn on a gray background.');
+  }
+  function draw() {
+    background(200);
+    // Enable orbiting with the mouse.
+    orbitControl();
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 specularMaterial()                                                *p5.specularMaterial()*
+────────────────────────
+
+📝 Sets the specular color of shapes’ surface material.  The `specularMaterial()` color sets the components of light color that glossy coats on shapes will reflect. For example, calling `specularMaterial(255, 255, 0)` would cause a shape to reflect red and green light, but not blue light.  Unlike [ambientMaterial()](#/p5/ambientMaterial), `specularMaterial()` will reflect the full color of light sources including [directionalLight()](#/p5/directionalLight), [pointLight()](#/p5/pointLight), and [spotLight()](#/p5/spotLight). This is what gives it shapes their "shiny" appearance. The material’s shininess can be controlled by the [shininess()](#/p5/shininess) function.  `specularMaterial()` can be called three ways with different parameters to set the material’s color.  The first way to call `specularMaterial()` has one parameter, `gray`. Grayscale values between 0 and 255, as in `specularMaterial(50)`, can be passed to set the material’s color. Higher grayscale values make shapes appear brighter.  The second way to call `specularMaterial()` has one parameter, `color`. A p5.Color> object, an array of color values, or a CSS color string, as in `specularMaterial('magenta')`, can be passed to set the material’s color.  The third way to call `specularMaterial()` has four parameters, `v1`, `v2`, `v3`, and `alpha`. `alpha` is optional. RGBA, HSBA, or HSLA values can be passed to set the material’s colors, as in `specularMaterial(255, 0, 0)` or `specularMaterial(255, 0, 0, 30)`. Color values will be interpreted using the current [colorMode()](#/p5/colorMode).  [colorMode()](#/p5/colorMode).   ` // Click and drag the mouse to view the scene from different angles. // Double-click the canvas to apply a specular material.  let isGlossy = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A red torus drawn on a gray background. It becomes glossy when the user double-clicks.'); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a white point light at the top-right. pointLight(255, 255, 255, 30, -40, 30);  // Add a glossy coat if the user has double-clicked. if (isGlossy === true) { specularMaterial(255); shininess(50); }  // Style the torus. noStroke(); fill(255, 0, 0);  // Draw the torus. torus(30); }  // Make the torus glossy when the user double-clicks. function doubleClicked() { isGlossy = true; } `    ` // Click and drag the mouse to view the scene from different angles. // Double-click the canvas to apply a specular material.  let isGlossy = false;  function setup() { createCanvas(100, 100, WEBGL);  describe( 'A red torus drawn on a gray background. It becomes glossy and reflects green light when the user double-clicks.' ); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a white point light at the top-right. pointLight(255, 255, 255, 30, -40, 30);  // Add a glossy green coat if the user has double-clicked. if (isGlossy === true) { specularMaterial(0, 255, 0); shininess(50); }  // Style the torus. noStroke(); fill(255, 0, 0);  // Draw the torus. torus(30); }  // Make the torus glossy when the user double-clicks. function doubleClicked() { isGlossy = true; } `    ` // Click and drag the mouse to view the scene from different angles. // Double-click the canvas to apply a specular material.  let isGlossy = false;  function setup() { createCanvas(100, 100, WEBGL);  describe( 'A red torus drawn on a gray background. It becomes glossy and reflects green light when the user double-clicks.' ); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a white point light at the top-right. pointLight(255, 255, 255, 30, -40, 30);  // Add a glossy green coat if the user has double-clicked. if (isGlossy === true) { // Create a p5.Color object. let c = color('green'); specularMaterial(c); shininess(50); }  // Style the torus. noStroke(); fill(255, 0, 0);  // Draw the torus. torus(30); }  // Make the torus glossy when the user double-clicks. function doubleClicked() { isGlossy = true; } `    ` // Click and drag the mouse to view the scene from different angles. // Double-click the canvas to apply a specular material.  let isGlossy = false;  function setup() { createCanvas(100, 100, WEBGL);  describe( 'A red torus drawn on a gray background. It becomes glossy and reflects green light when the user double-clicks.' ); }  function draw() { background(200);  // Enable orbiting with the mouse. orbitControl();  // Turn on a white point light at the top-right. pointLight(255, 255, 255, 30, -40, 30);  // Add a glossy green coat if the user has double-clicked. if (isGlossy === true) { specularMaterial('#00FF00'); shininess(50); }  // Style the torus. noStroke(); fill(255, 0, 0);  // Draw the torus. torus(30); }  // Make the torus glossy when the user double-clicks. function doubleClicked() { isGlossy = true; } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  // Double-click the canvas to apply a specular material.
+  let isGlossy = false;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A red torus drawn on a gray background. It becomes glossy when the user double-clicks.');
+  }
+  function draw() {
+    background(200);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 spotLight()                                                *p5.spotLight()*
+─────────────────
+
+📝 Creates a light that shines from a point in one direction.  Spot lights are like flashlights that shine in one direction creating a cone of light. The shape of the cone can be controlled using the angle and concentration parameters. A maximum of 5 spot lights can be active at once.  There are eight ways to call `spotLight()` with parameters to set the light’s color, position, direction. For example, `spotLight(255, 0, 0, 0, 0, 0, 1, 0, 0)` creates a red `(255, 0, 0)` light at the origin `(0, 0, 0)` that points to the right `(1, 0, 0)`.  The `angle` parameter is optional. It sets the radius of the light cone. For example, `spotLight(255, 0, 0, 0, 0, 0, 1, 0, 0, PI / 16)` creates a red `(255, 0, 0)` light at the origin `(0, 0, 0)` that points to the right `(1, 0, 0)` with an angle of `PI / 16` radians. By default, `angle` is `PI / 3` radians.  The `concentration` parameter is also optional. It focuses the light towards the center of the light cone. For example, `spotLight(255, 0, 0, 0, 0, 0, 1, 0, 0, PI / 16, 50)` creates a red `(255, 0, 0)` light at the origin `(0, 0, 0)` that points to the right `(1, 0, 0)` with an angle of `PI / 16` radians at concentration of 50. By default, `concentration` is 100.  [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode). [colorMode()](#/p5/colorMode).   ` // Click and drag the mouse to view the scene from different angles. // Double-click to adjust the spotlight.  let isLit = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A white sphere drawn on a gray background. A red spotlight starts shining when the user double-clicks.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. lights();  // Control the spotlight. if (isLit === true) { // Add a red spot light that shines into the screen. // Set its angle to PI / 32 radians. spotLight(255, 0, 0, 0, 0, 100, 0, 0, -1, PI / 32); }  // Draw the sphere. sphere(30); }  // Turn on the spotlight when the user double-clicks. function doubleClicked() { isLit = true; } `    ` // Click and drag the mouse to view the scene from different angles. // Double-click to adjust the spotlight.  let isLit = false;  function setup() { createCanvas(100, 100, WEBGL);  describe('A white sphere drawn on a gray background. A red spotlight starts shining when the user double-clicks.'); }  function draw() { background(50);  // Enable orbiting with the mouse. orbitControl();  // Turn on the lights. lights();  // Control the spotlight. if (isLit === true) { // Add a red spot light that shines into the screen. // Set its angle to PI / 3 radians (default). // Set its concentration to 1000. let c = color(255, 0, 0); let position = createVector(0, 0, 100); let direction = createVector(0, 0, -1); spotLight(c, position, direction, PI / 3, 1000); }  // Draw the sphere. sphere(30); }  // Turn on the spotlight when the user double-clicks. function doubleClicked() { isLit = true; } `
+
+💡 Example:
+>
+  `
+  // Click and drag the mouse to view the scene from different angles.
+  // Double-click to adjust the spotlight.
+  let isLit = false;
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    describe('A white sphere drawn on a gray background. A red spotlight starts shining when the user double-clicks.');
+  }
+  function draw() {
+    background(50);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 strokeShader()                                                *p5.strokeShader()*
+────────────────────
+
+📝 Sets the [p5.Shader](#/p5.Shader) object to apply for strokes.  This method applies the given shader to strokes, allowing customization of how lines and outlines are drawn in 3D space. The shader will be used for strokes until [resetShader()](#/p5/resetShader) is called or another strokeShader is applied.  The shader will be used for: - Strokes only, regardless of whether the uniform `uStrokeWeight` is present.  To further customize its behavior, refer to the various hooks provided by the [baseStrokeShader()](#/p5/baseStrokeShader) method, which allow control over stroke weight, vertex positions, colors, and more.  to apply for strokes.    ` let animatedStrokeShader;  let vertSrc = ` precision mediump int;  uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix; uniform float uStrokeWeight;  uniform bool uUseLineColor; uniform vec4 uMaterialColor;  uniform vec4 uViewport; uniform int uPerspective; uniform int uStrokeJoin;  attribute vec4 aPosition; attribute vec3 aTangentIn; attribute vec3 aTangentOut; attribute float aSide; attribute vec4 aVertexColor;  void main() { vec4 posp = uModelViewMatrix * aPosition; vec4 posqIn = uModelViewMatrix * (aPosition + vec4(aTangentIn, 0)); vec4 posqOut = uModelViewMatrix * (aPosition + vec4(aTangentOut, 0));  float facingCamera = pow( abs(normalize(posqIn-posp).z), 0.25 );  float scale = mix(1., 0.995, facingCamera);  posp.xyz = posp.xyz * scale; posqIn.xyz = posqIn.xyz * scale; posqOut.xyz = posqOut.xyz * scale;  vec4 p = uProjectionMatrix * posp; vec4 qIn = uProjectionMatrix * posqIn; vec4 qOut = uProjectionMatrix * posqOut;  vec2 tangentIn = normalize((qIn.xy*p.w - p.xy*qIn.w) * uViewport.zw); vec2 tangentOut = normalize((qOut.xy*p.w - p.xy*qOut.w) * uViewport.zw);  vec2 curPerspScale; if(uPerspective == 1) { curPerspScale = (uProjectionMatrix * vec4(1, sign(uProjectionMatrix[1][1]), 0, 0)).xy; } else { curPerspScale = p.w / (0.5 * uViewport.zw); }  vec2 offset; vec2 tangent = aTangentIn == vec3(0.) ? tangentOut : tangentIn; vec2 normal = vec2(-tangent.y, tangent.x); float normalOffset = sign(aSide); float tangentOffset = abs(aSide) - 1.; offset = (normal * normalOffset + tangent * tangentOffset) * uStrokeWeight * 0.5;  gl_Position.xy = p.xy + offset.xy * curPerspScale; gl_Position.zw = p.zw; } `;  let fragSrc = ` precision mediump float; uniform float uTime;  void main() { float wave = sin(gl_FragCoord.x * 0.1 + uTime) * 0.5 + 0.5; gl_FragColor = vec4(wave, 0.5, 1.0, 1.0);  // Animated color based on time } `;  function setup() { createCanvas(200, 200, WEBGL); animatedStrokeShader = createShader(vertSrc, fragSrc); strokeShader(animatedStrokeShader); strokeWeight(4);  describe('A hollow cube rotating continuously with its stroke colors changing dynamically over time against a static gray background.'); }  function draw() { animatedStrokeShader.setUniform('uTime', millis() / 1000.0); background(250); rotateY(frameCount * 0.02); noFill(); orbitControl(); box(50); } `     ` let myShader;  function setup() { createCanvas(200, 200, WEBGL); myShader = baseStrokeShader().modify({ 'float random': `(vec2 p) { vec3 p3  = fract(vec3(p.xyx) * .1471); p3 += dot(p3, p3.yzx + 32.33); return fract((p3.x + p3.y) * p3.z); }`, 'Inputs getPixelInputs': `(Inputs inputs) { // Modify alpha with dithering effect float a = inputs.color.a; inputs.color.a = 1.0; inputs.color *= random(inputs.position.xy) > a ? 0.0 : 1.0; return inputs; }` }); }  function draw() { background(255); strokeShader(myShader); strokeWeight(12); beginShape(); for (let i = 0; i
+
+📋 Parameters:
+   • {p5.Shader} s - [p5.Shader](#/p5.Shader) object
+
+💡 Example:
+>
+  `
+  let myShader;
+  function setup() {
+    createCanvas(200, 200, WEBGL);
+    myShader = baseStrokeShader().modify({
+      'float random': `(vec2 p) {
+        vec3 p3  = fract(vec3(p.xyx) * .1471);
+        p3 += dot(p3, p3.yzx + 32.33);
+        return fract((p3.x + p3.y) * p3.z);
+      }`,
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 texture()                                                *p5.texture()*
+───────────────
+
+📝 Sets the texture that will be used on shapes.  A texture is like a skin that wraps around a shape. `texture()` works with built-in shapes, such as [square()](#/p5/square) and [sphere()](#/p5/sphere), and custom shapes created with functions such as [buildGeometry()](#/p5/buildGeometry). To texture a geometry created with [beginShape()](#/p5/beginShape), uv coordinates must be passed to each [vertex()](#/p5/vertex) call.  The parameter, `tex`, is the texture to apply. `texture()` can use a range of sources including images, videos, and offscreen renderers such as [p5.Graphics](#/p5.Graphics) and [p5.Framebuffer](#/p5.Framebuffer) objects.  To texture a geometry created with [beginShape()](#/p5/beginShape), you will need to specify uv coordinates in [vertex()](#/p5/vertex).  Note: `texture()` can only be used in WebGL mode.    ` let img;  async function setup() { // Load an image and create a p5.Image object. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100, WEBGL);  describe('A spinning cube with an image of a ceiling on each face.'); }  function draw() { background(0);  // Rotate around the x-, y-, and z-axes. rotateZ(frameCount * 0.01); rotateX(frameCount * 0.01); rotateY(frameCount * 0.01);  // Apply the image as a texture. texture(img);  // Draw the box. box(50); } `    ` let pg;  function setup() { createCanvas(100, 100, WEBGL);  // Create a p5.Graphics object. pg = createGraphics(100, 100);  // Draw a circle to the p5.Graphics object. pg.background(200); pg.circle(50, 50, 30);  describe('A spinning cube with circle at the center of each face.'); }  function draw() { background(0);  // Rotate around the x-, y-, and z-axes. rotateZ(frameCount * 0.01); rotateX(frameCount * 0.01); rotateY(frameCount * 0.01);  // Apply the p5.Graphics object as a texture. texture(pg);  // Draw the box. box(50); } `    ` let vid;  function setup() { // Load a video and create a p5.MediaElement object. vid = createVideo('assets/fingers.mov');  createCanvas(100, 100, WEBGL);  // Hide the video. vid.hide();  // Set the video to loop. vid.loop();  describe('A rectangle with video as texture'); }  function draw() { background(0);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Apply the video as a texture. texture(vid);  // Draw the rectangle. rect(-40, -40, 80, 80); } `    ` let vid;  function setup() { // Load a video and create a p5.MediaElement object. vid = createVideo('assets/fingers.mov');  createCanvas(100, 100, WEBGL);  // Hide the video. vid.hide();  // Set the video to loop. vid.loop();  describe('A rectangle with video as texture'); }  function draw() { background(0);  // Rotate around the y-axis. rotateY(frameCount * 0.01);  // Set the texture mode. textureMode(NORMAL);  // Apply the video as a texture. texture(vid);  // Draw a custom shape using uv coordinates. beginShape(); vertex(-40, -40, 0, 0); vertex(40, -40, 1, 0); vertex(40, 40, 1, 1); vertex(-40, 40, 0, 1); endShape(); } `
+
+📋 Parameters:
+   • {p5.Image|p5.MediaElement|p5.Graphics|p5.Texture|p5.Framebuffer|p5.FramebufferTexture} tex - media to use as the texture.
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load an image and create a p5.Image object.
+    img = await loadImage('assets/laDefense.jpg');
+    createCanvas(100, 100, WEBGL);
+    describe('A spinning cube with an image of a ceiling on each face.');
+  }
+  function draw() {
+    background(0);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 textureMode()                                                *p5.textureMode()*
+───────────────────
+
+📝 Changes the coordinate system used for textures when they’re applied to custom shapes.  In order for [texture()](#/p5/texture) to work, a shape needs a way to map the points on its surface to the pixels in an image. Built-in shapes such as [rect()](#/p5/rect) and [box()](#/p5/box) already have these texture mappings based on their vertices. Custom shapes created with [vertex()](#/p5/vertex) require texture mappings to be passed as uv coordinates.  Each call to [vertex()](#/p5/vertex) must include 5 arguments, as in `vertex(x, y, z, u, v)`, to map the vertex at coordinates `(x, y, z)` to the pixel at coordinates `(u, v)` within an image. For example, the corners of a rectangular image are mapped to the corners of a rectangle by default:  ```js // Apply the image as a texture. texture(img);  // Draw the rectangle. rect(0, 0, 30, 50); ```  If the image in the code snippet above has dimensions of 300 x 500 pixels, the same result could be achieved as follows:  ```js // Apply the image as a texture. texture(img);  // Draw the rectangle. beginShape();  // Top-left. // u: 0, v: 0 vertex(0, 0, 0, 0, 0);  // Top-right. // u: 300, v: 0 vertex(30, 0, 0, 300, 0);  // Bottom-right. // u: 300, v: 500 vertex(30, 50, 0, 300, 500);  // Bottom-left. // u: 0, v: 500 vertex(0, 50, 0, 0, 500);  endShape(); ```  `textureMode()` changes the coordinate system for uv coordinates.  The parameter, `mode`, accepts two possible constants. If `NORMAL` is passed, as in `textureMode(NORMAL)`, then the texture’s uv coordinates can be provided in the range 0 to 1 instead of the image’s dimensions. This can be helpful for using the same code for multiple images of different sizes. For example, the code snippet above could be rewritten as follows:  ```js // Set the texture mode to use normalized coordinates. textureMode(NORMAL);  // Apply the image as a texture. texture(img);  // Draw the rectangle. beginShape();  // Top-left. // u: 0, v: 0 vertex(0, 0, 0, 0, 0);  // Top-right. // u: 1, v: 0 vertex(30, 0, 0, 1, 0);  // Bottom-right. // u: 1, v: 1 vertex(30, 50, 0, 1, 1);  // Bottom-left. // u: 0, v: 1 vertex(0, 50, 0, 0, 1);  endShape(); ```  By default, `mode` is `IMAGE`, which scales uv coordinates to the dimensions of the image. Calling `textureMode(IMAGE)` applies the default.  Note: `textureMode()` can only be used in WebGL mode.    ` let img;  async function setup() { // Load an image and create a p5.Image object. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100, WEBGL);  describe('An image of a ceiling against a black background.'); }  function draw() { background(0);  // Apply the image as a texture. texture(img);  // Draw the custom shape. // Use the image's width and height as uv coordinates. beginShape(); vertex(-30, -30, 0, 0); vertex(30, -30, img.width, 0); vertex(30, 30, img.width, img.height); vertex(-30, 30, 0, img.height); endShape(); } `    ` let img;  async function setup() { // Load an image and create a p5.Image object. img = await loadImage('assets/laDefense.jpg');  createCanvas(100, 100, WEBGL);  describe('An image of a ceiling against a black background.'); }  function draw() { background(0);  // Set the texture mode. textureMode(NORMAL);  // Apply the image as a texture. texture(img);  // Draw the custom shape. // Use normalized uv coordinates. beginShape(); vertex(-30, -30, 0, 0); vertex(30, -30, 1, 0); vertex(30, 30, 1, 1); vertex(-30, 30, 0, 1); endShape(); } `
+
+📋 Parameters:
+   • {(IMAGE|NORMAL)} mode - either IMAGE or NORMAL.
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    // Load an image and create a p5.Image object.
+    img = await loadImage('assets/laDefense.jpg');
+    createCanvas(100, 100, WEBGL);
+    describe('An image of a ceiling against a black background.');
+  }
+  function draw() {
+    background(0);
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 textureWrap()                                                *p5.textureWrap()*
+───────────────────
+
+📝 Changes the way textures behave when a shape’s uv coordinates go beyond the texture.  In order for [texture()](#/p5/texture) to work, a shape needs a way to map the points on its surface to the pixels in an image. Built-in shapes such as [rect()](#/p5/rect) and [box()](#/p5/box) already have these texture mappings based on their vertices. Custom shapes created with [vertex()](#/p5/vertex) require texture mappings to be passed as uv coordinates.  Each call to [vertex()](#/p5/vertex) must include 5 arguments, as in `vertex(x, y, z, u, v)`, to map the vertex at coordinates `(x, y, z)` to the pixel at coordinates `(u, v)` within an image. For example, the corners of a rectangular image are mapped to the corners of a rectangle by default:  ```js // Apply the image as a texture. texture(img);  // Draw the rectangle. rect(0, 0, 30, 50); ```  If the image in the code snippet above has dimensions of 300 x 500 pixels, the same result could be achieved as follows:  ```js // Apply the image as a texture. texture(img);  // Draw the rectangle. beginShape();  // Top-left. // u: 0, v: 0 vertex(0, 0, 0, 0, 0);  // Top-right. // u: 300, v: 0 vertex(30, 0, 0, 300, 0);  // Bottom-right. // u: 300, v: 500 vertex(30, 50, 0, 300, 500);  // Bottom-left. // u: 0, v: 500 vertex(0, 50, 0, 0, 500);  endShape(); ```  `textureWrap()` controls how textures behave when their uv's go beyond the texture. Doing so can produce interesting visual effects such as tiling. For example, the custom shape above could have u-coordinates are greater than the image’s width:  ```js // Apply the image as a texture. texture(img);  // Draw the rectangle. beginShape(); vertex(0, 0, 0, 0, 0);  // Top-right. // u: 600 vertex(30, 0, 0, 600, 0);  // Bottom-right. // u: 600 vertex(30, 50, 0, 600, 500);  vertex(0, 50, 0, 0, 500); endShape(); ```  The u-coordinates of 600 are greater than the texture image’s width of 300. This creates interesting possibilities.  The first parameter, `wrapX`, accepts three possible constants. If `CLAMP` is passed, as in `textureWrap(CLAMP)`, the pixels at the edge of the texture will extend to the shape’s edges. If `REPEAT` is passed, as in `textureWrap(REPEAT)`, the texture will tile repeatedly until reaching the shape’s edges. If `MIRROR` is passed, as in `textureWrap(MIRROR)`, the texture will tile repeatedly until reaching the shape’s edges, flipping its orientation between tiles. By default, textures `CLAMP`.  The second parameter, `wrapY`, is optional. It accepts the same three constants, `CLAMP`, `REPEAT`, and `MIRROR`. If one of these constants is passed, as in `textureWRAP(MIRROR, REPEAT)`, then the texture will `MIRROR` horizontally and `REPEAT` vertically. By default, `wrapY` will be set to the same value as `wrapX`.  Note: `textureWrap()` can only be used in WebGL mode.    ` let img;  async function setup() { img = await loadImage('assets/rockies128.jpg');  createCanvas(100, 100, WEBGL);  describe( 'An image of a landscape occupies the top-left corner of a square. Its edge colors smear to cover the other thre quarters of the square.' ); }  function draw() { background(0);  // Set the texture mode. textureMode(NORMAL);  // Set the texture wrapping. // Note: CLAMP is the default mode. textureWrap(CLAMP);  // Apply the image as a texture. texture(img);  // Style the shape. noStroke();  // Draw the shape. // Use uv coordinates > 1. beginShape(); vertex(-30, -30, 0, 0, 0); vertex(30, -30, 0, 2, 0); vertex(30, 30, 0, 2, 2); vertex(-30, 30, 0, 0, 2); endShape(); } `    ` let img;  async function setup() { img = await loadImage('assets/rockies128.jpg');  createCanvas(100, 100, WEBGL);  describe('Four identical images of a landscape arranged in a grid.'); }  function draw() { background(0);  // Set the texture mode. textureMode(NORMAL);  // Set the texture wrapping. textureWrap(REPEAT);  // Apply the image as a texture. texture(img);  // Style the shape. noStroke();  // Draw the shape. // Use uv coordinates > 1. beginShape(); vertex(-30, -30, 0, 0, 0); vertex(30, -30, 0, 2, 0); vertex(30, 30, 0, 2, 2); vertex(-30, 30, 0, 0, 2); endShape(); } `    ` let img;  async function setup() { img = await loadImage('assets/rockies128.jpg');  createCanvas(100, 100, WEBGL);  describe( 'Four identical images of a landscape arranged in a grid. The images are reflected horizontally and vertically, creating a kaleidoscope effect.' ); }  function draw() { background(0);  // Set the texture mode. textureMode(NORMAL);  // Set the texture wrapping. textureWrap(MIRROR);  // Apply the image as a texture. texture(img);  // Style the shape. noStroke();  // Draw the shape. // Use uv coordinates > 1. beginShape(); vertex(-30, -30, 0, 0, 0); vertex(30, -30, 0, 2, 0); vertex(30, 30, 0, 2, 2); vertex(-30, 30, 0, 0, 2); endShape(); } `    ` let img;  async function setup() { img = await loadImage('assets/rockies128.jpg');  createCanvas(100, 100, WEBGL);  describe( 'Four identical images of a landscape arranged in a grid. The top row and bottom row are reflections of each other.' ); }  function draw() { background(0);  // Set the texture mode. textureMode(NORMAL);  // Set the texture wrapping. textureWrap(REPEAT, MIRROR);  // Apply the image as a texture. texture(img);  // Style the shape. noStroke();  // Draw the shape. // Use uv coordinates > 1. beginShape(); vertex(-30, -30, 0, 0, 0); vertex(30, -30, 0, 2, 0); vertex(30, 30, 0, 2, 2); vertex(-30, 30, 0, 0, 2); endShape(); } `
+
+📋 Parameters:
+   • {(CLAMP|REPEAT|MIRROR)} wrapX - either CLAMP, REPEAT, or MIRROR
+
+💡 Example:
+>
+  `
+  let img;
+  async function setup() {
+    img = await loadImage('assets/rockies128.jpg');
+    createCanvas(100, 100, WEBGL);
+    describe(
+      'An image of a landscape occupies the top-left corner of a square. Its edge colors smear to cover the other thre quarters of the square.'
+    );
+  }
+  function draw() {
+>
+
+🔗 See also: |p5.3d|
+
+
+🔧 updatePixels()                                                *p5.updatePixels()*
+────────────────────
+
+📝 Updates the framebuffer with the RGBA values in the [pixels](#/p5.Framebuffer/pixels) array.  `myBuffer.updatePixels()` only needs to be called after changing values in the [myBuffer.pixels](#/p5.Framebuffer/pixels) array. Such changes can be made directly after calling [myBuffer.loadPixels()](#/p5.Framebuffer/loadPixels).    ` function setup() { createCanvas(100, 100, WEBGL);  background(200);  // Create a p5.Framebuffer object. let myBuffer = createFramebuffer();  // Load the pixels array. myBuffer.loadPixels();  // Get the number of pixels in the // top half of the framebuffer. let numPixels = myBuffer.pixels.length / 2;  // Set the framebuffer's top half to pink. for (let i = 0; i
+
+💡 Example:
+>
+  `
+  function setup() {
+    createCanvas(100, 100, WEBGL);
+    background(200);
+    // Create a p5.Framebuffer object.
+    let myBuffer = createFramebuffer();
+    // Load the pixels array.
+    myBuffer.loadPixels();
+    // Get the number of pixels in the
+    // top half of the framebuffer.
+>
+
+🔗 See also: |p5.3d|
+
+==============================================================================
+🤖 Generated by p5.man - neovim help generator for p5.js
+🌐 https://github.com/prjctimg/p5.man
