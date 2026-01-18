@@ -26,6 +26,116 @@ local write_file, read, ensure_dir, notify =
 	end, function(message, level)
 		vim.notify(message, level or INFO)
 	end
+
+-- Get cached file path for contributor libraries
+local function get_cache_path(url, filename)
+	ensure_dir(_cfg.cache_dir)
+	local cache_key = vim.fn.sha256(url)
+	local cache_dir = _cfg.cache_dir .. "/" .. cache_key
+	ensure_dir(cache_dir)
+	return cache_dir .. "/" .. filename
+end
+
+-- Multi-selection UI for libraries
+local function select_libraries(on_complete)
+	local lib_choices = {{name = "None", description = "Minimum setup (no additional libraries)"}}
+	for _, lib in ipairs(templates.library_catalog) do
+		insert(lib_choices, {
+			name = lib.name,
+			description = lib.description,
+		})
+	end
+	
+	local selected = {}
+	local function display_selection()
+		local lines = {"Select libraries (Enter to toggle, Space to select/deselect, Escape to finish):", ""}
+		for i, lib in ipairs(lib_choices) do
+			local marker = (vim.tbl_contains(selected, i) and "✓") or "□"
+			local line = string.format("  %s %d. %s - %s", marker, i, lib.name, lib.description)
+			insert(lines, line)
+		end
+		return lines
+	end
+	
+	local buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, display_selection())
+	vim.api.nvim_buf_set_option(buf, "modifiable", false)
+	vim.api.nvim_buf_set_option(buf, "readonly", false)
+	
+	-- Create window in floating configuration
+	local win = vim.api.nvim_open_win(buf, true, {
+		relative = "editor",
+		width = math.min(80, vim.o.columns - 4),
+		height = math.min(#lib_choices + 3, vim.o.lines - 4),
+		col = math.floor((vim.o.columns - math.min(80, vim.o.columns - 4)) / 2),
+		row = math.floor((vim.o.lines - math.min(#lib_choices + 3, vim.o.lines - 4)) / 2),
+		border = "rounded",
+		style = "minimal",
+	})
+	
+	-- Key mappings
+	local function update_display()
+		vim.api.nvim_buf_set_option(buf, "modifiable", true)
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, display_selection())
+		vim.api.nvim_buf_set_option(buf, "modifiable", false)
+	end
+	
+	local function toggle_item()
+		local line = vim.api.nvim_win_get_cursor(win)[1]
+		if line > 2 and line <= #lib_choices + 2 then
+			local index = line - 2
+			if vim.tbl_contains(selected, index) then
+				selected = vim.tbl_filter(function(i) return i ~= index end, selected)
+			else
+				-- If "None" is selected, clear other selections
+				if index == 1 then
+					selected = {1}
+				else
+					-- Remove "None" if other libraries are selected
+					selected = vim.tbl_filter(function(i) return i ~= 1 end, selected)
+					insert(selected, index)
+				end
+			end
+			update_display()
+		end
+	end
+	
+	vim.api.nvim_buf_set_keymap(buf, "n", "<Enter>", "", {
+		callback = toggle_item,
+		desc = "Toggle library selection",
+	})
+	vim.api.nvim_buf_set_keymap(buf, "n", "<Space>", "", {
+		callback = toggle_item,
+		desc = "Toggle library selection",
+	})
+	vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", "", {
+		callback = function()
+			vim.api.nvim_win_close(win, true)
+			if on_complete then
+				local result = {}
+				for _, index in ipairs(selected) do
+					if index > 1 then -- Skip "None" option
+						insert(result, lib_choices[index])
+					end
+				end
+				on_complete(result)
+			end
+		end,
+		desc = "Finish selection",
+	})
+	vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
+		callback = function()
+			vim.api.nvim_win_close(win, true)
+			if on_complete then
+				on_complete({})
+			end
+		end,
+		desc = "Cancel selection",
+	})
+	
+	-- Set cursor position
+	vim.api.nvim_win_set_cursor(win, {3, 0})
+end
 -- Default config
 local cfg = {
 	port = 8000,
@@ -43,6 +153,7 @@ local cfg = {
 	},
 	auto_open = true,
 	browser = "default",
+	cache_dir = vim.fn.stdpath("cache") .. "/p5.nvim",
 }
 -- Internal state
 local _cfg = {}
@@ -57,6 +168,8 @@ local download = {
 
 function I.setup(opts)
 	_cfg = vim.tbl_deep_extend("force", cfg, opts or {})
+	-- Ensure cache directory exists
+	ensure_dir(_cfg.cache_dir)
 	usrcmd("P5Create", function()
 		I.create_new_project()
 	end, { desc = "Create new p5.js project" })
@@ -67,7 +180,39 @@ function I.setup(opts)
 		I.stop_server()
 	end, { desc = "Stop p5.js development server" })
 	usrcmd("P5Download", function()
-		I.fetch()
+		-- Version selection for standalone download
+		vim.ui.select(_cfg.versions, {
+			prompt = "Select p5.js version:",
+			format_item = function(item)
+				local desc = item
+				if item:find("2%.") then
+					desc = desc .. " (latest, includes p5.strands)"
+				else
+					desc = desc .. " (legacy, compatible)"
+				end
+				return desc
+			end,
+		}, function(version)
+			if not version then
+				return
+			end
+			-- Library selection for standalone download
+			select_libraries(function(selected_libs)
+				local selected = selected_libs or {}
+				-- Extract library names from selected objects for downloading
+				local library_names = {}
+				for _, lib in ipairs(selected) do
+					insert(library_names, lib.name)
+				end
+				-- Reset download progress
+				download.total = 0
+				download.completed = 0
+				download.failed = 0
+				download.items = {}
+				-- Download libraries
+				I.fetch(version, library_names)
+			end)
+		end)
 	end, { desc = "Download p5.js libraries" })
 	-- Auto-stop server on exit
 	vim.api.nvim_create_autocmd("VimLeavePre", {
@@ -130,20 +275,8 @@ function I.proceed_with_project_creation(folder_name)
 		if not version then
 			return
 		end
-		-- Library selection
-		local lib_choices = {}
-		for _, lib in ipairs(templates.library_catalog) do
-			insert(lib_choices, {
-				name = lib.name,
-				description = lib.description,
-			})
-		end
-		vim.ui.select(lib_choices, {
-			prompt = "Select libraries (Ctrl+D for multiple):",
-			format_item = function(item)
-				return item.name .. " - " .. item.description
-			end,
-		}, function(selected_libs)
+		-- Library selection with multi-select UI
+		select_libraries(function(selected_libs)
 			local selected = selected_libs or {}
 			-- Extract library names from selected objects for downloading
 			local library_names = {}
@@ -440,6 +573,65 @@ function I.download(url, dest_path, description, on_complete)
 	})
 	download.total = #download.items
 
+	-- Handle local file:// URLs
+	if url:sub(1, 7) == "file://" then
+		local src_path = url:sub(8) -- Remove "file://" prefix
+		local success = vim.fn.copy(src_path, dest_path) == 0
+		
+		if success then
+			download.completed = download.completed + 1
+		else
+			download.failed = download.failed + 1
+		end
+
+		-- Mark this item as completed
+		for _, item in ipairs(download.items) do
+			if item.description == description then
+				item.success = success
+				break
+			end
+		end
+
+		-- Show progress notification
+		I.show_download_progress()
+
+		if on_complete then
+			on_complete(success)
+		end
+		return
+	end
+
+	-- Check cache for contributor libraries (non-core assets)
+	local filename = vim.fn.fnamemodify(dest_path, ":t")
+	local cache_path = get_cache_path(url, filename)
+	
+	if isfile(cache_path) == 1 then
+		-- Use cached file
+		local success = vim.fn.copy(cache_path, dest_path) == 0
+		if success then
+			download.completed = download.completed + 1
+		else
+			download.failed = download.failed + 1
+		end
+
+		-- Mark this item as completed
+		for _, item in ipairs(download.items) do
+			if item.description == description then
+				item.success = success
+				break
+			end
+		end
+
+		-- Show progress notification
+		I.show_download_progress()
+
+		if on_complete then
+			on_complete(success)
+		end
+		return
+	end
+
+	-- Handle remote URLs with curl (download and cache)
 	local cmd = {
 		"curl",
 		"-sL",
@@ -453,6 +645,8 @@ function I.download(url, dest_path, description, on_complete)
 			local success = exit_code == 0
 			if success then
 				vim.fn.rename(temp_path, dest_path)
+				-- Cache the file for future use
+				vim.fn.copy(dest_path, cache_path)
 				download.completed = download.completed + 1
 			else
 				download.failed = download.failed + 1

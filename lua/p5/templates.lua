@@ -445,6 +445,19 @@ function mousePressed() {
 T.python_reload_script = "server.py"
 -- URL generation functions
 function T.build_library_url(version, url_key)
+	-- Check for local core assets first
+	local plugin_path = vim.fn.fnamemodify(debug.getinfo(1).source:sub(2), ":h:h:h")
+	local asset_path = plugin_path .. "/assets/"
+	
+	if url_key == "core_template" and vim.fn.filereadable(asset_path .. "p5.js") == 1 then
+		return "file://" .. asset_path .. "p5.js"
+	end
+	
+	if url_key == "sound" and vim.fn.filereadable(asset_path .. "p5.sound.js") == 1 then
+		return "file://" .. asset_path .. "p5.sound.js"
+	end
+	
+	-- Fallback to CDN for all libraries (core and contributior)
 	local template = T.urls.libraries[url_key]
 	if not template then
 		return nil
@@ -455,6 +468,16 @@ function T.type_url(type_key)
 	if not type_key or type_key == "" then
 		return nil
 	end
+	
+	-- Check for local type definitions first
+	local plugin_path = vim.fn.fnamemodify(debug.getinfo(1).source:sub(2), ":h:h:h")
+	local asset_path = plugin_path .. "/assets/"
+	
+	if type_key == "p5" and vim.fn.filereadable(asset_path .. "p5.d.ts") == 1 then
+		return "file://" .. asset_path .. "p5.d.ts"
+	end
+	
+	-- Fallback to CDN for all types (including core)
 	local type_path = T.urls.types[type_key]
 	if not type_path then
 		return nil

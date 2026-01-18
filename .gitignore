@@ -1,0 +1,24 @@
+# Ignore static assets - these should be fetched by workflows
+assets/p5.js
+assets/p5.sound.js
+assets/p5.d.ts
+assets/constants.d.ts
+assets/literals.d.ts
+
+# Ignore cache directories
+.cache/
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore editor backup files
+*~
+*.swp
+*.swo
+
+# Ignore node modules (if any)
+node_modules/
+
+# Ignore temporary files
+*.tmp

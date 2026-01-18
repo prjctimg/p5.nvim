@@ -1,0 +1,125 @@
+name: Update Assets
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC to check for updates
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force update even if no new version found'
+        required: false
+        default: 'false'
+
+jobs:
+  update-assets:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Get current p5.js version
+      id: current-version
+      run: |
+        if [ -f "assets/.version" ]; then
+          echo "current=$(cat assets/.version)" >> $GITHUB_OUTPUT
+        else
+          echo "current=unknown" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Get latest p5.js version
+      id: latest-version
+      run: |
+        LATEST=$(curl -s "https://api.github.com/repos/processing/p5.js/releases/latest" | grep '"tag_name"' | sed -E 's/.*"tag_name": ?"([^"]+).*/\1/')
+        echo "latest=$LATEST" >> $GITHUB_OUTPUT
+        echo "Latest p5.js version: $LATEST"
+        
+    - name: Get latest @types/p5 version
+      id: latest-types-version
+      run: |
+        LATEST_TYPES=$(curl -s "https://api.github.com/repos/DefinitelyTyped/DefinitelyTyped/releases/latest" | grep '"tag_name"' | sed -E 's/.*"tag_name": ?"([^"]+).*/\1/' | sed 's/^v//')
+        echo "latest=$LATEST_TYPES" >> $GITHUB_OUTPUT
+        echo "Latest @types/p5 version: $LATEST_TYPES"
+        
+    - name: Check if update is needed
+      id: check-update
+      run: |
+        CURRENT_P5="${{ steps.current-version.outputs.current }}"
+        LATEST_P5="${{ steps.latest-version.outputs.latest }}"
+        FORCE="${{ github.event.inputs.force || 'false' }}"
+        
+        if [ "$FORCE" = "true" ]; then
+          echo "update_needed=true" >> $GITHUB_OUTPUT
+          echo "Force update requested"
+        elif [ "$CURRENT_P5" != "$LATEST_P5" ]; then
+          echo "update_needed=true" >> $GITHUB_OUTPUT
+          echo "Update needed: $CURRENT_P5 -> $LATEST_P5"
+        else
+          echo "update_needed=false" >> $GITHUB_OUTPUT
+          echo "No update needed"
+        fi
+        
+    - name: Update assets
+      if: steps.check-update.outputs.update_needed == 'true'
+      run: |
+        # Ensure assets directory exists
+        mkdir -p assets
+        
+        # Get latest version
+        LATEST_P5="${{ steps.latest-version.outputs.latest }}"
+        LATEST_TYPES="${{ steps.latest-types-version.outputs.latest }}"
+        
+        echo "Updating to p5.js version: $LATEST_P5"
+        echo "Updating to @types/p5 version: $LATEST_TYPES"
+        
+        # Download p5.js core library
+        P5_VERSION=$(echo "$LATEST_P5" | sed 's/^v//')
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/p5.js" -o assets/p5.js
+        
+        # Download p5.sound.js (use latest available)
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@latest/lib/addons/p5.sound.js" -o assets/p5.sound.js
+        
+        # Download TypeScript definitions
+        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES/index.d.ts" -o assets/p5.d.ts
+        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES/constants.d.ts" -o assets/constants.d.ts
+        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES/literals.d.ts" -o assets/literals.d.ts
+        
+        # Update version file
+        echo "$LATEST_P5" > assets/.version
+        
+        # Verify downloads
+        echo "Downloaded files:"
+        ls -la assets/
+        
+    - name: Configure git
+      if: steps.check-update.outputs.update_needed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add assets/
+        
+    - name: Commit and push updates
+      if: steps.check-update.outputs.update_needed == 'true'
+      run: |
+        LATEST_P5="${{ steps.latest-version.outputs.latest }}"
+        LATEST_TYPES="${{ steps.latest-types-version.outputs.latest }}"
+        
+        git commit -m "🔄 Update bundled assets to p5.js $LATEST_P5
+        
+        ## Automated Asset Update
+        
+        - **p5.js**: Updated to $LATEST_P5
+        - **@types/p5**: Updated to $LATEST_TYPES
+        - **p5.sound.js**: Refreshed from latest available version
+        
+        This update ensures offline project creation works with latest p5.js versions."
+        
+        git push
