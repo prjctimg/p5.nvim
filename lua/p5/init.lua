@@ -28,6 +28,23 @@ local write_file, read, ensure_dir, notify =
 		vim.notify(message, level or INFO)
 	end
 
+-- Get p5.js version from assets/.version file
+local function get_p5_version()
+	local plugin_path = vim.fn.fnamemodify(debug.getinfo(1).source:sub(2), ":h:h:h")
+	local version_file = plugin_path .. "/assets/.version"
+	
+	if isfile(version_file) == 1 then
+		local version_content = read(version_file)
+		if version_content and version_content ~= "" then
+			-- Remove 'v' prefix if present and clean whitespace
+			return version_content:gsub("^v", ""):gsub("%s+", "")
+		end
+	end
+	
+	-- Fallback to hardcoded version if file not found
+	return "2.0.5"
+end
+
 -- Get cached file path for contributor libraries
 local function get_cache_path(url, filename, config)
 	config = config or _cfg or cfg
@@ -45,10 +62,10 @@ local function select_libraries(on_complete)
 -- Default config
 local cfg = {
 	port = 8000,
-	default_version = "2.0.5",
+	default_version = get_p5_version(),
 	versions = {
 		"1.9.0",
-		"2.0.5",
+		get_p5_version(),
 	},
 	server_type = "auto", -- auto, live-server, python, static
 	libraries = {
