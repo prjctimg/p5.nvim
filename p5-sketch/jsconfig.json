@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "esm",
+    "checkJs": true,
+    "baseUrl": ".",
+    "typeRoots": ["./lib/types"],
+    "paths": {
+      "p5": ["./lib/types/p5.d.ts"],
+      "p5/*": ["./lib/types/*"]
+    }
+  },
+  "include": [
+    "**/*.js",
+    "**/*.ts",
+    "./p5.global.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

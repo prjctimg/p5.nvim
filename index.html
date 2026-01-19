@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js Sketch</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/addons/p5.strands.js"></script>
+</head>
+<body>
+    <main id="canvas-container"></main>
+    <script src="lib/p5.js"></script>
+    <script src="sketch.js"></script>
+    <script>
+      let lastModified = {};
+      async function checkForChanges() {
+        try {
+          const response = await fetch('./check-changes');
+          const changed = await response.text();
+          if (changed === 'true') {
+            location.reload();
+          }
+        } catch (e) {
+          console.log('Waiting for server...');
+        }
+      }
+      setInterval(checkForChanges, 1000);
+    </script></body>
+</html>

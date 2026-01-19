@@ -3,6 +3,7 @@
 --- Released under the GPL-3.0 license.
 local I = {}
 local templates = require("p5.templates")
+local multiselect = require("p5.multiselect")
 
 -- Logging level constants for DRY principle
 local INFO, ERROR, WARN = vim.log.levels.INFO, vim.log.levels.WARN, vim.log.levels.ERROR
@@ -28,114 +29,19 @@ local write_file, read, ensure_dir, notify =
 	end
 
 -- Get cached file path for contributor libraries
-local function get_cache_path(url, filename)
-	ensure_dir(_cfg.cache_dir)
+local function get_cache_path(url, filename, config)
+	config = config or _cfg or cfg
+	ensure_dir(config.cache_dir)
 	local cache_key = vim.fn.sha256(url)
-	local cache_dir = _cfg.cache_dir .. "/" .. cache_key
+	local cache_dir = config.cache_dir .. "/" .. cache_key
 	ensure_dir(cache_dir)
 	return cache_dir .. "/" .. filename
 end
 
--- Multi-selection UI for libraries
+-- Multi-selection UI for libraries (uses nui.nvim or fallback)
 local function select_libraries(on_complete)
-	local lib_choices = {{name = "None", description = "Minimum setup (no additional libraries)"}}
-	for _, lib in ipairs(templates.library_catalog) do
-		insert(lib_choices, {
-			name = lib.name,
-			description = lib.description,
-		})
-	end
-	
-	local selected = {}
-	local function display_selection()
-		local lines = {"Select libraries (Enter to toggle, Space to select/deselect, Escape to finish):", ""}
-		for i, lib in ipairs(lib_choices) do
-			local marker = (vim.tbl_contains(selected, i) and "✓") or "□"
-			local line = string.format("  %s %d. %s - %s", marker, i, lib.name, lib.description)
-			insert(lines, line)
-		end
-		return lines
-	end
-	
-	local buf = vim.api.nvim_create_buf(false, true)
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, display_selection())
-	vim.api.nvim_buf_set_option(buf, "modifiable", false)
-	vim.api.nvim_buf_set_option(buf, "readonly", false)
-	
-	-- Create window in floating configuration
-	local win = vim.api.nvim_open_win(buf, true, {
-		relative = "editor",
-		width = math.min(80, vim.o.columns - 4),
-		height = math.min(#lib_choices + 3, vim.o.lines - 4),
-		col = math.floor((vim.o.columns - math.min(80, vim.o.columns - 4)) / 2),
-		row = math.floor((vim.o.lines - math.min(#lib_choices + 3, vim.o.lines - 4)) / 2),
-		border = "rounded",
-		style = "minimal",
-	})
-	
-	-- Key mappings
-	local function update_display()
-		vim.api.nvim_buf_set_option(buf, "modifiable", true)
-		vim.api.nvim_buf_set_lines(buf, 0, -1, false, display_selection())
-		vim.api.nvim_buf_set_option(buf, "modifiable", false)
-	end
-	
-	local function toggle_item()
-		local line = vim.api.nvim_win_get_cursor(win)[1]
-		if line > 2 and line <= #lib_choices + 2 then
-			local index = line - 2
-			if vim.tbl_contains(selected, index) then
-				selected = vim.tbl_filter(function(i) return i ~= index end, selected)
-			else
-				-- If "None" is selected, clear other selections
-				if index == 1 then
-					selected = {1}
-				else
-					-- Remove "None" if other libraries are selected
-					selected = vim.tbl_filter(function(i) return i ~= 1 end, selected)
-					insert(selected, index)
-				end
-			end
-			update_display()
-		end
-	end
-	
-	vim.api.nvim_buf_set_keymap(buf, "n", "<Enter>", "", {
-		callback = toggle_item,
-		desc = "Toggle library selection",
-	})
-	vim.api.nvim_buf_set_keymap(buf, "n", "<Space>", "", {
-		callback = toggle_item,
-		desc = "Toggle library selection",
-	})
-	vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", "", {
-		callback = function()
-			vim.api.nvim_win_close(win, true)
-			if on_complete then
-				local result = {}
-				for _, index in ipairs(selected) do
-					if index > 1 then -- Skip "None" option
-						insert(result, lib_choices[index])
-					end
-				end
-				on_complete(result)
-			end
-		end,
-		desc = "Finish selection",
-	})
-	vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
-		callback = function()
-			vim.api.nvim_win_close(win, true)
-			if on_complete then
-				on_complete({})
-			end
-		end,
-		desc = "Cancel selection",
-	})
-	
-	-- Set cursor position
-	vim.api.nvim_win_set_cursor(win, {3, 0})
-end
+	multiselect.select_libraries(on_complete)
+ end
 -- Default config
 local cfg = {
 	port = 8000,
@@ -603,7 +509,7 @@ function I.download(url, dest_path, description, on_complete)
 
 	-- Check cache for contributor libraries (non-core assets)
 	local filename = vim.fn.fnamemodify(dest_path, ":t")
-	local cache_path = get_cache_path(url, filename)
+	local cache_path = get_cache_path(url, filename, _cfg)
 	
 	if isfile(cache_path) == 1 then
 		-- Use cached file
