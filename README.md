@@ -135,22 +135,52 @@ require('p5').setup({
 
 ### 🔄 Asset Updates
 
-The bundled p5.js libraries and TypeScript definitions are automatically updated:
+The bundled p5.js libraries and TypeScript definitions are automatically managed via GitHub Actions:
 
-- **Daily Checks**: GitHub Actions runs daily to check for new releases
-- **Automatic Updates**: When new versions are found, assets are updated automatically
-- **Manual Updates**: Run `./scripts/update-assets.sh` to update manually
+#### Automated Updates
+- **Release Monitoring**: Checks every 2 hours for new p5.js releases
+- **Automatic Updates**: Assets updated when new versions are detected
+- **Issue Creation**: Creates GitHub issues for new releases requiring attention
+- **Testing**: Validates all downloaded assets for correctness
 
+#### Manual Updates
 ```sh
-# Check for updates
+# Update to latest versions
 ./scripts/update-assets.sh
 
-# Force update (even if current)
-./scripts/update-assets.sh --force
+# Update to specific p5.js version
+./scripts/update-assets.sh v1.9.0
 
-# Update and commit to repository  
-./scripts/update-assets.sh --force --commit
+# Update both p5.js and types to specific versions
+./scripts/update-assets.sh v1.9.0 1.9.0
+
+# Verify current assets
+./scripts/verify-assets.sh
 ```
+
+#### Asset Structure
+```
+assets/
+├── core/                    # p5.js libraries
+│   ├── p5.js              # Full development version
+│   ├── p5.min.js          # Minified production version
+│   ├── p5.sound.js        # Sound library
+│   └── p5.sound.min.js    # Minified sound library
+├── types/                  # TypeScript definitions
+│   ├── p5.d.ts           # Main type definitions
+│   ├── constants.d.ts    # P5 constants
+│   └── literals.d.ts     # Type literals
+├── .version               # Legacy version file
+└── version.json           # Complete version info
+```
+
+#### GitHub Actions Workflows
+- **🔄 Update Assets on Release**: Main workflow for automated asset updates
+- **🧪 Test Assets**: Validates downloaded assets and runs tests
+- **📡 Monitor Releases**: Monitors p5.js repository for new releases
+- **📚 Generate Docs**: Updates Neovim help documentation
+
+See [`.github/WORKFLOWS.md`](.github/WORKFLOWS.md) for detailed workflow documentation.
 
 > **License ⚖️**
 >

@@ -1,8 +1,9 @@
-name: Update Assets
+name: Update Assets (Legacy)
 
 on:
   schedule:
     # Run daily at 2 AM UTC to check for updates
+    # Note: This workflow is deprecated, use update-on-release.yml instead
     - cron: '0 2 * * *'
   workflow_dispatch:
     inputs:
@@ -10,6 +11,10 @@ on:
         description: 'Force update even if no new version found'
         required: false
         default: 'false'
+      version:
+        description: 'Specific version to update to (e.g., v1.9.0)'
+        required: false
+        default: ''
 
 jobs:
   update-assets:
@@ -71,10 +76,15 @@ jobs:
       if: steps.check-update.outputs.update_needed == 'true'
       run: |
         # Ensure assets directory exists
-        mkdir -p assets
+        mkdir -p assets/core
+        mkdir -p assets/types
         
         # Get latest version
-        LATEST_P5="${{ steps.latest-version.outputs.latest }}"
+        if [ -n "${{ github.event.inputs.version }}" ]; then
+          LATEST_P5="${{ github.event.inputs.version }}"
+        else
+          LATEST_P5="${{ steps.latest-version.outputs.latest }}"
+        fi
         LATEST_TYPES="${{ steps.latest-types-version.outputs.latest }}"
         
         echo "Updating to p5.js version: $LATEST_P5"
@@ -82,15 +92,28 @@ jobs:
         
         # Download p5.js core library
         P5_VERSION=$(echo "$LATEST_P5" | sed 's/^v//')
-        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/p5.js" -o assets/p5.js
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/p5.js" -o assets/core/p5.js
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/p5.min.js" -o assets/core/p5.min.js
         
         # Download p5.sound.js (use latest available)
-        curl -sL "https://cdn.jsdelivr.net/npm/p5@latest/lib/addons/p5.sound.js" -o assets/p5.sound.js
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/addons/p5.sound.js" -o assets/core/p5.sound.js
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/addons/p5.sound.min.js" -o assets/core/p5.sound.min.js
         
         # Download TypeScript definitions
-        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES/index.d.ts" -o assets/p5.d.ts
-        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES/constants.d.ts" -o assets/constants.d.ts
-        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES/literals.d.ts" -o assets/literals.d.ts
+        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES/index.d.ts" -o assets/types/p5.d.ts
+        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES/constants.d.ts" -o assets/types/constants.d.ts
+        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES/literals.d.ts" -o assets/types/literals.d.ts
+        
+        # Create version.json
+        cat > assets/version.json << EOF
+        {
+          "p5js": "$LATEST_P5",
+          "p5js_semver": "$P5_VERSION",
+          "types": "$LATEST_TYPES",
+          "updated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+          "legacy_workflow": true
+        }
+        EOF
         
         # Update version file
         echo "$LATEST_P5" > assets/.version
@@ -98,6 +121,10 @@ jobs:
         # Verify downloads
         echo "Downloaded files:"
         ls -la assets/
+        echo "Core files:"
+        ls -la assets/core/
+        echo "TypeScript files:"
+        ls -la assets/types/
         
     - name: Configure git
       if: steps.check-update.outputs.update_needed == 'true'

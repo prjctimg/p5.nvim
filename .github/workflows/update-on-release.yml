@@ -1,0 +1,332 @@
+name: Update Assets on Release
+
+on:
+  # Trigger when p5.js releases a new version
+  schedule:
+    # Check every 2 hours for new releases
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Specific p5.js version to update to (e.g., v1.9.0)'
+        required: false
+        default: ''
+      update_types:
+        description: 'Update TypeScript definitions as well'
+        required: false
+        type: boolean
+        default: true
+  repository_dispatch:
+    types: [p5-release]
+
+env:
+  P5_REPO: 'processing/p5.js'
+  TYPES_REPO: 'DefinitelyTyped/DefinitelyTyped'
+
+jobs:
+  check-for-release:
+    runs-on: ubuntu-latest
+    outputs:
+      latest_version: ${{ steps.get-latest.outputs.version }}
+      current_version: ${{ steps.get-current.outputs.version }}
+      update_needed: ${{ steps.compare.outputs.update_needed }}
+      latest_types_version: ${{ steps.get-types.outputs.version }}
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Get current p5.js version
+      id: get-current
+      run: |
+        if [ -f "assets/.version" ]; then
+          CURRENT=$(cat assets/.version)
+          echo "version=$CURRENT" >> $GITHUB_OUTPUT
+          echo "Current p5.js version: $CURRENT"
+        else
+          echo "version=none" >> $GITHUB_OUTPUT
+          echo "No current version found"
+        fi
+        
+    - name: Get latest p5.js release
+      id: get-latest
+      run: |
+        if [ -n "${{ github.event.inputs.version }}" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+          echo "Using specified version: $VERSION"
+        else
+          # Get latest release from GitHub API
+          VERSION=$(curl -s "https://api.github.com/repos/${{ env.P5_REPO }}/releases/latest" | \
+            grep '"tag_name"' | sed -E 's/.*"tag_name": ?"([^"]+).*/\1/')
+          echo "Latest p5.js version: $VERSION"
+        fi
+        
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        
+        # Get release info for commit message
+        curl -s "https://api.github.com/repos/${{ env.P5_REPO }}/releases/tags/$VERSION" | \
+          jq -r '.body' > /tmp/release_notes.txt 2>/dev/null || echo "Release notes not available" > /tmp/release_notes.txt
+        
+    - name: Get latest @types/p5 version
+      id: get-types
+      run: |
+        # Get latest version from npm registry
+        TYPES_VERSION=$(curl -s "https://registry.npmjs.org/@types/p5/latest" | \
+          jq -r '.version')
+        echo "version=$TYPES_VERSION" >> $GITHUB_OUTPUT
+        echo "Latest @types/p5 version: $TYPES_VERSION"
+        
+    - name: Compare versions
+      id: compare
+      run: |
+        CURRENT="${{ steps.get-current.outputs.version }}"
+        LATEST="${{ steps.get-latest.outputs.version }}"
+        
+        if [ "$CURRENT" = "none" ] || [ "$CURRENT" != "$LATEST" ]; then
+          echo "update_needed=true" >> $GITHUB_OUTPUT
+          echo "Update needed: $CURRENT -> $LATEST"
+        else
+          echo "update_needed=false" >> $GITHUB_OUTPUT
+          echo "No update needed: current is latest ($LATEST)"
+        fi
+
+  update-assets:
+    needs: check-for-release
+    if: needs.check-for-release.outputs.update_needed == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Create assets directory
+      run: |
+        mkdir -p assets/core
+        mkdir -p assets/types
+        
+    - name: Download p5.js assets
+      env:
+        LATEST_VERSION: ${{ needs.check-for-release.outputs.latest_version }}
+        LATEST_TYPES_VERSION: ${{ needs.check-for-release.outputs.latest_types_version }}
+        UPDATE_TYPES: ${{ github.event.inputs.update_types || 'true' }}
+      run: |
+        # Clean version string
+        P5_VERSION=$(echo "$LATEST_VERSION" | sed 's/^v//')
+        echo "Downloading p5.js version: $LATEST_VERSION ($P5_VERSION)"
+        
+        # Download core p5.js library
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/p5.js" \
+          -o "assets/core/p5.js"
+        
+        # Download p5.sound.js
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/addons/p5.sound.js" \
+          -o "assets/core/p5.sound.js"
+        
+        # Download minified versions for production
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/p5.min.js" \
+          -o "assets/core/p5.min.js"
+        
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_VERSION/lib/addons/p5.sound.min.js" \
+          -o "assets/core/p5.sound.min.js"
+        
+        # Verify core downloads
+        echo "Core libraries downloaded:"
+        ls -la assets/core/
+        
+        # Update TypeScript definitions if requested
+        if [ "$UPDATE_TYPES" = "true" ]; then
+          echo "Downloading TypeScript definitions version: $LATEST_TYPES_VERSION"
+          
+          # Download main types
+          curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES_VERSION/index.d.ts" \
+            -o "assets/types/p5.d.ts"
+          
+          # Download additional type files if they exist
+          for file in constants literals; do
+            curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$LATEST_TYPES_VERSION/${file}.d.ts" \
+              -o "assets/types/${file}.d.ts" || echo "File ${file}.d.ts not found"
+          done
+          
+          echo "TypeScript definitions downloaded:"
+          ls -la assets/types/
+        fi
+        
+        # Create version info file
+        cat > assets/version.json << EOF
+        {
+          "p5js": "$LATEST_VERSION",
+          "p5js_semver": "$P5_VERSION",
+          "types": "$LATEST_TYPES_VERSION",
+          "updated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+          "assets": {
+            "core": [
+              "p5.js",
+              "p5.min.js", 
+              "p5.sound.js",
+              "p5.sound.min.js"
+            ],
+            "types": [
+              "p5.d.ts",
+              "constants.d.ts",
+              "literals.d.ts"
+            ]
+          }
+        }
+        EOF
+        
+        # Create legacy .version file for backward compatibility
+        echo "$LATEST_VERSION" > assets/.version
+        
+    - name: Verify downloaded files
+      run: |
+        echo "Verifying downloaded assets..."
+        
+        # Check if core files exist and have content
+        for file in "assets/core/p5.js" "assets/core/p5.sound.js"; do
+          if [ -f "$file" ] && [ -s "$file" ]; then
+            SIZE=$(wc -c < "$file")
+            echo "✓ $file (${SIZE} bytes)"
+          else
+            echo "✗ $file is missing or empty"
+            exit 1
+          fi
+        done
+        
+        # Check TypeScript files if they were updated
+        if [ -f "assets/types/p5.d.ts" ]; then
+          SIZE=$(wc -c < "assets/types/p5.d.ts")
+          echo "✓ assets/types/p5.d.ts (${SIZE} bytes)"
+        fi
+        
+    - name: Create update script
+      run: |
+        cat > scripts/update-assets.sh << 'EOF'
+        #!/bin/bash
+        # Asset update script for local development
+        
+        set -e
+        
+        P5_VERSION="${1:-latest}"
+        TYPES_VERSION="${2:-latest}"
+        
+        echo "Updating p5.js assets..."
+        echo "p5.js version: $P5_VERSION"
+        echo "@types/p5 version: $TYPES_VERSION"
+        
+        # Create directories
+        mkdir -p assets/core
+        mkdir -p assets/types
+        
+        # Clean version string
+        if [ "$P5_VERSION" != "latest" ]; then
+          P5_CLEAN=$(echo "$P5_VERSION" | sed 's/^v//')
+        else
+          P5_CLEAN="latest"
+        fi
+        
+        # Download core libraries
+        echo "Downloading core libraries..."
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_CLEAN/lib/p5.js" -o assets/core/p5.js
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_CLEAN/lib/p5.min.js" -o assets/core/p5.min.js
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_CLEAN/lib/addons/p5.sound.js" -o assets/core/p5.sound.js
+        curl -sL "https://cdn.jsdelivr.net/npm/p5@$P5_CLEAN/lib/addons/p5.sound.min.js" -o assets/core/p5.sound.min.js
+        
+        # Download TypeScript definitions
+        echo "Downloading TypeScript definitions..."
+        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$TYPES_VERSION/index.d.ts" -o assets/types/p5.d.ts
+        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$TYPES_VERSION/constants.d.ts" -o assets/types/constants.d.ts 2>/dev/null || true
+        curl -sL "https://cdn.jsdelivr.net/npm/@types/p5@$TYPES_VERSION/literals.d.ts" -o assets/types/literals.d.ts 2>/dev/null || true
+        
+        # Update version file
+        if [ "$P5_VERSION" != "latest" ]; then
+          echo "$P5_VERSION" > assets/.version
+        else
+          # Get actual latest version
+          ACTUAL_VERSION=$(curl -s "https://api.github.com/repos/processing/p5.js/releases/latest" | grep '"tag_name"' | sed -E 's/.*"tag_name": ?"([^"]+).*/\1/')
+          echo "$ACTUAL_VERSION" > assets/.version
+        fi
+        
+        echo "Assets updated successfully!"
+        ls -la assets/
+        EOF
+        
+        chmod +x scripts/update-assets.sh
+        
+    - name: Configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+    - name: Commit and push updates
+      env:
+        LATEST_VERSION: ${{ needs.check-for-release.outputs.latest_version }}
+        LATEST_TYPES_VERSION: ${{ needs.check-for-release.outputs.latest_types_version }}
+      run: |
+        # Add all asset changes
+        git add assets/
+        git add scripts/
+        
+        # Get the changes
+        CHANGES=$(git diff --cached --name-only)
+        if [ -z "$CHANGES" ]; then
+          echo "No changes to commit"
+          exit 0
+        fi
+        
+        # Create commit message with release info
+        cat > commit_message.txt << EOF
+        🔄 Update bundled assets to p5.js $LATEST_VERSION
+        
+        ## Automated Asset Update
+        
+        - **p5.js**: Updated to $LATEST_VERSION
+        - **@types/p5**: Updated to $LATEST_TYPES_VERSION
+        - **Assets**: Core libraries and TypeScript definitions
+        
+        ### Changes:
+        $(git diff --cached --stat)
+        
+        This update ensures offline project creation works with the latest p5.js versions.
+        
+        Run \`./scripts/update-assets.sh\` locally to update assets manually.
+        EOF
+        
+        git commit -F commit_message.txt
+        git push
+        
+        echo "✓ Assets updated and pushed successfully"
+        
+    - name: Create Release (if major version)
+      if: contains(needs.check-for-release.outputs.latest_version, '.0')
+      env:
+        LATEST_VERSION: ${{ needs.check-for-release.outputs.latest_version }}
+      run: |
+        # Check if this is a major/minor release (ends with .0)
+        if [[ "$LATEST_VERSION" =~ \.0$ ]]; then
+          echo "Creating release for $LATEST_VERSION"
+          
+          gh release create "$LATEST_VERSION" \
+            --title "p5.js Assets Update - $LATEST_VERSION" \
+            --notes "Bundled assets update for p5.js $LATEST_VERSION
+            
+          ## What's Updated
+          - Core p5.js library to $LATEST_VERSION
+          - TypeScript definitions to ${{ needs.check-for-release.outputs.latest_types_version }}
+          - All offline assets for project creation
+          
+          ## Installation
+          Users can now create projects with the latest p5.js version using:
+          \`\`\`vim
+          :P5Create
+          \`\`\`
+          
+          The bundled assets ensure offline functionality and faster project setup." \
+            --generate-notes
+        fi

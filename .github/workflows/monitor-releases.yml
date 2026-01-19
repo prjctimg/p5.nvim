@@ -1,0 +1,185 @@
+name: Monitor p5.js Releases
+
+on:
+  schedule:
+    # Check every hour for new releases
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor-releases:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Get latest p5.js release
+      id: latest-release
+      run: |
+        # Get the latest release from p5.js repository
+        LATEST_RELEASE=$(curl -s "https://api.github.com/repos/processing/p5.js/releases/latest" | \
+          jq -r '.tag_name // "unknown"')
+        PUBLISHED_AT=$(curl -s "https://api.github.com/repos/processing/p5.js/releases/latest" | \
+          jq -r '.published_at // "unknown"')
+        RELEASE_BODY=$(curl -s "https://api.github.com/repos/processing/p5.js/releases/latest" | \
+          jq -r '.body // "No release notes"')
+        
+        echo "tag_name=$LATEST_RELEASE" >> $GITHUB_OUTPUT
+        echo "published_at=$PUBLISHED_AT" >> $GITHUB_OUTPUT
+        
+        # Store release body in temp file
+        echo "$RELEASE_BODY" > /tmp/release_body.txt
+        
+        echo "Latest p5.js release: $LATEST_RELEASE"
+        echo "Published at: $PUBLISHED_AT"
+        
+    - name: Check current version
+      id: current-version
+      run: |
+        if [ -f "assets/.version" ]; then
+          CURRENT=$(cat assets/.version)
+          echo "current=$CURRENT" >> $GITHUB_OUTPUT
+          echo "Current bundled version: $CURRENT"
+        else
+          echo "current=none" >> $GITHUB_OUTPUT
+          echo "No current version found"
+        fi
+        
+    - name: Compare versions
+      id: compare
+      run: |
+        CURRENT="${{ steps.current-version.outputs.current }}"
+        LATEST="${{ steps.latest-release.outputs.tag_name }}"
+        
+        if [ "$CURRENT" != "$LATEST" ]; then
+          echo "update_available=true" >> $GITHUB_OUTPUT
+          echo "Update available: $CURRENT -> $LATEST"
+        else
+          echo "update_available=false" >> $GITHUB_OUTPUT
+          echo "No update needed: current is latest ($LATEST)"
+        fi
+        
+    - name: Create issue if update available
+      if: steps.compare.outputs.update_available == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const latestRelease = '${{ steps.latest-release.outputs.tag_name }}';
+          const publishedAt = '${{ steps.latest-release.outputs.published_at }}';
+          const currentVersion = '${{ steps.current-version.outputs.current }}';
+          
+          // Read release body from temp file
+          const fs = require('fs');
+          let releaseBody = '';
+          try {
+            releaseBody = fs.readFileSync('/tmp/release_body.txt', 'utf8');
+            // Limit to first 1000 characters
+            if (releaseBody.length > 1000) {
+              releaseBody = releaseBody.substring(0, 1000) + '...';
+            }
+          } catch (error) {
+            releaseBody = 'Release notes not available';
+          }
+          
+          const issueTitle = `🔄 New p5.js Release Available: ${latestRelease}`;
+          const issueBody = `
+          ## 🚀 New p5.js Release Detected
+          
+          **Latest Version:** ${latestRelease}  
+          **Current Bundled Version:** ${currentVersion}  
+          **Published:** ${publishedAt}
+          
+          ### 📋 Release Notes
+          ${releaseBody}
+          
+          ### 🔄 Update Actions
+          
+          1. **Manual Update:**  
+             Run the "Update Assets on Release" workflow manually with version \`${latestRelease}\`
+          
+          2. **Automatic Update:**  
+             The scheduled workflow will update assets within the next 2 hours
+          
+          3. **Local Testing:**  
+             \`\`\`bash
+             ./scripts/update-assets.sh ${latestRelease}
+             \`\`\`
+          
+          ### 🔗 Links
+          - [p5.js Release Page](https://github.com/processing/p5.js/releases/${latestRelease})
+          - [p5.js Documentation](https://p5js.org/reference/)
+          - [Changelog](https://github.com/processing/p5.js/blob/main/CHANGELOG.md)
+          
+          ---
+          
+          This issue will be automatically closed when the assets are updated.
+          `;
+          
+          // Check if issue already exists
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            labels: ['p5-release']
+          });
+          
+          const existingIssue = issues.data.find(issue => 
+            issue.title.includes(latestRelease) || issue.title.includes('New p5.js Release Available')
+          );
+          
+          if (!existingIssue) {
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body: issueBody,
+              labels: ['p5-release', 'automation', 'enhancement']
+            });
+            
+            console.log(`Created issue for p5.js release ${latestRelease}`);
+          } else {
+            console.log(`Issue for p5.js release already exists: ${existingIssue.html_url}`);
+          }
+          
+    - name: Trigger update workflow
+      if: steps.compare.outputs.update_available == 'true'
+      run: |
+        LATEST="${{ steps.latest-release.outputs.tag_name }}"
+        echo "Triggering update workflow for p5.js $LATEST"
+        
+        # Trigger the update-on-release workflow
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${{ github.repository }}/dispatches" \
+          -d '{
+            "event_type": "p5-release",
+            "client_payload": {
+              "version": "'"$LATEST"'",
+              "triggered_by": "monitor-workflow",
+              "automatic": true
+            }
+          }'
+        
+    - name: Update monitoring status
+      run: |
+        echo "# Release Monitoring Status" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        echo "## Current Status" >> $GITHUB_STEP_SUMMARY
+        echo "- **Latest p5.js:** ${{ steps.latest-release.outputs.tag_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Current Bundled:** ${{ steps.current-version.outputs.current }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Update Available:** ${{ steps.compare.outputs.update_available }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Last Checked:** $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ steps.compare.outputs.update_available }}" = "true" ]; then
+          echo "## 🔄 Actions Taken" >> $GITHUB_STEP_SUMMARY
+          echo "1. ✅ Created issue for new release" >> $GITHUB_STEP_SUMMARY
+          echo "2. ✅ Triggered automatic update workflow" >> $GITHUB_STEP_SUMMARY
+          echo "3. ⏳ Assets will be updated automatically" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "## ✅ Status" >> $GITHUB_STEP_SUMMARY
+          echo "All assets are up to date with the latest p5.js release!" >> $GITHUB_STEP_SUMMARY
+        fi

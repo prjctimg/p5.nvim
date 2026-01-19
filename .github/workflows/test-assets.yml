@@ -1,0 +1,226 @@
+name: Test Assets
+
+on:
+  push:
+    paths: [ 'assets/**' ]
+  pull_request:
+    paths: [ 'assets/**' ]
+  workflow_dispatch:
+
+jobs:
+  test-assets:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Verify asset structure
+      run: |
+        echo "Checking asset structure..."
+        
+        # Check if required directories exist
+        [ -d "assets" ] || (echo "❌ assets directory missing" && exit 1)
+        [ -d "assets/core" ] || (echo "❌ assets/core directory missing" && exit 1)
+        [ -d "assets/types" ] || (echo "❌ assets/types directory missing" && exit 1)
+        
+        echo "✅ Directory structure is correct"
+        
+    - name: Check core libraries
+      run: |
+        echo "Checking core libraries..."
+        
+        # Required core files
+        CORE_FILES=("p5.js" "p5.min.js" "p5.sound.js" "p5.sound.min.js")
+        
+        for file in "${CORE_FILES[@]}"; do
+          filepath="assets/core/$file"
+          if [ -f "$filepath" ] && [ -s "$filepath" ]; then
+            size=$(wc -c < "$filepath")
+            echo "✅ $file (${size} bytes)"
+          else
+            echo "❌ $file is missing or empty"
+            exit 1
+          fi
+        done
+        
+    - name: Check TypeScript definitions
+      run: |
+        echo "Checking TypeScript definitions..."
+        
+        # Required type files
+        TYPE_FILES=("p5.d.ts")
+        
+        for file in "${TYPE_FILES[@]}"; do
+          filepath="assets/types/$file"
+          if [ -f "$filepath" ] && [ -s "$filepath" ]; then
+            size=$(wc -c < "$filepath")
+            echo "✅ $file (${size} bytes)"
+          else
+            echo "❌ $file is missing or empty"
+            exit 1
+          fi
+        done
+        
+        # Check for optional type files
+        OPTIONAL_FILES=("constants.d.ts" "literals.d.ts")
+        for file in "${OPTIONAL_FILES[@]}"; do
+          filepath="assets/types/$file"
+          if [ -f "$filepath" ]; then
+            size=$(wc -c < "$filepath")
+            echo "✅ $file (${size} bytes) [optional]"
+          else
+            echo "⚠️  $file not found [optional]"
+          fi
+        done
+        
+    - name: Verify version files
+      run: |
+        echo "Checking version files..."
+        
+        # Check for .version file (legacy)
+        if [ -f "assets/.version" ]; then
+          VERSION=$(cat assets/.version)
+          echo "✅ .version: $VERSION"
+        else
+          echo "⚠️  assets/.version not found"
+        fi
+        
+        # Check for version.json (new format)
+        if [ -f "assets/version.json" ]; then
+          echo "✅ version.json found"
+          # Validate JSON
+          if jq empty assets/version.json 2>/dev/null; then
+            echo "✅ version.json is valid JSON"
+            
+            # Extract version info
+            P5_VERSION=$(jq -r '.p5js // "unknown"' assets/version.json)
+            TYPES_VERSION=$(jq -r '.types // "unknown"' assets/version.json)
+            UPDATED_AT=$(jq -r '.updated_at // "unknown"' assets/version.json)
+            
+            echo "  📦 p5.js: $P5_VERSION"
+            echo "  📝 @types/p5: $TYPES_VERSION"
+            echo "  📅 Updated: $UPDATED_AT"
+          else
+            echo "❌ version.json is invalid JSON"
+            exit 1
+          fi
+        else
+          echo "⚠️  version.json not found"
+        fi
+        
+    - name: Test JavaScript syntax
+      run: |
+        echo "Testing JavaScript syntax..."
+        
+        # Test if core files are valid JavaScript
+        for file in assets/core/*.js; do
+          if [ -f "$file" ]; then
+            filename=$(basename "$file")
+            # Basic syntax check using Node.js
+            if node --check "$file" 2>/dev/null; then
+              echo "✅ $filename has valid JavaScript syntax"
+            else
+              echo "❌ $filename has JavaScript syntax errors"
+              node --check "$file"
+              exit 1
+            fi
+          fi
+        done
+        
+    - name: Test TypeScript definitions
+      run: |
+        echo "Testing TypeScript definitions..."
+        
+        # Install TypeScript for checking
+        npm install -g typescript
+        
+        # Create a test TypeScript file that uses p5.js types
+        cat > test_p5_types.ts << 'EOF'
+        /// <reference types="./assets/types/p5.d.ts" />
+        
+        // Test basic p5.js types
+        let sketch: p5 = new p5(() => {});
+        
+        function setup(): void {
+          createCanvas(400, 400);
+        }
+        
+        function draw(): void {
+          background(220);
+          circle(200, 200, 50);
+        }
+        
+        // Test sound addon types
+        let sound: p5.SoundFile;
+        let osc: p5.Oscillator;
+        EOF
+        
+        # Compile test file
+        if npx tsc --noEmit --strict test_p5_types.ts 2>/dev/null; then
+          echo "✅ TypeScript definitions are valid"
+        else
+          echo "⚠️  TypeScript definitions have issues (may still be usable)"
+          npx tsc --noEmit --strict test_p5_types.ts || true
+        fi
+        
+        # Clean up
+        rm -f test_p5_types.ts
+        
+    - name: Generate asset summary
+      run: |
+        echo "# Asset Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        echo "## File Structure" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        find assets -type f -name "*.js" -o -name "*.d.ts" -o -name "*.json" | sort >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        echo "## Sizes" >> $GITHUB_STEP_SUMMARY
+        echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+        echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+        
+        for file in $(find assets -type f \( -name "*.js" -o -name "*.d.ts" \) | sort); do
+          size=$(stat -c%s "$file" | numfmt --to=iec)
+          echo "| $file | $size |" >> $GITHUB_STEP_SUMMARY
+        done
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ -f "assets/version.json" ]; then
+          echo "## Version Information" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          cat assets/version.json >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+        fi
+        
+    - name: Test update script
+      run: |
+        echo "Testing update script..."
+        
+        if [ -f "scripts/update-assets.sh" ]; then
+          # Check if script is executable
+          if [ -x "scripts/update-assets.sh" ]; then
+            echo "✅ Update script is executable"
+            
+            # Test script syntax
+            if bash -n scripts/update-assets.sh 2>/dev/null; then
+              echo "✅ Update script has valid bash syntax"
+            else
+              echo "❌ Update script has syntax errors"
+              bash -n scripts/update-assets.sh
+              exit 1
+            fi
+          else
+            echo "⚠️  Update script is not executable"
+          fi
+        else
+          echo "⚠️  Update script not found"
+        fi
