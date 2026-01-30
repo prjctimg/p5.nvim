@@ -1,0 +1,19 @@
+{
+  "p5js": "latest",
+  "p5js_semver": "1.9.0",
+  "types": "1.9.0",
+  "updated_at": "2025-01-30T00:00:00Z",
+  "assets": {
+    "core": [
+      "p5.js",
+      "p5.min.js",
+      "p5.sound.js",
+      "p5.sound.min.js"
+    ],
+    "types": [
+      "p5.d.ts",
+      "constants.d.ts",
+      "literals.d.ts"
+    ]
+  }
+}

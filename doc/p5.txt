@@ -1,0 +1,230 @@
+p5.nvim documentation                                               *p5.nvim*
+
+p5.nvim - A comprehensive Neovim plugin for p5.js development
+
+==============================================================================
+CONTENTS                                       *p5.nvim-contents*
+
+1. Introduction |p5.nvim-introduction|
+2. Requirements |p5.nvim-requirements|
+3. Installation |p5.nvim-installation|
+4. Configuration |p5.nvim-configuration|
+5. Commands |p5.nvim-commands|
+6. Features |p5.nvim-features|
+7. Project Structure |p5.nvim-project-structure|
+8. Library Management |p5.nvim-libraries|
+9. Browser Console |p5.nvim-console|
+10. GitHub Gists |p5.nvim-gists|
+
+==============================================================================
+1. INTRODUCTION                                             *p5.nvim-introduction*
+
+p5.nvim is a comprehensive Neovim plugin for p5.js development that provides
+project creation, live preview, library management, and browser console integration.
+It's designed to work seamlessly with modern Neovim (v0.11.0+) and uses
+snacks.nvim for UI components.
+
+==============================================================================
+2. REQUIREMENTS                                           *p5.nvim-requirements*
+
+- Neovim >= 0.9.0
+- snacks.nvim (required)
+- plenary.nvim (required)  
+- websocket.nvim (optional, for browser console)
+- gh CLI (optional, for gist functionality)
+- curl or wget (for library downloads)
+
+==============================================================================
+3. INSTALLATION                                             *p5.nvim-installation*
+
+Using lazy.nvim: >
+
+    {
+      'your-username/p5.nvim',
+      dependencies = {
+        'folke/snacks.nvim',
+        'nvim-lua/plenary.nvim',
+        'samsze0/websocket.nvim', -- optional
+      },
+      config = function()
+        require('p5').setup({
+          -- your configuration here
+        })
+      end
+    }
+<
+
+==============================================================================
+4. CONFIGURATION                                           *p5.nvim-configuration*
+
+Default configuration: >
+
+    {
+      server = {
+        port = 8000,
+        auto_start = false,
+        preferred_order = {"python", "bun", "deno", "live-server"}
+      },
+      console = {
+        enabled = true,
+        auto_show = true,
+        position = "below",  -- "left", "right", "above", "below"
+        height = 10
+      },
+      libraries = {
+        cdn_sources = {"jsdelivr", "cdnjs", "unpkg"},
+        auto_update = false
+      }
+    }
+<
+
+Configuration Parameters:
+    server.port               Port number for live server
+    server.auto_start         Automatically start server when entering project
+    server.preferred_order    Order of server type detection
+    console.enabled           Enable browser console integration
+    console.auto_show         Show console when server starts
+    console.position          Position of console window
+    console.height            Height of console window
+    libraries.cdn_sources    Preferred CDN sources for libraries
+
+==============================================================================
+5. COMMANDS                                                     *p5.nvim-commands*
+
+*:P5NewProject [name]*
+    Create a new p5.js project with optional project name
+
+*:P5Setup*
+    Initialize plugin environment and create necessary directories
+
+*:P5StartServer [port]*
+    Start live server on specified port (default: 8000)
+
+*:P5StopServer*
+    Stop the running live server
+
+*:P5InstallLib [library...]*
+    Install contributor libraries. If no arguments provided, shows library picker
+
+*:P5RemoveLib [library...]*
+    Remove installed libraries
+
+*:P5UpdateLibs*
+    Update all installed libraries to latest versions
+
+*:P5ToggleConsole*
+    Toggle browser console window visibility
+
+*:P5CreateGist [description]*
+    Upload current project as GitHub gist with optional description
+
+==============================================================================
+6. FEATURES                                                     *p5.nvim-features*
+
+PROJECT CREATION
+    Creates new p5.js projects with:
+    - Proper HTML structure with p5.js CDN links
+    - TypeScript configuration (jsconfig.json) for IntelliSense
+    - Project configuration (p5.json) for workspace tracking
+    - Asset directories for libraries and types
+
+LIBRARY MANAGEMENT
+    - Download contributor libraries from multiple CDNs
+    - Multi-select library picker using snacks.picker
+    - Automatic HTML injection for installed libraries
+    - Workspace configuration for reproducible setups
+
+LIVE SERVER
+    - Auto-detect available server options (Python, Bun, Deno, Node.js)
+    - Custom server scripts with WebSocket console injection
+    - Automatic browser opening
+    - CORS headers for development
+
+BROWSER CONSOLE
+    - Real-time browser logs in toggleable terminal
+    - WebSocket integration with websocket.nvim
+    - Console method overrides for complete log capture
+    - Error handling and uncaught exception reporting
+
+GITHUB GISTS
+    - Create gists from current project files
+    - Clone existing gists as new projects
+    - Update existing gists
+    - Automatic URL copying and browser opening
+
+==============================================================================
+7. PROJECT STRUCTURE                                   *p5.nvim-project-structure*
+
+New projects are created with this structure: >
+
+    my-project/
+    ├── index.html      # Main HTML file with p5.js includes
+    ├── sketch.js       # Your p5.js code
+    ├── jsconfig.json   # TypeScript configuration for IntelliSense
+    ├── p5.json        # Project configuration and library tracking
+    └── assets/
+        ├── types/      # TypeScript definitions
+        └── contrib/   # Downloaded contributor libraries
+<
+
+The p5.json file tracks installed libraries and settings, enabling:
+- Sharing project setups across machines
+- Automatic library installation
+- Server and console preferences
+
+==============================================================================
+8. LIBRARY MANAGEMENT                                         *p5.nvim-libraries*
+
+Available Contributor Libraries:
+
+    • p5.anaglyph      Create 3D stereoscopic scenes
+    • p5.bezier        Draw complex Bézier curves  
+    • p5.brush         Custom brushes and effects
+    • p5.fillGradient  Gradient fills for shapes
+    • p5.cmyk          CMYK color support
+    • p5.play          Game engine with physics
+    • p5.collide2d     2D collision detection
+    • ml5              Machine learning for web
+    • p5.speech        Speech synthesis and recognition
+    • p5.party         Networked multiplayer support
+
+Libraries are automatically injected into index.html and tracked in p5.json
+for workspace reproducibility.
+
+==============================================================================
+9. BROWSER CONSOLE                                           *p5.nvim-console*
+
+The browser console integration provides:
+
+- Real-time log display with timestamps and source information
+- Color-coded log levels (error, warn, info, log)
+- Toggleable window with customizable position and size
+- Automatic WebSocket server startup when live server starts
+- Complete console method overrides for full log capture
+
+Console keymaps:
+    q           Hide console
+    <Esc>       Hide console  
+    c           Clear console logs
+
+==============================================================================
+10. GITHUB GISTS                                               *p5.nvim-gists*
+
+With gh CLI installed, you can:
+
+• Create Gists
+    Upload sketch.js, index.html, and p5.json as a new gist
+    Auto-copy gist URL to clipboard and open in browser
+
+• Clone Gists  
+    Download existing gists and set up as new p5.js projects
+    Automatically create p5.json configuration
+
+• Update Gists
+    Update existing gists with modified sketch.js
+    Maintain same gist ID and URL
+
+Gist integration requires gh CLI authentication: `gh auth login`
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
