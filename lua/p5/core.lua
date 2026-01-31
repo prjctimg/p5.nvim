@@ -21,20 +21,41 @@ M.get_template_dir = function()
   return M.get_plugin_root() .. "/templates"
 end
 
--- Setup environment
-M.setup_environment = function()
-  local root = M.get_plugin_root()
-  local asset_dir = M.get_asset_dir()
+  -- Lazy dependency management
+  M.require_snacks = function()
+    local ok, lazy_module = pcall(require, "p5.lazy")
+    if ok then
+      return lazy_module.require("snacks")
+    end
+    return nil
+  end
   
-  -- Create necessary directories
-  vim.fn.mkdir(asset_dir .. "/core", "p")
-  vim.fn.mkdir(asset_dir .. "/types", "p")
-  vim.fn.mkdir(asset_dir .. "/contrib", "p")
-  vim.fn.mkdir(root .. "/scripts/live-server", "p")
-  
-  local snacks = require("snacks")
-  snacks.notifier.show("P5 environment setup ok", "info")
-end
+  M.require_websocket = function()
+    local ok, lazy_module = pcall(require, "p5.lazy")
+    if ok then
+      return lazy_module.require_opt("websocket", "Browser console forwarding will be disabled")
+    end
+    return nil
+  end
+
+  -- Setup environment
+  M.setup_environment = function()
+    local root = M.get_plugin_root()
+    local asset_dir = M.get_asset_dir()
+    
+    -- Create necessary directories
+    vim.fn.mkdir(asset_dir .. "/core", "p")
+    vim.fn.mkdir(asset_dir .. "/types", "p")
+    vim.fn.mkdir(asset_dir .. "/contrib", "p")
+    vim.fn.mkdir(root .. "/scripts/live-server", "p")
+    
+    local snacks = M.require_snacks()
+    if snacks then
+      snacks.notifier.show("P5 environment setup ok", "info")
+    else
+      vim.notify("P5 environment setup ok", "info")
+    end
+  end
 
 -- Read p5.json configuration
 M.read_workspace_config = function()

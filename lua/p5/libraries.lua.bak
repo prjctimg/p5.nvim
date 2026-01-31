@@ -1,0 +1,431 @@
+-- Library management
+local M = {}
+local core = require("p5.core")
+
+-- Default configuration
+M.config = {
+  cdn_sources = {"jsdelivr", "cdnjs", "unpkg"},
+  auto_update = false
+}
+
+-- Contributor library definitions
+M.contributor_libs = {
+  {
+    name = "p5.anaglyph",
+    description = "Create 3D stereoscopic scenes",
+    cdn = "https://cdn.jsdelivr.net/npm/p5.anaglyph/lib/p5.anaglyph.js"
+  },
+  {
+    name = "p5.bezier",
+    description = "Draw complex Bézier curves",
+    cdn = "https://cdn.jsdelivr.net/npm/p5.bezier/lib/p5.bezier.js"
+  },
+  {
+    name = "p5.brush",
+    description = "Custom brushes and effects",
+    cdn = "https://cdn.jsdelivr.net/npm/p5.brush/lib/p5.brush.js"
+  },
+  {
+    name = "p5.fillGradient",
+    description = "Gradient fills for shapes",
+    cdn = "https://cdn.jsdelivr.net/npm/p5.fillgradient/lib/p5.fillGradient.js"
+  },
+  {
+    name = "p5.cmyk",
+    description = "CMYK color support",
+    cdn = "https://cdn.jsdelivr.net/npm/p5.cmyk/lib/p5.cmyk.js"
+  },
+  {
+    name = "p5.play",
+    description = "Game engine with physics",
+    cdn = "https://cdn.jsdelivr.net/npm/p5.play/lib/p5.play.js"
+  },
+  {
+    name = "p5.collide2d",
+    description = "2D collision detection",
+    cdn = "https://cdn.jsdelivr.net/npm/p5.collide2d/lib/p5.collide2d.js"
+  },
+  {
+    name = "ml5",
+    description = "Machine learning for web",
+    cdn = "https://cdn.jsdelivr.net/npm/ml5/lib/ml5.js"
+  },
+  {
+    name = "p5.party",
+    description = "Networked multiplayer support",
+    cdn = "https://cdn.jsdelivr.net/npm/p5.party/lib/p5.party.js"
+  },
+  {
+    name = "p5.speech",
+    description = "Speech synthesis and recognition",
+    cdn = "https://cdn.jsdelivr.net/npm/p5.speech/lib/p5.speech.js"
+  }
+}
+
+-- Get available libraries list for picker
+M.get_available_libs = function()
+  local libs = {}
+  for _, lib in ipairs(M.contributor_libs) do
+    table.insert(libs, {
+      name = lib.name,
+      description = lib.description
+    })
+  end
+  return libs
+end
+
+-- Show library picker
+M.show_library_picker = function(callback)
+  local core = require("p5.core")
+  if core.require_snacks() then
+    core.require_snacks().picker.pick({
+      title = "Select Libraries",
+      items = M.get_available_libs(),
+      on_submit = function(selected)
+        callback(selected)
+      end
+    })
+  else
+    local libs = M.get_available_libs()
+    vim.ui.select(libs, "Select Libraries", "Type to filter", function(_, choice)
+      callback(choice)
+    end)
+  end
+end
+
+-- Install contributor libraries from CDN
+M.install_libs = function(lib_names)
+  local core = require("p5.core")
+  
+  -- Find library definitions
+  local libs = {}
+  for _, name in ipairs(lib_names) do
+    for _, lib in ipairs(M.contributor_libs) do
+      if lib.name == name then
+        table.insert(libs, lib)
+        break
+      end
+    end
+  end
+  
+  if #libs == 0 then
+    if core.require_snacks() then
+      core.require_snacks().notifier.show("No matching libraries found: " .. table.concat(lib_names, ", "), "warn")
+    else
+      core.notify("No matching libraries found: " .. table.concat(lib_names, ", "), "warn")
+    end
+    return
+  end
+  
+  if core.require_snacks() then
+    core.require_snacks().notifier.show("Installing " .. #libs .. " libraries...", "info")
+  else
+    core.notify("Installing " .. #libs .. " libraries...", "info")
+  end
+  
+  -- Download libraries in parallel
+  local completed_downloads = 0
+  local total_downloads = #libs
+  
+  for _, lib in ipairs(libs) do
+    total_downloads = total_downloads + 1
+    core.download_file(lib.cdn, lib.name .. ".js", function(success)
+      if success then
+        completed_downloads = completed_downloads + 1
+        if core.require_snacks() then
+          core.require_snacks().notifier.show("Downloaded " .. lib.name, "ok")
+        else
+          core.notify("Downloaded " .. lib.name, "ok")
+        end
+      else
+        if core.require_snacks() then
+          core.require_snacks().notifier.show("Failed to download " .. lib.name, "error")
+        else
+          core.notify("Failed to download " .. lib.name, "error")
+        end
+      end
+    end)
+  end
+  
+  local message = "Library installation complete: " .. completed_downloads .. "/" .. total_downloads
+  if core.require_snacks() then
+    core.require_snacks().notifier.show(message, "ok")
+  else
+    core.notify(message, "ok")
+  end
+  
+  -- Update project configuration
+  if core.is_p5_project() then
+    local config = core.read_workspace_config()
+    if config then
+      config.libraries = vim.tbl_deep_extend("force", config.libraries or {}, libs)
+      core.write_workspace_config(config)
+      
+      -- Regenerate index.html
+      local index_file = vim.fn.getcwd() .. "/index.html"
+      if vim.fn.filereadable(index_file) == 1 then
+        local content = vim.fn.readfile(index_file)
+        local html = table.concat(content, "\n")
+        
+        -- Remove existing library scripts
+        html = html:gsub('<!-- p5 libraries start -->.*<!-- p5 libraries end -->', '')
+          :gsub('<script src="assets/contrib/[^"]*"></script>', '')
+        
+        -- Add library scripts
+        local lib_scripts = {}
+        for _, lib in ipairs(config.libraries) do
+          if lib.local_path then
+            table.insert(lib_scripts, '    <script src="' .. lib.local_path .. '"></script>')
+          elseif lib.cdn then
+            table.insert(lib_scripts, '    <script src="' .. lib.cdn .. '"></script>')
+          end
+        end
+        
+        if #lib_scripts > 0 then
+          local lib_html = "  <!-- p5 libraries start -->\n" ..
+                         table.concat(lib_scripts, "\n") ..
+                         "\n  <!-- p5 libraries end -->"
+          
+          -- Insert before closing </head>
+          html = html:gsub("</head>", lib_html .. "\n</head>")
+        end
+        
+        vim.fn.writefile(vim.split(html, "\n"), index_file)
+      end
+    end
+  end
+end
+
+-- Install selected libraries
+M.install_selected_libs = function(libs)
+  if #libs == 0 then
+    if core.require_snacks() then
+      core.require_snacks().notifier.show("No libraries selected", "warn")
+    else
+      core.notify("No libraries selected", "warn")
+    end
+    return
+  end
+  
+  local config = core.read_workspace_config()
+  if not config then
+    if core.require_snacks() then
+      core.require_snacks().notifier.show("Not in a p5.js project", "error")
+    else
+      core.notify("Not in a p5.js project", "error")
+    end
+    return
+  end
+  
+  local project_path = vim.fn.getcwd()
+  local contrib_dir = project_path .. "/assets/contrib"
+  
+  vim.fn.mkdir(contrib_dir, "p")
+  
+  local installed_count = 0
+  
+  for _, lib in ipairs(libs) do
+    local filename = lib.name .. ".js"
+    local dest_path = contrib_dir .. "/" .. filename
+    
+    -- Check if already installed
+    for _, installed in ipairs(config.libraries) do
+      if installed.name == lib.name then
+        if core.require_snacks() then
+          core.require_snacks().notifier.show("Library " .. lib.name .. " already installed", "warn")
+        else
+           core.notify("Library " .. lib.name .. " already installed", "warn")
+        end
+      end
+    end
+end
+      end
+    end
+    
+    core.download_file(lib.cdn, dest_path, function(ok)
+      if ok then
+        -- Add to config
+        table.insert(config.libraries, {
+          name = lib.name,
+          version = "latest",
+          cdn = lib.cdn,
+          local_path = "assets/contrib/" .. filename
+        })
+        
+        installed_count = installed_count + 1
+        if core.require_snacks() then
+          core.require_snacks().notifier.show("Installed " .. lib.name, "ok")
+        else
+          core.notify("Installed " .. lib.name, "ok")
+        end
+      else
+        if core.require_snacks() then
+          core.require_snacks().notifier.show("Failed to install " .. lib.name, "error")
+        else
+          core.notify("Failed to install " .. lib.name, "error")
+        end
+      end
+    end
+    
+    -- Update config when all downloads complete
+    if installed_count == #libs then
+      core.write_workspace_config(config)
+      M.update_index_html()
+    end
+  end
+end
+
+-- Remove installed libraries
+M.remove_libs = function(lib_names)
+  local config = core.read_workspace_config()
+  if not config then
+    core.notify("Not in a p5.js project", "error")
+    return
+  end
+  
+  if not config.libraries or #config.libraries == 0 then
+    core.notify("No libraries installed", "warn")
+    return
+  end
+  
+  local core = require("p5.core")
+  
+  for _, remove_name in ipairs(lib_names) do
+    for i, lib in ipairs(config.libraries) do
+      if lib.name == remove_name then
+        -- Remove local file if exists
+        if lib.local_path then
+          local filepath = vim.fn.getcwd() .. "/" .. lib.local_path
+          if vim.fn.filereadable(filepath) == 1 then
+            vim.fn.delete(filepath)
+          end
+        end
+        
+        table.remove(config.libraries, i)
+        if core.require_snacks() then
+          core.require_snacks().notifier.show("Removed " .. remove_name, "ok")
+        else
+          core.notify("Removed " .. remove_name, "ok")
+        end
+        break
+      end
+    end
+  end
+  
+  core.write_workspace_config(config)
+  M.update_index_html()
+end
+
+-- Update index.html with new library scripts
+M.update_index_html = function()
+  local index_file = vim.fn.getcwd() .. "/index.html"
+  if vim.fn.filereadable(index_file) == 0 then
+    return
+  end
+  
+  local content = vim.fn.readfile(index_file)
+  local html = table.concat(content, "\n")
+  
+  -- Remove existing library scripts
+  html = html:gsub('<!-- p5 libraries start -->.*<!-- p5 libraries end -->', '')
+    :gsub('<script src="assets/contrib/[^"]*"></script>', '')
+  
+  local config = core.read_workspace_config()
+  if config and config.libraries and #config.libraries > 0 then
+    -- Add library scripts
+    local lib_scripts = {}
+    for _, lib in ipairs(config.libraries) do
+      if lib.local_path then
+        table.insert(lib_scripts, '    <script src="' .. lib.local_path .. '"></script>')
+      elseif lib.cdn then
+        table.insert(lib_scripts, '    <script src="' .. lib.cdn .. '"></script>')
+      end
+    end
+    
+    if #lib_scripts > 0 then
+      local lib_html = "  <!-- p5 libraries start -->\n" ..
+                       table.concat(lib_scripts, "\n") ..
+                       "\n  <!-- p5 libraries end -->"
+      
+      -- Insert before closing </head>
+      html = html:gsub("</head>", lib_html .. "\n</head>")
+    end
+    
+    vim.fn.writefile(vim.split(html, "\n"), index_file)
+  end
+end
+
+-- Update all installed libraries
+M.update_libs = function()
+  local config = core.read_workspace_config()
+  if not config or not config.libraries then
+    core.notify("No libraries installed", "warn")
+    return
+  end
+  
+  if core.require_snacks() then
+    core.require_snacks().notifier.show("Checking for library updates...", "info")
+  else
+    core.notify("Checking for library updates...", "info")
+  end
+  
+  -- Re-download all libraries to latest versions
+  for _, lib in ipairs(config.libraries) do
+    local filename = lib.name .. ".js"
+    local dest_path = vim.fn.getcwd() .. "/assets/contrib/" .. filename
+    
+    core.download_file(lib.cdn, dest_path, function(success)
+      if success then
+        if core.require_snacks() then
+          core.require_snacks().notifier.show("Updated " .. lib.name, "ok")
+        else
+          core.notify("Updated " .. lib.name, "ok")
+        end
+      else
+        if core.require_snacks() then
+          core.require_snacks().notifier.show("Failed to update " .. lib.name, "error")
+        else
+          core.notify("Failed to update " .. lib.name, "error")
+        end
+      end
+    end)
+  end
+  
+  local message = "Library update complete"
+  if core.require_snacks() then
+    core.require_snacks().notifier.show(message, "ok")
+  else
+    core.notify(message, "ok")
+  end
+end
+
+-- Check if workspace is a p5 project
+M.is_p5_project = function()
+  local config = core.read_workspace_config()
+  return config ~= nil
+end
+
+-- Read workspace configuration
+M.read_workspace_config = function()
+  local config_file = vim.fn.getcwd() .. "/p5.json"
+  if vim.fn.filereadable(config_file) == 0 then
+    return nil
+  end
+  
+  local content = vim.fn.readfile(config_file)
+  return vim.fn.json_decode(content)
+end
+
+-- Write workspace configuration
+M.write_workspace_config = function(config)
+  local config_file = vim.fn.getcwd() .. "/p5.json"
+  local content = vim.fn.json_encode(config)
+  vim.fn.writefile(vim.split(content, "\n"), config_file)
+end
+
+-- Setup libraries module
+M.setup = function(config)
+  M.config = vim.tbl_deep_extend("force", M.config, config or {})
+end
+
+return M

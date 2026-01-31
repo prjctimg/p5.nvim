@@ -1,10 +1,30 @@
--- Server management for p5.nvim
+-- Live server management
 local M = {}
 local core = require("p5.core")
 
-M.server_job = nil
-M.server_type = nil
-M.port = 8000
+-- Default configuration
+M.config = {
+  port = 8000,
+  auto_start = false,
+  preferred_order = {"python", "bun", "deno", "node"},
+  live_reload = {
+    enabled = true,
+    port = 12002,
+    debounce_ms = 300,
+    watch_extensions = {".js", ".css", ".html", ".json"},
+    exclude_dirs = {".git", "node_modules", "dist", "build"}
+  },
+  console = {
+    enabled = true,
+    auto_show = true,
+    position = "below",
+    height = 10
+  },
+  libraries = {
+    cdn_sources = {"jsdelivr", "cdnjs", "unpkg"},
+    auto_update = false
+  }
+}
 
 -- Detect available server options
 M.detect_server = function()
@@ -45,19 +65,14 @@ end
 
 -- Start live server
 M.start_server = function(port)
-  if M.server_job then
-    core.notify("Server already running", "warn")
+  local server_type = M.detect_server()
+  if not server_type then
+    core.notify("No suitable server found (python3, bun, deno, or node)", "error")
     return
   end
 
   port = port or M.port
   M.port = port
-
-  local server_type = M.detect_server()
-  if not server_type then
-    core.notify("No suitable server found (python3, bun, deno, or npx)", "error")
-    return
-  end
 
   local cmd = M.get_server_command(server_type, port)
   if not cmd then
@@ -67,11 +82,20 @@ M.start_server = function(port)
 
   -- Start WebSocket server for console integration
   local console = require("p5.console")
+  local core_ref = require("p5.core")
   local ws_started = console.start_websocket_server()
   
+  if ws_started then
+    if core_ref.require_snacks() then
+      core_ref.require_snacks().notifier.show("Console WebSocket server started on port 12001", "ok")
+    else
+      core_ref.notify("Console WebSocket server started on port 12001", "ok")
+    end
+  end
+
   M.server_job = vim.fn.jobstart(cmd, {
     on_stdout = function(_, data)
-      if data and #data > 0 then
+      if data and #data > 0 and data[1] ~= "" then
         -- Process server output if needed
       end
     end,
@@ -99,10 +123,6 @@ M.start_server = function(port)
     local url = "http://localhost:" .. port
     core.notify("Server started (" .. server_type .. ") at " .. url, "ok")
     
-    if ws_started then
-      core.notify("Console WebSocket server started on port 12001", "ok")
-    end
-    
     -- Auto-open browser
     vim.fn.system({ "xdg-open", url })
     
@@ -112,7 +132,6 @@ M.start_server = function(port)
     end
   else
     core.notify("Failed to start server", "error")
-    console.stop_websocket_server()
   end
 end
 
@@ -128,22 +147,15 @@ M.stop_server = function()
   M.server_type = nil
   
   -- Stop WebSocket server
-  require("p5.console").stop_websocket_server()
+  local console = require("p5.console")
+  console.stop_websocket_server()
   
   core.notify("Server stopped", "info")
 end
 
--- Get server status
-M.get_status = function()
-  return {
-    running = M.server_job ~= nil,
-    type = M.server_type,
-    port = M.port
-  }
-end
-
+-- Setup server module
 M.setup = function(config)
-  M.config = config
+  M.config = vim.tbl_deep_extend("force", M.config, config or {})
 end
 
 return M

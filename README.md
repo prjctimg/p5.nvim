@@ -15,23 +15,25 @@ A comprehensive Neovim plugin for p5.js development with live preview, library m
 ## Requirements
 
 - Neovim >= 0.9.0
+- [lazy.nvim](https://github.com/folke/lazy.nvim) plugin manager
 - snacks.nvim (required)
-- plenary.nvim (required)
 - websocket.nvim (optional, for browser console)
 - gh CLI (optional, for gist functionality)
 - curl or wget (for library downloads)
 
 ## Installation
 
-Using [lazy.nvim](https://github.com/folke/lazy.nvim):
+### Using lazy.nvim (Recommended)
+
+**For development/installation from local directory:**
 
 ```lua
 {
-  'your-username/p5.nvim',
+  dir = vim.fn.stdpath("config") .. "/lazy/p5.nvim",
+  name = "p5.nvim",
   dependencies = {
     'folke/snacks.nvim',
-    'nvim-lua/plenary.nvim',
-    'samsze0/websocket.nvim', -- optional
+    { 'samuelcolvin/websocket.nvim', optional = true }, -- optional for browser console
   },
   config = function()
     require('p5').setup({
@@ -40,6 +42,30 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
   end
 }
 ```
+
+**For installation from remote repository:**
+
+```lua
+{
+  'your-username/p5.nvim',
+  dependencies = {
+    'folke/snacks.nvim',
+    { 'samuelcolvin/websocket.nvim', optional = true }, -- optional for browser console
+  },
+  config = function()
+    require('p5').setup({
+      -- your configuration here
+    })
+  end
+}
+```
+
+### Dependency Management
+
+p5.nvim uses lazy.nvim's built-in dependency management:
+- **Required dependencies** (like `snacks.nvim`) are automatically loaded
+- **Optional dependencies** (like `websocket.nvim`) are gracefully handled with fallbacks
+- The plugin will function normally even when optional dependencies are missing
 
 ## Configuration
 
