@@ -32,14 +32,9 @@ M.detect_server = function()
   local preferred_order = config and config.server and config.server.preferred_order or M.config.server.preferred_order
 
   for _, server in ipairs(preferred_order) do
-    if server == "python" and core.command_exists("python3") then
-      return "python"
-    elseif server == "bun" and core.command_exists("bun") then
-      return "bun"
-    elseif server == "deno" and core.command_exists("deno") then
-      return "deno"
-    elseif server == "node" and core.command_exists("node") then
-      return "node"
+    local server_config = core.server_configs[server]
+    if server_config and core.command_exists(server_config.check) then
+      return server
     end
   end
 
@@ -50,14 +45,17 @@ end
 M.get_server_command = function(server_type, port)
   local plugin_root = core.get_plugin_root()
   
+  local server_config = core.server_configs[server_type]
+  if not server_config then
+    return nil
+  end
+  
   if server_type == "python" then
-    return {"python3", plugin_root .. "/scripts/live-server/python.py", tostring(port)}
-  elseif server_type == "bun" then
-    return {"bun", "run", plugin_root .. "/scripts/live-server/bun.js", tostring(port)}
+    return {"python3", plugin_root .. "/scripts/live-server/" .. server_config.script, tostring(port)}
   elseif server_type == "deno" then
-    return {"deno", "run", "--allow-net", plugin_root .. "/scripts/live-server/deno.js", tostring(port)}
-  elseif server_type == "node" then
-    return {"node", plugin_root .. "/scripts/live-server/node.js", tostring(port)}
+    return {"deno", "run", "--allow-net", plugin_root .. "/scripts/live-server/" .. server_config.script, tostring(port)}
+  else
+    return {server_config.cmd, "run", plugin_root .. "/scripts/live-server/" .. server_config.script, tostring(port)}
   end
   
   return nil
@@ -86,11 +84,7 @@ M.start_server = function(port)
   local ws_started = console.start_websocket_server()
   
   if ws_started then
-    if core_ref.require_snacks() then
-      core_ref.require_snacks().notifier.show("Console WebSocket server started on port 12001", "ok")
-    else
-      core_ref.notify("Console WebSocket server started on port 12001", "ok")
-    end
+    core_ref.notify_fallback("Console WebSocket server started on port 12001", "ok")
   end
 
   M.server_job = vim.fn.jobstart(cmd, {

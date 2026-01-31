@@ -176,58 +176,44 @@ M.install_libs = function(lib_names)
   end
   
   if #libs == 0 then
-    if core.require_snacks() then
-      core.require_snacks().notifier.show("No matching libraries found: " .. table.concat(lib_names, ", "), "warn")
-    else
-      core.notify("No matching libraries found: " .. table.concat(lib_names, ", "), "warn")
-    end
+    core.notify_fallback("No matching libraries found: " .. table.concat(lib_names, ", "), "warn")
     return
   end
   
-  if core.require_snacks() then
-    core.require_snacks().notifier.show("Installing " .. #libs .. " libraries...", "info")
-  else
-    core.notify("Installing " .. #libs .. " libraries...", "info")
-  end
+  core.notify_fallback("Installing " .. #libs .. " libraries...", "info")
   
   -- Create contrib directory
   local contrib_dir = vim.fn.getcwd() .. "/assets/contrib"
   vim.fn.mkdir(contrib_dir, "p")
   
-  -- Download libraries
+  M.process_libraries(libs, "install", function(completed)
+    local message = "Library installation complete: " .. completed .. "/" .. #libs
+    core.notify_fallback(message, "ok")
+    
+    -- Update project configuration
+    local config = core.read_workspace_config()
+    if config then
+      config.libraries = vim.tbl_deep_extend("force", config.libraries or {}, libs)
+      core.write_workspace_config(config)
+      M.update_index_html()
+    end
+  end)
+end
+
+-- Process libraries with unified callback
+M.process_libraries = function(libraries, operation, on_complete)
   local completed = 0
   
-  for _, lib in ipairs(libs) do
+  for _, lib in ipairs(libraries) do
     core.download_file(lib.cdn, lib.name .. ".js", function(success)
       completed = completed + 1
-      if success then
-        if core.require_snacks() then
-          core.require_snacks().notifier.show("Downloaded " .. lib.name, "ok")
-        else
-          core.notify("Downloaded " .. lib.name, "ok")
-        end
-      else
-        if core.require_snacks() then
-          core.require_snacks().notifier.show("Failed to install " .. lib.name, "error")
-        else
-          core.notify("Failed to install " .. lib.name, "error")
-        end
-      end
+      local msg = (operation == "install" and "Installed " or "Updated ") .. lib.name
+      local level = success and "ok" or "error"
+      core.notify_fallback(msg, level)
       
-      if completed == #libs then
-        local message = "Library installation complete: " .. completed .. "/" .. #libs
-        if core.require_snacks() then
-          core.require_snacks().notifier.show(message, "ok")
-        else
-          core.notify(message, "ok")
-        end
-        
-        -- Update project configuration
-        local config = core.read_workspace_config()
-        if config then
-          config.libraries = vim.tbl_deep_extend("force", config.libraries or {}, libs)
-          core.write_workspace_config(config)
-          M.update_index_html()
+      if completed == #libraries then
+        if on_complete then
+          on_complete(completed)
         end
       end
     end)
@@ -238,52 +224,15 @@ end
 M.update_libs = function()
   local config = core.read_workspace_config()
   if not config or not config.libraries then
-    if core.require_snacks() then
-      core.require_snacks().notifier.show("No libraries installed", "warn")
-    else
-      core.notify("No libraries installed", "warn")
-    end
+    core.notify_fallback("No libraries installed", "warn")
     return
   end
   
-  if core.require_snacks() then
-    core.require_snacks().notifier.show("Checking for library updates...", "info")
-  else
-    core.notify("Checking for library updates...", "info")
-  end
+  core.notify_fallback("Checking for library updates...", "info")
   
-  -- Re-download all libraries to latest versions
-  local completed = 0
-  
-  for _, lib in ipairs(config.libraries) do
-    if lib.cdn then
-      core.download_file(lib.cdn, lib.name .. ".js", function(success)
-        completed = completed + 1
-        if success then
-          if core.require_snacks() then
-            core.require_snacks().notifier.show("Updated " .. lib.name, "ok")
-          else
-            core.notify("Updated " .. lib.name, "ok")
-          end
-        else
-          if core.require_snacks() then
-            core.require_snacks().notifier.show("Failed to update " .. lib.name, "error")
-          else
-            core.notify("Failed to update " .. lib.name, "error")
-          end
-        end
-        
-        if completed == #config.libraries then
-          local message = "Library update complete"
-          if core.require_snacks() then
-            core.require_snacks().notifier.show(message, "ok")
-          else
-            core.notify(message, "ok")
-          end
-        end
-      end)
-    end
-  end
+  M.process_libraries(config.libraries, "update", function()
+    core.notify_fallback("Library update complete", "ok")
+  end)
 end
 
 -- Setup libraries module

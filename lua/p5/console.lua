@@ -40,19 +40,9 @@ M.show = function()
   local position = M.config.console.position or "below"
   local height = M.config.console.height or 10
 
-  -- Determine split command
-  local split_cmd
-  if position == "below" then
-    split_cmd = "botright " .. height .. "new"
-  elseif position == "above" then
-    split_cmd = "topleft " .. height .. "new"
-  elseif position == "left" then
-    split_cmd = "topleft vertical " .. height .. "new"
-  elseif position == "right" then
-    split_cmd = "botright vertical " .. height .. "new"
-  else
-    split_cmd = "botright " .. height .. "new"
-  end
+  -- Determine split command using lookup table
+  local split_pattern = core.split_commands[position] or core.split_commands.below
+  local split_cmd = split_pattern:format(height)
 
   vim.cmd(split_cmd)
   M.console_win = vim.api.nvim_get_current_win()
@@ -157,18 +147,10 @@ end
 -- Start WebSocket server for browser logs
 M.start_websocket_server = function()
   local core = require("p5.core")
-  local websocket = core.require_websocket()
-  if not websocket then
-    if core.require_snacks() then
-      core.require_snacks().notifier.show("WebSocket library not available. Please ensure websocket.nvim is properly installed.", "error")
-    else
-      core.notify("WebSocket library not available. Please ensure websocket.nvim is properly installed.", "error")
-    end
+  if not core.init_websocket("WebSocket library not available. Please ensure websocket.nvim is properly installed.") then
     return false
   end
 
-  -- Initialize websocket.nvim
-  websocket.setup({})
   local server_mod = require("websocket.server")
   local WebsocketServer = server_mod.WebsocketServer
   M.ws_server = WebsocketServer.new({

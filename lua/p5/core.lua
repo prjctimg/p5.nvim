@@ -85,8 +85,34 @@ M.download_file = function(url, dest, callback)
   else
     local snacks = require("snacks")
     snacks.notifier.show("Neither curl nor wget found", "error")
+  return false
+end
+
+-- Server command lookup tables
+M.server_configs = {
+  python = {cmd = "python3", check = "python3", script = "python.py"},
+  bun = {cmd = "bun", check = "bun", script = "bun.js"},
+  deno = {cmd = "deno", check = "deno", script = "deno.js"},
+  node = {cmd = "node", check = "node", script = "node.js"}
+}
+
+M.split_commands = {
+  below = "botright %d new",
+  above = "topleft %d new", 
+  left = "topleft vertical %d new",
+  right = "botright vertical %d new"
+}
+
+-- WebSocket initialization helper
+M.init_websocket = function(error_msg)
+  local websocket = M.require_websocket()
+  if not websocket then
+    M.notify_fallback(error_msg or "WebSocket library not available", "error")
     return false
   end
+  websocket.setup({})
+  return true
+end
   
   vim.fn.jobstart(cmd, {
     on_exit = function(_, exit_code)
@@ -110,6 +136,35 @@ M.notify = function(msg, level)
   end
   
   vim.notify("[p5.nvim] " .. msg, vim_level)
+end
+
+-- Unified notification with snacks fallback
+M.notify_fallback = function(msg, level)
+  local snacks = M.require_snacks()
+  if snacks then
+    snacks.notifier.show(msg, level)
+  else
+    M.notify(msg, level)
+  end
+end
+
+-- File validation helpers
+M.validate_file = function(path, name, required)
+  if vim.fn.filereadable(path) == 1 then
+    return true
+  elseif required then
+    M.notify_fallback(name .. " not found: " .. path, "error")
+  end
+  return false
+end
+
+M.validate_dir = function(path, name, required)
+  if vim.fn.isdirectory(path) == 1 then
+    return true
+  elseif required then
+    M.notify_fallback(name .. " not found: " .. path, "error")
+  end
+  return false
 end
 
 -- Validate p5 project directory

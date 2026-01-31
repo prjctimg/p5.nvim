@@ -78,7 +78,7 @@ M.check_plugin_env = function()
   vim.health.start("p5.nvim Plugin Environment")
   
   local plugin_root = core.get_plugin_root()
-  if vim.fn.isdirectory(plugin_root) == 1 then
+  if core.validate_dir(plugin_root, "Plugin root", false) then
     vim.health.ok("Plugin root: " .. plugin_root)
   else
     vim.health.error("Plugin root: not found at " .. plugin_root)
@@ -86,7 +86,7 @@ M.check_plugin_env = function()
   
   -- Check asset directory
   local asset_dir = core.get_asset_dir()
-  if vim.fn.isdirectory(asset_dir) == 1 then
+  if core.validate_dir(asset_dir, "Asset directory", false) then
     vim.health.ok("Asset directory: " .. asset_dir)
   else
     vim.health.error("Asset directory: not found at " .. asset_dir)
@@ -94,7 +94,7 @@ M.check_plugin_env = function()
   
   -- Check template directory
   local template_dir = core.get_template_dir()
-  if vim.fn.isdirectory(template_dir) == 1 then
+  if core.validate_dir(template_dir, "Template directory", false) then
     vim.health.ok("Template directory: " .. template_dir)
   else
     vim.health.warn("Template directory: not found at " .. template_dir)
@@ -102,12 +102,12 @@ M.check_plugin_env = function()
   
   -- Check core assets
   local core_dir = asset_dir .. "/core"
-  if vim.fn.isdirectory(core_dir) == 1 then
+  if core.validate_dir(core_dir, "Core assets", false) then
     vim.health.ok("Core assets: available")
     
     -- Check for essential files
     local p5_js = core_dir .. "/p5.js"
-    if vim.fn.filereadable(p5_js) == 1 then
+    if core.validate_file(p5_js, "p5.js", false) then
       vim.health.ok("p5.js: available")
     else
       vim.health.warn("p5.js: not found - will be downloaded on demand")
@@ -127,7 +127,7 @@ M.check_project_config = function()
   
   -- Check for p5.json
   local config_file = cwd .. "/p5.json"
-  if vim.fn.filereadable(config_file) == 1 then
+  if core.validate_file(config_file, "p5.json", false) then
     vim.health.ok("p5.json: found")
     
     -- Try to read config
@@ -151,7 +151,7 @@ M.check_project_config = function()
   
   -- Check for index.html
   local index_file = cwd .. "/index.html"
-  if vim.fn.filereadable(index_file) == 1 then
+  if core.validate_file(index_file, "index.html", false) then
     vim.health.ok("index.html: found")
   else
     vim.health.info("index.html: not found - run :P5ProjectCreate to create a new project")
@@ -159,18 +159,18 @@ M.check_project_config = function()
   
   -- Check for assets directory
   local assets_dir = cwd .. "/assets"
-  if vim.fn.isdirectory(assets_dir) == 1 then
+  if core.validate_dir(assets_dir, "assets/", false) then
     vim.health.ok("assets/: directory exists")
     
     -- Check for subdirectories
     local contrib_dir = assets_dir .. "/contrib"
-    if vim.fn.isdirectory(contrib_dir) == 1 then
+    if core.validate_dir(contrib_dir, "contrib/", false) then
       local js_files = vim.fn.glob(contrib_dir .. "/*.js", false, true)
       vim.health.ok("contrib/: " .. #js_files .. " library files")
     end
     
     local libs_dir = assets_dir .. "/libs"
-    if vim.fn.isdirectory(libs_dir) == 1 then
+    if core.validate_dir(libs_dir, "libs/", false) then
       local js_files = vim.fn.glob(libs_dir .. "/*.js", false, true)
       vim.health.ok("libs/: " .. #js_files .. " library files")
     end
@@ -199,7 +199,7 @@ M.check_workspace = function()
   
   -- Check temp directory
   local tmp_dir = vim.fn.stdpath("cache")
-  if vim.fn.isdirectory(tmp_dir) == 1 then
+  if core.validate_dir(tmp_dir, "Cache directory", false) then
     vim.health.ok("Cache directory: " .. tmp_dir)
   else
     vim.health.warn("Cache directory: not found")
