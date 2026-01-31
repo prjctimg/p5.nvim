@@ -83,9 +83,19 @@ M.download_file = function(url, dest, callback)
   elseif M.command_exists("wget") then
     cmd = string.format("wget -q -O '%s' '%s'", dest, url)
   else
-    local snacks = require("snacks")
-    snacks.notifier.show("Neither curl nor wget found", "error")
+    M.notify_fallback("Neither curl nor wget found", "error")
   return false
+  end
+
+  vim.fn.jobstart(cmd, {
+    on_exit = function(_, exit_code)
+      if callback then
+        callback(exit_code == 0)
+      end
+    end
+  })
+  
+  return true
 end
 
 -- Server command lookup tables
@@ -113,17 +123,6 @@ M.init_websocket = function(error_msg)
   websocket.setup({})
   return true
 end
-  
-  vim.fn.jobstart(cmd, {
-    on_exit = function(_, exit_code)
-      if callback then
-        callback(exit_code == 0)
-      end
-    end
-  })
-  
-  return true
-end
 
 -- Show notification
 M.notify = function(msg, level)
@@ -142,7 +141,7 @@ end
 M.notify_fallback = function(msg, level)
   local snacks = M.require_snacks()
   if snacks then
-    snacks.notifier.show(msg, level)
+    snacks.notify.info(msg, {title = "p5.nvim"})
   else
     M.notify(msg, level)
   end
