@@ -160,9 +160,9 @@ M.start_websocket_server = function()
   local websocket = core.require_websocket()
   if not websocket then
     if core.require_snacks() then
-      core.require_snacks().notifier.show("WebSocket library not found. Install websocket.nvim for browser console", "warn")
+      core.require_snacks().notifier.show("WebSocket library not available. Please ensure websocket.nvim is properly installed.", "error")
     else
-      core.notify("WebSocket library not found. Install websocket.nvim for browser console", "warn")
+      core.notify("WebSocket library not available. Please ensure websocket.nvim is properly installed.", "error")
     end
     return false
   end

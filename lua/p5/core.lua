@@ -33,7 +33,7 @@ end
   M.require_websocket = function()
     local ok, lazy_module = pcall(require, "p5.lazy")
     if ok then
-      return lazy_module.require_opt("websocket", "Browser console forwarding will be disabled")
+      return lazy_module.require("websocket")
     end
     return nil
   end

@@ -17,7 +17,7 @@ A comprehensive Neovim plugin for p5.js development with live preview, library m
 - Neovim >= 0.9.0
 - [lazy.nvim](https://github.com/folke/lazy.nvim) plugin manager
 - snacks.nvim (required)
-- websocket.nvim (optional, for browser console)
+- websocket.nvim (required for browser console)
 - gh CLI (optional, for gist functionality)
 - curl or wget (for library downloads)
 
@@ -33,7 +33,7 @@ A comprehensive Neovim plugin for p5.js development with live preview, library m
   name = "p5.nvim",
   dependencies = {
     'folke/snacks.nvim',
-    { 'samuelcolvin/websocket.nvim', optional = true }, -- optional for browser console
+    'samuelcolvin/websocket.nvim', -- required for browser console
   },
   config = function()
     require('p5').setup({
@@ -50,7 +50,7 @@ A comprehensive Neovim plugin for p5.js development with live preview, library m
   'your-username/p5.nvim',
   dependencies = {
     'folke/snacks.nvim',
-    { 'samuelcolvin/websocket.nvim', optional = true }, -- optional for browser console
+    'samuelcolvin/websocket.nvim', -- required for browser console
   },
   config = function()
     require('p5').setup({
@@ -63,9 +63,26 @@ A comprehensive Neovim plugin for p5.js development with live preview, library m
 ### Dependency Management
 
 p5.nvim uses lazy.nvim's built-in dependency management:
-- **Required dependencies** (like `snacks.nvim`) are automatically loaded
-- **Optional dependencies** (like `websocket.nvim`) are gracefully handled with fallbacks
-- The plugin will function normally even when optional dependencies are missing
+- **Required dependencies** (`snacks.nvim`, `websocket.nvim`) are automatically loaded
+- **Optional tools** (`gh` CLI) provide additional functionality
+- The plugin requires all dependencies for full functionality
+
+## Health Checks
+
+p5.nvim includes comprehensive health checks accessible via `:checkhealth p5`:
+
+**Health Check Categories:**
+- **Dependencies** - snacks.nvim, websocket.nvim availability
+- **External Tools** - curl/wget, gh CLI, Python, Node.js, Bun, Deno
+- **Plugin Environment** - asset directories, template files
+- **Workspace** - write permissions, cache directory
+- **Project Configuration** - p5.json validation, project structure
+- **Neovim Compatibility** - version requirements, required features
+
+**Usage:**
+```vim
+:checkhealth p5
+```
 
 ## Configuration
 

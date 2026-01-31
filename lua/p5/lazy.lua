@@ -36,7 +36,7 @@ local plugin_spec = {
   lazy = false,
   dependencies = {
     "folke/snacks.nvim",
-    { "samuelcolvin/websocket.nvim", optional = true },
+    "samuelcolvin/websocket.nvim",
   }
 }
 
