@@ -32,7 +32,7 @@ M.contributor_libs = {
   {
     name = "p5.play",
     description = "Game engine with physics",
-    cdn = "https://cdn.jsdelivr.net/npm/p5play@latest/lib/p5play.js"
+    cdn = "https://cdn.jsdelivr.net/npm/p5play@latest/p5play.js"
   },
   {
     name = "p5.collide2d",
