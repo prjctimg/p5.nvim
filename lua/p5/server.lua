@@ -18,8 +18,8 @@ M.detect_server = function()
       return "bun"
     elseif server == "deno" and core.command_exists("deno") then
       return "deno"
-    elseif server == "live-server" and core.command_exists("npx") then
-      return "live-server"
+    elseif server == "node" and core.command_exists("node") then
+      return "node"
     end
   end
 
@@ -36,8 +36,8 @@ M.get_server_command = function(server_type, port)
     return {"bun", "run", plugin_root .. "/scripts/live-server/bun.js", tostring(port)}
   elseif server_type == "deno" then
     return {"deno", "run", "--allow-net", plugin_root .. "/scripts/live-server/deno.js", tostring(port)}
-  elseif server_type == "live-server" then
-    return {"npx", "live-server", "--port=" .. tostring(port), "--quiet"}
+  elseif server_type == "node" then
+    return {"node", plugin_root .. "/scripts/live-server/node.js", tostring(port)}
   end
   
   return nil

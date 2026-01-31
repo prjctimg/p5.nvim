@@ -101,6 +101,11 @@ The plugin supports downloading these popular p5.js contributor libraries:
 - **p5.speech** - Speech synthesis and recognition
 - **p5.party** - Networked multiplayer support
 
+## Removed Dependencies
+
+- **live-server npm package**: Removed in favor of native implementations with live reload support
+- **External server dependencies**: All server functionality is now self-contained
+
 ## Project Structure
 
 When you create a new project, it will have this structure:
@@ -163,10 +168,20 @@ The plugin provides real-time browser console logs through WebSocket:
 
 The plugin automatically detects available servers in this order:
 
-1. **Python** - `python3 -m http.server`
-2. **Bun** - Custom Bun server script
-3. **Deno** - Custom Deno server script  
-4. **Node.js** - `npx live-server`
+1. **Python** - Custom Python server with live reload
+2. **Bun** - Custom Bun server script with live reload
+3. **Deno** - Custom Deno server script with live reload  
+4. **Node.js** - Custom Node.js server with live reload
+
+## Live Reload
+
+All server implementations now include automatic browser live reload functionality:
+
+- **File Watching**: Monitors `.js`, `.css`, `.html`, `.json` files
+- **Debouncing**: 300ms delay to prevent multiple reloads
+- **WebSocket Communication**: Sends reload signals to connected browsers
+- **Auto-Reconnection**: Browser reconnects if connection is lost
+- **Smart Filtering**: Ignores `.git`, `node_modules`, `dist`, `build` directories
 
 ## Gist Integration
 

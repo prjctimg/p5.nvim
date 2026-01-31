@@ -6,7 +6,14 @@ M.config = {
   server = {
     port = 8000,
     auto_start = false,
-    preferred_order = {"python", "bun", "deno", "live-server"}
+    preferred_order = {"python", "bun", "deno", "node"},
+    live_reload = {
+      enabled = true,
+      port = 12002,
+      debounce_ms = 300,
+      watch_extensions = {".js", ".css", ".html", ".json"},
+      exclude_dirs = {".git", "node_modules", "dist", "build"}
+    }
   },
   console = {
     enabled = true,

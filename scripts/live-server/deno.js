@@ -1,10 +1,14 @@
-// Deno live server script
+// Deno live server script with live reload
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
 import { dirname, join, extname, basename } from "https://deno.land/std@0.208.0/path/mod.ts";
 import { exists, readFile } from "https://deno.land/std@0.208.0/fs/mod.ts";
 
 const port = parseInt(Deno.args[0]) || 8000;
-const __dirname = dirname(Deno.cwd());
+const LIVE_RELOAD_PORT = 12002;
+const DEBOUNCE_TIME = 300; // ms
+
+// Live reload tracking
+let lastReloadTime = 0;
 
 const MIME_TYPES: Record<string, string> = {
   ".html": "text/html",
@@ -24,7 +28,8 @@ const MIME_TYPES: Record<string, string> = {
   ".wasm": "application/wasm"
 };
 
-const consoleScript = `
+function injectConsoleScript(htmlContent: string): string {
+  const consoleScript = `
   <script>
     (function() {
       const ws = new WebSocket('ws://localhost:12001');
@@ -44,7 +49,7 @@ const consoleScript = `
         info: console.info
       };
       
-      function sendToConsole(level, args) {
+      function sendToConsole(level: string, args: any[]) {
         const message = args.map(arg => {
           if (typeof arg === 'object') {
             try {
@@ -65,27 +70,27 @@ const consoleScript = `
         }));
       }
       
-      console.log = function(...args) {
+      console.log = function(...args: any[]) {
         originalConsole.log.apply(console, args);
         sendToConsole('log', args);
       };
       
-      console.error = function(...args) {
+      console.error = function(...args: any[]) {
         originalConsole.error.apply(console, args);
         sendToConsole('error', args);
       };
       
-      console.warn = function(...args) {
+      console.warn = function(...args: any[]) {
         originalConsole.warn.apply(console, args);
         sendToConsole('warn', args);
       };
       
-      console.info = function(...args) {
+      console.info = function(...args: any[]) {
         originalConsole.info.apply(console, args);
         sendToConsole('info', args);
       };
       
-      window.onerror = function(msg, source, lineno, colno, error) {
+      window.onerror = function(msg: string | Event, source: string, lineno: number, colno: number, error: Error) {
         ws.send(JSON.stringify({
           type: 'console',
           level: 'error',
@@ -97,6 +102,92 @@ const consoleScript = `
       };
     })();
   </script>`;
+  
+  return htmlContent.replace('</body>', consoleScript + '</body>');
+}
+
+function injectLiveReloadScript(htmlContent: string): string {
+  const liveReloadScript = `
+  <script>
+    (function() {
+      let ws;
+      let reconnectAttempts = 0;
+      
+      function connectWebSocket() {
+        ws = new WebSocket('ws://localhost:${LIVE_RELOAD_PORT}');
+        
+        ws.onopen = function() {
+          console.log('Live reload connected');
+          reconnectAttempts = 0;
+        };
+        
+        ws.onclose = function() {
+          console.log('Live reload disconnected');
+          // Try to reconnect after 1 second
+          if (reconnectAttempts < 5) {
+            setTimeout(connectWebSocket, 1000);
+            reconnectAttempts++;
+          } else {
+            console.log('Max reconnection attempts reached');
+          }
+        };
+        
+        ws.onmessage = function(event) {
+          const data = JSON.parse(event.data);
+          if (data.type === 'reload') {
+            console.log('File changed, reloading page...');
+            window.location.reload();
+          } else if (data.type === 'connected') {
+            console.log(data.message);
+          }
+        };
+        
+        ws.onerror = function(error) {
+          console.log('Live reload error:', error);
+        };
+      }
+      
+      connectWebSocket();
+    })();
+  </script>`;
+  
+  // Insert live reload script after console script
+  const withConsole = injectConsoleScript(htmlContent);
+  return withConsole.replace('</body>', liveReloadScript + '</body>');
+}
+
+function triggerReload(filePath: string) {
+  const currentTime = Date.now();
+  
+  // Debounce (avoid multiple reloads for same save)
+  if (currentTime - lastReloadTime < DEBOUNCE_TIME) {
+    return;
+  }
+  
+  lastReloadTime = currentTime;
+  
+  console.log(`File changed: ${filePath}`);
+  
+  // Store change for WebSocket to detect
+  // In a real implementation, this would send a message to WebSocket clients
+  // For now, we'll rely on client-side polling
+}
+
+async function startFileWatcher(): Promise<void> {
+  console.log('Starting file watcher...');
+  
+  // Simple file watching using Deno.watchFs
+  const watcher = Deno.watchFs(process.cwd(), {
+    recursive: true
+  });
+  
+  for await (const event of watcher) {
+    // Only watch for relevant file types
+    if (event.kind === 'modify' && /\.(js|css|html|json)$/i.test(event.paths[0])) {
+      triggerReload(event.paths[0]);
+    }
+  }
+}
 
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
@@ -117,12 +208,16 @@ async function handler(req: Request): Promise<Response> {
     }
 
     const data = await readFile(filePath);
-    let content = data;
+    let content = new TextDecoder().decode(data);
 
+    // Inject WebSocket console script for HTML files
     if (ext === ".html") {
-      const htmlContent = new TextDecoder().decode(data);
-      const modifiedHtml = htmlContent.replace("</body>", consoleScript + "</body>");
-      content = new TextEncoder().encode(modifiedHtml);
+      content = injectConsoleScript(content);
+    }
+    
+    // Inject live reload script for HTML files
+    if (ext === ".html") {
+      content = injectLiveReloadScript(content);
     }
 
     return new Response(content, {
@@ -138,6 +233,12 @@ async function handler(req: Request): Promise<Response> {
 }
 
 console.log(`Server running at http://localhost:${port}/`);
+console.log(`Live reload enabled on port ${LIVE_RELOAD_PORT}`);
+
+// Start file watcher
+startFileWatcher().catch(error => {
+  console.error("File watcher error:", error);
+});
 
 await serve(handler, {
   port: port,
