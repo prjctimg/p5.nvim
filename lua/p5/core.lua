@@ -8,7 +8,7 @@ end
 
 -- Get plugin root directory
 M.get_plugin_root = function()
-  return vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h:h")
+  return vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h:h:h")
 end
 
 -- Get asset directory

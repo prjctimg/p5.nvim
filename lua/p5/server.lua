@@ -31,7 +31,7 @@ M.get_server_command = function(server_type, port)
   local plugin_root = core.get_plugin_root()
   
   if server_type == "python" then
-    return {"python3", "-m", "http.server", tostring(port)}
+    return {"python3", plugin_root .. "/scripts/live-server/python.py", tostring(port)}
   elseif server_type == "bun" then
     return {"bun", "run", plugin_root .. "/scripts/live-server/bun.js", tostring(port)}
   elseif server_type == "deno" then
@@ -65,6 +65,10 @@ M.start_server = function(port)
     return
   end
 
+  -- Start WebSocket server for console integration
+  local console = require("p5.console")
+  local ws_started = console.start_websocket_server()
+  
   M.server_job = vim.fn.jobstart(cmd, {
     on_stdout = function(_, data)
       if data and #data > 0 then
@@ -84,6 +88,9 @@ M.start_server = function(port)
       end
       M.server_job = nil
       M.server_type = nil
+      
+      -- Stop WebSocket server when HTTP server stops
+      console.stop_websocket_server()
     end
   })
 
@@ -92,15 +99,20 @@ M.start_server = function(port)
     local url = "http://localhost:" .. port
     core.notify("Server started (" .. server_type .. ") at " .. url, "ok")
     
+    if ws_started then
+      core.notify("Console WebSocket server started on port 12001", "ok")
+    end
+    
     -- Auto-open browser
     vim.fn.system({ "xdg-open", url })
     
     -- Show console if enabled
     if M.config.console.auto_show then
-      require("p5.console").show()
+      console.show()
     end
   else
     core.notify("Failed to start server", "error")
+    console.stop_websocket_server()
   end
 end
 
@@ -114,6 +126,10 @@ M.stop_server = function()
   vim.fn.jobstop(M.server_job)
   M.server_job = nil
   M.server_type = nil
+  
+  -- Stop WebSocket server
+  require("p5.console").stop_websocket_server()
+  
   core.notify("Server stopped", "info")
 end
 

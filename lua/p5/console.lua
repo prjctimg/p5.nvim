@@ -162,7 +162,10 @@ M.start_websocket_server = function()
     return false
   end
 
-  local WebsocketServer = websocket.WebsocketServer
+  -- Initialize websocket.nvim
+  websocket.setup({})
+  local server_mod = require("websocket.server")
+  local WebsocketServer = server_mod.WebsocketServer
   M.ws_server = WebsocketServer.new({
     host = "localhost",
     port = 12001,

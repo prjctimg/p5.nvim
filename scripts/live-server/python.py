@@ -25,7 +25,30 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         if self.path == '/':
             self.path = '/index.html'
         
-        # Serve file normally first
+        # Translate path to file system
+        translated_path = self.translate_path(self.path)
+        
+        # Check if file exists and is HTML
+        if os.path.exists(translated_path) and translated_path.endswith('.html'):
+            try:
+                with open(translated_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                # Inject console script
+                modified_content = self.inject_console_script(content)
+                
+                # Send response with modified content
+                self.send_response(200)
+                self.send_header('Content-type', 'text/html')
+                self.send_header('Content-Length', str(len(modified_content.encode('utf-8'))))
+                self.end_headers()
+                self.wfile.write(modified_content.encode('utf-8'))
+                return
+            except Exception as e:
+                # Fallback to normal file serving if injection fails
+                pass
+        
+        # Fallback to normal file serving
         super().do_GET()
     
     def translate_path(self, path):
@@ -41,10 +64,10 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format, *args):
         # Suppress default logging
         pass
-
-def inject_console_script(html_content):
-    """Inject WebSocket console script into HTML content."""
-    console_script = """
+    
+    def inject_console_script(self, html_content):
+        """Inject WebSocket console script into HTML content."""
+        console_script = '''
   <script>
     (function() {
       const ws = new WebSocket('ws://localhost:12001');
@@ -116,51 +139,18 @@ def inject_console_script(html_content):
         return false;
       };
     })();
-  </script>"""
-    
-    # Replace </body> with script + </body>
-    return re.sub(r'</body\s*>', console_script + '</body>', html_content, flags=re.IGNORECASE)
-
-class P5HTTPRequestHandlerWithInjection(P5HTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/':
-            self.path = '/index.html'
+  </script>'''
         
-        # Translate path to file system
-        translated_path = self.translate_path(self.path)
-        
-        # Check if file exists and is HTML
-        if os.path.exists(translated_path) and translated_path.endswith('.html'):
-            try:
-                with open(translated_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                
-                # Inject console script
-                modified_content = inject_console_script(content)
-                
-                # Send response with modified content
-                self.send_response(200)
-                self.send_header('Content-type', 'text/html')
-                self.send_header('Content-Length', str(len(modified_content.encode('utf-8'))))
-                self.end_headers()
-                self.wfile.write(modified_content.encode('utf-8'))
-                return
-            except Exception as e:
-                # Fallback to normal file serving if injection fails
-                pass
-        
-        # Fallback to normal file serving
-        super().do_GET()
+        # Replace </body> with script + </body>
+        return re.sub(r'</body\s*>', console_script + '</body>', html_content, flags=re.IGNORECASE)
 
 def run_server():
-    Handler = P5HTTPRequestHandlerWithInjection
-    
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    with socketserver.TCPServer(("", PORT), P5HTTPRequestHandler) as httpd:
         print(f"Server running at http://localhost:{PORT}/")
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
-            print("\nServer stopped")
+            print("\\nServer stopped")
 
 if __name__ == "__main__":
     run_server()
