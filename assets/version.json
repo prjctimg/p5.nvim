@@ -1,8 +1,8 @@
 {
-  "p5js": "latest",
-  "p5js_semver": "1.9.0",
-  "types": "1.9.0",
-  "updated_at": "2025-01-30T00:00:00Z",
+  "p5js": "v2.2.0",
+  "p5js_semver": "2.2.0",
+  "types": "1.7.7",
+  "updated_at": "2026-02-01T04:51:50Z",
   "assets": {
     "core": [
       "p5.js",

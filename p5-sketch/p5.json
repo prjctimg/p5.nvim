@@ -1,0 +1,15 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "p5js_version": "latest",
+  "libraries": [],
+  "server": {
+    "type": "python",
+    "port": 8000
+  },
+  "console": {
+    "enabled": true,
+    "position": "below",
+    "height": 10
+  }
+}

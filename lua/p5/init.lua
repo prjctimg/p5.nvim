@@ -49,7 +49,19 @@ M.setup = function(opts)
 
   -- Create commands
   vim.api.nvim_create_user_command("P5NewProject", function(args)
-    require("p5.project").create_project(args.fargs[1])
+    if not args.fargs[1] then
+      vim.ui.input({
+        prompt = "Project name: ",
+        default = "p5-sketch",
+        completion = "dir",
+      }, function(input)
+        if input and input ~= "" then
+          require("p5.project").create_project(input)
+        end
+      end)
+    else
+      require("p5.project").create_project(args.fargs[1])
+    end
   end, { nargs = "?" })
 
   vim.api.nvim_create_user_command("P5StartServer", function(args)

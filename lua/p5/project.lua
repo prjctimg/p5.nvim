@@ -25,8 +25,54 @@ M.create_project = function(name)
   core.notify("Created p5.js project: " .. name, "info")
 end
 
+-- Copy plugin assets to project
+M.copy_assets_to_project = function(project_path)
+  local plugin_assets = core.get_asset_dir()
+  local project_assets = project_path .. "/assets"
+  
+  -- Create project assets directory
+  vim.fn.mkdir(project_assets, "p")
+  
+  -- Copy TypeScript definitions if they exist
+  local types_src = plugin_assets .. "/types"
+  local types_dest = project_assets .. "/types"
+  if vim.fn.isdirectory(types_src) == 1 then
+    vim.fn.mkdir(types_dest, "p")
+    local type_files = vim.fn.glob(types_src .. "/*.d.ts", false, true)
+    for _, file in ipairs(type_files) do
+      local filename = vim.fn.fnamemodify(file, ":t")
+      vim.fn.system("cp '" .. file .. "' '" .. types_dest .. "/" .. filename .. "'")
+    end
+  else
+    core.notify_fallback("TypeScript definitions not found in plugin assets", "warn")
+  end
+  
+  -- Copy core files if they exist
+  local core_src = plugin_assets .. "/core"
+  local core_dest = project_assets .. "/core"
+  if vim.fn.isdirectory(core_src) == 1 then
+    vim.fn.mkdir(core_dest, "p")
+    local core_files = vim.fn.glob(core_src .. "/*.js", false, true)
+    for _, file in ipairs(core_files) do
+      local filename = vim.fn.fnamemodify(file, ":t")
+      vim.fn.system("cp '" .. file .. "' '" .. core_dest .. "/" .. filename .. "'")
+    end
+  end
+end
+
 -- Create project files
 M.create_files = function(project_path)
+  -- Ensure plugin assets are available first
+  if not core.assets_available() then
+    core.download_core_assets()
+    if not core.assets_available() then
+      core.notify("Unable to download required assets. Project created but may have missing files.", "warn")
+    end
+  end
+  
+  -- Copy assets to project first
+  M.copy_assets_to_project(project_path)
+  
   -- Create index.html
   local index_html = [[<!DOCTYPE html>
 <html lang="en">
@@ -34,8 +80,8 @@ M.create_files = function(project_path)
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>p5.js Sketch</title>
-  <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/addons/p5.sound.js"></script>
+  <script src="./assets/core/p5.js"></script>
+  <script src="./assets/core/p5.sound.js"></script>
 </head>
 <body>
   <main>
@@ -58,7 +104,7 @@ function draw() {
   
   vim.fn.writefile(vim.split(sketch_js, "\n"), project_path .. "/sketch.js")
   
-  -- Create jsconfig.json for TypeScript support
+  -- Create jsconfig.json for TypeScript support (after assets are copied)
   local jsconfig = [[{
   "compilerOptions": {
     "target": "ES2022",
@@ -99,10 +145,6 @@ function draw() {
 }]]
   
   vim.fn.writefile(vim.split(p5_config, "\n"), project_path .. "/p5.json")
-  
-  -- Create assets directory
-  vim.fn.mkdir(project_path .. "/assets/types", "p")
-  vim.fn.mkdir(project_path .. "/assets/contrib", "p")
 end
 
 M.setup = function(config)

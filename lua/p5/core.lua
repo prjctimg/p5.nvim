@@ -186,10 +186,9 @@ end
 -- Check if assets are available
 M.assets_available = function()
   local version_file = M.get_asset_dir() .. "/version.json"
-  local has_core = vim.fn.filewritable(M.get_asset_dir() .. "/core/p5.js")
-  local has_types = vim.fn.filewritable(M.get_asset_dir() .. "/types/p5.d.ts")
-  
-  return vim.fn.filereadable(version_file) and has_core and has_types
+  local has_core = vim.fn.filereadable(M.get_asset_dir() .. "/core/p5.js")
+  local has_types = vim.fn.filereadable(M.get_asset_dir() .. "/types/p5.d.ts")
+  return has_core and has_types
 end
 
 -- Download core assets (p5.js, types, etc)
