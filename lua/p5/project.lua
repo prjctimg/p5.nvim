@@ -47,15 +47,18 @@ M.copy_assets_to_project = function(project_path)
     core.notify_fallback("TypeScript definitions not found in plugin assets", "warn")
   end
   
-  -- Copy core files if they exist
+  -- Copy only unminified core files
   local core_src = plugin_assets .. "/core"
   local core_dest = project_assets .. "/core"
   if vim.fn.isdirectory(core_src) == 1 then
     vim.fn.mkdir(core_dest, "p")
-    local core_files = vim.fn.glob(core_src .. "/*.js", false, true)
-    for _, file in ipairs(core_files) do
-      local filename = vim.fn.fnamemodify(file, ":t")
-      vim.fn.system("cp '" .. file .. "' '" .. core_dest .. "/" .. filename .. "'")
+    local unminified_files = {"p5.js", "p5.sound.js"}
+    for _, filename in ipairs(unminified_files) do
+      local src_file = core_src .. "/" .. filename
+      local dest_file = core_dest .. "/" .. filename
+      if vim.fn.filereadable(src_file) == 1 then
+        vim.fn.system("cp '" .. src_file .. "' '" .. dest_file .. "'")
+      end
     end
   end
 end
@@ -81,7 +84,6 @@ M.create_files = function(project_path)
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>p5.js Sketch</title>
   <script src="./assets/core/p5.js"></script>
-  <script src="./assets/core/p5.sound.js"></script>
 </head>
 <body>
   <main>

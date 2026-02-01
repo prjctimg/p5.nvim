@@ -1,9 +1,15 @@
 # Ignore static assets - these should be fetched by workflows
-assets/p5.js
-assets/p5.sound.js
-assets/p5.d.ts
-assets/constants.d.ts
-assets/literals.d.ts
+assets/core/p5.js
+assets/core/p5.min.js
+assets/core/p5.sound.js
+assets/core/p5.sound.min.js
+assets/types/p5.d.ts
+assets/types/constants.d.ts
+assets/types/literals.d.ts
+
+# Ignore test projects (always use same name for testing)
+test-project/
+p5-demo/
 
 # Ignore cache directories
 .cache/

@@ -1,0 +1,224 @@
+name: Bundle p5.js Types
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      p5_version:
+        description: 'Specific p5.js version to target'
+        required: false
+        default: 'latest'
+      types_version:
+        description: 'Specific @types/p5 version to use'
+        required: false
+        default: 'latest'
+      force_update:
+        description: 'Force update even if versions match'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  bundle-types:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Get current versions
+      id: versions
+      run: |
+        if [ -f "assets/version.json" ]; then
+          CURRENT_P5=$(grep -o '"p5js": "[^"]*"' assets/version.json | sed 's/"p5js": "\([^"]*\)"/\1/')
+          echo "current_p5=$CURRENT_P5" >> $GITHUB_OUTPUT
+        else
+          echo "current_p5=unknown" >> $GITHUB_OUTPUT
+        fi
+        
+        if [ -f "assets/version.json" ]; then
+          CURRENT_TYPES=$(grep -o '"types": "[^"]*"' assets/version.json | sed 's/"types": "\([^"]*\)"/\1/')
+          echo "current_types=$CURRENT_TYPES" >> $GITHUB_OUTPUT
+        else
+          echo "current_types=unknown" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Get latest versions
+      id: latest
+      run: |
+        if [ -n "${{ github.event.inputs.p5_version }}" ]; then
+          P5_VERSION="${{ github.event.inputs.p5_version }}"
+        else
+          P5_VERSION=$(curl -s "https://api.github.com/repos/processing/p5.js/releases/latest" | grep -o '"tag_name": "[^"]*"' | sed 's/"tag_name": "\([^"]*\)"/\1/')
+        fi
+        echo "latest_p5=$P5_VERSION" >> $GITHUB_OUTPUT
+        
+        if [ -n "${{ github.event.inputs.types_version }}" ]; then
+          TYPES_VERSION="${{ github.event.inputs.types_version }}"
+        else
+          TYPES_VERSION=$(curl -s "https://registry.npmjs.org/@types/p5/latest" | grep -o '"version": "[^"]*"' | sed 's/"version": "\([^"]*\)"/\1/')
+        fi
+        echo "latest_types=$TYPES_VERSION" >> $GITHUB_OUTPUT
+        
+    - name: Determine if update needed
+      id: check-update
+      run: |
+        CURRENT_P5="${{ steps.versions.outputs.current_p5 }}"
+        LATEST_P5="${{ steps.latest.outputs.latest_p5 }}"
+        CURRENT_TYPES="${{ steps.versions.outputs.current_types }}"
+        LATEST_TYPES="${{ steps.latest.outputs.latest_types }}"
+        FORCE_UPDATE="${{ github.event.inputs.force_update || 'false' }}"
+        
+        NEED_UPDATE="false"
+        
+        if [ "$FORCE_UPDATE" = "true" ]; then
+          NEED_UPDATE="true"
+        elif [ "$CURRENT_P5" = "unknown" ] || [ "$CURRENT_P5" != "$LATEST_P5" ]; then
+          NEED_UPDATE="true"
+        elif [ "$CURRENT_TYPES" = "unknown" ] || [ "$CURRENT_TYPES" != "$LATEST_TYPES" ]; then
+          NEED_UPDATE="true"
+        fi
+        
+        echo "need_update=$NEED_UPDATE" >> $GITHUB_OUTPUT
+        echo "target_p5=$LATEST_P5" >> $GITHUB_OUTPUT
+        echo "target_types=$LATEST_TYPES" >> $GITHUB_OUTPUT
+        
+  update-types:
+    needs: bundle-types
+    if: needs.bundle-types.outputs.need_update == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install bundling tools
+      run: |
+        npm install -g tsdown
+        
+        TARGET_P5="${{ needs.bundle-types.outputs.target_p5 }}"
+        TARGET_TYPES="${{ needs.bundle-types.outputs.target_types }}"
+        
+        mkdir -p /tmp/p5-types
+        cd /tmp/p5-types
+        
+        npm pack "@types/p5@$TARGET_TYPES"
+        tar -xzf package.tgz
+        cd package
+        
+    - name: Generate bundled p5.d.ts
+      run: |
+        P5_VERSION="${{ needs.bundle-types.outputs.target_p5 }}"
+        TYPES_VERSION="${{ needs.bundle-types.outputs.target_types }}"
+        
+        mkdir -p assets/types
+        tsdown --dts --isolatedDeclarations true --output assets/types/p5.d.ts
+        
+        if [ ! -f "assets/types/p5.d.ts" ]; then
+          echo "Failed to generate p5.d.ts"
+          exit 1
+        fi
+        
+    - name: Create fallback types if needed
+      if: failure()
+      run: |
+        mkdir -p assets/types
+        
+        cat > assets/types/p5.d.ts << 'EOF'
+        // Fallback p5.js TypeScript definitions
+        
+        declare global {
+          function createCanvas(width: number, height: number): HTMLCanvasElement;
+          function setup(): void;
+          function draw(): void;
+          function preload(): void;
+          function mousePressed(): void;
+          function mouseReleased(): void;
+          function keyPressed(): void;
+          function keyReleased(): void;
+          function background(color: any): void;
+          function fill(color: any): void;
+          function stroke(color: any): void;
+          function circle(x: number, y: number, radius: number): void;
+          function rect(x: number, y: number, width: number, height: number): void;
+          function line(x1: number, y1: number, x2: number, y2: number): void;
+          function textSize(size: number): void;
+          function text(txt: string, x: number, y: number): void;
+          const mouseX: number;
+          const mouseY: number;
+          const width: number;
+          const height: number;
+          const frameCount: number;
+          const keyIsPressed: boolean;
+          const mouseIsPressed: boolean;
+        }
+        
+        export {};
+        EOF
+        
+    - name: Update version metadata
+      run: |
+        P5_VERSION="${{ needs.bundle-types.outputs.target_p5 }}"
+        TYPES_VERSION="${{ needs.bundle-types.outputs.target_types }}"
+        UPDATED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        
+        cat > assets/version.json << EOF
+        {
+          "p5js": "$P5_VERSION",
+          "p5js_semver": "${P5_VERSION#v}",
+          "types": "$TYPES_VERSION",
+          "updated_at": "$UPDATED_AT",
+          "bundled_types": true,
+          "assets": {
+            "core": ["p5.js", "p5.sound.js"],
+            "types": ["p5.d.ts", "constants.d.ts", "literals.d.ts"]
+          }
+        }
+        EOF
+        
+    - name: Verify final output
+      run: |
+        if [ -f "assets/types/p5.d.ts" ]; then
+          SIZE=$(wc -c < assets/types/p5.d.ts)
+          echo "p5.d.ts generated successfully, size: $SIZE bytes"
+        else
+          echo "p5.d.ts generation failed"
+          exit 1
+        fi
+        
+    - name: Configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+    - name: Commit and push changes
+      run: |
+        P5_VERSION="${{ needs.bundle-types.outputs.target_p5 }}"
+        TYPES_VERSION="${{ needs.bundle-types.outputs.target_types }}"
+        
+        git add assets/types/p5.d.ts
+        git add assets/version.json
+        
+        if git diff --cached --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Bundle p5.js types for v$P5_VERSION - Updated p5.js to v$P5_VERSION - Updated @types/p5 to v$TYPES_VERSION - Generated bundled p5.d.ts with global types"
+          
+          git push
+          echo "Type bundle committed and pushed"
+        fi
