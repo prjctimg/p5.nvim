@@ -107,69 +107,15 @@ jobs:
       with:
         node-version: '18'
         
-    - name: Install bundling tools
-      run: |
-        npm install -g tsdown
-        
-        TARGET_P5="${{ needs.bundle-types.outputs.target_p5 }}"
-        TARGET_TYPES="${{ needs.bundle-types.outputs.target_types }}"
-        
-        mkdir -p /tmp/p5-types
-        cd /tmp/p5-types
-        
-        npm pack "@types/p5@$TARGET_TYPES"
-        tar -xzf package.tgz
-        cd package
-        
-    - name: Generate bundled p5.d.ts
+    - name: Generate comprehensive types
       run: |
         P5_VERSION="${{ needs.bundle-types.outputs.target_p5 }}"
         TYPES_VERSION="${{ needs.bundle-types.outputs.target_types }}"
         
-        mkdir -p assets/types
-        tsdown --dts --isolatedDeclarations true --output assets/types/p5.d.ts
+        echo "Generating comprehensive p5.js types for p5@$P5_VERSION, @types/p5@$TYPES_VERSION"
         
-        if [ ! -f "assets/types/p5.d.ts" ]; then
-          echo "Failed to generate p5.d.ts"
-          exit 1
-        fi
-        
-    - name: Create fallback types if needed
-      if: failure()
-      run: |
-        mkdir -p assets/types
-        
-        cat > assets/types/p5.d.ts << 'EOF'
-        // Fallback p5.js TypeScript definitions
-        
-        declare global {
-          function createCanvas(width: number, height: number): HTMLCanvasElement;
-          function setup(): void;
-          function draw(): void;
-          function preload(): void;
-          function mousePressed(): void;
-          function mouseReleased(): void;
-          function keyPressed(): void;
-          function keyReleased(): void;
-          function background(color: any): void;
-          function fill(color: any): void;
-          function stroke(color: any): void;
-          function circle(x: number, y: number, radius: number): void;
-          function rect(x: number, y: number, width: number, height: number): void;
-          function line(x1: number, y1: number, x2: number, y2: number): void;
-          function textSize(size: number): void;
-          function text(txt: string, x: number, y: number): void;
-          const mouseX: number;
-          const mouseY: number;
-          const width: number;
-          const height: number;
-          const frameCount: number;
-          const keyIsPressed: boolean;
-          const mouseIsPressed: boolean;
-        }
-        
-        export {};
-        EOF
+        chmod +x scripts/bundle-p5-types.sh
+        ./scripts/bundle-p5-types.sh "$P5_VERSION" "$TYPES_VERSION"
         
     - name: Update version metadata
       run: |
@@ -177,19 +123,19 @@ jobs:
         TYPES_VERSION="${{ needs.bundle-types.outputs.target_types }}"
         UPDATED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
         
-        cat > assets/version.json << EOF
-        {
-          "p5js": "$P5_VERSION",
-          "p5js_semver": "${P5_VERSION#v}",
-          "types": "$TYPES_VERSION",
-          "updated_at": "$UPDATED_AT",
-          "bundled_types": true,
-          "assets": {
-            "core": ["p5.js", "p5.sound.js"],
-            "types": ["p5.d.ts", "constants.d.ts", "literals.d.ts"]
-          }
-        }
-        EOF
+        cat > assets/version.json << JSON_EOF
+{
+  "p5js": "$P5_VERSION",
+  "p5js_semver": "${P5_VERSION#v}",
+  "types": "$TYPES_VERSION",
+  "updated_at": "$UPDATED_AT",
+  "bundled_types": true,
+  "assets": {
+    "core": ["p5.js", "p5.sound.js"],
+    "types": ["p5.d.ts"]
+  }
+}
+JSON_EOF
         
     - name: Verify final output
       run: |
@@ -217,7 +163,7 @@ jobs:
         if git diff --cached --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Bundle p5.js types for v$P5_VERSION - Updated p5.js to v$P5_VERSION - Updated @types/p5 to v$TYPES_VERSION - Generated bundled p5.d.ts with global types"
+          git commit -m "Bundle p5.js types for v$P5_VERSION - Updated p5.js to v$P5_VERSION - Updated @types/p5 to v$TYPES_VERSION - Generated bundled p5.d.ts with comprehensive JSDoc and p5 namespace"
           
           git push
           echo "Type bundle committed and pushed"

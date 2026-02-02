@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext", 
+    "lib": ["DOM", "ES2022"],
+    "types": ["./assets/types/p5.d.ts"],
+    "checkJs": true,
+    "strict": false,
+    "allowJs": true,
+    "moduleResolution": "node"
+  },
+  "include": [
+    "**/*.js",
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
