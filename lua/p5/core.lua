@@ -1,6 +1,38 @@
 -- Core utilities and functions for p5.nvim
 local M = {}
 
+-- Server configurations for different runtime environments
+M.server_configs = {
+  python = {
+    check = "python3",
+    script = "python.py",
+    cmd = "python3"
+  },
+  bun = {
+    check = "bun",
+    script = "bun.js",
+    cmd = "bun"
+  },
+  deno = {
+    check = "deno",
+    script = "deno.js",
+    cmd = "deno"
+  },
+  node = {
+    check = "node",
+    script = "node.js", 
+    cmd = "node"
+  }
+}
+
+-- Split commands for window positioning
+M.split_commands = {
+  below = "belowright split",
+  above = "aboveleft split",
+  left = "aboveleft vsplit",
+  right = "belowright vsplit"
+}
+
 -- Check if command exists
 M.command_exists = function(cmd)
   return vim.fn.executable(cmd) ~= 0
@@ -8,7 +40,7 @@ end
 
 -- Get plugin root directory
 M.get_plugin_root = function()
-  return vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h:h")
+  return vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h:h:h")
 end
 
 -- Get asset directory
@@ -47,7 +79,7 @@ end
 M.notify_fallback = function(msg, level)
   local snacks = M.require_snacks()
   if snacks then
-    snacks.notifier.show(msg, level)
+    vim.notify("[p5.nvim] " .. msg, level)
   else
     M.notify(msg, level)
   end
@@ -148,6 +180,21 @@ M.get_p5_version = function()
   return nil
 end
 
+-- WebSocket initialization
+M.init_websocket = function(error_msg)
+  local websocket = M.require_websocket()
+  if not websocket then
+    M.notify(error_msg or "WebSocket library not available", "error")
+    return false
+  end
+  return true
+end
+
+-- Setup function
+M.setup = function(config)
+  M.config = config
+end
+
 -- Setup environment
 M.setup_environment = function()
   local root = M.get_plugin_root()
@@ -163,26 +210,64 @@ M.setup_environment = function()
   
   -- Copy example configs
   if vim.fn.filereadable(root .. "/scripts/live-server/python.js.example") and vim.fn.filereadable(root .. "/scripts/python.py.example") then
-    vim.fn.system("cp " +p5 && git add python.py && git add scripts/live-server/python.py")
+    vim.fn.system("cp " .. root .. "/scripts/python.py.example " .. root .. "/scripts/live-server/python.py")
   end
   
   -- Create user configs
-  vim.fn.writefile(root .. "/scripts/live-server/config.default.json", [[{
+  vim.fn.writefile(vim.split([[
+{
   "name": "p5.js Live Server",
     "version": "1.0.0",
     "default_port": 8000,
     "auto_port_start": 8001,
     "auto_port_end": 9000
   }
-  }])
-  vim.fn.writefile(root .. "/scripts/live-server/config.python.json", [[{
+  ]], "\n"), root .. "/scripts/live-server/config.default.json")
+  
+  vim.fn.writefile(vim.split([[
+{
   "name": "p5.js Live Server (Python)",
     "version": "1.0.0",
     "default_port": 8000,
     "auto_port_start": 8001,
     "auto_port_end": 9000,
     "service": "python"
-  }]])
+  }
+  ]], "\n"), root .. "/scripts/live-server/config.python.json")
+  
+  -- Create editor configs
+  vim.fn.writefile(vim.split([[
+{
+  "name": "p5.js Live Server (Deno)",
+    "version": "1.0.0",
+    "default_port": 8000,
+    "auto_port_start": 8001,
+    "auto_port_end": 9000,
+    "service": "deno"
+  }
+  ]], "\n"), root .. "/scripts/live-server/config.deno.json")
+  
+  vim.fn.writefile(vim.split([[
+{
+  "name": "p5.js Live Server (Node)",
+    "version": "1.0.0",
+    "default_port": 8000,
+    "auto_port_start": 8001,
+    "auto_port_end": 9000,
+    "service": "node"
+  }
+  ]], "\n"), root .. "/scripts/live-server/config.node.json")
+  
+  vim.fn.writefile(vim.split([[
+{
+  "name": "p5.js Live Server (Bun)",
+    "version": "1.0.0",
+    "default_port": 8000,
+    "auto_port_start": 8001,
+    "auto_port_end": 9000,
+    "service": "bun"
+  }
+  ]], "\n"), root .. "/scripts/live-server/config.bun.json")
   
   -- Create editor configs
   vim.fn.writefile(root .. "/scripts/live-server/config.deno.json", [[{
@@ -216,11 +301,11 @@ M.setup_environment = function()
     if info and info.version ~= "unknown" then
       local updated_at = vim.fn.strftime("%Y-%m-%dT%H:%M:%S")
       local version_json = {
-        "p5js": info.version,
-        "p5js_semver": info.semver,
-        "updated_at": updated_at
+        p5js = info.version,
+        p5js_semver = info.semver,
+        updated_at = updated_at
       }
-      vim.fn.writefile(M.get_asset_dir() .. "/version.json", vim.fn.json_encode(version_json))
+      vim.fn.writefile(vim.split(vim.fn.json_encode(version_json), "\n"), M.get_asset_dir() .. "/version.json")
     end
   end
   

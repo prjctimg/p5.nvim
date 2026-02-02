@@ -16,6 +16,9 @@ M.create_project = function(name)
   vim.fn.mkdir(name, "p")
   local project_path = vim.fn.fnamemodify(name, ":p")
   
+  -- Create project files
+  M.create_files(project_path)
+  
   -- Open sketch.js in editor
   vim.cmd("edit " .. project_path .. "/sketch.js")
   
@@ -111,6 +114,9 @@ M.copy_assets_to_project = function(project_path)
   
   -- Create project assets directory
   vim.fn.mkdir(project_assets, "p")
+  vim.fn.mkdir(project_assets .. "/types", "p")
+  vim.fn.mkdir(project_assets .. "/core", "p")
+  vim.fn.mkdir(project_assets .. "/contrib", "p")
   
   -- Copy bundled p5.d.ts if it exists
   local bundled_types_src = plugin_assets .. "/types/p5.d.ts"

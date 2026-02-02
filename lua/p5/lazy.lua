@@ -21,28 +21,9 @@ M.require_opt = function(plugin_name, warning_msg)
   return ok and plugin or nil
 end
 
--- Export dependency management functions
-local dependency_api = {
-  require = M.require,
-  require_opt = M.require_opt
-}
-
--- Lazy.nvim plugin spec that also exports the API
-local plugin_spec = {
-  "Your Name/p5.nvim",
-  dir = vim.fn.stdpath("config") .. "/lazy/p5.nvim",
-  name = "p5.nvim",
-  version = "1.0.0",
-  lazy = false,
-  dependencies = {
-    "folke/snacks.nvim",
-    "samuelcolvin/websocket.nvim",
-  }
-}
-
--- Copy dependency API functions to the plugin spec
-for k, v in pairs(dependency_api) do
-  plugin_spec[k] = v
+-- Setup function
+M.setup = function(config)
+  M.config = config
 end
 
-return plugin_spec
+return M
