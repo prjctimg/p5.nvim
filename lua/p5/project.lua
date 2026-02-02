@@ -16,64 +16,15 @@ M.create_project = function(name)
   vim.fn.mkdir(name, "p")
   local project_path = vim.fn.fnamemodify(name, ":p")
   
-  -- Create files
-  M.create_files(project_path)
-  
   -- Open sketch.js in editor
   vim.cmd("edit " .. project_path .. "/sketch.js")
   
   core.notify("Created p5.js project: " .. name, "info")
 end
 
--- Copy plugin assets to project
-M.copy_assets_to_project = function(project_path)
-  local plugin_assets = core.get_asset_dir()
-  local project_assets = project_path .. "/assets"
-  
-  -- Create project assets directory
-  vim.fn.mkdir(project_assets, "p")
-  
-  -- Copy TypeScript definitions if they exist
-  local types_src = plugin_assets .. "/types"
-  local types_dest = project_assets .. "/types"
-  if vim.fn.isdirectory(types_src) == 1 then
-    vim.fn.mkdir(types_dest, "p")
-    local type_files = vim.fn.glob(types_src .. "/*.d.ts", false, true)
-    for _, file in ipairs(type_files) do
-      local filename = vim.fn.fnamemodify(file, ":t")
-      vim.fn.system("cp '" .. file .. "' '" .. types_dest .. "/" .. filename .. "'")
-    end
-  else
-    core.notify_fallback("TypeScript definitions not found in plugin assets", "warn")
-  end
-  
-  -- Copy only unminified core files
-  local core_src = plugin_assets .. "/core"
-  local core_dest = project_assets .. "/core"
-  if vim.fn.isdirectory(core_src) == 1 then
-    vim.fn.mkdir(core_dest, "p")
-    local unminified_files = {"p5.js", "p5.sound.js"}
-    for _, filename in ipairs(unminified_files) do
-      local src_file = core_src .. "/" .. filename
-      local dest_file = core_dest .. "/" .. filename
-      if vim.fn.filereadable(src_file) == 1 then
-        vim.fn.system("cp '" .. src_file .. "' '" .. dest_file .. "'")
-      end
-    end
-  end
-end
-
 -- Create project files
 M.create_files = function(project_path)
-  -- Ensure plugin assets are available first
-  if not core.assets_available() then
-    core.download_core_assets()
-    if not core.assets_available() then
-      core.notify("Unable to download required assets. Project created but may have missing files.", "warn")
-    end
-  end
-  
-  -- Copy assets to project first
+  -- Copy plugin assets to project first
   M.copy_assets_to_project(project_path)
   
   -- Create index.html
@@ -106,7 +57,7 @@ function draw() {
   
   vim.fn.writefile(vim.split(sketch_js, "\n"), project_path .. "/sketch.js")
   
-  -- Create jsconfig.json for TypeScript support (after assets are copied)
+  -- Create jsconfig.json for TypeScript support
   local jsconfig = [[{
   "compilerOptions": {
     "target": "ES2022",
@@ -147,6 +98,54 @@ function draw() {
 }]]
   
   vim.fn.writefile(vim.split(p5_config, "\n"), project_path .. "/p5.json")
+  
+  -- Create assets directory
+  vim.fn.mkdir(project_path .. "/assets/types", "p")
+  vim.fn.mkdir(project_path .. "/assets/contrib", "p")
+end
+
+-- Copy plugin assets to project with bundled types
+M.copy_assets_to_project = function(project_path)
+  local plugin_assets = core.get_asset_dir()
+  local project_assets = project_path .. "/assets"
+  
+  -- Create project assets directory
+  vim.fn.mkdir(project_assets, "p")
+  
+  -- Copy bundled p5.d.ts if it exists
+  local bundled_types_src = plugin_assets .. "/types/p5.d.ts"
+  local bundled_types_dest = project_assets .. "/types/p5.d.ts"
+  
+  if vim.fn.filereadable(bundled_types_src) == 1 then
+    vim.fn.system("cp '" .. bundled_types_src .. "' '" .. bundled_types_dest .. "'")
+    core.notify_fallback("Copied bundled p5.d.ts to project", "info")
+  else
+    core.notify_fallback("Bundled p5.d.ts not found - type support may be limited", "warn")
+  end
+  
+  -- Copy supporting type files if they exist
+  local support_files = {"constants.d.ts", "literals.d.ts"}
+  for _, file in ipairs(support_files) do
+    local src = plugin_assets .. "/types/" .. file
+    local dest = project_assets .. "/types/" .. file
+    if vim.fn.filereadable(src) == 1 then
+      vim.fn.system("cp '" .. src .. "' '" .. dest .. "'")
+    end
+  end
+  
+  -- Copy unminified core files if they exist
+  local core_src = plugin_assets .. "/core"
+  local core_dest = project_assets .. "/core"
+  if vim.fn.isdirectory(core_src) == 1 then
+    local unminified_files = {"p5.js", "p5.sound.js"}
+    for _, file in ipairs(unminified_files) do
+      local src_file = core_src .. "/" .. file
+      local dest_file = core_dest .. "/" .. file
+      if vim.fn.filereadable(src_file) == 1 then
+        vim.fn.system("cp '" .. src_file .. "' '" .. dest_file .. "'")
+      end
+    end
+  end
 end
 
 M.setup = function(config)

@@ -8,7 +8,7 @@ end
 
 -- Get plugin root directory
 M.get_plugin_root = function()
-  return vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h:h:h")
+  return vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h:h")
 end
 
 -- Get asset directory
@@ -21,133 +21,39 @@ M.get_template_dir = function()
   return M.get_plugin_root() .. "/templates"
 end
 
-  -- Lazy dependency management
-  M.require_snacks = function()
-    local ok, lazy_module = pcall(require, "p5.lazy")
-    if ok then
-      return lazy_module.require("snacks")
-    end
-    return nil
-  end
-  
-  M.require_websocket = function()
-    local ok, lazy_module = pcall(require, "p5.lazy")
-    if ok then
-      return lazy_module.require("websocket")
-    end
-    return nil
-  end
-
-  -- Setup environment
-  M.setup_environment = function()
-    local root = M.get_plugin_root()
-    local asset_dir = M.get_asset_dir()
-    
-    -- Create necessary directories
-    vim.fn.mkdir(asset_dir .. "/core", "p")
-    vim.fn.mkdir(asset_dir .. "/types", "p")
-    vim.fn.mkdir(asset_dir .. "/contrib", "p")
-    vim.fn.mkdir(root .. "/scripts/live-server", "p")
-    
-    local snacks = M.require_snacks()
-    if snacks then
-      snacks.notifier.show("P5 environment setup ok", "info")
-    else
-      vim.notify("P5 environment setup ok", "info")
-    end
-  end
-
--- Read p5.json configuration
-M.read_workspace_config = function()
-  local config_file = vim.fn.getcwd() .. "/p5.json"
-  if vim.fn.filereadable(config_file) == 0 then
-    return nil
-  end
-  
-  local content = vim.fn.readfile(config_file)
-  return vim.fn.json_decode(table.concat(content, "\n"))
+-- Get project root directory (deprecated, kept for compatibility)
+M.get_project_root = function()
+  return vim.fn.getcwd()
 end
 
--- Write p5.json configuration
-M.write_workspace_config = function(config)
-  local config_file = vim.fn.getcwd() .. "/p5.json"
-  local content = vim.fn.json_encode(config)
-  vim.fn.writefile(vim.split(content, "\n"), config_file)
+-- Lazy dependency management
+M.require_snacks = function()
+  local ok, lazy_module = pcall(require, "p5.lazy")
+  if ok then
+    return lazy_module.require("snacks")
+  end
+  return nil
 end
 
--- Download file using curl or wget
-M.download_file = function(url, dest, callback)
-  local cmd
-  if M.command_exists("curl") then
-    cmd = string.format("curl -sL '%s' -o '%s'", url, dest)
-  elseif M.command_exists("wget") then
-    cmd = string.format("wget -q -O '%s' '%s'", dest, url)
-  else
-    M.notify_fallback("Neither curl nor wget found", "error")
-  return false
+M.require_websocket = function()
+  local ok, lazy_module = pcall(require, "p5.lazy")
+  if ok then
+    return lazy_module.require("websocket")
   end
-
-  vim.fn.jobstart(cmd, {
-    on_exit = function(_, exit_code)
-      if callback then
-        callback(exit_code == 0)
-      end
-    end
-  })
-  
-  return true
-end
-
--- Server command lookup tables
-M.server_configs = {
-  python = {cmd = "python3", check = "python3", script = "python.py"},
-  bun = {cmd = "bun", check = "bun", script = "bun.js"},
-  deno = {cmd = "deno", check = "deno", script = "deno.js"},
-  node = {cmd = "node", check = "node", script = "node.js"}
-}
-
-M.split_commands = {
-  below = "botright %d new",
-  above = "topleft %d new", 
-  left = "topleft vertical %d new",
-  right = "botright vertical %d new"
-}
-
--- WebSocket initialization helper
-M.init_websocket = function(error_msg)
-  local websocket = M.require_websocket()
-  if not websocket then
-    M.notify_fallback(error_msg or "WebSocket library not available", "error")
-    return false
-  end
-  websocket.setup({})
-  return true
-end
-
--- Show notification
-M.notify = function(msg, level)
-  level = level or "info"
-  local vim_level = vim.log.levels.INFO
-  if level == "error" then
-    vim_level = vim.log.levels.ERROR
-  elseif level == "warn" then
-    vim_level = vim.log.levels.WARN
-  end
-  
-  vim.notify("[p5.nvim] " .. msg, vim_level)
+  return nil
 end
 
 -- Unified notification with snacks fallback
 M.notify_fallback = function(msg, level)
   local snacks = M.require_snacks()
   if snacks then
-    snacks.notify.info(msg, {title = "p5.nvim"})
+    snacks.notifier.show(msg, level)
   else
     M.notify(msg, level)
   end
 end
 
--- File validation helpers
+-- Validate file exists
 M.validate_file = function(path, name, required)
   if vim.fn.filereadable(path) == 1 then
     return true
@@ -166,121 +72,161 @@ M.validate_dir = function(path, name, required)
   return false
 end
 
--- Validate p5 project directory
-M.is_p5_project = function()
-  local config = M.read_workspace_config()
-  return config ~= nil
+-- Check if p5 assets are available
+M.assets_available = function()
+  local version_file = M.get_asset_dir() .. "/version.json"
+  local has_p5 = vim.fn.filereadable(M.get_asset_dir() .. "/core/p5.js")
+  local has_types = vim.fn.filereadable(M.get_asset_dir() .. "/types/p5.d.ts")
+  return has_p5 and has_types
+end
+
+-- Read workspace configuration
+M.read_workspace_config = function()
+  local config_file = vim.fn.getcwd() .. "/p5.json"
+  if vim.fn.filereadable(config_file) == 1 then
+    local content = vim.fn.readfile(config_file)
+    return vim.fn.json_decode(table.concat(content, "\n"))
+  end
+  return nil
+end
+
+-- Write workspace configuration
+M.write_workspace_config = function(config)
+  local config_file = vim.fn.getcwd() .. "/p5.json"
+  local content = vim.fn.json_encode(config)
+  vim.fn.writefile(vim.split(content, "\n"), config_file)
+end
+
+-- Show notification
+M.notify = function(msg, level)
+  local vim_level = vim.log.levels.INFO
+  if level == "error" then
+    vim_level = vim.log.levels.ERROR
+  elseif level == "warn" then
+    vim_level = vim.log.levels.WARN
+  end
+  
+  vim.notify("[p5.nvim] " .. msg, vim_level)
+end
+
+-- Download file using curl or wget
+M.download_file = function(url, dest, callback)
+  local cmd
+  if M.command_exists("curl") then
+    cmd = string.format("curl -sL '%s' -o '%s'", url, dest)
+  elseif M.command_exists("wget") then
+    cmd = string.format("wget -q -O '%s' '%s'", url, dest)
+  else
+    M.notify("Neither curl nor wget found. Cannot download: " .. url, "error")
+    if callback then callback(false)
+    return false
+  end
+  end
+  
+  vim.fn.jobstart(cmd, {
+    on_exit = function(_, exit_code)
+      if callback then
+        callback(exit_code == 0)
+      end
+    end
+  })
+  
+  return true
 end
 
 -- Get p5 version info
 M.get_p5_version = function()
   local version_file = M.get_asset_dir() .. "/version.json"
-  if vim.fn.filereadable(version_file) == 0 then
-    return nil
+  if vim.fn.filereadable(version_file) == 1 then
+    local content = vim.fn.readfile(version_file)
+    local info = vim.fn.json_decode(table.concat(content, "\n"))
+    return {
+      version = info.p5js_version or "unknown",
+      semver = info.p5js_semver or "unknown"
+    }
   end
-  
-  local content = vim.fn.readfile(version_file)
-  return vim.fn.json_decode(table.concat(content, "\n"))
+  return nil
 end
 
--- Check if assets are available
-M.assets_available = function()
-  local version_file = M.get_asset_dir() .. "/version.json"
-  local has_core = vim.fn.filereadable(M.get_asset_dir() .. "/core/p5.js")
-  local has_types = vim.fn.filereadable(M.get_asset_dir() .. "/types/p5.d.ts")
-  return has_core and has_types
-end
-
--- Download core assets (p5.js, types, etc)
-M.download_core_assets = function()
+-- Setup environment
+M.setup_environment = function()
+  local root = M.get_plugin_root()
   local asset_dir = M.get_asset_dir()
-  local version_info = M.get_p5_version()
-  if not version_info then
-    M.notify("Unable to get version info", "warn")
-    return
+  
+  -- Create necessary directories
+  vim.fn.mkdir(asset_dir .. "/core", "p")
+  vim.fn.mkdir(asset_dir .. "/types", "p")
+  vim.fn.mkdir(asset_dir .. "/contrib", "p")
+  
+  -- Create scripts directory
+  vim.fn.mkdir(root .. "/scripts/live-server", "p")
+  
+  -- Copy example configs
+  if vim.fn.filereadable(root .. "/scripts/live-server/python.js.example") and vim.fn.filereadable(root .. "/scripts/python.py.example") then
+    vim.fn.system("cp " +p5 && git add python.py && git add scripts/live-server/python.py")
   end
   
-  local p5_version = version_info.p5js_semver or "latest"
-  local types_version = version_info.types or "latest"
-  
-  M.notify("Downloading p5.js core assets v" .. p5_version, "info")
-  
-  -- Download core libraries
-  local core_urls = {
-    ["https://cdn.jsdelivr.net/npm/p5@" .. p5_version .. "/lib/p5.js"] = asset_dir .. "/core/p5.js",
-    ["https://cdn.jsdelivr.net/npm/p5@" .. p5_version .. "/lib/p5.min.js"] = asset_dir .. "/core/p5.min.js",
-    ["https://cdn.jsdelivr.net/npm/p5@" .. p5_version .. "/lib/addons/p5.sound.js"] = asset_dir .. "/core/p5.sound.js",
-    ["https://cdn.jsdelivr.net/npm/p5@" .. p5_version .. "/lib/addons/p5.sound.min.js"] = asset_dir .. "/core/p5.sound.min.js"
+  -- Create user configs
+  vim.fn.writefile(root .. "/scripts/live-server/config.default.json", [[{
+  "name": "p5.js Live Server",
+    "version": "1.0.0",
+    "default_port": 8000,
+    "auto_port_start": 8001,
+    "auto_port_end": 9000
   }
+  }])
+  vim.fn.writefile(root .. "/scripts/live-server/config.python.json", [[{
+  "name": "p5.js Live Server (Python)",
+    "version": "1.0.0",
+    "default_port": 8000,
+    "auto_port_start": 8001,
+    "auto_port_end": 9000,
+    "service": "python"
+  }]])
   
-  -- Download TypeScript definitions
-  local types_urls = {
-    ["https://cdn.jsdelivr.net/npm/@types/p5@" .. types_version .. "/index.d.ts"] = asset_dir .. "/types/p5.d.ts",
-    ["https://cdn.jsdelivr.net/npm/@types/p5@" .. types_version .. "/constants.d.ts"] = asset_dir .. "/types/constants.d.ts",
-    ["https://cdn.jsdelivr.net/npm/@types/p5@" .. types_version .. "/literals.d.ts"] = asset_dir .. "/types/literals.d.ts"
-  }
+  -- Create editor configs
+  vim.fn.writefile(root .. "/scripts/live-server/config.deno.json", [[{
+  "name": "p5.js Live Server (Deno)",
+    "version": "1.0.0",
+    "default_port": 8000,
+    "auto_port_start": 8001,
+    "auto_port_end": 9000,
+    "service": "deno"
+  }]])
+  vim.fn.writefile(root .. "/scripts/live-server/config.node.json", [[{
+  "name": "p5.js Live Server (Node)",
+    "version": "1.0.0",
+    "default_port": 8000,
+    "auto_port_start": 8001,
+    "auto_port_end": 9000,
+    "service": "node"
+  }]])
+  vim.fn.writefile(root .. "/scripts/live-server/config.bun.json", [[{
+  "name": "p5.js Live Server (Bun)",
+    "version": "1.0.0",
+    "default_port": 8000,
+    "auto_port_start": 8001,
+    "auto_port_end": 9000,
+    "service": "bun"
+  }]])
   
-  local total_downloads = 0
-  local completed_downloads = 0
-  
-  -- Download all core assets
-  for url, dest in pairs(core_urls) do
-    total_downloads = total_downloads + 1
-    M.download_file(url, dest, function(success)
-      if success then
-        completed_downloads = completed_downloads + 1
-        M.notify("Downloaded " .. vim.fn.fnamemodify(dest, ":t"), "ok")
-      else
-        M.notify("Failed to download " .. url, "error")
-      end
-    end)
+  -- Update version.json with current p5.js version if available
+  if M.assets_available() then
+    local info = M.get_p5_version()
+    if info and info.version ~= "unknown" then
+      local updated_at = vim.fn.strftime("%Y-%m-%dT%H:%M:%S")
+      local version_json = {
+        "p5js": info.version,
+        "p5js_semver": info.semver,
+        "updated_at": updated_at
+      }
+      vim.fn.writefile(M.get_asset_dir() .. "/version.json", vim.fn.json_encode(version_json))
+    end
   end
   
-  -- Download all type definitions
-  for url, dest in pairs(types_urls) do
-    total_downloads = total_downloads + 1
-    M.download_file(url, dest, function(success)
-      if success then
-        completed_downloads = completed_downloads + 1
-        M.notify("Downloaded " .. vim.fn.fnamemodify(dest, ":t"), "ok")
-      else
-        M.notify("Failed to download " .. url, "error")
-      end
-    end)
-  end
-  
-  M.notify("Core assets download complete: " .. completed_downloads .. "/" .. total_downloads, "ok")
-  
-  -- Create consolidated global types file for better global mode support
-  M.create_consolidated_types = function()
-    local types_dir = M.get_asset_dir() .. "/types"
-    local output_file = types_dir .. "/p5-global.d.ts"
-    
-    -- Create header
-    local header = [[// Consolidated p5.js global types for p5.nvim
-// Generated by p5.nvim asset management
-// Version: ]] .. os.date("%Y-%m-%dT%H:%M:%SZ") .. [[
-
-// Footer
-declare module 'p5';
-
-// Re-export everything for global access
-export * from './p5.d.ts';
-]]
-    
-    -- Write consolidated file
-    vim.fn.writefile(vim.split(header, "\n"), output_file)
-    M.notify("Created consolidated p5-global.d.ts", "ok")
-  end
-end
-
--- Setup core module
-M.setup = function(config)
-  M.config = config
-  
-  -- Auto-download assets on first use if not available
-  if not M.assets_available() then
-    M.download_core_assets()
+  -- Show setup completion message
+  if M.assets_available() then
+    M.notify_fallback("P5 environment setup complete", "info")
   end
 end
 

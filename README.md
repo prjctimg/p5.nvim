@@ -9,7 +9,8 @@ A comprehensive Neovim plugin for p5.js development with live preview, library m
 - 🌐 **Live Server**: Auto-detect and start live servers (Python, Bun, Deno, Node.js)
 - 🖥️ **Browser Console**: Real-time browser logs in a toggleable terminal
 - 📝 **GitHub Gists**: Upload sketches as GitHub gists using gh CLI
-- ⚡ **TypeScript Support**: Full IntelliSense for JavaScript files using p5.d.ts
+- ⚡ **TypeScript Support**: Enhanced type bundling system with comprehensive p5.js IntelliSense
+- 🔄 **Automated Workflows**: GitHub Actions for automatic type updates and asset management
 - 🔄 **Workspace Config**: JSON-based project configuration for reproducible setups
 
 ## Requirements
