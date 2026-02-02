@@ -205,12 +205,12 @@ M.setup_environment = function()
   vim.fn.mkdir(asset_dir .. "/types", "p")
   vim.fn.mkdir(asset_dir .. "/contrib", "p")
   
-  -- Create scripts directory
-  vim.fn.mkdir(root .. "/scripts/live-server", "p")
+  -- Create servers directory
+  vim.fn.mkdir(root .. "/servers", "p")
   
   -- Copy example configs
-  if vim.fn.filereadable(root .. "/scripts/live-server/python.js.example") and vim.fn.filereadable(root .. "/scripts/python.py.example") then
-    vim.fn.system("cp " .. root .. "/scripts/python.py.example " .. root .. "/scripts/live-server/python.py")
+  if vim.fn.filereadable(root .. "/servers/python.js.example") and vim.fn.filereadable(root .. "/scripts/python.py.example") then
+    vim.fn.system("cp " .. root .. "/scripts/python.py.example " .. root .. "/servers/python.py")
   end
   
   -- Create user configs
@@ -222,7 +222,7 @@ M.setup_environment = function()
     "auto_port_start": 8001,
     "auto_port_end": 9000
   }
-  ]], "\n"), root .. "/scripts/live-server/config.default.json")
+  ]], "\n"), root .. "/servers/config.default.json")
   
   vim.fn.writefile(vim.split([[
 {
@@ -233,7 +233,7 @@ M.setup_environment = function()
     "auto_port_end": 9000,
     "service": "python"
   }
-  ]], "\n"), root .. "/scripts/live-server/config.python.json")
+  ]], "\n"), root .. "/servers/config.python.json")
   
   -- Create editor configs
   vim.fn.writefile(vim.split([[
@@ -245,7 +245,7 @@ M.setup_environment = function()
     "auto_port_end": 9000,
     "service": "deno"
   }
-  ]], "\n"), root .. "/scripts/live-server/config.deno.json")
+  ]], "\n"), root .. "/servers/config.deno.json")
   
   vim.fn.writefile(vim.split([[
 {
@@ -256,7 +256,7 @@ M.setup_environment = function()
     "auto_port_end": 9000,
     "service": "node"
   }
-  ]], "\n"), root .. "/scripts/live-server/config.node.json")
+  ]], "\n"), root .. "/servers/config.node.json")
   
   vim.fn.writefile(vim.split([[
 {
@@ -267,10 +267,10 @@ M.setup_environment = function()
     "auto_port_end": 9000,
     "service": "bun"
   }
-  ]], "\n"), root .. "/scripts/live-server/config.bun.json")
+  ]], "\n"), root .. "/servers/config.bun.json")
   
   -- Create editor configs
-  vim.fn.writefile(root .. "/scripts/live-server/config.deno.json", [[{
+  vim.fn.writefile(root .. "/servers/config.deno.json", [[{
   "name": "p5.js Live Server (Deno)",
     "version": "1.0.0",
     "default_port": 8000,
@@ -278,7 +278,7 @@ M.setup_environment = function()
     "auto_port_end": 9000,
     "service": "deno"
   }]])
-  vim.fn.writefile(root .. "/scripts/live-server/config.node.json", [[{
+  vim.fn.writefile(root .. "/servers/config.node.json", [[{
   "name": "p5.js Live Server (Node)",
     "version": "1.0.0",
     "default_port": 8000,
@@ -286,7 +286,7 @@ M.setup_environment = function()
     "auto_port_end": 9000,
     "service": "node"
   }]])
-  vim.fn.writefile(root .. "/scripts/live-server/config.bun.json", [[{
+  vim.fn.writefile(root .. "/servers/config.bun.json", [[{
   "name": "p5.js Live Server (Bun)",
     "version": "1.0.0",
     "default_port": 8000,

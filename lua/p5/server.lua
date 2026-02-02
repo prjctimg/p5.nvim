@@ -51,11 +51,11 @@ M.get_server_command = function(server_type, port)
   end
   
   if server_type == "python" then
-    return {"python3", plugin_root .. "/scripts/live-server/" .. server_config.script, tostring(port)}
+    return {"python3", plugin_root .. "/servers/" .. server_config.script, tostring(port)}
   elseif server_type == "deno" then
-    return {"deno", "run", "--allow-net", plugin_root .. "/scripts/live-server/" .. server_config.script, tostring(port)}
+    return {"deno", "run", "--allow-net", plugin_root .. "/servers/" .. server_config.script, tostring(port)}
   else
-    return {server_config.cmd, "run", plugin_root .. "/scripts/live-server/" .. server_config.script, tostring(port)}
+    return {server_config.cmd, "run", plugin_root .. "/servers/" .. server_config.script, tostring(port)}
   end
   
   return nil
