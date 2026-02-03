@@ -1,0 +1,2029 @@
+📄 *p5.Data*📄
+Data module functions and properties
+
+==============================================================================
+Tags p5.Data Data module functions and properties
+==============================================================================
+
+
+
+CONTENTS                                                           *${this.getCurrentModuleName()}-contents*
+
+🔍 NAVIGATION:~
+   Use | to jump to sections, :help p5-[symbol] to jump to symbols~
+
+🏛️ CLASSES:
+  |NumberDict               |
+  |StringDict               |
+  |TypedDict                |
+
+⚡ FUNCTIONS:
+  |append                   |
+  |arrayCopy                |
+  |boolean                  |
+  |byte                     |
+  |char                     |
+  |clearStorage             |
+  |concat                   |
+  |createNumberDict         |
+  |digits                   |
+  |float                    |
+  |getItem                  |
+  |hex                      |
+  |int                      |
+  |join                     |
+  |match                    |
+  |matchAll                 |
+  |nf                       |
+  |nfc                      |
+  |nfp                      |
+  |nfs                      |
+  |removeItem               |
+  |reverse                  |
+  |shorten                  |
+  |shuffle                  |
+  |sort                     |
+  |splice                   |
+  |split                    |
+  |splitTokens              |
+  |storeItem                |
+  |str                      |
+  |subset                   |
+  |trim                     |
+  |unchar                   |
+  |unhex                    |
+
+📌 VARIABLES:
+  |arr                      |
+  |isView                   |
+  |keys                     |
+  |value                    |
+
+
+
+🔗 RELATED SYMBOLS:~
+   See |p5| for complete p5.js API reference~
+
+
+
+⚡ QUICK REFERENCE:~
+   :help p5-[symbolname] - Jump directly to any function~
+
+
+
+CLASSES                                                   *p5-Data-classes*
+
+Data_NumberDict() 📄 🏛️
+|NumberDict|() 🏛️ Class
+
+A simple Dictionary class for Numbers.
+
+See also: ~
+   |help p5-NumberDict| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/p5.TypedDict.js:424
+~
+
+
+Data_StringDict() 📄 🏛️
+|StringDict|() 🏛️ Class
+
+A simple Dictionary class for Strings.
+
+See also: ~
+   |help p5-StringDict| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/p5.TypedDict.js:405
+~
+
+
+Data_TypedDict() 📄 🏛️
+|TypedDict|() 🏛️ Class
+
+Base class for all p5.Dictionary types.
+Specifically typed Dictionary classes inherit from this class.
+
+See also: ~
+   |help p5-TypedDict| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/p5.TypedDict.js:91
+~
+
+
+FUNCTIONS                                                   *p5-Data-functions*
+
+Data_append() 📄 ⚡ ⚠️
+|append|(array, value) ⚡ Function
+
+Adds a value to the end of an array.
+Extends the length of the array by one.
+Maps to Array.`push`().
+
+⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push">array.push(value)</a> instead.
+
+Parameters: ~
+                📚 `array` (Array) - Array to append
+                🔢 `value` (any) - to be added to the Array
+~
+
+Returns: ~
+                📚 Returns Array: the array that was appended to
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> let myArray = ['Mango', 'Apple', 'Papaya'];
+> print(myArray); // ['Mango', 'Apple', 'Papaya']
+>
+> append(myArray, 'Peach');
+> print(myArray); // ['Mango', 'Apple', 'Papaya', 'Peach']
+> }
+> </code>
+<
+
+See also: ~
+   |help p5-append| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:30
+~
+
+
+Data_arrayCopy() 📄 ⚡ ⚠️
+|arrayCopy|(src, dst, {Integer} [length]) ⚡ Function
+
+⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin">arr1.copyWithin(arr2)</a> instead.
+
+Parameters: ~
+                📚 `src` (Array)
+                📚 `dst` (Array)
+                🔢 `{Integer} [length]` (unknown)
+~
+
+See also: ~
+   |help p5-arrayCopy| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:80
+~
+
+
+Data_boolean() 📄 ⚡
+|boolean|(ns) ⚡ Function
+
+Parameters: ~
+                📚 `ns` (Array) - values to convert.
+~
+
+Returns: ~
+                🔢 Returns Boolean[]: converted Boolean values.
+~
+
+See also: ~
+   |help p5-boolean| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:456
+~
+
+
+Data_byte() 📄 ⚡
+|byte|(ns) ⚡ Function
+
+Parameters: ~
+                📚 `ns` (Array) - values to convert.
+~
+
+Returns: ~
+                🔢 Returns Number[]: converted byte values.
+~
+
+See also: ~
+   |help p5-byte| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:603
+~
+
+
+Data_char() 📄 ⚡
+|char|(ns) ⚡ Function
+
+Parameters: ~
+                📚 `ns` (Array) - values to convert.
+~
+
+Returns: ~
+                🔢 Returns String[]: converted single-character strings.
+~
+
+See also: ~
+   |help p5-char| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:721
+~
+
+
+Data_clearStorage() 📄 ⚡
+|clearStorage|() ⚡ Function
+
+Removes all items in the web browser's local storage.
+Web browsers can `save` small amounts of data using the built-in <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage object</a>.
+Data stored in `localStorage` can be retrieved at any `point`, even after refreshing a page or restarting the browser.
+Data are stored as `key`-value pairs.
+Calling `clearStorage()` removes all data from `localStorage`.
+Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.
+
+Examples: >
+>
+> <code>
+> // Double-click to clear localStorage.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Store the player's name.
+> storeItem('name', 'Feist');
+>
+> // Store the player's score.
+> storeItem('score', 1234);
+>
+> describe(
+> 'The text "Feist: 1234" written in black on a gray background. The text "null: null" appears when the user double-clicks.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(14);
+>
+> // Retrieve the name.
+> let name = getItem('name');
+>
+> // Retrieve the score.
+> let score = getItem('score');
+>
+> // Display the score.
+> text(`${name}: ${score}`, 50, 50);
+> }
+>
+> // Clear localStorage when the user double-clicks.
+> function doubleClicked() {
+> clearStorage();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-clearStorage| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/local_storage.js:371
+~
+
+
+Data_concat() 📄 ⚡ ⚠️
+|concat|(a, b) ⚡ Function
+
+Concatenates two arrays, maps to Array.concat().
+Does not modify the input arrays.
+
+⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat">arr1.concat(arr2)</a> instead.
+
+Parameters: ~
+                📚 `a` (Array) - first Array to concatenate
+                📚 `b` (Array) - second Array to concatenate
+~
+
+Returns: ~
+                📚 Returns Array: concatenated array
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> let arr1 = ['A', 'B', 'C'];
+> let arr2 = [1, 2, 3];
+>
+> print(arr1); // ['A','B','C']
+> print(arr2); // [1,2,3]
+>
+> let arr3 = concat(arr1, arr2);
+>
+> print(arr1); // ['A','B','C']
+> print(arr2); // [1, 2, 3]
+> print(arr3); // ['A','B','C', 1, 2, 3]
+> }
+> </code>
+<
+
+See also: ~
+   |help p5-concat| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:139
+~
+
+
+Data_createNumberDict() 📄 ⚡
+|createNumberDict|(object) ⚡ Function
+
+Parameters: ~
+                📦 `object` (Object) - object
+~
+
+Returns: ~
+                🔢 Returns p5.NumberDict
+~
+
+See also: ~
+   |help p5-createNumberDict| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/p5.TypedDict.js:77
+~
+
+
+Data_digits() 📄 ⚡
+|digits|(ns, {Number} [digits]) ⚡ Function
+
+Parameters: ~
+                🔢 `ns` (Number[]) - values to convert.
+                🔢 `{Number} [digits]` (unknown)
+~
+
+Returns: ~
+                🔢 Returns String[]: converted hexadecimal values.
+~
+
+See also: ~
+   |help p5-digits| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:933
+~
+
+
+Data_float() 📄 ⚡
+|float|(ns) ⚡ Function
+
+Parameters: ~
+                🔢 `ns` (String[]) - array of strings to convert.
+~
+
+Returns: ~
+                🔢 Returns Number[]: converted numbers.
+~
+
+See also: ~
+   |help p5-float| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:85
+~
+
+
+Data_getItem() 📄 ⚡
+|getItem|(key) ⚡ Function
+
+Returns a value in the web browser's local storage.
+Web browsers can `save` small amounts of data using the built-in <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage object</a>.
+Data stored in `localStorage` can be retrieved at any `point`, even after refreshing a page or restarting the browser.
+Data are stored as `key`-value pairs.
+<a href="#/p5/storeItem">storeItem()</a> makes it easy to store values in `localStorage` and `getItem()` makes it easy to retrieve them.
+The first parameter, ``key``, is the name of the value to be stored as a string.
+The second parameter, `value`, is the value to be retrieved a string.
+For example, calling `getItem('size')` retrieves the value with the `key` `size`.
+Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.
+
+Parameters: ~
+                📝 `key` (String) - name of the value.
+~
+
+Returns: ~
+                🔢 Returns String|Number|Boolean|Object|Array: stored item.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Store the player's name.
+> storeItem('name', 'Feist');
+>
+> // Store the player's score.
+> storeItem('score', 1234);
+>
+> describe('The text "Feist: 1234" written in black on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(14);
+>
+> // Retrieve the name.
+> let name = getItem('name');
+>
+> // Retrieve the score.
+> let score = getItem('score');
+>
+> // Display the score.
+> text(`${name}: ${score}`, 50, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Create an object.
+> let p = { x: 50, y: 50 };
+>
+> // Store the object.
+> storeItem('position', p);
+>
+> describe('A white circle on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Retrieve the object.
+> let p = getItem('position');
+>
+> // Draw the circle.
+> circle(p.x, p.y, 30);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Create a p5.Color object.
+> let c = color('deeppink');
+>
+> // Store the object.
+> storeItem('color', c);
+>
+> describe('A pink circle on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Retrieve the object.
+> let c = getItem('color');
+>
+> // Style the circle.
+> fill(c);
+>
+> // Draw the circle.
+> circle(50, 50, 30);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-getItem| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/local_storage.js:279
+~
+
+
+Data_hex() 📄 ⚡
+|hex|(ns, {Number} [digits]) ⚡ Function
+
+Parameters: ~
+                🔢 `ns` (Number[]) - values to convert.
+                🔢 `{Number} [digits]` (unknown)
+~
+
+Returns: ~
+                🔢 Returns String[]: converted hexadecimal values.
+~
+
+See also: ~
+   |help p5-hex| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:932
+~
+
+
+Data_int() 📄 ⚡
+|int|(ns) ⚡ Function
+
+Parameters: ~
+                📚 `ns` (Array) - values to convert.
+~
+
+Returns: ~
+                🔢 Returns Number[]: converted numbers.
+~
+
+See also: ~
+   |help p5-int| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:216
+~
+
+
+Data_join() 📄 ⚡
+|join|(list, separator) ⚡ Function
+
+Combines an array of strings into one string.
+The first parameter, `list`, is the array of strings to join.
+The second parameter, `separator`, is the character(s) that should be used to separate the combined strings.
+For example, calling `join(myWords, ' : ')` would return a string of words each separated by a colon and spaces.
+
+Parameters: ~
+                📚 `list` (Array) - array of strings to combine.
+                📝 `separator` (String) - character(s) to place between strings when they're combined.
+~
+
+Returns: ~
+                📝 Returns String: combined string.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create an array of strings.
+> let myWords = ['one', 'two', 'three'];
+>
+> // Create a combined string
+> let combined = join(myWords, ' : ');
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+>
+> // Display the combined string.
+> text(combined, 50, 50);
+>
+> describe('The text "one : two : three" written in black on a gray canvas.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-join| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:55
+~
+
+
+Data_match() 📄 ⚡
+|match|(str, regexp) ⚡ Function
+
+Applies a regular expression to a string and returns an array with the first match.
+`match()` uses regular expressions (regex) to match patterns in `text`.
+For example, the regex `abc` can be used to search a string for the exact sequence of characters `abc`.
+See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#tools" target="_blank">MDN</a>.
+for more information about regexes.
+The first parameter, `str`, is the string to search.
+The second parameter, `regex`, is a string with the regular expression to apply.
+For example, calling `match('Hello, p5*js!', '[a-z][0-9]')` would return the array `['p5']`.
+Note: If no matches are found, `null` is returned.
+
+Parameters: ~
+                📝 `str` (String) - string to search.
+                📝 `regexp` (String) - regular expression to match.
+~
+
+Returns: ~
+                🔢 Returns String[]: match if found.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create a string variable.
+> let string = 'Hello, p5*js!';
+>
+> // Match the characters that are lowercase
+> // letters followed by digits.
+> let matches = match(string, '[a-z][0-9]');
+>
+> // Print the matches array to the console:
+> // ['p5']
+> print(matches);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(16);
+>
+> // Display the matches.
+> text(matches, 50, 50);
+>
+> describe('The text "p5" written in black on a gray canvas.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-match| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:114
+~
+
+
+Data_matchAll() 📄 ⚡
+|matchAll|(str, regexp) ⚡ Function
+
+Applies a regular expression to a string and returns an array of matches.
+`match()` uses regular expressions (regex) to match patterns in `text`.
+For example, the regex `abc` can be used to search a string for the exact sequence of characters `abc`.
+See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#tools" target="_blank">MDN</a>.
+for more information about regexes.
+`matchAll()` is different from <a href="#/p5/match">match()</a> because it returns every match, not just the first.
+The first parameter, `str`, is the string to search.
+The second parameter, `regex`, is a string with the regular expression to apply.
+For example, calling `matchAll('p5*js is easier than abc123', '[a-z][0-9]')` would return the 2D array `[['p5'], ['c1']]`.
+Note: If no matches are found, an empty array `[]` is returned.
+
+Parameters: ~
+                📝 `str` (String) - string to search.
+                📝 `regexp` (String) - regular expression to match.
+~
+
+Returns: ~
+                🔢 Returns String[]: matches found.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create a string variable.
+> let string = 'p5*js is easier than abc123';
+>
+> // Match the character sequences that are
+> // lowercase letters followed by digits.
+> let matches = matchAll(string, '[a-z][0-9]');
+>
+> // Print the matches array to the console:
+> // [['p5'], ['c1']]
+> print(matches);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(16);
+>
+> // Iterate over the matches array.
+> for (let i = 0; i < matches.length; i += 1) {
+>
+> // Calculate the y-coordainate.
+> let y = (i + 1) * 33;
+>
+> // Display the match.
+> text(matches[i], 50, y);
+> }
+>
+> describe(
+> 'The text "p5" and "c1" written on separate lines. The text is black on a gray background.'
+> );
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-matchAll| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:184
+~
+
+
+Data_nf() 📄 ⚡
+|nf|(nums, {Integer|String} [left], {Integer|String} [right]) ⚡ Function
+
+Parameters: ~
+                🔢 `nums` (Number[]) - numbers to format.
+                🔢 `{Integer|String} [left]` (unknown)
+                🔢 `{Integer|String} [right]` (unknown)
+~
+
+Returns: ~
+                🔢 Returns String[]: formatted strings.
+~
+
+See also: ~
+   |help p5-nf| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:283
+~
+
+
+Data_nfc() 📄 ⚡
+|nfc|(nums, {Integer|String} [right]) ⚡ Function
+
+Parameters: ~
+                🔢 `nums` (Number[]) - numbers to format.
+                🔢 `{Integer|String} [right]` (unknown)
+~
+
+Returns: ~
+                🔢 Returns String[]: formatted strings.
+~
+
+See also: ~
+   |help p5-nfc| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:417
+~
+
+
+Data_nfp() 📄 ⚡
+|nfp|(nums, {Integer} [left], {Integer} [right]) ⚡ Function
+
+Parameters: ~
+                🔢 `nums` (Number[]) - numbers to format.
+                🔢 `{Integer} [left]` (unknown)
+                🔢 `{Integer} [right]` (unknown)
+~
+
+Returns: ~
+                🔢 Returns String[]: formatted strings.
+~
+
+See also: ~
+   |help p5-nfp| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:559
+~
+
+
+Data_nfs() 📄 ⚡
+|nfs|(nums, {Integer} [left], {Integer} [right]) ⚡ Function
+
+Parameters: ~
+                📚 `nums` (Array) - numbers to format.
+                🔢 `{Integer} [left]` (unknown)
+                🔢 `{Integer} [right]` (unknown)
+~
+
+Returns: ~
+                🔢 Returns String[]: formatted strings.
+~
+
+See also: ~
+   |help p5-nfs| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:676
+~
+
+
+Data_removeItem() 📄 ⚡
+|removeItem|(key) ⚡ Function
+
+Removes an item from the web browser's local storage.
+Web browsers can `save` small amounts of data using the built-in <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage object</a>.
+Data stored in `localStorage` can be retrieved at any `point`, even after refreshing a page or restarting the browser.
+Data are stored as `key`-value pairs.
+<a href="#/p5/storeItem">storeItem()</a> makes it easy to store values in `localStorage` and `removeItem()` makes it easy to delete them.
+The parameter, ``key``, is the name of the value to remove as a string.
+For example, calling `removeItem('size')` removes the item with the `key` `size`.
+Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.
+
+Parameters: ~
+                📝 `key` (String) - name of the value to remove.
+~
+
+Examples: >
+>
+> <code>
+> // Double-click to remove an item from localStorage.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Store the player's name.
+> storeItem('name', 'Feist');
+>
+> // Store the player's score.
+> storeItem('score', 1234);
+>
+> describe(
+> 'The text "Feist: 1234" written in black on a gray background. The text "Feist: null" appears when the user double-clicks.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(14);
+>
+> // Retrieve the name.
+> let name = getItem('name');
+>
+> // Retrieve the score.
+> let score = getItem('score');
+>
+> // Display the score.
+> text(`${name}: ${score}`, 50, 50);
+> }
+>
+> // Remove the word from localStorage when the user double-clicks.
+> function doubleClicked() {
+> removeItem('score');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-removeItem| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/local_storage.js:445
+~
+
+
+Data_reverse() 📄 ⚡ ⚠️
+|reverse|(list) ⚡ Function
+
+Reverses the order of an array, maps to Array.reverse()
+
+⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse">array.reverse()</a> instead.
+
+Parameters: ~
+                📚 `list` (Array) - Array to reverse
+~
+
+Returns: ~
+                📚 Returns Array: the reversed list
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> let myArray = ['A', 'B', 'C'];
+> print(myArray); // ['A','B','C']
+>
+> reverse(myArray);
+> print(myArray); // ['C','B','A']
+> }
+> </code>
+<
+
+See also: ~
+   |help p5-reverse| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:159
+~
+
+
+Data_shorten() 📄 ⚡ ⚠️
+|shorten|(list) ⚡ Function
+
+Decreases an array by one element and returns the shortened array, maps to Array.`pop`().
+
+⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop">array.pop()</a> instead.
+
+Parameters: ~
+                📚 `list` (Array) - Array to shorten
+~
+
+Returns: ~
+                📚 Returns Array: shortened Array
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> let myArray = ['A', 'B', 'C'];
+> print(myArray); // ['A', 'B', 'C']
+> let newArray = shorten(myArray);
+> print(myArray); // ['A','B','C']
+> print(newArray); // ['A','B']
+> }
+> </code>
+<
+
+See also: ~
+   |help p5-shorten| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:180
+~
+
+
+Data_shuffle() 📄 ⚡
+|shuffle|(array, {Boolean} [bool] if `true`, shuffle the original array in place. Defaults to `false`.) ⚡ Function
+
+Shuffles the elements of an array.
+The first parameter, `array`, is the array to be shuffled.
+For example, calling `shuffle(myArray)` will shuffle the elements of `myArray`.
+By default, the original array won’t be modified.
+Instead, a `copy` will be created, shuffled, and returned.
+The second parameter, `modify`, is optional.
+If `true` is passed, as in `shuffle(myArray, true)`, then the array will be shuffled in place without making a `copy`.
+
+Parameters: ~
+                📚 `array` (Array) - array to shuffle.
+                🔢 `{Boolean} [bool] if `true`, shuffle the original array in place. Defaults to `false`.` (unknown)
+~
+
+Returns: ~
+                📚 Returns Array: shuffled array.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create an array of colors.
+> let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+>
+> // Create a shuffled copy of the array.
+> let shuffledColors = shuffle(colors);
+>
+> // Draw  a row of circles using the original array.
+> for (let i = 0; i < colors.length; i += 1) {
+> // Calculate the x-coordinate.
+> let x = (i + 1) * 12.5;
+>
+> // Style the circle.
+> let c = colors[i];
+> fill(c);
+>
+> // Draw the circle.
+> circle(x, 33, 10);
+> }
+>
+> // Draw  a row of circles using the original array.
+> for (let i = 0; i < shuffledColors.length; i += 1) {
+> // Calculate the x-coordinate.
+> let x = (i + 1) * 12.5;
+>
+> // Style the circle.
+> let c = shuffledColors[i];
+> fill(c);
+>
+> // Draw the circle.
+> circle(x, 67, 10);
+> }
+>
+> describe(
+> 'Two rows of circles on a gray background. The top row follows the color sequence ROYGBIV. The bottom row has all the same colors but they are shuffled.'
+> );
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create an array of colors.
+> let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+>
+> // Shuffle the array.
+> shuffle(colors, true);
+>
+> // Draw  a row of circles using the original array.
+> for (let i = 0; i < colors.length; i += 1) {
+> // Calculate the x-coordinate.
+> let x = (i + 1) * 12.5;
+>
+> // Style the circle.
+> let c = colors[i];
+> fill(c);
+>
+> // Draw the circle.
+> circle(x, 50, 10);
+> }
+>
+> describe(
+> 'A row of colorful circles on a gray background. Their sequence changes each time the sketch runs.'
+> );
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-shuffle| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:282
+~
+
+
+Data_sort() 📄 ⚡ ⚠️
+|sort|(list, {Integer} [count] number of elements to sort, starting from 0) ⚡ Function
+
+Sorts an array of numbers from smallest to largest, or puts an array of words in alphabetical order.
+The original array is not modified; a re-ordered array is returned.
+The count parameter states the number of elements to sort.
+For example, if there are 12 elements in an array and count is `set` to 5, only the first 5 elements in the array will be sorted.
+
+⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">array.sort()</a> instead.
+
+Parameters: ~
+                📚 `list` (Array) - Array to sort
+                🔢 `{Integer} [count] number of elements to sort, starting from 0` (unknown)
+~
+
+Returns: ~
+                📚 Returns Array: the sorted list
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> let words = ['banana', 'apple', 'pear', 'lime'];
+> print(words); // ['banana', 'apple', 'pear', 'lime']
+> let count = 4; // length of array
+>
+> words = sort(words, count);
+> print(words); // ['apple', 'banana', 'lime', 'pear']
+> }
+> </code></div>
+> <div class = 'norender'><code>
+> function setup() {
+> let numbers = [2, 6, 1, 5, 14, 9, 8, 12];
+> print(numbers); // [2, 6, 1, 5, 14, 9, 8, 12]
+> let count = 5; // Less than the length of the array
+>
+> numbers = sort(numbers, count);
+> print(numbers); // [1,2,5,6,14,9,8,12]
+> }
+> </code>
+<
+
+See also: ~
+   |help p5-sort| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:335
+~
+
+
+Data_splice() 📄 ⚡ ⚠️
+|splice|(list, value, position) ⚡ Function
+
+Inserts a value or an array of values into an existing array.
+The first parameter specifies the initial array to be modified, and the second parameter defines the data to be inserted.
+The third parameter is an index value which specifies the array position from which to insert data.
+(Remember that array index numbering starts at zero, so the first position is 0, the second position is 1, and so on.)
+
+⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice">array.splice()</a> instead.
+
+Parameters: ~
+                📚 `list` (Array) - Array to splice into
+                🔢 `value` (any) - value to be spliced in
+                🔢 `position` (Integer) - in the array from which to insert data
+~
+
+Returns: ~
+                📚 Returns Array: the list
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> let myArray = [0, 1, 2, 3, 4];
+> let insArray = ['A', 'B', 'C'];
+> print(myArray); // [0, 1, 2, 3, 4]
+> print(insArray); // ['A','B','C']
+>
+> splice(myArray, insArray, 3);
+> print(myArray); // [0,1,2,'A','B','C',3,4]
+> }
+> </code>
+<
+
+See also: ~
+   |help p5-splice| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:374
+~
+
+
+Data_split() 📄 ⚡
+|split|(value, delim) ⚡ Function
+
+Splits a `String` into pieces and returns an array containing the pieces.
+The first parameter, `value`, is the string to split.
+The second parameter, `delim`, is the character(s) that should be used to split the string.
+For example, calling `split('rock...paper...scissors', '...')` would return the array `['rock', 'paper', 'scissors']` because there are three periods `...` between each word.
+
+Parameters: ~
+                📝 `value` (String) - the String to be split
+                📝 `delim` (String) - the String used to separate the data
+~
+
+Returns: ~
+                🔢 Returns String[]: Array of Strings
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create a string variable.
+> let string = 'rock...paper...scissors';
+>
+> // Split the string at each ...
+> let words = split(string, '...');
+>
+> // Print the array to the console:
+> // ["rock", "paper", "scissors"]
+> print(words);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textFont('Courier New');
+> textSize(16);
+>
+> // Iterate over the words array.
+> for (let i = 0; i < words.length; i += 1) {
+>
+> // Calculate the y-coordinate.
+> let y = (i + 1) * 25;
+>
+> // Display the word.
+> text(words[i], 50, y);
+> }
+>
+> describe(
+> 'The words "rock", "paper", and "scissors" written on separate lines. The text is black on a gray background.'
+> );
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-split| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:746
+~
+
+
+Data_splitTokens() 📄 ⚡
+|splitTokens|(value, {String} [delim] character(s) to use for splitting the string.) ⚡ Function
+
+Splits a `String` into pieces and returns an array containing the pieces.
+`splitTokens()` is an enhanced version of <a href="#/p5/split">split()</a>.
+It can split a string when any characters from a list are detected.
+The first parameter, `value`, is the string to split.
+The second parameter, `delim`, is optional.
+It sets the character(s) that should be used to split the string.
+`delim` can be a single string, as in `splitTokens('rock...paper...scissors...shoot', '...')`, or an array of strings, as in `splitTokens('rock;paper,scissors...shoot, [';', ',', '...'])`.
+By default, if no `delim` characters are specified, then any whitespace character is used to split.
+Whitespace characters include tab (`\t`), `line` feed (`\n`), carriage return (`\r`), form feed (`\f`), and space.
+
+Parameters: ~
+                📝 `value` (String) - string to split.
+                🔢 `{String} [delim] character(s) to use for splitting the string.` (unknown)
+~
+
+Returns: ~
+                🔢 Returns String[]: separated strings.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create a string variable.
+> let string = 'rock paper scissors shoot';
+>
+> // Split the string at each space.
+> let words = splitTokens(string);
+>
+> // Print the array to the console.
+> print(words);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textFont('Courier New');
+> textSize(12);
+>
+> // Iterate over the words array.
+> for (let i = 0; i < words.length; i += 1) {
+>
+> // Calculate the y-coordinate.
+> let y = (i + 1) * 20;
+>
+> // Display the word.
+> text(words[i], 50, y);
+> }
+>
+> describe(
+> 'The words "rock", "paper", "scissors", and "shoot" written on separate lines. The text is black on a gray background.'
+> );
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create a string variable.
+> let string = 'rock...paper...scissors...shoot';
+>
+> // Split the string at each ...
+> let words = splitTokens(string, '...');
+>
+> // Print the array to the console.
+> print(words);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textFont('Courier New');
+> textSize(12);
+>
+> // Iterate over the words array.
+> for (let i = 0; i < words.length; i += 1) {
+>
+> // Calculate the y-coordinate.
+> let y = (i + 1) * 20;
+>
+> // Display the word.
+> text(words[i], 50, y);
+> }
+>
+> describe(
+> 'The words "rock", "paper", "scissors", and "shoot" written on separate lines. The text is black on a gray background.'
+> );
+> }
+> </code>
+> </div>
+>
+> <div class='notest'>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create a string variable.
+> let string = 'rock;paper,scissors...shoot';
+>
+> // Split the string at each semicolon, comma, or ...
+> let words = splitTokens(string, [';', ',', '...']);
+>
+> // Print the array to the console.
+> print(words);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textFont('Courier New');
+> textSize(12);
+>
+> // Iterate over the words array.
+> for (let i = 0; i < words.length; i += 1) {
+>
+> // Calculate the y-coordinate.
+> let y = (i + 1) * 20;
+>
+> // Display the word.
+> text(words[i], 50, y);
+> }
+>
+> describe(
+> 'The words "rock", "paper", "scissors", and "shoot" written on separate lines. The text is black on a gray background.'
+> );
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-splitTokens| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:889
+~
+
+
+Data_storeItem() 📄 ⚡
+|storeItem|(key, value) ⚡ Function
+
+Stores a value in the web browser's local storage.
+Web browsers can `save` small amounts of data using the built-in <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage object</a>.
+Data stored in `localStorage` can be retrieved at any `point`, even after refreshing a page or restarting the browser.
+Data are stored as `key`-value pairs.
+`storeItem()` makes it easy to store values in `localStorage` and <a href="#/p5/getItem">getItem()</a> makes it easy to retrieve them.
+The first parameter, ``key``, is the name of the value to be stored as a string.
+The second parameter, `value`, is the value to be stored.
+Values can have any type.
+Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.
+
+Parameters: ~
+                📝 `key` (String) - name of the value.
+                🔢 `value` (String|Number|Boolean|Object|Array) - value to be stored.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Store the player's name.
+> storeItem('name', 'Feist');
+>
+> // Store the player's score.
+> storeItem('score', 1234);
+>
+> describe('The text "Feist: 1234" written in black on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(14);
+>
+> // Retrieve the name.
+> let name = getItem('name');
+>
+> // Retrieve the score.
+> let score = getItem('score');
+>
+> // Display the score.
+> text(`${name}: ${score}`, 50, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Create an object.
+> let p = { x: 50, y: 50 };
+>
+> // Store the object.
+> storeItem('position', p);
+>
+> describe('A white circle on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Retrieve the object.
+> let p = getItem('position');
+>
+> // Draw the circle.
+> circle(p.x, p.y, 30);
+> }
+> </code>
+> </div>
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Create a p5.Color object.
+> let c = color('deeppink');
+>
+> // Store the object.
+> storeItem('color', c);
+>
+> describe('A pink circle on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Retrieve the object.
+> let c = getItem('color');
+>
+> // Style the circle.
+> fill(c);
+>
+> // Draw the circle.
+> circle(50, 50, 30);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-storeItem| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/local_storage.js:123
+~
+
+
+Data_str() 📄 ⚡
+|str|(n) ⚡ Function
+
+Converts a `Boolean` or `Number` to `String`.
+`str()` converts values to strings.
+See the <a href="#/p5/String">String</a> reference page for guidance on using template literals instead.
+The parameter, `n`, is the value to convert.
+If `n` is a Boolean, as in `str(false)` or `str(true)`, then the value will be returned as a string, as in `'false'` or `'true'`.
+If `n` is a number, as in `str(123)`, then its value will be returned as a string, as in `'123'`.
+If an array is passed, as in `str([12.34, 56.78])`, then an array of strings will be returned.
+
+Parameters: ~
+                🔢 `n` (String|Boolean|Number) - value to convert.
+~
+
+Returns: ~
+                📝 Returns String: converted string.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create a Boolean variable.
+> let original = false;
+>
+> // Convert the Boolean to a string.
+> let converted = str(original);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(16);
+>
+> // Display the original and converted values.
+> text(`${original} : ${converted}`, 50, 50);
+>
+> describe('The text "false : false" written in black on a gray background.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create a number variable.
+> let original = 123;
+>
+> // Convert the number to a string.
+> let converted = str(original);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(16);
+>
+> // Display the original and converted values.
+> text(`${original} = ${converted}`, 50, 50);
+>
+> describe('The text "123 = 123" written in black on a gray background.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create an array of numbers.
+> let original = [12, 34, 56];
+>
+> // Convert the numbers to strings.
+> let strings = str(original);
+>
+> // Create an empty string variable.
+> let final = '';
+>
+> // Concatenate all the strings.
+> for (let s of strings) {
+> final += s;
+> }
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(16);
+>
+> // Display the concatenated string.
+> text(final, 50, 50);
+>
+> describe('The text "123456" written in black on a gray background.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-str| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:333
+~
+
+
+Data_subset() 📄 ⚡ ⚠️
+|subset|(list, start, {Integer} [count] number of values to extract) ⚡ Function
+
+Extracts an array of elements from an existing array.
+The list parameter defines the array from which the elements will be copied, and the start and count parameters specify which elements to extract.
+If no count is given, elements will be extracted from the start to the end of the array.
+When specifying the start, remember that the first array element is 0.
+This function does not change the source array.
+
+⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice">array.slice()</a> instead.
+
+Parameters: ~
+                📚 `list` (Array) - Array to extract from
+                🔢 `start` (Integer) - position to begin
+                🔢 `{Integer} [count] number of values to extract` (unknown)
+~
+
+Returns: ~
+                📚 Returns Array: Array of extracted elements
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> let myArray = [1, 2, 3, 4, 5];
+> print(myArray); // [1, 2, 3, 4, 5]
+>
+> let sub1 = subset(myArray, 0, 3);
+> let sub2 = subset(myArray, 2, 2);
+> print(sub1); // [1,2,3]
+> print(sub2); // [3,4]
+> }
+> </code>
+<
+
+See also: ~
+   |help p5-subset| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:409
+~
+
+
+Data_trim() 📄 ⚡
+|trim|(strs) ⚡ Function
+
+Parameters: ~
+                🔢 `strs` (String[]) - strings to trim.
+~
+
+Returns: ~
+                🔢 Returns String[]: trimmed strings.
+~
+
+See also: ~
+   |help p5-trim| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/string_functions.js:989
+~
+
+
+Data_unchar() 📄 ⚡
+|unchar|(ns) ⚡ Function
+
+Parameters: ~
+                🔢 `ns` (String[]) - values to convert.
+~
+
+Returns: ~
+                🔢 Returns Number[]: converted numbers.
+~
+
+See also: ~
+   |help p5-unchar| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:810
+~
+
+
+Data_unhex() 📄 ⚡
+|unhex|(ns) ⚡ Function
+
+Parameters: ~
+                🔢 `ns` (String[]) - values to convert.
+~
+
+Returns: ~
+                🔢 Returns Number[]: converted numbers.
+~
+
+See also: ~
+   |help p5-unhex| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/conversion.js:1038
+~
+
+
+VARIABLES                                                   *p5-Data-variables*
+
+Data_arr() 📄 📌 ⚠️
+|arr| ⚡ Function
+
+Sorts an array of numbers from smallest to largest, or puts an array of words in alphabetical order.
+The original array is not modified; a re-ordered array is returned.
+The count parameter states the number of elements to sort.
+For example, if there are 12 elements in an array and count is `set` to 5, only the first 5 elements in the array will be sorted.
+
+⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">array.sort()</a> instead.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> let words = ['banana', 'apple', 'pear', 'lime'];
+> print(words); // ['banana', 'apple', 'pear', 'lime']
+> let count = 4; // length of array
+>
+> words = sort(words, count);
+> print(words); // ['apple', 'banana', 'lime', 'pear']
+> }
+> </code></div>
+> <div class = 'norender'><code>
+> function setup() {
+> let numbers = [2, 6, 1, 5, 14, 9, 8, 12];
+> print(numbers); // [2, 6, 1, 5, 14, 9, 8, 12]
+> let count = 5; // Less than the length of the array
+>
+> numbers = sort(numbers, count);
+> print(numbers); // [1,2,5,6,14,9,8,12]
+> }
+> </code>
+<
+
+See also: ~
+   |help p5-arr| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:336
+~
+
+
+Data_isView() 📄 📌
+|isView| ⚡ Function
+
+Shuffles the elements of an array.
+The first parameter, `array`, is the array to be shuffled.
+For example, calling `shuffle(myArray)` will shuffle the elements of `myArray`.
+By default, the original array won’t be modified.
+Instead, a `copy` will be created, shuffled, and returned.
+The second parameter, `modify`, is optional.
+If `true` is passed, as in `shuffle(myArray, true)`, then the array will be shuffled in place without making a `copy`.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create an array of colors.
+> let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+>
+> // Create a shuffled copy of the array.
+> let shuffledColors = shuffle(colors);
+>
+> // Draw  a row of circles using the original array.
+> for (let i = 0; i < colors.length; i += 1) {
+> // Calculate the x-coordinate.
+> let x = (i + 1) * 12.5;
+>
+> // Style the circle.
+> let c = colors[i];
+> fill(c);
+>
+> // Draw the circle.
+> circle(x, 33, 10);
+> }
+>
+> // Draw  a row of circles using the original array.
+> for (let i = 0; i < shuffledColors.length; i += 1) {
+> // Calculate the x-coordinate.
+> let x = (i + 1) * 12.5;
+>
+> // Style the circle.
+> let c = shuffledColors[i];
+> fill(c);
+>
+> // Draw the circle.
+> circle(x, 67, 10);
+> }
+>
+> describe(
+> 'Two rows of circles on a gray background. The top row follows the color sequence ROYGBIV. The bottom row has all the same colors but they are shuffled.'
+> );
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create an array of colors.
+> let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+>
+> // Shuffle the array.
+> shuffle(colors, true);
+>
+> // Draw  a row of circles using the original array.
+> for (let i = 0; i < colors.length; i += 1) {
+> // Calculate the x-coordinate.
+> let x = (i + 1) * 12.5;
+>
+> // Style the circle.
+> let c = colors[i];
+> fill(c);
+>
+> // Draw the circle.
+> circle(x, 50, 10);
+> }
+>
+> describe(
+> 'A row of colorful circles on a gray background. Their sequence changes each time the sketch runs.'
+> );
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-isView| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/utilities/array_functions.js:283
+~
+
+
+Data_keys() 📄 📌
+|keys| ⚡ Function
+
+Removes all items in the web browser's local storage.
+Web browsers can `save` small amounts of data using the built-in <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage object</a>.
+Data stored in `localStorage` can be retrieved at any `point`, even after refreshing a page or restarting the browser.
+Data are stored as `key`-value pairs.
+Calling `clearStorage()` removes all data from `localStorage`.
+Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.
+
+Examples: >
+>
+> <code>
+> // Double-click to clear localStorage.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Store the player's name.
+> storeItem('name', 'Feist');
+>
+> // Store the player's score.
+> storeItem('score', 1234);
+>
+> describe(
+> 'The text "Feist: 1234" written in black on a gray background. The text "null: null" appears when the user double-clicks.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(14);
+>
+> // Retrieve the name.
+> let name = getItem('name');
+>
+> // Retrieve the score.
+> let score = getItem('score');
+>
+> // Display the score.
+> text(`${name}: ${score}`, 50, 50);
+> }
+>
+> // Clear localStorage when the user double-clicks.
+> function doubleClicked() {
+> clearStorage();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-keys| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/local_storage.js:372
+~
+
+
+Data_value() 📄 📌
+|value| ⚡ Function
+
+Returns a value in the web browser's local storage.
+Web browsers can `save` small amounts of data using the built-in <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage object</a>.
+Data stored in `localStorage` can be retrieved at any `point`, even after refreshing a page or restarting the browser.
+Data are stored as `key`-value pairs.
+<a href="#/p5/storeItem">storeItem()</a> makes it easy to store values in `localStorage` and `getItem()` makes it easy to retrieve them.
+The first parameter, ``key``, is the name of the value to be stored as a string.
+The second parameter, `value`, is the value to be retrieved a string.
+For example, calling `getItem('size')` retrieves the value with the `key` `size`.
+Note: Sensitive data such as passwords or personal information shouldn't be stored in `localStorage`.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Store the player's name.
+> storeItem('name', 'Feist');
+>
+> // Store the player's score.
+> storeItem('score', 1234);
+>
+> describe('The text "Feist: 1234" written in black on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER, CENTER);
+> textSize(14);
+>
+> // Retrieve the name.
+> let name = getItem('name');
+>
+> // Retrieve the score.
+> let score = getItem('score');
+>
+> // Display the score.
+> text(`${name}: ${score}`, 50, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Create an object.
+> let p = { x: 50, y: 50 };
+>
+> // Store the object.
+> storeItem('position', p);
+>
+> describe('A white circle on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Retrieve the object.
+> let p = getItem('position');
+>
+> // Draw the circle.
+> circle(p.x, p.y, 30);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Create a p5.Color object.
+> let c = color('deeppink');
+>
+> // Store the object.
+> storeItem('color', c);
+>
+> describe('A pink circle on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Retrieve the object.
+> let c = getItem('color');
+>
+> // Style the circle.
+> fill(c);
+>
+> // Draw the circle.
+> circle(50, 50, 30);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-value| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/data/local_storage.js:280
+~
+
+
+
+
+==============================================================================
+Generated by p5.js Documentation Automation
+See: https://github.com/prjctimg/automata
+Last updated: 2026-02-03
+📄 End of Data documentation 📄
+==============================================================================

@@ -1,0 +1,864 @@
+📄 *p5.Typography*📄
+Typography module functions and properties
+
+==============================================================================
+Tags p5.Typography Typography module functions and properties
+==============================================================================
+
+
+
+CONTENTS                                                           *${this.getCurrentModuleName()}-contents*
+
+🔍 NAVIGATION:~
+   Use | to jump to sections, :help p5-[symbol] to jump to symbols~
+
+🏛️ CLASSES:
+  |Anonymous                |
+  |Font                     |
+
+⚡ FUNCTIONS:
+  |loadFont                 |
+  |text                     |
+  |textAlign                |
+  |textAscent               |
+  |textDescent              |
+  |textFont                 |
+  |textLeading              |
+  |textSize                 |
+  |textStyle                |
+  |textWidth                |
+  |textWrap                 |
+
+🔧 PROPERTIES:
+  |font                     |
+
+📌 VARIABLES:
+  |p                        |
+  |xOriginal                |
+
+
+
+🔗 RELATED SYMBOLS:~
+   See |p5| for complete p5.js API reference~
+
+
+
+⚡ QUICK REFERENCE:~
+   :help p5-[symbolname] - Jump directly to any function~
+
+
+
+CLASSES                                                   *p5-Typography-classes*
+
+Typography_Anonymous() 📄 🏛️
+|Anonymous|() 🏛️ Class
+
+A class to describe fonts.
+
+Parameters: ~
+                🔢 `{p5} [pInst] pointer to p5 instance.` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> let font;
+>
+> function preload() {
+> // Creates a p5.Font object.
+> font = loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Style the text.
+> fill('deeppink');
+> textFont(font);
+> textSize(36);
+>
+> // Display the text.
+> text('p5*js', 10, 50);
+>
+> describe('The text "p5*js" written in pink on a gray background.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-Anonymous| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/p5.Font.js:45
+~
+
+
+Typography_Font() 📄 🏛️
+|Font|() 🏛️ Class
+
+A class to describe fonts.
+
+Parameters: ~
+                🔢 `{p5} [pInst] pointer to p5 instance.` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> let font;
+>
+> function preload() {
+> // Creates a p5.Font object.
+> font = loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Style the text.
+> fill('deeppink');
+> textFont(font);
+> textSize(36);
+>
+> // Display the text.
+> text('p5*js', 10, 50);
+>
+> describe('The text "p5*js" written in pink on a gray background.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-Font| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/p5.Font.js:45
+~
+
+
+FUNCTIONS                                                   *p5-Typography-functions*
+
+Typography_loadFont() 📄 ⚡
+|loadFont|(path, {Function}      [successCallback] function called with the, {Function}      [failureCallback] function called with the error) ⚡ Function
+
+Loads a font and creates a <a href="#/p5.Font">p5.Font</a> object.
+``loadFont`()` can load fonts in either .otf or .ttf format.
+Loaded fonts can be used to style `text` on the canvas and in HTML elements.
+The first parameter, `path`, is the path to a font file.
+Paths to local files should be relative.
+For example, `'assets/inconsolata.otf'`.
+The Inconsolata font used in the following examples can be downloaded for free <a href="https://www.fontsquirrel.com/fonts/inconsolata" target="_blank">here</a>.
+Paths to remote files should be URLs.
+For example, `'https://example.com/inconsolata.otf'`.
+URLs may be blocked due to browser security.
+The second parameter, `successCallback`, is optional.
+If a function is passed, it will be called once the font has loaded.
+The callback function may use the new <a href="#/p5.Font">p5.Font</a> object if needed.
+The third parameter, `failureCallback`, is also optional.
+If a function is passed, it will be called if the font fails to load.
+The callback function may use the error <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event" target="_blank">Event</a> object if needed.
+Fonts can take time to load.
+Calling ``loadFont`()` in <a href="#/p5/preload">preload()</a> ensures fonts load before they're used in <a href="#/p5/`setup`">`setup`()</a> or <a href="#/p5/`draw`">`draw`()</a>.
+
+Parameters: ~
+                📝 `path` (String) - path of the font to be loaded.
+                🔢 `{Function}      [successCallback] function called with the` (unknown)
+                🔢 `{Function}      [failureCallback] function called with the error` (unknown)
+~
+
+Returns: ~
+                🔢 Returns p5.Font: <a href="#/p5.Font">p5.Font</a> object.
+~
+
+Examples: >
+>
+> <code>
+> let font;
+>
+> function preload() {
+> font = loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup() {
+> fill('deeppink');
+> textFont(font);
+> textSize(36);
+> text('p5*js', 10, 50);
+>
+> describe('The text "p5*js" written in pink on a white background.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> loadFont('assets/inconsolata.otf', font => {
+> fill('deeppink');
+> textFont(font);
+> textSize(36);
+> text('p5*js', 10, 50);
+>
+> describe('The text "p5*js" written in pink on a white background.');
+> });
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> loadFont('assets/inconsolata.otf', success, failure);
+> }
+>
+> function success(font) {
+> fill('deeppink');
+> textFont(font);
+> textSize(36);
+> text('p5*js', 10, 50);
+>
+> describe('The text "p5*js" written in pink on a white background.');
+> }
+>
+> function failure(event) {
+> console.error('Oops!', event);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function preload() {
+> loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup() {
+> let p = createP('p5*js');
+> p.style('color', 'deeppink');
+> p.style('font-family', 'Inconsolata');
+> p.style('font-size', '36px');
+> p.position(10, 50);
+>
+> describe('The text "p5*js" written in pink on a white background.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-loadFont| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/loading_displaying.js:129
+~
+
+
+Typography_text() 📄 ⚡
+|text|(str, x, y, {Number} [maxWidth] maximum width of the text box. See, {Number} [maxHeight] maximum height of the text box. See) ⚡ Function
+
+Draws `text` to the canvas.
+The first parameter, `str`, is the `text` to be drawn.
+The second and third parameters, `x` and `y`, `set` the coordinates of the `text`'s bottom-left corner.
+See <a href="#/p5/`textAlign`">`textAlign`()</a> for other ways to align `text`.
+The fourth and fifth parameters, `maxWidth` and `maxHeight`, are optional.
+They `set` the dimensions of the invisible rectangle containing the `text`.
+By default, they `set` its maximum `width` and `height`.
+See <a href="#/p5/rectMode">rectMode()</a> for other ways to define the rectangular `text` box.
+Text will wrap to fit within the `text` box.
+Text outside of the box won't be drawn.
+Text can be styled a few ways.
+Call the <a href="#/p5/`fill`">`fill`()</a> function to `set` the `text`'s `fill` `color`.
+Call <a href="#/p5/`stroke`">`stroke`()</a> and <a href="#/p5/strokeWeight">strokeWeight()</a> to `set` the `text`'s outline.
+Call <a href="#/p5/`textSize`">`textSize`()</a> and <a href="#/p5/`textFont`">`textFont`()</a> to `set` the `text`'s size and font, respectively.
+Note: `WEBGL` mode only supports fonts loaded with <a href="#/p5/`loadFont`">`loadFont`()</a>.
+Calling <a href="#/p5/`stroke`">`stroke`()</a> has no effect in `WEBGL` mode.
+
+Parameters: ~
+                🔢 `str` (String|Object|Array|Number|Boolean) - text to be displayed.
+                🔢 `x` (Number) - x-coordinate of the text box.
+                🔢 `y` (Number) - y-coordinate of the text box.
+                🔢 `{Number} [maxWidth] maximum width of the text box. See` (unknown)
+                🔢 `{Number} [maxHeight] maximum height of the text box. See` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> background(200);
+> text('hi', 50, 50);
+>
+> describe('The text "hi" written in black in the middle of a gray square.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> background('skyblue');
+> textSize(100);
+> text('🌈', 0, 100);
+>
+> describe('A rainbow in a blue sky.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> textSize(32);
+> fill(255);
+> stroke(0);
+> strokeWeight(4);
+> text('hi', 50, 50);
+>
+> describe('The text "hi" written in white with a black outline.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> background('black');
+> textSize(22);
+> fill('yellow');
+> text('rainbows', 6, 20);
+> fill('cornflowerblue');
+> text('rainbows', 6, 45);
+> fill('tomato');
+> text('rainbows', 6, 70);
+> fill('limegreen');
+> text('rainbows', 6, 95);
+>
+> describe('The text "rainbows" written on several lines, each in a different color.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> background(200);
+> let s = 'The quick brown fox jumps over the lazy dog.';
+> text(s, 10, 10, 70, 80);
+>
+> describe('The sample text "The quick brown fox..." written in black across several lines.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> background(200);
+> rectMode(CENTER);
+> let s = 'The quick brown fox jumps over the lazy dog.';
+> text(s, 50, 50, 70, 80);
+>
+> describe('The sample text "The quick brown fox..." written in black across several lines.');
+> }
+> </code>
+> </div>
+>
+> <div modernizr='webgl'>
+> <code>
+> let font;
+>
+> function preload() {
+> font = loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+> textFont(font);
+> textSize(32);
+> textAlign(CENTER, CENTER);
+> }
+>
+> function draw() {
+> background(0);
+> rotateY(frameCount / 30);
+> text('p5*js', 0, 0);
+>
+> describe('The text "p5*js" written in white and spinning in 3D.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-text| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/loading_displaying.js:328
+~
+
+
+Typography_textAlign() 📄 ⚡
+|textAlign|() ⚡ Function
+
+Returns: ~
+                📦 Returns Object
+~
+
+See also: ~
+   |help p5-textAlign| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/attributes.js:102
+~
+
+
+Typography_textAscent() 📄 ⚡
+|textAscent|() ⚡ Function
+
+Calculates the ascent of the current font at its current size.
+The ascent represents the distance, in `pixels`, of the tallest character above the baseline.
+
+Returns: ~
+                🔢 Returns Number: ascent measured in units of pixels.
+~
+
+Examples: >
+>
+> <code>
+> let font;
+>
+> function preload()  {
+> font = loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup()  {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Style the text.
+> textFont(font);
+>
+> // Different for each font.
+> let fontScale = 0.8;
+>
+> let baseY = 75;
+> strokeWeight(0.5);
+>
+> // Draw small text.
+> textSize(24);
+> text('dp', 0, baseY);
+>
+> // Draw baseline and ascent.
+> let a = textAscent() * fontScale;
+> line(0, baseY, 23, baseY);
+> line(23, baseY - a, 23, baseY);
+>
+> // Draw large text.
+> textSize(48);
+> text('dp', 45, baseY);
+>
+> // Draw baseline and ascent.
+> a = textAscent() * fontScale;
+> line(45, baseY, 91, baseY);
+> line(91, baseY - a, 91, baseY);
+>
+> describe('The letters "dp" written twice in different sizes. Each version has a horizontal baseline. A vertical line extends upward from each baseline to the top of the "d".');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-textAscent| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/attributes.js:391
+~
+
+
+Typography_textDescent() 📄 ⚡
+|textDescent|() ⚡ Function
+
+Calculates the descent of the current font at its current size.
+The descent represents the distance, in `pixels`, of the character with the longest descender below the baseline.
+
+Returns: ~
+                🔢 Returns Number: descent measured in units of pixels.
+~
+
+Examples: >
+>
+> <code>
+> let font;
+>
+> function preload()  {
+> font = loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup()  {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Style the font.
+> textFont(font);
+>
+> // Different for each font.
+> let fontScale = 0.9;
+>
+> let baseY = 75;
+> strokeWeight(0.5);
+>
+> // Draw small text.
+> textSize(24);
+> text('dp', 0, baseY);
+>
+> // Draw baseline and descent.
+> let d = textDescent() * fontScale;
+> line(0, baseY, 23, baseY);
+> line(23, baseY, 23, baseY + d);
+>
+> // Draw large text.
+> textSize(48);
+> text('dp', 45, baseY);
+>
+> // Draw baseline and descent.
+> d = textDescent() * fontScale;
+> line(45, baseY, 91, baseY);
+> line(91, baseY, 91, baseY + d);
+>
+> describe('The letters "dp" written twice in different sizes. Each version has a horizontal baseline. A vertical line extends downward from each baseline to the bottom of the "p".');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-textDescent| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/attributes.js:450
+~
+
+
+Typography_textFont() 📄 ⚡
+|textFont|(font, {Number} [size] font size in pixels.) ⚡ Function
+
+Parameters: ~
+                🔢 `font` (Object|String) - font as a <a href="#/p5.Font">p5.Font</a> object or a string.
+                🔢 `{Number} [size] font size in pixels.` (unknown)
+~
+
+See also: ~
+   |help p5-textFont| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/loading_displaying.js:424
+~
+
+
+Typography_textLeading() 📄 ⚡
+|textLeading|() ⚡ Function
+
+Returns: ~
+                🔢 Returns Number
+~
+
+See also: ~
+   |help p5-textLeading| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/attributes.js:146
+~
+
+
+Typography_textSize() 📄 ⚡
+|textSize|() ⚡ Function
+
+Returns: ~
+                🔢 Returns Number
+~
+
+See also: ~
+   |help p5-textSize| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/attributes.js:192
+~
+
+
+Typography_textStyle() 📄 ⚡
+|textStyle|() ⚡ Function
+
+Returns: ~
+                📝 Returns String
+~
+
+See also: ~
+   |help p5-textStyle| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/attributes.js:248
+~
+
+
+Typography_textWidth() 📄 ⚡
+|textWidth|(str) ⚡ Function
+
+Calculates the maximum `width` of a string of `text` drawn when <a href="#/p5/`text`">`text`()</a> is called.
+
+Parameters: ~
+                📝 `str` (String) - string of text to measure.
+~
+
+Returns: ~
+                🔢 Returns Number: width measured in units of pixels.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Style the text.
+> textSize(28);
+> strokeWeight(0.5);
+>
+> // Calculate the text width.
+> let s = 'yoyo';
+> let w = textWidth(s);
+>
+> // Display the text.
+> text(s, 22, 55);
+>
+> // Underline the text.
+> line(22, 55, 22 + w, 55);
+>
+> describe('The word "yoyo" underlined.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Style the text.
+> textSize(28);
+> strokeWeight(0.5);
+>
+> // Calculate the text width.
+> // "\n" starts a new line.
+> let s = 'yo\nyo';
+> let w = textWidth(s);
+>
+> // Display the text.
+> text(s, 22, 55);
+>
+> // Underline the text.
+> line(22, 55, 22 + w, 55);
+>
+> describe('The word "yo" written twice, one copy beneath the other. The words are divided by a horizontal line.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-textWidth| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/attributes.js:314
+~
+
+
+Typography_textWrap() 📄 ⚡
+|textWrap|(style) ⚡ Function
+
+Sets the style for wrapping `text` when <a href="#/p5/`text`">`text`()</a> is called.
+The parameter, `style`, can be one of the following values: `WORD` starts new lines of `text` at spaces.
+If a string of `text` doesn't have spaces, it may overflow the `text` box and the canvas.
+This is the default style.
+`CHAR` starts new lines as needed to stay within the `text` box.
+`textWrap()` only works when the maximum `width` is `set` for a `text` box.
+For example, calling ``text`('Have a wonderful day', 0, 10, 100)` sets the maximum `width` to 100 `pixels`.
+Calling `textWrap()` without an argument returns the current style.
+
+Parameters: ~
+                📋 `style` (Constant) - text wrapping style, either WORD or CHAR.
+~
+
+Returns: ~
+                📝 Returns String: style
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Style the text.
+> textSize(20);
+> textWrap(WORD);
+>
+> // Display the text.
+> text('Have a wonderful day', 0, 10, 100);
+>
+> describe('The text "Have a wonderful day" written across three lines.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Style the text.
+> textSize(20);
+> textWrap(CHAR);
+>
+> // Display the text.
+> text('Have a wonderful day', 0, 10, 100);
+>
+> describe('The text "Have a wonderful day" written across two lines.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Style the text.
+> textSize(20);
+> textWrap(CHAR);
+>
+> // Display the text.
+> text('祝你有美好的一天', 0, 10, 100);
+>
+> describe('The text "祝你有美好的一天" written across two lines.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-textWrap| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/attributes.js:541
+~
+
+
+PROPERTIES                                                   *p5-Typography-properties*
+
+Typography_font() 📄 🔧
+|font| ⚡ Function
+
+The font's underlying <a href="https://opentype.js.org/" target="_blank">opentype.js</a> font object.
+
+See also: ~
+   |help p5-font| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/p5.Font.js:59
+~
+
+
+VARIABLES                                                   *p5-Typography-variables*
+
+Typography_p() 📄 📌
+|p| ⚡ Function
+
+Returns an opentype path for the supplied string and position.
+
+See also: ~
+   |help p5-p| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/p5.Font.js:429
+~
+
+
+Typography_xOriginal() 📄 📌
+|xOriginal| ⚡ Function
+
+Returns an array of points outlining a string of `text` written using the font.
+Each `point` object in the array has three properties that describe the `point`'s location and orientation, called its path angle.
+For example, `{ x: 10, y: 20, `alpha`: 450 }`.
+The first parameter, `str`, is a string of `text`.
+The second and third parameters, `x` and `y`, are the `text`'s position.
+By default, they `set` the coordinates of the bounding box's bottom-left corner.
+See <a href="#/p5/`textAlign`">`textAlign`()</a> for more ways to align `text`.
+The fourth parameter, `fontSize`, is optional.
+It sets the `text`'s font size.
+By default, `font.textToPoints()` will use the current <a href="#/p5/`textSize`">`textSize`()</a>.
+The fifth parameter, `options`, is also optional.
+`font.textToPoints()` expects an object with the following properties: `sampleFactor` is the ratio of the `text`'s path length to the number of samples.
+It defaults to 0.1.
+Higher values produce more points along the path and are more precise.
+`simplifyThreshold` removes collinear points if it's `set` to a number other than 0.
+The value represents the `threshold` angle to use when determining whether two edges are collinear.
+
+Examples: >
+>
+> <code>
+> let font;
+>
+> function preload() {
+> font = loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Get the point array.
+> let points = font.textToPoints('p5*js', 6, 60, 35, { sampleFactor:  0.5 });
+>
+> // Draw a dot at each point.
+> for (let p of points) {
+> point(p.x, p.y);
+> }
+>
+> describe('A set of black dots outlining the text "p5*js" on a gray background.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-xOriginal| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/typography/p5.Font.js:345
+~
+
+
+
+
+==============================================================================
+Generated by p5.js Documentation Automation
+See: https://github.com/prjctimg/automata
+Last updated: 2026-02-03
+📄 End of Typography documentation 📄
+==============================================================================

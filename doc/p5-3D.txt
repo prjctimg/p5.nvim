@@ -1,0 +1,5606 @@
+📄 *p5.3D*📄
+3D module functions and properties
+
+==============================================================================
+Tags p5.3D 3D module functions and properties
+==============================================================================
+
+
+
+CONTENTS                                                           *${this.getCurrentModuleName()}-contents*
+
+🔍 NAVIGATION:~
+   Use | to jump to sections, :help p5-[symbol] to jump to symbols~
+
+🏛️ CLASSES:
+  |Anonymous                |
+  |Camera                   |
+  |Cubic                    |
+  |DataArray                |
+  |FontInfo                 |
+  |ImageInfos               |
+  |ScreenshotError          |
+  |Shader                   |
+  |Texture                  |
+
+⚡ FUNCTIONS:
+  |ambientLight             |
+  |ambientMaterial          |
+  |anonymous                |
+  |baseColorShader          |
+  |baseMaterialShader       |
+  |baseNormalShader         |
+  |baseStrokeShader         |
+  |byte                     |
+  |camera                   |
+  |cameraType               |
+  |clamp                    |
+  |createCamera             |
+  |createFilterShader       |
+  |createShader             |
+  |cubicToQuadratics        |
+  |deepEqualCyclic          |
+  |directionalLight         |
+  |emissiveMaterial         |
+  |frustum                  |
+  |getEpoch                 |
+  |getIndex                 |
+  |identical                |
+  |imageLight               |
+  |isArguments              |
+  |isDate                   |
+  |isElement                |
+  |isNegZero                |
+  |isObject                 |
+  |keys                     |
+  |layout                   |
+  |left                     |
+  |lightFalloff             |
+  |lights                   |
+  |linePerspective          |
+  |loadShader               |
+  |metalness                |
+  |noLights                 |
+  |normalMaterial           |
+  |ortho                    |
+  |panorama                 |
+  |parseTime                |
+  |perspective              |
+  |pointLight               |
+  |push                     |
+  |pushLine                 |
+  |resetShader              |
+  |samePoint                |
+  |setCamera                |
+  |setPixel                 |
+  |setup                    |
+  |shininess                |
+  |specularColor            |
+  |specularMaterial         |
+  |spotLight                |
+  |texture                  |
+  |textureMode              |
+  |textureWrap              |
+  |textureWrapX             |
+  |userFillShader           |
+  |userStrokeShader         |
+
+🔧 PROPERTIES:
+  |fft                      |
+  |frequencySpectrum        |
+  |length                   |
+  |visualSuite              |
+  |waveform                 |
+
+📌 VARIABLES:
+  |ampLabel                 |
+  |ampSlider                |
+  |analyzer                 |
+  |button                   |
+  |c                        |
+  |carrier                  |
+  |centerX                  |
+  |currentIR                |
+  |cVerb                    |
+  |data                     |
+  |delay                    |
+  |description              |
+  |diffX                    |
+  |env                      |
+  |freqLabel                |
+  |freqSlider               |
+  |gl                       |
+  |img                      |
+  |keyNamesOfThePropToCopy  |
+  |languages                |
+  |local                    |
+  |location                 |
+  |match                    |
+  |mic                      |
+  |myp5                     |
+  |myp5Container            |
+  |noise                    |
+  |osc                      |
+  |playMode                 |
+  |result                   |
+  |reverb                   |
+  |shader                   |
+  |sinon                    |
+  |size                     |
+  |sound                    |
+  |soundFile                |
+  |source                   |
+  |triOsc                   |
+  |uniform                  |
+
+
+
+🔗 RELATED SYMBOLS:~
+   See |p5| for complete p5.js API reference~
+
+
+
+⚡ QUICK REFERENCE:~
+   :help p5-[symbolname] - Jump directly to any function~
+
+
+
+CLASSES                                                   *p5-3D-classes*
+
+3D_Anonymous() 📄 🏛️
+|Anonymous|() 🏛️ Class
+
+A class to describe a shader program.
+Each `p5.Shader` object contains a shader program that runs on the graphics processing unit (GPU).
+Shaders can process many `pixels` or vertices at the same time, making them fast for many graphics tasks.
+They’re written in a language called <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders" target="_blank">GLSL</a> and run along with the rest of the code in a sketch.
+A shader program consists of two files, a `vertex` shader and a fragment shader.
+The `vertex` shader affects where 3D geometry is drawn on the screen and the fragment shader affects `color`.
+Once the `p5.Shader` object is created, it can be used with the <a href="#/p5/shader">shader()</a> function, as in `shader(myShader)`.
+A shader can optionally describe *hooks,* which are functions in GLSL that users may choose to provide to customize the behavior of the shader.
+For the `vertex` or the fragment shader, users can pass in an object where each `key` is the type and name of a hook function, and each value is a string with the parameter list and default implementation of the hook.
+For example, to let users optionally run code at the start of the `vertex` shader, the options object could include: ```js { `vertex`: { 'void beforeVertex': '() {}' } } ``` Then, in your `vertex` shader source, you can run a hook by calling a function with the same name prefixed by `HOOK_`: ```glsl void main() { HOOK_beforeVertex(); // Add the rest of your shader code here!
+} ``` Note: <a href="#/p5/createShader">createShader()</a>, <a href="#/p5/createFilterShader">createFilterShader()</a>, and <a href="#/p5/loadShader">loadShader()</a> are the recommended ways to create an instance of this class.
+
+Parameters: ~
+                🔢 `renderer` (p5.RendererGL) - WebGL context for this shader.
+                📝 `vertSrc` (String) - source code for the vertex shader program.
+                📝 `fragSrc` (String) - source code for the fragment shader program.
+                🔢 `{Object} [options] An optional object describing how this shader can` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+>
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision highp float;
+>
+> void main() {
+> // Set each pixel's RGBA value to yellow.
+> gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+> }
+> `;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> let myShader = createShader(vertSrc, fragSrc);
+>
+> // Apply the p5.Shader object.
+> shader(myShader);
+>
+> // Style the drawing surface.
+> noStroke();
+>
+> // Add a plane as a drawing surface.
+> plane(100, 100);
+>
+> describe('A yellow square.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> let mandelbrot;
+>
+> // Load the shader and create a p5.Shader object.
+> function preload() {
+> mandelbrot = loadShader('assets/shader.vert', 'assets/shader.frag');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Use the p5.Shader object.
+> shader(mandelbrot);
+>
+> // Set the shader uniform p to an array.
+> mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);
+>
+> describe('A fractal image zooms in and out of focus.');
+> }
+>
+> function draw() {
+> // Set the shader uniform r to a value that oscillates between 0 and 2.
+> mandelbrot.setUniform('r', sin(frameCount * 0.01) + 1);
+>
+> // Add a quad as a display surface for the shader.
+> quad(-1, -1, 1, -1, 1, 1, -1, 1);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-Anonymous| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Shader.js:155
+~
+
+
+3D_Camera() 📄 🏛️
+|Camera|() 🏛️ Class
+
+A class to describe a camera for viewing a 3D sketch.
+Each `p5.Camera` object represents a camera that views a section of 3D space.
+It stores information about the camera’s position, orientation, and projection.
+In WebGL mode, the default camera is a `p5.Camera` object that can be controlled with the <a href="#/p5/camera">camera()</a>, <a href="#/p5/perspective">perspective()</a>, <a href="#/p5/ortho">ortho()</a>, and <a href="#/p5/frustum">frustum()</a> functions.
+Additional cameras can be created with <a href="#/p5/createCamera">createCamera()</a> and activated with <a href="#/p5/setCamera">setCamera()</a>.
+Note: `p5.Camera`’s methods operate in two coordinate systems: - The “world” coordinate system describes positions in terms of their relationship to the origin along the x-, y-, and z-axes.
+For example, calling `myCamera.setPosition()` places the camera in 3D space using "world" coordinates.
+- The "local" coordinate system describes positions from the camera's `point` of view: left-right, up-down, and forward-backward.
+For example, calling `myCamera.`move`()` moves the camera along its own axes.
+
+Parameters: ~
+                🔢 `rendererGL` (rendererGL) - instance of WebGL renderer
+~
+
+Examples: >
+>
+> <code>
+> let cam;
+> let delta = 0.001;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Camera object.
+> cam = createCamera();
+>
+> // Place the camera at the top-center.
+> cam.setPosition(0, -400, 800);
+>
+> // Point the camera at the origin.
+> cam.lookAt(0, 0, 0);
+>
+> describe(
+> 'A white cube on a gray background. The cube goes in and out of view as the camera pans left and right.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Turn the camera left and right, called "panning".
+> cam.pan(delta);
+>
+> // Switch directions every 120 frames.
+> if (frameCount % 120 === 0) {
+> delta *= -1;
+> }
+>
+> // Draw the box.
+> box();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Double-click to toggle between cameras.
+>
+> let cam1;
+> let cam2;
+> let isDefaultCamera = true;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> // Keep its default settings.
+> cam1 = createCamera();
+>
+> // Create the second camera.
+> // Place it at the top-left.
+> // Point it at the origin.
+> cam2 = createCamera();
+> cam2.setPosition(400, -400, 800);
+> cam2.lookAt(0, 0, 0);
+>
+> // Set the current camera to cam1.
+> setCamera(cam1);
+>
+> describe(
+> 'A white cube on a gray background. The camera toggles between frontal and aerial views when the user double-clicks.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw the box.
+> box();
+> }
+>
+> // Toggle the current camera when the user double-clicks.
+> function doubleClicked() {
+> if (isDefaultCamera === true) {
+> setCamera(cam2);
+> isDefaultCamera = false;
+> } else {
+> setCamera(cam1);
+> isDefaultCamera = true;
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-Camera| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:841
+~
+
+
+3D_Cubic() 📄 🏛️
+|Cubic|() 🏛️ Class
+
+Parameters: ~
+                🔢 `p0` (Number) - the start point of the curve
+                🔢 `c0` (Number) - the first control point
+                🔢 `c1` (Number) - the second control point
+                🔢 `p1` (Number) - the end point
+~
+
+See also: ~
+   |help p5-Cubic| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:289
+~
+
+
+3D_DataArray() 📄 🏛️
+|DataArray|() 🏛️ Class
+
+An internal class to store data that will be sent to a p5.RenderBuffer.
+Those need to eventually go into a Float32Array, so this class provides a variable-length array container backed by a Float32Array so that it can be sent to the GPU without allocating a new array each frame.
+Like a C++ vector, its fixed-length Float32Array backing its contents will double in size when it goes over its capacity.
+
+Examples: >
+>
+> <code>
+> // Initialize storage with a capacity of 4
+> const storage = new DataArray(4);
+> console.log(storage.data.length); // 4
+> console.log(storage.length); // 0
+> console.log(storage.dataArray()); // Empty Float32Array
+>
+> storage.push(1, 2, 3, 4, 5, 6);
+> console.log(storage.data.length); // 8
+> console.log(storage.length); // 6
+> console.log(storage.dataArray()); // Float32Array{1, 2, 3, 4, 5, 6}
+> </code>
+>
+<
+
+See also: ~
+   |help p5-DataArray| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.DataArray.js:28
+~
+
+
+3D_FontInfo() 📄 🏛️
+|FontInfo|() 🏛️ Class
+
+Parameters: ~
+                📦 `font` (Object) - an opentype.js font object
+~
+
+See also: ~
+   |help p5-FontInfo| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:147
+~
+
+
+3D_ImageInfos() 📄 🏛️
+|ImageInfos|() 🏛️ Class
+
+Parameters: ~
+                🔢 `width` (Integer)
+                🔢 `height` (Integer)
+~
+
+See also: ~
+   |help p5-ImageInfos| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:49
+~
+
+
+3D_ScreenshotError() 📄 🏛️
+|ScreenshotError|() 🏛️ Class
+
+A helper class to contain an error and also the screenshot data that caused the error.
+
+See also: ~
+   |help p5-ScreenshotError| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/unit/visual/visualTest.js:5
+~
+
+
+3D_Shader() 📄 🏛️
+|Shader|() 🏛️ Class
+
+A class to describe a shader program.
+Each `p5.Shader` object contains a shader program that runs on the graphics processing unit (GPU).
+Shaders can process many `pixels` or vertices at the same time, making them fast for many graphics tasks.
+They’re written in a language called <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders" target="_blank">GLSL</a> and run along with the rest of the code in a sketch.
+A shader program consists of two files, a `vertex` shader and a fragment shader.
+The `vertex` shader affects where 3D geometry is drawn on the screen and the fragment shader affects `color`.
+Once the `p5.Shader` object is created, it can be used with the <a href="#/p5/shader">shader()</a> function, as in `shader(myShader)`.
+A shader can optionally describe *hooks,* which are functions in GLSL that users may choose to provide to customize the behavior of the shader.
+For the `vertex` or the fragment shader, users can pass in an object where each `key` is the type and name of a hook function, and each value is a string with the parameter list and default implementation of the hook.
+For example, to let users optionally run code at the start of the `vertex` shader, the options object could include: ```js { `vertex`: { 'void beforeVertex': '() {}' } } ``` Then, in your `vertex` shader source, you can run a hook by calling a function with the same name prefixed by `HOOK_`: ```glsl void main() { HOOK_beforeVertex(); // Add the rest of your shader code here!
+} ``` Note: <a href="#/p5/createShader">createShader()</a>, <a href="#/p5/createFilterShader">createFilterShader()</a>, and <a href="#/p5/loadShader">loadShader()</a> are the recommended ways to create an instance of this class.
+
+Parameters: ~
+                🔢 `renderer` (p5.RendererGL) - WebGL context for this shader.
+                📝 `vertSrc` (String) - source code for the vertex shader program.
+                📝 `fragSrc` (String) - source code for the fragment shader program.
+                🔢 `{Object} [options] An optional object describing how this shader can` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+>
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision highp float;
+>
+> void main() {
+> // Set each pixel's RGBA value to yellow.
+> gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+> }
+> `;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> let myShader = createShader(vertSrc, fragSrc);
+>
+> // Apply the p5.Shader object.
+> shader(myShader);
+>
+> // Style the drawing surface.
+> noStroke();
+>
+> // Add a plane as a drawing surface.
+> plane(100, 100);
+>
+> describe('A yellow square.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> let mandelbrot;
+>
+> // Load the shader and create a p5.Shader object.
+> function preload() {
+> mandelbrot = loadShader('assets/shader.vert', 'assets/shader.frag');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Use the p5.Shader object.
+> shader(mandelbrot);
+>
+> // Set the shader uniform p to an array.
+> mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);
+>
+> describe('A fractal image zooms in and out of focus.');
+> }
+>
+> function draw() {
+> // Set the shader uniform r to a value that oscillates between 0 and 2.
+> mandelbrot.setUniform('r', sin(frameCount * 0.01) + 1);
+>
+> // Add a quad as a display surface for the shader.
+> quad(-1, -1, 1, -1, 1, 1, -1, 1);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-Shader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Shader.js:155
+~
+
+
+3D_Texture() 📄 🏛️
+|Texture|() 🏛️ Class
+
+Texture class for WEBGL Mode
+
+Parameters: ~
+                🔢 `renderer` (p5.RendererGL) - an instance of p5.RendererGL that
+                🔢 `{p5.Image|p5.Graphics|p5.Element|p5.MediaElement|ImageData|p5.Framebuffer|p5.FramebufferTexture|ImageData} [obj] the` (unknown)
+                🔢 `{Object} [settings] optional A javascript object containing texture` (unknown)
+                🔢 `{Number} [settings.format] optional The internal color component` (unknown)
+                🔢 `{Number} [settings.minFilter] optional The texture minification` (unknown)
+                🔢 `{Number} [settings.magFilter] optional The texture magnification` (unknown)
+                🔢 `{Number} [settings.wrapS] optional The texture wrap settings for` (unknown)
+                🔢 `{Number} [settings.wrapT] optional The texture wrap settings for` (unknown)
+                🔢 `{Number} [settings.dataType] optional The data type of the texel` (unknown)
+~
+
+See also: ~
+   |help p5-Texture| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Texture.js:43
+~
+
+
+FUNCTIONS                                                   *p5-3D-functions*
+
+3D_ambientLight() 📄 ⚡
+|ambientLight|(color) ⚡ Function
+
+Parameters: ~
+                🔢 `color` (p5.Color) - color as a <a href="#/p5.Color">p5.Color</a> object.
+~
+
+See also: ~
+   |help p5-ambientLight| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:189
+~
+
+
+3D_ambientMaterial() 📄 ⚡
+|ambientMaterial|(color) ⚡ Function
+
+Parameters: ~
+                🔢 `color` (p5.Color|Number[]|String)
+~
+
+See also: ~
+   |help p5-ambientMaterial| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:2634
+~
+
+
+3D_anonymous() 📄 ⚡
+|anonymous|() ⚡ Function
+
+Expects an `image` file and a p5 instance with an `image` file loaded and drawn and checks that they are exactly the same.
+Sends result to the callback.
+
+See also: ~
+   |help p5-anonymous| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/unit/image/loading.js:5
+~
+
+
+3D_baseColorShader() 📄 ⚡
+|baseColorShader|() ⚡ Function
+
+Get the shader used when no lights or materials are applied.
+You can call <a href="#/p5.Shader/modify">`baseColorShader().modify()`</a> and change any of the following hooks: Hook | Description -------|------------- `void beforeVertex` | Called at the start of the `vertex` shader.
+`vec3 getLocalPosition` | Update the position of vertices before transforms are applied.
+It takes in `vec3 position` and must return a modified version.
+`vec3 getWorldPosition` | Update the position of vertices after transforms are applied.
+It takes in `vec3 position` and pust return a modified version.
+`vec3 getLocalNormal` | Update the normal before transforms are applied.
+It takes in `vec3 normal` and must return a modified version.
+`vec3 getWorldNormal` | Update the normal after transforms are applied.
+It takes in `vec3 normal` and must return a modified version.
+`vec2 getUV` | Update the texture coordinates.
+It takes in `vec2 uv` and must return a modified version.
+`vec4 getVertexColor` | Update the `color` of each `vertex`.
+It takes in a `vec4 `color`` and must return a modified version.
+`void afterVertex` | Called at the end of the `vertex` shader.
+`void beforeFragment` | Called at the start of the fragment shader.
+`vec4 getFinalColor` | Update the final `color` after mixing.
+It takes in a `vec4 `color`` and must return a modified version.
+`void afterFragment` | Called at the end of the fragment shader.
+Most of the time, you will need to write your hooks in GLSL ES version 300.
+If you are using WebGL 1 instead of 2, write your hooks in GLSL ES 100 instead.
+Call `baseColorShader().inspectHooks()` to see all the possible hooks and their default implementations.
+
+Returns: ~
+                🔢 Returns undefined
+~
+
+Examples: >
+>
+> <code>
+> let myShader;
+>
+> function setup() {
+> createCanvas(200, 200, WEBGL);
+> myShader = baseColorShader().modify({
+> uniforms: {
+> 'float time': () => millis()
+> },
+> 'vec3 getWorldPosition': `(vec3 pos) {
+> pos.y += 20. * sin(time * 0.001 + pos.x * 0.05);
+> return pos;
+> }`
+> });
+> }
+>
+> function draw() {
+> background(255);
+> shader(myShader);
+> noStroke();
+> fill('red');
+> circle(0, 0, 50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-baseColorShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:1350
+~
+
+
+3D_baseMaterialShader() 📄 ⚡
+|baseMaterialShader|() ⚡ Function
+
+Get the default shader used with lights, materials, and textures.
+You can call <a href="#/p5.Shader/modify">`baseMaterialShader().modify()`</a> and change any of the following hooks: <table> <tr><th>Hook</th><th>Description</th></tr> <tr><td> `void beforeVertex` </td><td> Called at the start of the `vertex` shader.
+</td></tr> <tr><td> `vec3 getLocalPosition` </td><td> Update the position of vertices before transforms are applied.
+It takes in `vec3 position` and must return a modified version.
+</td></tr> <tr><td> `vec3 getWorldPosition` </td><td> Update the position of vertices after transforms are applied.
+It takes in `vec3 position` and pust return a modified version.
+</td></tr> <tr><td> `vec3 getLocalNormal` </td><td> Update the normal before transforms are applied.
+It takes in `vec3 normal` and must return a modified version.
+</td></tr> <tr><td> `vec3 getWorldNormal` </td><td> Update the normal after transforms are applied.
+It takes in `vec3 normal` and must return a modified version.
+</td></tr> <tr><td> `vec2 getUV` </td><td> Update the texture coordinates.
+It takes in `vec2 uv` and must return a modified version.
+</td></tr> <tr><td> `vec4 getVertexColor` </td><td> Update the `color` of each `vertex`.
+It takes in a `vec4 `color`` and must return a modified version.
+</td></tr> <tr><td> `void afterVertex` </td><td> Called at the end of the `vertex` shader.
+</td></tr> <tr><td> `void beforeFragment` </td><td> Called at the start of the fragment shader.
+</td></tr> <tr><td> `Inputs getPixelInputs` </td><td> Update the per-pixel inputs of the material.
+It takes in an `Inputs` struct, which includes: - `vec3 normal`, the direction pointing out of the surface - `vec2 texCoord`, a vector where `x` and `y` are between 0 and 1 describing the spot on a texture the pixel is mapped to, as a fraction of the texture size - `vec3 ambientLight`, the ambient light `color` on the `vertex` - `vec4 `color``, the base material `color` of the pixel - `vec3 ambientMaterial`, the `color` of the pixel when affected by ambient light - `vec3 specularMaterial`, the `color` of the pixel when reflecting specular highlights - `vec3 emissiveMaterial`, the light `color` emitted by the pixel - `float shininess`, a number representing how sharp specular reflections should be, from 1 to infinity - `float metalness`, a number representing how mirrorlike the material should be, between 0 and 1 The struct can be modified and returned.
+</td></tr> <tr><td> `vec4 combineColors` </td><td> Take in a `ColorComponents` struct containing all the different components of light, and combining them into a single final `color`.
+The struct contains: - `vec3 baseColor`, the base `color` of the pixel - `float opacity`, the opacity between 0 and 1 that it should be drawn at - `vec3 ambientColor`, the `color` of the pixel when affected by ambient light - `vec3 specularColor`, the `color` of the pixel when affected by specular reflections - `vec3 diffuse`, the amount of diffused light hitting the pixel - `vec3 ambient`, the amount of ambient light hitting the pixel - `vec3 specular`, the amount of specular reflection hitting the pixel - `vec3 emissive`, the amount of light emitted by the pixel </td></tr> <tr><td> `vec4 getFinalColor` </td><td> Update the final `color` after mixing.
+It takes in a `vec4 `color`` and must return a modified version.
+</td></tr> <tr><td> `void afterFragment` </td><td> Called at the end of the fragment shader.
+</td></tr> </table> Most of the time, you will need to write your hooks in GLSL ES version 300.
+If you are using WebGL 1 instead of 2, write your hooks in GLSL ES 100 instead.
+Call `baseMaterialShader().inspectHooks()` to see all the possible hooks and their default implementations.
+
+Returns: ~
+                🔢 Returns undefined
+~
+
+Examples: >
+>
+> <code>
+> let myShader;
+>
+> function setup() {
+> createCanvas(200, 200, WEBGL);
+> myShader = baseMaterialShader().modify({
+> 'Inputs getPixelInputs': `(Inputs inputs) {
+> vec3 newNormal = inputs.normal;
+> // Simple bump mapping: adjust the normal based on position
+> newNormal.x += 0.2 * sin(
+> sin(
+> inputs.texCoord.y * ${TWO_PI} * 10.0 +
+> inputs.texCoord.x * ${TWO_PI} * 25.0
+> )
+> );
+> newNormal.y += 0.2 * sin(
+> sin(
+> inputs.texCoord.x * ${TWO_PI} * 10.0 +
+> inputs.texCoord.y * ${TWO_PI} * 25.0
+> )
+> );
+> inputs.normal = normalize(newNormal);
+> return inputs;
+> }`
+> });
+> }
+>
+> function draw() {
+> background(255);
+> shader(myShader);
+> ambientLight(150);
+> pointLight(
+> 255, 255, 255,
+> 100*cos(frameCount*0.04), -50, 100*sin(frameCount*0.04)
+> );
+> noStroke();
+> fill('red');
+> shininess(200);
+> specularMaterial(255);
+> sphere(50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-baseMaterialShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:1192
+~
+
+
+3D_baseNormalShader() 📄 ⚡
+|baseNormalShader|() ⚡ Function
+
+Get the shader used by <a href="#/p5/normalMaterial">`normalMaterial()`</a>.
+You can call <a href="#/p5.Shader/modify">`baseNormalShader().modify()`</a> and change any of the following hooks: Hook | Description -----|------------ `void beforeVertex` | Called at the start of the `vertex` shader.
+`vec3 getLocalPosition` | Update the position of vertices before transforms are applied.
+It takes in `vec3 position` and must return a modified version.
+`vec3 getWorldPosition` | Update the position of vertices after transforms are applied.
+It takes in `vec3 position` and pust return a modified version.
+`vec3 getLocalNormal` | Update the normal before transforms are applied.
+It takes in `vec3 normal` and must return a modified version.
+`vec3 getWorldNormal` | Update the normal after transforms are applied.
+It takes in `vec3 normal` and must return a modified version.
+`vec2 getUV` | Update the texture coordinates.
+It takes in `vec2 uv` and must return a modified version.
+`vec4 getVertexColor` | Update the `color` of each `vertex`.
+It takes in a `vec4 `color`` and must return a modified version.
+`void afterVertex` | Called at the end of the `vertex` shader.
+`void beforeFragment` | Called at the start of the fragment shader.
+`vec4 getFinalColor` | Update the final `color` after mixing.
+It takes in a `vec4 `color`` and must return a modified version.
+`void afterFragment` | Called at the end of the fragment shader.
+Most of the time, you will need to write your hooks in GLSL ES version 300.
+If you are using WebGL 1 instead of 2, write your hooks in GLSL ES 100 instead.
+Call `baseNormalShader().inspectHooks()` to see all the possible hooks and their default implementations.
+
+Returns: ~
+                🔢 Returns undefined
+~
+
+Examples: >
+>
+> <code>
+> let myShader;
+>
+> function setup() {
+> createCanvas(200, 200, WEBGL);
+> myShader = baseNormalShader().modify({
+> 'vec3 getWorldNormal': '(vec3 normal) { return abs(normal); }',
+> 'vec4 getFinalColor': `(vec4 color) {
+> // Map the r, g, and b values of the old normal to new colors
+> // instead of just red, green, and blue:
+> vec3 newColor =
+> color.r * vec3(89.0, 240.0, 232.0) / 255.0 +
+> color.g * vec3(240.0, 237.0, 89.0) / 255.0 +
+> color.b * vec3(205.0, 55.0, 222.0) / 255.0;
+> newColor = newColor / (color.r + color.g + color.b);
+> return vec4(newColor, 1.0) * color.a;
+> }`
+> });
+> }
+>
+> function draw() {
+> background(255);
+> shader(myShader);
+> noStroke();
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.015);
+> box(100);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-baseNormalShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:1287
+~
+
+
+3D_baseStrokeShader() 📄 ⚡
+|baseStrokeShader|() ⚡ Function
+
+Get the shader used when drawing the strokes of shapes.
+You can call <a href="#/p5.Shader/modify">`baseStrokeShader().modify()`</a> and change any of the following hooks: <table> <tr><th>Hook</th><th>Description</th></tr> <tr><td> `void beforeVertex` </td><td> Called at the start of the `vertex` shader.
+</td></tr> <tr><td> `vec3 getLocalPosition` </td><td> Update the position of vertices before transforms are applied.
+It takes in `vec3 position` and must return a modified version.
+</td></tr> <tr><td> `vec3 getWorldPosition` </td><td> Update the position of vertices after transforms are applied.
+It takes in `vec3 position` and pust return a modified version.
+</td></tr> <tr><td> `float getStrokeWeight` </td><td> Update the `stroke` weight.
+It takes in `float weight` and pust return a modified version.
+</td></tr> <tr><td> `vec2 getLineCenter` </td><td> Update the center of the `line`.
+It takes in `vec2 center` and must return a modified version.
+</td></tr> <tr><td> `vec2 getLinePosition` </td><td> Update the position of each `vertex` on the edge of the `line`.
+It takes in `vec2 position` and must return a modified version.
+</td></tr> <tr><td> `vec4 getVertexColor` </td><td> Update the `color` of each `vertex`.
+It takes in a `vec4 `color`` and must return a modified version.
+</td></tr> <tr><td> `void afterVertex` </td><td> Called at the end of the `vertex` shader.
+</td></tr> <tr><td> `void beforeFragment` </td><td> Called at the start of the fragment shader.
+</td></tr> <tr><td> `Inputs getPixelInputs` </td><td> Update the inputs to the shader.
+It takes in a struct `Inputs inputs`, which includes: - `vec4 `color``, the `color` of the `stroke` - `vec2 tangent`, the direction of the `stroke` in screen space - `vec2 center`, the coordinate of the center of the `stroke` in screen space p5.js `pixels` - `vec2 position`, the coordinate of the current pixel in screen space p5.js `pixels` - `float strokeWeight`, the thickness of the `stroke` in p5.js `pixels` </td></tr> <tr><td> `bool shouldDiscard` </td><td> Caps and joins are made by discarded `pixels` in the fragment shader to carve away unwanted areas.
+Use this to change this logic.
+It takes in a `bool willDiscard` and must return a modified version.
+</td></tr> <tr><td> `vec4 getFinalColor` </td><td> Update the final `color` after mixing.
+It takes in a `vec4 `color`` and must return a modified version.
+</td></tr> <tr><td> `void afterFragment` </td><td> Called at the end of the fragment shader.
+</td></tr> </table> Most of the time, you will need to write your hooks in GLSL ES version 300.
+If you are using WebGL 1 instead of 2, write your hooks in GLSL ES 100 instead.
+Call `baseStrokeShader().inspectHooks()` to see all the possible hooks and their default implementations.
+
+Returns: ~
+                🔢 Returns undefined
+~
+
+Examples: >
+>
+> <code>
+> let myShader;
+>
+> function setup() {
+> createCanvas(200, 200, WEBGL);
+> myShader = baseStrokeShader().modify({
+> 'float random': `(vec2 p) {
+> vec3 p3  = fract(vec3(p.xyx) * .1031);
+> p3 += dot(p3, p3.yzx + 33.33);
+> return fract((p3.x + p3.y) * p3.z);
+> }`,
+> 'Inputs getPixelInputs': `(Inputs inputs) {
+> // Replace alpha in the color with dithering by
+> // randomly setting pixel colors to 0 based on opacity
+> float a = inputs.color.a;
+> inputs.color.a = 1.0;
+> inputs.color *= random(inputs.position.xy) > a ? 0.0 : 1.0;
+> return inputs;
+> }`
+> });
+> }
+>
+> function draw() {
+> background(255);
+> shader(myShader);
+> strokeWeight(10);
+> beginShape();
+> for (let i = 0; i <= 50; i++) {
+> stroke(
+> 0,
+> 255
+> * map(i, 0, 20, 0, 1, true)
+> * map(i, 30, 50, 1, 0, true)
+> );
+> vertex(
+> map(i, 0, 50, -1, 1) * width/3,
+> 50 * sin(i/10 + frameCount/100)
+> );
+> }
+> endShape();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-baseStrokeShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:1623
+~
+
+
+3D_byte() 📄 ⚡
+|byte|(v) ⚡ Function
+
+Parameters: ~
+                🔢 `v` (Number) - the value to scale
+~
+
+See also: ~
+   |help p5-byte| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:275
+~
+
+
+3D_camera() 📄 ⚡
+|camera|({Number} [x]        x-coordinate of the camera. Defaults to 0., {Number} [y]        y-coordinate of the camera. Defaults to 0., {Number} [z]        z-coordinate of the camera. Defaults to 800., {Number} [centerX]  x-coordinate of the point the camera faces. Defaults to 0., {Number} [centerY]  y-coordinate of the point the camera faces. Defaults to 0., {Number} [centerZ]  z-coordinate of the point the camera faces. Defaults to 0., {Number} [upX]      x-component of the camera’s "up" vector. Defaults to 0., {Number} [upY]      y-component of the camera’s "up" vector. Defaults to 1., {Number} [upZ]      z-component of the camera’s "up" vector. Defaults to 0.) ⚡ Function
+
+Sets the position and orientation of the current camera in a 3D sketch.
+`camera()` allows objects to be viewed from different angles.
+It has nine parameters that are all optional.
+The first three parameters, `x`, `y`, and `z`, are the coordinates of the camera’s position.
+For example, calling `camera(0, 0, 0)` places the camera at the origin `(0, 0, 0)`.
+By default, the camera is placed at `(0, 0, 800)`.
+The next three parameters, ``centerX``, ``centerY``, and `centerZ` are the coordinates of the `point` where the camera faces.
+For example, calling `camera(0, 0, 0, 10, 20, 30)` places the camera at the origin `(0, 0, 0)` and points it at `(10, 20, 30)`.
+By default, the camera points at the origin `(0, 0, 0)`.
+The last three parameters, `upX`, `upY`, and `upZ` are the components of the "up" vector.
+The "up" vector orients the camera’s y-axis.
+For example, calling `camera(0, 0, 0, 10, 20, 30, 0, -1, 0)` places the camera at the origin `(0, 0, 0)`, points it at `(10, 20, 30)`, and sets the "up" vector to `(0, -1, 0)` which is like holding it upside-down.
+By default, the "up" vector is `(0, 1, 0)`.
+Note: `camera()` can only be used in WebGL mode.
+
+Parameters: ~
+                🔢 `{Number} [x]        x-coordinate of the camera. Defaults to 0.` (unknown)
+                🔢 `{Number} [y]        y-coordinate of the camera. Defaults to 0.` (unknown)
+                🔢 `{Number} [z]        z-coordinate of the camera. Defaults to 800.` (unknown)
+                🔢 `{Number} [centerX]  x-coordinate of the point the camera faces. Defaults to 0.` (unknown)
+                🔢 `{Number} [centerY]  y-coordinate of the point the camera faces. Defaults to 0.` (unknown)
+                🔢 `{Number} [centerZ]  z-coordinate of the point the camera faces. Defaults to 0.` (unknown)
+                🔢 `{Number} [upX]      x-component of the camera’s "up" vector. Defaults to 0.` (unknown)
+                🔢 `{Number} [upY]      y-component of the camera’s "up" vector. Defaults to 1.` (unknown)
+                🔢 `{Number} [upZ]      z-component of the camera’s "up" vector. Defaults to 0.` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A white cube on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Move the camera to the top-right.
+> camera(200, -400, 800);
+>
+> // Draw the box.
+> box();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A white cube apperas to sway left and right on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Calculate the camera's x-coordinate.
+> let x = 400 * cos(frameCount * 0.01);
+>
+> // Orbit the camera around the box.
+> camera(x, -400, 800);
+>
+> // Draw the box.
+> box();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Adjust the range sliders to change the camera's position.
+>
+> let xSlider;
+> let ySlider;
+> let zSlider;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create slider objects to set the camera's coordinates.
+> xSlider = createSlider(-400, 400, 400);
+> xSlider.position(0, 100);
+> xSlider.size(100);
+> ySlider = createSlider(-400, 400, -200);
+> ySlider.position(0, 120);
+> ySlider.size(100);
+> zSlider = createSlider(0, 1600, 800);
+> zSlider.position(0, 140);
+> zSlider.size(100);
+>
+> describe(
+> 'A white cube drawn against a gray background. Three range sliders appear beneath the image. The camera position changes when the user moves the sliders.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Get the camera's coordinates from the sliders.
+> let x = xSlider.value();
+> let y = ySlider.value();
+> let z = zSlider.value();
+>
+> // Move the camera.
+> camera(x, y, z);
+>
+> // Draw the box.
+> box();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-camera| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:141
+~
+
+
+3D_cameraType() 📄 ⚡
+|cameraType|({Number} [fovy]   camera frustum vertical field of view. Defaults to, {Number} [aspect] camera frustum aspect ratio. Defaults to, {Number} [near]   distance from the camera to the near clipping plane., {Number} [far]    distance from the camera to the far clipping plane.) ⚡ Function
+
+Sets a perspective projection for the camera.
+In a perspective projection, shapes that are further from the camera appear smaller than shapes that are near the camera.
+This technique, called foreshortening, creates realistic 3D scenes.
+It’s applied by default in new `p5.Camera` objects.
+`myCamera.perspective()` changes the camera’s perspective by changing its viewing frustum.
+The frustum is the volume of space that’s visible to the camera.
+The frustum’s shape is a pyramid with its top cut off.
+The camera is placed where the top of the pyramid should be and points towards the base of the pyramid.
+It views everything within the frustum.
+The first parameter, `fovy`, is the camera’s vertical field of view.
+It’s an angle that describes how tall or narrow a view the camera has.
+For example, calling `myCamera.perspective(0.5)` sets the camera’s vertical field of view to 0.5 radians.
+By default, `fovy` is calculated based on the sketch’s `height` and the camera’s default z-coordinate, which is 800.
+The formula for the default `fovy` is `2 * atan(`height` / 2 / 800)`.
+The second parameter, `aspect`, is the camera’s aspect ratio.
+It’s a number that describes the ratio of the top plane’s `width` to its `height`.
+For example, calling `myCamera.perspective(0.5, 1.5)` sets the camera’s field of view to 0.5 radians and aspect ratio to 1.5, which would make shapes appear thinner on a square canvas.
+By default, `aspect` is `set` to ``width` / `height``.
+The third parameter, `near`, is the distance from the camera to the near plane.
+For example, calling `myCamera.perspective(0.5, 1.5, 100)` sets the camera’s field of view to 0.5 radians, its aspect ratio to 1.5, and places the near plane 100 `pixels` from the camera.
+Any shapes drawn less than 100 `pixels` from the camera won’t be visible.
+By default, `near` is `set` to `0.1 * 800`, which is 1/10th the default distance between the camera and the origin.
+The fourth parameter, `far`, is the distance from the camera to the far plane.
+For example, calling `myCamera.perspective(0.5, 1.5, 100, 10000)` sets the camera’s field of view to 0.5 radians, its aspect ratio to 1.5, places the near plane 100 `pixels` from the camera, and places the far plane 10,000 `pixels` from the camera.
+Any shapes drawn more than 10,000 `pixels` from the camera won’t be visible.
+By default, `far` is `set` to `10 * 800`, which is 10 times the default distance between the camera and the origin.
+
+Parameters: ~
+                🔢 `{Number} [fovy]   camera frustum vertical field of view. Defaults to` (unknown)
+                🔢 `{Number} [aspect] camera frustum aspect ratio. Defaults to` (unknown)
+                🔢 `{Number} [near]   distance from the camera to the near clipping plane.` (unknown)
+                🔢 `{Number} [far]    distance from the camera to the far clipping plane.` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> // Double-click to toggle between cameras.
+>
+> let cam1;
+> let cam2;
+> let isDefaultCamera = true;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> // Keep its default settings.
+> cam1 = createCamera();
+>
+> // Create the second camera.
+> cam2 = createCamera();
+>
+> // Place it at the top-right.
+> cam2.camera(400, -400, 800);
+>
+> // Set its fovy to 0.2.
+> // Set its aspect to 1.5.
+> // Set its near to 600.
+> // Set its far to 1200.
+> cam2.perspective(0.2, 1.5, 600, 1200);
+>
+> // Set the current camera to cam1.
+> setCamera(cam1);
+>
+> describe('A white cube on a gray background. The camera toggles between a frontal view and a skewed aerial view when the user double-clicks.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw the box.
+> box();
+> }
+>
+> // Toggle the current camera when the user double-clicks.
+> function doubleClicked() {
+> if (isDefaultCamera === true) {
+> setCamera(cam2);
+> isDefaultCamera = false;
+> } else {
+> setCamera(cam1);
+> isDefaultCamera = true;
+> }
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Double-click to toggle between cameras.
+>
+> let cam1;
+> let cam2;
+> let isDefaultCamera = true;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> // Keep its default settings.
+> cam1 = createCamera();
+>
+> // Create the second camera.
+> cam2 = createCamera();
+>
+> // Place it at the top-right.
+> cam2.camera(400, -400, 800);
+>
+> // Set its fovy to 0.2.
+> // Set its aspect to 1.5.
+> // Set its near to 600.
+> // Set its far to 1200.
+> cam2.perspective(0.2, 1.5, 600, 1200);
+>
+> // Set the current camera to cam1.
+> setCamera(cam1);
+>
+> describe('A white cube moves left and right on a gray background. The camera toggles between a frontal and a skewed aerial view when the user double-clicks.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Translate the origin left and right.
+> let x = 100 * sin(frameCount * 0.01);
+> translate(x, 0, 0);
+>
+> // Draw the box.
+> box();
+> }
+>
+> // Toggle the current camera when the user double-clicks.
+> function doubleClicked() {
+> if (isDefaultCamera === true) {
+> setCamera(cam2);
+> isDefaultCamera = false;
+> } else {
+> setCamera(cam1);
+> isDefaultCamera = true;
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-cameraType| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:2030
+~
+
+
+3D_clamp() 📄 ⚡
+|clamp|(v, min, max) ⚡ Function
+
+Parameters: ~
+                🔢 `v` (Number) - the value to clamp
+                🔢 `min` (Number) - the minimum value
+                🔢 `max` (Number) - the maxmimum value
+~
+
+See also: ~
+   |help p5-clamp| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:263
+~
+
+
+3D_createCamera() 📄 ⚡
+|createCamera|() ⚡ Function
+
+Creates a new <a href="#/p5.Camera">p5.Camera</a> object and sets it as the current (active) camera.
+The new camera is initialized with a default position `(0, 0, 800)` and a default perspective projection.
+Its properties can be controlled with <a href="#/p5.Camera">p5.Camera</a> methods such as `myCamera.lookAt(0, 0, 0)`.
+Note: Every 3D sketch starts with a default camera initialized.
+This camera can be controlled with the functions <a href="#/p5/camera">camera()</a>, <a href="#/p5/perspective">perspective()</a>, <a href="#/p5/ortho">ortho()</a>, and <a href="#/p5/frustum">frustum()</a> if it's the only camera in the scene.
+Note: `createCamera()` can only be used in WebGL mode.
+
+Returns: ~
+                🔢 Returns p5.Camera: the new camera.
+~
+
+Examples: >
+>
+> <code>
+> // Double-click to toggle between cameras.
+>
+> let cam1;
+> let cam2;
+> let usingCam1 = true;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> // Keep its default settings.
+> cam1 = createCamera();
+>
+> // Create the second camera.
+> // Place it at the top-left.
+> // Point it at the origin.
+> cam2 = createCamera();
+> cam2.setPosition(400, -400, 800);
+> cam2.lookAt(0, 0, 0);
+>
+> // Set the current camera to cam1.
+> setCamera(cam1);
+>
+> describe('A white cube on a gray background. The camera toggles between frontal and aerial views when the user double-clicks.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw the box.
+> box();
+> }
+>
+> // Toggle the current camera when the user double-clicks.
+> function doubleClicked() {
+> if (usingCam1 === true) {
+> setCamera(cam2);
+> usingCam1 = false;
+> } else {
+> setCamera(cam1);
+> usingCam1 = true;
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-createCamera| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:709
+~
+
+
+3D_createFilterShader() 📄 ⚡
+|createFilterShader|(fragSrc) ⚡ Function
+
+Creates a <a href="#/p5.Shader">p5.Shader</a> object to be used with the <a href="#/p5/`filter`">`filter`()</a> function.
+`createFilterShader()` works like <a href="#/p5/createShader">createShader()</a> but has a default `vertex` shader included.
+`createFilterShader()` is intended to be used along with <a href="#/p5/`filter`">`filter`()</a> for filtering the contents of a canvas.
+A `filter` shader will be applied to the whole canvas instead of just <a href="#/p5.Geometry">p5.Geometry</a> objects.
+The parameter, `fragSrc`, sets the fragment shader.
+It’s a string that contains the fragment shader program written in <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders" target="_blank">GLSL</a>.
+The <a href="#/p5.Shader">p5.Shader</a> object that's created has some uniforms that can be `set`: - `sampler2D tex0`, which contains the canvas contents as a texture.
+- `vec2 canvasSize`, which is the `width` and `height` of the canvas, not including pixel density.
+- `vec2 texelSize`, which is the size of a physical pixel including pixel density.
+This is calculated as `1.0 / (`width` * density)` for the pixel `width` and `1.0 / (`height` * density)` for the pixel `height`.
+The <a href="#/p5.Shader">p5.Shader</a> that's created also provides `varying vec2 vTexCoord`, a coordinate with values between 0 and 1.
+`vTexCoord` describes where on the canvas the pixel will be drawn.
+For more info about filters and shaders, see Adam Ferriss' <a href="https://github.com/aferriss/p5jsShaderExamples">repo of shader examples</a> or the <a href="https://p5js.org/tutorials/intro-to-shaders/">Introduction to Shaders</a> tutorial.
+
+Parameters: ~
+                📝 `fragSrc` (String) - source code for the fragment shader.
+~
+
+Returns: ~
+                🔢 Returns undefined
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> let fragSrc = `precision highp float;
+> void main() {
+> gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+> }`;
+>
+> createCanvas(100, 100, WEBGL);
+> let s = createFilterShader(fragSrc);
+> filter(s);
+> describe('a yellow canvas');
+> }
+> </code>
+> </div>
+>
+> <div modernizr='webgl'>
+> <code>
+> let img, s;
+> function preload() {
+> img = loadImage('assets/bricks.jpg');
+> }
+> function setup() {
+> let fragSrc = `precision highp float;
+>
+> // x,y coordinates, given from the vertex shader
+> varying vec2 vTexCoord;
+>
+> // the canvas contents, given from filter()
+> uniform sampler2D tex0;
+> // other useful information from the canvas
+> uniform vec2 texelSize;
+> uniform vec2 canvasSize;
+> // a custom variable from this sketch
+> uniform float darkness;
+>
+> void main() {
+> // get the color at current pixel
+> vec4 color = texture2D(tex0, vTexCoord);
+> // set the output color
+> color.b = 1.0;
+> color *= darkness;
+> gl_FragColor = vec4(color.rgb, 1.0);
+> }`;
+>
+> createCanvas(100, 100, WEBGL);
+> s = createFilterShader(fragSrc);
+> }
+> function draw() {
+> image(img, -50, -50);
+> s.setUniform('darkness', 0.5);
+> filter(s);
+> describe('a image of bricks tinted dark blue');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-createFilterShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:630
+~
+
+
+3D_createShader() 📄 ⚡
+|createShader|(vertSrc, fragSrc, {Object} [options] An optional object describing how this shader can) ⚡ Function
+
+Creates a new <a href="#/p5.Shader">p5.Shader</a> object.
+Shaders are programs that run on the graphics processing unit (GPU).
+They can process many `pixels` at the same time, making them fast for many graphics tasks.
+They’re written in a language called <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders" target="_blank">GLSL</a> and run along with the rest of the code in a sketch.
+Once the <a href="#/p5.Shader">p5.Shader</a> object is created, it can be used with the <a href="#/p5/shader">shader()</a> function, as in `shader(myShader)`.
+A shader program consists of two parts, a `vertex` shader and a fragment shader.
+The `vertex` shader affects where 3D geometry is drawn on the screen and the fragment shader affects `color`.
+The first parameter, `vertSrc`, sets the `vertex` shader.
+It’s a string that contains the `vertex` shader program written in GLSL.
+The second parameter, `fragSrc`, sets the fragment shader.
+It’s a string that contains the fragment shader program written in GLSL.
+A shader can optionally describe *hooks,* which are functions in GLSL that users may choose to provide to customize the behavior of the shader using the <a href="#/p5.Shader/modify">`modify()`</a> method of `p5.Shader`.
+These are added by describing the hooks in a third parameter, `options`, and referencing the hooks in your `vertSrc` or `fragSrc`.
+Hooks for the `vertex` or fragment shader are described under the ``vertex`` and `fragment` keys of `options`.
+Each one is an object.
+where each `key` is the type and name of a hook function, and each value is a string with the parameter list and default implementation of the hook.
+For example, to let users optionally run code at the start of the `vertex` shader, the options object could include: ```js { `vertex`: { 'void beforeVertex': '() {}' } } ``` Then, in your `vertex` shader source, you can run a hook by calling a function with the same name prefixed by `HOOK_`.
+If you want to check if the default hook has been replaced, maybe to avoid extra overhead, you can check if the same name prefixed by `AUGMENTED_HOOK_` has been defined: ```glsl void main() { // In most cases, just calling the hook is fine: HOOK_beforeVertex(); // Alternatively, for more efficiency: #ifdef AUGMENTED_HOOK_beforeVertex HOOK_beforeVertex(); #endif // Add the rest of your shader code here!
+} ``` Note: Only `filter` shaders can be used in 2D mode.
+All shaders can be used in WebGL mode.
+
+Parameters: ~
+                📝 `vertSrc` (String) - source code for the vertex shader.
+                📝 `fragSrc` (String) - source code for the fragment shader.
+                🔢 `{Object} [options] An optional object describing how this shader can` (unknown)
+~
+
+Returns: ~
+                🔢 Returns undefined
+~
+
+Examples: >
+>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision highp float;
+>
+> void main() {
+> // Set each pixel's RGBA value to yellow.
+> gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+> }
+> `;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> let shaderProgram = createShader(vertSrc, fragSrc);
+>
+> // Compile and apply the p5.Shader object.
+> shader(shaderProgram);
+>
+> // Style the drawing surface.
+> noStroke();
+>
+> // Add a plane as a drawing surface.
+> plane(100, 100);
+>
+> describe('A yellow square.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision highp float;
+> uniform vec2 p;
+> uniform float r;
+> const int numIterations = 500;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vec2 c = p + gl_FragCoord.xy * r;
+> vec2 z = c;
+> float n = 0.0;
+>
+> for (int i = numIterations; i > 0; i--) {
+> if (z.x * z.x + z.y * z.y > 4.0) {
+> n = float(i) / float(numIterations);
+> break;
+> }
+> z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c;
+> }
+>
+> gl_FragColor = vec4(
+> 0.5 - cos(n * 17.0) / 2.0,
+> 0.5 - cos(n * 13.0) / 2.0,
+> 0.5 - cos(n * 23.0) / 2.0,
+> 1.0
+> );
+> }
+> `;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> let mandelbrot = createShader(vertSrc, fragSrc);
+>
+> // Compile and apply the p5.Shader object.
+> shader(mandelbrot);
+>
+> // Set the shader uniform p to an array.
+> // p is the center point of the Mandelbrot image.
+> mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);
+>
+> // Set the shader uniform r to 0.005.
+> // r is the size of the image in Mandelbrot-space.
+> mandelbrot.setUniform('r', 0.005);
+>
+> // Style the drawing surface.
+> noStroke();
+>
+> // Add a plane as a drawing surface.
+> plane(100, 100);
+>
+> describe('A black fractal image on a magenta background.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+>
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision highp float;
+> uniform vec2 p;
+> uniform float r;
+> const int numIterations = 500;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vec2 c = p + gl_FragCoord.xy * r;
+> vec2 z = c;
+> float n = 0.0;
+>
+> for (int i = numIterations; i > 0; i--) {
+> if (z.x * z.x + z.y * z.y > 4.0) {
+> n = float(i) / float(numIterations);
+> break;
+> }
+>
+> z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c;
+> }
+>
+> gl_FragColor = vec4(
+> 0.5 - cos(n * 17.0) / 2.0,
+> 0.5 - cos(n * 13.0) / 2.0,
+> 0.5 - cos(n * 23.0) / 2.0,
+> 1.0
+> );
+> }
+> `;
+>
+> let mandelbrot;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> mandelbrot = createShader(vertSrc, fragSrc);
+>
+> // Apply the p5.Shader object.
+> shader(mandelbrot);
+>
+> // Set the shader uniform p to an array.
+> // p is the center point of the Mandelbrot image.
+> mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);
+>
+> describe('A fractal image zooms in and out of focus.');
+> }
+>
+> function draw() {
+> // Set the shader uniform r to a value that oscillates
+> // between 0 and 0.005.
+> // r is the size of the image in Mandelbrot-space.
+> let radius = 0.005 * (sin(frameCount * 0.01) + 1);
+> mandelbrot.setUniform('r', radius);
+>
+> // Style the drawing surface.
+> noStroke();
+>
+> // Add a plane as a drawing surface.
+> plane(100, 100);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // A shader with hooks.
+> let myShader;
+>
+> // A shader with modified hooks.
+> let modifiedShader;
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+>
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+>
+> void main() {
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a fragment shader that uses a hook.
+> let fragSrc = `
+> precision highp float;
+> void main() {
+> // Let users override the color
+> gl_FragColor = HOOK_getColor(vec4(1., 0., 0., 1.));
+> }
+> `;
+>
+> function setup() {
+> createCanvas(50, 50, WEBGL);
+>
+> // Create a shader with hooks
+> myShader = createShader(vertSrc, fragSrc, {
+> fragment: {
+> 'vec4 getColor': '(vec4 color) { return color; }'
+> }
+> });
+>
+> // Make a version of the shader with a hook overridden
+> modifiedShader = myShader.modify({
+> 'vec4 getColor': `(vec4 color) {
+> return vec4(0., 0., 1., 1.);
+> }`
+> });
+> }
+>
+> function draw() {
+> noStroke();
+>
+> push();
+> shader(myShader);
+> translate(-width/3, 0);
+> sphere(10);
+> pop();
+>
+> push();
+> shader(modifiedShader);
+> translate(width/3, 0);
+> sphere(10);
+> pop();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-createShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:535
+~
+
+
+3D_cubicToQuadratics() 📄 ⚡
+|cubicToQuadratics|(x0, y0, cx0, cy0, cx1, cy1, x1, y1) ⚡ Function
+
+Parameters: ~
+                🔢 `x0` (Number)
+                🔢 `y0` (Number)
+                🔢 `cx0` (Number)
+                🔢 `cy0` (Number)
+                🔢 `cx1` (Number)
+                🔢 `cy1` (Number)
+                🔢 `x1` (Number)
+                🔢 `y1` (Number)
+~
+
+Returns: ~
+                🔢 Returns undefined
+~
+
+See also: ~
+   |help p5-cubicToQuadratics| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:423
+~
+
+
+3D_deepEqualCyclic() 📄 ⚡
+|deepEqualCyclic|(Object obj1, Object obj2) ⚡ Function
+
+Parameters: ~
+                🔢 `Object obj1` (unknown)
+                🔢 `Object obj2` (unknown)
+~
+
+See also: ~
+   |help p5-deepEqualCyclic| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:198
+~
+
+
+3D_directionalLight() 📄 ⚡
+|directionalLight|(color, direction) ⚡ Function
+
+Parameters: ~
+                🔢 `color` (p5.Color|Number[]|String)
+                🔢 `direction` (p5.Vector)
+~
+
+See also: ~
+   |help p5-directionalLight| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:640
+~
+
+
+3D_emissiveMaterial() 📄 ⚡
+|emissiveMaterial|(color) ⚡ Function
+
+Parameters: ~
+                🔢 `color` (p5.Color|Number[]|String)
+~
+
+See also: ~
+   |help p5-emissiveMaterial| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:2730
+~
+
+
+3D_frustum() 📄 ⚡
+|frustum|({Number} [left]   x-coordinate of the frustum’s left plane. Defaults to `-width / 20`., {Number} [right]  x-coordinate of the frustum’s right plane. Defaults to `width / 20`., {Number} [bottom] y-coordinate of the frustum’s bottom plane. Defaults to `height / 20`., {Number} [top]    y-coordinate of the frustum’s top plane. Defaults to `-height / 20`., {Number} [near]   z-coordinate of the frustum’s near plane. Defaults to `0.1 * 800`., {Number} [far]    z-coordinate of the frustum’s far plane. Defaults to `10 * 800`.) ⚡ Function
+
+Sets the frustum of the current camera in a 3D sketch.
+In a frustum projection, shapes that are further from the camera appear smaller than shapes that are near the camera.
+This technique, called foreshortening, creates realistic 3D scenes.
+`frustum()` changes the default camera’s perspective by changing its viewing frustum.
+The frustum is the volume of space that’s visible to the camera.
+The frustum’s shape is a pyramid with its top cut off.
+The camera is placed where the top of the pyramid should be and points towards the base of the pyramid.
+It views everything within the frustum.
+The first four parameters, `left`, `right`, `bottom`, and `top`, `set` the coordinates of the frustum’s sides, bottom, and top.
+For example, calling `frustum(-100, 100, 200, -200)` creates a frustum that’s 200 `pixels` wide and 400 `pixels` tall.
+By default, these coordinates are `set` based on the sketch’s `width` and `height`, as in `ortho(-`width` / 20, `width` / 20, `height` / 20, -`height` / 20)`.
+The last two parameters, `near` and `far`, `set` the distance of the frustum’s near and far plane from the camera.
+For example, calling `ortho(-100, 100, 200, -200, 50, 1000)` creates a frustum that’s 200 `pixels` wide, 400 `pixels` tall, starts 50 `pixels` from the camera, and ends 1,000 `pixels` from the camera.
+By default, near is `set` to `0.1 * 800`, which is 1/10th the default distance between the camera and the origin.
+`far` is `set` to `10 * 800`, which is 10 times the default distance between the camera and the origin.
+Note: `frustum()` can only be used in WebGL mode.
+
+Parameters: ~
+                🔢 `{Number} [left]   x-coordinate of the frustum’s left plane. Defaults to `-width / 20`.` (unknown)
+                🔢 `{Number} [right]  x-coordinate of the frustum’s right plane. Defaults to `width / 20`.` (unknown)
+                🔢 `{Number} [bottom] y-coordinate of the frustum’s bottom plane. Defaults to `height / 20`.` (unknown)
+                🔢 `{Number} [top]    y-coordinate of the frustum’s top plane. Defaults to `-height / 20`.` (unknown)
+                🔢 `{Number} [near]   z-coordinate of the frustum’s near plane. Defaults to `0.1 * 800`.` (unknown)
+                🔢 `{Number} [far]    z-coordinate of the frustum’s far plane. Defaults to `10 * 800`.` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A row of white cubes on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Apply the default frustum projection.
+> frustum();
+>
+> // Translate the origin toward the camera.
+> translate(-10, 10, 600);
+>
+> // Rotate the coordinate system.
+> rotateY(-0.1);
+> rotateX(-0.1);
+>
+> // Draw the row of boxes.
+> for (let i = 0; i < 6; i += 1) {
+> translate(0, 0, -40);
+> box(10);
+> }
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+> describe('A white cube on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Adjust the frustum.
+> // Center it.
+> // Set its width and height to 20 pixels.
+> // Place its near plane 300 pixels from the camera.
+> // Place its far plane 350 pixels from the camera.
+> frustum(-10, 10, -10, 10, 300, 350);
+>
+> // Translate the origin toward the camera.
+> translate(-10, 10, 600);
+>
+> // Rotate the coordinate system.
+> rotateY(-0.1);
+> rotateX(-0.1);
+>
+> // Draw the row of boxes.
+> for (let i = 0; i < 6; i += 1) {
+> translate(0, 0, -40);
+> box(10);
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-frustum| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:627
+~
+
+
+3D_getEpoch() 📄 ⚡
+|getEpoch|() ⚡ Function
+
+Used to grok the `now` parameter to createClock.
+
+See also: ~
+   |help p5-getEpoch| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:727
+~
+
+
+3D_getIndex() 📄 ⚡
+|getIndex|() ⚡ Function
+
+returns the index of the given object in the given objects array, -1 if not contained only needed for cyclic logic
+
+See also: ~
+   |help p5-getIndex| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:238
+~
+
+
+3D_identical() 📄 ⚡
+|identical|(Object obj1, Object obj2) ⚡ Function
+
+Parameters: ~
+                🔢 `Object obj1` (unknown)
+                🔢 `Object obj2` (unknown)
+~
+
+See also: ~
+   |help p5-identical| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:176
+~
+
+
+3D_imageLight() 📄 ⚡
+|imageLight|(img) ⚡ Function
+
+Creates an ambient light from an `image`.
+`imageLight()` simulates a light shining from all directions.
+The effect is like placing the sketch at the center of a giant sphere that uses the `image` as its texture.
+The `image`'s diffuse light will be affected by <a href="#/p5/`fill`">`fill`()</a> and the specular reflections will be affected by <a href="#/p5/specularMaterial">specularMaterial()</a> and <a href="#/p5/shininess">shininess()</a>.
+The parameter, `img`, is the <a href="#/p5.Image">p5.Image</a> object to use as the light source.
+
+Parameters: ~
+                🔢 `img` (p5.image) - image to use as the light source.
+~
+
+Examples: >
+>
+> <code>
+> // Click and drag the mouse to view the scene from different angles.
+>
+> let img;
+>
+> // Load an image and create a p5.Image object.
+> function preload() {
+> img = loadImage('assets/outdoor_spheremap.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A sphere floating above a landscape. The surface of the sphere reflects the landscape.');
+> }
+>
+> function draw() {
+> // Enable orbiting with the mouse.
+> orbitControl();
+>
+> // Draw the image as a panorama (360˚ background).
+> panorama(img);
+>
+> // Add a soft ambient light.
+> ambientLight(50);
+>
+> // Add light from the image.
+> imageLight(img);
+>
+> // Style the sphere.
+> specularMaterial(20);
+> shininess(100);
+> noStroke();
+>
+> // Draw the sphere.
+> sphere(30);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-imageLight| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:1014
+~
+
+
+3D_isArguments() 📄 ⚡
+|isArguments|(Object object) ⚡ Function
+
+Parameters: ~
+                🔢 `Object object` (unknown)
+~
+
+See also: ~
+   |help p5-isArguments| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:91
+~
+
+
+3D_isDate() 📄 ⚡
+|isDate|(Object value) ⚡ Function
+
+Parameters: ~
+                🔢 `Object value` (unknown)
+~
+
+See also: ~
+   |help p5-isDate| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:150
+~
+
+
+3D_isElement() 📄 ⚡
+|isElement|(Object object) ⚡ Function
+
+Parameters: ~
+                🔢 `Object object` (unknown)
+~
+
+See also: ~
+   |help p5-isElement| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:116
+~
+
+
+3D_isNegZero() 📄 ⚡
+|isNegZero|(Object value) ⚡ Function
+
+Parameters: ~
+                🔢 `Object value` (unknown)
+~
+
+See also: ~
+   |help p5-isNegZero| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:161
+~
+
+
+3D_isObject() 📄 ⚡
+|isObject|() ⚡ Function
+
+used to check, if the value of a property is an object (cyclic logic is only needed for objects) only needed for cyclic logic
+
+See also: ~
+   |help p5-isObject| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:218
+~
+
+
+3D_keys() 📄 ⚡
+|keys|(Object object) ⚡ Function
+
+Parameters: ~
+                🔢 `Object object` (unknown)
+~
+
+See also: ~
+   |help p5-keys| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:133
+~
+
+
+3D_layout() 📄 ⚡
+|layout|(dim, dimImageInfos, cellImageInfos) ⚡ Function
+
+Parameters: ~
+                🔢 `dim` (Number[][])
+                🔢 `dimImageInfos` (ImageInfo[])
+                🔢 `cellImageInfos` (ImageInfo[])
+~
+
+Returns: ~
+                📦 Returns Object
+~
+
+See also: ~
+   |help p5-layout| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:587
+~
+
+
+3D_left() 📄 ⚡
+|left|({Number} [left]   x-coordinate of the frustum’s left plane. Defaults to `-width / 20`., {Number} [right]  x-coordinate of the frustum’s right plane. Defaults to `width / 20`., {Number} [bottom] y-coordinate of the frustum’s bottom plane. Defaults to `height / 20`., {Number} [top]    y-coordinate of the frustum’s top plane. Defaults to `-height / 20`., {Number} [near]   z-coordinate of the frustum’s near plane. Defaults to `0.1 * 800`., {Number} [far]    z-coordinate of the frustum’s far plane. Defaults to `10 * 800`.) ⚡ Function
+
+Sets the camera's frustum.
+In a frustum projection, shapes that are further from the camera appear smaller than shapes that are near the camera.
+This technique, called foreshortening, creates realistic 3D scenes.
+`myCamera.frustum()` changes the camera’s perspective by changing its viewing frustum.
+The frustum is the volume of space that’s visible to the camera.
+The frustum’s shape is a pyramid with its top cut off.
+The camera is placed where the top of the pyramid should be and points towards the base of the pyramid.
+It views everything within the frustum.
+The first four parameters, `left`, `right`, `bottom`, and `top`, `set` the coordinates of the frustum’s sides, bottom, and top.
+For example, calling `myCamera.frustum(-100, 100, 200, -200)` creates a frustum that’s 200 `pixels` wide and 400 `pixels` tall.
+By default, these coordinates are `set` based on the sketch’s `width` and `height`, as in `myCamera.frustum(-`width` / 20, `width` / 20, `height` / 20, -`height` / 20)`.
+The last two parameters, `near` and `far`, `set` the distance of the frustum’s near and far plane from the camera.
+For example, calling `myCamera.frustum(-100, 100, 200, -200, 50, 1000)` creates a frustum that’s 200 `pixels` wide, 400 `pixels` tall, starts 50 `pixels` from the camera, and ends 1,000 `pixels` from the camera.
+By default, near is `set` to `0.1 * 800`, which is 1/10th the default distance between the camera and the origin.
+`far` is `set` to `10 * 800`, which is 10 times the default distance between the camera and the origin.
+
+Parameters: ~
+                🔢 `{Number} [left]   x-coordinate of the frustum’s left plane. Defaults to `-width / 20`.` (unknown)
+                🔢 `{Number} [right]  x-coordinate of the frustum’s right plane. Defaults to `width / 20`.` (unknown)
+                🔢 `{Number} [bottom] y-coordinate of the frustum’s bottom plane. Defaults to `height / 20`.` (unknown)
+                🔢 `{Number} [top]    y-coordinate of the frustum’s top plane. Defaults to `-height / 20`.` (unknown)
+                🔢 `{Number} [near]   z-coordinate of the frustum’s near plane. Defaults to `0.1 * 800`.` (unknown)
+                🔢 `{Number} [far]    z-coordinate of the frustum’s far plane. Defaults to `10 * 800`.` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> // Double-click to toggle between cameras.
+>
+> let cam1;
+> let cam2;
+> let isDefaultCamera = true;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> // Keep its default settings.
+> cam1 = createCamera();
+>
+> // Create the second camera.
+> cam2 = createCamera();
+>
+> // Adjust the frustum.
+> // Center it.
+> // Set its width and height to 20 pixels.
+> // Place its near plane 300 pixels from the camera.
+> // Place its far plane 350 pixels from the camera.
+> cam2.frustum(-10, 10, -10, 10, 300, 350);
+>
+> // Set the current camera to cam1.
+> setCamera(cam1);
+>
+> describe(
+> 'A row of white cubes against a gray background. The camera zooms in on one cube when the user double-clicks.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Translate the origin toward the camera.
+> translate(-10, 10, 600);
+>
+> // Rotate the coordinate system.
+> rotateY(-0.1);
+> rotateX(-0.1);
+>
+> // Draw the row of boxes.
+> for (let i = 0; i < 6; i += 1) {
+> translate(0, 0, -40);
+> box(10);
+> }
+> }
+>
+> // Toggle the current camera when the user double-clicks.
+> function doubleClicked() {
+> if (isDefaultCamera === true) {
+> setCamera(cam2);
+> isDefaultCamera = false;
+> } else {
+> setCamera(cam1);
+> isDefaultCamera = true;
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-left| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:2377
+~
+
+
+3D_lightFalloff() 📄 ⚡
+|lightFalloff|(constant, linear, quadratic) ⚡ Function
+
+Sets the falloff rate for <a href="#/p5/pointLight">pointLight()</a> and <a href="#/p5/spotLight">spotLight()</a>.
+A light’s falloff describes the intensity of its beam at a distance.
+For example, a lantern has a slow falloff, a flashlight has a medium falloff, and a laser pointer has a sharp falloff.
+`lightFalloff()` has three parameters, `constant`, `linear`, and `quadratic`.
+They’re numbers used to calculate falloff at a distance, `d`, as follows: `falloff = 1 / (constant + d * linear + (d * d) * quadratic)` Note: `constant`, `linear`, and `quadratic` should always be `set` to values greater than 0.
+
+Parameters: ~
+                🔢 `constant` (Number) - constant value for calculating falloff.
+                🔢 `linear` (Number) - linear value for calculating falloff.
+                🔢 `quadratic` (Number) - quadratic value for calculating falloff.
+~
+
+Examples: >
+>
+> <code>
+> // Click and drag the mouse to view the scene from different angles.
+> // Double-click to change the falloff rate.
+>
+> let useFalloff = false;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A sphere drawn against a gray background. The intensity of the light changes when the user double-clicks.');
+> }
+>
+> function draw() {
+> background(50);
+>
+> // Enable orbiting with the mouse.
+> orbitControl();
+>
+> // Set the light falloff.
+> if (useFalloff === true) {
+> lightFalloff(2, 0, 0);
+> }
+>
+> // Add a white point light from the front.
+> pointLight(255, 255, 255, 0, 0, 100);
+>
+> // Style the sphere.
+> noStroke();
+>
+> // Draw the sphere.
+> sphere(30);
+> }
+>
+> // Change the falloff value when the user double-clicks.
+> function doubleClicked() {
+> useFalloff = true;
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-lightFalloff| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:1226
+~
+
+
+3D_lights() 📄 ⚡
+|lights|() ⚡ Function
+
+Places an ambient and directional light in the scene.
+The lights are `set` to ambientLight(128, 128, 128) and directionalLight(128, 128, 128, 0, 0, -1).
+Note: lights need to be called (whether directly or indirectly) within `draw`() to remain persistent in a looping program.
+Placing them in `setup`() will cause them to only have an effect the first time through the `loop`.
+
+Examples: >
+>
+> <code>
+> // Click and drag the mouse to view the scene from different angles.
+> // Double-click to turn on the lights.
+>
+> let isLit = false;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A white box drawn against a gray background. The quality of the light changes when the user double-clicks.');
+> }
+>
+> function draw() {
+> background(50);
+>
+> // Enable orbiting with the mouse.
+> orbitControl();
+>
+> // Control the lights.
+> if (isLit === true) {
+> lights();
+> }
+>
+> // Draw the box.
+> box();
+> }
+>
+> // Turn on the lights when the user double-clicks.
+> function doubleClicked() {
+> isLit = true;
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Click and drag the mouse to view the scene from different angles.
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A white box drawn against a gray background.');
+> }
+>
+> function draw() {
+> background(50);
+>
+> // Enable orbiting with the mouse.
+> orbitControl();
+>
+> // Turn on the lights.
+> ambientLight(128, 128, 128);
+> directionalLight(128, 128, 128, 0, 0, -1);
+>
+> // Draw the box.
+> box();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-lights| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:1152
+~
+
+
+3D_linePerspective() 📄 ⚡
+|linePerspective|() ⚡ Function
+
+Returns: ~
+                🔢 Returns boolean: whether line perspective is enabled.
+~
+
+See also: ~
+   |help p5-linePerspective| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:397
+~
+
+
+3D_loadShader() 📄 ⚡
+|loadShader|(vertFilename, fragFilename, {function} [successCallback] function to call once the shader is loaded. Can be passed the, {function} [failureCallback] function to call if the shader fails to load. Can be passed an) ⚡ Function
+
+Loads `vertex` and fragment shaders to create a <a href="#/p5.Shader">p5.Shader</a> object.
+Shaders are programs that run on the graphics processing unit (GPU).
+They can process many `pixels` at the same time, making them fast for many graphics tasks.
+They’re written in a language called <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders" target="_blank">GLSL</a> and run along with the rest of the code in a sketch.
+Once the <a href="#/p5.Shader">p5.Shader</a> object is created, it can be used with the <a href="#/p5/shader">shader()</a> function, as in `shader(myShader)`.
+A shader program consists of two files, a `vertex` shader and a fragment shader.
+The `vertex` shader affects where 3D geometry is drawn on the screen and the fragment shader affects `color`.
+`loadShader()` loads the `vertex` and fragment shaders from their `.vert` and `.frag` files.
+For example, calling `loadShader('assets/shader.vert', 'assets/shader.frag')` loads both required shaders and returns a <a href="#/p5.Shader">p5.Shader</a> object.
+The third parameter, `successCallback`, is optional.
+If a function is passed, it will be called once the shader has loaded.
+The callback function can use the new <a href="#/p5.Shader">p5.Shader</a> object as its parameter.
+The fourth parameter, `failureCallback`, is also optional.
+If a function is passed, it will be called if the shader fails to load.
+The callback function can use the event error as its parameter.
+Shaders can take time to load.
+Calling `loadShader()` in <a href="#/p5/preload">preload()</a> ensures shaders load before they're used in <a href="#/p5/`setup`">`setup`()</a> or <a href="#/p5/`draw`">`draw`()</a>.
+Note: Shaders can only be used in WebGL mode.
+
+Parameters: ~
+                📝 `vertFilename` (String) - path of the vertex shader to be loaded.
+                📝 `fragFilename` (String) - path of the fragment shader to be loaded.
+                🔢 `{function} [successCallback] function to call once the shader is loaded. Can be passed the` (unknown)
+                🔢 `{function} [failureCallback] function to call if the shader fails to load. Can be passed an` (unknown)
+~
+
+Returns: ~
+                🔢 Returns p5.Shader: new shader created from the vertex and fragment shader files.
+~
+
+Examples: >
+>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> let mandelbrot;
+>
+> // Load the shader and create a p5.Shader object.
+> function preload() {
+> mandelbrot = loadShader('assets/shader.vert', 'assets/shader.frag');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Compile and apply the p5.Shader object.
+> shader(mandelbrot);
+>
+> // Set the shader uniform p to an array.
+> mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);
+>
+> // Set the shader uniform r to the value 1.5.
+> mandelbrot.setUniform('r', 1.5);
+>
+> // Add a quad as a display surface for the shader.
+> quad(-1, -1, 1, -1, 1, 1, -1, 1);
+>
+> describe('A black fractal image on a magenta background.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> let mandelbrot;
+>
+> // Load the shader and create a p5.Shader object.
+> function preload() {
+> mandelbrot = loadShader('assets/shader.vert', 'assets/shader.frag');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Use the p5.Shader object.
+> shader(mandelbrot);
+>
+> // Set the shader uniform p to an array.
+> mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);
+>
+> describe('A fractal image zooms in and out of focus.');
+> }
+>
+> function draw() {
+> // Set the shader uniform r to a value that oscillates between 0 and 2.
+> mandelbrot.setUniform('r', sin(frameCount * 0.01) + 1);
+>
+> // Add a quad as a display surface for the shader.
+> quad(-1, -1, 1, -1, 1, 1, -1, 1);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-loadShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:122
+~
+
+
+3D_metalness() 📄 ⚡
+|metalness|(metallic) ⚡ Function
+
+Sets the amount of "metalness" of a <a href="#/p5/specularMaterial">specularMaterial()</a>.
+`metalness()` can make materials appear more metallic.
+It affects the way materials reflect light sources including affects the way materials reflect light sources including <a href="#/p5/directionalLight">directionalLight()</a>, <a href="#/p5/pointLight">pointLight()</a>, <a href="#/p5/spotLight">spotLight()</a>, and <a href="#/p5/imageLight">imageLight()</a>.
+The parameter, `metallic`, is a number that sets the amount of metalness.
+`metallic` must be greater than 1, which is its default value.
+Higher values, such as `metalness(100)`, make specular materials appear more metallic.
+
+Parameters: ~
+                🔢 `metallic` (Number) - amount of metalness.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> 'Two blue spheres drawn on a gray background. White light reflects from their surfaces as the mouse moves. The right sphere is more metallic than the left sphere.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Turn on an ambient light.
+> ambientLight(200);
+>
+> // Get the mouse's coordinates.
+> let mx = mouseX - 50;
+> let my = mouseY - 50;
+>
+> // Turn on a white point light that follows the mouse.
+> pointLight(255, 255, 255, mx, my, 50);
+>
+> // Style the spheres.
+> noStroke();
+> fill(30, 30, 255);
+> specularMaterial(255);
+> shininess(20);
+>
+> // Draw the left sphere with low metalness.
+> translate(-25, 0, 0);
+> metalness(1);
+> sphere(20);
+>
+> // Draw the right sphere with high metalness.
+> translate(50, 0, 0);
+> metalness(50);
+> sphere(20);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Click and drag the mouse to view the scene from different angles.
+>
+> let img;
+>
+> function preload() {
+> img = loadImage('assets/outdoor_spheremap.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100 ,100 ,WEBGL);
+>
+> describe(
+> 'Two spheres floating above a landscape. The surface of the spheres reflect the landscape. The right sphere is more reflective than the left sphere.'
+> );
+> }
+>
+> function draw() {
+> // Add the panorama.
+> panorama(img);
+>
+> // Enable orbiting with the mouse.
+> orbitControl();
+>
+> // Use the image as a light source.
+> imageLight(img);
+>
+> // Style the spheres.
+> noStroke();
+> specularMaterial(50);
+> shininess(200);
+>
+> // Draw the left sphere with low metalness.
+> translate(-25, 0, 0);
+> metalness(1);
+> sphere(20);
+>
+> // Draw the right sphere with high metalness.
+> translate(50, 0, 0);
+> metalness(50);
+> sphere(20);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-metalness| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:3178
+~
+
+
+3D_noLights() 📄 ⚡
+|noLights|() ⚡ Function
+
+Removes all lights from the sketch.
+Calling `noLights()` removes any lights created with <a href="#/p5/lights">lights()</a>, <a href="#/p5/ambientLight">ambientLight()</a>, <a href="#/p5/directionalLight">directionalLight()</a>, <a href="#/p5/pointLight">pointLight()</a>, or <a href="#/p5/spotLight">spotLight()</a>.
+These functions may be called after `noLights()` to create a new lighting scheme.
+
+Examples: >
+>
+> <code>
+> // Click and drag the mouse to view the scene from different angles.
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('Two spheres drawn against a gray background. The top sphere is white and the bottom sphere is red.');
+> }
+>
+> function draw() {
+> background(50);
+>
+> // Enable orbiting with the mouse.
+> orbitControl();
+>
+> // Turn on the lights.
+> lights();
+>
+> // Style the spheres.
+> noStroke();
+>
+> // Draw the top sphere.
+> push();
+> translate(0, -25, 0);
+> sphere(20);
+> pop();
+>
+> // Turn off the lights.
+> noLights();
+>
+> // Add a red directional light that points into the screen.
+> directionalLight(255, 0, 0, 0, 0, -1);
+>
+> // Draw the bottom sphere.
+> push();
+> translate(0, 25, 0);
+> sphere(20);
+> pop();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-noLights| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:1745
+~
+
+
+3D_normalMaterial() 📄 ⚡
+|normalMaterial|() ⚡ Function
+
+Sets the current material as a normal material.
+A normal material sets surfaces facing the x-axis to `red`, those facing the y-axis to `green`, and those facing the z-axis to `blue`.
+Normal material isn't affected by light.
+It’s often used as a placeholder material when debugging.
+Note: `normalMaterial()` can only be used in WebGL mode.
+
+Examples: >
+>
+> <code>
+> // Click and drag the mouse to view the scene from different angles.
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A multicolor torus drawn on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Enable orbiting with the mouse.
+> orbitControl();
+>
+> // Style the torus.
+> normalMaterial();
+>
+> // Draw the torus.
+> torus(30);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-normalMaterial| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:2403
+~
+
+
+3D_ortho() 📄 ⚡
+|ortho|({Number} [left]   x-coordinate of the frustum’s left plane. Defaults to `-width / 2`., {Number} [right]  x-coordinate of the frustum’s right plane. Defaults to `width / 2`., {Number} [bottom] y-coordinate of the frustum’s bottom plane. Defaults to `height / 2`., {Number} [top]    y-coordinate of the frustum’s top plane. Defaults to `-height / 2`., {Number} [near]   z-coordinate of the frustum’s near plane. Defaults to 0., {Number} [far]    z-coordinate of the frustum’s far plane. Defaults to `max(width, height) + 800`.) ⚡ Function
+
+Sets an orthographic projection for the current camera in a 3D sketch.
+In an orthographic projection, shapes with the same size always appear the same size, regardless of whether they are near or far from the camera.
+`ortho()` changes the camera’s perspective by changing its viewing frustum from a truncated pyramid to a rectangular prism.
+The camera is placed in front of the frustum and views everything between the frustum’s near plane and its far plane.
+`ortho()` has six optional parameters to define the frustum.
+The first four parameters, `left`, `right`, `bottom`, and `top`, `set` the coordinates of the frustum’s sides, bottom, and top.
+For example, calling `ortho(-100, 100, 200, -200)` creates a frustum that’s 200 `pixels` wide and 400 `pixels` tall.
+By default, these coordinates are `set` based on the sketch’s `width` and `height`, as in `ortho(-`width` / 2, `width` / 2, -`height` / 2, `height` / 2)`.
+The last two parameters, `near` and `far`, `set` the distance of the frustum’s near and far plane from the camera.
+For example, calling `ortho(-100, 100, 200, 200, 50, 1000)` creates a frustum that’s 200 `pixels` wide, 400 `pixels` tall, starts 50 `pixels` from the camera, and ends 1,000 `pixels` from the camera.
+By default, `near` and `far` are `set` to 0 and `max(`width`, `height`) + 800`, respectively.
+Note: `ortho()` can only be used in WebGL mode.
+
+Parameters: ~
+                🔢 `{Number} [left]   x-coordinate of the frustum’s left plane. Defaults to `-width / 2`.` (unknown)
+                🔢 `{Number} [right]  x-coordinate of the frustum’s right plane. Defaults to `width / 2`.` (unknown)
+                🔢 `{Number} [bottom] y-coordinate of the frustum’s bottom plane. Defaults to `height / 2`.` (unknown)
+                🔢 `{Number} [top]    y-coordinate of the frustum’s top plane. Defaults to `-height / 2`.` (unknown)
+                🔢 `{Number} [near]   z-coordinate of the frustum’s near plane. Defaults to 0.` (unknown)
+                🔢 `{Number} [far]    z-coordinate of the frustum’s far plane. Defaults to `max(width, height) + 800`.` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A row of tiny, white cubes on a gray background. All the cubes appear the same size.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Apply an orthographic projection.
+> ortho();
+>
+> // Translate the origin toward the camera.
+> translate(-10, 10, 600);
+>
+> // Rotate the coordinate system.
+> rotateY(-0.1);
+> rotateX(-0.1);
+>
+> // Draw the row of boxes.
+> for (let i = 0; i < 6; i += 1) {
+> translate(0, 0, -40);
+> box(10);
+> }
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A white cube on a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Apply an orthographic projection.
+> // Center the frustum.
+> // Set its width and height to 20.
+> // Place its near plane 300 pixels from the camera.
+> // Place its far plane 350 pixels from the camera.
+> ortho(-10, 10, -10, 10, 300, 350);
+>
+> // Translate the origin toward the camera.
+> translate(-10, 10, 600);
+>
+> // Rotate the coordinate system.
+> rotateY(-0.1);
+> rotateX(-0.1);
+>
+> // Draw the row of boxes.
+> for (let i = 0; i < 6; i += 1) {
+> translate(0, 0, -40);
+> box(10);
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-ortho| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:515
+~
+
+
+3D_panorama() 📄 ⚡
+|panorama|(img) ⚡ Function
+
+Creates an immersive 3D `background`.
+`panorama()` transforms images containing 360˚ content, such as maps or HDRIs, into immersive 3D backgrounds that surround a sketch.
+Exploring the space requires changing the camera's perspective with functions such as <a href="#/p5/orbitControl">orbitControl()</a> or <a href="#/p5/camera">camera()</a>.
+
+Parameters: ~
+                🔢 `img` (p5.Image) - 360˚ image to use as the background.
+~
+
+Examples: >
+>
+> <code>
+> // Click and drag the mouse to view the scene from different angles.
+>
+> let img;
+>
+> // Load an image and create a p5.Image object.
+> function preload() {
+> img = loadImage('assets/outdoor_spheremap.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100 ,100 ,WEBGL);
+>
+> describe('A sphere floating above a landscape. The surface of the sphere reflects the landscape. The full landscape is viewable in 3D as the user drags the mouse.');
+> }
+>
+> function draw() {
+> // Add the panorama.
+> panorama(img);
+>
+> // Enable orbiting with the mouse.
+> orbitControl();
+>
+> // Use the image as a light source.
+> imageLight(img);
+>
+> // Style the sphere.
+> noStroke();
+> specularMaterial(50);
+> shininess(200);
+> metalness(100);
+>
+> // Draw the sphere.
+> sphere(30);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-panorama| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:1073
+~
+
+
+3D_parseTime() 📄 ⚡
+|parseTime|() ⚡ Function
+
+Parse strings like "01:10:00" (meaning 1 hour, 10 minutes, 0 seconds) into number of milliseconds.
+This is used to support human-readable strings passed to clock.tick()
+
+See also: ~
+   |help p5-parseTime| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:698
+~
+
+
+3D_perspective() 📄 ⚡
+|perspective|({Number} [fovy]   camera frustum vertical field of view. Defaults to, {Number} [aspect] camera frustum aspect ratio. Defaults to, {Number} [near]   distance from the camera to the near clipping plane., {Number} [far]    distance from the camera to the far clipping plane.) ⚡ Function
+
+Sets a perspective projection for the current camera in a 3D sketch.
+In a perspective projection, shapes that are further from the camera appear smaller than shapes that are near the camera.
+This technique, called foreshortening, creates realistic 3D scenes.
+It’s applied by default in WebGL mode.
+`perspective()` changes the camera’s perspective by changing its viewing frustum.
+The frustum is the volume of space that’s visible to the camera.
+Its shape is a pyramid with its top cut off.
+The camera is placed where the top of the pyramid should be and views everything between the frustum’s top (near) plane and its bottom (far) plane.
+The first parameter, `fovy`, is the camera’s vertical field of view.
+It’s an angle that describes how tall or narrow a view the camera has.
+For example, calling `perspective(0.5)` sets the camera’s vertical field of view to 0.5 radians.
+By default, `fovy` is calculated based on the sketch’s `height` and the camera’s default z-coordinate, which is 800.
+The formula for the default `fovy` is `2 * atan(`height` / 2 / 800)`.
+The second parameter, `aspect`, is the camera’s aspect ratio.
+It’s a number that describes the ratio of the top plane’s `width` to its `height`.
+For example, calling `perspective(0.5, 1.5)` sets the camera’s field of view to 0.5 radians and aspect ratio to 1.5, which would make shapes appear thinner on a square canvas.
+By default, aspect is `set` to ``width` / `height``.
+The third parameter, `near`, is the distance from the camera to the near plane.
+For example, calling `perspective(0.5, 1.5, 100)` sets the camera’s field of view to 0.5 radians, its aspect ratio to 1.5, and places the near plane 100 `pixels` from the camera.
+Any shapes drawn less than 100 `pixels` from the camera won’t be visible.
+By default, near is `set` to `0.1 * 800`, which is 1/10th the default distance between the camera and the origin.
+The fourth parameter, `far`, is the distance from the camera to the far plane.
+For example, calling `perspective(0.5, 1.5, 100, 10000)` sets the camera’s field of view to 0.5 radians, its aspect ratio to 1.5, places the near plane 100 `pixels` from the camera, and places the far plane 10,000 `pixels` from the camera.
+Any shapes drawn more than 10,000 `pixels` from the camera won’t be visible.
+By default, far is `set` to `10 * 800`, which is 10 times the default distance between the camera and the origin.
+Note: `perspective()` can only be used in WebGL mode.
+
+Parameters: ~
+                🔢 `{Number} [fovy]   camera frustum vertical field of view. Defaults to` (unknown)
+                🔢 `{Number} [aspect] camera frustum aspect ratio. Defaults to` (unknown)
+                🔢 `{Number} [near]   distance from the camera to the near clipping plane.` (unknown)
+                🔢 `{Number} [far]    distance from the camera to the far clipping plane.` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> // Double-click to squeeze the box.
+>
+> let isSqueezed = false;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A white rectangular prism on a gray background. The box appears to become thinner when the user double-clicks.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Place the camera at the top-right.
+> camera(400, -400, 800);
+>
+> if (isSqueezed === true) {
+> // Set fovy to 0.2.
+> // Set aspect to 1.5.
+> perspective(0.2, 1.5);
+> }
+>
+> // Draw the box.
+> box();
+> }
+>
+> // Change the camera's perspective when the user double-clicks.
+> function doubleClicked() {
+> isSqueezed = true;
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A white rectangular prism on a gray background. The prism moves away from the camera until it disappears.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Place the camera at the top-right.
+> camera(400, -400, 800);
+>
+> // Set fovy to 0.2.
+> // Set aspect to 1.5.
+> // Set near to 600.
+> // Set far to 1200.
+> perspective(0.2, 1.5, 600, 1200);
+>
+> // Move the origin away from the camera.
+> let x = -frameCount;
+> let y = frameCount;
+> let z = -2 * frameCount;
+> translate(x, y, z);
+>
+> // Draw the box.
+> box();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-perspective| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:272
+~
+
+
+3D_pointLight() 📄 ⚡
+|pointLight|(color, position) ⚡ Function
+
+Parameters: ~
+                🔢 `color` (p5.Color|Number[]|String)
+                🔢 `position` (p5.Vector)
+~
+
+See also: ~
+   |help p5-pointLight| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:916
+~
+
+
+3D_push() 📄 ⚡
+|push|(xs, ys, v) ⚡ Function
+
+Parameters: ~
+                🔢 `xs` (Number[]) - the x positions of points in the curve
+                🔢 `ys` (Number[]) - the y positions of points in the curve
+                📦 `v` (Object) - the curve information
+~
+
+See also: ~
+   |help p5-push| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:202
+~
+
+
+3D_pushLine() 📄 ⚡
+|pushLine|(x0, y0, x1, y1) ⚡ Function
+
+Parameters: ~
+                🔢 `x0` (Number)
+                🔢 `y0` (Number)
+                🔢 `x1` (Number)
+                🔢 `y1` (Number)
+~
+
+See also: ~
+   |help p5-pushLine| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:485
+~
+
+
+3D_resetShader() 📄 ⚡
+|resetShader|() ⚡ Function
+
+Restores the default shaders.
+`resetShader()` deactivates any shaders previously applied by <a href="#/p5/shader">shader()</a>.
+Note: Shaders can only be used in WebGL mode.
+
+Examples: >
+>
+> <code>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> uniform mat4 uProjectionMatrix;
+> uniform mat4 uModelViewMatrix;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 position = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * position;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision mediump float;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vec2 uv = vTexCoord;
+> vec3 color = vec3(uv.x, uv.y, min(uv.x + uv.y, 1.0));
+> gl_FragColor = vec4(color, 1.0);
+> }
+> `;
+>
+> let myShader;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> myShader = createShader(vertSrc, fragSrc);
+>
+> describe(
+> 'Two rotating cubes on a gray background. The left one has a blue-purple gradient on each face. The right one is red.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw a box using the p5.Shader.
+> // shader() sets the active shader to myShader.
+> shader(myShader);
+> push();
+> translate(-25, 0, 0);
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.01);
+> box(width / 4);
+> pop();
+>
+> // Draw a box using the default fill shader.
+> // resetShader() restores the default fill shader.
+> resetShader();
+> fill(255, 0, 0);
+> push();
+> translate(25, 0, 0);
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.01);
+> box(width / 4);
+> pop();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-resetShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:1711
+~
+
+
+3D_samePoint() 📄 ⚡
+|samePoint|(x0, y0, x1, y1) ⚡ Function
+
+Parameters: ~
+                🔢 `x0` (Number)
+                🔢 `y0` (Number)
+                🔢 `x1` (Number)
+                🔢 `y1` (Number)
+~
+
+Returns: ~
+                ☑️ Returns Boolean: true if the two points are sufficiently close
+~
+
+See also: ~
+   |help p5-samePoint| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:501
+~
+
+
+3D_setCamera() 📄 ⚡
+|setCamera|(cam) ⚡ Function
+
+Sets the current (active) camera of a 3D sketch.
+`setCamera()` allows for switching between multiple cameras created with <a href="#/p5/createCamera">createCamera()</a>.
+Note: `setCamera()` can only be used in WebGL mode.
+
+Parameters: ~
+                🔢 `cam` (p5.Camera) - camera that should be made active.
+~
+
+Examples: >
+>
+> <code>
+> // Double-click to toggle between cameras.
+>
+> let cam1;
+> let cam2;
+> let usingCam1 = true;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> // Keep its default settings.
+> cam1 = createCamera();
+>
+> // Create the second camera.
+> // Place it at the top-left.
+> // Point it at the origin.
+> cam2 = createCamera();
+> cam2.setPosition(400, -400, 800);
+> cam2.lookAt(0, 0, 0);
+>
+> // Set the current camera to cam1.
+> setCamera(cam1);
+>
+> describe('A white cube on a gray background. The camera toggles between frontal and aerial views when the user double-clicks.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw the box.
+> box();
+> }
+>
+> // Toggle the current camera when the user double-clicks.
+> function doubleClicked() {
+> if (usingCam1 === true) {
+> setCamera(cam2);
+> usingCam1 = false;
+> } else {
+> setCamera(cam1);
+> usingCam1 = true;
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-setCamera| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:3958
+~
+
+
+3D_setPixel() 📄 ⚡
+|setPixel|(imageInfo, r, g, b, a) ⚡ Function
+
+Parameters: ~
+                📦 `imageInfo` (Object)
+                🔢 `r` (Number)
+                🔢 `g` (Number)
+                🔢 `b` (Number)
+                🔢 `a` (Number)
+~
+
+See also: ~
+   |help p5-setPixel| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/text.js:128
+~
+
+
+3D_setup() 📄 ⚡
+|setup|() ⚡ Function
+
+Example: change amplitude with fadeTime, and schedule the change to happen in the future.
+
+See also: ~
+   |help p5-setup| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/oscillatorSecondsFromNow/sketch.js:5
+~
+
+
+3D_shininess() 📄 ⚡
+|shininess|(shine) ⚡ Function
+
+Sets the amount of gloss ("shininess") of a <a href="#/p5/specularMaterial">specularMaterial()</a>.
+Shiny materials focus reflected light more than dull materials.
+`shininess()` affects the way materials reflect light sources including <a href="#/p5/directionalLight">directionalLight()</a>, <a href="#/p5/pointLight">pointLight()</a>, and <a href="#/p5/spotLight">spotLight()</a>.
+The parameter, `shine`, is a number that sets the amount of shininess.
+`shine` must be greater than 1, which is its default value.
+
+Parameters: ~
+                🔢 `shine` (Number) - amount of shine.
+~
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> 'Two red spheres drawn on a gray background. White light reflects from their surfaces as the mouse moves. The right sphere is shinier than the left sphere.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Turn on a red ambient light.
+> ambientLight(255, 0, 0);
+>
+> // Get the mouse's coordinates.
+> let mx = mouseX - 50;
+> let my = mouseY - 50;
+>
+> // Turn on a white point light that follows the mouse.
+> pointLight(255, 255, 255, mx, my, 50);
+>
+> // Style the sphere.
+> noStroke();
+>
+> // Add a specular material with a grayscale value.
+> specularMaterial(255);
+>
+> // Draw the left sphere with low shininess.
+> translate(-25, 0, 0);
+> shininess(10);
+> sphere(20);
+>
+> // Draw the right sphere with high shininess.
+> translate(50, 0, 0);
+> shininess(100);
+> sphere(20);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-shininess| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:3058
+~
+
+
+3D_specularColor() 📄 ⚡
+|specularColor|(color) ⚡ Function
+
+Parameters: ~
+                🔢 `color` (p5.Color) - color as a <a href="#/p5.Color">p5.Color</a> object.
+~
+
+See also: ~
+   |help p5-specularColor| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:447
+~
+
+
+3D_specularMaterial() 📄 ⚡
+|specularMaterial|(color) ⚡ Function
+
+Parameters: ~
+                🔢 `color` (p5.Color|Number[]|String)
+~
+
+See also: ~
+   |help p5-specularMaterial| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:2985
+~
+
+
+3D_spotLight() 📄 ⚡
+|spotLight|(color, x, y, z, rx, ry, rz, {Number}                   [angle], {Number}                   [concentration]) ⚡ Function
+
+Parameters: ~
+                🔢 `color` (p5.Color|Number[]|String)
+                🔢 `x` (Number)
+                🔢 `y` (Number)
+                🔢 `z` (Number)
+                🔢 `rx` (Number)
+                🔢 `ry` (Number)
+                🔢 `rz` (Number)
+                🔢 `{Number}                   [angle]` (unknown)
+                🔢 `{Number}                   [concentration]` (unknown)
+~
+
+See also: ~
+   |help p5-spotLight| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/light.js:1474
+~
+
+
+3D_texture() 📄 ⚡
+|texture|(tex) ⚡ Function
+
+Sets the texture that will be used on shapes.
+A texture is like a skin that wraps around a shape.
+`texture()` works with built-in shapes, such as <a href="#/p5/square">square()</a> and <a href="#/p5/sphere">sphere()</a>, and custom shapes created with functions such as <a href="#/p5/buildGeometry">buildGeometry()</a>.
+To texture a geometry created with <a href="#/p5/`beginShape`">`beginShape`()</a>, uv coordinates must be passed to each <a href="#/p5/`vertex`">`vertex`()</a> call.
+The parameter, `tex`, is the texture to apply.
+`texture()` can use a range of sources including images, videos, and offscreen renderers such as <a href="#/p5.Graphics">p5.Graphics</a> and <a href="#/p5.Framebuffer">p5.Framebuffer</a> objects.
+To texture a geometry created with <a href="#/p5/`beginShape`">`beginShape`()</a>, you will need to specify uv coordinates in <a href="#/p5/`vertex`">`vertex`()</a>.
+Note: `texture()` can only be used in WebGL mode.
+
+Parameters: ~
+                🔢 `tex` (p5.Image|p5.MediaElement|p5.Graphics|p5.Texture|p5.Framebuffer|p5.FramebufferTexture) - media to use as the texture.
+~
+
+Examples: >
+>
+> <code>
+> let img;
+>
+> // Load an image and create a p5.Image object.
+> function preload() {
+> img = loadImage('assets/laDefense.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A spinning cube with an image of a ceiling on each face.');
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Rotate around the x-, y-, and z-axes.
+> rotateZ(frameCount * 0.01);
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.01);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Draw the box.
+> box(50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let pg;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Graphics object.
+> pg = createGraphics(100, 100);
+>
+> // Draw a circle to the p5.Graphics object.
+> pg.background(200);
+> pg.circle(50, 50, 30);
+>
+> describe('A spinning cube with circle at the center of each face.');
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Rotate around the x-, y-, and z-axes.
+> rotateZ(frameCount * 0.01);
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.01);
+>
+> // Apply the p5.Graphics object as a texture.
+> texture(pg);
+>
+> // Draw the box.
+> box(50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let vid;
+>
+> // Load a video and create a p5.MediaElement object.
+> function preload() {
+> vid = createVideo('assets/fingers.mov');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Hide the video.
+> vid.hide();
+>
+> // Set the video to loop.
+> vid.loop();
+>
+> describe('A rectangle with video as texture');
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Rotate around the y-axis.
+> rotateY(frameCount * 0.01);
+>
+> // Apply the video as a texture.
+> texture(vid);
+>
+> // Draw the rectangle.
+> rect(-40, -40, 80, 80);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let vid;
+>
+> // Load a video and create a p5.MediaElement object.
+> function preload() {
+> vid = createVideo('assets/fingers.mov');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Hide the video.
+> vid.hide();
+>
+> // Set the video to loop.
+> vid.loop();
+>
+> describe('A rectangle with video as texture');
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Rotate around the y-axis.
+> rotateY(frameCount * 0.01);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Apply the video as a texture.
+> texture(vid);
+>
+> // Draw a custom shape using uv coordinates.
+> beginShape();
+> vertex(-40, -40, 0, 0);
+> vertex(40, -40, 1, 0);
+> vertex(40, 40, 1, 1);
+> vertex(-40, 40, 0, 1);
+> endShape();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-texture| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:1888
+~
+
+
+3D_textureMode() 📄 ⚡
+|textureMode|(mode) ⚡ Function
+
+Changes the coordinate system used for textures when they’re applied to custom shapes.
+In order for <a href="#/p5/texture">texture()</a> to work, a shape needs a way to `map` the points on its surface to the `pixels` in an `image`.
+Built-in shapes such as <a href="#/p5/`rect`">`rect`()</a> and <a href="#/p5/box">box()</a> already have these texture mappings based on their vertices.
+Custom shapes created with <a href="#/p5/`vertex`">`vertex`()</a> require texture mappings to be passed as uv coordinates.
+Each call to <a href="#/p5/`vertex`">`vertex`()</a> must include 5 arguments, as in ``vertex`(x, y, z, u, v)`, to `map` the `vertex` at coordinates `(x, y, z)` to the pixel at coordinates `(u, v)` within an `image`.
+For example, the corners of a rectangular `image` are mapped to the corners of a rectangle by default: ```js // Apply the `image` as a texture.
+texture(img); // Draw the rectangle.
+`rect`(0, 0, 30, 50); ``` If the `image` in the code snippet above has dimensions of 300 x 500 `pixels`, the same result could be achieved as follows: ```js // Apply the `image` as a texture.
+texture(img); // Draw the rectangle.
+`beginShape`(); // Top-left.
+// u: 0, v: 0 `vertex`(0, 0, 0, 0, 0); // Top-right.
+// u: 300, v: 0 `vertex`(30, 0, 0, 300, 0); // Bottom-right.
+// u: 300, v: 500 `vertex`(30, 50, 0, 300, 500); // Bottom-left.
+// u: 0, v: 500 `vertex`(0, 50, 0, 0, 500); `endShape`(); ``` `textureMode()` changes the coordinate system for uv coordinates.
+The parameter, `mode`, accepts two possible constants.
+If `NORMAL` is passed, as in `textureMode(NORMAL)`, then the texture’s uv coordinates can be provided in the range 0 to 1 instead of the `image`’s dimensions.
+This can be helpful for using the same code for multiple images of different sizes.
+For example, the code snippet above could be rewritten as follows: ```js // Set the texture mode to use normalized coordinates.
+textureMode(NORMAL); // Apply the `image` as a texture.
+texture(img); // Draw the rectangle.
+`beginShape`(); // Top-left.
+// u: 0, v: 0 `vertex`(0, 0, 0, 0, 0); // Top-right.
+// u: 1, v: 0 `vertex`(30, 0, 0, 1, 0); // Bottom-right.
+// u: 1, v: 1 `vertex`(30, 50, 0, 1, 1); // Bottom-left.
+// u: 0, v: 1 `vertex`(0, 50, 0, 0, 1); `endShape`(); ``` By default, `mode` is `IMAGE`, which scales uv coordinates to the dimensions of the `image`.
+Calling `textureMode(IMAGE)` applies the default.
+Note: `textureMode()` can only be used in WebGL mode.
+
+Parameters: ~
+                📋 `mode` (Constant) - either IMAGE or NORMAL.
+~
+
+Examples: >
+>
+> <code>
+> let img;
+>
+> // Load an image and create a p5.Image object.
+> function preload() {
+> img = loadImage('assets/laDefense.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('An image of a ceiling against a black background.');
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Draw the custom shape.
+> // Use the image's width and height as uv coordinates.
+> beginShape();
+> vertex(-30, -30, 0, 0);
+> vertex(30, -30, img.width, 0);
+> vertex(30, 30, img.width, img.height);
+> vertex(-30, 30, 0, img.height);
+> endShape();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let img;
+>
+> // Load an image and create a p5.Image object.
+> function preload() {
+> img = loadImage('assets/laDefense.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('An image of a ceiling against a black background.');
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Draw the custom shape.
+> // Use normalized uv coordinates.
+> beginShape();
+> vertex(-30, -30, 0, 0);
+> vertex(30, -30, 1, 0);
+> vertex(30, 30, 1, 1);
+> vertex(-30, 30, 0, 1);
+> endShape();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-textureMode| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:2072
+~
+
+
+3D_textureWrap() 📄 ⚡
+|textureWrap|(wrapX, {Constant} [wrapY] either CLAMP, REPEAT, or MIRROR) ⚡ Function
+
+Changes the way textures behave when a shape’s uv coordinates go beyond the texture.
+In order for <a href="#/p5/texture">texture()</a> to work, a shape needs a way to `map` the points on its surface to the `pixels` in an `image`.
+Built-in shapes such as <a href="#/p5/`rect`">`rect`()</a> and <a href="#/p5/box">box()</a> already have these texture mappings based on their vertices.
+Custom shapes created with <a href="#/p5/`vertex`">`vertex`()</a> require texture mappings to be passed as uv coordinates.
+Each call to <a href="#/p5/`vertex`">`vertex`()</a> must include 5 arguments, as in ``vertex`(x, y, z, u, v)`, to `map` the `vertex` at coordinates `(x, y, z)` to the pixel at coordinates `(u, v)` within an `image`.
+For example, the corners of a rectangular `image` are mapped to the corners of a rectangle by default: ```js // Apply the `image` as a texture.
+texture(img); // Draw the rectangle.
+`rect`(0, 0, 30, 50); ``` If the `image` in the code snippet above has dimensions of 300 x 500 `pixels`, the same result could be achieved as follows: ```js // Apply the `image` as a texture.
+texture(img); // Draw the rectangle.
+`beginShape`(); // Top-left.
+// u: 0, v: 0 `vertex`(0, 0, 0, 0, 0); // Top-right.
+// u: 300, v: 0 `vertex`(30, 0, 0, 300, 0); // Bottom-right.
+// u: 300, v: 500 `vertex`(30, 50, 0, 300, 500); // Bottom-left.
+// u: 0, v: 500 `vertex`(0, 50, 0, 0, 500); `endShape`(); ``` `textureWrap()` controls how textures behave when their uv's go beyond the texture.
+Doing so can produce interesting visual effects such as tiling.
+For example, the custom shape above could have u-coordinates are greater than the `image`’s `width`: ```js // Apply the `image` as a texture.
+texture(img); // Draw the rectangle.
+`beginShape`(); `vertex`(0, 0, 0, 0, 0); // Top-right.
+// u: 600 `vertex`(30, 0, 0, 600, 0); // Bottom-right.
+// u: 600 `vertex`(30, 50, 0, 600, 500); `vertex`(0, 50, 0, 0, 500); `endShape`(); ``` The u-coordinates of 600 are greater than the texture `image`’s `width` of 300.
+This creates interesting possibilities.
+The first parameter, `wrapX`, accepts three possible constants.
+If `CLAMP` is passed, as in `textureWrap(CLAMP)`, the `pixels` at the edge of the texture will extend to the shape’s edges.
+If `REPEAT` is passed, as in `textureWrap(REPEAT)`, the texture will tile repeatedly until reaching the shape’s edges.
+If `MIRROR` is passed, as in `textureWrap(MIRROR)`, the texture will tile repeatedly until reaching the shape’s edges, flipping its orientation between tiles.
+By default, textures `CLAMP`.
+The second parameter, `wrapY`, is optional.
+It accepts the same three constants, `CLAMP`, `REPEAT`, and `MIRROR`.
+If one of these constants is passed, as in `textureWRAP(MIRROR, REPEAT)`, then the texture will `MIRROR` horizontally and `REPEAT` vertically.
+By default, `wrapY` will be `set` to the same value as `wrapX`.
+Note: `textureWrap()` can only be used in WebGL mode.
+
+Parameters: ~
+                📋 `wrapX` (Constant) - either CLAMP, REPEAT, or MIRROR
+                🔢 `{Constant} [wrapY] either CLAMP, REPEAT, or MIRROR` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> let img;
+>
+> function preload() {
+> img = loadImage('assets/rockies128.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> 'An image of a landscape occupies the top-left corner of a square. Its edge colors smear to cover the other thre quarters of the square.'
+> );
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Set the texture wrapping.
+> // Note: CLAMP is the default mode.
+> textureWrap(CLAMP);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Style the shape.
+> noStroke();
+>
+> // Draw the shape.
+> // Use uv coordinates > 1.
+> beginShape();
+> vertex(-30, -30, 0, 0, 0);
+> vertex(30, -30, 0, 2, 0);
+> vertex(30, 30, 0, 2, 2);
+> vertex(-30, 30, 0, 0, 2);
+> endShape();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let img;
+>
+> function preload() {
+> img = loadImage('assets/rockies128.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('Four identical images of a landscape arranged in a grid.');
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Set the texture wrapping.
+> textureWrap(REPEAT);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Style the shape.
+> noStroke();
+>
+> // Draw the shape.
+> // Use uv coordinates > 1.
+> beginShape();
+> vertex(-30, -30, 0, 0, 0);
+> vertex(30, -30, 0, 2, 0);
+> vertex(30, 30, 0, 2, 2);
+> vertex(-30, 30, 0, 0, 2);
+> endShape();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let img;
+>
+> function preload() {
+> img = loadImage('assets/rockies128.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> 'Four identical images of a landscape arranged in a grid. The images are reflected horizontally and vertically, creating a kaleidoscope effect.'
+> );
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Set the texture wrapping.
+> textureWrap(MIRROR);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Style the shape.
+> noStroke();
+>
+> // Draw the shape.
+> // Use uv coordinates > 1.
+> beginShape();
+> vertex(-30, -30, 0, 0, 0);
+> vertex(30, -30, 0, 2, 0);
+> vertex(30, 30, 0, 2, 2);
+> vertex(-30, 30, 0, 0, 2);
+> endShape();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let img;
+>
+> function preload() {
+> img = loadImage('assets/rockies128.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> 'Four identical images of a landscape arranged in a grid. The top row and bottom row are reflections of each other.'
+> );
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Set the texture wrapping.
+> textureWrap(REPEAT, MIRROR);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Style the shape.
+> noStroke();
+>
+> // Draw the shape.
+> // Use uv coordinates > 1.
+> beginShape();
+> vertex(-30, -30, 0, 0, 0);
+> vertex(30, -30, 0, 2, 0);
+> vertex(30, 30, 0, 2, 2);
+> vertex(-30, 30, 0, 0, 2);
+> endShape();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-textureWrap| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:2356
+~
+
+
+3D_textureWrapX() 📄 ⚡
+|textureWrapX|(wrapX, {Constant} [wrapY] either CLAMP, REPEAT, or MIRROR) ⚡ Function
+
+Changes the way textures behave when a shape’s uv coordinates go beyond the texture.
+In order for <a href="#/p5/texture">texture()</a> to work, a shape needs a way to `map` the points on its surface to the `pixels` in an `image`.
+Built-in shapes such as <a href="#/p5/`rect`">`rect`()</a> and <a href="#/p5/box">box()</a> already have these texture mappings based on their vertices.
+Custom shapes created with <a href="#/p5/`vertex`">`vertex`()</a> require texture mappings to be passed as uv coordinates.
+Each call to <a href="#/p5/`vertex`">`vertex`()</a> must include 5 arguments, as in ``vertex`(x, y, z, u, v)`, to `map` the `vertex` at coordinates `(x, y, z)` to the pixel at coordinates `(u, v)` within an `image`.
+For example, the corners of a rectangular `image` are mapped to the corners of a rectangle by default: ```js // Apply the `image` as a texture.
+texture(img); // Draw the rectangle.
+`rect`(0, 0, 30, 50); ``` If the `image` in the code snippet above has dimensions of 300 x 500 `pixels`, the same result could be achieved as follows: ```js // Apply the `image` as a texture.
+texture(img); // Draw the rectangle.
+`beginShape`(); // Top-left.
+// u: 0, v: 0 `vertex`(0, 0, 0, 0, 0); // Top-right.
+// u: 300, v: 0 `vertex`(30, 0, 0, 300, 0); // Bottom-right.
+// u: 300, v: 500 `vertex`(30, 50, 0, 300, 500); // Bottom-left.
+// u: 0, v: 500 `vertex`(0, 50, 0, 0, 500); `endShape`(); ``` `textureWrap()` controls how textures behave when their uv's go beyond the texture.
+Doing so can produce interesting visual effects such as tiling.
+For example, the custom shape above could have u-coordinates are greater than the `image`’s `width`: ```js // Apply the `image` as a texture.
+texture(img); // Draw the rectangle.
+`beginShape`(); `vertex`(0, 0, 0, 0, 0); // Top-right.
+// u: 600 `vertex`(30, 0, 0, 600, 0); // Bottom-right.
+// u: 600 `vertex`(30, 50, 0, 600, 500); `vertex`(0, 50, 0, 0, 500); `endShape`(); ``` The u-coordinates of 600 are greater than the texture `image`’s `width` of 300.
+This creates interesting possibilities.
+The first parameter, `wrapX`, accepts three possible constants.
+If `CLAMP` is passed, as in `textureWrap(CLAMP)`, the `pixels` at the edge of the texture will extend to the shape’s edges.
+If `REPEAT` is passed, as in `textureWrap(REPEAT)`, the texture will tile repeatedly until reaching the shape’s edges.
+If `MIRROR` is passed, as in `textureWrap(MIRROR)`, the texture will tile repeatedly until reaching the shape’s edges, flipping its orientation between tiles.
+By default, textures `CLAMP`.
+The second parameter, `wrapY`, is optional.
+It accepts the same three constants, `CLAMP`, `REPEAT`, and `MIRROR`.
+If one of these constants is passed, as in `textureWRAP(MIRROR, REPEAT)`, then the texture will `MIRROR` horizontally and `REPEAT` vertically.
+By default, `wrapY` will be `set` to the same value as `wrapX`.
+Note: `textureWrap()` can only be used in WebGL mode.
+
+Parameters: ~
+                📋 `wrapX` (Constant) - either CLAMP, REPEAT, or MIRROR
+                🔢 `{Constant} [wrapY] either CLAMP, REPEAT, or MIRROR` (unknown)
+~
+
+Examples: >
+>
+> <code>
+> let img;
+>
+> function preload() {
+> img = loadImage('assets/rockies128.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> 'An image of a landscape occupies the top-left corner of a square. Its edge colors smear to cover the other thre quarters of the square.'
+> );
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Set the texture wrapping.
+> // Note: CLAMP is the default mode.
+> textureWrap(CLAMP);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Style the shape.
+> noStroke();
+>
+> // Draw the shape.
+> // Use uv coordinates > 1.
+> beginShape();
+> vertex(-30, -30, 0, 0, 0);
+> vertex(30, -30, 0, 2, 0);
+> vertex(30, 30, 0, 2, 2);
+> vertex(-30, 30, 0, 0, 2);
+> endShape();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let img;
+>
+> function preload() {
+> img = loadImage('assets/rockies128.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('Four identical images of a landscape arranged in a grid.');
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Set the texture wrapping.
+> textureWrap(REPEAT);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Style the shape.
+> noStroke();
+>
+> // Draw the shape.
+> // Use uv coordinates > 1.
+> beginShape();
+> vertex(-30, -30, 0, 0, 0);
+> vertex(30, -30, 0, 2, 0);
+> vertex(30, 30, 0, 2, 2);
+> vertex(-30, 30, 0, 0, 2);
+> endShape();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let img;
+>
+> function preload() {
+> img = loadImage('assets/rockies128.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> 'Four identical images of a landscape arranged in a grid. The images are reflected horizontally and vertically, creating a kaleidoscope effect.'
+> );
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Set the texture wrapping.
+> textureWrap(MIRROR);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Style the shape.
+> noStroke();
+>
+> // Draw the shape.
+> // Use uv coordinates > 1.
+> beginShape();
+> vertex(-30, -30, 0, 0, 0);
+> vertex(30, -30, 0, 2, 0);
+> vertex(30, 30, 0, 2, 2);
+> vertex(-30, 30, 0, 0, 2);
+> endShape();
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let img;
+>
+> function preload() {
+> img = loadImage('assets/rockies128.jpg');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> 'Four identical images of a landscape arranged in a grid. The top row and bottom row are reflections of each other.'
+> );
+> }
+>
+> function draw() {
+> background(0);
+>
+> // Set the texture mode.
+> textureMode(NORMAL);
+>
+> // Set the texture wrapping.
+> textureWrap(REPEAT, MIRROR);
+>
+> // Apply the image as a texture.
+> texture(img);
+>
+> // Style the shape.
+> noStroke();
+>
+> // Draw the shape.
+> // Use uv coordinates > 1.
+> beginShape();
+> vertex(-30, -30, 0, 0, 0);
+> vertex(30, -30, 0, 2, 0);
+> vertex(30, 30, 0, 2, 2);
+> vertex(-30, 30, 0, 0, 2);
+> endShape();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-textureWrapX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:2357
+~
+
+
+3D_userFillShader() 📄 ⚡
+|userFillShader|() ⚡ Function
+
+Restores the default shaders.
+`resetShader()` deactivates any shaders previously applied by <a href="#/p5/shader">shader()</a>.
+Note: Shaders can only be used in WebGL mode.
+
+Examples: >
+>
+> <code>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> uniform mat4 uProjectionMatrix;
+> uniform mat4 uModelViewMatrix;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 position = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * position;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision mediump float;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vec2 uv = vTexCoord;
+> vec3 color = vec3(uv.x, uv.y, min(uv.x + uv.y, 1.0));
+> gl_FragColor = vec4(color, 1.0);
+> }
+> `;
+>
+> let myShader;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> myShader = createShader(vertSrc, fragSrc);
+>
+> describe(
+> 'Two rotating cubes on a gray background. The left one has a blue-purple gradient on each face. The right one is red.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw a box using the p5.Shader.
+> // shader() sets the active shader to myShader.
+> shader(myShader);
+> push();
+> translate(-25, 0, 0);
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.01);
+> box(width / 4);
+> pop();
+>
+> // Draw a box using the default fill shader.
+> // resetShader() restores the default fill shader.
+> resetShader();
+> fill(255, 0, 0);
+> push();
+> translate(25, 0, 0);
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.01);
+> box(width / 4);
+> pop();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-userFillShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:1712
+~
+
+
+3D_userStrokeShader() 📄 ⚡
+|userStrokeShader|() ⚡ Function
+
+Restores the default shaders.
+`resetShader()` deactivates any shaders previously applied by <a href="#/p5/shader">shader()</a>.
+Note: Shaders can only be used in WebGL mode.
+
+Examples: >
+>
+> <code>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> uniform mat4 uProjectionMatrix;
+> uniform mat4 uModelViewMatrix;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 position = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * position;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision mediump float;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vec2 uv = vTexCoord;
+> vec3 color = vec3(uv.x, uv.y, min(uv.x + uv.y, 1.0));
+> gl_FragColor = vec4(color, 1.0);
+> }
+> `;
+>
+> let myShader;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> myShader = createShader(vertSrc, fragSrc);
+>
+> describe(
+> 'Two rotating cubes on a gray background. The left one has a blue-purple gradient on each face. The right one is red.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw a box using the p5.Shader.
+> // shader() sets the active shader to myShader.
+> shader(myShader);
+> push();
+> translate(-25, 0, 0);
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.01);
+> box(width / 4);
+> pop();
+>
+> // Draw a box using the default fill shader.
+> // resetShader() restores the default fill shader.
+> resetShader();
+> fill(255, 0, 0);
+> push();
+> translate(25, 0, 0);
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.01);
+> box(width / 4);
+> pop();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-userStrokeShader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/material.js:1712
+~
+
+
+PROPERTIES                                                   *p5-3D-properties*
+
+3D_fft() 📄 🔧
+|fft| ⚡ Function
+
+Create an FFT object.
+Accepts optional parameters for - Smoothing - Length of the FFT's analyze/waveform array.
+Must be a power of two between 16 and 1024 (default).
+
+See also: ~
+   |help p5-fft| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/waveform/sketch.js:29
+~
+
+
+3D_frequencySpectrum() 📄 🔧
+|frequencySpectrum| ⚡ Function
+
+Analyze the sound.
+Return array of frequency volumes, from lowest to highest frequencies.
+
+See also: ~
+   |help p5-frequencySpectrum| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/FFT_frequency_spectrum/sketch.js:61
+~
+
+
+3D_length() 📄 🔧
+|length| ⚡ Function
+
+A "soft" `clear`, which keeps the underlying storage size the same, but empties the contents of its dataArray()
+
+See also: ~
+   |help p5-length| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.DataArray.js:47
+~
+
+
+3D_visualSuite() 📄 🔧
+|visualSuite| ⚡ Function
+
+A helper to define a category of visual tests.
+
+Parameters: ~
+                🔢 `name The name of the category of test.` (unknown)
+                🔢 `callback A callback that calls `visualTest` a number of times to define` (unknown)
+                🔢 `[options] An options object with optional additional settings. Set its` (unknown)
+~
+
+See also: ~
+   |help p5-visualSuite| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/unit/visual/visualTest.js:33
+~
+
+
+3D_waveform() 📄 🔧
+|waveform| ⚡ Function
+
+Analyze the sound as a waveform (amplitude over time)
+
+See also: ~
+   |help p5-waveform| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/waveform/sketch.js:40
+~
+
+
+VARIABLES                                                   *p5-3D-variables*
+
+3D_ampLabel() 📄 📌
+|ampLabel| ⚡ Function
+
+Example: change the frequency of an oscillator and visualize the waveform
+
+See also: ~
+   |help p5-ampLabel| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/oscillatorWaveform/sketch.js:5
+~
+
+
+3D_ampSlider() 📄 📌
+|ampSlider| ⚡ Function
+
+Example: change the frequency of an oscillator and visualize the waveform
+
+See also: ~
+   |help p5-ampSlider| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/oscillatorWaveform/sketch.js:5
+~
+
+
+3D_analyzer() 📄 📌
+|analyzer| ⚡ Function
+
+Example: p5.Delay w/ p5.SoundFile + p5.Amplitude Click the mouse to hear the p5.Delay process a sound file.
+MouseX controls the p5.Delay Filter Frequency.
+MouseY controls both the p5.Delay Time and Resonance.
+
+See also: ~
+   |help p5-analyzer| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/DelaySoundFile/sketch.js:8
+~
+
+
+3D_button() 📄 📌
+|button| ⚡ Function
+
+Example: change the frequency of an oscillator and visualize the waveform
+
+See also: ~
+   |help p5-button| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/oscillatorWaveform/sketch.js:5
+~
+
+
+3D_c() 📄 📌
+|c| ⚡ Function
+
+webgl `loadPixels`() and `get`() example
+
+See also: ~
+   |help p5-c| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/webgl/get/sketch.js:5
+~
+
+
+3D_carrier() 📄 📌
+|carrier| ⚡ Function
+
+Example: Amplitude Modulation involves two oscillators, referred to as the carrier and the modulator, where the modulator controls the carrier's amplitude.
+The carrier is typically `set` at an audible frequency (i.e.
+440 Hz) and connected to main output by default.
+The carrier.amp is `set` to zero because we will have the modulator control its amplitude.
+The modulator is typically `set` to a frequency that is lower than humans can hear (i.e.
+1 Hz, or one cycle every second).
+The modulator is disconnected from main output.
+Instead, it is connected to the amplitude of the Carrier, like this: carrier.amp(modulator).
+MouseX controls the amplitude of the modulator from 0 to 1.
+When the modulator's amplitude is `set` to 0, the amplitude modulation has no effect.
+MouseY controls the frequency of the modulator from 0 to 20hz.
+Both impact our perception of the Carrier frequency.
+A subtle amount of Amplitude Modulation can simulate effects such as Tremolo.
+Ring Modulation is a type of Amplitude Modulation where the original carrier signal is not present.
+
+See also: ~
+   |help p5-carrier| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/soundfileMod_AM/sketch.js:25
+~
+
+
+3D_centerX() 📄 📌
+|centerX| ⚡ Function
+
+Rotate camera view about arbitrary axis defined by x,y,z based on http://learnwebgl.brown37.net/07_cameras/camera_rotating_motion.html
+
+See also: ~
+   |help p5-centerX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:2426
+~
+
+
+3D_currentIR() 📄 📌
+|currentIR| ⚡ Function
+
+Example: Convolution Reverb w/ FFT The p5.Convolver can recreate the sound of actual spaces using convolution.
+Toggle between different impulses with the mouse.
+Press any `key` to hear the original impulse recording.
+Convolution samples Creative Commons BY recordinghopkins, via freesound.org https://www.freesound.org/people/recordinghopkins/
+
+See also: ~
+   |help p5-currentIR| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/Reverb_convolve_FFT/sketch.js:13
+~
+
+
+3D_cVerb() 📄 📌
+|cVerb| ⚡ Function
+
+Example: Convolution Reverb w/ FFT The p5.Convolver can recreate the sound of actual spaces using convolution.
+Toggle between different impulses with the mouse.
+Press any `key` to hear the original impulse recording.
+Convolution samples Creative Commons BY recordinghopkins, via freesound.org https://www.freesound.org/people/recordinghopkins/
+
+See also: ~
+   |help p5-cVerb| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/Reverb_convolve_FFT/sketch.js:12
+~
+
+
+3D_data() 📄 📌
+|data| ⚡ Function
+
+Checks if the source data for this texture has changed (if it's easy to do so) and reuploads the texture if necessary.
+If it's not possible or to expensive to do a calculation to determine wheter or not the data has occurred, this method simply re-uploads the texture.
+
+See also: ~
+   |help p5-data| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Texture.js:204
+~
+
+
+3D_delay() 📄 📌
+|delay| ⚡ Function
+
+Example: p5.Delay w/ p5.SoundFile + p5.Amplitude Click the mouse to hear the p5.Delay process a sound file.
+MouseX controls the p5.Delay Filter Frequency.
+MouseY controls both the p5.Delay Time and Resonance.
+
+See also: ~
+   |help p5-delay| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/DelaySoundFile/sketch.js:8
+~
+
+
+3D_description() 📄 📌
+|description| ⚡ Function
+
+Example: Apply a p5.BandPass `filter` to white `noise`.
+Visualize the sound with FFT.
+Map `mouseX` to the bandpass frequency and `mouseY` to resonance/`width` of the a BandPass `filter`
+
+See also: ~
+   |help p5-description| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/Filter_BandPass/sketch.js:8
+~
+
+
+3D_diffX() 📄 📌
+|diffX| ⚡ Function
+
+Sets the camera’s position in "world" space without changing its orientation.
+The parameters, `x`, `y`, and `z`, are the coordinates where the camera should be placed.
+For example, calling `myCamera.setPosition(10, 20, 30)` places the camera at coordinates `(10, 20, 30)` in "world" space.
+
+Examples: >
+>
+> <code>
+> // Double-click to toggle between cameras.
+>
+> let cam1;
+> let cam2;
+> let isDefaultCamera = true;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> // Keep its default settings.
+> cam1 = createCamera();
+>
+> // Create the second camera.
+> cam2 = createCamera();
+>
+> // Place it closer to the origin.
+> cam2.setPosition(0, 0, 600);
+>
+> // Set the current camera to cam1.
+> setCamera(cam1);
+>
+> describe(
+> 'A row of white cubes against a gray background. The camera toggles the amount of zoom when the user double-clicks.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Translate the origin toward the camera.
+> translate(-10, 10, 500);
+>
+> // Rotate the coordinate system.
+> rotateY(-0.1);
+> rotateX(-0.1);
+>
+> // Draw the row of boxes.
+> for (let i = 0; i < 6; i += 1) {
+> translate(0, 0, -30);
+> box(10);
+> }
+> }
+>
+> // Toggle the current camera when the user double-clicks.
+> function doubleClicked() {
+> if (isDefaultCamera === true) {
+> setCamera(cam2);
+> isDefaultCamera = false;
+> } else {
+> setCamera(cam1);
+> isDefaultCamera = true;
+> }
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Double-click to toggle between cameras.
+>
+> let cam1;
+> let cam2;
+> let isDefaultCamera = true;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> // Keep its default settings.
+> cam1 = createCamera();
+>
+> // Create the second camera.
+> cam2 = createCamera();
+>
+> // Place it closer to the origin.
+> cam2.setPosition(0, 0, 600);
+>
+> // Set the current camera to cam1.
+> setCamera(cam1);
+>
+> describe(
+> 'A row of white cubes against a gray background. The camera toggles between a static view and a view that zooms in and out when the user double-clicks.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Update cam2's z-coordinate.
+> let z = 100 * sin(frameCount * 0.01) + 700;
+> cam2.setPosition(0, 0, z);
+>
+> // Translate the origin toward the camera.
+> translate(-10, 10, 500);
+>
+> // Rotate the coordinate system.
+> rotateY(-0.1);
+> rotateX(-0.1);
+>
+> // Draw the row of boxes.
+> for (let i = 0; i < 6; i += 1) {
+> translate(0, 0, -30);
+> box(10);
+> }
+> }
+>
+> // Toggle the current camera when the user double-clicks.
+> function doubleClicked() {
+> if (isDefaultCamera === true) {
+> setCamera(cam2);
+> isDefaultCamera = false;
+> } else {
+> setCamera(cam1);
+> isDefaultCamera = true;
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-diffX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:3235
+~
+
+
+3D_env() 📄 📌
+|env| ⚡ Function
+
+Create a sequence using a Part.
+Add two Phrases to the part, and tell the part to `loop`.
+The callback includes parameters (the value at that position in the Phrase array) as well as time, which should be used to schedule playback with precision.
+
+See also: ~
+   |help p5-env| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/looper_simple/sketch.js:9
+~
+
+
+3D_freqLabel() 📄 📌
+|freqLabel| ⚡ Function
+
+Example: change the frequency of an oscillator and visualize the waveform
+
+See also: ~
+   |help p5-freqLabel| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/oscillatorWaveform/sketch.js:5
+~
+
+
+3D_freqSlider() 📄 📌
+|freqSlider| ⚡ Function
+
+Example: change the frequency of an oscillator and visualize the waveform
+
+See also: ~
+   |help p5-freqSlider| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/oscillatorWaveform/sketch.js:5
+~
+
+
+3D_gl() 📄 📌
+|gl| ⚡ Function
+
+Sets the texture wrapping mode.
+This controls how textures behave when their uv's go outside of the 0 - 1 range.
+There are three options: CLAMP, REPEAT, and MIRROR.
+REPEAT & MIRROR are only available if the texture is a power of two size (128, 256, 512, 1024, etc.).
+
+See also: ~
+   |help p5-gl| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Texture.js:371
+~
+
+
+3D_img() 📄 📌
+|img| ⚡ Function
+
+webgl texture mode example
+
+See also: ~
+   |help p5-img| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/webgl/texture/textureMode/sketch.js:4
+~
+
+
+3D_keyNamesOfThePropToCopy() 📄 📌
+|keyNamesOfThePropToCopy| ⚡ Function
+
+Sets the camera’s position, orientation, and projection by copying another camera.
+The parameter, `cam`, is the `p5.Camera` object to `copy`.
+For example, calling `cam2.`set`(cam1)` will `set` `cam2` using `cam1`’s configuration.
+
+Examples: >
+>
+> <code>
+> // Double-click to "reset" the camera zoom.
+>
+> let cam1;
+> let cam2;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> cam1 = createCamera();
+>
+> // Place the camera at the top-right.
+> cam1.setPosition(400, -400, 800);
+>
+> // Point it at the origin.
+> cam1.lookAt(0, 0, 0);
+>
+> // Create the second camera.
+> cam2 = createCamera();
+>
+> // Copy cam1's configuration.
+> cam2.set(cam1);
+>
+> describe(
+> 'A white cube drawn against a gray background. The camera slowly moves forward. The camera resets when the user double-clicks.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Update cam2's position.
+> cam2.move(0, 0, -1);
+>
+> // Draw the box.
+> box();
+> }
+>
+> // "Reset" the camera when the user double-clicks.
+> function doubleClicked() {
+> cam2.set(cam1);
+> }
+<
+
+See also: ~
+   |help p5-keyNamesOfThePropToCopy| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:3309
+~
+
+
+3D_languages() 📄 📌
+|languages| ⚡ Function
+
+This is a list of languages that we have added so far.
+If you have just added a new language (yay!), add its `key` to the list below (`en` is english, `es` es español).
+Also add its export to dev.js, which is another file in this folder.
+
+See also: ~
+   |help p5-languages| for detailed help on this symbol~
+
+Source: ~
+                ../temp/translations/index.js:24
+~
+
+
+3D_local() 📄 📌
+|local| ⚡ Function
+
+Moves the camera along its "local" axes without changing its orientation.
+The parameters, `x`, `y`, and `z`, are the distances the camera should `move`.
+For example, calling `myCamera.`move`(10, 20, 30)` moves the camera 10 `pixels` to the right, 20 `pixels` down, and 30 `pixels` backward in its "local" space.
+
+Examples: >
+>
+> <code>
+> // Click the canvas to begin detecting key presses.
+>
+> let cam;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create the first camera.
+> // Keep its default settings.
+> cam = createCamera();
+>
+> // Place the camera at the top-right.
+> cam.setPosition(400, -400, 800);
+>
+> // Point it at the origin.
+> cam.lookAt(0, 0, 0);
+>
+> describe(
+> 'A white cube drawn against a gray background. The cube appears to move when the user presses certain keys.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Move the camera along its "local" axes
+> // when the user presses certain keys.
+> if (keyIsPressed === true) {
+>
+> // Move horizontally.
+> if (keyCode === LEFT_ARROW) {
+> cam.move(-1, 0, 0);
+> }
+> if (keyCode === RIGHT_ARROW) {
+> cam.move(1, 0, 0);
+> }
+>
+> // Move vertically.
+> if (keyCode === UP_ARROW) {
+> cam.move(0, -1, 0);
+> }
+> if (keyCode === DOWN_ARROW) {
+> cam.move(0, 1, 0);
+> }
+>
+> // Move in/out of the screen.
+> if (key === 'i') {
+> cam.move(0, 0, -1);
+> }
+> if (key === 'o') {
+> cam.move(0, 0, 1);
+> }
+> }
+>
+> // Draw the box.
+> box();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-local| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Camera.js:3077
+~
+
+
+3D_location() 📄 📌
+|location| ⚡ Function
+
+Once all buffers have been bound, this checks to see if there are any remaining active attributes, likely left over from previous renders, and disables them so that they don't affect rendering.
+
+See also: ~
+   |help p5-location| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Shader.js:1484
+~
+
+
+3D_match() 📄 📌
+|match| ⚡ Function
+
+Shaders are written in <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders">GLSL</a>, but there are different versions of GLSL that it might be written in.
+Calling this method on a `p5.Shader` will return the GLSL version it uses, either `100 es` or `300 es`.
+WebGL 1 shaders will only use `100 es`, and WebGL 2 shaders may use either.
+
+See also: ~
+   |help p5-match| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Shader.js:243
+~
+
+
+3D_mic() 📄 📌
+|mic| ⚡ Function
+
+Visualize the frequency spectrum of live audio input
+
+See also: ~
+   |help p5-mic| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/micFFT/sketch.js:5
+~
+
+
+3D_myp5() 📄 📌
+|myp5| ⚡ Function
+
+Uses p5 in instance-mode inside a custom container.
+All elements are attached inside the container for testing And cleaned up on teardown.
+
+See also: ~
+   |help p5-myp5| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/unit/dom/dom.js:8
+~
+
+
+3D_myp5Container() 📄 📌
+|myp5Container| ⚡ Function
+
+Uses p5 in instance-mode inside a custom container.
+All elements are attached inside the container for testing And cleaned up on teardown.
+
+See also: ~
+   |help p5-myp5Container| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/unit/dom/dom.js:9
+~
+
+
+3D_noise() 📄 📌
+|noise| ⚡ Function
+
+Example: p5.Delay w/ p5.Noise, p5.Env & p5.Amplitude Click the mouse to hear the p5.Delay process a Noise Envelope.
+MouseX controls the p5.Delay Filter Frequency.
+MouseY controls both the p5.Delay Time and Resonance.
+
+See also: ~
+   |help p5-noise| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/DelayNoiseEnvelope/sketch.js:10
+~
+
+
+3D_osc() 📄 📌
+|osc| ⚡ Function
+
+Create a sequence using a Part.
+Add two Phrases to the part, and tell the part to `loop`.
+The callback includes parameters (the value at that position in the Phrase array) as well as time, which should be used to schedule playback with precision.
+
+See also: ~
+   |help p5-osc| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/looper_simple/sketch.js:9
+~
+
+
+3D_playMode() 📄 📌
+|playMode| ⚡ Function
+
+Toggle play mode between 'restart' and 'sustain'.
+Sustain is the default playmode for SoundFiles Music from Damscray, "Dancing Tiger", Creative Commons BY-NC-SA
+
+See also: ~
+   |help p5-playMode| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/soundfile_playMode/sketch.js:7
+~
+
+
+3D_result() 📄 📌
+|result| ⚡ Function
+
+Load strings of `text` into an array of lines.
+Display a `random` `line` every time the mouse is clicked.
+
+See also: ~
+   |help p5-result| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/async/loadStrings_preload/sketch.js:7
+~
+
+
+3D_reverb() 📄 📌
+|reverb| ⚡ Function
+
+Example: Reverb
+
+See also: ~
+   |help p5-reverb| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/Reverb_basic/sketch.js:5
+~
+
+
+3D_shader() 📄 📌
+|shader| ⚡ Function
+
+Copies the shader from one drawing context to another.
+Each `p5.Shader` object must be compiled by calling <a href="#/p5/shader">shader()</a> before it can run.
+Compilation happens in a drawing context which is usually the main canvas or an instance of <a href="#/p5.Graphics">p5.Graphics</a>.
+A shader can only be used in the context where it was compiled.
+The `copyToContext()` method compiles the shader again and copies it to another drawing context where it can be reused.
+The parameter, `context`, is the drawing context where the shader will be used.
+The shader can be copied to an instance of <a href="#/p5.Graphics">p5.Graphics</a>, as in `myShader.copyToContext(pg)`.
+The shader can also be copied from a <a href="#/p5.Graphics">p5.Graphics</a> object to the main canvas using the `window` variable, as in `myShader.copyToContext(window)`.
+Note: A <a href="#/p5.Shader">p5.Shader</a> object created with <a href="#/p5/createShader">createShader()</a>, <a href="#/p5/createFilterShader">createFilterShader()</a>, or <a href="#/p5/loadShader">loadShader()</a> can be used directly with a <a href="#/p5.Framebuffer">p5.Framebuffer</a> object created with <a href="#/p5/createFramebuffer">createFramebuffer()</a>.
+Both objects have the same context as the main canvas.
+
+Examples: >
+>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+>
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision mediump float;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vec2 uv = vTexCoord;
+> vec3 color = vec3(uv.x, uv.y, min(uv.x + uv.y, 1.0));
+> gl_FragColor = vec4(color, 1.0);\
+> }
+> `;
+>
+> let pg;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> background(200);
+>
+> // Create a p5.Shader object.
+> let original = createShader(vertSrc, fragSrc);
+>
+> // Compile the p5.Shader object.
+> shader(original);
+>
+> // Create a p5.Graphics object.
+> pg = createGraphics(50, 50, WEBGL);
+>
+> // Copy the original shader to the p5.Graphics object.
+> let copied = original.copyToContext(pg);
+>
+> // Apply the copied shader to the p5.Graphics object.
+> pg.shader(copied);
+>
+> // Style the display surface.
+> pg.noStroke();
+>
+> // Add a display surface for the shader.
+> pg.plane(50, 50);
+>
+> describe('A square with purple-blue gradient on its surface drawn against a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw the p5.Graphics object to the main canvas.
+> image(pg, -25, -25);
+> }
+> </code>
+> </div>
+>
+> <div class='notest'>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+>
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision mediump float;
+>
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vec2 uv = vTexCoord;
+> vec3 color = vec3(uv.x, uv.y, min(uv.x + uv.y, 1.0));
+> gl_FragColor = vec4(color, 1.0);
+> }
+> `;
+>
+> let copied;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Graphics object.
+> let pg = createGraphics(25, 25, WEBGL);
+>
+> // Create a p5.Shader object.
+> let original = pg.createShader(vertSrc, fragSrc);
+>
+> // Compile the p5.Shader object.
+> pg.shader(original);
+>
+> // Copy the original shader to the main canvas.
+> copied = original.copyToContext(window);
+>
+> // Apply the copied shader to the main canvas.
+> shader(copied);
+>
+> describe('A rotating cube with a purple-blue gradient on its surface drawn against a gray background.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Rotate around the x-, y-, and z-axes.
+> rotateX(frameCount * 0.01);
+> rotateY(frameCount * 0.01);
+> rotateZ(frameCount * 0.01);
+>
+> // Draw the box.
+> box(50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-shader| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Shader.js:755
+~
+
+
+3D_sinon() 📄 📌
+|sinon| ⚡ Function
+
+Sinon core utilities.
+For internal use only.
+
+See also: ~
+   |help p5-sinon| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/js/sinon.js:1110
+~
+
+
+3D_size() 📄 📌
+|size| ⚡ Function
+
+DEMO: Use p5.Amplitude (volume) to change the size of an `ellipse`
+
+See also: ~
+   |help p5-size| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/amplitude_analysis/sketch.js:5
+~
+
+
+3D_sound() 📄 📌
+|sound| ⚡ Function
+
+Example: Convolution Reverb w/ FFT The p5.Convolver can recreate the sound of actual spaces using convolution.
+Toggle between different impulses with the mouse.
+Press any `key` to hear the original impulse recording.
+Convolution samples Creative Commons BY recordinghopkins, via freesound.org https://www.freesound.org/people/recordinghopkins/
+
+See also: ~
+   |help p5-sound| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/Reverb_convolve_FFT/sketch.js:12
+~
+
+
+3D_soundFile() 📄 📌
+|soundFile| ⚡ Function
+
+DEMO: Draw the waveform of a sound as it plays using p5.FFT.waveform()
+
+See also: ~
+   |help p5-soundFile| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/waveform/sketch.js:5
+~
+
+
+3D_source() 📄 📌
+|source| ⚡ Function
+
+Auto Correlation multiples each sample in a buffer by all of the other samples.
+This emphasizes the fundamental frequency.
+Auto Correlation is useful for pitch detection, as well as for visualization This example is a Correlogram which is a plot of the autocorrelations.
+Example by Jason Sigal and Golan Levin.
+
+See also: ~
+   |help p5-source| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/autoCorrelation/sketch.js:13
+~
+
+
+3D_triOsc() 📄 📌
+|triOsc| ⚡ Function
+
+Example: Create an Envelope (p5.Env) to control oscillator amplitude.
+Trigger the Attack portion of the envelope when the mouse is clicked.
+Trigger the Release when the mouse is released.
+
+See also: ~
+   |help p5-triOsc| for detailed help on this symbol~
+
+Source: ~
+                ../temp/test/manual-test-examples/addons/p5.sound/envelopeOnOff/sketch.js:7
+~
+
+
+3D_uniform() 📄 📌
+|uniform| ⚡ Function
+
+Sets the shader’s uniform (global) variables.
+Shader programs run on the computer’s graphics processing unit (GPU).
+They live in part of the computer’s memory that’s completely separate from the sketch that runs them.
+Uniforms are global variables within a shader program.
+They provide a way to pass values from a sketch running on the CPU to a shader program running on the GPU.
+The first parameter, `uniformName`, is a string with the uniform’s name.
+For the shader above, `uniformName` would be `'r'`.
+The second parameter, `data`, is the value that should be used to `set` the uniform.
+For example, calling `myShader.setUniform('r', 0.5)` would `set` the `r` uniform in the shader above to `0.5`.
+data should match the uniform’s type.
+Numbers, strings, booleans, arrays, and many types of images can all be passed to a shader with `setUniform()`.
+
+Examples: >
+>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+>
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision mediump float;
+>
+> uniform float r;
+>
+> void main() {
+> gl_FragColor = vec4(r, 1.0, 1.0, 1.0);
+> }
+> `;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> let myShader = createShader(vertSrc, fragSrc);
+>
+> // Apply the p5.Shader object.
+> shader(myShader);
+>
+> // Set the r uniform to 0.5.
+> myShader.setUniform('r', 0.5);
+>
+> // Style the drawing surface.
+> noStroke();
+>
+> // Add a plane as a drawing surface for the shader.
+> plane(100, 100);
+>
+> describe('A cyan square.');
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+>
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision mediump float;
+>
+> uniform float r;
+>
+> void main() {
+> gl_FragColor = vec4(r, 1.0, 1.0, 1.0);
+> }
+> `;
+>
+> let myShader;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> myShader = createShader(vertSrc, fragSrc);
+>
+> // Compile and apply the p5.Shader object.
+> shader(myShader);
+>
+> describe('A square oscillates color between cyan and white.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the drawing surface.
+> noStroke();
+>
+> // Update the r uniform.
+> let nextR = 0.5 * (sin(frameCount * 0.01) + 1);
+> myShader.setUniform('r', nextR);
+>
+> // Add a plane as a drawing surface.
+> plane(100, 100);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Note: A "uniform" is a global variable within a shader program.
+>
+> // Create a string with the vertex shader program.
+> // The vertex shader is called for each vertex.
+> let vertSrc = `
+> precision highp float;
+> uniform mat4 uModelViewMatrix;
+> uniform mat4 uProjectionMatrix;
+>
+> attribute vec3 aPosition;
+> attribute vec2 aTexCoord;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vTexCoord = aTexCoord;
+> vec4 positionVec4 = vec4(aPosition, 1.0);
+> gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;
+> }
+> `;
+>
+> // Create a string with the fragment shader program.
+> // The fragment shader is called for each pixel.
+> let fragSrc = `
+> precision highp float;
+> uniform vec2 p;
+> uniform float r;
+> const int numIterations = 500;
+> varying vec2 vTexCoord;
+>
+> void main() {
+> vec2 c = p + gl_FragCoord.xy * r;
+> vec2 z = c;
+> float n = 0.0;
+>
+> for (int i = numIterations; i > 0; i--) {
+> if (z.x * z.x + z.y * z.y > 4.0) {
+> n = float(i) / float(numIterations);
+> break;
+> }
+>
+> z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c;
+> }
+>
+> gl_FragColor = vec4(
+> 0.5 - cos(n * 17.0) / 2.0,
+> 0.5 - cos(n * 13.0) / 2.0,
+> 0.5 - cos(n * 23.0) / 2.0,
+> 1.0
+> );
+> }
+> `;
+>
+> let mandelbrot;
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> // Create a p5.Shader object.
+> mandelbrot = createShader(vertSrc, fragSrc);
+>
+> // Compile and apply the p5.Shader object.
+> shader(mandelbrot);
+>
+> // Set the shader uniform p to an array.
+> // p is the center point of the Mandelbrot image.
+> mandelbrot.setUniform('p', [-0.74364388703, 0.13182590421]);
+>
+> describe('A fractal image zooms in and out of focus.');
+> }
+>
+> function draw() {
+> // Set the shader uniform r to a value that oscillates
+> // between 0 and 0.005.
+> // r is the size of the image in Mandelbrot-space.
+> let radius = 0.005 * (sin(frameCount * 0.01) + 1);
+> mandelbrot.setUniform('r', radius);
+>
+> // Style the drawing surface.
+> noStroke();
+>
+> // Add a plane as a drawing surface.
+> plane(100, 100);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-uniform| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/webgl/p5.Shader.js:1226
+~
+
+
+
+
+==============================================================================
+Generated by p5.js Documentation Automation
+See: https://github.com/prjctimg/automata
+Last updated: 2026-02-03
+📄 End of 3D documentation 📄
+==============================================================================

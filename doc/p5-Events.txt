@@ -1,0 +1,2186 @@
+📄 *p5.Events*📄
+Events module functions and properties
+
+==============================================================================
+Tags p5.Events Events module functions and properties
+==============================================================================
+
+
+
+CONTENTS                                                           *${this.getCurrentModuleName()}-contents*
+
+🔍 NAVIGATION:~
+   Use | to jump to sections, :help p5-[symbol] to jump to symbols~
+
+⚡ FUNCTIONS:
+  |exitPointerLock          |
+  |keyIsDown                |
+  |requestPointerLock       |
+  |setMoveThreshold         |
+  |setShakeThreshold        |
+
+🔧 PROPERTIES:
+  |accelerationX            |
+  |accelerationY            |
+  |accelerationZ            |
+  |deviceOrientation        |
+  |isKeyPressed             |
+  |keyCode                  |
+  |keyIsPressed             |
+  |mouseButton              |
+  |mouseIsPressed           |
+  |mouseX                   |
+  |mouseY                   |
+  |movedX                   |
+  |movedY                   |
+  |pAccelerationX           |
+  |pAccelerationY           |
+  |pAccelerationZ           |
+  |pmouseX                  |
+  |pmouseY                  |
+  |pRotationX               |
+  |pRotationY               |
+  |pRotationZ               |
+  |pwinMouseX               |
+  |pwinMouseY               |
+  |rotationX                |
+  |rotationY                |
+  |rotationZ                |
+  |touches                  |
+  |turnAxis                 |
+  |winMouseX                |
+  |winMouseY                |
+
+📌 VARIABLES:
+  |context                  |
+  |Filters                  |
+  |key                      |
+  |offset                   |
+  |pixels                   |
+  |pixelsState              |
+
+
+
+🔗 RELATED SYMBOLS:~
+   See |p5| for complete p5.js API reference~
+
+
+
+⚡ QUICK REFERENCE:~
+   :help p5-[symbolname] - Jump directly to any function~
+
+
+
+FUNCTIONS                                                   *p5-Events-functions*
+
+Events_exitPointerLock() 📄 ⚡
+|exitPointerLock|() ⚡ Function
+
+Exits a pointer lock started with <a href="#/p5/requestPointerLock">requestPointerLock</a>.
+Calling `requestPointerLock()` locks the values of <a href="#/p5/`mouseX`">`mouseX`</a>, <a href="#/p5/`mouseY`">`mouseY`</a>, <a href="#/p5/`pmouseX`">`pmouseX`</a>, and <a href="#/p5/`pmouseY`">`pmouseY`</a>.
+Calling `exitPointerLock()` resumes updating the mouse system variables.
+Note: Most browsers require an input, such as a click, before calling `requestPointerLock()`.
+It’s recommended to call `requestPointerLock()` in an event function such as <a href="#/p5/doubleClicked">doubleClicked()</a>.
+
+Examples: >
+>
+> <code>
+> let isLocked = false;
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with a word at its center. The word changes between "Unlocked" and "Locked" when the user double-clicks.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Tell the user whether the pointer is locked.
+> if (isLocked === true) {
+> text('Locked', 50, 50);
+> } else {
+> text('Unlocked', 50, 50);
+> }
+> }
+>
+> // Toggle the pointer lock when the user double-clicks.
+> function doubleClicked() {
+> if (isLocked === true) {
+> exitPointerLock();
+> isLocked = false;
+> } else {
+> requestPointerLock();
+> isLocked = true;
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-exitPointerLock| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:2002
+~
+
+
+Events_keyIsDown() 📄 ⚡
+|keyIsDown|(code) ⚡ Function
+
+Returns `true` if the `key` it’s checking is pressed and `false` if not.
+`keyIsDown()` is helpful when checking for multiple different `key` presses.
+For example, `keyIsDown()` can be used to check if both `LEFT_ARROW` and `UP_ARROW` are pressed: ```js if (keyIsDown(LEFT_ARROW) && keyIsDown(UP_ARROW)) { // Move diagonally.
+} ``` `keyIsDown()` can check for `key` presses using <a href="#/p5/`keyCode`">`keyCode`</a> values, as in `keyIsDown(37)` or `keyIsDown(LEFT_ARROW)`.
+Key codes can be found on websites such as <a href="https://keycode.info" target="_blank">keycode.info</a>.
+
+Parameters: ~
+                🔢 `code` (Number) - key to check.
+~
+
+Returns: ~
+                ☑️ Returns Boolean: whether the key is down or not.
+~
+
+Examples: >
+>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> let x = 50;
+> let y = 50;
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> describe(
+> 'A gray square with a black circle at its center. The circle moves when the user presses an arrow key. It leaves a trail as it moves.'
+> );
+> }
+>
+> function draw() {
+> // Update x and y if an arrow key is pressed.
+> if (keyIsDown(LEFT_ARROW) === true) {
+> x -= 1;
+> }
+>
+> if (keyIsDown(RIGHT_ARROW) === true) {
+> x += 1;
+> }
+>
+> if (keyIsDown(UP_ARROW) === true) {
+> y -= 1;
+> }
+>
+> if (keyIsDown(DOWN_ARROW) === true) {
+> y += 1;
+> }
+>
+> // Style the circle.
+> fill(0);
+>
+> // Draw the circle.
+> circle(x, y, 5);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> let x = 50;
+> let y = 50;
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> describe(
+> 'A gray square with a black circle at its center. The circle moves when the user presses an arrow key. It leaves a trail as it moves.'
+> );
+> }
+>
+> function draw() {
+> // Update x and y if an arrow key is pressed.
+> if (keyIsDown(37) === true) {
+> x -= 1;
+> }
+>
+> if (keyIsDown(39) === true) {
+> x += 1;
+> }
+>
+> if (keyIsDown(38) === true) {
+> y -= 1;
+> }
+>
+> if (keyIsDown(40) === true) {
+> y += 1;
+> }
+>
+> // Style the circle.
+> fill(0);
+>
+> // Draw the circle.
+> circle(x, y, 5);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-keyIsDown| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/keyboard.js:922
+~
+
+
+Events_requestPointerLock() 📄 ⚡
+|requestPointerLock|() ⚡ Function
+
+Locks the mouse pointer to its current position and makes it invisible.
+`requestPointerLock()` allows the mouse to `move` forever without leaving the screen.
+Calling `requestPointerLock()` locks the values of <a href="#/p5/`mouseX`">`mouseX`</a>, <a href="#/p5/`mouseY`">`mouseY`</a>, <a href="#/p5/`pmouseX`">`pmouseX`</a>, and <a href="#/p5/`pmouseY`">`pmouseY`</a>.
+<a href="#/p5/movedX">movedX</a> and <a href="#/p5/movedY">movedY</a> continue updating and can be used to `get` the distance the mouse moved since the last frame was drawn.
+Calling <a href="#/p5/exitPointerLock">exitPointerLock()</a> resumes updating the mouse system variables.
+Note: Most browsers require an input, such as a click, before calling `requestPointerLock()`.
+It’s recommended to call `requestPointerLock()` in an event function such as <a href="#/p5/doubleClicked">doubleClicked()</a>.
+
+Examples: >
+>
+> <code>
+> let score = 0;
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with the text "Score: X" at its center. The score increases when the user moves the mouse upward. It decreases when the user moves the mouse downward.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Update the score.
+> score -= movedY;
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the score.
+> text(`Score: ${score}`, 50, 50);
+> }
+>
+> // Lock the pointer when the user double-clicks.
+> function doubleClicked() {
+> requestPointerLock();
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-requestPointerLock| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:1933
+~
+
+
+Events_setMoveThreshold() 📄 ⚡
+|setMoveThreshold|(value) ⚡ Function
+
+The <a href="#/p5/setMoveThreshold">setMoveThreshold()</a> function is used to `set` the movement `threshold` for the <a href="#/p5/deviceMoved">deviceMoved()</a> function.
+The default `threshold` is `set` to 0.5.
+
+Parameters: ~
+                🔢 `value` (number) - The threshold value
+~
+
+Examples: >
+>
+> <code>
+> // Run this example on a mobile device
+> // You will need to move the device incrementally further
+> // the closer the square's color gets to white in order to change the value.
+>
+> let value = 0;
+> let threshold = 0.5;
+> function setup() {
+> setMoveThreshold(threshold);
+> }
+> function draw() {
+> fill(value);
+> rect(25, 25, 50, 50);
+> describe(`50-by-50 black rect in center of canvas.
+> turns white on mobile when device moves`);
+> }
+> function deviceMoved() {
+> value = value + 5;
+> threshold = threshold + 0.1;
+> if (value > 255) {
+> value = 0;
+> threshold = 30;
+> }
+> setMoveThreshold(threshold);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-setMoveThreshold| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:454
+~
+
+
+Events_setShakeThreshold() 📄 ⚡
+|setShakeThreshold|(value) ⚡ Function
+
+The <a href="#/p5/setShakeThreshold">setShakeThreshold()</a> function is used to `set` the movement `threshold` for the <a href="#/p5/deviceShaken">deviceShaken()</a> function.
+The default `threshold` is `set` to 30.
+
+Parameters: ~
+                🔢 `value` (number) - The threshold value
+~
+
+Examples: >
+>
+> <code>
+> // Run this example on a mobile device
+> // You will need to shake the device more firmly
+> // the closer the box's fill gets to white in order to change the value.
+>
+> let value = 0;
+> let threshold = 30;
+> function setup() {
+> setShakeThreshold(threshold);
+> }
+> function draw() {
+> fill(value);
+> rect(25, 25, 50, 50);
+> describe(`50-by-50 black rect in center of canvas.
+> turns white on mobile when device is being shaked`);
+> }
+> function deviceMoved() {
+> value = value + 5;
+> threshold = threshold + 5;
+> if (value > 255) {
+> value = 0;
+> threshold = 30;
+> }
+> setShakeThreshold(threshold);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-setShakeThreshold| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:496
+~
+
+
+PROPERTIES                                                   *p5-Events-properties*
+
+Events_accelerationX() 📄 🔧
+|accelerationX| ⚡ Function
+
+The system variable accelerationX always contains the acceleration of the device along the x axis.
+Value is represented as meters per second squared.
+
+Examples: >
+>
+> <code>
+> // Move a touchscreen device to register
+> // acceleration changes.
+> function draw() {
+> background(220, 50);
+> fill('magenta');
+> ellipse(width / 2, height / 2, accelerationX);
+> describe('Magnitude of device acceleration is displayed as ellipse size.');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-accelerationX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:43
+~
+
+
+Events_accelerationY() 📄 🔧
+|accelerationY| ⚡ Function
+
+The system variable accelerationY always contains the acceleration of the device along the y axis.
+Value is represented as meters per second squared.
+
+Examples: >
+>
+> <code>
+> // Move a touchscreen device to register
+> // acceleration changes.
+> function draw() {
+> background(220, 50);
+> fill('magenta');
+> ellipse(width / 2, height / 2, accelerationY);
+> describe('Magnitude of device acceleration is displayed as ellipse size');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-accelerationY| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:65
+~
+
+
+Events_accelerationZ() 📄 🔧
+|accelerationZ| ⚡ Function
+
+The system variable accelerationZ always contains the acceleration of the device along the z axis.
+Value is represented as meters per second squared.
+
+Examples: >
+>
+> <code>
+> // Move a touchscreen device to register
+> // acceleration changes.
+> function draw() {
+> background(220, 50);
+> fill('magenta');
+> ellipse(width / 2, height / 2, accelerationZ);
+> describe('Magnitude of device acceleration is displayed as ellipse size');
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-accelerationZ| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:88
+~
+
+
+Events_deviceOrientation() 📄 🔧
+|deviceOrientation| ⚡ Function
+
+The system variable deviceOrientation always contains the orientation of the device.
+The value of this variable will either be `set` 'landscape' or 'portrait'.
+If no data is available it will be `set` to 'undefined'.
+either LANDSCAPE or PORTRAIT.
+
+See also: ~
+   |help p5-deviceOrientation| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:20
+~
+
+
+Events_isKeyPressed() 📄 🔧
+|isKeyPressed| ⚡ Function
+
+A `Boolean` system variable that's `true` if any `key` is currently pressed and `false` if not.
+
+Examples: >
+>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with a white square at its center. The white square turns black when the user presses a key.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the square.
+> if (keyIsPressed === true) {
+> fill(0);
+> } else {
+> fill(255);
+> }
+>
+> // Draw the square.
+> square(25, 25, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with a white square at its center. The white square turns black when the user presses a key.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the square.
+> if (keyIsPressed) {
+> fill(0);
+> } else {
+> fill(255);
+> }
+>
+> // Draw the square.
+> square(25, 25, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with the word "false" at its center. The word switches to "true" when the user presses a key.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the value of keyIsPressed.
+> text(keyIsPressed, 50, 50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-isKeyPressed| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/keyboard.js:99
+~
+
+
+Events_keyCode() 📄 🔧
+|keyCode| ⚡ Function
+
+A `Number` system variable that contains the code of the last `key` typed.
+All keys have a ``keyCode``.
+For example, the `a` `key` has the ``keyCode`` 65.
+The ``keyCode`` variable is helpful for checking whether a special `key` has been typed.
+For example, the following conditional checks whether the enter `key` has been typed: ```js if (`keyCode` === 13) { // Code to run if the enter `key` was pressed.
+} ``` The same code can be written more clearly using the system variable `ENTER` which has a value of 13: ```js if (`keyCode` === ENTER) { // Code to run if the enter `key` was pressed.
+} ``` The system variables `BACKSPACE`, `DELETE`, `ENTER`, `RETURN`, `TAB`, `ESCAPE`, `SHIFT`, `CONTROL`, `OPTION`, `ALT`, `UP_ARROW`, `DOWN_ARROW`, `LEFT_ARROW`, and `RIGHT_ARROW` are all helpful shorthands the `key` codes of special keys.
+Key codes can be found on websites such as <a href="http://keycode.info/">keycode.info</a>.
+
+Examples: >
+>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square. The last key pressed and its code are displayed at the center.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the last key pressed and its code.
+> text(`${key} : ${keyCode}`, 50, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> let x = 50;
+> let y = 50;
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> describe(
+> 'A gray square with a black circle at its center. The circle moves when the user presses an arrow key. It leaves a trail as it moves.'
+> );
+> }
+>
+> function draw() {
+> // Update x and y if an arrow key is pressed.
+> if (keyIsPressed === true) {
+> if (keyCode === UP_ARROW) {
+> y -= 1;
+> } else if (keyCode === DOWN_ARROW) {
+> y += 1;
+> } else if (keyCode === LEFT_ARROW) {
+> x -= 1;
+> } else if (keyCode === RIGHT_ARROW) {
+> x += 1;
+> }
+> }
+>
+> // Style the circle.
+> fill(0);
+>
+> // Draw the circle at (x, y).
+> circle(x, y, 5);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-keyCode| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/keyboard.js:282
+~
+
+
+Events_keyIsPressed() 📄 🔧
+|keyIsPressed| ⚡ Function
+
+A `Boolean` system variable that's `true` if any `key` is currently pressed and `false` if not.
+
+Examples: >
+>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with a white square at its center. The white square turns black when the user presses a key.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the square.
+> if (keyIsPressed === true) {
+> fill(0);
+> } else {
+> fill(255);
+> }
+>
+> // Draw the square.
+> square(25, 25, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with a white square at its center. The white square turns black when the user presses a key.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the square.
+> if (keyIsPressed) {
+> fill(0);
+> } else {
+> fill(255);
+> }
+>
+> // Draw the square.
+> square(25, 25, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // Click on the canvas to begin detecting key presses.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with the word "false" at its center. The word switches to "true" when the user presses a key.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the value of keyIsPressed.
+> text(keyIsPressed, 50, 50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-keyIsPressed| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/keyboard.js:100
+~
+
+
+Events_mouseButton() 📄 🔧
+|mouseButton| ⚡ Function
+
+A String system variable that contains the value of the last mouse button pressed.
+The ``mouseButton`` variable is either `LEFT`, `RIGHT`, or `CENTER`, depending on which button was pressed last.
+Note: Different browsers may track ``mouseButton`` differently.
+See <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons" target="_blank">MDN</a> for more information.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with black text at its center. The text changes from 0 to either "left" or "right" when the user clicks a mouse button.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the mouse button.
+> text(mouseButton, 50, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> "A gray square. Different shapes appear at its center depending on the mouse button that's clicked."
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> if (mouseIsPressed === true) {
+> if (mouseButton === LEFT) {
+> circle(50, 50, 50);
+> }
+> if (mouseButton === RIGHT) {
+> square(25, 25, 50);
+> }
+> if (mouseButton === CENTER) {
+> triangle(23, 75, 50, 20, 78, 75);
+> }
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-mouseButton| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:753
+~
+
+
+Events_mouseIsPressed() 📄 🔧
+|mouseIsPressed| ⚡ Function
+
+A `Boolean` system variable that's `true` if the mouse is pressed and `false` if not.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with the word "false" at its center. The word changes to "true" when the user presses a mouse button.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the mouseIsPressed variable.
+> text(mouseIsPressed, 25, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with a white square at its center. The inner square turns black when the user presses the mouse.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the square.
+> if (mouseIsPressed === true) {
+> fill(0);
+> } else {
+> fill(255);
+> }
+>
+> // Draw the square.
+> square(25, 25, 50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-mouseIsPressed| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:812
+~
+
+
+Events_mouseX() 📄 🔧
+|mouseX| ⚡ Function
+
+A `Number` system variable that tracks the mouse's horizontal position.
+``mouseX`` keeps track of the mouse's position relative to the top-left corner of the canvas.
+For example, if the mouse is 50 `pixels` from the left edge of the canvas, then ``mouseX`` will be 50.
+If touch is used instead of the mouse, then ``mouseX`` will hold the x-coordinate of the most recent touch `point`.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe("A vertical black line moves left and right following the mouse's x-position.");
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw a vertical line that follows the mouse's x-coordinate.
+> line(mouseX, 0, mouseX, 100);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe("A gray square. The mouse's x- and y-coordinates are displayed as the user moves the mouse.");
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the mouse's coordinates.
+> text(`x: ${mouseX} y: ${mouseY}`, 50, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe("A vertical black line moves left and right following the mouse's x-position.");
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Adjust coordinates for WebGL mode.
+> // The origin (0, 0) is at the center of the canvas.
+> let mx = mouseX - 50;
+>
+> // Draw the line.
+> line(mx, -50, mx, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let font;
+>
+> // Load a font for WebGL mode.
+> function preload() {
+> font = loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> "A gray square. The mouse's x- and y-coordinates are displayed as the user moves the mouse."
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+> textFont(font);
+> fill(0);
+>
+> // Display the mouse's coordinates.
+> text(`x: ${mouseX} y: ${mouseY}`, 0, 0);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-mouseX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:224
+~
+
+
+Events_mouseY() 📄 🔧
+|mouseY| ⚡ Function
+
+A `Number` system variable that tracks the mouse's vertical position.
+``mouseY`` keeps track of the mouse's position relative to the top-left corner of the canvas.
+For example, if the mouse is 50 `pixels` from the top edge of the canvas, then ``mouseY`` will be 50.
+If touch is used instead of the mouse, then ``mouseY`` will hold the y-coordinate of the most recent touch `point`.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe("A horizontal black line moves up and down following the mouse's y-position.");
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw a horizontal line that follows the mouse's y-coordinate.
+> line(0, mouseY, 100, mouseY);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe("A gray square. The mouse's x- and y-coordinates are displayed as the user moves the mouse.");
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the mouse's coordinates.
+> text(`x: ${mouseX} y: ${mouseY}`, 50, 50);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe("A horizontal black line moves up and down following the mouse's y-position.");
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Adjust coordinates for WebGL mode.
+> // The origin (0, 0) is at the center of the canvas.
+> let my = mouseY - 50;
+>
+> // Draw the line.
+> line(-50, my, 50, my);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> let font;
+>
+> // Load a font for WebGL mode.
+> function preload() {
+> font = loadFont('assets/inconsolata.otf');
+> }
+>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe(
+> "A gray square. The mouse's x- and y-coordinates are displayed as the user moves the mouse."
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+> textFont(font);
+> fill(0);
+>
+> // Display the mouse's coordinates.
+> text(`x: ${mouseX} y: ${mouseY}`, 0, 0);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-mouseY| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:331
+~
+
+
+Events_movedX() 📄 🔧
+|movedX| ⚡ Function
+
+A `Number` system variable that tracks the mouse's horizontal movement.
+`movedX` tracks how many `pixels` the mouse moves left or right between frames.
+`movedX` will have a negative value if the mouse moves left between frames and a positive value if it moves right.
+`movedX` can be calculated as ``mouseX` - `pmouseX``.
+Note: `movedX` continues updating even when <a href="#/p5/requestPointerLock">requestPointerLock()</a> is active.
+But keep in mind that during an active pointer lock, `mouseX` and `pmouseX` are locked, so `movedX` is based on <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/movementX">the MouseEvent's movementX value</a> (which may behave differently in different browsers when the user is zoomed in or out).
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square. The text ">>" appears when the user moves the mouse to the right. The text "<<" appears when the user moves the mouse to the left.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display >> when movedX is positive and
+> // << when it's negative.
+> if (movedX > 0) {
+> text('>>', 50, 50);
+> } else if (movedX < 0) {
+> text('<<', 50, 50);
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-movedX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:60
+~
+
+
+Events_movedY() 📄 🔧
+|movedY| ⚡ Function
+
+A `Number` system variable that tracks the mouse's vertical movement.
+`movedY` tracks how many `pixels` the mouse moves up or down between frames.
+`movedY` will have a negative value if the mouse moves up between frames and a positive value if it moves down.
+`movedY` can be calculated as ``mouseY` - `pmouseY``.
+Note: `movedY` continues updating even when <a href="#/p5/requestPointerLock">requestPointerLock()</a> is active.
+But keep in mind that during an active pointer lock, `mouseX` and `pmouseX` are locked, so `movedX` is based on <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/movementX">the MouseEvent's movementX value</a> (which may behave differently in different browsers when the user is zoomed in or out).
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square. The text "▲" appears when the user moves the mouse upward. The text "▼" appears when the user moves the mouse downward.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display ▼ when movedY is positive and
+> // ▲ when it's negative.
+> if (movedY > 0) {
+> text('▼', 50, 50);
+> } else if (movedY < 0) {
+> text('▲', 50, 50);
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-movedY| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:110
+~
+
+
+Events_pAccelerationX() 📄 🔧
+|pAccelerationX| ⚡ Function
+
+The system variable pAccelerationX always contains the acceleration of the device along the x axis in the frame previous to the current frame.
+Value is represented as meters per second squared.
+
+See also: ~
+   |help p5-pAccelerationX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:98
+~
+
+
+Events_pAccelerationY() 📄 🔧
+|pAccelerationY| ⚡ Function
+
+The system variable pAccelerationY always contains the acceleration of the device along the y axis in the frame previous to the current frame.
+Value is represented as meters per second squared.
+
+See also: ~
+   |help p5-pAccelerationY| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:108
+~
+
+
+Events_pAccelerationZ() 📄 🔧
+|pAccelerationZ| ⚡ Function
+
+The system variable pAccelerationZ always contains the acceleration of the device along the z axis in the frame previous to the current frame.
+Value is represented as meters per second squared.
+
+See also: ~
+   |help p5-pAccelerationZ| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:118
+~
+
+
+Events_pmouseX() 📄 🔧
+|pmouseX| ⚡ Function
+
+A `Number` system variable that tracks the mouse's previous horizontal position.
+``pmouseX`` keeps track of the mouse's position relative to the top-left corner of the canvas.
+Its value is <a href="#/p5/`mouseX`">`mouseX`</a> from the previous frame.
+For example, if the mouse was 50 `pixels` from the left edge of the canvas during the last frame, then ``pmouseX`` will be 50.
+If touch is used instead of the mouse, then ``pmouseX`` will hold the x-coordinate of the last touch `point`.
+Note: ``pmouseX`` is reset to the current <a href="#/p5/`mouseX`">`mouseX`</a> value at the start of each touch event.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Slow the frame rate.
+> frameRate(10);
+>
+> describe('A line follows the mouse as it moves. The line grows longer with faster movements.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> line(pmouseX, pmouseY, mouseX, mouseY);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A line follows the mouse as it moves. The line grows longer with faster movements.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Adjust coordinates for WebGL mode.
+> // The origin (0, 0) is at the center of the canvas.
+> let pmx = pmouseX - 50;
+> let pmy = pmouseY - 50;
+> let mx = mouseX - 50;
+> let my = mouseY - 50;
+>
+> // Draw the line.
+> line(pmx, pmy, mx, my);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-pmouseX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:396
+~
+
+
+Events_pmouseY() 📄 🔧
+|pmouseY| ⚡ Function
+
+A `Number` system variable that tracks the mouse's previous vertical position.
+``pmouseY`` keeps track of the mouse's position relative to the top-left corner of the canvas.
+Its value is <a href="#/p5/`mouseY`">`mouseY`</a> from the previous frame.
+For example, if the mouse was 50 `pixels` from the top edge of the canvas during the last frame, then ``pmouseY`` will be 50.
+If touch is used instead of the mouse, then ``pmouseY`` will hold the y-coordinate of the last touch `point`.
+Note: ``pmouseY`` is reset to the current <a href="#/p5/`mouseY`">`mouseY`</a> value at the start of each touch event.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Slow the frame rate.
+> frameRate(10);
+>
+> describe('A line follows the mouse as it moves. The line grows longer with faster movements.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> line(pmouseX, pmouseY, mouseX, mouseY);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+>
+> describe('A line follows the mouse as it moves. The line grows longer with faster movements.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Adjust coordinates for WebGL mode.
+> // The origin (0, 0) is at the center of the canvas.
+> let pmx = pmouseX - 50;
+> let pmy = pmouseY - 50;
+> let mx = mouseX - 50;
+> let my = mouseY - 50;
+>
+> // Draw the line.
+> line(pmx, pmy, mx, my);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-pmouseY| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:461
+~
+
+
+Events_pRotationX() 📄 🔧
+|pRotationX| ⚡ Function
+
+The system variable pRotationX always contains the rotation of the device along the x axis in the frame previous to the current frame.
+If the sketch <a href="#/p5/angleMode"> angleMode()</a> is `set` to DEGREES, the value will be -180 to 180.
+If it is `set` to RADIANS, the value will be -PI to PI.
+pRotationX can also be used with rotationX to determine the `rotate` direction of the device along the X-axis.
+
+Examples: >
+>
+> <code>
+> // A simple if statement looking at whether
+> // rotationX - pRotationX < 0 is true or not will be
+> // sufficient for determining the rotate direction
+> // in most cases.
+>
+> // Some extra logic is needed to account for cases where
+> // the angles wrap around.
+> let rotateDirection = 'clockwise';
+>
+> // Simple range conversion to make things simpler.
+> // This is not absolutely necessary but the logic
+> // will be different in that case.
+>
+> let rX = rotationX + 180;
+> let pRX = pRotationX + 180;
+>
+> if ((rX - pRX > 0 && rX - pRX < 270) || rX - pRX < -270) {
+> rotateDirection = 'clockwise';
+> } else if (rX - pRX < 0 || rX - pRX > 270) {
+> rotateDirection = 'counter-clockwise';
+> }
+>
+> print(rotateDirection);
+> describe('no image to display.');
+> </code>
+>
+<
+
+See also: ~
+   |help p5-pRotationX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:276
+~
+
+
+Events_pRotationY() 📄 🔧
+|pRotationY| ⚡ Function
+
+The system variable pRotationY always contains the rotation of the device along the y axis in the frame previous to the current frame.
+If the sketch <a href="#/p5/angleMode"> angleMode()</a> is `set` to DEGREES, the value will be -90 to 90.
+If it is `set` to RADIANS, the value will be -PI/2 to PI/2.
+pRotationY can also be used with rotationY to determine the `rotate` direction of the device along the Y-axis.
+
+Examples: >
+>
+> <code>
+> // A simple if statement looking at whether
+> // rotationY - pRotationY < 0 is true or not will be
+> // sufficient for determining the rotate direction
+> // in most cases.
+>
+> // Some extra logic is needed to account for cases where
+> // the angles wrap around.
+> let rotateDirection = 'clockwise';
+>
+> // Simple range conversion to make things simpler.
+> // This is not absolutely necessary but the logic
+> // will be different in that case.
+>
+> let rY = rotationY + 180;
+> let pRY = pRotationY + 180;
+>
+> if ((rY - pRY > 0 && rY - pRY < 270) || rY - pRY < -270) {
+> rotateDirection = 'clockwise';
+> } else if (rY - pRY < 0 || rY - pRY > 270) {
+> rotateDirection = 'counter-clockwise';
+> }
+> print(rotateDirection);
+> describe('no image to display.');
+> </code>
+>
+<
+
+See also: ~
+   |help p5-pRotationY| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:319
+~
+
+
+Events_pRotationZ() 📄 🔧
+|pRotationZ| ⚡ Function
+
+The system variable pRotationZ always contains the rotation of the device along the z axis in the frame previous to the current frame.
+If the sketch <a href="#/p5/angleMode"> angleMode()</a> is `set` to DEGREES, the value will be 0 to 360.
+If it is `set` to RADIANS, the value will be 0 to 2*PI.
+pRotationZ can also be used with rotationZ to determine the `rotate` direction of the device along the Z-axis.
+
+Examples: >
+>
+> <code>
+> // A simple if statement looking at whether
+> // rotationZ - pRotationZ < 0 is true or not will be
+> // sufficient for determining the rotate direction
+> // in most cases.
+>
+> // Some extra logic is needed to account for cases where
+> // the angles wrap around.
+> let rotateDirection = 'clockwise';
+>
+> if (
+> (rotationZ - pRotationZ > 0 && rotationZ - pRotationZ < 270) ||
+> rotationZ - pRotationZ < -270
+> ) {
+> rotateDirection = 'clockwise';
+> } else if (rotationZ - pRotationZ < 0 || rotationZ - pRotationZ > 270) {
+> rotateDirection = 'counter-clockwise';
+> }
+> print(rotateDirection);
+> describe('no image to display.');
+> </code>
+>
+<
+
+See also: ~
+   |help p5-pRotationZ| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:358
+~
+
+
+Events_pwinMouseX() 📄 🔧
+|pwinMouseX| ⚡ Function
+
+A `Number` variable that tracks the mouse's previous horizontal position within the browser.
+`pwinMouseX` keeps track of the mouse's position relative to the top-left corner of the browser window.
+Its value is <a href="#/p5/`winMouseX`">`winMouseX`</a> from the previous frame.
+For example, if the mouse was 50 `pixels` from the left edge of the browser during the last frame, then `pwinMouseX` will be 50.
+On a touchscreen device, `pwinMouseX` will hold the x-coordinate of the most recent touch `point`.
+`pwinMouseX` is reset to the current <a href="#/p5/`winMouseX`">`winMouseX`</a> value at the start of each touch event.
+Note: Use <a href="#/p5/`pmouseX`">`pmouseX`</a> to track the mouse’s previous x-coordinate within the canvas.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Slow the frame rate.
+> frameRate(10);
+>
+> describe('A gray square. A white circle at its center grows larger when the mouse moves horizontally.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Calculate the circle's diameter.
+> let d = winMouseX - pwinMouseX;
+>
+> // Draw the circle.
+> circle(50, 50, d);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> // Create the canvas and set its position.
+> let cnv = createCanvas(100, 100);
+> cnv.position(20, 20);
+>
+> describe('A gray square with a number at its center. The number changes as the user moves the mouse vertically.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display pwinMouseX.
+> text(pwinMouseX, 50, 50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-pwinMouseX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:614
+~
+
+
+Events_pwinMouseY() 📄 🔧
+|pwinMouseY| ⚡ Function
+
+A `Number` variable that tracks the mouse's previous vertical position within the browser.
+`pwinMouseY` keeps track of the mouse's position relative to the top-left corner of the browser window.
+Its value is <a href="#/p5/`winMouseY`">`winMouseY`</a> from the previous frame.
+For example, if the mouse was 50 `pixels` from the top edge of the browser during the last frame, then `pwinMouseY` will be 50.
+On a touchscreen device, `pwinMouseY` will hold the y-coordinate of the most recent touch `point`.
+`pwinMouseY` is reset to the current <a href="#/p5/`winMouseY`">`winMouseY`</a> value at the start of each touch event.
+Note: Use <a href="#/p5/`pmouseY`">`pmouseY`</a> to track the mouse’s previous y-coordinate within the canvas.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Slow the frame rate.
+> frameRate(10);
+>
+> describe('A gray square. A white circle at its center grows larger when the mouse moves vertically.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Calculate the circle's diameter.
+> let d = winMouseY - pwinMouseY;
+>
+> // Draw the circle.
+> circle(50, 50, d);
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> function setup() {
+> // Create the canvas and set its position.
+> let cnv = createCanvas(100, 100);
+> cnv.position(20, 20);
+>
+> describe('A gray square with a number at its center. The number changes as the user moves the mouse vertically.');
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display pwinMouseY.
+> text(pwinMouseY, 50, 50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-pwinMouseY| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:685
+~
+
+
+Events_rotationX() 📄 🔧
+|rotationX| ⚡ Function
+
+The system variable rotationX always contains the rotation of the device along the x axis.
+If the sketch <a href="#/p5/angleMode"> angleMode()</a> is `set` to DEGREES, the value will be -180 to 180.
+If it is `set` to RADIANS, the value will be -PI to PI.
+Note: The order the rotations are called is important, ie.
+if used together, it must be called in the order Z-X-Y or there might be unexpected behaviour.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+> }
+>
+> function draw() {
+> background(200);
+> //rotateZ(radians(rotationZ));
+> rotateX(radians(rotationX));
+> //rotateY(radians(rotationY));
+> box(200, 200, 200);
+> describe(`red horizontal line right, green vertical line bottom.
+> black background.`);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-rotationX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:162
+~
+
+
+Events_rotationY() 📄 🔧
+|rotationY| ⚡ Function
+
+The system variable rotationY always contains the rotation of the device along the y axis.
+If the sketch <a href="#/p5/angleMode"> angleMode()</a> is `set` to DEGREES, the value will be -90 to 90.
+If it is `set` to RADIANS, the value will be -PI/2 to PI/2.
+Note: The order the rotations are called is important, ie.
+if used together, it must be called in the order Z-X-Y or there might be unexpected behaviour.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+> }
+>
+> function draw() {
+> background(200);
+> //rotateZ(radians(rotationZ));
+> //rotateX(radians(rotationX));
+> rotateY(radians(rotationY));
+> box(200, 200, 200);
+> describe(`red horizontal line right, green vertical line bottom.
+> black background.`);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-rotationY| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:195
+~
+
+
+Events_rotationZ() 📄 🔧
+|rotationZ| ⚡ Function
+
+The system variable rotationZ always contains the rotation of the device along the z axis.
+If the sketch <a href="#/p5/angleMode"> angleMode()</a> is `set` to DEGREES, the value will be 0 to 360.
+If it is `set` to RADIANS, the value will be 0 to 2*PI.
+Unlike rotationX and rotationY, this variable is available for devices with a built-in compass only.
+Note: The order the rotations are called is important, ie.
+if used together, it must be called in the order Z-X-Y or there might be unexpected behaviour.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100, WEBGL);
+> }
+>
+> function draw() {
+> background(200);
+> rotateZ(radians(rotationZ));
+> //rotateX(radians(rotationX));
+> //rotateY(radians(rotationY));
+> box(200, 200, 200);
+> describe(`red horizontal line right, green vertical line bottom.
+> black background.`);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-rotationZ| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:232
+~
+
+
+Events_touches() 📄 🔧
+|touches| ⚡ Function
+
+An `Array` of all the current touch points on a touchscreen device.
+The `touches` array is empty by default.
+When the user touches their screen, a new touch `point` is tracked and added to the array.
+Touch points are `Objects` with the following properties: ```js // Iterate over the touches array.
+for (let touch of touches) { // x-coordinate relative to the top-left // corner of the canvas.
+console.log(touch.x); // y-coordinate relative to the top-left // corner of the canvas.
+console.log(touch.y); // x-coordinate relative to the top-left // corner of the browser.
+console.log(touch.winX); // y-coordinate relative to the top-left // corner of the browser.
+console.log(touch.winY); // ID number console.log(touch.id); } ```
+
+Examples: >
+>
+> <code>
+> // On a touchscreen device, touch the canvas using one or more fingers
+> // at the same time.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square. White circles appear where the user touches the square.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw a circle at each touch point.
+> for (let touch of touches) {
+> circle(touch.x, touch.y, 40);
+> }
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // On a touchscreen device, touch the canvas using one or more fingers
+> // at the same time.
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square. Labels appear where the user touches the square, displaying the coordinates.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Draw a label above each touch point.
+> for (let touch of touches) {
+> text(`${touch.x}, ${touch.y}`, touch.x, touch.y - 40);
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-touches| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/touch.js:93
+~
+
+
+Events_turnAxis() 📄 🔧
+|turnAxis| ⚡ Function
+
+When a device is rotated, the axis that triggers the <a href="#/p5/deviceTurned">deviceTurned()</a> method is stored in the turnAxis variable.
+The turnAxis variable is only defined within the scope of deviceTurned().
+
+Examples: >
+>
+> <code>
+> // Run this example on a mobile device
+> // Rotate the device by 90 degrees in the
+> // X-axis to change the value.
+>
+> let value = 0;
+> function draw() {
+> fill(value);
+> rect(25, 25, 50, 50);
+> describe(`50-by-50 black rect in center of canvas.
+> turns white on mobile when device turns`);
+> describe(`50-by-50 black rect in center of canvas.
+> turns white on mobile when x-axis turns`);
+> }
+> function deviceTurned() {
+> if (turnAxis === 'X') {
+> if (value === 0) {
+> value = 255;
+> } else if (value === 255) {
+> value = 0;
+> }
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-turnAxis| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/acceleration.js:412
+~
+
+
+Events_winMouseX() 📄 🔧
+|winMouseX| ⚡ Function
+
+A `Number` variable that tracks the mouse's horizontal position within the browser.
+``winMouseX`` keeps track of the mouse's position relative to the top-left corner of the browser window.
+For example, if the mouse is 50 `pixels` from the left edge of the browser, then ``winMouseX`` will be 50.
+On a touchscreen device, ``winMouseX`` will hold the x-coordinate of the most recent touch `point`.
+Note: Use <a href="#/p5/`mouseX`">`mouseX`</a> to track the mouse’s x-coordinate within the canvas.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe("A gray square. The mouse's x- and y-coordinates are displayed as the user moves the mouse.");
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the mouse's coordinates within the browser window.
+> text(`x: ${winMouseX} y: ${winMouseY}`, 50, 50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-winMouseX| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:502
+~
+
+
+Events_winMouseY() 📄 🔧
+|winMouseY| ⚡ Function
+
+A `Number` variable that tracks the mouse's vertical position within the browser.
+``winMouseY`` keeps track of the mouse's position relative to the top-left corner of the browser window.
+For example, if the mouse is 50 `pixels` from the top edge of the browser, then ``winMouseY`` will be 50.
+On a touchscreen device, ``winMouseY`` will hold the y-coordinate of the most recent touch `point`.
+Note: Use <a href="#/p5/`mouseY`">`mouseY`</a> to track the mouse’s y-coordinate within the canvas.
+
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe("A gray square. The mouse's x- and y-coordinates are displayed as the user moves the mouse.");
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+>
+> // Display the mouse's coordinates within the browser window.
+> text(`x: ${winMouseX} y: ${winMouseY}`, 50, 50);
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-winMouseY| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/mouse.js:543
+~
+
+
+VARIABLES                                                   *p5-Events-variables*
+
+Events_context() 📄 📌
+|context| ⚡ Function
+
+A function that's called when the user touches the screen and moves.
+Declaring the function `touchMoved()` sets a code block to run automatically when the user touches a touchscreen device and moves: ```js function touchMoved() { // Code to run.
+} ``` The <a href="#/p5/touches">touches</a> array will be updated with the most recent touch points when `touchMoved()` is called by p5.js: ```js function touchMoved() { // Paint over the `background`.
+`background`(200); // Mark each touch `point` while the user moves.
+for (let touch of touches) { `circle`(touch.x, touch.y, 40); } } ``` The parameter, event, is optional.
+`touchMoved()` will be passed a <a href="https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent" target="_blank">TouchEvent</a> object with properties that describe the touch event: ```js function touchMoved(event) { // Code to run that uses the event.
+console.log(event); } ``` On touchscreen devices, <a href="#/p5/`mouseDragged`">`mouseDragged`()</a> will run when the user’s touch points `move` if `touchMoved()` isn’t declared.
+If `touchMoved()` is declared, then `touchMoved()` will run when a user’s touch points `move` and <a href="#/p5/`mouseDragged`">`mouseDragged`()</a> won’t.
+Note: <a href="#/p5/touchStarted">touchStarted()</a>, <a href="#/p5/touchEnded">touchEnded()</a>, and `touchMoved()` are all related.
+<a href="#/p5/touchStarted">touchStarted()</a> runs as soon as the user touches a touchscreen device.
+<a href="#/p5/touchEnded">touchEnded()</a> runs as soon as the user ends a touch.
+`touchMoved()` runs repeatedly as the user moves any touch points.
+
+Examples: >
+>
+> <code>
+> // On a touchscreen device, touch the canvas using one or more fingers
+> // at the same time.
+>
+> let value = 0;
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with a black square at its center. The inner square becomes lighter when the user touches the screen and moves.'
+> );
+> }
+>
+> function draw() {
+> background(200);
+>
+> // Style the square.
+> fill(value);
+>
+> // Draw the square.
+> square(25, 25, 50);
+> }
+>
+> function touchMoved() {
+> // Update the grayscale value.
+> value += 5;
+>
+> // Reset the grayscale value.
+> if (value > 255) {
+> value = 0;
+> }
+> }
+> </code>
+> </div>
+>
+> <div>
+> <code>
+> // On a touchscreen device, touch the canvas using one or more fingers
+> // at the same time.
+>
+> let bgColor = 50;
+> let fillColor = 255;
+> let borderWidth = 0.5;
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> describe(
+> 'A gray square with the number 0 at the top-center. The number tracks the number of places the user is touching the screen. Circles appear at each touch point and change style in response to events.'
+> );
+> }
+>
+> function draw() {
+> background(bgColor);
+>
+> // Style the text.
+> textAlign(CENTER);
+> textSize(16);
+> fill(0);
+> noStroke();
+>
+> // Display the number of touch points.
+> text(touches.length, 50, 20);
+>
+> // Style the touch points.
+> fill(fillColor);
+> stroke(0);
+> strokeWeight(borderWidth);
+>
+> // Display the touch points as circles.
+> for (let touch of touches) {
+> circle(touch.x, touch.y, 40);
+> }
+> }
+>
+> // Set the background color to a random grayscale value.
+> function touchStarted() {
+> bgColor = random(80, 255);
+> }
+>
+> // Set the fill color to a random grayscale value.
+> function touchEnded() {
+> fillColor = random(0, 255);
+> }
+>
+> // Set the stroke weight.
+> function touchMoved() {
+> // Increment the border width.
+> borderWidth += 0.1;
+>
+> // Reset the border width once it's too thick.
+> if (borderWidth > 20) {
+> borderWidth = 0.5;
+> }
+> }
+> </code>
+>
+<
+
+See also: ~
+   |help p5-context| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/touch.js:451
+~
+
+
+Events_Filters() 📄 📌
+|Filters| ⚡ Function
+
+This module defines the filters for use with `image` buffers.
+This module is basically a collection of functions stored in an object as opposed to modules.
+The functions are destructive, modifying the passed in canvas rather than creating a `copy`.
+Generally speaking users of this module will use the Filters.apply method on a canvas to create an effect.
+A number of functions are borrowed/adapted from http://www.html5rocks.com/en/tutorials/canvas/imagefilters/ or the java processing implementation.
+
+See also: ~
+   |help p5-Filters| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/image/filters.js:16
+~
+
+
+Events_key() 📄 📌
+|key| ⚡ Function
+
+The _areDownKeys function returns a boolean true if any keys pressed and a false if no keys are currently pressed.
+Helps avoid instances where multiple keys are pressed simultaneously and releasing a single `key` will then switch the `keyIsPressed` property to true.
+
+See also: ~
+   |help p5-key| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/events/keyboard.js:937
+~
+
+
+Events_offset() 📄 📌
+|offset| ⚡ Function
+
+Modifies `pixels` RGBA values to values contained in the data object.
+
+See also: ~
+   |help p5-offset| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/image/filters.js:98
+~
+
+
+Events_pixels() 📄 📌
+|pixels| ⚡ Function
+
+Reduces the bright areas in an `image`.
+Similar to `dilate()`, but updates the output `color` based on the lowest luminance value.
+
+See also: ~
+   |help p5-pixels| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/image/filters.js:418
+~
+
+
+Events_pixelsState() 📄 📌
+|pixelsState| ⚡ Function
+
+Applys a `filter` function to a canvas.
+The difference between this and the actual `filter` functions defined below is that the `filter` functions generally modify the pixel buffer but do not actually put that data back to the canvas (where it would actually update what is visible).
+By contrast this method does make the changes actually visible in the canvas.
+The apply method is the method that callers of this module would generally use.
+It has been separated from the actual filters to support an advanced use case of creating a `filter` chain that executes without actually updating the canvas in between everystep.
+
+See also: ~
+   |help p5-pixelsState| for detailed help on this symbol~
+
+Source: ~
+                ../temp/src/image/filters.js:165
+~
+
+
+
+
+==============================================================================
+Generated by p5.js Documentation Automation
+See: https://github.com/prjctimg/automata
+Last updated: 2026-02-03
+📄 End of Events documentation 📄
+==============================================================================
