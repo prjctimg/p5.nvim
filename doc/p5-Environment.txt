@@ -109,7 +109,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-Environment-classes*
 
-Environment_err() 📄 🏛️
+p5-Environment_err() 📄 🏛️
 |err|() 🏛️ Class
 
 a custom error type, used by the mocha tests when expecting validation errors
@@ -122,7 +122,7 @@ Source: ~
 ~
 
 
-Environment_FetchResources() 📄 🏛️
+p5-Environment_FetchResources() 📄 🏛️
 |FetchResources|() 🏛️ Class
 
 This is our i18next "backend" plugin.
@@ -138,7 +138,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-Environment-functions*
 
-Environment_anonymous() 📄 ⚡
+p5-Environment_anonymous() 📄 ⚡
 |anonymous|() ⚡ Function
 
 Sets the current language for translation Returns a promise that resolved when loading is finished, or rejects if it fails.
@@ -151,7 +151,7 @@ Source: ~
 ~
 
 
-Environment_cursor() 📄 ⚡
+p5-Environment_cursor() 📄 ⚡
 |cursor|() ⚡ Function
 
 Hides the cursor from view.
@@ -183,7 +183,7 @@ Source: ~
 ~
 
 
-Environment_defineMisusedAtTopLevelCode() 📄 ⚡
+p5-Environment_defineMisusedAtTopLevelCode() 📄 ⚡
 |defineMisusedAtTopLevelCode|() ⚡ Function
 
 A helper function for populating misusedAtTopLevel list.
@@ -196,7 +196,7 @@ Source: ~
 ~
 
 
-Environment_describe() 📄 ⚡
+p5-Environment_describe() 📄 ⚡
 |describe|(text, {Constant} [display] either LABEL or FALLBACK.) ⚡ Function
 
 Creates a screen reader-accessible description of the canvas.
@@ -303,7 +303,7 @@ Source: ~
 ~
 
 
-Environment_describeElement() 📄 ⚡
+p5-Environment_describeElement() 📄 ⚡
 |describeElement|(name, text, {Constant} [display] either LABEL or FALLBACK.) ⚡ Function
 
 Creates a screen reader-accessible description of elements in the canvas.
@@ -390,7 +390,7 @@ Source: ~
 ~
 
 
-Environment_displayDensity() 📄 ⚡
+p5-Environment_displayDensity() 📄 ⚡
 |displayDensity|() ⚡ Function
 
 Returns the display's current pixel density.
@@ -440,7 +440,7 @@ Source: ~
 ~
 
 
-Environment_ErrorStackParser$$parse() 📄 ⚡
+p5-Environment_ErrorStackParser$$parse() 📄 ⚡
 |ErrorStackParser$$parse|(error) ⚡ Function
 
 Given an Error object, extract the most information from it.
@@ -461,7 +461,7 @@ Source: ~
 ~
 
 
-Environment_frameRate() 📄 ⚡
+p5-Environment_frameRate() 📄 ⚡
 |frameRate|() ⚡ Function
 
 Returns: ~
@@ -476,7 +476,7 @@ Source: ~
 ~
 
 
-Environment_fullscreen() 📄 ⚡
+p5-Environment_fullscreen() 📄 ⚡
 |fullscreen|({Boolean} [val] whether the sketch should be in fullscreen mode.) ⚡ Function
 
 Toggles full-screen mode or returns the current mode.
@@ -522,7 +522,7 @@ Source: ~
 ~
 
 
-Environment_getTargetFrameRate() 📄 ⚡
+p5-Environment_getTargetFrameRate() 📄 ⚡
 |getTargetFrameRate|() ⚡ Function
 
 Returns the target frame rate.
@@ -564,7 +564,7 @@ Source: ~
 ~
 
 
-Environment_getURL() 📄 ⚡
+p5-Environment_getURL() 📄 ⚡
 |getURL|() ⚡ Function
 
 Returns the sketch's current <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_URL" target="_blank">URL</a> as a `String`.
@@ -599,7 +599,7 @@ Source: ~
 ~
 
 
-Environment_getURLParams() 📄 ⚡
+p5-Environment_getURLParams() 📄 ⚡
 |getURLParams|() ⚡ Function
 
 Returns the current <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_URL#parameters" target="_blank">URL parameters</a> in an `Object`.
@@ -640,7 +640,7 @@ Source: ~
 ~
 
 
-Environment_getURLPath() 📄 ⚡
+p5-Environment_getURLPath() 📄 ⚡
 |getURLPath|() ⚡ Function
 
 Returns the current <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_URL#path_to_resource" target="_blank">URL</a> path as an `Array` of `String`s.
@@ -678,7 +678,7 @@ Source: ~
 ~
 
 
-Environment_gridOutput() 📄 ⚡
+p5-Environment_gridOutput() 📄 ⚡
 |gridOutput|({Constant} [display] either FALLBACK or LABEL.) ⚡ Function
 
 Creates a screen reader-accessible description of shapes on the canvas.
@@ -810,7 +810,7 @@ Source: ~
 ~
 
 
-Environment_noCursor() 📄 ⚡
+p5-Environment_noCursor() 📄 ⚡
 |noCursor|() ⚡ Function
 
 Hides the cursor from view.
@@ -842,7 +842,7 @@ Source: ~
 ~
 
 
-Environment_pixelDensity() 📄 ⚡
+p5-Environment_pixelDensity() 📄 ⚡
 |pixelDensity|() ⚡ Function
 
 Returns: ~
@@ -857,7 +857,7 @@ Source: ~
 ~
 
 
-Environment_print() 📄 ⚡
+p5-Environment_print() 📄 ⚡
 |print|(contents) ⚡ Function
 
 Displays `text` in the web browser's console.
@@ -899,7 +899,7 @@ Source: ~
 ~
 
 
-Environment_textOutput() 📄 ⚡
+p5-Environment_textOutput() 📄 ⚡
 |textOutput|({Constant} [display] either FALLBACK or LABEL.) ⚡ Function
 
 Creates a screen reader-accessible description of shapes on the canvas.
@@ -1030,7 +1030,7 @@ Source: ~
 ~
 
 
-Environment_ValidationError() 📄 ⚡
+p5-Environment_ValidationError() 📄 ⚡
 |ValidationError|() ⚡ Function
 
 a custom error type, used by the mocha tests when expecting validation errors
@@ -1045,7 +1045,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-Environment-properties*
 
-Environment_deltaTime() 📄 🔧
+p5-Environment_deltaTime() 📄 🔧
 |deltaTime| ⚡ Function
 
 A `Number` variable that tracks the number of milliseconds it took to `draw` the last frame.
@@ -1099,7 +1099,7 @@ Source: ~
 ~
 
 
-Environment_displayHeight() 📄 🔧
+p5-Environment_displayHeight() 📄 🔧
 |displayHeight| ⚡ Function
 
 A `Number` variable that stores the `height` of the screen display.
@@ -1131,7 +1131,7 @@ Source: ~
 ~
 
 
-Environment_displayWidth() 📄 🔧
+p5-Environment_displayWidth() 📄 🔧
 |displayWidth| ⚡ Function
 
 A `Number` variable that stores the `width` of the screen display.
@@ -1163,7 +1163,7 @@ Source: ~
 ~
 
 
-Environment_focused() 📄 🔧
+p5-Environment_focused() 📄 🔧
 |focused| ⚡ Function
 
 A `Boolean` variable that's `true` if the browser is focused and `false` if not.
@@ -1203,7 +1203,7 @@ Source: ~
 ~
 
 
-Environment_frameCount() 📄 🔧
+p5-Environment_frameCount() 📄 🔧
 |frameCount| ⚡ Function
 
 A `Number` variable that tracks the number of frames drawn since the sketch started.
@@ -1262,7 +1262,7 @@ Source: ~
 ~
 
 
-Environment_getFrameRate() 📄 🔧
+p5-Environment_getFrameRate() 📄 🔧
 |getFrameRate| ⚡ Function
 
 Returns the current framerate.
@@ -1279,7 +1279,7 @@ Source: ~
 ~
 
 
-Environment_height() 📄 🔧
+p5-Environment_height() 📄 🔧
 |height| ⚡ Function
 
 A `Number` variable that stores the `height` of the canvas in `pixels`.
@@ -1351,7 +1351,7 @@ Source: ~
 ~
 
 
-Environment_setFrameRate() 📄 🔧
+p5-Environment_setFrameRate() 📄 🔧
 |setFrameRate| ⚡ Function
 
 Specifies the number of frames to be displayed every second.
@@ -1373,7 +1373,7 @@ Source: ~
 ~
 
 
-Environment_webglVersion() 📄 🔧
+p5-Environment_webglVersion() 📄 🔧
 |webglVersion| ⚡ Function
 
 A `String` variable with the WebGL version in use.
@@ -1456,7 +1456,7 @@ Source: ~
 ~
 
 
-Environment_width() 📄 🔧
+p5-Environment_width() 📄 🔧
 |width| ⚡ Function
 
 A `Number` variable that stores the `width` of the canvas in `pixels`.
@@ -1528,7 +1528,7 @@ Source: ~
 ~
 
 
-Environment_windowHeight() 📄 🔧
+p5-Environment_windowHeight() 📄 🔧
 |windowHeight| ⚡ Function
 
 A `Number` variable that stores the `height` of the browser's viewport.
@@ -1558,7 +1558,7 @@ Source: ~
 ~
 
 
-Environment_windowWidth() 📄 🔧
+p5-Environment_windowWidth() 📄 🔧
 |windowWidth| ⚡ Function
 
 A `Number` variable that stores the `width` of the browser's viewport.
@@ -1590,7 +1590,7 @@ Source: ~
 
 VARIABLES                                                   *p5-Environment-variables*
 
-Environment_addType() 📄 📌
+p5-Environment_addType() 📄 📌
 |addType| ⚡ Function
 
 Query type and return the result as an object This would be called repeatedly over and over again, so it needs to be as optimized for performance as possible
@@ -1603,7 +1603,7 @@ Source: ~
 ~
 
 
-Environment_availableTranslatorLanguages() 📄 📌
+p5-Environment_availableTranslatorLanguages() 📄 📌
 |availableTranslatorLanguages| ⚡ Function
 
 Returns a list of languages we have translations loaded for
@@ -1616,7 +1616,7 @@ Source: ~
 ~
 
 
-Environment_buildArgTypeCache() 📄 📌
+p5-Environment_buildArgTypeCache() 📄 📌
 |buildArgTypeCache| ⚡ Function
 
 Build the argument type tree, argumentTree This would be called repeatedly over and over again, so it needs to be as optimized for performance as possible
@@ -1629,7 +1629,7 @@ Source: ~
 ~
 
 
-Environment_checkForConstsAndFuncs() 📄 📌
+p5-Environment_checkForConstsAndFuncs() 📄 📌
 |checkForConstsAndFuncs| ⚡ Function
 
 Takes a list of variables defined by the user in the code as an array and checks if the list contains p5.js constants and functions.
@@ -1642,7 +1642,7 @@ Source: ~
 ~
 
 
-Environment_checkForUserDefinedFunctions() 📄 📌
+p5-Environment_checkForUserDefinedFunctions() 📄 📌
 |checkForUserDefinedFunctions| ⚡ Function
 
 Checks capitalization for user defined functions.
@@ -1656,7 +1656,7 @@ Source: ~
 ~
 
 
-Environment_codeToLines() 📄 📌
+p5-Environment_codeToLines() 📄 📌
 |codeToLines| ⚡ Function
 
 Converts code written by the user to an array every element of which is a separate `line` of code.
@@ -1669,7 +1669,7 @@ Source: ~
 ~
 
 
-Environment_computeEditDistance() 📄 📌
+p5-Environment_computeEditDistance() 📄 📌
 |computeEditDistance| ⚡ Function
 
 Measures dissimilarity between two strings by calculating the Levenshtein distance.
@@ -1684,7 +1684,7 @@ Source: ~
 ~
 
 
-Environment_currentTranslatorLanguage() 📄 📌
+p5-Environment_currentTranslatorLanguage() 📄 📌
 |currentTranslatorLanguage| ⚡ Function
 
 Returns the current language selected for translation
@@ -1697,7 +1697,7 @@ Source: ~
 ~
 
 
-Environment_extractFuncVariables() 📄 📌
+p5-Environment_extractFuncVariables() 📄 📌
 |extractFuncVariables| ⚡ Function
 
 Takes an array in which each element is a `line` of code containing a function definition(array=['let x = () => {...}']) and extracts the functions defined.
@@ -1710,7 +1710,7 @@ Source: ~
 ~
 
 
-Environment_extractVariables() 📄 📌
+p5-Environment_extractVariables() 📄 📌
 |extractVariables| ⚡ Function
 
 Takes an array in which each element is a `line` of code containing a variable definition(Eg: arr=['let x = 100', 'const y = 200']) and extracts the variables defined.
@@ -1723,7 +1723,7 @@ Source: ~
 ~
 
 
-Environment_fesCodeReader() 📄 📌
+p5-Environment_fesCodeReader() 📄 📌
 |fesCodeReader| ⚡ Function
 
 Initiates the sketch_reader's processes.
@@ -1737,7 +1737,7 @@ Source: ~
 ~
 
 
-Environment_fesErrorMonitor() 📄 📌
+p5-Environment_fesErrorMonitor() 📄 📌
 |fesErrorMonitor| ⚡ Function
 
 Handles "global" errors that the browser catches.
@@ -1752,7 +1752,7 @@ Source: ~
 ~
 
 
-Environment_formats() 📄 📌
+p5-Environment_formats() 📄 📌
 |formats| ⚡ Function
 
 Gets a list of errors for this overload
@@ -1765,7 +1765,7 @@ Source: ~
 ~
 
 
-Environment_getOverloadErrors() 📄 📌
+p5-Environment_getOverloadErrors() 📄 📌
 |getOverloadErrors| ⚡ Function
 
 Gets a list of errors for this overload
@@ -1778,7 +1778,7 @@ Source: ~
 ~
 
 
-Environment_globalConstFuncCheck() 📄 📌
+p5-Environment_globalConstFuncCheck() 📄 📌
 |globalConstFuncCheck| ⚡ Function
 
 Checks if any p5.js constant or function is declared outside a function and reports it if found.
@@ -1791,7 +1791,7 @@ Source: ~
 ~
 
 
-Environment_handleMisspelling() 📄 📌
+p5-Environment_handleMisspelling() 📄 📌
 |handleMisspelling| ⚡ Function
 
 Compares the symbol caught in the ReferenceError to everything in misusedAtTopLevel ( all public p5 properties ).
@@ -1805,7 +1805,7 @@ Source: ~
 ~
 
 
-Environment_helpForMisusedAtTopLevelCode() 📄 📌
+p5-Environment_helpForMisusedAtTopLevelCode() 📄 📌
 |helpForMisusedAtTopLevelCode| ⚡ Function
 
 Detects browser level error event for p5 constants/functions used outside of `setup`() and `draw`().
@@ -1819,7 +1819,7 @@ Source: ~
 ~
 
 
-Environment_i() 📄 📌
+p5-Environment_i() 📄 📌
 |i| ⚡ Function
 
 Takes a list of variables defined by the user in the code as an array and checks if the list contains p5.js constants and functions.
@@ -1832,7 +1832,7 @@ Source: ~
 ~
 
 
-Environment_i18init() 📄 📌
+p5-Environment_i18init() 📄 📌
 |i18init| ⚡ Function
 
 Set up our translation function, with loaded languages
@@ -1845,7 +1845,7 @@ Source: ~
 ~
 
 
-Environment_initialize() 📄 📌
+p5-Environment_initialize() 📄 📌
 |initialize| ⚡ Function
 
 Set up our translation function, with loaded languages
@@ -1858,7 +1858,7 @@ Source: ~
 ~
 
 
-Environment_isArray() 📄 📌
+p5-Environment_isArray() 📄 📌
 |isArray| ⚡ Function
 
 Test type for non-object type parameter validation
@@ -1871,7 +1871,7 @@ Source: ~
 ~
 
 
-Environment_isNumber() 📄 📌
+p5-Environment_isNumber() 📄 📌
 |isNumber| ⚡ Function
 
 Checks whether input type is Number This is a helper function for validateParameters()
@@ -1884,7 +1884,7 @@ Source: ~
 ~
 
 
-Environment_key() 📄 📌
+p5-Environment_key() 📄 📌
 |key| ⚡ Function
 
 Clears cache to avoid having multiple FES messages for the same `set` of parameters.
@@ -1900,7 +1900,7 @@ Source: ~
 ~
 
 
-Environment_l1() 📄 📌
+p5-Environment_l1() 📄 📌
 |l1| ⚡ Function
 
 Measures dissimilarity between two strings by calculating the Levenshtein distance.
@@ -1915,7 +1915,7 @@ Source: ~
 ~
 
 
-Environment_log() 📄 📌
+p5-Environment_log() 📄 📌
 |log| ⚡ Function
 
 Prints a friendly stacktrace for user-written functions for "global" errors Generates and prints a friendly error message using `key`: "fes.globalErrors.stackTop", "fes.globalErrors.stackSubseq".
@@ -1928,7 +1928,7 @@ Source: ~
 ~
 
 
-Environment_lookupParamDoc() 📄 📌
+p5-Environment_lookupParamDoc() 📄 📌
 |lookupParamDoc| ⚡ Function
 
 Query data.json This is a helper function for validateParameters()
@@ -1941,7 +1941,7 @@ Source: ~
 ~
 
 
-Environment_mapToReference() 📄 📌
+p5-Environment_mapToReference() 📄 📌
 |mapToReference| ⚡ Function
 
 Takes a message and a p5 function func, and adds a link pointing to the reference documentation of func at the end of the message
@@ -1954,7 +1954,7 @@ Source: ~
 ~
 
 
-Environment_matches() 📄 📌
+p5-Environment_matches() 📄 📌
 |matches| ⚡ Function
 
 Takes an array in which each element is a `line` of code containing a function definition(array=['let x = () => {...}']) and extracts the functions defined.
@@ -1967,7 +1967,7 @@ Source: ~
 ~
 
 
-Environment_message() 📄 📌
+p5-Environment_message() 📄 📌
 |message| ⚡ Function
 
 Prints a friendly msg after parameter validation
@@ -1980,7 +1980,7 @@ Source: ~
 ~
 
 
-Environment_minScore() 📄 📌
+p5-Environment_minScore() 📄 📌
 |minScore| ⚡ Function
 
 Test type for multiple parameters
@@ -1993,7 +1993,7 @@ Source: ~
 ~
 
 
-Environment_msgWithReference() 📄 📌
+p5-Environment_msgWithReference() 📄 📌
 |msgWithReference| ⚡ Function
 
 Takes a message and a p5 function func, and adds a link pointing to the reference documentation of func at the end of the message
@@ -2006,7 +2006,7 @@ Source: ~
 ~
 
 
-Environment_printFriendlyStack() 📄 📌
+p5-Environment_printFriendlyStack() 📄 📌
 |printFriendlyStack| ⚡ Function
 
 Prints a friendly stacktrace for user-written functions for "global" errors Generates and prints a friendly error message using `key`: "fes.globalErrors.stackTop", "fes.globalErrors.stackSubseq".
@@ -2019,7 +2019,7 @@ Source: ~
 ~
 
 
-Environment_processStack() 📄 📌
+p5-Environment_processStack() 📄 📌
 |processStack| ⚡ Function
 
 Takes a stacktrace array and filters out all frames that show internal p5 details.
@@ -2035,7 +2035,7 @@ Source: ~
 ~
 
 
-Environment_re() 📄 📌
+p5-Environment_re() 📄 📌
 |re| ⚡ Function
 
 Returns the current <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_URL#parameters" target="_blank">URL parameters</a> in an `Object`.
@@ -2072,7 +2072,7 @@ Source: ~
 ~
 
 
-Environment_removeMultilineComments() 📄 📌
+p5-Environment_removeMultilineComments() 📄 📌
 |removeMultilineComments| ⚡ Function
 
 Remove multiline comments and the content inside it.
@@ -2085,7 +2085,7 @@ Source: ~
 ~
 
 
-Environment_score() 📄 📌
+p5-Environment_score() 📄 📌
 |score| ⚡ Function
 
 generate a score (higher is worse) for applying these args to this overload.
@@ -2098,7 +2098,7 @@ Source: ~
 ~
 
 
-Environment_scoreOverload() 📄 📌
+p5-Environment_scoreOverload() 📄 📌
 |scoreOverload| ⚡ Function
 
 generate a score (higher is worse) for applying these args to this overload.
@@ -2111,7 +2111,7 @@ Source: ~
 ~
 
 
-Environment_setTranslatorLanguage() 📄 📌
+p5-Environment_setTranslatorLanguage() 📄 📌
 |setTranslatorLanguage| ⚡ Function
 
 Sets the current language for translation Returns a promise that resolved when loading is finished, or rejects if it fails.
@@ -2124,7 +2124,7 @@ Source: ~
 ~
 
 
-Environment_start() 📄 📌
+p5-Environment_start() 📄 📌
 |start| ⚡ Function
 
 Remove multiline comments and the content inside it.
@@ -2137,7 +2137,7 @@ Source: ~
 ~
 
 
-Environment_translator() 📄 📌
+p5-Environment_translator() 📄 📌
 |translator| ⚡ Function
 
 This is our translation function.
@@ -2151,7 +2151,7 @@ Source: ~
 ~
 
 
-Environment_type() 📄 📌
+p5-Environment_type() 📄 📌
 |type| ⚡ Function
 
 Query type and return the result as an object This would be called repeatedly over and over again, so it needs to be as optimized for performance as possible
@@ -2164,7 +2164,7 @@ Source: ~
 ~
 
 
-Environment_uniqueNamesFound() 📄 📌
+p5-Environment_uniqueNamesFound() 📄 📌
 |uniqueNamesFound| ⚡ Function
 
 A helper function for populating misusedAtTopLevel list.

@@ -62,7 +62,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-Color-classes*
 
-Color_Color() 📄 🏛️
+p5-Color_Color() 📄 🏛️
 |Color|() 🏛️ Class
 
 A class to describe a `color`.
@@ -91,7 +91,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-Color-functions*
 
-Color_alpha() 📄 ⚡
+p5-Color_alpha() 📄 ⚡
 |alpha|(color) ⚡ Function
 
 Gets the `alpha` (transparency) value of a `color`.
@@ -142,7 +142,7 @@ Source: ~
 ~
 
 
-Color_background() 📄 ⚡
+p5-Color_background() 📄 ⚡
 |background|(image, {Number}  [a]) ⚡ Function
 
 Parameters: ~
@@ -158,7 +158,7 @@ Source: ~
 ~
 
 
-Color_beginClip() 📄 ⚡
+p5-Color_beginClip() 📄 ⚡
 |beginClip|({Object} [options] an object containing clip settings.) ⚡ Function
 
 Starts defining a shape that will mask any shapes drawn afterward.
@@ -221,7 +221,7 @@ Source: ~
 ~
 
 
-Color_blue() 📄 ⚡
+p5-Color_blue() 📄 ⚡
 |blue|(color) ⚡ Function
 
 Gets the `blue` value of a `color`.
@@ -277,7 +277,7 @@ Source: ~
 ~
 
 
-Color_brightness() 📄 ⚡
+p5-Color_brightness() 📄 ⚡
 |brightness|(color) ⚡ Function
 
 Gets the `brightness` value of a `color`.
@@ -333,7 +333,7 @@ Source: ~
 ~
 
 
-Color_clear() 📄 ⚡
+p5-Color_clear() 📄 ⚡
 |clear|({Number} [r] normalized red value., {Number} [g] normalized green value., {Number} [b] normalized blue value., {Number} [a] normalized alpha value.) ⚡ Function
 
 Clears the `pixels` on the canvas.
@@ -407,7 +407,7 @@ Source: ~
 ~
 
 
-Color_clip() 📄 ⚡
+p5-Color_clip() 📄 ⚡
 |clip|(callback, {Object} [options] an object containing clip settings.) ⚡ Function
 
 Defines a shape that will mask any shapes drawn afterward.
@@ -475,7 +475,7 @@ Source: ~
 ~
 
 
-Color_color() 📄 ⚡
+p5-Color_color() 📄 ⚡
 |color|(color) ⚡ Function
 
 Parameters: ~
@@ -494,7 +494,7 @@ Source: ~
 ~
 
 
-Color_colorMode() 📄 ⚡
+p5-Color_colorMode() 📄 ⚡
 |colorMode|(mode, max1, max2, max3, {Number} [maxA]   range for the alpha.) ⚡ Function
 
 Parameters: ~
@@ -513,7 +513,7 @@ Source: ~
 ~
 
 
-Color_endClip() 📄 ⚡
+p5-Color_endClip() 📄 ⚡
 |endClip|() ⚡ Function
 
 Ends defining a mask that was started with <a href="#/p5/`beginClip`">`beginClip`()</a>.
@@ -549,7 +549,7 @@ Source: ~
 ~
 
 
-Color_erase() 📄 ⚡
+p5-Color_erase() 📄 ⚡
 |erase|({Number}   [strengthFill]      a number (0-255) for the strength of erasing under a shape's interior., {Number}   [strengthStroke]    a number (0-255) for the strength of erasing under a shape's edge.) ⚡ Function
 
 Starts using shapes to `erase` parts of the canvas.
@@ -605,7 +605,7 @@ Source: ~
 ~
 
 
-Color_fill() 📄 ⚡
+p5-Color_fill() 📄 ⚡
 |fill|(color) ⚡ Function
 
 Parameters: ~
@@ -620,7 +620,7 @@ Source: ~
 ~
 
 
-Color_green() 📄 ⚡
+p5-Color_green() 📄 ⚡
 |green|(color) ⚡ Function
 
 Gets the `green` value of a `color`.
@@ -676,7 +676,7 @@ Source: ~
 ~
 
 
-Color_hue() 📄 ⚡
+p5-Color_hue() 📄 ⚡
 |hue|(color) ⚡ Function
 
 Gets the `hue` value of a `color`.
@@ -735,7 +735,7 @@ Source: ~
 ~
 
 
-Color_lerpColor() 📄 ⚡
+p5-Color_lerpColor() 📄 ⚡
 |lerpColor|(c1, c2, amt) ⚡ Function
 
 Blends two colors to find a third `color` between them.
@@ -806,7 +806,7 @@ Source: ~
 ~
 
 
-Color_lightness() 📄 ⚡
+p5-Color_lightness() 📄 ⚡
 |lightness|(color) ⚡ Function
 
 Gets the lightness value of a `color`.
@@ -862,7 +862,7 @@ Source: ~
 ~
 
 
-Color_noErase() 📄 ⚡
+p5-Color_noErase() 📄 ⚡
 |noErase|() ⚡ Function
 
 Ends erasing that was started with <a href="#/p5/`erase`">`erase`()</a>.
@@ -903,7 +903,7 @@ Source: ~
 ~
 
 
-Color_noFill() 📄 ⚡
+p5-Color_noFill() 📄 ⚡
 |noFill|() ⚡ Function
 
 Disables setting the `fill` `color` for shapes.
@@ -964,7 +964,7 @@ Source: ~
 ~
 
 
-Color_noStroke() 📄 ⚡
+p5-Color_noStroke() 📄 ⚡
 |noStroke|() ⚡ Function
 
 Disables drawing points, lines, and the outlines of shapes.
@@ -1021,7 +1021,7 @@ Source: ~
 ~
 
 
-Color_paletteLerp() 📄 ⚡
+p5-Color_paletteLerp() 📄 ⚡
 |paletteLerp|(colors_stops, amt) ⚡ Function
 
 Blends multiple colors to find a `color` between them.
@@ -1065,7 +1065,7 @@ Source: ~
 ~
 
 
-Color_red() 📄 ⚡
+p5-Color_red() 📄 ⚡
 |red|(color) ⚡ Function
 
 Gets the `red` value of a `color`.
@@ -1121,7 +1121,7 @@ Source: ~
 ~
 
 
-Color_saturation() 📄 ⚡
+p5-Color_saturation() 📄 ⚡
 |saturation|(color) ⚡ Function
 
 Gets the `saturation` value of a `color`.
@@ -1178,7 +1178,7 @@ Source: ~
 ~
 
 
-Color_stroke() 📄 ⚡
+p5-Color_stroke() 📄 ⚡
 |stroke|(color) ⚡ Function
 
 Parameters: ~
@@ -1195,7 +1195,7 @@ Source: ~
 
 VARIABLES                                                   *p5-Color-variables*
 
-Color_a() 📄 📌
+p5-Color_a() 📄 📌
 |a| ⚡ Function
 
 Returns the `color` formatted as a `String`.
@@ -1237,7 +1237,7 @@ Source: ~
 ~
 
 
-Color_colorPatterns() 📄 📌
+p5-Color_colorPatterns() 📄 📌
 |colorPatterns| ⚡ Function
 
 Full `color` string patterns.
@@ -1251,7 +1251,7 @@ Source: ~
 ~
 
 
-Color_first_color_stop() 📄 📌
+p5-Color_first_color_stop() 📄 📌
 |first_color_stop| ⚡ Function
 
 Blends multiple colors to find a `color` between them.
@@ -1286,7 +1286,7 @@ Source: ~
 ~
 
 
-Color_INTEGER() 📄 📌
+p5-Color_INTEGER() 📄 📌
 |INTEGER| ⚡ Function
 
 These regular expressions are used to build up the patterns for matching viable CSS `color` strings: fragmenting the regexes in this way increases the legibility and comprehensibility of the code.
@@ -1300,7 +1300,7 @@ Source: ~
 ~
 
 
-Color_namedColors() 📄 📌
+p5-Color_namedColors() 📄 📌
 |namedColors| ⚡ Function
 
 CSS named colors.
@@ -1313,7 +1313,7 @@ Source: ~
 ~
 
 
-Color_WHITESPACE() 📄 📌
+p5-Color_WHITESPACE() 📄 📌
 |WHITESPACE| ⚡ Function
 
 These regular expressions are used to build up the patterns for matching viable CSS `color` strings: fragmenting the regexes in this way increases the legibility and comprehensibility of the code.

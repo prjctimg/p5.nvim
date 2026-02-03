@@ -44,7 +44,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-Structure-classes*
 
-Structure_p5() 📄 🏛️
+p5-Structure_p5() 📄 🏛️
 |p5|() 🏛️ Class
 
 This is the p5 instance constructor.
@@ -68,7 +68,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-Structure-functions*
 
-Structure_isLooping() 📄 ⚡
+p5-Structure_isLooping() 📄 ⚡
 |isLooping|() ⚡ Function
 
 Returns `true` if the `draw` `loop` is running and `false` if not.
@@ -117,7 +117,7 @@ Source: ~
 ~
 
 
-Structure_loop() 📄 ⚡
+p5-Structure_loop() 📄 ⚡
 |loop|() ⚡ Function
 
 Resumes the `draw` `loop` after <a href="#/p5/`noLoop`">`noLoop`()</a> has been called.
@@ -209,7 +209,7 @@ Source: ~
 ~
 
 
-Structure_noLoop() 📄 ⚡
+p5-Structure_noLoop() 📄 ⚡
 |noLoop|() ⚡ Function
 
 Stops the code in <a href="#/p5/`draw`">`draw`()</a> from running repeatedly.
@@ -328,7 +328,7 @@ Source: ~
 ~
 
 
-Structure_pop() 📄 ⚡
+p5-Structure_pop() 📄 ⚡
 |pop|() ⚡ Function
 
 Ends a drawing group that contains its own styles and transformations.
@@ -503,7 +503,7 @@ Source: ~
 ~
 
 
-Structure_push() 📄 ⚡
+p5-Structure_push() 📄 ⚡
 |push|() ⚡ Function
 
 Begins a drawing group that contains its own styles and transformations.
@@ -678,7 +678,7 @@ Source: ~
 ~
 
 
-Structure_redraw() 📄 ⚡
+p5-Structure_redraw() 📄 ⚡
 |redraw|({Integer} [n] number of times to run <a href="#/p5/draw">draw()</a>. Defaults to 1.) ⚡ Function
 
 Runs the code in <a href="#/p5/`draw`">`draw`()</a> once.
@@ -771,7 +771,7 @@ Source: ~
 ~
 
 
-Structure_remove() 📄 ⚡
+p5-Structure_remove() 📄 ⚡
 |remove|() ⚡ Function
 
 Removes the sketch from the web page.
@@ -817,7 +817,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-Structure-properties*
 
-Structure_disableFriendlyErrors() 📄 🔧
+p5-Structure_disableFriendlyErrors() 📄 🔧
 |disableFriendlyErrors| ⚡ Function
 
 Turns off the parts of the Friendly Error System (FES) that impact performance.
@@ -858,7 +858,7 @@ Source: ~
 
 VARIABLES                                                   *p5-Structure-variables*
 
-Structure_style() 📄 📌
+p5-Structure_style() 📄 📌
 |style| ⚡ Function
 
 Ends a drawing group that contains its own styles and transformations.

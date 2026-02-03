@@ -140,7 +140,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-🔊p5.sound-classes*
 
-p5.sound_Envelope() 🔊 🏛️
+p5-🔊p5.sound_Envelope() 🔊 🏛️
 |Envelope|() 🏛️ Class
 
 <p>Envelopes are pre-defined amplitude distribution over time.
@@ -187,7 +187,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-🔊p5.sound-functions*
 
-p5.sound_anonymous() 🔊 ⚡
+p5-🔊p5.sound_anonymous() 🔊 ⚡
 |anonymous|() ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -200,7 +200,7 @@ Source: ~
 ~
 
 
-p5.sound_createConvolver() 🔊 ⚡
+p5-🔊p5.sound_createConvolver() 🔊 ⚡
 |createConvolver|(path, {Function} [callback] function to call if loading is successful., {Function} [errorCallback] function to call if loading is not successful.) ⚡ Function
 
 Create a p5.Convolver.
@@ -261,7 +261,7 @@ Source: ~
 ~
 
 
-p5.sound_freqToMidi() 🔊 ⚡
+p5-🔊p5.sound_freqToMidi() 🔊 ⚡
 |freqToMidi|(frequency) ⚡ Function
 
 Returns the closest MIDI note value for a given frequency.
@@ -282,7 +282,7 @@ Source: ~
 ~
 
 
-p5.sound_getAudioContext() 🔊 ⚡
+p5-🔊p5.sound_getAudioContext() 🔊 ⚡
 |getAudioContext|() ⚡ Function
 
 <p>Returns the Audio Context for this sketch.
@@ -325,7 +325,7 @@ Source: ~
 ~
 
 
-p5.sound_getOutputVolume() 🔊 ⚡
+p5-🔊p5.sound_getOutputVolume() 🔊 ⚡
 |getOutputVolume|() ⚡ Function
 
 Returns a number representing the output volume for sound in this sketch.
@@ -342,7 +342,7 @@ Source: ~
 ~
 
 
-p5.sound_l() 🔊 ⚡
+p5-🔊p5.sound_l() 🔊 ⚡
 |l|() ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -355,7 +355,7 @@ Source: ~
 ~
 
 
-p5.sound_loadSound() 🔊 ⚡
+p5-🔊p5.sound_loadSound() 🔊 ⚡
 |loadSound|(path, {Function} [successCallback]   Name of a function to call once file loads, {Function} [errorCallback]   Name of a function to call if there is, {Function} [whileLoading] Name of a function to call while file is loading.) ⚡ Function
 
 loadSound() returns a new p5.SoundFile from a specified path.
@@ -406,7 +406,7 @@ Source: ~
 ~
 
 
-p5.sound_midiToFreq() 🔊 ⚡
+p5-🔊p5.sound_midiToFreq() 🔊 ⚡
 |midiToFreq|(midiNote) ⚡ Function
 
 Returns the frequency value of a MIDI note value.
@@ -466,7 +466,7 @@ Source: ~
 ~
 
 
-p5.sound_sampleRate() 🔊 ⚡
+p5-🔊p5.sound_sampleRate() 🔊 ⚡
 |sampleRate|() ⚡ Function
 
 See also: ~
@@ -477,7 +477,7 @@ Source: ~
 ~
 
 
-p5.sound_saveSound() 🔊 ⚡
+p5-🔊p5.sound_saveSound() 🔊 ⚡
 |saveSound|(soundFile, fileName) ⚡ Function
 
 Save a p5.SoundFile as a .wav file.
@@ -497,7 +497,7 @@ Source: ~
 ~
 
 
-p5.sound_setBPM() 🔊 ⚡
+p5-🔊p5.sound_setBPM() 🔊 ⚡
 |setBPM|(BPM, rampTime) ⚡ Function
 
 Set the global tempo, in beats per minute, for all p5.Parts.
@@ -516,7 +516,7 @@ Source: ~
 ~
 
 
-p5.sound_soundFormats() 🔊 ⚡
+p5-🔊p5.sound_soundFormats() 🔊 ⚡
 |soundFormats|({String} [...formats] i.e. 'mp3', 'wav', 'ogg') ⚡ Function
 
 List the SoundFile formats that you will include.
@@ -557,7 +557,7 @@ Source: ~
 ~
 
 
-p5.sound_userStartAudio() 🔊 ⚡
+p5-🔊p5.sound_userStartAudio() 🔊 ⚡
 |userStartAudio|({Element|Array}   [elements] This argument can be an Element,, {Function} [callback] Callback to invoke when the AudioContext) ⚡ Function
 
 <p>It is not only a good practice to give users control over starting audio.
@@ -610,7 +610,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-🔊p5.sound-properties*
 
-p5.sound_aLevel() 🔊 🔧
+p5-🔊p5.sound_aLevel() 🔊 🔧
 |aLevel| ⚡ Function
 
 Level once attack is complete.
@@ -623,7 +623,7 @@ Source: ~
 ~
 
 
-p5.sound_amplitude() 🔊 🔧
+p5-🔊p5.sound_amplitude() 🔊 🔧
 |amplitude| ⚡ Function
 
 Input amplitude, connect to it by default but not to master out
@@ -636,7 +636,7 @@ Source: ~
 ~
 
 
-p5.sound_aTime() 🔊 🔧
+p5-🔊p5.sound_aTime() 🔊 🔧
 |aTime| ⚡ Function
 
 Time until envelope reaches attackLevel
@@ -649,7 +649,7 @@ Source: ~
 ~
 
 
-p5.sound_AudioVoice() 🔊 🔧
+p5-🔊p5.sound_AudioVoice() 🔊 🔧
 |AudioVoice| ⚡ Function
 
 Monosynth that generates the sound for each note that is triggered.
@@ -663,7 +663,7 @@ Source: ~
 ~
 
 
-p5.sound_bands() 🔊 🔧
+p5-🔊p5.sound_bands() 🔊 🔧
 |bands| ⚡ Function
 
 The p5.EQ is built with abstracted p5.Filter objects.
@@ -678,7 +678,7 @@ Source: ~
 ~
 
 
-p5.sound_biquad() 🔊 🔧
+p5-🔊p5.sound_biquad() 🔊 🔧
 |biquad| ⚡ Function
 
 The p5.Filter is built with a <a href="http://www.w3.org/TR/webaudio/#BiquadFilterNode"> Web Audio BiquadFilter Node</a>.
@@ -691,7 +691,7 @@ Source: ~
 ~
 
 
-p5.sound_chain() 🔊 🔧
+p5-🔊p5.sound_chain() 🔊 🔧
 |chain| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -704,7 +704,7 @@ Source: ~
 ~
 
 
-p5.sound_compressor() 🔊 🔧
+p5-🔊p5.sound_compressor() 🔊 🔧
 |compressor| ⚡ Function
 
 The p5.Compressor is built with a <a href="https://www.w3.org/TR/webaudio/#the-dynamicscompressornode-interface" target="_blank" title="W3 spec for Dynamics Compressor Node">Web Audio Dynamics Compressor Node </a>
@@ -717,7 +717,7 @@ Source: ~
 ~
 
 
-p5.sound_connect() 🔊 🔧
+p5-🔊p5.sound_connect() 🔊 🔧
 |connect| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -730,7 +730,7 @@ Source: ~
 ~
 
 
-p5.sound_connectSeries() 🔊 🔧
+p5-🔊p5.sound_connectSeries() 🔊 🔧
 |connectSeries| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -743,7 +743,7 @@ Source: ~
 ~
 
 
-p5.sound_constructor() 🔊 🔧
+p5-🔊p5.sound_constructor() 🔊 🔧
 |constructor| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -756,7 +756,7 @@ Source: ~
 ~
 
 
-p5.sound_context() 🔊 🔧
+p5-🔊p5.sound_context() 🔊 🔧
 |context| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -769,7 +769,7 @@ Source: ~
 ~
 
 
-p5.sound_d() 🔊 🔧
+p5-🔊p5.sound_d() 🔊 🔧
 |d| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -782,7 +782,7 @@ Source: ~
 ~
 
 
-p5.sound_dbToGain() 🔊 🔧
+p5-🔊p5.sound_dbToGain() 🔊 🔧
 |dbToGain| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -795,7 +795,7 @@ Source: ~
 ~
 
 
-p5.sound_defaultArg() 🔊 🔧
+p5-🔊p5.sound_defaultArg() 🔊 🔧
 |defaultArg| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -808,7 +808,7 @@ Source: ~
 ~
 
 
-p5.sound_disconnect() 🔊 🔧
+p5-🔊p5.sound_disconnect() 🔊 🔧
 |disconnect| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -821,7 +821,7 @@ Source: ~
 ~
 
 
-p5.sound_dispose() 🔊 🔧
+p5-🔊p5.sound_dispose() 🔊 🔧
 |dispose| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -834,7 +834,7 @@ Source: ~
 ~
 
 
-p5.sound_dLevel() 🔊 🔧
+p5-🔊p5.sound_dLevel() 🔊 🔧
 |dLevel| ⚡ Function
 
 Level after decay.
@@ -848,7 +848,7 @@ Source: ~
 ~
 
 
-p5.sound_dTime() 🔊 🔧
+p5-🔊p5.sound_dTime() 🔊 🔧
 |dTime| ⚡ Function
 
 Time until envelope reaches decayLevel.
@@ -861,7 +861,7 @@ Source: ~
 ~
 
 
-p5.sound_enabled() 🔊 🔧
+p5-🔊p5.sound_enabled() 🔊 🔧
 |enabled| ⚡ Function
 
 Client must allow browser to access their microphone / audioin source.
@@ -876,7 +876,7 @@ Source: ~
 ~
 
 
-p5.sound_equalPowerScale() 🔊 🔧
+p5-🔊p5.sound_equalPowerScale() 🔊 🔧
 |equalPowerScale| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -889,7 +889,7 @@ Source: ~
 ~
 
 
-p5.sound_exports() 🔊 🔧
+p5-🔊p5.sound_exports() 🔊 🔧
 |exports| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -902,7 +902,7 @@ Source: ~
 ~
 
 
-p5.sound_extend() 🔊 🔧
+p5-🔊p5.sound_extend() 🔊 🔧
 |extend| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -915,7 +915,7 @@ Source: ~
 ~
 
 
-p5.sound_fan() 🔊 🔧
+p5-🔊p5.sound_fan() 🔊 🔧
 |fan| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -928,7 +928,7 @@ Source: ~
 ~
 
 
-p5.sound_gainToDb() 🔊 🔧
+p5-🔊p5.sound_gainToDb() 🔊 🔧
 |gainToDb| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -941,7 +941,7 @@ Source: ~
 ~
 
 
-p5.sound_get() 🔊 🔧
+p5-🔊p5.sound_get() 🔊 🔧
 |get| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -954,7 +954,7 @@ Source: ~
 ~
 
 
-p5.sound_i() 🔊 🔧
+p5-🔊p5.sound_i() 🔊 🔧
 |i| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -967,7 +967,7 @@ Source: ~
 ~
 
 
-p5.sound_input() 🔊 🔧
+p5-🔊p5.sound_input() 🔊 🔧
 |input| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -980,7 +980,7 @@ Source: ~
 ~
 
 
-p5.sound_intervalToFrequencyRatio() 🔊 🔧
+p5-🔊p5.sound_intervalToFrequencyRatio() 🔊 🔧
 |intervalToFrequencyRatio| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -993,7 +993,7 @@ Source: ~
 ~
 
 
-p5.sound_isArray() 🔊 🔧
+p5-🔊p5.sound_isArray() 🔊 🔧
 |isArray| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1006,7 +1006,7 @@ Source: ~
 ~
 
 
-p5.sound_isBoolean() 🔊 🔧
+p5-🔊p5.sound_isBoolean() 🔊 🔧
 |isBoolean| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1019,7 +1019,7 @@ Source: ~
 ~
 
 
-p5.sound_isDetected() 🔊 🔧
+p5-🔊p5.sound_isDetected() 🔊 🔧
 |isDetected| ⚡ Function
 
 isDetected is `set` to true when a peak is detected.
@@ -1032,7 +1032,7 @@ Source: ~
 ~
 
 
-p5.sound_isFunction() 🔊 🔧
+p5-🔊p5.sound_isFunction() 🔊 🔧
 |isFunction| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1045,7 +1045,7 @@ Source: ~
 ~
 
 
-p5.sound_isNumber() 🔊 🔧
+p5-🔊p5.sound_isNumber() 🔊 🔧
 |isNumber| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1058,7 +1058,7 @@ Source: ~
 ~
 
 
-p5.sound_isObject() 🔊 🔧
+p5-🔊p5.sound_isObject() 🔊 🔧
 |isObject| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1071,7 +1071,7 @@ Source: ~
 ~
 
 
-p5.sound_isString() 🔊 🔧
+p5-🔊p5.sound_isString() 🔊 🔧
 |isString| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1084,7 +1084,7 @@ Source: ~
 ~
 
 
-p5.sound_isUndef() 🔊 🔧
+p5-🔊p5.sound_isUndef() 🔊 🔧
 |isUndef| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1097,7 +1097,7 @@ Source: ~
 ~
 
 
-p5.sound_leftDelay() 🔊 🔧
+p5-🔊p5.sound_leftDelay() 🔊 🔧
 |leftDelay| ⚡ Function
 
 The p5.Delay is built with two <a href="http://www.w3.org/TR/webaudio/#DelayNode"> Web Audio Delay Nodes</a>, one for each stereo channel.
@@ -1110,7 +1110,7 @@ Source: ~
 ~
 
 
-p5.sound_m() 🔊 🔧
+p5-🔊p5.sound_m() 🔊 🔧
 |m| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1123,7 +1123,7 @@ Source: ~
 ~
 
 
-p5.sound_maxIterations() 🔊 🔧
+p5-🔊p5.sound_maxIterations() 🔊 🔧
 |maxIterations| ⚡ Function
 
 Set a limit to the number of loops to play.
@@ -1137,7 +1137,7 @@ Source: ~
 ~
 
 
-p5.sound_maxVoices() 🔊 🔧
+p5-🔊p5.sound_maxVoices() 🔊 🔧
 |maxVoices| ⚡ Function
 
 A PolySynth must have at least 1 voice, defaults to 8
@@ -1150,7 +1150,7 @@ Source: ~
 ~
 
 
-p5.sound_Multiply() 🔊 🔧
+p5-🔊p5.sound_Multiply() 🔊 🔧
 |Multiply| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1163,7 +1163,7 @@ Source: ~
 ~
 
 
-p5.sound_musicalTimeMode() 🔊 🔧
+p5-🔊p5.sound_musicalTimeMode() 🔊 🔧
 |musicalTimeMode| ⚡ Function
 
 musicalTimeMode uses <a href = "https://github.com/Tonejs/Tone.js/wiki/Time">Tone.Time</a> convention true if string, false if number
@@ -1176,7 +1176,7 @@ Source: ~
 ~
 
 
-p5.sound_noOp() 🔊 🔧
+p5-🔊p5.sound_noOp() 🔊 🔧
 |noOp| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1189,7 +1189,7 @@ Source: ~
 ~
 
 
-p5.sound_notes() 🔊 🔧
+p5-🔊p5.sound_notes() 🔊 🔧
 |notes| ⚡ Function
 
 An object that holds information about which notes have been played and which notes are currently being played.
@@ -1205,7 +1205,7 @@ Source: ~
 ~
 
 
-p5.sound_now() 🔊 🔧
+p5-🔊p5.sound_now() 🔊 🔧
 |now| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1218,7 +1218,7 @@ Source: ~
 ~
 
 
-p5.sound_o() 🔊 🔧
+p5-🔊p5.sound_o() 🔊 🔧
 |o| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1231,7 +1231,7 @@ Source: ~
 ~
 
 
-p5.sound_optionsObject() 🔊 🔧
+p5-🔊p5.sound_optionsObject() 🔊 🔧
 |optionsObject| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1244,7 +1244,7 @@ Source: ~
 ~
 
 
-p5.sound_output() 🔊 🔧
+p5-🔊p5.sound_output() 🔊 🔧
 |output| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1257,7 +1257,7 @@ Source: ~
 ~
 
 
-p5.sound_p() 🔊 🔧
+p5-🔊p5.sound_p() 🔊 🔧
 |p| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1270,7 +1270,7 @@ Source: ~
 ~
 
 
-p5.sound_panner() 🔊 🔧
+p5-🔊p5.sound_panner() 🔊 🔧
 |panner| ⚡ Function
 
 <a title="Web Audio Panner docs" href= "https://developer.mozilla.org/en-US/docs/Web/API/PannerNode"> Web Audio Spatial Panner Node</a> Properties include<br> [Panning Model](https://www.w3.org/TR/webaudio/#idl-def-PanningModelType) : "equal power" or "HRTF"<br> [DistanceModel](https://www.w3.org/TR/webaudio/#idl-def-DistanceModelType) : "linear", "inverse", or "exponential"
@@ -1283,7 +1283,7 @@ Source: ~
 ~
 
 
-p5.sound_prototype() 🔊 🔧
+p5-🔊p5.sound_prototype() 🔊 🔧
 |prototype| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1296,7 +1296,7 @@ Source: ~
 ~
 
 
-p5.sound_r() 🔊 🔧
+p5-🔊p5.sound_r() 🔊 🔧
 |r| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1309,7 +1309,7 @@ Source: ~
 ~
 
 
-p5.sound_rightDelay() 🔊 🔧
+p5-🔊p5.sound_rightDelay() 🔊 🔧
 |rightDelay| ⚡ Function
 
 The p5.Delay is built with two <a href="http://www.w3.org/TR/webaudio/#DelayNode"> Web Audio Delay Nodes</a>, one for each stereo channel.
@@ -1322,7 +1322,7 @@ Source: ~
 ~
 
 
-p5.sound_rLevel() 🔊 🔧
+p5-🔊p5.sound_rLevel() 🔊 🔧
 |rLevel| ⚡ Function
 
 Level at the end of the release.
@@ -1335,7 +1335,7 @@ Source: ~
 ~
 
 
-p5.sound_rTime() 🔊 🔧
+p5-🔊p5.sound_rTime() 🔊 🔧
 |rTime| ⚡ Function
 
 Duration of the release portion of the envelope.
@@ -1348,7 +1348,7 @@ Source: ~
 ~
 
 
-p5.sound_sequence() 🔊 🔧
+p5-🔊p5.sound_sequence() 🔊 🔧
 |sequence| ⚡ Function
 
 Array of values to pass into the callback at each step of the phrase.
@@ -1363,7 +1363,7 @@ Source: ~
 ~
 
 
-p5.sound_set() 🔊 🔧
+p5-🔊p5.sound_set() 🔊 🔧
 |set| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1376,7 +1376,7 @@ Source: ~
 ~
 
 
-p5.sound_setContext() 🔊 🔧
+p5-🔊p5.sound_setContext() 🔊 🔧
 |setContext| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1389,7 +1389,7 @@ Source: ~
 ~
 
 
-p5.sound_State() 🔊 🔧
+p5-🔊p5.sound_State() 🔊 🔧
 |State| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1402,7 +1402,7 @@ Source: ~
 ~
 
 
-p5.sound_toString() 🔊 🔧
+p5-🔊p5.sound_toString() 🔊 🔧
 |toString| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1415,7 +1415,7 @@ Source: ~
 ~
 
 
-p5.sound_u() 🔊 🔧
+p5-🔊p5.sound_u() 🔊 🔧
 |u| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1428,7 +1428,7 @@ Source: ~
 ~
 
 
-p5.sound_value() 🔊 🔧
+p5-🔊p5.sound_value() 🔊 🔧
 |value| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1441,7 +1441,7 @@ Source: ~
 ~
 
 
-p5.sound_version() 🔊 🔧
+p5-🔊p5.sound_version() 🔊 🔧
 |version| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1454,7 +1454,7 @@ Source: ~
 ~
 
 
-p5.sound_waveShaperNode() 🔊 🔧
+p5-🔊p5.sound_waveShaperNode() 🔊 🔧
 |waveShaperNode| ⚡ Function
 
 The p5.Distortion is built with a <a href="http://www.w3.org/TR/webaudio/#WaveShaperNode"> Web Audio WaveShaper Node</a>.
@@ -1467,7 +1467,7 @@ Source: ~
 ~
 
 
-p5.sound_wet() 🔊 🔧
+p5-🔊p5.sound_wet() 🔊 🔧
 |wet| ⚡ Function
 
 In classes that extend p5.Effect, connect effect nodes to the wet parameter
@@ -1482,7 +1482,7 @@ Source: ~
 
 VARIABLES                                                   *p5-🔊p5.sound-variables*
 
-p5.sound_a() 🔊 📌
+p5-🔊p5.sound_a() 🔊 📌
 |a| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1495,7 +1495,7 @@ Source: ~
 ~
 
 
-p5.sound_amplitude_Amplitude() 🔊 📌
+p5-🔊p5.sound_amplitude_Amplitude() 🔊 📌
 |amplitude_Amplitude| ⚡ Function
 
 Amplitude measures volume between 0.0 and 1.0.
@@ -1546,7 +1546,7 @@ Source: ~
 ~
 
 
-p5.sound_audioin_AudioIn() 🔊 📌
+p5-🔊p5.sound_audioin_AudioIn() 🔊 📌
 |audioin_AudioIn| ⚡ Function
 
 <p>Get audio from an input, i.e.
@@ -1588,7 +1588,7 @@ Source: ~
 ~
 
 
-p5.sound_audioVoice_AudioVoice() 🔊 📌
+p5-🔊p5.sound_audioVoice_AudioVoice() 🔊 📌
 |audioVoice_AudioVoice| ⚡ Function
 
 Base class for monophonic synthesizers.
@@ -1602,7 +1602,7 @@ Source: ~
 ~
 
 
-p5.sound_c() 🔊 📌
+p5-🔊p5.sound_c() 🔊 📌
 |c| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1615,7 +1615,7 @@ Source: ~
 ~
 
 
-p5.sound_Compressor() 🔊 📌
+p5-🔊p5.sound_Compressor() 🔊 📌
 |Compressor| ⚡ Function
 
 Compressor is an audio effect class that performs dynamics compression on an audio input source.
@@ -1634,7 +1634,7 @@ Source: ~
 ~
 
 
-p5.sound_delay_Delay() 🔊 📌
+p5-🔊p5.sound_delay_Delay() 🔊 📌
 |delay_Delay| ⚡ Function
 
 Delay is an echo effect.
@@ -1685,7 +1685,7 @@ Source: ~
 ~
 
 
-p5.sound_e() 🔊 📌
+p5-🔊p5.sound_e() 🔊 📌
 |e| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -1698,7 +1698,7 @@ Source: ~
 ~
 
 
-p5.sound_effect_Effect() 🔊 📌
+p5-🔊p5.sound_effect_Effect() 🔊 📌
 |effect_Effect| ⚡ Function
 
 Effect is a base class for audio effects in p5.
@@ -1713,7 +1713,7 @@ Source: ~
 ~
 
 
-p5.sound_el() 🔊 📌
+p5-🔊p5.sound_el() 🔊 📌
 |el| ⚡ Function
 
 Determine which filetypes are supported (inspired by buzz.js) The audio element (el) will only be used to test browser support for various audio formats
@@ -1726,7 +1726,7 @@ Source: ~
 ~
 
 
-p5.sound_eq_EQ() 🔊 📌
+p5-🔊p5.sound_eq_EQ() 🔊 📌
 |eq_EQ| ⚡ Function
 
 p5.EQ is an audio effect that performs the function of a multiband audio equalizer.
@@ -1804,7 +1804,7 @@ Source: ~
 ~
 
 
-p5.sound_eqFilter_EQFilter() 🔊 📌
+p5-🔊p5.sound_eqFilter_EQFilter() 🔊 📌
 |eqFilter_EQFilter| ⚡ Function
 
 EQFilter extends p5.Filter with constraints necessary for the p5.EQ
@@ -1817,7 +1817,7 @@ Source: ~
 ~
 
 
-p5.sound_fft_FFT() 🔊 📌
+p5-🔊p5.sound_fft_FFT() 🔊 📌
 |fft_FFT| ⚡ Function
 
 <p>FFT (Fast Fourier Transform) is an analysis algorithm that isolates individual <a href="https://en.wikipedia.org/wiki/Audio_frequency"> audio frequencies</a> within a waveform.</p> <p>Once instantiated, a p5.FFT object can return an array based on two types of analyses: <br> • <code>FFT.waveform()</code> computes amplitude values along the time domain.
@@ -1891,7 +1891,7 @@ Source: ~
 ~
 
 
-p5.sound_Filter() 🔊 📌
+p5-🔊p5.sound_Filter() 🔊 📌
 |Filter| ⚡ Function
 
 <p>A p5.Filter uses a Web Audio Biquad Filter to `filter` the frequency response of an input source.
@@ -1964,7 +1964,7 @@ Source: ~
 ~
 
 
-p5.sound_gain_Gain() 🔊 📌
+p5-🔊p5.sound_gain_Gain() 🔊 📌
 |gain_Gain| ⚡ Function
 
 A gain node is usefull to `set` the relative volume of sound.
@@ -2041,7 +2041,7 @@ Source: ~
 ~
 
 
-p5.sound_monosynth_MonoSynth() 🔊 📌
+p5-🔊p5.sound_monosynth_MonoSynth() 🔊 📌
 |monosynth_MonoSynth| ⚡ Function
 
 A MonoSynth is used as a single voice for sound synthesis.
@@ -2087,7 +2087,7 @@ Source: ~
 ~
 
 
-p5.sound_n() 🔊 📌
+p5-🔊p5.sound_n() 🔊 📌
 |n| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -2100,7 +2100,7 @@ Source: ~
 ~
 
 
-p5.sound_OnsetDetect() 🔊 📌
+p5-🔊p5.sound_OnsetDetect() 🔊 📌
 |OnsetDetect| ⚡ Function
 
 Listen for onsets (a sharp increase in volume) within a given frequency range.
@@ -2113,7 +2113,7 @@ Source: ~
 ~
 
 
-p5.sound_Panner3D() 🔊 📌
+p5-🔊p5.sound_Panner3D() 🔊 📌
 |Panner3D| ⚡ Function
 
 Panner3D is based on the <a title="Web Audio Panner docs" href= "https://developer.mozilla.org/en-US/docs/Web/API/PannerNode"> Web Audio Spatial Panner Node</a>.
@@ -2128,7 +2128,7 @@ Source: ~
 ~
 
 
-p5.sound_PeakDetect() 🔊 📌
+p5-🔊p5.sound_PeakDetect() 🔊 📌
 |PeakDetect| ⚡ Function
 
 <p>PeakDetect works in conjunction with p5.FFT to look for onsets in some or all of the frequency spectrum.
@@ -2199,7 +2199,7 @@ Source: ~
 ~
 
 
-p5.sound_polysynth_PolySynth() 🔊 📌
+p5-🔊p5.sound_polysynth_PolySynth() 🔊 📌
 |polysynth_PolySynth| ⚡ Function
 
 An AudioVoice is used as a single voice for sound synthesis.
@@ -2247,7 +2247,7 @@ Source: ~
 ~
 
 
-p5.sound_pulse_Pulse() 🔊 📌
+p5-🔊p5.sound_pulse_Pulse() 🔊 📌
 |pulse_Pulse| ⚡ Function
 
 Creates a Pulse object, an oscillator that implements Pulse Width Modulation.
@@ -2294,7 +2294,7 @@ Source: ~
 ~
 
 
-p5.sound_Reverb() 🔊 📌
+p5-🔊p5.sound_Reverb() 🔊 📌
 |Reverb| ⚡ Function
 
 Reverb adds depth to a sound through a large number of decaying echoes.
@@ -2348,7 +2348,7 @@ Source: ~
 ~
 
 
-p5.sound_s() 🔊 📌
+p5-🔊p5.sound_s() 🔊 📌
 |s| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25
@@ -2361,7 +2361,7 @@ Source: ~
 ~
 
 
-p5.sound_soundRecorder_SoundRecorder() 🔊 📌
+p5-🔊p5.sound_soundRecorder_SoundRecorder() 🔊 📌
 |soundRecorder_SoundRecorder| ⚡ Function
 
 <p>Record sounds for playback and/or to `save` as a .wav file.
@@ -2441,7 +2441,7 @@ Source: ~
 ~
 
 
-p5.sound_t() 🔊 📌
+p5-🔊p5.sound_t() 🔊 📌
 |t| ⚡ Function
 
 [p5.sound] Version: 1.0.1 - 2021-05-25

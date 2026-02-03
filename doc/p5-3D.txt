@@ -147,7 +147,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-3D-classes*
 
-3D_Anonymous() 📄 🏛️
+p5-3D_Anonymous() 📄 🏛️
 |Anonymous|() 🏛️ Class
 
 A class to describe a shader program.
@@ -265,7 +265,7 @@ Source: ~
 ~
 
 
-3D_Camera() 📄 🏛️
+p5-3D_Camera() 📄 🏛️
 |Camera|() 🏛️ Class
 
 A class to describe a camera for viewing a 3D sketch.
@@ -381,7 +381,7 @@ Source: ~
 ~
 
 
-3D_Cubic() 📄 🏛️
+p5-3D_Cubic() 📄 🏛️
 |Cubic|() 🏛️ Class
 
 Parameters: ~
@@ -399,7 +399,7 @@ Source: ~
 ~
 
 
-3D_DataArray() 📄 🏛️
+p5-3D_DataArray() 📄 🏛️
 |DataArray|() 🏛️ Class
 
 An internal class to store data that will be sent to a p5.RenderBuffer.
@@ -431,7 +431,7 @@ Source: ~
 ~
 
 
-3D_FontInfo() 📄 🏛️
+p5-3D_FontInfo() 📄 🏛️
 |FontInfo|() 🏛️ Class
 
 Parameters: ~
@@ -446,7 +446,7 @@ Source: ~
 ~
 
 
-3D_ImageInfos() 📄 🏛️
+p5-3D_ImageInfos() 📄 🏛️
 |ImageInfos|() 🏛️ Class
 
 Parameters: ~
@@ -462,7 +462,7 @@ Source: ~
 ~
 
 
-3D_ScreenshotError() 📄 🏛️
+p5-3D_ScreenshotError() 📄 🏛️
 |ScreenshotError|() 🏛️ Class
 
 A helper class to contain an error and also the screenshot data that caused the error.
@@ -475,7 +475,7 @@ Source: ~
 ~
 
 
-3D_Shader() 📄 🏛️
+p5-3D_Shader() 📄 🏛️
 |Shader|() 🏛️ Class
 
 A class to describe a shader program.
@@ -593,7 +593,7 @@ Source: ~
 ~
 
 
-3D_Texture() 📄 🏛️
+p5-3D_Texture() 📄 🏛️
 |Texture|() 🏛️ Class
 
 Texture class for WEBGL Mode
@@ -620,7 +620,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-3D-functions*
 
-3D_ambientLight() 📄 ⚡
+p5-3D_ambientLight() 📄 ⚡
 |ambientLight|(color) ⚡ Function
 
 Parameters: ~
@@ -635,7 +635,7 @@ Source: ~
 ~
 
 
-3D_ambientMaterial() 📄 ⚡
+p5-3D_ambientMaterial() 📄 ⚡
 |ambientMaterial|(color) ⚡ Function
 
 Parameters: ~
@@ -650,7 +650,7 @@ Source: ~
 ~
 
 
-3D_anonymous() 📄 ⚡
+p5-3D_anonymous() 📄 ⚡
 |anonymous|() ⚡ Function
 
 Expects an `image` file and a p5 instance with an `image` file loaded and drawn and checks that they are exactly the same.
@@ -664,7 +664,7 @@ Source: ~
 ~
 
 
-3D_baseColorShader() 📄 ⚡
+p5-3D_baseColorShader() 📄 ⚡
 |baseColorShader|() ⚡ Function
 
 Get the shader used when no lights or materials are applied.
@@ -731,7 +731,7 @@ Source: ~
 ~
 
 
-3D_baseMaterialShader() 📄 ⚡
+p5-3D_baseMaterialShader() 📄 ⚡
 |baseMaterialShader|() ⚡ Function
 
 Get the default shader used with lights, materials, and textures.
@@ -819,7 +819,7 @@ Source: ~
 ~
 
 
-3D_baseNormalShader() 📄 ⚡
+p5-3D_baseNormalShader() 📄 ⚡
 |baseNormalShader|() ⚡ Function
 
 Get the shader used by <a href="#/p5/normalMaterial">`normalMaterial()`</a>.
@@ -891,7 +891,7 @@ Source: ~
 ~
 
 
-3D_baseStrokeShader() 📄 ⚡
+p5-3D_baseStrokeShader() 📄 ⚡
 |baseStrokeShader|() ⚡ Function
 
 Get the shader used when drawing the strokes of shapes.
@@ -980,7 +980,7 @@ Source: ~
 ~
 
 
-3D_byte() 📄 ⚡
+p5-3D_byte() 📄 ⚡
 |byte|(v) ⚡ Function
 
 Parameters: ~
@@ -995,7 +995,7 @@ Source: ~
 ~
 
 
-3D_camera() 📄 ⚡
+p5-3D_camera() 📄 ⚡
 |camera|({Number} [x]        x-coordinate of the camera. Defaults to 0., {Number} [y]        y-coordinate of the camera. Defaults to 0., {Number} [z]        z-coordinate of the camera. Defaults to 800., {Number} [centerX]  x-coordinate of the point the camera faces. Defaults to 0., {Number} [centerY]  y-coordinate of the point the camera faces. Defaults to 0., {Number} [centerZ]  z-coordinate of the point the camera faces. Defaults to 0., {Number} [upX]      x-component of the camera’s "up" vector. Defaults to 0., {Number} [upY]      y-component of the camera’s "up" vector. Defaults to 1., {Number} [upZ]      z-component of the camera’s "up" vector. Defaults to 0.) ⚡ Function
 
 Sets the position and orientation of the current camera in a 3D sketch.
@@ -1122,7 +1122,7 @@ Source: ~
 ~
 
 
-3D_cameraType() 📄 ⚡
+p5-3D_cameraType() 📄 ⚡
 |cameraType|({Number} [fovy]   camera frustum vertical field of view. Defaults to, {Number} [aspect] camera frustum aspect ratio. Defaults to, {Number} [near]   distance from the camera to the near clipping plane., {Number} [far]    distance from the camera to the far clipping plane.) ⚡ Function
 
 Sets a perspective projection for the camera.
@@ -1279,7 +1279,7 @@ Source: ~
 ~
 
 
-3D_clamp() 📄 ⚡
+p5-3D_clamp() 📄 ⚡
 |clamp|(v, min, max) ⚡ Function
 
 Parameters: ~
@@ -1296,7 +1296,7 @@ Source: ~
 ~
 
 
-3D_createCamera() 📄 ⚡
+p5-3D_createCamera() 📄 ⚡
 |createCamera|() ⚡ Function
 
 Creates a new <a href="#/p5.Camera">p5.Camera</a> object and sets it as the current (active) camera.
@@ -1368,7 +1368,7 @@ Source: ~
 ~
 
 
-3D_createFilterShader() 📄 ⚡
+p5-3D_createFilterShader() 📄 ⚡
 |createFilterShader|(fragSrc) ⚡ Function
 
 Creates a <a href="#/p5.Shader">p5.Shader</a> object to be used with the <a href="#/p5/`filter`">`filter`()</a> function.
@@ -1460,7 +1460,7 @@ Source: ~
 ~
 
 
-3D_createShader() 📄 ⚡
+p5-3D_createShader() 📄 ⚡
 |createShader|(vertSrc, fragSrc, {Object} [options] An optional object describing how this shader can) ⚡ Function
 
 Creates a new <a href="#/p5.Shader">p5.Shader</a> object.
@@ -1793,7 +1793,7 @@ Source: ~
 ~
 
 
-3D_cubicToQuadratics() 📄 ⚡
+p5-3D_cubicToQuadratics() 📄 ⚡
 |cubicToQuadratics|(x0, y0, cx0, cy0, cx1, cy1, x1, y1) ⚡ Function
 
 Parameters: ~
@@ -1819,7 +1819,7 @@ Source: ~
 ~
 
 
-3D_deepEqualCyclic() 📄 ⚡
+p5-3D_deepEqualCyclic() 📄 ⚡
 |deepEqualCyclic|(Object obj1, Object obj2) ⚡ Function
 
 Parameters: ~
@@ -1835,7 +1835,7 @@ Source: ~
 ~
 
 
-3D_directionalLight() 📄 ⚡
+p5-3D_directionalLight() 📄 ⚡
 |directionalLight|(color, direction) ⚡ Function
 
 Parameters: ~
@@ -1851,7 +1851,7 @@ Source: ~
 ~
 
 
-3D_emissiveMaterial() 📄 ⚡
+p5-3D_emissiveMaterial() 📄 ⚡
 |emissiveMaterial|(color) ⚡ Function
 
 Parameters: ~
@@ -1866,7 +1866,7 @@ Source: ~
 ~
 
 
-3D_frustum() 📄 ⚡
+p5-3D_frustum() 📄 ⚡
 |frustum|({Number} [left]   x-coordinate of the frustum’s left plane. Defaults to `-width / 20`., {Number} [right]  x-coordinate of the frustum’s right plane. Defaults to `width / 20`., {Number} [bottom] y-coordinate of the frustum’s bottom plane. Defaults to `height / 20`., {Number} [top]    y-coordinate of the frustum’s top plane. Defaults to `-height / 20`., {Number} [near]   z-coordinate of the frustum’s near plane. Defaults to `0.1 * 800`., {Number} [far]    z-coordinate of the frustum’s far plane. Defaults to `10 * 800`.) ⚡ Function
 
 Sets the frustum of the current camera in a 3D sketch.
@@ -1968,7 +1968,7 @@ Source: ~
 ~
 
 
-3D_getEpoch() 📄 ⚡
+p5-3D_getEpoch() 📄 ⚡
 |getEpoch|() ⚡ Function
 
 Used to grok the `now` parameter to createClock.
@@ -1981,7 +1981,7 @@ Source: ~
 ~
 
 
-3D_getIndex() 📄 ⚡
+p5-3D_getIndex() 📄 ⚡
 |getIndex|() ⚡ Function
 
 returns the index of the given object in the given objects array, -1 if not contained only needed for cyclic logic
@@ -1994,7 +1994,7 @@ Source: ~
 ~
 
 
-3D_identical() 📄 ⚡
+p5-3D_identical() 📄 ⚡
 |identical|(Object obj1, Object obj2) ⚡ Function
 
 Parameters: ~
@@ -2010,7 +2010,7 @@ Source: ~
 ~
 
 
-3D_imageLight() 📄 ⚡
+p5-3D_imageLight() 📄 ⚡
 |imageLight|(img) ⚡ Function
 
 Creates an ambient light from an `image`.
@@ -2074,7 +2074,7 @@ Source: ~
 ~
 
 
-3D_isArguments() 📄 ⚡
+p5-3D_isArguments() 📄 ⚡
 |isArguments|(Object object) ⚡ Function
 
 Parameters: ~
@@ -2089,7 +2089,7 @@ Source: ~
 ~
 
 
-3D_isDate() 📄 ⚡
+p5-3D_isDate() 📄 ⚡
 |isDate|(Object value) ⚡ Function
 
 Parameters: ~
@@ -2104,7 +2104,7 @@ Source: ~
 ~
 
 
-3D_isElement() 📄 ⚡
+p5-3D_isElement() 📄 ⚡
 |isElement|(Object object) ⚡ Function
 
 Parameters: ~
@@ -2119,7 +2119,7 @@ Source: ~
 ~
 
 
-3D_isNegZero() 📄 ⚡
+p5-3D_isNegZero() 📄 ⚡
 |isNegZero|(Object value) ⚡ Function
 
 Parameters: ~
@@ -2134,7 +2134,7 @@ Source: ~
 ~
 
 
-3D_isObject() 📄 ⚡
+p5-3D_isObject() 📄 ⚡
 |isObject|() ⚡ Function
 
 used to check, if the value of a property is an object (cyclic logic is only needed for objects) only needed for cyclic logic
@@ -2147,7 +2147,7 @@ Source: ~
 ~
 
 
-3D_keys() 📄 ⚡
+p5-3D_keys() 📄 ⚡
 |keys|(Object object) ⚡ Function
 
 Parameters: ~
@@ -2162,7 +2162,7 @@ Source: ~
 ~
 
 
-3D_layout() 📄 ⚡
+p5-3D_layout() 📄 ⚡
 |layout|(dim, dimImageInfos, cellImageInfos) ⚡ Function
 
 Parameters: ~
@@ -2183,7 +2183,7 @@ Source: ~
 ~
 
 
-3D_left() 📄 ⚡
+p5-3D_left() 📄 ⚡
 |left|({Number} [left]   x-coordinate of the frustum’s left plane. Defaults to `-width / 20`., {Number} [right]  x-coordinate of the frustum’s right plane. Defaults to `width / 20`., {Number} [bottom] y-coordinate of the frustum’s bottom plane. Defaults to `height / 20`., {Number} [top]    y-coordinate of the frustum’s top plane. Defaults to `-height / 20`., {Number} [near]   z-coordinate of the frustum’s near plane. Defaults to `0.1 * 800`., {Number} [far]    z-coordinate of the frustum’s far plane. Defaults to `10 * 800`.) ⚡ Function
 
 Sets the camera's frustum.
@@ -2284,7 +2284,7 @@ Source: ~
 ~
 
 
-3D_lightFalloff() 📄 ⚡
+p5-3D_lightFalloff() 📄 ⚡
 |lightFalloff|(constant, linear, quadratic) ⚡ Function
 
 Sets the falloff rate for <a href="#/p5/pointLight">pointLight()</a> and <a href="#/p5/spotLight">spotLight()</a>.
@@ -2350,7 +2350,7 @@ Source: ~
 ~
 
 
-3D_lights() 📄 ⚡
+p5-3D_lights() 📄 ⚡
 |lights|() ⚡ Function
 
 Places an ambient and directional light in the scene.
@@ -2429,7 +2429,7 @@ Source: ~
 ~
 
 
-3D_linePerspective() 📄 ⚡
+p5-3D_linePerspective() 📄 ⚡
 |linePerspective|() ⚡ Function
 
 Returns: ~
@@ -2444,7 +2444,7 @@ Source: ~
 ~
 
 
-3D_loadShader() 📄 ⚡
+p5-3D_loadShader() 📄 ⚡
 |loadShader|(vertFilename, fragFilename, {function} [successCallback] function to call once the shader is loaded. Can be passed the, {function} [failureCallback] function to call if the shader fails to load. Can be passed an) ⚡ Function
 
 Loads `vertex` and fragment shaders to create a <a href="#/p5.Shader">p5.Shader</a> object.
@@ -2551,7 +2551,7 @@ Source: ~
 ~
 
 
-3D_metalness() 📄 ⚡
+p5-3D_metalness() 📄 ⚡
 |metalness|(metallic) ⚡ Function
 
 Sets the amount of "metalness" of a <a href="#/p5/specularMaterial">specularMaterial()</a>.
@@ -2663,7 +2663,7 @@ Source: ~
 ~
 
 
-3D_noLights() 📄 ⚡
+p5-3D_noLights() 📄 ⚡
 |noLights|() ⚡ Function
 
 Removes all lights from the sketch.
@@ -2723,7 +2723,7 @@ Source: ~
 ~
 
 
-3D_normalMaterial() 📄 ⚡
+p5-3D_normalMaterial() 📄 ⚡
 |normalMaterial|() ⚡ Function
 
 Sets the current material as a normal material.
@@ -2767,7 +2767,7 @@ Source: ~
 ~
 
 
-3D_ortho() 📄 ⚡
+p5-3D_ortho() 📄 ⚡
 |ortho|({Number} [left]   x-coordinate of the frustum’s left plane. Defaults to `-width / 2`., {Number} [right]  x-coordinate of the frustum’s right plane. Defaults to `width / 2`., {Number} [bottom] y-coordinate of the frustum’s bottom plane. Defaults to `height / 2`., {Number} [top]    y-coordinate of the frustum’s top plane. Defaults to `-height / 2`., {Number} [near]   z-coordinate of the frustum’s near plane. Defaults to 0., {Number} [far]    z-coordinate of the frustum’s far plane. Defaults to `max(width, height) + 800`.) ⚡ Function
 
 Sets an orthographic projection for the current camera in a 3D sketch.
@@ -2866,7 +2866,7 @@ Source: ~
 ~
 
 
-3D_panorama() 📄 ⚡
+p5-3D_panorama() 📄 ⚡
 |panorama|(img) ⚡ Function
 
 Creates an immersive 3D `background`.
@@ -2926,7 +2926,7 @@ Source: ~
 ~
 
 
-3D_parseTime() 📄 ⚡
+p5-3D_parseTime() 📄 ⚡
 |parseTime|() ⚡ Function
 
 Parse strings like "01:10:00" (meaning 1 hour, 10 minutes, 0 seconds) into number of milliseconds.
@@ -2940,7 +2940,7 @@ Source: ~
 ~
 
 
-3D_perspective() 📄 ⚡
+p5-3D_perspective() 📄 ⚡
 |perspective|({Number} [fovy]   camera frustum vertical field of view. Defaults to, {Number} [aspect] camera frustum aspect ratio. Defaults to, {Number} [near]   distance from the camera to the near clipping plane., {Number} [far]    distance from the camera to the far clipping plane.) ⚡ Function
 
 Sets a perspective projection for the current camera in a 3D sketch.
@@ -3054,7 +3054,7 @@ Source: ~
 ~
 
 
-3D_pointLight() 📄 ⚡
+p5-3D_pointLight() 📄 ⚡
 |pointLight|(color, position) ⚡ Function
 
 Parameters: ~
@@ -3070,7 +3070,7 @@ Source: ~
 ~
 
 
-3D_push() 📄 ⚡
+p5-3D_push() 📄 ⚡
 |push|(xs, ys, v) ⚡ Function
 
 Parameters: ~
@@ -3087,7 +3087,7 @@ Source: ~
 ~
 
 
-3D_pushLine() 📄 ⚡
+p5-3D_pushLine() 📄 ⚡
 |pushLine|(x0, y0, x1, y1) ⚡ Function
 
 Parameters: ~
@@ -3105,7 +3105,7 @@ Source: ~
 ~
 
 
-3D_resetShader() 📄 ⚡
+p5-3D_resetShader() 📄 ⚡
 |resetShader|() ⚡ Function
 
 Restores the default shaders.
@@ -3193,7 +3193,7 @@ Source: ~
 ~
 
 
-3D_samePoint() 📄 ⚡
+p5-3D_samePoint() 📄 ⚡
 |samePoint|(x0, y0, x1, y1) ⚡ Function
 
 Parameters: ~
@@ -3215,7 +3215,7 @@ Source: ~
 ~
 
 
-3D_setCamera() 📄 ⚡
+p5-3D_setCamera() 📄 ⚡
 |setCamera|(cam) ⚡ Function
 
 Sets the current (active) camera of a 3D sketch.
@@ -3284,7 +3284,7 @@ Source: ~
 ~
 
 
-3D_setPixel() 📄 ⚡
+p5-3D_setPixel() 📄 ⚡
 |setPixel|(imageInfo, r, g, b, a) ⚡ Function
 
 Parameters: ~
@@ -3303,7 +3303,7 @@ Source: ~
 ~
 
 
-3D_setup() 📄 ⚡
+p5-3D_setup() 📄 ⚡
 |setup|() ⚡ Function
 
 Example: change amplitude with fadeTime, and schedule the change to happen in the future.
@@ -3316,7 +3316,7 @@ Source: ~
 ~
 
 
-3D_shininess() 📄 ⚡
+p5-3D_shininess() 📄 ⚡
 |shininess|(shine) ⚡ Function
 
 Sets the amount of gloss ("shininess") of a <a href="#/p5/specularMaterial">specularMaterial()</a>.
@@ -3381,7 +3381,7 @@ Source: ~
 ~
 
 
-3D_specularColor() 📄 ⚡
+p5-3D_specularColor() 📄 ⚡
 |specularColor|(color) ⚡ Function
 
 Parameters: ~
@@ -3396,7 +3396,7 @@ Source: ~
 ~
 
 
-3D_specularMaterial() 📄 ⚡
+p5-3D_specularMaterial() 📄 ⚡
 |specularMaterial|(color) ⚡ Function
 
 Parameters: ~
@@ -3411,7 +3411,7 @@ Source: ~
 ~
 
 
-3D_spotLight() 📄 ⚡
+p5-3D_spotLight() 📄 ⚡
 |spotLight|(color, x, y, z, rx, ry, rz, {Number}                   [angle], {Number}                   [concentration]) ⚡ Function
 
 Parameters: ~
@@ -3434,7 +3434,7 @@ Source: ~
 ~
 
 
-3D_texture() 📄 ⚡
+p5-3D_texture() 📄 ⚡
 |texture|(tex) ⚡ Function
 
 Sets the texture that will be used on shapes.
@@ -3606,7 +3606,7 @@ Source: ~
 ~
 
 
-3D_textureMode() 📄 ⚡
+p5-3D_textureMode() 📄 ⚡
 |textureMode|(mode) ⚡ Function
 
 Changes the coordinate system used for textures when they’re applied to custom shapes.
@@ -3720,7 +3720,7 @@ Source: ~
 ~
 
 
-3D_textureWrap() 📄 ⚡
+p5-3D_textureWrap() 📄 ⚡
 |textureWrap|(wrapX, {Constant} [wrapY] either CLAMP, REPEAT, or MIRROR) ⚡ Function
 
 Changes the way textures behave when a shape’s uv coordinates go beyond the texture.
@@ -3941,7 +3941,7 @@ Source: ~
 ~
 
 
-3D_textureWrapX() 📄 ⚡
+p5-3D_textureWrapX() 📄 ⚡
 |textureWrapX|(wrapX, {Constant} [wrapY] either CLAMP, REPEAT, or MIRROR) ⚡ Function
 
 Changes the way textures behave when a shape’s uv coordinates go beyond the texture.
@@ -4162,7 +4162,7 @@ Source: ~
 ~
 
 
-3D_userFillShader() 📄 ⚡
+p5-3D_userFillShader() 📄 ⚡
 |userFillShader|() ⚡ Function
 
 Restores the default shaders.
@@ -4250,7 +4250,7 @@ Source: ~
 ~
 
 
-3D_userStrokeShader() 📄 ⚡
+p5-3D_userStrokeShader() 📄 ⚡
 |userStrokeShader|() ⚡ Function
 
 Restores the default shaders.
@@ -4340,7 +4340,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-3D-properties*
 
-3D_fft() 📄 🔧
+p5-3D_fft() 📄 🔧
 |fft| ⚡ Function
 
 Create an FFT object.
@@ -4355,7 +4355,7 @@ Source: ~
 ~
 
 
-3D_frequencySpectrum() 📄 🔧
+p5-3D_frequencySpectrum() 📄 🔧
 |frequencySpectrum| ⚡ Function
 
 Analyze the sound.
@@ -4369,7 +4369,7 @@ Source: ~
 ~
 
 
-3D_length() 📄 🔧
+p5-3D_length() 📄 🔧
 |length| ⚡ Function
 
 A "soft" `clear`, which keeps the underlying storage size the same, but empties the contents of its dataArray()
@@ -4382,7 +4382,7 @@ Source: ~
 ~
 
 
-3D_visualSuite() 📄 🔧
+p5-3D_visualSuite() 📄 🔧
 |visualSuite| ⚡ Function
 
 A helper to define a category of visual tests.
@@ -4401,7 +4401,7 @@ Source: ~
 ~
 
 
-3D_waveform() 📄 🔧
+p5-3D_waveform() 📄 🔧
 |waveform| ⚡ Function
 
 Analyze the sound as a waveform (amplitude over time)
@@ -4416,7 +4416,7 @@ Source: ~
 
 VARIABLES                                                   *p5-3D-variables*
 
-3D_ampLabel() 📄 📌
+p5-3D_ampLabel() 📄 📌
 |ampLabel| ⚡ Function
 
 Example: change the frequency of an oscillator and visualize the waveform
@@ -4429,7 +4429,7 @@ Source: ~
 ~
 
 
-3D_ampSlider() 📄 📌
+p5-3D_ampSlider() 📄 📌
 |ampSlider| ⚡ Function
 
 Example: change the frequency of an oscillator and visualize the waveform
@@ -4442,7 +4442,7 @@ Source: ~
 ~
 
 
-3D_analyzer() 📄 📌
+p5-3D_analyzer() 📄 📌
 |analyzer| ⚡ Function
 
 Example: p5.Delay w/ p5.SoundFile + p5.Amplitude Click the mouse to hear the p5.Delay process a sound file.
@@ -4457,7 +4457,7 @@ Source: ~
 ~
 
 
-3D_button() 📄 📌
+p5-3D_button() 📄 📌
 |button| ⚡ Function
 
 Example: change the frequency of an oscillator and visualize the waveform
@@ -4470,7 +4470,7 @@ Source: ~
 ~
 
 
-3D_c() 📄 📌
+p5-3D_c() 📄 📌
 |c| ⚡ Function
 
 webgl `loadPixels`() and `get`() example
@@ -4483,7 +4483,7 @@ Source: ~
 ~
 
 
-3D_carrier() 📄 📌
+p5-3D_carrier() 📄 📌
 |carrier| ⚡ Function
 
 Example: Amplitude Modulation involves two oscillators, referred to as the carrier and the modulator, where the modulator controls the carrier's amplitude.
@@ -4509,7 +4509,7 @@ Source: ~
 ~
 
 
-3D_centerX() 📄 📌
+p5-3D_centerX() 📄 📌
 |centerX| ⚡ Function
 
 Rotate camera view about arbitrary axis defined by x,y,z based on http://learnwebgl.brown37.net/07_cameras/camera_rotating_motion.html
@@ -4522,7 +4522,7 @@ Source: ~
 ~
 
 
-3D_currentIR() 📄 📌
+p5-3D_currentIR() 📄 📌
 |currentIR| ⚡ Function
 
 Example: Convolution Reverb w/ FFT The p5.Convolver can recreate the sound of actual spaces using convolution.
@@ -4538,7 +4538,7 @@ Source: ~
 ~
 
 
-3D_cVerb() 📄 📌
+p5-3D_cVerb() 📄 📌
 |cVerb| ⚡ Function
 
 Example: Convolution Reverb w/ FFT The p5.Convolver can recreate the sound of actual spaces using convolution.
@@ -4554,7 +4554,7 @@ Source: ~
 ~
 
 
-3D_data() 📄 📌
+p5-3D_data() 📄 📌
 |data| ⚡ Function
 
 Checks if the source data for this texture has changed (if it's easy to do so) and reuploads the texture if necessary.
@@ -4568,7 +4568,7 @@ Source: ~
 ~
 
 
-3D_delay() 📄 📌
+p5-3D_delay() 📄 📌
 |delay| ⚡ Function
 
 Example: p5.Delay w/ p5.SoundFile + p5.Amplitude Click the mouse to hear the p5.Delay process a sound file.
@@ -4583,7 +4583,7 @@ Source: ~
 ~
 
 
-3D_description() 📄 📌
+p5-3D_description() 📄 📌
 |description| ⚡ Function
 
 Example: Apply a p5.BandPass `filter` to white `noise`.
@@ -4598,7 +4598,7 @@ Source: ~
 ~
 
 
-3D_diffX() 📄 📌
+p5-3D_diffX() 📄 📌
 |diffX| ⚡ Function
 
 Sets the camera’s position in "world" space without changing its orientation.
@@ -4737,7 +4737,7 @@ Source: ~
 ~
 
 
-3D_env() 📄 📌
+p5-3D_env() 📄 📌
 |env| ⚡ Function
 
 Create a sequence using a Part.
@@ -4752,7 +4752,7 @@ Source: ~
 ~
 
 
-3D_freqLabel() 📄 📌
+p5-3D_freqLabel() 📄 📌
 |freqLabel| ⚡ Function
 
 Example: change the frequency of an oscillator and visualize the waveform
@@ -4765,7 +4765,7 @@ Source: ~
 ~
 
 
-3D_freqSlider() 📄 📌
+p5-3D_freqSlider() 📄 📌
 |freqSlider| ⚡ Function
 
 Example: change the frequency of an oscillator and visualize the waveform
@@ -4778,7 +4778,7 @@ Source: ~
 ~
 
 
-3D_gl() 📄 📌
+p5-3D_gl() 📄 📌
 |gl| ⚡ Function
 
 Sets the texture wrapping mode.
@@ -4794,7 +4794,7 @@ Source: ~
 ~
 
 
-3D_img() 📄 📌
+p5-3D_img() 📄 📌
 |img| ⚡ Function
 
 webgl texture mode example
@@ -4807,7 +4807,7 @@ Source: ~
 ~
 
 
-3D_keyNamesOfThePropToCopy() 📄 📌
+p5-3D_keyNamesOfThePropToCopy() 📄 📌
 |keyNamesOfThePropToCopy| ⚡ Function
 
 Sets the camera’s position, orientation, and projection by copying another camera.
@@ -4869,7 +4869,7 @@ Source: ~
 ~
 
 
-3D_languages() 📄 📌
+p5-3D_languages() 📄 📌
 |languages| ⚡ Function
 
 This is a list of languages that we have added so far.
@@ -4884,7 +4884,7 @@ Source: ~
 ~
 
 
-3D_local() 📄 📌
+p5-3D_local() 📄 📌
 |local| ⚡ Function
 
 Moves the camera along its "local" axes without changing its orientation.
@@ -4963,7 +4963,7 @@ Source: ~
 ~
 
 
-3D_location() 📄 📌
+p5-3D_location() 📄 📌
 |location| ⚡ Function
 
 Once all buffers have been bound, this checks to see if there are any remaining active attributes, likely left over from previous renders, and disables them so that they don't affect rendering.
@@ -4976,7 +4976,7 @@ Source: ~
 ~
 
 
-3D_match() 📄 📌
+p5-3D_match() 📄 📌
 |match| ⚡ Function
 
 Shaders are written in <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders">GLSL</a>, but there are different versions of GLSL that it might be written in.
@@ -4991,7 +4991,7 @@ Source: ~
 ~
 
 
-3D_mic() 📄 📌
+p5-3D_mic() 📄 📌
 |mic| ⚡ Function
 
 Visualize the frequency spectrum of live audio input
@@ -5004,7 +5004,7 @@ Source: ~
 ~
 
 
-3D_myp5() 📄 📌
+p5-3D_myp5() 📄 📌
 |myp5| ⚡ Function
 
 Uses p5 in instance-mode inside a custom container.
@@ -5018,7 +5018,7 @@ Source: ~
 ~
 
 
-3D_myp5Container() 📄 📌
+p5-3D_myp5Container() 📄 📌
 |myp5Container| ⚡ Function
 
 Uses p5 in instance-mode inside a custom container.
@@ -5032,7 +5032,7 @@ Source: ~
 ~
 
 
-3D_noise() 📄 📌
+p5-3D_noise() 📄 📌
 |noise| ⚡ Function
 
 Example: p5.Delay w/ p5.Noise, p5.Env & p5.Amplitude Click the mouse to hear the p5.Delay process a Noise Envelope.
@@ -5047,7 +5047,7 @@ Source: ~
 ~
 
 
-3D_osc() 📄 📌
+p5-3D_osc() 📄 📌
 |osc| ⚡ Function
 
 Create a sequence using a Part.
@@ -5062,7 +5062,7 @@ Source: ~
 ~
 
 
-3D_playMode() 📄 📌
+p5-3D_playMode() 📄 📌
 |playMode| ⚡ Function
 
 Toggle play mode between 'restart' and 'sustain'.
@@ -5076,7 +5076,7 @@ Source: ~
 ~
 
 
-3D_result() 📄 📌
+p5-3D_result() 📄 📌
 |result| ⚡ Function
 
 Load strings of `text` into an array of lines.
@@ -5090,7 +5090,7 @@ Source: ~
 ~
 
 
-3D_reverb() 📄 📌
+p5-3D_reverb() 📄 📌
 |reverb| ⚡ Function
 
 Example: Reverb
@@ -5103,7 +5103,7 @@ Source: ~
 ~
 
 
-3D_shader() 📄 📌
+p5-3D_shader() 📄 📌
 |shader| ⚡ Function
 
 Copies the shader from one drawing context to another.
@@ -5275,7 +5275,7 @@ Source: ~
 ~
 
 
-3D_sinon() 📄 📌
+p5-3D_sinon() 📄 📌
 |sinon| ⚡ Function
 
 Sinon core utilities.
@@ -5289,7 +5289,7 @@ Source: ~
 ~
 
 
-3D_size() 📄 📌
+p5-3D_size() 📄 📌
 |size| ⚡ Function
 
 DEMO: Use p5.Amplitude (volume) to change the size of an `ellipse`
@@ -5302,7 +5302,7 @@ Source: ~
 ~
 
 
-3D_sound() 📄 📌
+p5-3D_sound() 📄 📌
 |sound| ⚡ Function
 
 Example: Convolution Reverb w/ FFT The p5.Convolver can recreate the sound of actual spaces using convolution.
@@ -5318,7 +5318,7 @@ Source: ~
 ~
 
 
-3D_soundFile() 📄 📌
+p5-3D_soundFile() 📄 📌
 |soundFile| ⚡ Function
 
 DEMO: Draw the waveform of a sound as it plays using p5.FFT.waveform()
@@ -5331,7 +5331,7 @@ Source: ~
 ~
 
 
-3D_source() 📄 📌
+p5-3D_source() 📄 📌
 |source| ⚡ Function
 
 Auto Correlation multiples each sample in a buffer by all of the other samples.
@@ -5347,7 +5347,7 @@ Source: ~
 ~
 
 
-3D_triOsc() 📄 📌
+p5-3D_triOsc() 📄 📌
 |triOsc| ⚡ Function
 
 Example: Create an Envelope (p5.Env) to control oscillator amplitude.
@@ -5362,7 +5362,7 @@ Source: ~
 ~
 
 
-3D_uniform() 📄 📌
+p5-3D_uniform() 📄 📌
 |uniform| ⚡ Function
 
 Sets the shader’s uniform (global) variables.

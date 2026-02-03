@@ -73,7 +73,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-Data-classes*
 
-Data_NumberDict() 📄 🏛️
+p5-Data_NumberDict() 📄 🏛️
 |NumberDict|() 🏛️ Class
 
 A simple Dictionary class for Numbers.
@@ -86,7 +86,7 @@ Source: ~
 ~
 
 
-Data_StringDict() 📄 🏛️
+p5-Data_StringDict() 📄 🏛️
 |StringDict|() 🏛️ Class
 
 A simple Dictionary class for Strings.
@@ -99,7 +99,7 @@ Source: ~
 ~
 
 
-Data_TypedDict() 📄 🏛️
+p5-Data_TypedDict() 📄 🏛️
 |TypedDict|() 🏛️ Class
 
 Base class for all p5.Dictionary types.
@@ -115,7 +115,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-Data-functions*
 
-Data_append() 📄 ⚡ ⚠️
+p5-Data_append() 📄 ⚡ ⚠️
 |append|(array, value) ⚡ Function
 
 Adds a value to the end of an array.
@@ -154,7 +154,7 @@ Source: ~
 ~
 
 
-Data_arrayCopy() 📄 ⚡ ⚠️
+p5-Data_arrayCopy() 📄 ⚡ ⚠️
 |arrayCopy|(src, dst, {Integer} [length]) ⚡ Function
 
 ⚠️  DEPRECATED: Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin">arr1.copyWithin(arr2)</a> instead.
@@ -173,7 +173,7 @@ Source: ~
 ~
 
 
-Data_boolean() 📄 ⚡
+p5-Data_boolean() 📄 ⚡
 |boolean|(ns) ⚡ Function
 
 Parameters: ~
@@ -192,7 +192,7 @@ Source: ~
 ~
 
 
-Data_byte() 📄 ⚡
+p5-Data_byte() 📄 ⚡
 |byte|(ns) ⚡ Function
 
 Parameters: ~
@@ -211,7 +211,7 @@ Source: ~
 ~
 
 
-Data_char() 📄 ⚡
+p5-Data_char() 📄 ⚡
 |char|(ns) ⚡ Function
 
 Parameters: ~
@@ -230,7 +230,7 @@ Source: ~
 ~
 
 
-Data_clearStorage() 📄 ⚡
+p5-Data_clearStorage() 📄 ⚡
 |clearStorage|() ⚡ Function
 
 Removes all items in the web browser's local storage.
@@ -292,7 +292,7 @@ Source: ~
 ~
 
 
-Data_concat() 📄 ⚡ ⚠️
+p5-Data_concat() 📄 ⚡ ⚠️
 |concat|(a, b) ⚡ Function
 
 Concatenates two arrays, maps to Array.concat().
@@ -336,7 +336,7 @@ Source: ~
 ~
 
 
-Data_createNumberDict() 📄 ⚡
+p5-Data_createNumberDict() 📄 ⚡
 |createNumberDict|(object) ⚡ Function
 
 Parameters: ~
@@ -355,7 +355,7 @@ Source: ~
 ~
 
 
-Data_digits() 📄 ⚡
+p5-Data_digits() 📄 ⚡
 |digits|(ns, {Number} [digits]) ⚡ Function
 
 Parameters: ~
@@ -375,7 +375,7 @@ Source: ~
 ~
 
 
-Data_float() 📄 ⚡
+p5-Data_float() 📄 ⚡
 |float|(ns) ⚡ Function
 
 Parameters: ~
@@ -394,7 +394,7 @@ Source: ~
 ~
 
 
-Data_getItem() 📄 ⚡
+p5-Data_getItem() 📄 ⚡
 |getItem|(key) ⚡ Function
 
 Returns a value in the web browser's local storage.
@@ -513,7 +513,7 @@ Source: ~
 ~
 
 
-Data_hex() 📄 ⚡
+p5-Data_hex() 📄 ⚡
 |hex|(ns, {Number} [digits]) ⚡ Function
 
 Parameters: ~
@@ -533,7 +533,7 @@ Source: ~
 ~
 
 
-Data_int() 📄 ⚡
+p5-Data_int() 📄 ⚡
 |int|(ns) ⚡ Function
 
 Parameters: ~
@@ -552,7 +552,7 @@ Source: ~
 ~
 
 
-Data_join() 📄 ⚡
+p5-Data_join() 📄 ⚡
 |join|(list, separator) ⚡ Function
 
 Combines an array of strings into one string.
@@ -603,7 +603,7 @@ Source: ~
 ~
 
 
-Data_match() 📄 ⚡
+p5-Data_match() 📄 ⚡
 |match|(str, regexp) ⚡ Function
 
 Applies a regular expression to a string and returns an array with the first match.
@@ -665,7 +665,7 @@ Source: ~
 ~
 
 
-Data_matchAll() 📄 ⚡
+p5-Data_matchAll() 📄 ⚡
 |matchAll|(str, regexp) ⚡ Function
 
 Applies a regular expression to a string and returns an array of matches.
@@ -737,7 +737,7 @@ Source: ~
 ~
 
 
-Data_nf() 📄 ⚡
+p5-Data_nf() 📄 ⚡
 |nf|(nums, {Integer|String} [left], {Integer|String} [right]) ⚡ Function
 
 Parameters: ~
@@ -758,7 +758,7 @@ Source: ~
 ~
 
 
-Data_nfc() 📄 ⚡
+p5-Data_nfc() 📄 ⚡
 |nfc|(nums, {Integer|String} [right]) ⚡ Function
 
 Parameters: ~
@@ -778,7 +778,7 @@ Source: ~
 ~
 
 
-Data_nfp() 📄 ⚡
+p5-Data_nfp() 📄 ⚡
 |nfp|(nums, {Integer} [left], {Integer} [right]) ⚡ Function
 
 Parameters: ~
@@ -799,7 +799,7 @@ Source: ~
 ~
 
 
-Data_nfs() 📄 ⚡
+p5-Data_nfs() 📄 ⚡
 |nfs|(nums, {Integer} [left], {Integer} [right]) ⚡ Function
 
 Parameters: ~
@@ -820,7 +820,7 @@ Source: ~
 ~
 
 
-Data_removeItem() 📄 ⚡
+p5-Data_removeItem() 📄 ⚡
 |removeItem|(key) ⚡ Function
 
 Removes an item from the web browser's local storage.
@@ -888,7 +888,7 @@ Source: ~
 ~
 
 
-Data_reverse() 📄 ⚡ ⚠️
+p5-Data_reverse() 📄 ⚡ ⚠️
 |reverse|(list) ⚡ Function
 
 Reverses the order of an array, maps to Array.reverse()
@@ -924,7 +924,7 @@ Source: ~
 ~
 
 
-Data_shorten() 📄 ⚡ ⚠️
+p5-Data_shorten() 📄 ⚡ ⚠️
 |shorten|(list) ⚡ Function
 
 Decreases an array by one element and returns the shortened array, maps to Array.`pop`().
@@ -960,7 +960,7 @@ Source: ~
 ~
 
 
-Data_shuffle() 📄 ⚡
+p5-Data_shuffle() 📄 ⚡
 |shuffle|(array, {Boolean} [bool] if `true`, shuffle the original array in place. Defaults to `false`.) ⚡ Function
 
 Shuffles the elements of an array.
@@ -1069,7 +1069,7 @@ Source: ~
 ~
 
 
-Data_sort() 📄 ⚡ ⚠️
+p5-Data_sort() 📄 ⚡ ⚠️
 |sort|(list, {Integer} [count] number of elements to sort, starting from 0) ⚡ Function
 
 Sorts an array of numbers from smallest to largest, or puts an array of words in alphabetical order.
@@ -1120,7 +1120,7 @@ Source: ~
 ~
 
 
-Data_splice() 📄 ⚡ ⚠️
+p5-Data_splice() 📄 ⚡ ⚠️
 |splice|(list, value, position) ⚡ Function
 
 Inserts a value or an array of values into an existing array.
@@ -1163,7 +1163,7 @@ Source: ~
 ~
 
 
-Data_split() 📄 ⚡
+p5-Data_split() 📄 ⚡
 |split|(value, delim) ⚡ Function
 
 Splits a `String` into pieces and returns an array containing the pieces.
@@ -1229,7 +1229,7 @@ Source: ~
 ~
 
 
-Data_splitTokens() 📄 ⚡
+p5-Data_splitTokens() 📄 ⚡
 |splitTokens|(value, {String} [delim] character(s) to use for splitting the string.) ⚡ Function
 
 Splits a `String` into pieces and returns an array containing the pieces.
@@ -1375,7 +1375,7 @@ Source: ~
 ~
 
 
-Data_storeItem() 📄 ⚡
+p5-Data_storeItem() 📄 ⚡
 |storeItem|(key, value) ⚡ Function
 
 Stores a value in the web browser's local storage.
@@ -1489,7 +1489,7 @@ Source: ~
 ~
 
 
-Data_str() 📄 ⚡
+p5-Data_str() 📄 ⚡
 |str|(n) ⚡ Function
 
 Converts a `Boolean` or `Number` to `String`.
@@ -1601,7 +1601,7 @@ Source: ~
 ~
 
 
-Data_subset() 📄 ⚡ ⚠️
+p5-Data_subset() 📄 ⚡ ⚠️
 |subset|(list, start, {Integer} [count] number of values to extract) ⚡ Function
 
 Extracts an array of elements from an existing array.
@@ -1645,7 +1645,7 @@ Source: ~
 ~
 
 
-Data_trim() 📄 ⚡
+p5-Data_trim() 📄 ⚡
 |trim|(strs) ⚡ Function
 
 Parameters: ~
@@ -1664,7 +1664,7 @@ Source: ~
 ~
 
 
-Data_unchar() 📄 ⚡
+p5-Data_unchar() 📄 ⚡
 |unchar|(ns) ⚡ Function
 
 Parameters: ~
@@ -1683,7 +1683,7 @@ Source: ~
 ~
 
 
-Data_unhex() 📄 ⚡
+p5-Data_unhex() 📄 ⚡
 |unhex|(ns) ⚡ Function
 
 Parameters: ~
@@ -1704,7 +1704,7 @@ Source: ~
 
 VARIABLES                                                   *p5-Data-variables*
 
-Data_arr() 📄 📌 ⚠️
+p5-Data_arr() 📄 📌 ⚠️
 |arr| ⚡ Function
 
 Sorts an array of numbers from smallest to largest, or puts an array of words in alphabetical order.
@@ -1746,7 +1746,7 @@ Source: ~
 ~
 
 
-Data_isView() 📄 📌
+p5-Data_isView() 📄 📌
 |isView| ⚡ Function
 
 Shuffles the elements of an array.
@@ -1846,7 +1846,7 @@ Source: ~
 ~
 
 
-Data_keys() 📄 📌
+p5-Data_keys() 📄 📌
 |keys| ⚡ Function
 
 Removes all items in the web browser's local storage.
@@ -1908,7 +1908,7 @@ Source: ~
 ~
 
 
-Data_value() 📄 📌
+p5-Data_value() 📄 📌
 |value| ⚡ Function
 
 Returns a value in the web browser's local storage.

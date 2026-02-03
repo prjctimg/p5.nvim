@@ -91,7 +91,7 @@ CONTENTS                                                           *${this.getCu
 
 FUNCTIONS                                                   *p5-unknown-functions*
 
-unknown_$prettyPrint() 📄 ⚡
+p5-unknown_$prettyPrint() 📄 ⚡
 |$prettyPrint|(opt_whenDone, opt_root) ⚡ Function
 
 Find all the {@code <pre>} and {@code <code>} tags in the DOM with {@code class=prettyprint} and prettify them.
@@ -109,7 +109,7 @@ Source: ~
 ~
 
 
-unknown_$prettyPrintOne() 📄 ⚡
+p5-unknown_$prettyPrintOne() 📄 ⚡
 |$prettyPrintOne|(sourceCodeHtml {string} The HTML to pretty print., opt_langExtension {string} The language name to use., opt_numberLines {number|boolean} True to number lines,) ⚡ Function
 
 Pretty `print` a chunk of code.
@@ -128,7 +128,7 @@ Source: ~
 ~
 
 
-unknown_anonymous() 📄 ⚡
+p5-unknown_anonymous() 📄 ⚡
 |anonymous|() ⚡ Function
 
 Define global App.
@@ -141,7 +141,7 @@ Source: ~
 ~
 
 
-unknown_appendDecorations() 📄 ⚡
+p5-unknown_appendDecorations() 📄 ⚡
 |appendDecorations|(basePos) ⚡ Function
 
 Apply the given language handler to sourceCode and add the resulting decorations to out.
@@ -158,7 +158,7 @@ Source: ~
 ~
 
 
-unknown_background() 📄 ⚡
+p5-unknown_background() 📄 ⚡
 |background|(colorString, {Number} [a]) ⚡ Function
 
 Parameters: ~
@@ -174,7 +174,7 @@ Source: ~
 ~
 
 
-unknown_childContentWrapper() 📄 ⚡
+p5-unknown_childContentWrapper() 📄 ⚡
 |childContentWrapper|() ⚡ Function
 
 Given an element, if it contains only one child element and any `text` nodes it contains contain only space characters, return the sole child element.
@@ -189,7 +189,7 @@ Source: ~
 ~
 
 
-unknown_createSimpleLexer() 📄 ⚡
+p5-unknown_createSimpleLexer() 📄 ⚡
 |createSimpleLexer|(shortcutStylePatterns, fallthroughStylePatterns) ⚡ Function
 
 Given triples of [style, pattern, context] returns a lexing function, The lexing function interprets the patterns to find token boundaries and returns a decoration list of the form [index_0, style_0, index_1, style_1, ..., index_n, style_n] where index_n is an index into the sourceCode, and style_n is a style constant like PR_PLAIN.
@@ -222,7 +222,7 @@ Source: ~
 ~
 
 
-unknown_extractSourceSpans() 📄 ⚡
+p5-unknown_extractSourceSpans() 📄 ⚡
 |extractSourceSpans|(node, isPreformatted) ⚡ Function
 
 Split markup into a string of source code and an array mapping ranges in that string to the `text` nodes in which they appear.
@@ -249,7 +249,7 @@ Source: ~
 ~
 
 
-unknown_findMatches() 📄 ⚡
+p5-unknown_findMatches() 📄 ⚡
 |findMatches|(array) ⚡ Function
 
 substringMatcher function for Typehead (search for strings in an array).
@@ -270,7 +270,7 @@ Source: ~
 ~
 
 
-unknown_methodName() 📄 ⚡
+p5-unknown_methodName() 📄 ⚡
 |methodName|({"dataType"} "paramName" "Description of the param", {"dataType"} "paramName" "Description of the param") ⚡ Function
 
 Parameters: ~
@@ -286,7 +286,7 @@ Source: ~
 ~
 
 
-unknown_numberLines() 📄 ⚡
+p5-unknown_numberLines() 📄 ⚡
 |numberLines|(node, isPreformatted) ⚡ Function
 
 Given a DOM subtree, wraps it in a list, and puts each `line` into its own list item.
@@ -304,7 +304,7 @@ Source: ~
 ~
 
 
-unknown_recombineTagsAndDecorations() 📄 ⚡
+p5-unknown_recombineTagsAndDecorations() 📄 ⚡
 |recombineTagsAndDecorations|(job) ⚡ Function
 
 Breaks {@code job.sourceCode} around style boundaries in {@code job.decorations} and modifies {@code job.sourceNode} in place.
@@ -321,7 +321,7 @@ Source: ~
 ~
 
 
-unknown_registerLangHandler() 📄 ⚡
+p5-unknown_registerLangHandler() 📄 ⚡
 |registerLangHandler|(handler, fileExtensions) ⚡ Function
 
 Register a language handler for the given file extensions.
@@ -339,7 +339,7 @@ Source: ~
 ~
 
 
-unknown_sourceDecorator() 📄 ⚡
+p5-unknown_sourceDecorator() 📄 ⚡
 |sourceDecorator|(options) ⚡ Function
 
 returns a function that produces a list of decorations from source `text`.
@@ -366,7 +366,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-unknown-properties*
 
-unknown_PR() 📄 🔧
+p5-unknown_PR() 📄 🔧
 |PR| ⚡ Function
 
 Contains functions for creating and registering new language handlers.
@@ -379,7 +379,7 @@ Source: ~
 ~
 
 
-unknown_PR_SHOULD_USE_CONTINUATION() 📄 🔧
+p5-unknown_PR_SHOULD_USE_CONTINUATION() 📄 🔧
 |PR_SHOULD_USE_CONTINUATION| ⚡ Function
 
 Split {@code prettyPrint} into multiple timeouts so as not to interfere with UI events.
@@ -393,7 +393,7 @@ Source: ~
 ~
 
 
-unknown_sourceCode() 📄 🔧
+p5-unknown_sourceCode() 📄 🔧
 |sourceCode| ⚡ Function
 
 Plain `text`.
@@ -409,7 +409,7 @@ Source: ~
 
 VARIABLES                                                   *p5-unknown-variables*
 
-unknown_App() 📄 📌
+p5-unknown_App() 📄 📌
 |App| ⚡ Function
 
 Define global App.
@@ -422,7 +422,7 @@ Source: ~
 ~
 
 
-unknown_basePos() 📄 📌
+p5-unknown_basePos() 📄 📌
 |basePos| ⚡ Function
 
 Lexes job.sourceCode and produces an output array job.decorations of style classes preceded by the position at which they start in job.sourceCode in order.
@@ -435,7 +435,7 @@ Source: ~
 ~
 
 
-unknown_capturedGroupIndex() 📄 📌
+p5-unknown_capturedGroupIndex() 📄 📌
 |capturedGroupIndex| ⚡ Function
 
 Given a group of {@link RegExp}s, returns a {@code RegExp} that globally matches the union of the sets of strings matched by the input RegExp.
@@ -449,7 +449,7 @@ Source: ~
 ~
 
 
-unknown_classes() 📄 📌
+p5-unknown_classes() 📄 📌
 |classes| ⚡ Function
 
 Returns one item object by searching a class or a class item (method, property or event).
@@ -462,7 +462,7 @@ Source: ~
 ~
 
 
-unknown_cleanItem() 📄 📌
+p5-unknown_cleanItem() 📄 📌
 |cleanItem| ⚡ Function
 
 Clean item properties: url encode properties containing paths.
@@ -475,7 +475,7 @@ Source: ~
 ~
 
 
-unknown_container() 📄 📌
+p5-unknown_container() 📄 📌
 |container| ⚡ Function
 
 Pretty `print` a chunk of code.
@@ -488,7 +488,7 @@ Source: ~
 ~
 
 
-unknown_decorate() 📄 📌
+p5-unknown_decorate() 📄 📌
 |decorate| ⚡ Function
 
 Lexes job.sourceCode and produces an output array job.decorations of style classes preceded by the position at which they start in job.sourceCode in order.
@@ -501,7 +501,7 @@ Source: ~
 ~
 
 
-unknown_decorations() 📄 📌
+p5-unknown_decorations() 📄 📌
 |decorations| ⚡ Function
 
 Even entries are positions in source in ascending order.
@@ -515,7 +515,7 @@ Source: ~
 ~
 
 
-unknown_ext() 📄 📌
+p5-unknown_ext() 📄 📌
 |ext| ⚡ Function
 
 Parses a resource name into its component parts.
@@ -529,7 +529,7 @@ Source: ~
 ~
 
 
-unknown_fallthroughStylePatterns() 📄 📌
+p5-unknown_fallthroughStylePatterns() 📄 📌
 |fallthroughStylePatterns| ⚡ Function
 
 returns a function that produces a list of decorations from source `text`.
@@ -546,7 +546,7 @@ Source: ~
 ~
 
 
-unknown_i() 📄 📌
+p5-unknown_i() 📄 📌
 |i| ⚡ Function
 
 Register a language handler for the given file extensions.
@@ -559,7 +559,7 @@ Source: ~
 ~
 
 
-unknown_isIE8OrEarlier() 📄 📌
+p5-unknown_isIE8OrEarlier() 📄 📌
 |isIE8OrEarlier| ⚡ Function
 
 Breaks {@code job.sourceCode} around style boundaries in {@code job.decorations} and modifies {@code job.sourceNode} in place.
@@ -572,7 +572,7 @@ Source: ~
 ~
 
 
-unknown_langHandlerRegistry() 📄 📌
+p5-unknown_langHandlerRegistry() 📄 📌
 |langHandlerRegistry| ⚡ Function
 
 Maps language-specific file extensions to handlers.
@@ -585,7 +585,7 @@ Source: ~
 ~
 
 
-unknown_modName() 📄 📌
+p5-unknown_modName() 📄 📌
 |modName| ⚡ Function
 
 Parses a resource name into its component parts.
@@ -599,7 +599,7 @@ Source: ~
 ~
 
 
-unknown_nocode() 📄 📌
+p5-unknown_nocode() 📄 📌
 |nocode| ⚡ Function
 
 Given a DOM subtree, wraps it in a list, and puts each `line` into its own list item.
@@ -612,7 +612,7 @@ Source: ~
 ~
 
 
-unknown_pos() 📄 📌
+p5-unknown_pos() 📄 📌
 |pos| ⚡ Function
 
 Even entries are positions in source in ascending order.
@@ -626,7 +626,7 @@ Source: ~
 ~
 
 
-unknown_PR_ATTRIB_NAME() 📄 📌
+p5-unknown_PR_ATTRIB_NAME() 📄 📌
 |PR_ATTRIB_NAME| ⚡ Function
 
 token style for an sgml attribute name.
@@ -639,7 +639,7 @@ Source: ~
 ~
 
 
-unknown_PR_ATTRIB_VALUE() 📄 📌
+p5-unknown_PR_ATTRIB_VALUE() 📄 📌
 |PR_ATTRIB_VALUE| ⚡ Function
 
 token style for an sgml attribute value.
@@ -652,7 +652,7 @@ Source: ~
 ~
 
 
-unknown_PR_COMMENT() 📄 📌
+p5-unknown_PR_COMMENT() 📄 📌
 |PR_COMMENT| ⚡ Function
 
 token style for a comment
@@ -665,7 +665,7 @@ Source: ~
 ~
 
 
-unknown_PR_DECLARATION() 📄 📌
+p5-unknown_PR_DECLARATION() 📄 📌
 |PR_DECLARATION| ⚡ Function
 
 token style for a markup declaration such as a DOCTYPE.
@@ -678,7 +678,7 @@ Source: ~
 ~
 
 
-unknown_PR_KEYWORD() 📄 📌
+p5-unknown_PR_KEYWORD() 📄 📌
 |PR_KEYWORD| ⚡ Function
 
 token style for a keyword
@@ -691,7 +691,7 @@ Source: ~
 ~
 
 
-unknown_PR_LITERAL() 📄 📌
+p5-unknown_PR_LITERAL() 📄 📌
 |PR_LITERAL| ⚡ Function
 
 token style for a literal value.
@@ -706,7 +706,7 @@ Source: ~
 ~
 
 
-unknown_PR_NOCODE() 📄 📌
+p5-unknown_PR_NOCODE() 📄 📌
 |PR_NOCODE| ⚡ Function
 
 A class that indicates a section of markup that is not code, e.g.
@@ -720,7 +720,7 @@ Source: ~
 ~
 
 
-unknown_PR_PLAIN() 📄 📌
+p5-unknown_PR_PLAIN() 📄 📌
 |PR_PLAIN| ⚡ Function
 
 token style for plain `text`.
@@ -733,7 +733,7 @@ Source: ~
 ~
 
 
-unknown_PR_PUNCTUATION() 📄 📌
+p5-unknown_PR_PUNCTUATION() 📄 📌
 |PR_PUNCTUATION| ⚡ Function
 
 token style for a punctuation string.
@@ -746,7 +746,7 @@ Source: ~
 ~
 
 
-unknown_PR_SOURCE() 📄 📌
+p5-unknown_PR_SOURCE() 📄 📌
 |PR_SOURCE| ⚡ Function
 
 token style for embedded source.
@@ -759,7 +759,7 @@ Source: ~
 ~
 
 
-unknown_PR_STRING() 📄 📌
+p5-unknown_PR_STRING() 📄 📌
 |PR_STRING| ⚡ Function
 
 token style for a string literal
@@ -772,7 +772,7 @@ Source: ~
 ~
 
 
-unknown_PR_TAG() 📄 📌
+p5-unknown_PR_TAG() 📄 📌
 |PR_TAG| ⚡ Function
 
 token style for an sgml tag.
@@ -785,7 +785,7 @@ Source: ~
 ~
 
 
-unknown_PR_TYPE() 📄 📌
+p5-unknown_PR_TYPE() 📄 📌
 |PR_TYPE| ⚡ Function
 
 token style for a type
@@ -798,7 +798,7 @@ Source: ~
 ~
 
 
-unknown_prettyPrint() 📄 📌
+p5-unknown_prettyPrint() 📄 📌
 |prettyPrint| ⚡ Function
 
 Find all the {@code <pre>} and {@code <code>} tags in the DOM with {@code class=prettyprint} and prettify them.
@@ -811,7 +811,7 @@ Source: ~
 ~
 
 
-unknown_prettyPrintOne() 📄 📌
+p5-unknown_prettyPrintOne() 📄 📌
 |prettyPrintOne| ⚡ Function
 
 Pretty `print` a chunk of code.
@@ -824,7 +824,7 @@ Source: ~
 ~
 
 
-unknown_REGEXP_PRECEDER_PATTERN() 📄 📌
+p5-unknown_REGEXP_PRECEDER_PATTERN() 📄 📌
 |REGEXP_PRECEDER_PATTERN| ⚡ Function
 
 A `set` of tokens that can precede a regular expression literal in javascript http://web.archive.org/web/20070717142515/http://www.mozilla.org/js/language/js20/rationale/syntax.html has the full list, but I've removed ones that might be problematic when seen in languages that don't support regular expression literals.
@@ -839,7 +839,7 @@ Source: ~
 ~
 
 
-unknown_root() 📄 📌
+p5-unknown_root() 📄 📌
 |root| ⚡ Function
 
 Find all the {@code <pre>} and {@code <code>} tags in the DOM with {@code class=prettyprint} and prettify them.
@@ -852,7 +852,7 @@ Source: ~
 ~
 
 
-unknown_self() 📄 📌
+p5-unknown_self() 📄 📌
 |self| ⚡ Function
 
 Initialize the app: load json API data and create searchable arrays.
@@ -865,7 +865,7 @@ Source: ~
 ~
 
 
-unknown_shortcuts() 📄 📌
+p5-unknown_shortcuts() 📄 📌
 |shortcuts| ⚡ Function
 
 Given triples of [style, pattern, context] returns a lexing function, The lexing function interprets the patterns to find token boundaries and returns a decoration list of the form [index_0, style_0, index_1, style_1, ..., index_n, style_n] where index_n is an index into the sourceCode, and style_n is a style constant like PR_PLAIN.
@@ -889,7 +889,7 @@ Source: ~
 ~
 
 
-unknown_shortcutStylePatterns() 📄 📌
+p5-unknown_shortcutStylePatterns() 📄 📌
 |shortcutStylePatterns| ⚡ Function
 
 returns a function that produces a list of decorations from source `text`.
@@ -906,7 +906,7 @@ Source: ~
 ~
 
 
-unknown_source() 📄 📌
+p5-unknown_source() 📄 📌
 |source| ⚡ Function
 
 Plain `text`.
@@ -920,7 +920,7 @@ Source: ~
 ~
 
 
-unknown_temp() 📄 📌
+p5-unknown_temp() 📄 📌
 |temp| ⚡ Function
 
 Parses a resource name into its component parts.
@@ -934,7 +934,7 @@ Source: ~
 ~
 
 
-unknown_uHostName() 📄 📌
+p5-unknown_uHostName() 📄 📌
 |uHostName| ⚡ Function
 
 Is an URL on another domain.
@@ -949,7 +949,7 @@ Source: ~
 ~
 
 
-unknown_uPort() 📄 📌
+p5-unknown_uPort() 📄 📌
 |uPort| ⚡ Function
 
 Is an URL on another domain.
@@ -964,7 +964,7 @@ Source: ~
 ~
 
 
-unknown_uProtocol() 📄 📌
+p5-unknown_uProtocol() 📄 📌
 |uProtocol| ⚡ Function
 
 Is an URL on another domain.
@@ -979,7 +979,7 @@ Source: ~
 ~
 
 
-unknown_wrapper() 📄 📌
+p5-unknown_wrapper() 📄 📌
 |wrapper| ⚡ Function
 
 Given an element, if it contains only one child element and any `text` nodes it contains contain only space characters, return the sole child element.

@@ -73,7 +73,7 @@ CONTENTS                                                           *${this.getCu
 
 FUNCTIONS                                                   *p5-Events-functions*
 
-Events_exitPointerLock() 📄 ⚡
+p5-Events_exitPointerLock() 📄 ⚡
 |exitPointerLock|() ⚡ Function
 
 Exits a pointer lock started with <a href="#/p5/requestPointerLock">requestPointerLock</a>.
@@ -132,7 +132,7 @@ Source: ~
 ~
 
 
-Events_keyIsDown() 📄 ⚡
+p5-Events_keyIsDown() 📄 ⚡
 |keyIsDown|(code) ⚡ Function
 
 Returns `true` if the `key` it’s checking is pressed and `false` if not.
@@ -247,7 +247,7 @@ Source: ~
 ~
 
 
-Events_requestPointerLock() 📄 ⚡
+p5-Events_requestPointerLock() 📄 ⚡
 |requestPointerLock|() ⚡ Function
 
 Locks the mouse pointer to its current position and makes it invisible.
@@ -301,7 +301,7 @@ Source: ~
 ~
 
 
-Events_setMoveThreshold() 📄 ⚡
+p5-Events_setMoveThreshold() 📄 ⚡
 |setMoveThreshold|(value) ⚡ Function
 
 The <a href="#/p5/setMoveThreshold">setMoveThreshold()</a> function is used to `set` the movement `threshold` for the <a href="#/p5/deviceMoved">deviceMoved()</a> function.
@@ -350,7 +350,7 @@ Source: ~
 ~
 
 
-Events_setShakeThreshold() 📄 ⚡
+p5-Events_setShakeThreshold() 📄 ⚡
 |setShakeThreshold|(value) ⚡ Function
 
 The <a href="#/p5/setShakeThreshold">setShakeThreshold()</a> function is used to `set` the movement `threshold` for the <a href="#/p5/deviceShaken">deviceShaken()</a> function.
@@ -401,7 +401,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-Events-properties*
 
-Events_accelerationX() 📄 🔧
+p5-Events_accelerationX() 📄 🔧
 |accelerationX| ⚡ Function
 
 The system variable accelerationX always contains the acceleration of the device along the x axis.
@@ -430,7 +430,7 @@ Source: ~
 ~
 
 
-Events_accelerationY() 📄 🔧
+p5-Events_accelerationY() 📄 🔧
 |accelerationY| ⚡ Function
 
 The system variable accelerationY always contains the acceleration of the device along the y axis.
@@ -459,7 +459,7 @@ Source: ~
 ~
 
 
-Events_accelerationZ() 📄 🔧
+p5-Events_accelerationZ() 📄 🔧
 |accelerationZ| ⚡ Function
 
 The system variable accelerationZ always contains the acceleration of the device along the z axis.
@@ -488,7 +488,7 @@ Source: ~
 ~
 
 
-Events_deviceOrientation() 📄 🔧
+p5-Events_deviceOrientation() 📄 🔧
 |deviceOrientation| ⚡ Function
 
 The system variable deviceOrientation always contains the orientation of the device.
@@ -504,7 +504,7 @@ Source: ~
 ~
 
 
-Events_isKeyPressed() 📄 🔧
+p5-Events_isKeyPressed() 📄 🔧
 |isKeyPressed| ⚡ Function
 
 A `Boolean` system variable that's `true` if any `key` is currently pressed and `false` if not.
@@ -600,7 +600,7 @@ Source: ~
 ~
 
 
-Events_keyCode() 📄 🔧
+p5-Events_keyCode() 📄 🔧
 |keyCode| ⚡ Function
 
 A `Number` system variable that contains the code of the last `key` typed.
@@ -687,7 +687,7 @@ Source: ~
 ~
 
 
-Events_keyIsPressed() 📄 🔧
+p5-Events_keyIsPressed() 📄 🔧
 |keyIsPressed| ⚡ Function
 
 A `Boolean` system variable that's `true` if any `key` is currently pressed and `false` if not.
@@ -783,7 +783,7 @@ Source: ~
 ~
 
 
-Events_mouseButton() 📄 🔧
+p5-Events_mouseButton() 📄 🔧
 |mouseButton| ⚡ Function
 
 A String system variable that contains the value of the last mouse button pressed.
@@ -852,7 +852,7 @@ Source: ~
 ~
 
 
-Events_mouseIsPressed() 📄 🔧
+p5-Events_mouseIsPressed() 📄 🔧
 |mouseIsPressed| ⚡ Function
 
 A `Boolean` system variable that's `true` if the mouse is pressed and `false` if not.
@@ -916,7 +916,7 @@ Source: ~
 ~
 
 
-Events_mouseX() 📄 🔧
+p5-Events_mouseX() 📄 🔧
 |mouseX| ⚡ Function
 
 A `Number` system variable that tracks the mouse's horizontal position.
@@ -1025,7 +1025,7 @@ Source: ~
 ~
 
 
-Events_mouseY() 📄 🔧
+p5-Events_mouseY() 📄 🔧
 |mouseY| ⚡ Function
 
 A `Number` system variable that tracks the mouse's vertical position.
@@ -1134,7 +1134,7 @@ Source: ~
 ~
 
 
-Events_movedX() 📄 🔧
+p5-Events_movedX() 📄 🔧
 |movedX| ⚡ Function
 
 A `Number` system variable that tracks the mouse's horizontal movement.
@@ -1182,7 +1182,7 @@ Source: ~
 ~
 
 
-Events_movedY() 📄 🔧
+p5-Events_movedY() 📄 🔧
 |movedY| ⚡ Function
 
 A `Number` system variable that tracks the mouse's vertical movement.
@@ -1230,7 +1230,7 @@ Source: ~
 ~
 
 
-Events_pAccelerationX() 📄 🔧
+p5-Events_pAccelerationX() 📄 🔧
 |pAccelerationX| ⚡ Function
 
 The system variable pAccelerationX always contains the acceleration of the device along the x axis in the frame previous to the current frame.
@@ -1244,7 +1244,7 @@ Source: ~
 ~
 
 
-Events_pAccelerationY() 📄 🔧
+p5-Events_pAccelerationY() 📄 🔧
 |pAccelerationY| ⚡ Function
 
 The system variable pAccelerationY always contains the acceleration of the device along the y axis in the frame previous to the current frame.
@@ -1258,7 +1258,7 @@ Source: ~
 ~
 
 
-Events_pAccelerationZ() 📄 🔧
+p5-Events_pAccelerationZ() 📄 🔧
 |pAccelerationZ| ⚡ Function
 
 The system variable pAccelerationZ always contains the acceleration of the device along the z axis in the frame previous to the current frame.
@@ -1272,7 +1272,7 @@ Source: ~
 ~
 
 
-Events_pmouseX() 📄 🔧
+p5-Events_pmouseX() 📄 🔧
 |pmouseX| ⚡ Function
 
 A `Number` system variable that tracks the mouse's previous horizontal position.
@@ -1335,7 +1335,7 @@ Source: ~
 ~
 
 
-Events_pmouseY() 📄 🔧
+p5-Events_pmouseY() 📄 🔧
 |pmouseY| ⚡ Function
 
 A `Number` system variable that tracks the mouse's previous vertical position.
@@ -1398,7 +1398,7 @@ Source: ~
 ~
 
 
-Events_pRotationX() 📄 🔧
+p5-Events_pRotationX() 📄 🔧
 |pRotationX| ⚡ Function
 
 The system variable pRotationX always contains the rotation of the device along the x axis in the frame previous to the current frame.
@@ -1445,7 +1445,7 @@ Source: ~
 ~
 
 
-Events_pRotationY() 📄 🔧
+p5-Events_pRotationY() 📄 🔧
 |pRotationY| ⚡ Function
 
 The system variable pRotationY always contains the rotation of the device along the y axis in the frame previous to the current frame.
@@ -1491,7 +1491,7 @@ Source: ~
 ~
 
 
-Events_pRotationZ() 📄 🔧
+p5-Events_pRotationZ() 📄 🔧
 |pRotationZ| ⚡ Function
 
 The system variable pRotationZ always contains the rotation of the device along the z axis in the frame previous to the current frame.
@@ -1533,7 +1533,7 @@ Source: ~
 ~
 
 
-Events_pwinMouseX() 📄 🔧
+p5-Events_pwinMouseX() 📄 🔧
 |pwinMouseX| ⚡ Function
 
 A `Number` variable that tracks the mouse's previous horizontal position within the browser.
@@ -1600,7 +1600,7 @@ Source: ~
 ~
 
 
-Events_pwinMouseY() 📄 🔧
+p5-Events_pwinMouseY() 📄 🔧
 |pwinMouseY| ⚡ Function
 
 A `Number` variable that tracks the mouse's previous vertical position within the browser.
@@ -1667,7 +1667,7 @@ Source: ~
 ~
 
 
-Events_rotationX() 📄 🔧
+p5-Events_rotationX() 📄 🔧
 |rotationX| ⚡ Function
 
 The system variable rotationX always contains the rotation of the device along the x axis.
@@ -1704,7 +1704,7 @@ Source: ~
 ~
 
 
-Events_rotationY() 📄 🔧
+p5-Events_rotationY() 📄 🔧
 |rotationY| ⚡ Function
 
 The system variable rotationY always contains the rotation of the device along the y axis.
@@ -1741,7 +1741,7 @@ Source: ~
 ~
 
 
-Events_rotationZ() 📄 🔧
+p5-Events_rotationZ() 📄 🔧
 |rotationZ| ⚡ Function
 
 The system variable rotationZ always contains the rotation of the device along the z axis.
@@ -1779,7 +1779,7 @@ Source: ~
 ~
 
 
-Events_touches() 📄 🔧
+p5-Events_touches() 📄 🔧
 |touches| ⚡ Function
 
 An `Array` of all the current touch points on a touchscreen device.
@@ -1850,7 +1850,7 @@ Source: ~
 ~
 
 
-Events_turnAxis() 📄 🔧
+p5-Events_turnAxis() 📄 🔧
 |turnAxis| ⚡ Function
 
 When a device is rotated, the axis that triggers the <a href="#/p5/deviceTurned">deviceTurned()</a> method is stored in the turnAxis variable.
@@ -1893,7 +1893,7 @@ Source: ~
 ~
 
 
-Events_winMouseX() 📄 🔧
+p5-Events_winMouseX() 📄 🔧
 |winMouseX| ⚡ Function
 
 A `Number` variable that tracks the mouse's horizontal position within the browser.
@@ -1933,7 +1933,7 @@ Source: ~
 ~
 
 
-Events_winMouseY() 📄 🔧
+p5-Events_winMouseY() 📄 🔧
 |winMouseY| ⚡ Function
 
 A `Number` variable that tracks the mouse's vertical position within the browser.
@@ -1975,7 +1975,7 @@ Source: ~
 
 VARIABLES                                                   *p5-Events-variables*
 
-Events_context() 📄 📌
+p5-Events_context() 📄 📌
 |context| ⚡ Function
 
 A function that's called when the user touches the screen and moves.
@@ -2101,7 +2101,7 @@ Source: ~
 ~
 
 
-Events_Filters() 📄 📌
+p5-Events_Filters() 📄 📌
 |Filters| ⚡ Function
 
 This module defines the filters for use with `image` buffers.
@@ -2118,7 +2118,7 @@ Source: ~
 ~
 
 
-Events_key() 📄 📌
+p5-Events_key() 📄 📌
 |key| ⚡ Function
 
 The _areDownKeys function returns a boolean true if any keys pressed and a false if no keys are currently pressed.
@@ -2132,7 +2132,7 @@ Source: ~
 ~
 
 
-Events_offset() 📄 📌
+p5-Events_offset() 📄 📌
 |offset| ⚡ Function
 
 Modifies `pixels` RGBA values to values contained in the data object.
@@ -2145,7 +2145,7 @@ Source: ~
 ~
 
 
-Events_pixels() 📄 📌
+p5-Events_pixels() 📄 📌
 |pixels| ⚡ Function
 
 Reduces the bright areas in an `image`.
@@ -2159,7 +2159,7 @@ Source: ~
 ~
 
 
-Events_pixelsState() 📄 📌
+p5-Events_pixelsState() 📄 📌
 |pixelsState| ⚡ Function
 
 Applys a `filter` function to a canvas.

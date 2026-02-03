@@ -98,7 +98,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-Math-classes*
 
-Math_Anonymous() 📄 🏛️
+p5-Math_Anonymous() 📄 🏛️
 |Anonymous|() 🏛️ Class
 
 A class to describe a Quaternion for vector rotations in the p5js webgl renderer.
@@ -119,7 +119,7 @@ Source: ~
 ~
 
 
-Math_Quat() 📄 🏛️
+p5-Math_Quat() 📄 🏛️
 |Quat|() 🏛️ Class
 
 A class to describe a Quaternion for vector rotations in the p5js webgl renderer.
@@ -140,7 +140,7 @@ Source: ~
 ~
 
 
-Math_Vector() 📄 🏛️
+p5-Math_Vector() 📄 🏛️
 |Vector|() 🏛️ Class
 
 A class to describe a two or three-dimensional vector.
@@ -234,7 +234,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-Math-functions*
 
-Math_abs() 📄 ⚡
+p5-Math_abs() 📄 ⚡
 |abs|(n) ⚡ Function
 
 Calculates the absolute value of a number.
@@ -284,7 +284,7 @@ Source: ~
 ~
 
 
-Math_acos() 📄 ⚡
+p5-Math_acos() 📄 ⚡
 |acos|(value) ⚡ Function
 
 Calculates the `arc` cosine of a number.
@@ -355,7 +355,7 @@ Source: ~
 ~
 
 
-Math_angleMode() 📄 ⚡
+p5-Math_angleMode() 📄 ⚡
 |angleMode|() ⚡ Function
 
 Returns: ~
@@ -370,7 +370,7 @@ Source: ~
 ~
 
 
-Math_anonymous() 📄 ⚡
+p5-Math_anonymous() 📄 ⚡
 |anonymous|(nums) ⚡ Function
 
 Parameters: ~
@@ -389,7 +389,7 @@ Source: ~
 ~
 
 
-Math_asin() 📄 ⚡
+p5-Math_asin() 📄 ⚡
 |asin|(value) ⚡ Function
 
 Calculates the `arc` sine of a number.
@@ -460,7 +460,7 @@ Source: ~
 ~
 
 
-Math_atan() 📄 ⚡
+p5-Math_atan() 📄 ⚡
 |atan|(value) ⚡ Function
 
 Calculates the `arc` tangent of a number.
@@ -531,7 +531,7 @@ Source: ~
 ~
 
 
-Math_atan2() 📄 ⚡
+p5-Math_atan2() 📄 ⚡
 |atan2|(y, x) ⚡ Function
 
 Calculates the angle formed by a `point`, the origin, and the positive x-axis.
@@ -613,7 +613,7 @@ Source: ~
 ~
 
 
-Math_beginShape() 📄 ⚡
+p5-Math_beginShape() 📄 ⚡
 |beginShape|(mode) ⚡ Function
 
 Begin shape drawing.
@@ -633,7 +633,7 @@ Source: ~
 ~
 
 
-Math_ceil() 📄 ⚡
+p5-Math_ceil() 📄 ⚡
 |ceil|(n) ⚡ Function
 
 Calculates the closest integer value that is greater than or equal to a number.
@@ -686,7 +686,7 @@ Source: ~
 ~
 
 
-Math_constrain() 📄 ⚡
+p5-Math_constrain() 📄 ⚡
 |constrain|(n, low, high) ⚡ Function
 
 Constrains a number between a minimum and maximum value.
@@ -760,7 +760,7 @@ Source: ~
 ~
 
 
-Math_cos() 📄 ⚡
+p5-Math_cos() 📄 ⚡
 |cos|(angle) ⚡ Function
 
 Calculates the cosine of an angle.
@@ -850,7 +850,7 @@ Source: ~
 ~
 
 
-Math_createVector() 📄 ⚡
+p5-Math_createVector() 📄 ⚡
 |createVector|({Number} [x] x component of the vector., {Number} [y] y component of the vector., {Number} [z] z component of the vector.) ⚡ Function
 
 Creates a new <a href="#/p5.Vector">p5.Vector</a> object.
@@ -947,7 +947,7 @@ Source: ~
 ~
 
 
-Math_degrees() 📄 ⚡
+p5-Math_degrees() 📄 ⚡
 |degrees|(radians) ⚡ Function
 
 Converts an angle measured in radians to its value in degrees.
@@ -995,7 +995,7 @@ Source: ~
 ~
 
 
-Math_dist() 📄 ⚡
+p5-Math_dist() 📄 ⚡
 |dist|(x1, y1, z1, x2, y2, z2) ⚡ Function
 
 Parameters: ~
@@ -1019,7 +1019,7 @@ Source: ~
 ~
 
 
-Math_drawBuffersScaled() 📄 ⚡
+p5-Math_drawBuffersScaled() 📄 ⚡
 |drawBuffersScaled|(gId, scaleX, scaleY, scaleZ) ⚡ Function
 
 Calls drawBuffers() with a scaled model/view matrix.
@@ -1042,7 +1042,7 @@ Source: ~
 ~
 
 
-Math_exp() 📄 ⚡
+p5-Math_exp() 📄 ⚡
 |exp|(n) ⚡ Function
 
 Calculates the value of Euler's number e (2.71828...) raised to the power of a number.
@@ -1118,7 +1118,7 @@ Source: ~
 ~
 
 
-Math_floor() 📄 ⚡
+p5-Math_floor() 📄 ⚡
 |floor|(n) ⚡ Function
 
 Calculates the closest integer value that is less than or equal to the value of a number.
@@ -1168,7 +1168,7 @@ Source: ~
 ~
 
 
-Math_fract() 📄 ⚡
+p5-Math_fract() 📄 ⚡
 |fract|(n) ⚡ Function
 
 Calculates the fractional part of a number.
@@ -1217,7 +1217,7 @@ Source: ~
 ~
 
 
-Math_lerp() 📄 ⚡
+p5-Math_lerp() 📄 ⚡
 |lerp|(start, stop, amt) ⚡ Function
 
 Calculates a number between two numbers at a specific increment.
@@ -1313,7 +1313,7 @@ Source: ~
 ~
 
 
-Math_log() 📄 ⚡
+p5-Math_log() 📄 ⚡
 |log|(n) ⚡ Function
 
 Calculates the natural logarithm (the base-e logarithm) of a number.
@@ -1382,7 +1382,7 @@ Source: ~
 ~
 
 
-Math_mag() 📄 ⚡
+p5-Math_mag() 📄 ⚡
 |mag|(x, y) ⚡ Function
 
 Calculates the magnitude, or length, of a vector.
@@ -1441,7 +1441,7 @@ Source: ~
 ~
 
 
-Math_map() 📄 ⚡
+p5-Math_map() 📄 ⚡
 |map|(value, start1, stop1, start2, stop2, {Boolean} [withinBounds] constrain the value to the newly mapped range.) ⚡ Function
 
 Re-maps a number from one range to another.
@@ -1524,7 +1524,7 @@ Source: ~
 ~
 
 
-Math_max() 📄 ⚡
+p5-Math_max() 📄 ⚡
 |max|(nums) ⚡ Function
 
 Parameters: ~
@@ -1543,7 +1543,7 @@ Source: ~
 ~
 
 
-Math_min() 📄 ⚡
+p5-Math_min() 📄 ⚡
 |min|(nums) ⚡ Function
 
 Parameters: ~
@@ -1562,7 +1562,7 @@ Source: ~
 ~
 
 
-Math_noise() 📄 ⚡
+p5-Math_noise() 📄 ⚡
 |noise|(x, {Number} [y] y-coordinate in noise space., {Number} [z] z-coordinate in noise space.) ⚡ Function
 
 Returns `random` numbers that can be tuned to feel organic.
@@ -1782,7 +1782,7 @@ Source: ~
 ~
 
 
-Math_noiseDetail() 📄 ⚡
+p5-Math_noiseDetail() 📄 ⚡
 |noiseDetail|(lod, falloff) ⚡ Function
 
 Adjusts the character of the `noise` produced by the <a href="#/p5/`noise`">`noise`()</a> function.
@@ -1856,7 +1856,7 @@ Source: ~
 ~
 
 
-Math_noiseSeed() 📄 ⚡
+p5-Math_noiseSeed() 📄 ⚡
 |noiseSeed|(seed) ⚡ Function
 
 Sets the seed value for the <a href="#/p5/`noise`">`noise`()</a> function.
@@ -1907,7 +1907,7 @@ Source: ~
 ~
 
 
-Math_norm() 📄 ⚡
+p5-Math_norm() 📄 ⚡
 |norm|(value, start, stop) ⚡ Function
 
 Maps a number from one range to a value between 0 and 1.
@@ -1958,7 +1958,7 @@ Source: ~
 ~
 
 
-Math_normal() 📄 ⚡
+p5-Math_normal() 📄 ⚡
 |normal|(x, y, z, v) ⚡ Function
 
 Sets the normal to use for subsequent vertices.
@@ -1978,7 +1978,7 @@ Source: ~
 ~
 
 
-Math_pow() 📄 ⚡
+p5-Math_pow() 📄 ⚡
 |pow|(n, e) ⚡ Function
 
 Calculates exponential expressions such as <var>2<sup>3</sup></var>.
@@ -2035,7 +2035,7 @@ Source: ~
 ~
 
 
-Math_radians() 📄 ⚡
+p5-Math_radians() 📄 ⚡
 |radians|(degrees) ⚡ Function
 
 Converts an angle measured in degrees to its value in radians.
@@ -2083,7 +2083,7 @@ Source: ~
 ~
 
 
-Math_random() 📄 ⚡
+p5-Math_random() 📄 ⚡
 |random|(choices) ⚡ Function
 
 Parameters: ~
@@ -2102,7 +2102,7 @@ Source: ~
 ~
 
 
-Math_randomGaussian() 📄 ⚡
+p5-Math_randomGaussian() 📄 ⚡
 |randomGaussian|({Number} [mean]  mean., {Number} [sd]    standard deviation.) ⚡ Function
 
 Returns a `random` number fitting a Gaussian, or normal, distribution.
@@ -2170,7 +2170,7 @@ Source: ~
 ~
 
 
-Math_randomSeed() 📄 ⚡
+p5-Math_randomSeed() 📄 ⚡
 |randomSeed|(seed) ⚡ Function
 
 Sets the seed value for the <a href="#/p5/`random`">`random`()</a> and <a href="#/p5/randomGaussian">randomGaussian()</a> functions.
@@ -2221,7 +2221,7 @@ Source: ~
 ~
 
 
-Math_round() 📄 ⚡
+p5-Math_round() 📄 ⚡
 |round|(n, {Number} [decimals] number of decimal places to round to, default is 0.) ⚡ Function
 
 Calculates the integer closest to a number.
@@ -2294,7 +2294,7 @@ Source: ~
 ~
 
 
-Math_shapeMode() 📄 ⚡
+p5-Math_shapeMode() 📄 ⚡
 |shapeMode|(mode) ⚡ Function
 
 Begin shape drawing.
@@ -2314,7 +2314,7 @@ Source: ~
 ~
 
 
-Math_sin() 📄 ⚡
+p5-Math_sin() 📄 ⚡
 |sin|(angle) ⚡ Function
 
 Calculates the sine of an angle.
@@ -2404,7 +2404,7 @@ Source: ~
 ~
 
 
-Math_sq() 📄 ⚡
+p5-Math_sq() 📄 ⚡
 |sq|(n) ⚡ Function
 
 Calculates the square of a number.
@@ -2477,7 +2477,7 @@ Source: ~
 ~
 
 
-Math_sqrt() 📄 ⚡
+p5-Math_sqrt() 📄 ⚡
 |sqrt|(n) ⚡ Function
 
 Calculates the square root of a number.
@@ -2549,7 +2549,7 @@ Source: ~
 ~
 
 
-Math_tan() 📄 ⚡
+p5-Math_tan() 📄 ⚡
 |tan|(angle) ⚡ Function
 
 Calculates the tangent of an angle.
@@ -2596,7 +2596,7 @@ Source: ~
 ~
 
 
-Math_vertex() 📄 ⚡
+p5-Math_vertex() 📄 ⚡
 |vertex|(x, y, z) ⚡ Function
 
 adds a `vertex` to be drawn in a custom Shape.
@@ -2615,7 +2615,7 @@ Source: ~
 ~
 
 
-Math_x() 📄 ⚡
+p5-Math_x() 📄 ⚡
 |x|() ⚡ Function
 
 Replaces the components of a <a href="#/p5.Vector">p5.Vector</a> that are very close to zero with zero.
@@ -2637,7 +2637,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-Math-properties*
 
-Math_createBuffers() 📄 🔧
+p5-Math_createBuffers() 📄 🔧
 |createBuffers| ⚡ Function
 
 creates a buffers object that holds the WebGL render buffers for a geometry.
@@ -2655,7 +2655,7 @@ Source: ~
 ~
 
 
-Math_drawBuffers() 📄 🔧
+p5-Math_drawBuffers() 📄 🔧
 |drawBuffers| ⚡ Function
 
 Draws buffers given a geometry `key` ID
@@ -2672,7 +2672,7 @@ Source: ~
 ~
 
 
-Math_endShape() 📄 🔧
+p5-Math_endShape() 📄 🔧
 |endShape| ⚡ Function
 
 End shape drawing and render vertices to screen.
@@ -2685,7 +2685,7 @@ Source: ~
 ~
 
 
-Math_y() 📄 🔧
+p5-Math_y() 📄 🔧
 |y| ⚡ Function
 
 The y component of the vector
@@ -2698,7 +2698,7 @@ Source: ~
 ~
 
 
-Math_z() 📄 🔧
+p5-Math_z() 📄 🔧
 |z| ⚡ Function
 
 The z component of the vector
@@ -2713,7 +2713,7 @@ Source: ~
 
 VARIABLES                                                   *p5-Math-variables*
 
-Math_angle() 📄 📌
+p5-Math_angle() 📄 📌
 |angle| ⚡ Function
 
 Creates a new 3D unit vector with a `random` heading.
@@ -2741,7 +2741,7 @@ Source: ~
 ~
 
 
-Math_attributes() 📄 📌
+p5-Math_attributes() 📄 📌
 |attributes| ⚡ Function
 
 Enables and binds the buffers used by shader when the appropriate data exists in geometry.
@@ -2755,7 +2755,7 @@ Source: ~
 ~
 
 
-Math_cosPhi() 📄 📌
+p5-Math_cosPhi() 📄 📌
 |cosPhi| ⚡ Function
 
 Creates a new 3D vector from a pair of ISO spherical angles.
@@ -2814,7 +2814,7 @@ Source: ~
 ~
 
 
-Math_gl() 📄 📌
+p5-Math_gl() 📄 📌
 |gl| ⚡ Function
 
 Draws buffers given a geometry `key` ID
@@ -2827,7 +2827,7 @@ Source: ~
 ~
 
 
-Math_h() 📄 📌
+p5-Math_h() 📄 📌
 |h| ⚡ Function
 
 Calculates the angle a 2D vector makes with the positive x-axis.
@@ -2931,7 +2931,7 @@ Source: ~
 ~
 
 
-Math_len() 📄 📌
+p5-Math_len() 📄 📌
 |len| ⚡ Function
 
 Scales the components of a <a href="#/p5.Vector">p5.Vector</a> object so that its magnitude is 1.
@@ -3036,7 +3036,7 @@ Source: ~
 ~
 
 
-Math_magSqMult() 📄 📌
+p5-Math_magSqMult() 📄 📌
 |magSqMult| ⚡ Function
 
 Calculates the angle between two vectors.
@@ -3175,7 +3175,7 @@ Source: ~
 ~
 
 
-Math_mSq() 📄 📌
+p5-Math_mSq() 📄 📌
 |mSq| ⚡ Function
 
 Limits a vector's magnitude to a maximum value.
@@ -3268,7 +3268,7 @@ Source: ~
 ~
 
 
-Math_newHeading() 📄 📌
+p5-Math_newHeading() 📄 📌
 |newHeading| ⚡ Function
 
 Rotates a 2D vector by an angle without changing its magnitude.
@@ -3406,7 +3406,7 @@ Source: ~
 ~
 
 
-Math_surfaceNormalCopy() 📄 📌
+p5-Math_surfaceNormalCopy() 📄 📌
 |surfaceNormalCopy| ⚡ Function
 
 Reflects a vector about a `line` in 2D or a plane in 3D.
@@ -3513,7 +3513,7 @@ Source: ~
 ~
 
 
-Math_w() 📄 📌
+p5-Math_w() 📄 📌
 |w| ⚡ Function
 
 Returns a Quaternion for the axis angle representation of the rotation
@@ -3526,7 +3526,7 @@ Source: ~
 ~
 
 
-Math_x1() 📄 📌
+p5-Math_x1() 📄 📌
 |x1| ⚡ Function
 
 Returns a `random` number fitting a Gaussian, or normal, distribution.
@@ -3585,7 +3585,7 @@ Source: ~
 ~
 
 
-Math_x2() 📄 📌
+p5-Math_x2() 📄 📌
 |x2| ⚡ Function
 
 Returns a `random` number fitting a Gaussian, or normal, distribution.
@@ -3644,7 +3644,7 @@ Source: ~
 ~
 
 
-Math_y1() 📄 📌
+p5-Math_y1() 📄 📌
 |y1| ⚡ Function
 
 Returns a `random` number fitting a Gaussian, or normal, distribution.

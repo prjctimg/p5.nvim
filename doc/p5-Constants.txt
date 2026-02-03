@@ -42,7 +42,7 @@ CONTENTS                                                           *${this.getCu
 
 VARIABLES                                                   *p5-Constants-variables*
 
-Constants_AUTO() 📄 📌
+p5-Constants_AUTO() 📄 📌
 |AUTO| ⚡ Function
 
 AUTO allows us to automatically `set` the `width` or `height` of an element (but not both), based on the current `height` and `width` of the element.
@@ -56,7 +56,7 @@ Source: ~
 ~
 
 
-Constants_DEG_TO_RAD() 📄 📌
+p5-Constants_DEG_TO_RAD() 📄 📌
 |DEG_TO_RAD| ⚡ Function
 
 A `String` constant that's used to `set` the <a href="#/p5/angleMode">angleMode()</a>.
@@ -101,7 +101,7 @@ Source: ~
 ~
 
 
-Constants_DEGREES() 📄 📌
+p5-Constants_DEGREES() 📄 📌
 |DEGREES| ⚡ Function
 
 A `String` constant that's used to `set` the <a href="#/p5/angleMode">angleMode()</a>.
@@ -142,7 +142,7 @@ Source: ~
 ~
 
 
-Constants_HALF_PI() 📄 📌
+p5-Constants_HALF_PI() 📄 📌
 |HALF_PI| ⚡ Function
 
 A `Number` constant that's approximately 1.5708.
@@ -234,7 +234,7 @@ Source: ~
 ~
 
 
-Constants_HSB() 📄 📌
+p5-Constants_HSB() 📄 📌
 |HSB| ⚡ Function
 
 HSB (`hue`, `saturation`, `brightness`) is a type of `color` model.
@@ -248,7 +248,7 @@ Source: ~
 ~
 
 
-Constants_P2D() 📄 📌
+p5-Constants_P2D() 📄 📌
 |P2D| ⚡ Function
 
 The default, two-dimensional renderer.
@@ -261,7 +261,7 @@ Source: ~
 ~
 
 
-Constants_PI() 📄 📌
+p5-Constants_PI() 📄 📌
 |PI| ⚡ Function
 
 A `Number` constant that's approximately 3.1416.
@@ -353,7 +353,7 @@ Source: ~
 ~
 
 
-Constants_QUARTER_PI() 📄 📌
+p5-Constants_QUARTER_PI() 📄 📌
 |QUARTER_PI| ⚡ Function
 
 A `Number` constant that's approximately 0.7854.
@@ -445,7 +445,7 @@ Source: ~
 ~
 
 
-Constants_RADIANS() 📄 📌
+p5-Constants_RADIANS() 📄 📌
 |RADIANS| ⚡ Function
 
 A `String` constant that's used to `set` the <a href="#/p5/angleMode">angleMode()</a>.
@@ -490,7 +490,7 @@ Source: ~
 ~
 
 
-Constants_TAU() 📄 📌
+p5-Constants_TAU() 📄 📌
 |TAU| ⚡ Function
 
 A `Number` constant that's approximately 6.2382.
@@ -588,7 +588,7 @@ Source: ~
 ~
 
 
-Constants_TWO_PI() 📄 📌
+p5-Constants_TWO_PI() 📄 📌
 |TWO_PI| ⚡ Function
 
 A `Number` constant that's approximately 6.2382.
@@ -686,7 +686,7 @@ Source: ~
 ~
 
 
-Constants_VERSION() 📄 📌
+p5-Constants_VERSION() 📄 📌
 |VERSION| ⚡ Function
 
 Version of this p5.js.
@@ -699,7 +699,7 @@ Source: ~
 ~
 
 
-Constants_WEBGL() 📄 📌
+p5-Constants_WEBGL() 📄 📌
 |WEBGL| ⚡ Function
 
 One of the two render modes in p5.js, used for computationally intensive tasks like 3D rendering and shaders.
@@ -731,7 +731,7 @@ Source: ~
 ~
 
 
-Constants_WEBGL2() 📄 📌
+p5-Constants_WEBGL2() 📄 📌
 |WEBGL2| ⚡ Function
 
 One of the two possible values of a WebGL canvas (either WEBGL or WEBGL2), which can be used to determine what capabilities the rendering environment has.

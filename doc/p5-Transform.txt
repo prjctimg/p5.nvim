@@ -38,7 +38,7 @@ CONTENTS                                                           *${this.getCu
 
 FUNCTIONS                                                   *p5-Transform-functions*
 
-Transform_applyMatrix() 📄 ⚡
+p5-Transform_applyMatrix() 📄 ⚡
 |applyMatrix|(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) ⚡ Function
 
 Parameters: ~
@@ -68,7 +68,7 @@ Source: ~
 ~
 
 
-Transform_resetMatrix() 📄 ⚡
+p5-Transform_resetMatrix() 📄 ⚡
 |resetMatrix|() ⚡ Function
 
 Clears all transformations applied to the coordinate system.
@@ -114,7 +114,7 @@ Source: ~
 ~
 
 
-Transform_rotate() 📄 ⚡
+p5-Transform_rotate() 📄 ⚡
 |rotate|(angle, {p5.Vector|Number[]} [axis] axis to rotate about in 3D.) ⚡ Function
 
 Rotates the coordinate system.
@@ -288,7 +288,7 @@ Source: ~
 ~
 
 
-Transform_rotateX() 📄 ⚡
+p5-Transform_rotateX() 📄 ⚡
 |rotateX|(angle) ⚡ Function
 
 Rotates the coordinate system about the x-axis in WebGL mode.
@@ -422,7 +422,7 @@ Source: ~
 ~
 
 
-Transform_rotateY() 📄 ⚡
+p5-Transform_rotateY() 📄 ⚡
 |rotateY|(angle) ⚡ Function
 
 Rotates the coordinate system about the y-axis in WebGL mode.
@@ -556,7 +556,7 @@ Source: ~
 ~
 
 
-Transform_rotateZ() 📄 ⚡
+p5-Transform_rotateZ() 📄 ⚡
 |rotateZ|(angle) ⚡ Function
 
 Rotates the coordinate system about the z-axis in WebGL mode.
@@ -690,7 +690,7 @@ Source: ~
 ~
 
 
-Transform_scale() 📄 ⚡
+p5-Transform_scale() 📄 ⚡
 |scale|(scales) ⚡ Function
 
 Parameters: ~
@@ -705,7 +705,7 @@ Source: ~
 ~
 
 
-Transform_shearX() 📄 ⚡
+p5-Transform_shearX() 📄 ⚡
 |shearX|(angle) ⚡ Function
 
 Shears the x-axis so that shapes appear skewed.
@@ -777,7 +777,7 @@ Source: ~
 ~
 
 
-Transform_shearY() 📄 ⚡
+p5-Transform_shearY() 📄 ⚡
 |shearY|(angle) ⚡ Function
 
 Shears the y-axis so that shapes appear skewed.
@@ -849,7 +849,7 @@ Source: ~
 ~
 
 
-Transform_translate() 📄 ⚡
+p5-Transform_translate() 📄 ⚡
 |translate|(vector) ⚡ Function
 
 Parameters: ~

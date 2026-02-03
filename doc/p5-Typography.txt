@@ -50,7 +50,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-Typography-classes*
 
-Typography_Anonymous() 📄 🏛️
+p5-Typography_Anonymous() 📄 🏛️
 |Anonymous|() 🏛️ Class
 
 A class to describe fonts.
@@ -94,7 +94,7 @@ Source: ~
 ~
 
 
-Typography_Font() 📄 🏛️
+p5-Typography_Font() 📄 🏛️
 |Font|() 🏛️ Class
 
 A class to describe fonts.
@@ -140,7 +140,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-Typography-functions*
 
-Typography_loadFont() 📄 ⚡
+p5-Typography_loadFont() 📄 ⚡
 |loadFont|(path, {Function}      [successCallback] function called with the, {Function}      [failureCallback] function called with the error) ⚡ Function
 
 Loads a font and creates a <a href="#/p5.Font">p5.Font</a> object.
@@ -255,7 +255,7 @@ Source: ~
 ~
 
 
-Typography_text() 📄 ⚡
+p5-Typography_text() 📄 ⚡
 |text|(str, x, y, {Number} [maxWidth] maximum width of the text box. See, {Number} [maxHeight] maximum height of the text box. See) ⚡ Function
 
 Draws `text` to the canvas.
@@ -399,7 +399,7 @@ Source: ~
 ~
 
 
-Typography_textAlign() 📄 ⚡
+p5-Typography_textAlign() 📄 ⚡
 |textAlign|() ⚡ Function
 
 Returns: ~
@@ -414,7 +414,7 @@ Source: ~
 ~
 
 
-Typography_textAscent() 📄 ⚡
+p5-Typography_textAscent() 📄 ⚡
 |textAscent|() ⚡ Function
 
 Calculates the ascent of the current font at its current size.
@@ -479,7 +479,7 @@ Source: ~
 ~
 
 
-Typography_textDescent() 📄 ⚡
+p5-Typography_textDescent() 📄 ⚡
 |textDescent|() ⚡ Function
 
 Calculates the descent of the current font at its current size.
@@ -544,7 +544,7 @@ Source: ~
 ~
 
 
-Typography_textFont() 📄 ⚡
+p5-Typography_textFont() 📄 ⚡
 |textFont|(font, {Number} [size] font size in pixels.) ⚡ Function
 
 Parameters: ~
@@ -560,7 +560,7 @@ Source: ~
 ~
 
 
-Typography_textLeading() 📄 ⚡
+p5-Typography_textLeading() 📄 ⚡
 |textLeading|() ⚡ Function
 
 Returns: ~
@@ -575,7 +575,7 @@ Source: ~
 ~
 
 
-Typography_textSize() 📄 ⚡
+p5-Typography_textSize() 📄 ⚡
 |textSize|() ⚡ Function
 
 Returns: ~
@@ -590,7 +590,7 @@ Source: ~
 ~
 
 
-Typography_textStyle() 📄 ⚡
+p5-Typography_textStyle() 📄 ⚡
 |textStyle|() ⚡ Function
 
 Returns: ~
@@ -605,7 +605,7 @@ Source: ~
 ~
 
 
-Typography_textWidth() 📄 ⚡
+p5-Typography_textWidth() 📄 ⚡
 |textWidth|(str) ⚡ Function
 
 Calculates the maximum `width` of a string of `text` drawn when <a href="#/p5/`text`">`text`()</a> is called.
@@ -681,7 +681,7 @@ Source: ~
 ~
 
 
-Typography_textWrap() 📄 ⚡
+p5-Typography_textWrap() 📄 ⚡
 |textWrap|(style) ⚡ Function
 
 Sets the style for wrapping `text` when <a href="#/p5/`text`">`text`()</a> is called.
@@ -770,7 +770,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-Typography-properties*
 
-Typography_font() 📄 🔧
+p5-Typography_font() 📄 🔧
 |font| ⚡ Function
 
 The font's underlying <a href="https://opentype.js.org/" target="_blank">opentype.js</a> font object.
@@ -785,7 +785,7 @@ Source: ~
 
 VARIABLES                                                   *p5-Typography-variables*
 
-Typography_p() 📄 📌
+p5-Typography_p() 📄 📌
 |p| ⚡ Function
 
 Returns an opentype path for the supplied string and position.
@@ -798,7 +798,7 @@ Source: ~
 ~
 
 
-Typography_xOriginal() 📄 📌
+p5-Typography_xOriginal() 📄 📌
 |xOriginal| ⚡ Function
 
 Returns an array of points outlining a string of `text` written using the font.

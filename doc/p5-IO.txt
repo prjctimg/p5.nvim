@@ -89,7 +89,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-IO-classes*
 
-IO_Anonymous() 📄 🏛️
+p5-IO_Anonymous() 📄 🏛️
 |Anonymous|() 🏛️ Class
 
 A class to describe an XML object.
@@ -150,7 +150,7 @@ Source: ~
 ~
 
 
-IO_PrintWriter() 📄 🏛️
+p5-IO_PrintWriter() 📄 🏛️
 |PrintWriter|() 🏛️ Class
 
 A class to describe a `print` stream.
@@ -208,7 +208,7 @@ Source: ~
 ~
 
 
-IO_Table() 📄 🏛️
+p5-IO_Table() 📄 🏛️
 |Table|() 🏛️ Class
 
 <a href="#/p5.Table">Table</a> objects store data with multiple rows and columns, much like in a traditional spreadsheet.
@@ -226,7 +226,7 @@ Source: ~
 ~
 
 
-IO_TableRow() 📄 🏛️
+p5-IO_TableRow() 📄 🏛️
 |TableRow|() 🏛️ Class
 
 A TableRow object represents a single row of data values, stored in columns, from a table.
@@ -245,7 +245,7 @@ Source: ~
 ~
 
 
-IO_XML() 📄 🏛️
+p5-IO_XML() 📄 🏛️
 |XML|() 🏛️ Class
 
 A class to describe an XML object.
@@ -308,7 +308,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-IO-functions*
 
-IO_anonymous() 📄 ⚡
+p5-IO_anonymous() 📄 ⚡
 |anonymous|(chars, {String|Integer} [column] Column ID (number)) ⚡ Function
 
 Removes any of the specified characters (or "tokens").
@@ -355,7 +355,7 @@ Source: ~
 ~
 
 
-IO_clear() 📄 ⚡
+p5-IO_clear() 📄 ⚡
 |clear|() ⚡ Function
 
 Clears all data from the `print` stream.
@@ -405,7 +405,7 @@ Source: ~
 ~
 
 
-IO_close() 📄 ⚡
+p5-IO_close() 📄 ⚡
 |close|() ⚡ Function
 
 Saves the file and closes the `print` stream.
@@ -456,7 +456,7 @@ Source: ~
 ~
 
 
-IO_createWriter() 📄 ⚡
+p5-IO_createWriter() 📄 ⚡
 |createWriter|(name, {String} [extension] format to use for the file.) ⚡ Function
 
 Creates a new <a href="#/p5.PrintWriter">p5.PrintWriter</a> object.
@@ -564,7 +564,7 @@ Source: ~
 ~
 
 
-IO_day() 📄 ⚡
+p5-IO_day() 📄 ⚡
 |day|() ⚡ Function
 
 Returns the current day as a number from 1–31.
@@ -606,7 +606,7 @@ Source: ~
 ~
 
 
-IO_destroyClickedElement() 📄 ⚡
+p5-IO_destroyClickedElement() 📄 ⚡
 |destroyClickedElement|() ⚡ Function
 
 Helper function, a callback for download that deletes an invisible anchor element from the DOM once the file has been automatically downloaded.
@@ -619,7 +619,7 @@ Source: ~
 ~
 
 
-IO_downloadFile() 📄 ⚡
+p5-IO_downloadFile() 📄 ⚡
 |downloadFile|(data, {String} [filename], {String} [extension]) ⚡ Function
 
 Forces download.
@@ -640,7 +640,7 @@ Source: ~
 ~
 
 
-IO_hour() 📄 ⚡
+p5-IO_hour() 📄 ⚡
 |hour|() ⚡ Function
 
 Returns the current hour as a number from 0–23.
@@ -682,7 +682,7 @@ Source: ~
 ~
 
 
-IO_httpDo() 📄 ⚡
+p5-IO_httpDo() 📄 ⚡
 |httpDo|(path, options, {function}      [callback], {function}      [errorCallback]) ⚡ Function
 
 Parameters: ~
@@ -704,7 +704,7 @@ Source: ~
 ~
 
 
-IO_httpGet() 📄 ⚡
+p5-IO_httpGet() 📄 ⚡
 |httpGet|(path, callback, {function}      [errorCallback]) ⚡ Function
 
 Parameters: ~
@@ -725,7 +725,7 @@ Source: ~
 ~
 
 
-IO_httpPost() 📄 ⚡
+p5-IO_httpPost() 📄 ⚡
 |httpPost|(path, callback, {function}      [errorCallback]) ⚡ Function
 
 Parameters: ~
@@ -746,7 +746,7 @@ Source: ~
 ~
 
 
-IO_loadBytes() 📄 ⚡
+p5-IO_loadBytes() 📄 ⚡
 |loadBytes|(file, {function} [callback]      function to be executed after <a href="#/p5/loadBytes">loadBytes()</a>, {function} [errorCallback] function to be executed if there) ⚡ Function
 
 This method is suitable for fetching files up to size of 64MB.
@@ -787,7 +787,7 @@ Source: ~
 ~
 
 
-IO_loadJSON() 📄 ⚡
+p5-IO_loadJSON() 📄 ⚡
 |loadJSON|(path, {function} [successCallback] function to call once the data is loaded. Will be passed the object., {function} [errorCallback] function to call if the data fails to load. Will be passed an `Error` event object.) ⚡ Function
 
 Loads a JSON file to create an `Object`.
@@ -1017,7 +1017,7 @@ Source: ~
 ~
 
 
-IO_loadStrings() 📄 ⚡
+p5-IO_loadStrings() 📄 ⚡
 |loadStrings|(path, {function} [successCallback] function to call once the data is, {function} [errorCallback] function to call if the data fails to) ⚡ Function
 
 Loads a `text` file to create an `Array`.
@@ -1152,7 +1152,7 @@ Source: ~
 ~
 
 
-IO_loadTable() 📄 ⚡
+p5-IO_loadTable() 📄 ⚡
 |loadTable|(filename, {String}         [extension] parse the table by comma-separated values "csv", semicolon-separated, {String}         [header]    "header" to indicate table has header row, {function}       [callback]  function to be executed after, {function}  [errorCallback]  function to be executed if) ⚡ Function
 
 Reads the contents of a file or URL and creates a <a href="#/p5.Table">p5.Table</a> object with its values.
@@ -1227,7 +1227,7 @@ Source: ~
 ~
 
 
-IO_loadXML() 📄 ⚡
+p5-IO_loadXML() 📄 ⚡
 |loadXML|(path, {function} [successCallback] function to call once the data is, {function} [errorCallback] function to call if the data fails to) ⚡ Function
 
 Loads an XML file to create a <a href="#/p5.XML">p5.XML</a> object.
@@ -1384,7 +1384,7 @@ Source: ~
 ~
 
 
-IO_millis() 📄 ⚡
+p5-IO_millis() 📄 ⚡
 |millis|() ⚡ Function
 
 Returns the number of milliseconds since a sketch started running.
@@ -1510,7 +1510,7 @@ Source: ~
 ~
 
 
-IO_minute() 📄 ⚡
+p5-IO_minute() 📄 ⚡
 |minute|() ⚡ Function
 
 Returns the current minute as a number from 0–59.
@@ -1552,7 +1552,7 @@ Source: ~
 ~
 
 
-IO_month() 📄 ⚡
+p5-IO_month() 📄 ⚡
 |month|() ⚡ Function
 
 Returns the current month as a number from 1–12.
@@ -1594,7 +1594,7 @@ Source: ~
 ~
 
 
-IO_print() 📄 ⚡
+p5-IO_print() 📄 ⚡
 |print|(data) ⚡ Function
 
 Writes data to the `print` stream with new lines added.
@@ -1649,7 +1649,7 @@ Source: ~
 ~
 
 
-IO_save() 📄 ⚡
+p5-IO_save() 📄 ⚡
 |save|({Object|String} [objectOrFilename]  If filename is provided, will, {String} [filename] If an object is provided as the first, {Boolean|String} [options]  Additional options depend on) ⚡ Function
 
 Saves a given element(`image`, `text`, json, csv, wav, or html) to the client's computer.
@@ -1737,7 +1737,7 @@ Source: ~
 ~
 
 
-IO_saveJSON() 📄 ⚡
+p5-IO_saveJSON() 📄 ⚡
 |saveJSON|(json, filename, {Boolean} [optimize] whether to trim unneeded whitespace. Defaults) ⚡ Function
 
 Saves an `Object` or `Array` to a JSON file.
@@ -1862,7 +1862,7 @@ Source: ~
 ~
 
 
-IO_saveStrings() 📄 ⚡
+p5-IO_saveStrings() 📄 ⚡
 |saveStrings|(list, filename, {String} [extension] format to use for the file., {Boolean} [isCRLF] whether to add `\r\n` to the end of each) ⚡ Function
 
 Saves an `Array` of `String`s to a file, one per `line`.
@@ -1994,7 +1994,7 @@ Source: ~
 ~
 
 
-IO_saveTable() 📄 ⚡
+p5-IO_saveTable() 📄 ⚡
 |saveTable|(Table, filename, {String} [options]  can be one of "tsv", "csv", or "html") ⚡ Function
 
 Writes the contents of a <a href="#/p5.Table">Table</a> object to a file.
@@ -2044,7 +2044,7 @@ Source: ~
 ~
 
 
-IO_second() 📄 ⚡
+p5-IO_second() 📄 ⚡
 |second|() ⚡ Function
 
 Returns the current second as a number from 0–59.
@@ -2086,7 +2086,7 @@ Source: ~
 ~
 
 
-IO_table() 📄 ⚡
+p5-IO_table() 📄 ⚡
 |table|(id) ⚡ Function
 
 Removes a row from the table object.
@@ -2137,7 +2137,7 @@ Source: ~
 ~
 
 
-IO_write() 📄 ⚡
+p5-IO_write() 📄 ⚡
 |write|(data) ⚡ Function
 
 Writes data to the `print` stream without adding new lines.
@@ -2192,7 +2192,7 @@ Source: ~
 ~
 
 
-IO_year() 📄 ⚡
+p5-IO_year() 📄 ⚡
 |year|() ⚡ Function
 
 Returns the current year as a number such as 1999.
@@ -2236,7 +2236,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-IO-properties*
 
-IO_columns() 📄 🔧
+p5-IO_columns() 📄 🔧
 |columns| ⚡ Function
 
 An array containing the names of the columns in the table, if the "header" the table is loaded with the "header" parameter.
@@ -2278,7 +2278,7 @@ Source: ~
 ~
 
 
-IO_rows() 📄 🔧
+p5-IO_rows() 📄 🔧
 |rows| ⚡ Function
 
 An array containing the <a href="#/p5.Table">p5.TableRow</a> objects that make up the rows of the table.
@@ -2292,7 +2292,7 @@ Source: ~
 ~
 
 
-IO_writeFile() 📄 🔧
+p5-IO_writeFile() 📄 🔧
 |writeFile| ⚡ Function
 
 Generate a blob of file data as a url to prepare for download.
@@ -2315,7 +2315,7 @@ Source: ~
 
 VARIABLES                                                   *p5-IO-variables*
 
-IO_arr() 📄 📌
+p5-IO_arr() 📄 📌
 |arr| ⚡ Function
 
 Returns an `Array` with the names of the element's attributes.
@@ -2364,7 +2364,7 @@ Source: ~
 ~
 
 
-IO_content() 📄 📌
+p5-IO_content() 📄 📌
 |content| ⚡ Function
 
 Sets the element's tag name.
@@ -2421,7 +2421,7 @@ Source: ~
 ~
 
 
-IO_cString() 📄 📌
+p5-IO_cString() 📄 📌
 |cString| ⚡ Function
 
 Use <a href="#/p5/removeColumn">removeColumn()</a> to remove an existing column from a Table object.
@@ -2464,7 +2464,7 @@ Source: ~
 ~
 
 
-IO_escape() 📄 📌
+p5-IO_escape() 📄 📌
 |escape| ⚡ Function
 
 Removes any of the specified characters (or "tokens").
@@ -2506,7 +2506,7 @@ Source: ~
 ~
 
 
-IO_floatVal() 📄 📌
+p5-IO_floatVal() 📄 📌
 |floatVal| ⚡ Function
 
 Stores a Float value in the TableRow's specified column.
@@ -2551,7 +2551,7 @@ Source: ~
 ~
 
 
-IO_fx() 📄 📌
+p5-IO_fx() 📄 📌
 |fx| ⚡ Function
 
 Forces download.
@@ -2566,7 +2566,7 @@ Source: ~
 ~
 
 
-IO_ind() 📄 📌
+p5-IO_ind() 📄 📌
 |ind| ⚡ Function
 
 Removes the first matching child element.
@@ -2674,7 +2674,7 @@ Source: ~
 ~
 
 
-IO_newPW() 📄 📌
+p5-IO_newPW() 📄 📌
 |newPW| ⚡ Function
 
 Creates a new <a href="#/p5.PrintWriter">p5.PrintWriter</a> object.
@@ -2773,7 +2773,7 @@ Source: ~
 ~
 
 
-IO_obj() 📄 📌
+p5-IO_obj() 📄 📌
 |obj| ⚡ Function
 
 Return an attribute's value as a string.
@@ -2866,7 +2866,7 @@ Source: ~
 ~
 
 
-IO_regex() 📄 📌
+p5-IO_regex() 📄 📌
 |regex| ⚡ Function
 
 Trims leading and trailing whitespace, such as spaces and tabs, from String table values.
@@ -2908,7 +2908,7 @@ Source: ~
 ~
 
 
-IO_ret() 📄 📌
+p5-IO_ret() 📄 📌
 |ret| ⚡ Function
 
 Retrieves a Float value from the TableRow's specified column.
@@ -2955,7 +2955,7 @@ Source: ~
 ~
 
 
-IO_self() 📄 📌
+p5-IO_self() 📄 📌
 |self| ⚡ Function
 
 A class to describe a `print` stream.
@@ -3008,7 +3008,7 @@ Source: ~
 ~
 
 
-IO_str() 📄 📌
+p5-IO_str() 📄 📌
 |str| ⚡ Function
 
 Returns the element's content as a `String`.
@@ -3084,7 +3084,7 @@ Source: ~
 ~
 
 
-IO_stringVal() 📄 📌
+p5-IO_stringVal() 📄 📌
 |stringVal| ⚡ Function
 
 Stores a String value in the TableRow's specified column.
@@ -3130,7 +3130,7 @@ Source: ~
 ~
 
 
-IO_t() 📄 📌
+p5-IO_t() 📄 📌
 |t| ⚡ Function
 
 Use <a href="#/p5/addColumn">addColumn()</a> to add a new column to a <a href="#/p5.Table">Table</a> object.
@@ -3181,7 +3181,7 @@ Source: ~
 ~
 
 
-IO_tableArray() 📄 📌
+p5-IO_tableArray() 📄 📌
 |tableArray| ⚡ Function
 
 Retrieves all table data and returns it as a multidimensional array.
@@ -3224,7 +3224,7 @@ Source: ~
 ~
 
 
-IO_tableObject() 📄 📌
+p5-IO_tableObject() 📄 📌
 |tableObject| ⚡ Function
 
 Retrieves all table data and returns as an object.
@@ -3269,7 +3269,7 @@ Source: ~
 ~
 
 
-IO_type() 📄 📌
+p5-IO_type() 📄 📌
 |type| ⚡ Function
 
 Generate a blob of file data as a url to prepare for download.
@@ -3284,7 +3284,7 @@ Source: ~
 ~
 
 
-IO_xmlSerializer() 📄 📌
+p5-IO_xmlSerializer() 📄 📌
 |xmlSerializer| ⚡ Function
 
 Returns the element as a `String`.

@@ -64,7 +64,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-Rendering-classes*
 
-Rendering_Anonymous() 📄 🏛️
+p5-Rendering_Anonymous() 📄 🏛️
 |Anonymous|() 🏛️ Class
 
 A class to describe a drawing surface that's separate from the main canvas.
@@ -153,7 +153,7 @@ Source: ~
 ~
 
 
-Rendering_framebuffer() 📄 🏛️
+p5-Rendering_framebuffer() 📄 🏛️
 |framebuffer|() 🏛️ Class
 
 A <a href="#/p5.Texture">p5.Texture</a> corresponding to a property of a <a href="#/p5.Framebuffer">p5.Framebuffer</a>.
@@ -171,7 +171,7 @@ Source: ~
 ~
 
 
-Rendering_Graphics() 📄 🏛️
+p5-Rendering_Graphics() 📄 🏛️
 |Graphics|() 🏛️ Class
 
 A class to describe a drawing surface that's separate from the main canvas.
@@ -260,7 +260,7 @@ Source: ~
 ~
 
 
-Rendering_Renderer() 📄 🏛️
+p5-Rendering_Renderer() 📄 🏛️
 |Renderer|() 🏛️ Class
 
 Main graphics and rendering context, as well as the base API implementation for p5.js "core".
@@ -280,7 +280,7 @@ Source: ~
 ~
 
 
-Rendering_RendererGL() 📄 🏛️
+p5-Rendering_RendererGL() 📄 🏛️
 |RendererGL|() 🏛️ Class
 
 3D graphics class
@@ -293,7 +293,7 @@ Source: ~
 ~
 
 
-Rendering_target() 📄 🏛️
+p5-Rendering_target() 📄 🏛️
 |target|() 🏛️ Class
 
 A class to describe a high-performance drawing surface for textures.
@@ -321,7 +321,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-Rendering-functions*
 
-Rendering_anonymous() 📄 ⚡
+p5-Rendering_anonymous() 📄 ⚡
 |anonymous|(arr) ⚡ Function
 
 turn a p5.Vector Array into a one dimensional number array
@@ -342,7 +342,7 @@ Source: ~
 ~
 
 
-Rendering_calculateOffset() 📄 ⚡
+p5-Rendering_calculateOffset() 📄 ⚡
 |calculateOffset|() ⚡ Function
 
 Helper fxn to measure ascent and descent.
@@ -356,7 +356,7 @@ Source: ~
 ~
 
 
-Rendering_createCanvas() 📄 ⚡
+p5-Rendering_createCanvas() 📄 ⚡
 |createCanvas|({Number} [width], {Number} [height], {HTMLCanvasElement} [canvas]) ⚡ Function
 
 Parameters: ~
@@ -377,7 +377,7 @@ Source: ~
 ~
 
 
-Rendering_createGraphics() 📄 ⚡
+p5-Rendering_createGraphics() 📄 ⚡
 |createGraphics|(width, height, {HTMLCanvasElement} [canvas]) ⚡ Function
 
 Parameters: ~
@@ -398,7 +398,7 @@ Source: ~
 ~
 
 
-Rendering_noCanvas() 📄 ⚡
+p5-Rendering_noCanvas() 📄 ⚡
 |noCanvas|() ⚡ Function
 
 Removes the default canvas.
@@ -423,7 +423,7 @@ Source: ~
 ~
 
 
-Rendering_prevFramebuffer() 📄 ⚡
+p5-Rendering_prevFramebuffer() 📄 ⚡
 |prevFramebuffer|() ⚡ Function
 
 Begins drawing shapes to the framebuffer.
@@ -477,7 +477,7 @@ Source: ~
 ~
 
 
-Rendering_readPixelsWebGL() 📄 ⚡
+p5-Rendering_readPixelsWebGL() 📄 ⚡
 |readPixelsWebGL|(pixels, gl, framebuffer, x, y, width, height, format, type, flipY) ⚡ Function
 
 Parameters: ~
@@ -505,7 +505,7 @@ Source: ~
 ~
 
 
-Rendering_readPixelWebGL() 📄 ⚡
+p5-Rendering_readPixelWebGL() 📄 ⚡
 |readPixelWebGL|(gl, framebuffer, x, y, format, type, flipY) ⚡ Function
 
 Parameters: ~
@@ -530,7 +530,7 @@ Source: ~
 ~
 
 
-Rendering_resizeCanvas() 📄 ⚡
+p5-Rendering_resizeCanvas() 📄 ⚡
 |resizeCanvas|(width, height, {Boolean} [noRedraw] whether to delay calling) ⚡ Function
 
 Resizes the canvas to a given `width` and `height`.
@@ -608,7 +608,7 @@ Source: ~
 ~
 
 
-Rendering_setAttributes() 📄 ⚡
+p5-Rendering_setAttributes() 📄 ⚡
 |setAttributes|(obj) ⚡ Function
 
 Parameters: ~
@@ -625,7 +625,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-Rendering-properties*
 
-Rendering_Framebuffer() 📄 🔧
+p5-Rendering_Framebuffer() 📄 🔧
 |Framebuffer| ⚡ Function
 
 An object that stores the framebuffer's depth data.
@@ -725,7 +725,7 @@ Source: ~
 ~
 
 
-Rendering_pixels() 📄 🔧
+p5-Rendering_pixels() 📄 🔧
 |pixels| ⚡ Function
 
 An array containing the `color` of each pixel in the framebuffer.
@@ -780,7 +780,7 @@ Source: ~
 ~
 
 
-Rendering_uModelMatrix() 📄 🔧
+p5-Rendering_uModelMatrix() 📄 🔧
 |uModelMatrix| ⚡ Function
 
 model view, projection, & normal matrices
@@ -793,7 +793,7 @@ Source: ~
 ~
 
 
-Rendering_uViewMatrix() 📄 🔧
+p5-Rendering_uViewMatrix() 📄 🔧
 |uViewMatrix| ⚡ Function
 
 model view, projection, & normal matrices
@@ -806,7 +806,7 @@ Source: ~
 ~
 
 
-Rendering_width() 📄 🔧
+p5-Rendering_width() 📄 🔧
 |width| ⚡ Function
 
 Resize our canvas element.
@@ -821,7 +821,7 @@ Source: ~
 
 VARIABLES                                                   *p5-Rendering-variables*
 
-Rendering_a0() 📄 📌
+p5-Rendering_a0() 📄 📌
 |a0| ⚡ Function
 
 [`background` description]
@@ -834,7 +834,7 @@ Source: ~
 ~
 
 
-Rendering_cam() 📄 📌
+p5-Rendering_cam() 📄 📌
 |cam| ⚡ Function
 
 Creates a new <a href="#/p5.Camera">p5.Camera</a> object to use with the framebuffer.
@@ -928,7 +928,7 @@ Source: ~
 ~
 
 
-Rendering_color() 📄 📌
+p5-Rendering_color() 📄 📌
 |color| ⚡ Function
 
 Basic `stroke` material for geometry with a given `color`
@@ -960,7 +960,7 @@ Source: ~
 ~
 
 
-Rendering_currentLeft() 📄 📌
+p5-Rendering_currentLeft() 📄 📌
 |currentLeft| ⚡ Function
 
 Helper fxn to measure ascent and descent.
@@ -974,7 +974,7 @@ Source: ~
 ~
 
 
-Rendering_format() 📄 📌
+p5-Rendering_format() 📄 📌
 |format| ⚡ Function
 
 To create a WebGL texture, one needs to supply three pieces of information: the type (the data type each channel will be stored as, e.g.
@@ -990,7 +990,7 @@ Source: ~
 ~
 
 
-Rendering_gl() 📄 📌
+p5-Rendering_gl() 📄 📌
 |gl| ⚡ Function
 
 Updates the framebuffer with the RGBA values in the <a href="#/p5.Framebuffer/`pixels`">`pixels`</a> array.
@@ -1043,7 +1043,7 @@ Source: ~
 ~
 
 
-Rendering_oldColor() 📄 📌
+p5-Rendering_oldColor() 📄 📌
 |oldColor| ⚡ Function
 
 Called when the size of the framebuffer has changed (either by being manually updated or from auto-size updates when its canvas changes size.) Old textures and renderbuffers will be deleted, and then recreated with the new size.
@@ -1056,7 +1056,7 @@ Source: ~
 ~
 
 
-Rendering_styleEmpty() 📄 📌
+p5-Rendering_styleEmpty() 📄 📌
 |styleEmpty| ⚡ Function
 
 p5.Renderer2D The 2D graphics canvas renderer class.
@@ -1070,7 +1070,7 @@ Source: ~
 ~
 
 
-Rendering_type() 📄 📌
+p5-Rendering_type() 📄 📌
 |type| ⚡ Function
 
 To create a WebGL texture, one needs to supply three pieces of information: the type (the data type each channel will be stored as, e.g.

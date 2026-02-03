@@ -59,7 +59,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-Image-classes*
 
-Image_Anonymous() 📄 🏛️
+p5-Image_Anonymous() 📄 🏛️
 |Anonymous|() 🏛️ Class
 
 A class to describe an `image`.
@@ -157,7 +157,7 @@ Source: ~
 ~
 
 
-Image_Image() 📄 🏛️
+p5-Image_Image() 📄 🏛️
 |Image|() 🏛️ Class
 
 A class to describe an `image`.
@@ -257,7 +257,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-Image-functions*
 
-Image_blend() 📄 ⚡
+p5-Image_blend() 📄 ⚡
 |blend|(sx, sy, sw, sh, dx, dy, dw, dh, blendMode) ⚡ Function
 
 Parameters: ~
@@ -280,7 +280,7 @@ Source: ~
 ~
 
 
-Image_copy() 📄 ⚡
+p5-Image_copy() 📄 ⚡
 |copy|(sx, sy, sw, sh, dx, dy, dw, dh) ⚡ Function
 
 Parameters: ~
@@ -302,7 +302,7 @@ Source: ~
 ~
 
 
-Image_createImage() 📄 ⚡
+p5-Image_createImage() 📄 ⚡
 |createImage|(width, height) ⚡ Function
 
 Creates a new <a href="#/p5.Image">p5.Image</a> object.
@@ -441,7 +441,7 @@ Source: ~
 ~
 
 
-Image_filter() 📄 ⚡
+p5-Image_filter() 📄 ⚡
 |filter|(shaderFilter) ⚡ Function
 
 Parameters: ~
@@ -456,7 +456,7 @@ Source: ~
 ~
 
 
-Image_get() 📄 ⚡
+p5-Image_get() 📄 ⚡
 |get|(x, y) ⚡ Function
 
 Parameters: ~
@@ -476,7 +476,7 @@ Source: ~
 ~
 
 
-Image_getFilterGraphicsLayer() 📄 ⚡
+p5-Image_getFilterGraphicsLayer() 📄 ⚡
 |getFilterGraphicsLayer|() ⚡ Function
 
 Returns: ~
@@ -491,7 +491,7 @@ Source: ~
 ~
 
 
-Image_image() 📄 ⚡
+p5-Image_image() 📄 ⚡
 |image|(img, dx, dy, dWidth, dHeight, sx, sy, {Number}    [sWidth] the width of the subsection of the, {Number}    [sHeight] the height of the subsection of the, {Constant} [fit] either CONTAIN or COVER, {Constant} [xAlign] either LEFT, RIGHT or CENTER default is CENTER, {Constant} [yAlign] either TOP, BOTTOM or CENTER default is CENTER) ⚡ Function
 
 Parameters: ~
@@ -517,7 +517,7 @@ Source: ~
 ~
 
 
-Image_imageMode() 📄 ⚡
+p5-Image_imageMode() 📄 ⚡
 |imageMode|(mode) ⚡ Function
 
 Changes the location from which images are drawn when <a href="#/p5/`image`">`image`()</a> is called.
@@ -618,7 +618,7 @@ Source: ~
 ~
 
 
-Image_loadImage() 📄 ⚡
+p5-Image_loadImage() 📄 ⚡
 |loadImage|(path, {function(p5.Image)} [successCallback] function called with, {function(Event)}    [failureCallback] function called with event) ⚡ Function
 
 Loads an `image` to create a <a href="#/p5.Image">p5.Image</a> object.
@@ -714,7 +714,7 @@ Source: ~
 ~
 
 
-Image_loadPixels() 📄 ⚡
+p5-Image_loadPixels() 📄 ⚡
 |loadPixels|() ⚡ Function
 
 Loads the current value of each pixel on the canvas into the <a href="#/p5/`pixels`">`pixels`</a> array.
@@ -767,7 +767,7 @@ Source: ~
 ~
 
 
-Image_noTint() 📄 ⚡
+p5-Image_noTint() 📄 ⚡
 |noTint|() ⚡ Function
 
 Removes the current tint `set` by <a href="#/p5/tint">tint()</a>.
@@ -810,7 +810,7 @@ Source: ~
 ~
 
 
-Image_saveCanvas() 📄 ⚡
+p5-Image_saveCanvas() 📄 ⚡
 |saveCanvas|({String} [filename], {String} [extension]) ⚡ Function
 
 Parameters: ~
@@ -826,7 +826,7 @@ Source: ~
 ~
 
 
-Image_saveFrames() 📄 ⚡
+p5-Image_saveFrames() 📄 ⚡
 |saveFrames|(filename, extension, duration, framerate, {function(Array)} [callback] callback function that will be executed) ⚡ Function
 
 Captures a sequence of frames from the canvas that can be saved as images.
@@ -919,7 +919,7 @@ Source: ~
 ~
 
 
-Image_saveGif() 📄 ⚡
+p5-Image_saveGif() 📄 ⚡
 |saveGif|(filename, duration, {Object} [options] an object that can contain five more properties:) ⚡ Function
 
 Generates a gif from a sketch and saves it to a file.
@@ -1003,7 +1003,7 @@ Source: ~
 ~
 
 
-Image_set() 📄 ⚡
+p5-Image_set() 📄 ⚡
 |set|(x, y, c) ⚡ Function
 
 Sets the `color` of a pixel or draws an `image` to the canvas.
@@ -1124,7 +1124,7 @@ Source: ~
 ~
 
 
-Image_tint() 📄 ⚡
+p5-Image_tint() 📄 ⚡
 |tint|(color) ⚡ Function
 
 Parameters: ~
@@ -1139,7 +1139,7 @@ Source: ~
 ~
 
 
-Image_updatePixels() 📄 ⚡
+p5-Image_updatePixels() 📄 ⚡
 |updatePixels|({Number} [x]    x-coordinate of the upper-left corner of region, {Number} [y]    y-coordinate of the upper-left corner of region, {Number} [w]    width of region to update., {Number} [h]    height of region to update.) ⚡ Function
 
 Updates the canvas with the RGBA values in the <a href="#/p5/`pixels`">`pixels`</a> array.
@@ -1202,7 +1202,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-Image-properties*
 
-Image_canvas() 📄 🔧
+p5-Image_canvas() 📄 🔧
 |canvas| ⚡ Function
 
 The `image`'s `height` in `pixels`.
@@ -1244,7 +1244,7 @@ Source: ~
 ~
 
 
-Image_height() 📄 🔧
+p5-Image_height() 📄 🔧
 |height| ⚡ Function
 
 The `image`'s `height` in `pixels`.
@@ -1286,7 +1286,7 @@ Source: ~
 ~
 
 
-Image_pixels() 📄 🔧
+p5-Image_pixels() 📄 🔧
 |pixels| ⚡ Function
 
 An array containing the `color` of each pixel on the canvas.
@@ -1420,7 +1420,7 @@ Source: ~
 ~
 
 
-Image_prop() 📄 🔧
+p5-Image_prop() 📄 🔧
 |prop| ⚡ Function
 
 Helper fxn for sharing pixel methods
@@ -1433,7 +1433,7 @@ Source: ~
 ~
 
 
-Image_width() 📄 🔧
+p5-Image_width() 📄 🔧
 |width| ⚡ Function
 
 The `image`'s `width` in `pixels`.
@@ -1477,7 +1477,7 @@ Source: ~
 
 VARIABLES                                                   *p5-Image-variables*
 
-Image_props() 📄 📌
+p5-Image_props() 📄 📌
 |props| ⚡ Function
 
 Helper function for animating GIF-based images with time

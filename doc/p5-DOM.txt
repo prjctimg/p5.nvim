@@ -102,7 +102,7 @@ CONTENTS                                                           *${this.getCu
 
 CLASSES                                                   *p5-DOM-classes*
 
-DOM_Anonymous() 📄 🏛️
+p5-DOM_Anonymous() 📄 🏛️
 |Anonymous|() 🏛️ Class
 
 A class to describe an <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started" target="_blank">HTML element</a>.
@@ -154,7 +154,7 @@ Source: ~
 ~
 
 
-DOM_Cue() 📄 🏛️
+p5-DOM_Cue() 📄 🏛️
 |Cue|() 🏛️ Class
 
 * SCHEDULE EVENTS **
@@ -167,7 +167,7 @@ Source: ~
 ~
 
 
-DOM_Element() 📄 🏛️
+p5-DOM_Element() 📄 🏛️
 |Element|() 🏛️ Class
 
 A class to describe an <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started" target="_blank">HTML element</a>.
@@ -219,7 +219,7 @@ Source: ~
 ~
 
 
-DOM_File() 📄 🏛️
+p5-DOM_File() 📄 🏛️
 |File|() 🏛️ Class
 
 A class to describe a file.
@@ -317,7 +317,7 @@ Source: ~
 
 FUNCTIONS                                                   *p5-DOM-functions*
 
-DOM_addClass() 📄 ⚡
+p5-DOM_addClass() 📄 ⚡
 |addClass|(class) ⚡ Function
 
 Adds a class to the element.
@@ -354,7 +354,7 @@ Source: ~
 ~
 
 
-DOM_addElement() 📄 ⚡
+p5-DOM_addElement() 📄 ⚡
 |addElement|() ⚡ Function
 
 Helpers for create methods.
@@ -367,7 +367,7 @@ Source: ~
 ~
 
 
-DOM_anonymous() 📄 ⚡
+p5-DOM_anonymous() 📄 ⚡
 |anonymous|() ⚡ Function
 
 Sets up logic to check that autoplay succeeded.
@@ -380,7 +380,7 @@ Source: ~
 ~
 
 
-DOM_attribute() 📄 ⚡
+p5-DOM_attribute() 📄 ⚡
 |attribute|(attr, value) ⚡ Function
 
 Parameters: ~
@@ -396,7 +396,7 @@ Source: ~
 ~
 
 
-DOM_center() 📄 ⚡
+p5-DOM_center() 📄 ⚡
 |center|({String} [align] passing 'vertical', 'horizontal' aligns element accordingly) ⚡ Function
 
 Centers the element either vertically, horizontally, or both.
@@ -437,7 +437,7 @@ Source: ~
 ~
 
 
-DOM_changed() 📄 ⚡
+p5-DOM_changed() 📄 ⚡
 |changed|(fxn) ⚡ Function
 
 Calls a function when the element changes.
@@ -516,7 +516,7 @@ Source: ~
 ~
 
 
-DOM_child() 📄 ⚡
+p5-DOM_child() 📄 ⚡
 |child|({String|p5.Element} [child] the ID, DOM node, or <a href="#/p5.Element">p5.Element</a>) ⚡ Function
 
 Parameters: ~
@@ -531,7 +531,7 @@ Source: ~
 ~
 
 
-DOM_controls() 📄 ⚡
+p5-DOM_controls() 📄 ⚡
 |controls|() ⚡ Function
 
 Hide the default <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement" target="_blank">HTMLMediaElement</a> controls.
@@ -590,7 +590,7 @@ Source: ~
 ~
 
 
-DOM_createA() 📄 ⚡
+p5-DOM_createA() 📄 ⚡
 |createA|(href, html, {String} [target]   target where the new link should open,) ⚡ Function
 
 Creates an `&lt;a&gt;&lt;/a&gt;` element that links to another web page.
@@ -654,7 +654,7 @@ Source: ~
 ~
 
 
-DOM_createAudio() 📄 ⚡
+p5-DOM_createAudio() 📄 ⚡
 |createAudio|({String|String[]} [src] path to an audio file, or an array of paths, {Function} [callback]   function to call once the audio is ready to play.) ⚡ Function
 
 Creates a hidden `&lt;audio&gt;` element for simple audio playback.
@@ -703,7 +703,7 @@ Source: ~
 ~
 
 
-DOM_createButton() 📄 ⚡
+p5-DOM_createButton() 📄 ⚡
 |createButton|(label, {String} [value] value of the button.) ⚡ Function
 
 Creates a `&lt;button&gt;&lt;/button&gt;` element.
@@ -790,7 +790,7 @@ Source: ~
 ~
 
 
-DOM_createCapture() 📄 ⚡
+p5-DOM_createCapture() 📄 ⚡
 |createCapture|({String|Constant|Object}  [type] type of capture, either AUDIO or VIDEO,, {Object}                  [flipped] flip the capturing video and mirror the output with `{flipped:true}`. By, {Function}                [callback] function to call once the stream) ⚡ Function
 
 Creates a `&lt;video&gt;` element that "captures" the audio/video stream from the webcam and microphone.
@@ -910,7 +910,7 @@ Source: ~
 ~
 
 
-DOM_createCheckbox() 📄 ⚡
+p5-DOM_createCheckbox() 📄 ⚡
 |createCheckbox|({String} [label] label displayed after the checkbox., {boolean} [value] value of the checkbox. Checked is `true` and unchecked is `false`.) ⚡ Function
 
 Creates a checkbox `&lt;input&gt;&lt;/input&gt;` element.
@@ -1017,7 +1017,7 @@ Source: ~
 ~
 
 
-DOM_createColorPicker() 📄 ⚡
+p5-DOM_createColorPicker() 📄 ⚡
 |createColorPicker|({String|p5.Color} [value] default color as a <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color" target="_blank">CSS color string</a>.) ⚡ Function
 
 Creates a `color` picker element.
@@ -1091,7 +1091,7 @@ Source: ~
 ~
 
 
-DOM_createDiv() 📄 ⚡
+p5-DOM_createDiv() 📄 ⚡
 |createDiv|({String} [html] inner HTML for the new `&lt;div&gt;&lt;/div&gt;` element.) ⚡ Function
 
 Creates a `&lt;div&gt;&lt;/div&gt;` element.
@@ -1149,7 +1149,7 @@ Source: ~
 ~
 
 
-DOM_createElement() 📄 ⚡
+p5-DOM_createElement() 📄 ⚡
 |createElement|(tag, {String} [content] HTML content to insert into the element.) ⚡ Function
 
 Creates a new <a href="#/p5.Element">p5.Element</a> object.
@@ -1211,7 +1211,7 @@ Source: ~
 ~
 
 
-DOM_createFileInput() 📄 ⚡
+p5-DOM_createFileInput() 📄 ⚡
 |createFileInput|(callback, {Boolean} [multiple] allow multiple files to be selected.) ⚡ Function
 
 Creates an `&lt;input&gt;&lt;/input&gt;` element of type `'file'`.
@@ -1324,7 +1324,7 @@ Source: ~
 ~
 
 
-DOM_createImg() 📄 ⚡
+p5-DOM_createImg() 📄 ⚡
 |createImg|(src, alt, {String} [crossOrigin] crossOrigin property to use when fetching the image., {Function} [successCallback] function to call once the image loads. The new image will be passed) ⚡ Function
 
 Parameters: ~
@@ -1346,7 +1346,7 @@ Source: ~
 ~
 
 
-DOM_createInput() 📄 ⚡
+p5-DOM_createInput() 📄 ⚡
 |createInput|({String} [value]) ⚡ Function
 
 Parameters: ~
@@ -1365,7 +1365,7 @@ Source: ~
 ~
 
 
-DOM_createMedia() 📄 ⚡
+p5-DOM_createMedia() 📄 ⚡
 |createMedia|() ⚡ Function
 
 VIDEO STUFF *
@@ -1378,7 +1378,7 @@ Source: ~
 ~
 
 
-DOM_createP() 📄 ⚡
+p5-DOM_createP() 📄 ⚡
 |createP|({String} [html] inner HTML for the new `&lt;p&gt;&lt;/p&gt;` element.) ⚡ Function
 
 Creates a paragraph element.
@@ -1420,7 +1420,7 @@ Source: ~
 ~
 
 
-DOM_createSelect() 📄 ⚡
+p5-DOM_createSelect() 📄 ⚡
 |createSelect|(existing) ⚡ Function
 
 Parameters: ~
@@ -1439,7 +1439,7 @@ Source: ~
 ~
 
 
-DOM_createSlider() 📄 ⚡
+p5-DOM_createSlider() 📄 ⚡
 |createSlider|(min, max, {Number} [value] default value of the slider., {Number} [step] size for each step in the slider's range.) ⚡ Function
 
 Creates a slider `&lt;input&gt;&lt;/input&gt;` element.
@@ -1569,7 +1569,7 @@ Source: ~
 ~
 
 
-DOM_createSpan() 📄 ⚡
+p5-DOM_createSpan() 📄 ⚡
 |createSpan|({String} [html] inner HTML for the new `&lt;span&gt;&lt;/span&gt;` element.) ⚡ Function
 
 Creates a `&lt;span&gt;&lt;/span&gt;` element.
@@ -1645,7 +1645,7 @@ Source: ~
 ~
 
 
-DOM_createVideo() 📄 ⚡
+p5-DOM_createVideo() 📄 ⚡
 |createVideo|(src, {Function} [callback] function to call once the video is ready to play.) ⚡ Function
 
 Creates a `&lt;video&gt;` element for simple audio/video playback.
@@ -1744,7 +1744,7 @@ Source: ~
 ~
 
 
-DOM_display() 📄 ⚡
+p5-DOM_display() 📄 ⚡
 |display|() ⚡ Function
 
 Hides the current element.
@@ -1781,7 +1781,7 @@ Source: ~
 ~
 
 
-DOM_draggable() 📄 ⚡
+p5-DOM_draggable() 📄 ⚡
 |draggable|({p5.Element} [elmnt]  another <a href="#/p5.Element">p5.Element</a>.) ⚡ Function
 
 Makes the element draggable.
@@ -1858,7 +1858,7 @@ Source: ~
 ~
 
 
-DOM_drop() 📄 ⚡
+p5-DOM_drop() 📄 ⚡
 |drop|(callback, {Function} [fxn]     called once when any files are dropped.) ⚡ Function
 
 Calls a function when the user drops a file on the element.
@@ -1974,7 +1974,7 @@ Source: ~
 ~
 
 
-DOM_hasClass() 📄 ⚡
+p5-DOM_hasClass() 📄 ⚡
 |hasClass|(c {String} name of class to check.) ⚡ Function
 
 Checks if a class is already applied to element.
@@ -2026,7 +2026,7 @@ Source: ~
 ~
 
 
-DOM_hide() 📄 ⚡
+p5-DOM_hide() 📄 ⚡
 |hide|() ⚡ Function
 
 Hides the current element.
@@ -2063,7 +2063,7 @@ Source: ~
 ~
 
 
-DOM_html() 📄 ⚡
+p5-DOM_html() 📄 ⚡
 |html|({String} [html] the HTML to be placed inside the element, {boolean} [append] whether to append HTML to existing) ⚡ Function
 
 Parameters: ~
@@ -2079,7 +2079,7 @@ Source: ~
 ~
 
 
-DOM_input() 📄 ⚡
+p5-DOM_input() 📄 ⚡
 |input|(fxn) ⚡ Function
 
 Calls a function when the element receives input.
@@ -2155,7 +2155,7 @@ Source: ~
 ~
 
 
-DOM_position() 📄 ⚡
+p5-DOM_position() 📄 ⚡
 |position|({Number} [x] x-position relative to top-left of window (optional), {Number} [y] y-position relative to top-left of window (optional), {String} [positionType] it can be static, fixed, relative, sticky, initial or inherit (optional)) ⚡ Function
 
 Parameters: ~
@@ -2172,7 +2172,7 @@ Source: ~
 ~
 
 
-DOM_remove() 📄 ⚡
+p5-DOM_remove() 📄 ⚡
 |remove|() ⚡ Function
 
 Removes the element, stops all audio/video streams, and removes all callback functions.
@@ -2210,7 +2210,7 @@ Source: ~
 ~
 
 
-DOM_removeAttribute() 📄 ⚡
+p5-DOM_removeAttribute() 📄 ⚡
 |removeAttribute|(attr) ⚡ Function
 
 Removes an attribute from the element.
@@ -2256,7 +2256,7 @@ Source: ~
 ~
 
 
-DOM_removeClass() 📄 ⚡
+p5-DOM_removeClass() 📄 ⚡
 |removeClass|(class) ⚡ Function
 
 Removes a class from the element.
@@ -2304,7 +2304,7 @@ Source: ~
 ~
 
 
-DOM_removeElements() 📄 ⚡
+p5-DOM_removeElements() 📄 ⚡
 |removeElements|() ⚡ Function
 
 Removes all elements created by p5.js, including any event handlers.
@@ -2375,7 +2375,7 @@ Source: ~
 ~
 
 
-DOM_select() 📄 ⚡
+p5-DOM_select() 📄 ⚡
 |select|(selectors, {String|p5.Element|HTMLElement} [container] CSS selector string, <a href="#/p5.Element">p5.Element</a>, or) ⚡ Function
 
 Searches the page for the first element that matches the given <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics#different_types_of_selectors" target="_blank">CSS selector string</a>.
@@ -2461,7 +2461,7 @@ Source: ~
 ~
 
 
-DOM_selectAll() 📄 ⚡
+p5-DOM_selectAll() 📄 ⚡
 |selectAll|(selectors, {String|p5.Element|HTMLElement} [container] CSS selector string, <a href="#/p5.Element">p5.Element</a>, or) ⚡ Function
 
 Searches the page for all elements that matches the given <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics#different_types_of_selectors" target="_blank">CSS selector string</a>.
@@ -2553,7 +2553,7 @@ Source: ~
 ~
 
 
-DOM_show() 📄 ⚡
+p5-DOM_show() 📄 ⚡
 |show|() ⚡ Function
 
 Shows the current element.
@@ -2592,7 +2592,7 @@ Source: ~
 ~
 
 
-DOM_style() 📄 ⚡
+p5-DOM_style() 📄 ⚡
 |style|(property, value) ⚡ Function
 
 Parameters: ~
@@ -2612,7 +2612,7 @@ Source: ~
 ~
 
 
-DOM_toggleClass() 📄 ⚡
+p5-DOM_toggleClass() 📄 ⚡
 |toggleClass|(c {String} class name to toggle.) ⚡ Function
 
 Toggles whether a class is applied to the element.
@@ -2656,7 +2656,7 @@ Source: ~
 ~
 
 
-DOM_value() 📄 ⚡
+p5-DOM_value() 📄 ⚡
 |value|(value) ⚡ Function
 
 Parameters: ~
@@ -2673,7 +2673,7 @@ Source: ~
 
 PROPERTIES                                                   *p5-DOM-properties*
 
-DOM_data() 📄 🔧
+p5-DOM_data() 📄 🔧
 |data| ⚡ Function
 
 A string containing the file's data.
@@ -2716,7 +2716,7 @@ Source: ~
 ~
 
 
-DOM_file() 📄 🔧
+p5-DOM_file() 📄 🔧
 |file| ⚡ Function
 
 Underlying <a href="https://developer.mozilla.org/en-US/docs/Web/API/File" target="_blank">File</a> object.
@@ -2766,7 +2766,7 @@ Source: ~
 ~
 
 
-DOM_height() 📄 🔧
+p5-DOM_height() 📄 🔧
 |height| ⚡ Function
 
 A `Number` property that stores the element's `height`.
@@ -2779,7 +2779,7 @@ Source: ~
 ~
 
 
-DOM_name() 📄 🔧
+p5-DOM_name() 📄 🔧
 |name| ⚡ Function
 
 The file name as a string.
@@ -2822,7 +2822,7 @@ Source: ~
 ~
 
 
-DOM_prop() 📄 🔧
+p5-DOM_prop() 📄 🔧
 |prop| ⚡ Function
 
 Helper fxn for sharing pixel methods
@@ -2835,7 +2835,7 @@ Source: ~
 ~
 
 
-DOM_size() 📄 🔧
+p5-DOM_size() 📄 🔧
 |size| ⚡ Function
 
 The number of bytes in the file.
@@ -2877,7 +2877,7 @@ Source: ~
 ~
 
 
-DOM_subtype() 📄 🔧
+p5-DOM_subtype() 📄 🔧
 |subtype| ⚡ Function
 
 The file subtype as a string.
@@ -2921,7 +2921,7 @@ Source: ~
 ~
 
 
-DOM_type() 📄 🔧
+p5-DOM_type() 📄 🔧
 |type| ⚡ Function
 
 The file <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types" target="_blank">MIME type</a> as a string.
@@ -2964,7 +2964,7 @@ Source: ~
 ~
 
 
-DOM_VIDEO() 📄 🔧
+p5-DOM_VIDEO() 📄 🔧
 |VIDEO| ⚡ Function
 
 CAMERA STUFF *
@@ -2977,7 +2977,7 @@ Source: ~
 ~
 
 
-DOM_width() 📄 🔧
+p5-DOM_width() 📄 🔧
 |width| ⚡ Function
 
 A `Number` property that stores the element's `width`.
@@ -2992,7 +2992,7 @@ Source: ~
 
 VARIABLES                                                   *p5-DOM-variables*
 
-DOM_audioContext() 📄 📌
+p5-DOM_audioContext() 📄 📌
 |audioContext| ⚡ Function
 
 Sends the element's audio to an output.
@@ -3009,7 +3009,7 @@ Source: ~
 ~
 
 
-DOM_children() 📄 📌
+p5-DOM_children() 📄 📌
 |children| ⚡ Function
 
 Helper function for getElement and getElements.
@@ -3022,7 +3022,7 @@ Source: ~
 ~
 
 
-DOM_container() 📄 📌
+p5-DOM_container() 📄 📌
 |container| ⚡ Function
 
 Helper function for select and selectAll
@@ -3035,7 +3035,7 @@ Source: ~
 ~
 
 
-DOM_elt() 📄 📌
+p5-DOM_elt() 📄 📌
 |elt| ⚡ Function
 
 Creates a `&lt;span&gt;&lt;/span&gt;` element.
@@ -3103,7 +3103,7 @@ Source: ~
 ~
 
 
-DOM_i() 📄 📌
+p5-DOM_i() 📄 📌
 |i| ⚡ Function
 
 Removes a callback based on its ID.
@@ -3169,7 +3169,7 @@ Source: ~
 ~
 
 
-DOM_id() 📄 📌
+p5-DOM_id() 📄 📌
 |id| ⚡ Function
 
 Schedules a function to call when the audio/video reaches a specific time during its playback.
@@ -3218,7 +3218,7 @@ Source: ~
 ~
 
 
-DOM_isTouch() 📄 📌
+p5-DOM_isTouch() 📄 📌
 |isTouch| ⚡ Function
 
 Makes the element draggable.
@@ -3291,7 +3291,7 @@ Source: ~
 ~
 
 
-DOM_mainOutput() 📄 📌
+p5-DOM_mainOutput() 📄 📌
 |mainOutput| ⚡ Function
 
 Sends the element's audio to an output.
@@ -3308,7 +3308,7 @@ Source: ~
 ~
 
 
-DOM_node() 📄 📌
+p5-DOM_node() 📄 📌
 |node| ⚡ Function
 
 Helpers for create methods.
@@ -3321,7 +3321,7 @@ Source: ~
 ~
 
 
-DOM_oldVal() 📄 📌
+p5-DOM_oldVal() 📄 📌
 |oldVal| ⚡ Function
 
 Sets the audio/video to play once it's loaded.
@@ -3388,7 +3388,7 @@ Source: ~
 ~
 
 
-DOM_timeout() 📄 📌
+p5-DOM_timeout() 📄 📌
 |timeout| ⚡ Function
 
 Sets up logic to check that autoplay succeeded.
