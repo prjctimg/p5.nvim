@@ -9,77 +9,93 @@ Tags p5.Color Color module functions and properties
 
 CONTENTS                                                           *${this.getCurrentModuleName()}-contents*
 
-CLASSES:
-  Color                     |Color_Color()
+🔍 NAVIGATION:~
+   Use | to jump to sections, :help p5-[symbol] to jump to symbols~
 
-FUNCTIONS:
-  alpha                     |Color_alpha()
-  background                |Color_background()
-  beginClip                 |Color_beginClip()
-  blue                      |Color_blue()
-  brightness                |Color_brightness()
-  clear                     |Color_clear()
-  clip                      |Color_clip()
-  color                     |Color_color()
-  colorMode                 |Color_colorMode()
-  endClip                   |Color_endClip()
-  erase                     |Color_erase()
-  fill                      |Color_fill()
-  green                     |Color_green()
-  hue                       |Color_hue()
-  lerpColor                 |Color_lerpColor()
-  lightness                 |Color_lightness()
-  noErase                   |Color_noErase()
-  noFill                    |Color_noFill()
-  noStroke                  |Color_noStroke()
-  paletteLerp               |Color_paletteLerp()
-  red                       |Color_red()
-  saturation                |Color_saturation()
-  stroke                    |Color_stroke()
+🏛️ CLASSES:
+  |Color                    |
 
-VARIABLES:
-  a                         |Color_a()
-  colorPatterns             |Color_colorPatterns()
-  first_color_stop          |Color_first_color_stop()
-  INTEGER                   |Color_INTEGER()
-  namedColors               |Color_namedColors()
-  WHITESPACE                |Color_WHITESPACE()
+⚡ FUNCTIONS:
+  |alpha                    |
+  |background               |
+  |beginClip                |
+  |blue                     |
+  |brightness               |
+  |clear                    |
+  |clip                     |
+  |color                    |
+  |colorMode                |
+  |endClip                  |
+  |erase                    |
+  |fill                     |
+  |green                    |
+  |hue                      |
+  |lerpColor                |
+  |lightness                |
+  |noErase                  |
+  |noFill                   |
+  |noStroke                 |
+  |paletteLerp              |
+  |red                      |
+  |saturation               |
+  |stroke                   |
+
+📌 VARIABLES:
+  |a                        |
+  |colorPatterns            |
+  |first_color_stop         |
+  |INTEGER                  |
+  |namedColors              |
+  |WHITESPACE               |
 
 
 
-CLASSES                                                   *p5-module-classes*
+🔗 RELATED SYMBOLS:~
+   See |p5| for complete p5.js API reference~
+
+
+
+⚡ QUICK REFERENCE:~
+   :help p5-[symbolname] - Jump directly to any function~
+
+
+
+CLASSES                                                   *p5-Color-classes*
 
 Color_Color() 📄 🏛️
-Color() Class
+|Color|() 🏛️ Class
 
-A class to describe a color.
-Each `p5.Color` object stores the color mode and level maxes that were active during its construction.
+A class to describe a `color`.
+Each `p5.Color` object stores the `color` mode and level maxes that were active during its construction.
 These values are used to interpret the arguments passed to the object's constructor.
-They also determine output formatting such as when <a href="#/p5/saturation">saturation()</a> is called.
-Color is stored internally as an array of ideal RGBA values in floating point form, normalized from 0 to 1.
+They also determine output formatting such as when <a href="#/p5/`saturation`">`saturation`()</a> is called.
+Color is stored internally as an array of ideal RGBA values in floating `point` form, normalized from 0 to 1.
 These values are used to calculate the closest screen colors, which are RGBA levels from 0 to 255.
 Screen colors are sent to the renderer.
-When different color representations are calculated, the results are cached for performance.
-These values are normalized, floating-point numbers.
-Note: <a href="#/p5/color">color()</a> is the recommended way to create an instance of this class.
+When different `color` representations are calculated, the results are cached for performance.
+These values are normalized, floating-`point` numbers.
+Note: <a href="#/p5/`color`">`color`()</a> is the recommended way to create an instance of this class.
 
 Parameters: ~
                 🔢 `{p5} [pInst]                      pointer to p5 instance.` (unknown)
                 🔢 `vals` (Number[]|String) - an array containing the color values
 ~
 
+See also: ~
+   |help p5-Color| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/color/p5.Color.js:346
 ~
 
 
-FUNCTIONS                                                   *p5-module-functions*
+FUNCTIONS                                                   *p5-Color-functions*
 
 Color_alpha() 📄 ⚡
-alpha(color) Function
+|alpha|(color) ⚡ Function
 
-Gets the alpha (transparency) value of a color.
-`alpha()` extracts the alpha value from a <a href="#/p5.Color">p5.Color</a> object, an array of color components, or a CSS color string.
+Gets the `alpha` (transparency) value of a `color`.
+``alpha`()` extracts the `alpha` value from a <a href="#/p5.Color">p5.Color</a> object, an array of `color` components, or a CSS `color` string.
 
 Parameters: ~
                 🔢 `color` (p5.Color|Number[]|String) - <a href="#/p5.Color">p5.Color</a> object, array of
@@ -89,35 +105,37 @@ Returns: ~
                 🔢 Returns Number: the alpha value.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a CSS color string.
 > let c = 'rgba(0, 126, 255, 0.4)';
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(c);
 > rect(15, 15, 35, 70);
-> 
+>
 > // Set 'alphaValue' to 102.
 > let alphaValue = alpha(c);
-> 
+>
 > // Draw the right rectangle.
 > fill(alphaValue);
 > rect(50, 15, 35, 70);
-> 
+>
 > describe('Two rectangles. The left one is light blue and the right one is charcoal gray.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-alpha| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:112
@@ -125,12 +143,15 @@ Source: ~
 
 
 Color_background() 📄 ⚡
-background(image, {Number}  [a]) Function
+|background|(image, {Number}  [a]) ⚡ Function
 
 Parameters: ~
                 🔢 `image` (p5.Image) - image created with <a href="#/p5/loadImage">loadImage()</a>
                 🔢 `{Number}  [a]` (unknown)
 ~
+
+See also: ~
+   |help p5-background| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:668
@@ -138,36 +159,35 @@ Source: ~
 
 
 Color_beginClip() 📄 ⚡
-beginClip({Object} [options] an object containing clip settings.) Function
+|beginClip|({Object} [options] an object containing clip settings.) ⚡ Function
 
 Starts defining a shape that will mask any shapes drawn afterward.
-Any shapes drawn between `beginClip()` and <a href="#/p5/endClip">endClip()</a> will add to the mask shape.
-The mask will apply to anything drawn after <a href="#/p5/endClip">endClip()</a>.
+Any shapes drawn between ``beginClip`()` and <a href="#/p5/`endClip`">`endClip`()</a> will add to the mask shape.
+The mask will apply to anything drawn after <a href="#/p5/`endClip`">`endClip`()</a>.
 The parameter, `options`, is optional.
-If an object with an `invert` property is passed, as in `beginClip({ invert: true })`, it will be used to set the masking mode.
+If an object with an `invert` property is passed, as in ``beginClip`({ invert: true })`, it will be used to `set` the masking mode.
 `{ invert: true }` inverts the mask, creating holes in shapes that are masked.
 `invert` is `false` by default.
-Masks can be contained between the <a href="#/p5/push">push()</a> and <a href="#/p5/pop">pop()</a> functions.
+Masks can be contained between the <a href="#/p5/`push`">`push`()</a> and <a href="#/p5/`pop`">`pop`()</a> functions.
 Doing so allows unmasked shapes to be drawn after masked shapes.
-Masks can also be defined in a callback function that's passed to <a href="#/p5/clip">clip()</a>.
+Masks can also be defined in a callback function that's passed to <a href="#/p5/`clip`">`clip`()</a>.
 
 Parameters: ~
                 🔢 `{Object} [options] an object containing clip settings.` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100, WEBGL);
-> 
+>
 > describe('A silhouette of a rotating torus colored with a gradient from cyan to purple.');
 > }
-> 
+>
 > function draw() {
 > background(200);
-> 
+>
 > // Create a mask.
 > beginClip();
 > push();
@@ -177,7 +197,7 @@ Example: >
 > torus(30, 15);
 > pop();
 > endClip();
-> 
+>
 > // Draw a backing shape.
 > noStroke();
 > beginShape(QUAD_STRIP);
@@ -190,8 +210,11 @@ Example: >
 > endShape();
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-beginClip| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:186
@@ -199,12 +222,12 @@ Source: ~
 
 
 Color_blue() 📄 ⚡
-blue(color) Function
+|blue|(color) ⚡ Function
 
-Gets the blue value of a color.
-`blue()` extracts the blue value from a <a href="#/p5.Color">p5.Color</a> object, an array of color components, or a CSS color string.
-By default, `blue()` returns a color's blue value in the range 0 to 255.
-If the <a href="#/colorMode">colorMode()</a> is set to RGB, it returns the blue value in the given range.
+Gets the `blue` value of a `color`.
+``blue`()` extracts the `blue` value from a <a href="#/p5.Color">p5.Color</a> object, an array of `color` components, or a CSS `color` string.
+By default, ``blue`()` returns a `color`'s `blue` value in the range 0 to 255.
+If the <a href="#/`colorMode`">`colorMode`()</a> is `set` to RGB, it returns the `blue` value in the given range.
 
 Parameters: ~
                 🔢 `color` (p5.Color|Number[]|String) - <a href="#/p5.Color">p5.Color</a> object, array of
@@ -214,38 +237,40 @@ Returns: ~
                 🔢 Returns Number: the blue value.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Use RGB color with values in the range 0-100.
 > colorMode(RGB, 100);
-> 
+>
 > // Create a p5.Color object using RGB values.
 > let c = color(69, 39, 86);
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(c);
 > rect(15, 15, 35, 70);
-> 
+>
 > // Set 'blueValue' to 86.
 > let blueValue = blue(c);
-> 
+>
 > // Draw the right rectangle.
 > fill(0, 0, blueValue);
 > rect(50, 15, 35, 70);
-> 
+>
 > describe('Two rectangles. The left one is light purple and the right one is royal blue.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-blue| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:248
@@ -253,12 +278,12 @@ Source: ~
 
 
 Color_brightness() 📄 ⚡
-brightness(color) Function
+|brightness|(color) ⚡ Function
 
-Gets the brightness value of a color.
-`brightness()` extracts the HSB brightness value from a <a href="#/p5.Color">p5.Color</a> object, an array of color components, or a CSS color string.
-By default, `brightness()` returns a color's HSB brightness in the range 0 to 100.
-If the <a href="#/colorMode">colorMode()</a> is set to HSB, it returns the brightness value in the given range.
+Gets the `brightness` value of a `color`.
+``brightness`()` extracts the HSB `brightness` value from a <a href="#/p5.Color">p5.Color</a> object, an array of `color` components, or a CSS `color` string.
+By default, ``brightness`()` returns a `color`'s HSB `brightness` in the range 0 to 100.
+If the <a href="#/`colorMode`">`colorMode`()</a> is `set` to HSB, it returns the `brightness` value in the given range.
 
 Parameters: ~
                 🔢 `color` (p5.Color|Number[]|String) - <a href="#/p5.Color">p5.Color</a> object, array of
@@ -268,38 +293,40 @@ Returns: ~
                 🔢 Returns Number: the brightness value.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Use HSB color with values in the range 0-255.
 > colorMode(HSB, 255);
-> 
+>
 > // Create a p5.Color object.
 > let c = color(0, 127, 255);
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(c);
 > rect(15, 15, 35, 70);
-> 
+>
 > // Set 'brightValue' to 255.
 > let brightValue = brightness(c);
-> 
+>
 > // Draw the right rectangle.
 > fill(brightValue);
 > rect(50, 15, 35, 70);
-> 
+>
 > describe('Two rectangles. The left one is salmon pink and the right one is white.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-brightness| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:393
@@ -307,14 +334,14 @@ Source: ~
 
 
 Color_clear() 📄 ⚡
-clear({Number} [r] normalized red value., {Number} [g] normalized green value., {Number} [b] normalized blue value., {Number} [a] normalized alpha value.) Function
+|clear|({Number} [r] normalized red value., {Number} [g] normalized green value., {Number} [b] normalized blue value., {Number} [a] normalized alpha value.) ⚡ Function
 
-Clears the pixels on the canvas.
-`clear()` makes every pixel 100% transparent.
-Calling `clear()` doesn't clear objects created by `createX()` functions such as <a href="#/p5/createGraphics">createGraphics()</a>, <a href="#/p5/createVideo">createVideo()</a>, and <a href="#/p5/createImg">createImg()</a>.
-These objects will remain unchanged after calling `clear()` and can be redrawn.
-In WebGL mode, this function can clear the screen to a specific color.
-It interprets four numeric parameters as normalized RGBA color values.
+Clears the `pixels` on the canvas.
+``clear`()` makes every pixel 100% transparent.
+Calling ``clear`()` doesn't `clear` objects created by `createX()` functions such as <a href="#/p5/`createGraphics`">`createGraphics`()</a>, <a href="#/p5/createVideo">createVideo()</a>, and <a href="#/p5/createImg">createImg()</a>.
+These objects will remain unchanged after calling ``clear`()` and can be redrawn.
+In WebGL mode, this function can `clear` the screen to a specific `color`.
+It interprets four numeric parameters as normalized RGBA `color` values.
 It also clears the depth buffer.
 If you are not using the WebGL renderer, these parameters will have no effect.
 
@@ -325,53 +352,55 @@ Parameters: ~
                 🔢 `{Number} [a] normalized alpha value.` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > describe('A gray square. White circles are drawn as the user moves the mouse. The circles disappear when the user presses the mouse.');
 > }
-> 
+>
 > function draw() {
 > circle(mouseX, mouseY, 20);
 > }
-> 
+>
 > function mousePressed() {
 > clear();
 > background(200);
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let pg;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
 > background(200);
-> 
+>
 > pg = createGraphics(60, 60);
 > pg.background(200);
 > pg.noStroke();
 > pg.circle(pg.width / 2, pg.height / 2, 15);
 > image(pg, 20, 20);
-> 
+>
 > describe('A white circle drawn on a gray square. The square gets smaller when the mouse is pressed.');
 > }
-> 
+>
 > function mousePressed() {
 > clear();
 > image(pg, 20, 20);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-clear| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:741
@@ -379,41 +408,40 @@ Source: ~
 
 
 Color_clip() 📄 ⚡
-clip(callback, {Object} [options] an object containing clip settings.) Function
+|clip|(callback, {Object} [options] an object containing clip settings.) ⚡ Function
 
 Defines a shape that will mask any shapes drawn afterward.
 The first parameter, `callback`, is a function that defines the mask.
 Any shapes drawn in `callback` will add to the mask shape.
-The mask will apply to anything drawn after `clip()` is called.
+The mask will apply to anything drawn after ``clip`()` is called.
 The second parameter, `options`, is optional.
-If an object with an `invert` property is passed, as in `beginClip({ invert: true })`, it will be used to set the masking mode.
+If an object with an `invert` property is passed, as in ``beginClip`({ invert: true })`, it will be used to `set` the masking mode.
 `{ invert: true }` inverts the mask, creating holes in shapes that are masked.
 `invert` is `false` by default.
-Masks can be contained between the <a href="#/p5/push">push()</a> and <a href="#/p5/pop">pop()</a> functions.
+Masks can be contained between the <a href="#/p5/`push`">`push`()</a> and <a href="#/p5/`pop`">`pop`()</a> functions.
 Doing so allows unmasked shapes to be drawn after masked shapes.
-Masks can also be defined with <a href="#/p5/beginClip">beginClip()</a> and <a href="#/p5/endClip">endClip()</a>.
+Masks can also be defined with <a href="#/p5/`beginClip`">`beginClip`()</a> and <a href="#/p5/`endClip`">`endClip`()</a>.
 
 Parameters: ~
                 ⚡ `callback` (Function) - a function that draws the mask shape.
                 🔢 `{Object} [options] an object containing clip settings.` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100, WEBGL);
-> 
+>
 > describe('A silhouette of a rotating torus colored with a gradient from cyan to purple.');
 > }
-> 
+>
 > function draw() {
 > background(200);
-> 
+>
 > // Create a mask.
 > clip(mask);
-> 
+>
 > // Draw a backing shape.
 > noStroke();
 > beginShape(QUAD_STRIP);
@@ -425,7 +453,7 @@ Example: >
 > vertex(width / 2, height / 2);
 > endShape();
 > }
-> 
+>
 > // Declare a function that defines the mask.
 > function mask() {
 > push();
@@ -436,8 +464,11 @@ Example: >
 > pop();
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-clip| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:408
@@ -445,7 +476,7 @@ Source: ~
 
 
 Color_color() 📄 ⚡
-color(color) Function
+|color|(color) ⚡ Function
 
 Parameters: ~
                 🔢 `color` (p5.Color)
@@ -455,13 +486,16 @@ Returns: ~
                 🔢 Returns p5.Color
 ~
 
+See also: ~
+   |help p5-color| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/color/creating_reading.js:682
 ~
 
 
 Color_colorMode() 📄 ⚡
-colorMode(mode, max1, max2, max3, {Number} [maxA]   range for the alpha.) Function
+|colorMode|(mode, max1, max2, max3, {Number} [maxA]   range for the alpha.) ⚡ Function
 
 Parameters: ~
                 📋 `mode` (Constant)
@@ -471,39 +505,44 @@ Parameters: ~
                 🔢 `{Number} [maxA]   range for the alpha.` (unknown)
 ~
 
+See also: ~
+   |help p5-colorMode| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/color/setting.js:968
 ~
 
 
 Color_endClip() 📄 ⚡
-endClip() Function
+|endClip|() ⚡ Function
 
-Ends defining a mask that was started with <a href="#/p5/beginClip">beginClip()</a>.
+Ends defining a mask that was started with <a href="#/p5/`beginClip`">`beginClip`()</a>.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a mask.
 > beginClip();
 > triangle(15, 37, 30, 13, 43, 37);
 > circle(45, 45, 7);
 > endClip();
-> 
+>
 > // Draw a backing shape.
 > square(5, 5, 45);
-> 
+>
 > describe('A white triangle and circle on a gray background.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-endClip| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:218
@@ -511,53 +550,55 @@ Source: ~
 
 
 Color_erase() 📄 ⚡
-erase({Number}   [strengthFill]      a number (0-255) for the strength of erasing under a shape's interior., {Number}   [strengthStroke]    a number (0-255) for the strength of erasing under a shape's edge.) Function
+|erase|({Number}   [strengthFill]      a number (0-255) for the strength of erasing under a shape's interior., {Number}   [strengthStroke]    a number (0-255) for the strength of erasing under a shape's edge.) ⚡ Function
 
-Starts using shapes to erase parts of the canvas.
-All drawing that follows `erase()` will subtract from the canvas, revealing the web page underneath.
+Starts using shapes to `erase` parts of the canvas.
+All drawing that follows ``erase`()` will subtract from the canvas, revealing the web page underneath.
 The erased areas will become transparent, allowing the content behind the canvas to show through.
-The <a href="#/p5/fill">fill()</a>, <a href="#/p5/stroke">stroke()</a>, and <a href="#/p5/blendMode">blendMode()</a> have no effect once `erase()` is called.
-The `erase()` function has two optional parameters.
+The <a href="#/p5/`fill`">`fill`()</a>, <a href="#/p5/`stroke`">`stroke`()</a>, and <a href="#/p5/`blendMode`">`blendMode`()</a> have no effect once ``erase`()` is called.
+The ``erase`()` function has two optional parameters.
 The first parameter sets the strength of erasing by the shape's interior.
 A value of 0 means that no erasing will occur.
-A value of 255 means that the shape's interior will fully erase the content underneath.
+A value of 255 means that the shape's interior will fully `erase` the content underneath.
 The default value is 255 (full strength).
 The second parameter sets the strength of erasing by the shape's edge.
 A value of 0 means that no erasing will occur.
-A value of 255 means that the shape's edge will fully erase the content underneath.
+A value of 255 means that the shape's edge will fully `erase` the content underneath.
 The default value is 255 (full strength).
 To cancel the erasing effect, use the <a href="#/p5/noErase">noErase()</a> function.
-`erase()` has no effect on drawing done with the <a href="#/p5/image">image()</a> and <a href="#/p5/background">background()</a> functions.
+``erase`()` has no effect on drawing done with the <a href="#/p5/`image`">`image`()</a> and <a href="#/p5/`background`">`background`()</a> functions.
 
 Parameters: ~
                 🔢 `{Number}   [strengthFill]      a number (0-255) for the strength of erasing under a shape's interior.` (unknown)
                 🔢 `{Number}   [strengthStroke]    a number (0-255) for the strength of erasing under a shape's edge.` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(100, 100, 250);
-> 
+>
 > // Draw a pink square.
 > fill(250, 100, 100);
 > square(20, 20, 60);
-> 
+>
 > // Erase a circular area.
 > strokeWeight(5);
 > erase(150, 255);
 > circle(25, 30, 30);
 > noErase();
-> 
+>
 > describe('A purple canvas with a pink square in the middle. A circle at the top-left partially erases its interior and a fully erases its outline.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-erase| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:1710
@@ -565,11 +606,14 @@ Source: ~
 
 
 Color_fill() 📄 ⚡
-fill(color) Function
+|fill|(color) ⚡ Function
 
 Parameters: ~
                 🔢 `color` (p5.Color) - the fill color.
 ~
+
+See also: ~
+   |help p5-fill| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:1250
@@ -577,12 +621,12 @@ Source: ~
 
 
 Color_green() 📄 ⚡
-green(color) Function
+|green|(color) ⚡ Function
 
-Gets the green value of a color.
-`green()` extracts the green value from a <a href="#/p5.Color">p5.Color</a> object, an array of color components, or a CSS color string.
-By default, `green()` returns a color's green value in the range 0 to 255.
-If the <a href="#/colorMode">colorMode()</a> is set to RGB, it returns the green value in the given range.
+Gets the `green` value of a `color`.
+``green`()` extracts the `green` value from a <a href="#/p5.Color">p5.Color</a> object, an array of `color` components, or a CSS `color` string.
+By default, ``green`()` returns a `color`'s `green` value in the range 0 to 255.
+If the <a href="#/`colorMode`">`colorMode`()</a> is `set` to RGB, it returns the `green` value in the given range.
 
 Parameters: ~
                 🔢 `color` (p5.Color|Number[]|String) - <a href="#/p5.Color">p5.Color</a> object, array of
@@ -592,38 +636,40 @@ Returns: ~
                 🔢 Returns Number: the green value.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Use RGB color with values in the range 0-100.
 > colorMode(RGB, 100);
-> 
+>
 > // Create a p5.Color object using RGB values.
 > let c = color(69, 39, 86);
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(c);
 > rect(15, 15, 35, 70);
-> 
+>
 > // Set 'greenValue' to 39.
 > let greenValue = green(c);
-> 
+>
 > // Draw the right rectangle.
 > fill(0, greenValue, 0);
 > rect(50, 15, 35, 70);
-> 
+>
 > describe('Two rectangles. The left one is light purple and the right one is dark green.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-green| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:823
@@ -631,13 +677,13 @@ Source: ~
 
 
 Color_hue() 📄 ⚡
-hue(color) Function
+|hue|(color) ⚡ Function
 
-Gets the hue value of a color.
-`hue()` extracts the hue value from a <a href="#/p5.Color">p5.Color</a> object, an array of color components, or a CSS color string.
-Hue describes a color's position on the color wheel.
-By default, `hue()` returns a color's HSL hue in the range 0 to 360.
-If the <a href="#/colorMode">colorMode()</a> is set to HSB or HSL, it returns the hue value in the given mode.
+Gets the `hue` value of a `color`.
+``hue`()` extracts the `hue` value from a <a href="#/p5.Color">p5.Color</a> object, an array of `color` components, or a CSS `color` string.
+Hue describes a `color`'s position on the `color` wheel.
+By default, ``hue`()` returns a `color`'s HSL `hue` in the range 0 to 360.
+If the <a href="#/`colorMode`">`colorMode`()</a> is `set` to HSB or HSL, it returns the `hue` value in the given mode.
 
 Parameters: ~
                 🔢 `color` (p5.Color|Number[]|String) - <a href="#/p5.Color">p5.Color</a> object, array of
@@ -647,40 +693,42 @@ Returns: ~
                 🔢 Returns Number: the hue value.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Use HSL color.
 > colorMode(HSL);
-> 
+>
 > // Create a CSS color string.
 > let c = 'rgb(255, 128, 128)';
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(c);
 > rect(15, 20, 35, 60);
-> 
+>
 > // Set 'hueValue' to 0.
 > let hueValue = hue(c);
-> 
+>
 > // Draw the right rectangle.
 > fill(hueValue);
 > rect(50, 20, 35, 60);
-> 
+>
 > describe(
 > 'Two rectangles. The rectangle on the left is salmon pink and the one on the right is black.'
 > );
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-hue| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:944
@@ -688,16 +736,16 @@ Source: ~
 
 
 Color_lerpColor() 📄 ⚡
-lerpColor(c1, c2, amt) Function
+|lerpColor|(c1, c2, amt) ⚡ Function
 
-Blends two colors to find a third color between them.
+Blends two colors to find a third `color` between them.
 The `amt` parameter specifies the amount to interpolate between the two values.
-0 is equal to the first color, 0.1 is very near the first color, 0.5 is halfway between the two colors, and so on.
-Negative numbers are set to 0.
-Numbers greater than 1 are set to 1.
-This differs from the behavior of <a href="#/p5/lerp">lerp</a>.
+0 is equal to the first `color`, 0.1 is very near the first `color`, 0.5 is halfway between the two colors, and so on.
+Negative numbers are `set` to 0.
+Numbers greater than 1 are `set` to 1.
+This differs from the behavior of <a href="#/p5/`lerp`">`lerp`</a>.
 It's necessary because numbers outside of the interval [0, 1] will produce strange and unexpected colors.
-The way that colors are interpolated depends on the current <a href="#/p5/colorMode">colorMode()</a>.
+The way that colors are interpolated depends on the current <a href="#/p5/`colorMode`">`colorMode`()</a>.
 
 Parameters: ~
                 🔢 `c1` (p5.Color) - interpolate from this color (any value created by the color() function).
@@ -709,47 +757,49 @@ Returns: ~
                 🔢 Returns p5.Color: interpolated color.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create p5.Color objects to interpolate between.
 > let from = color(218, 165, 32);
 > let to = color(72, 61, 139);
-> 
+>
 > // Create intermediate colors.
 > let interA = lerpColor(from, to, 0.33);
 > let interB = lerpColor(from, to, 0.66);
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(from);
 > rect(10, 20, 20, 60);
-> 
+>
 > // Draw the left-center rectangle.
 > fill(interA);
 > rect(30, 20, 20, 60);
-> 
+>
 > // Draw the right-center rectangle.
 > fill(interB);
 > rect(50, 20, 20, 60);
-> 
+>
 > // Draw the right rectangle.
 > fill(to);
 > rect(70, 20, 20, 60);
-> 
+>
 > describe(
 > 'Four rectangles. From left to right, the rectangles are tan, brown, brownish purple, and purple.'
 > );
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-lerpColor| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:1008
@@ -757,12 +807,12 @@ Source: ~
 
 
 Color_lightness() 📄 ⚡
-lightness(color) Function
+|lightness|(color) ⚡ Function
 
-Gets the lightness value of a color.
-`lightness()` extracts the HSL lightness value from a <a href="#/p5.Color">p5.Color</a> object, an array of color components, or a CSS color string.
-By default, `lightness()` returns a color's HSL lightness in the range 0 to 100.
-If the <a href="#/colorMode">colorMode()</a> is set to HSL, it returns the lightness value in the given range.
+Gets the lightness value of a `color`.
+`lightness()` extracts the HSL lightness value from a <a href="#/p5.Color">p5.Color</a> object, an array of `color` components, or a CSS `color` string.
+By default, `lightness()` returns a `color`'s HSL lightness in the range 0 to 100.
+If the <a href="#/`colorMode`">`colorMode`()</a> is `set` to HSL, it returns the lightness value in the given range.
 
 Parameters: ~
                 🔢 `color` (p5.Color|Number[]|String) - <a href="#/p5.Color">p5.Color</a> object, array of
@@ -772,38 +822,40 @@ Returns: ~
                 🔢 Returns Number: the lightness value.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(50);
-> 
+>
 > // Use HSL color with values in the range 0-255.
 > colorMode(HSL, 255);
-> 
+>
 > // Create a p5.Color object using HSL values.
 > let c = color(0, 255, 191.5);
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(c);
 > rect(15, 15, 35, 70);
-> 
+>
 > // Set 'lightValue' to 191.5.
 > let lightValue = lightness(c);
-> 
+>
 > // Draw the right rectangle.
 > fill(lightValue);
 > rect(50, 15, 35, 70);
-> 
+>
 > describe('Two rectangles. The left one is salmon pink and the right one is gray.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-lightness| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:1274
@@ -811,38 +863,40 @@ Source: ~
 
 
 Color_noErase() 📄 ⚡
-noErase() Function
+|noErase|() ⚡ Function
 
-Ends erasing that was started with <a href="#/p5/erase">erase()</a>.
-The <a href="#/p5/fill">fill()</a>, <a href="#/p5/stroke">stroke()</a>, and <a href="#/p5/blendMode">blendMode()</a> settings will return to what they were prior to calling <a href="#/p5/erase">erase()</a>.
+Ends erasing that was started with <a href="#/p5/`erase`">`erase`()</a>.
+The <a href="#/p5/`fill`">`fill`()</a>, <a href="#/p5/`stroke`">`stroke`()</a>, and <a href="#/p5/`blendMode`">`blendMode`()</a> settings will return to what they were prior to calling <a href="#/p5/`erase`">`erase`()</a>.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(235, 145, 15);
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(30, 45, 220);
 > rect(30, 10, 10, 80);
-> 
+>
 > // Erase a circle.
 > erase();
 > circle(50, 50, 60);
 > noErase();
-> 
+>
 > // Draw the right rectangle.
 > rect(70, 10, 10, 80);
-> 
+>
 > describe('An orange canvas with two tall blue rectangles. A circular hole in the center erases the rectangle on the left but not the one on the right.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-noErase| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:1751
@@ -850,58 +904,60 @@ Source: ~
 
 
 Color_noFill() 📄 ⚡
-noFill() Function
+|noFill|() ⚡ Function
 
-Disables setting the fill color for shapes.
-Calling `noFill()` is the same as making the fill completely transparent, as in `fill(0, 0)`.
-If both <a href="#/p5/noStroke">noStroke()</a> and `noFill()` are called, nothing will be drawn to the screen.
+Disables setting the `fill` `color` for shapes.
+Calling ``noFill`()` is the same as making the `fill` completely transparent, as in ``fill`(0, 0)`.
+If both <a href="#/p5/noStroke">noStroke()</a> and ``noFill`()` are called, nothing will be drawn to the screen.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Draw the top square.
 > square(32, 10, 35);
-> 
+>
 > // Draw the bottom square.
 > noFill();
 > square(32, 55, 35);
-> 
+>
 > describe('A white square on above an empty square. Both squares have black outlines.');
 > }
 > </code>
 > </div>
-> 
+>
 > <div modernizr='webgl'>
 > <code>
 > function setup() {
 > createCanvas(100, 100, WEBGL);
-> 
+>
 > describe('A purple cube wireframe spinning on a black canvas.');
 > }
-> 
+>
 > function draw() {
 > background(0);
-> 
+>
 > // Style the box.
 > noFill();
 > stroke(100, 100, 240);
-> 
+>
 > // Rotate the coordinates.
 > rotateX(frameCount * 0.01);
 > rotateY(frameCount * 0.01);
-> 
+>
 > // Draw the box.
 > box(45);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-noFill| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:1312
@@ -909,54 +965,56 @@ Source: ~
 
 
 Color_noStroke() 📄 ⚡
-noStroke() Function
+|noStroke|() ⚡ Function
 
 Disables drawing points, lines, and the outlines of shapes.
-Calling `noStroke()` is the same as making the stroke completely transparent, as in `stroke(0, 0)`.
-If both `noStroke()` and <a href="#/p5/noFill">noFill()</a> are called, nothing will be drawn to the screen.
+Calling `noStroke()` is the same as making the `stroke` completely transparent, as in ``stroke`(0, 0)`.
+If both `noStroke()` and <a href="#/p5/`noFill`">`noFill`()</a> are called, nothing will be drawn to the screen.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > noStroke();
 > square(20, 20, 60);
-> 
+>
 > describe('A white square with no outline.');
 > }
 > </code>
 > </div>
-> 
+>
 > <div modernizr='webgl'>
 > <code>
 > function setup() {
 > createCanvas(100, 100, WEBGL);
-> 
+>
 > describe('A pink cube with no edge outlines spinning on a black canvas.');
 > }
-> 
+>
 > function draw() {
 > background(0);
-> 
+>
 > // Style the box.
 > noStroke();
 > fill(240, 150, 150);
-> 
+>
 > // Rotate the coordinates.
 > rotateX(frameCount * 0.01);
 > rotateY(frameCount * 0.01);
-> 
+>
 > // Draw the box.
 > box(45);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-noStroke| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:1368
@@ -964,11 +1022,11 @@ Source: ~
 
 
 Color_paletteLerp() 📄 ⚡
-paletteLerp(colors_stops, amt) Function
+|paletteLerp|(colors_stops, amt) ⚡ Function
 
-Blends multiple colors to find a color between them.
-The `amt` parameter specifies the amount to interpolate between the color stops which are colors at each `amt` value "location" with `amt` values that are between 2 color stops interpolating between them based on its relative distance to both.
-The way that colors are interpolated depends on the current <a href="#/colorMode">colorMode()</a>.
+Blends multiple colors to find a `color` between them.
+The `amt` parameter specifies the amount to interpolate between the `color` stops which are colors at each `amt` value "location" with `amt` values that are between 2 `color` stops interpolating between them based on its relative distance to both.
+The way that colors are interpolated depends on the current <a href="#/`colorMode`">`colorMode`()</a>.
 
 Parameters: ~
                 🔢 `colors_stops` ([p5.Color, Number][]) - color stops to interpolate from
@@ -979,14 +1037,13 @@ Returns: ~
                 🔢 Returns p5.Color: interpolated color.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(400, 400);
 > }
-> 
+>
 > function draw() {
 > // The background goes from white to red to green to blue fill
 > background(paletteLerp([
@@ -997,8 +1054,11 @@ Example: >
 > ], millis() / 10000 % 1));
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-paletteLerp| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:1114
@@ -1006,12 +1066,12 @@ Source: ~
 
 
 Color_red() 📄 ⚡
-red(color) Function
+|red|(color) ⚡ Function
 
-Gets the red value of a color.
-`red()` extracts the red value from a <a href="#/p5.Color">p5.Color</a> object, an array of color components, or a CSS color string.
-By default, `red()` returns a color's red value in the range 0 to 255.
-If the <a href="#/colorMode">colorMode()</a> is set to RGB, it returns the red value in the given range.
+Gets the `red` value of a `color`.
+``red`()` extracts the `red` value from a <a href="#/p5.Color">p5.Color</a> object, an array of `color` components, or a CSS `color` string.
+By default, ``red`()` returns a `color`'s `red` value in the range 0 to 255.
+If the <a href="#/`colorMode`">`colorMode`()</a> is `set` to RGB, it returns the `red` value in the given range.
 
 Parameters: ~
                 🔢 `color` (p5.Color|Number[]|String) - <a href="#/p5.Color">p5.Color</a> object, array of
@@ -1021,38 +1081,40 @@ Returns: ~
                 🔢 Returns Number: the red value.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Use RGB color with values in the range 0-100.
 > colorMode(RGB, 100);
-> 
+>
 > // Create a p5.Color object.
 > let c = color(69, 39, 86);
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(c);
 > rect(15, 15, 35, 70);
-> 
+>
 > // Set 'redValue' to 69.
 > let redValue = red(c);
-> 
+>
 > // Draw the right rectangle.
 > fill(redValue, 0, 0);
 > rect(50, 15, 35, 70);
-> 
+>
 > describe('Two rectangles. The left one is light purple and the right one is red.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-red| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:1410
@@ -1060,13 +1122,13 @@ Source: ~
 
 
 Color_saturation() 📄 ⚡
-saturation(color) Function
+|saturation|(color) ⚡ Function
 
-Gets the saturation value of a color.
-`saturation()` extracts the saturation value from a <a href="#/p5.Color">p5.Color</a> object, an array of color components, or a CSS color string.
+Gets the `saturation` value of a `color`.
+``saturation`()` extracts the `saturation` value from a <a href="#/p5.Color">p5.Color</a> object, an array of `color` components, or a CSS `color` string.
 Saturation is scaled differently in HSB and HSL.
-By default, `saturation()` returns a color's HSL saturation in the range 0 to 100.
-If the <a href="#/colorMode">colorMode()</a> is set to HSB or HSL, it returns the saturation value in the given mode.
+By default, ``saturation`()` returns a `color`'s HSL `saturation` in the range 0 to 100.
+If the <a href="#/`colorMode`">`colorMode`()</a> is `set` to HSB or HSL, it returns the `saturation` value in the given mode.
 
 Parameters: ~
                 🔢 `color` (p5.Color|Number[]|String) - <a href="#/p5.Color">p5.Color</a> object, array of
@@ -1076,38 +1138,40 @@ Returns: ~
                 🔢 Returns Number: the saturation value
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(50);
-> 
+>
 > // Use HSL color with values in the range 0-255.
 > colorMode(HSL, 255);
-> 
+>
 > // Create a p5.Color object.
 > let c = color(0, 255, 191.5);
-> 
+>
 > // Draw the left rectangle.
 > noStroke();
 > fill(c);
 > rect(15, 15, 35, 70);
-> 
+>
 > // Set 'satValue' to 255.
 > let satValue = saturation(c);
-> 
+>
 > // Draw the right rectangle.
 > fill(satValue);
 > rect(50, 15, 35, 70);
-> 
+>
 > describe('Two rectangles. The left one is salmon pink and the right one is white.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-saturation| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:1587
@@ -1115,53 +1179,58 @@ Source: ~
 
 
 Color_stroke() 📄 ⚡
-stroke(color) Function
+|stroke|(color) ⚡ Function
 
 Parameters: ~
                 🔢 `color` (p5.Color) - the stroke color.
 ~
+
+See also: ~
+   |help p5-stroke| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/setting.js:1622
 ~
 
 
-VARIABLES                                                   *p5-module-variables*
+VARIABLES                                                   *p5-Color-variables*
 
 Color_a() 📄 📌
-a Function
+|a| ⚡ Function
 
-Returns the color formatted as a `String`.
-Calling `myColor.toString()` can be useful for debugging, as in `print(myColor.toString())`.
+Returns the `color` formatted as a `String`.
+Calling `myColor.toString()` can be useful for debugging, as in ``print`(myColor.toString())`.
 It's also helpful for using p5.js with other libraries.
 The parameter, `format`, is optional.
-If a format string is passed, as in `myColor.toString('#rrggbb')`, it will determine how the color string is formatted.
-By default, color strings are formatted as `'rgba(r, g, b, a)'`.
+If a format string is passed, as in `myColor.toString('#rrggbb')`, it will determine how the `color` string is formatted.
+By default, `color` strings are formatted as `'rgba(r, g, b, a)'`.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a p5.Color object.
 > let myColor = color('darkorchid');
-> 
+>
 > // Style the text.
 > textAlign(CENTER);
 > textSize(16);
-> 
+>
 > // Display the text.
 > text(myColor.toString('#rrggbb'), 50, 50);
-> 
+>
 > describe('The text "#9932cc" written in purple on a gray background.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-a| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/p5.Color.js:406
@@ -1169,10 +1238,13 @@ Source: ~
 
 
 Color_colorPatterns() 📄 📌
-colorPatterns Function
+|colorPatterns| ⚡ Function
 
-Full color string patterns.
+Full `color` string patterns.
 The capture groups are necessary.
+
+See also: ~
+   |help p5-colorPatterns| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/p5.Color.js:184
@@ -1180,20 +1252,19 @@ Source: ~
 
 
 Color_first_color_stop() 📄 📌
-first_color_stop Function
+|first_color_stop| ⚡ Function
 
-Blends multiple colors to find a color between them.
-The `amt` parameter specifies the amount to interpolate between the color stops which are colors at each `amt` value "location" with `amt` values that are between 2 color stops interpolating between them based on its relative distance to both.
-The way that colors are interpolated depends on the current <a href="#/colorMode">colorMode()</a>.
+Blends multiple colors to find a `color` between them.
+The `amt` parameter specifies the amount to interpolate between the `color` stops which are colors at each `amt` value "location" with `amt` values that are between 2 `color` stops interpolating between them based on its relative distance to both.
+The way that colors are interpolated depends on the current <a href="#/`colorMode`">`colorMode`()</a>.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(400, 400);
 > }
-> 
+>
 > function draw() {
 > // The background goes from white to red to green to blue fill
 > background(paletteLerp([
@@ -1204,8 +1275,11 @@ Example: >
 > ], millis() / 10000 % 1));
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-first_color_stop| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/creating_reading.js:1115
@@ -1213,10 +1287,13 @@ Source: ~
 
 
 Color_INTEGER() 📄 📌
-INTEGER Function
+|INTEGER| ⚡ Function
 
-These regular expressions are used to build up the patterns for matching viable CSS color strings: fragmenting the regexes in this way increases the legibility and comprehensibility of the code.
-Note that RGB values of .9 are not parsed by IE, but are supported here for color string consistency.
+These regular expressions are used to build up the patterns for matching viable CSS `color` strings: fragmenting the regexes in this way increases the legibility and comprehensibility of the code.
+Note that RGB values of .9 are not parsed by IE, but are supported here for `color` string consistency.
+
+See also: ~
+   |help p5-INTEGER| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/p5.Color.js:177
@@ -1224,9 +1301,12 @@ Source: ~
 
 
 Color_namedColors() 📄 📌
-namedColors Function
+|namedColors| ⚡ Function
 
 CSS named colors.
+
+See also: ~
+   |help p5-namedColors| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/p5.Color.js:17
@@ -1234,10 +1314,13 @@ Source: ~
 
 
 Color_WHITESPACE() 📄 📌
-WHITESPACE Function
+|WHITESPACE| ⚡ Function
 
-These regular expressions are used to build up the patterns for matching viable CSS color strings: fragmenting the regexes in this way increases the legibility and comprehensibility of the code.
-Note that RGB values of .9 are not parsed by IE, but are supported here for color string consistency.
+These regular expressions are used to build up the patterns for matching viable CSS `color` strings: fragmenting the regexes in this way increases the legibility and comprehensibility of the code.
+Note that RGB values of .9 are not parsed by IE, but are supported here for `color` string consistency.
+
+See also: ~
+   |help p5-WHITESPACE| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/color/p5.Color.js:176

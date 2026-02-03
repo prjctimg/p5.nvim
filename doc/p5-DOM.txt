@@ -9,121 +9,133 @@ Tags p5.DOM DOM module functions and properties
 
 CONTENTS                                                           *${this.getCurrentModuleName()}-contents*
 
-CLASSES:
-  Anonymous                 |DOM_Anonymous()
-  Cue                       |DOM_Cue()
-  Element                   |DOM_Element()
-  File                      |DOM_File()
+🔍 NAVIGATION:~
+   Use | to jump to sections, :help p5-[symbol] to jump to symbols~
 
-FUNCTIONS:
-  addClass                  |DOM_addClass()
-  addElement                |DOM_addElement()
-  anonymous                 |DOM_anonymous()
-  attribute                 |DOM_attribute()
-  center                    |DOM_center()
-  changed                   |DOM_changed()
-  child                     |DOM_child()
-  controls                  |DOM_controls()
-  createA                   |DOM_createA()
-  createAudio               |DOM_createAudio()
-  createButton              |DOM_createButton()
-  createCapture             |DOM_createCapture()
-  createCheckbox            |DOM_createCheckbox()
-  createColorPicker         |DOM_createColorPicker()
-  createDiv                 |DOM_createDiv()
-  createElement             |DOM_createElement()
-  createFileInput           |DOM_createFileInput()
-  createImg                 |DOM_createImg()
-  createInput               |DOM_createInput()
-  createMedia               |DOM_createMedia()
-  createP                   |DOM_createP()
-  createSelect              |DOM_createSelect()
-  createSlider              |DOM_createSlider()
-  createSpan                |DOM_createSpan()
-  createVideo               |DOM_createVideo()
-  display                   |DOM_display()
-  draggable                 |DOM_draggable()
-  drop                      |DOM_drop()
-  hasClass                  |DOM_hasClass()
-  hide                      |DOM_hide()
-  html                      |DOM_html()
-  input                     |DOM_input()
-  position                  |DOM_position()
-  remove                    |DOM_remove()
-  removeAttribute           |DOM_removeAttribute()
-  removeClass               |DOM_removeClass()
-  removeElements            |DOM_removeElements()
-  select                    |DOM_select()
-  selectAll                 |DOM_selectAll()
-  show                      |DOM_show()
-  style                     |DOM_style()
-  toggleClass               |DOM_toggleClass()
-  value                     |DOM_value()
+🏛️ CLASSES:
+  |Anonymous                |
+  |Cue                      |
+  |Element                  |
+  |File                     |
 
-PROPERTIES:
-  data                      |DOM_data()
-  file                      |DOM_file()
-  height                    |DOM_height()
-  name                      |DOM_name()
-  prop                      |DOM_prop()
-  size                      |DOM_size()
-  subtype                   |DOM_subtype()
-  type                      |DOM_type()
-  VIDEO                     |DOM_VIDEO()
-  width                     |DOM_width()
+⚡ FUNCTIONS:
+  |addClass                 |
+  |addElement               |
+  |anonymous                |
+  |attribute                |
+  |center                   |
+  |changed                  |
+  |child                    |
+  |controls                 |
+  |createA                  |
+  |createAudio              |
+  |createButton             |
+  |createCapture            |
+  |createCheckbox           |
+  |createColorPicker        |
+  |createDiv                |
+  |createElement            |
+  |createFileInput          |
+  |createImg                |
+  |createInput              |
+  |createMedia              |
+  |createP                  |
+  |createSelect             |
+  |createSlider             |
+  |createSpan               |
+  |createVideo              |
+  |display                  |
+  |draggable                |
+  |drop                     |
+  |hasClass                 |
+  |hide                     |
+  |html                     |
+  |input                    |
+  |position                 |
+  |remove                   |
+  |removeAttribute          |
+  |removeClass              |
+  |removeElements           |
+  |select                   |
+  |selectAll                |
+  |show                     |
+  |style                    |
+  |toggleClass              |
+  |value                    |
 
-VARIABLES:
-  audioContext              |DOM_audioContext()
-  children                  |DOM_children()
-  container                 |DOM_container()
-  elt                       |DOM_elt()
-  i                         |DOM_i()
-  id                        |DOM_id()
-  isTouch                   |DOM_isTouch()
-  mainOutput                |DOM_mainOutput()
-  node                      |DOM_node()
-  oldVal                    |DOM_oldVal()
-  timeout                   |DOM_timeout()
+🔧 PROPERTIES:
+  |data                     |
+  |file                     |
+  |height                   |
+  |name                     |
+  |prop                     |
+  |size                     |
+  |subtype                  |
+  |type                     |
+  |VIDEO                    |
+  |width                    |
+
+📌 VARIABLES:
+  |audioContext             |
+  |children                 |
+  |container                |
+  |elt                      |
+  |i                        |
+  |id                       |
+  |isTouch                  |
+  |mainOutput               |
+  |node                     |
+  |oldVal                   |
+  |timeout                  |
 
 
 
-CLASSES                                                   *p5-module-classes*
+🔗 RELATED SYMBOLS:~
+   See |p5| for complete p5.js API reference~
+
+
+
+⚡ QUICK REFERENCE:~
+   :help p5-[symbolname] - Jump directly to any function~
+
+
+
+CLASSES                                                   *p5-DOM-classes*
 
 DOM_Anonymous() 📄 🏛️
-Anonymous() Class
+|Anonymous|() 🏛️ Class
 
 A class to describe an <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started" target="_blank">HTML element</a>.
 Sketches can use many elements.
 Common elements include the drawing canvas, buttons, sliders, webcam feeds, and so on.
 All elements share the methods of the `p5.Element` class.
-They're created with functions such as <a href="#/p5/createCanvas">createCanvas()</a> and <a href="#/p5/createButton">createButton()</a>.
+They're created with functions such as <a href="#/p5/`createCanvas`">`createCanvas`()</a> and <a href="#/p5/createButton">createButton()</a>.
 
 Parameters: ~
                 🔢 `elt` (HTMLElement) - wrapped DOM element.
                 🔢 `{p5} [pInst] pointer to p5 instance.` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a button element and
 > // place it beneath the canvas.
 > let btn = createButton('change');
 > btn.position(0, 100);
-> 
+>
 > // Call randomColor() when
 > // the button is pressed.
 > btn.mousePressed(randomColor);
-> 
+>
 > describe('A gray square with a button that says "change" beneath it. The square changes color when the user presses the button.');
 > }
-> 
+>
 > // Paint the background either
 > // red, yellow, blue, or green.
 > function randomColor() {
@@ -131,8 +143,11 @@ Example: >
 > background(c);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-Anonymous| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/core/p5.Element.js:54
@@ -140,9 +155,12 @@ Source: ~
 
 
 DOM_Cue() 📄 🏛️
-Cue() Class
+|Cue|() 🏛️ Class
 
 * SCHEDULE EVENTS **
+
+See also: ~
+   |help p5-Cue| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:4086
@@ -150,40 +168,39 @@ Source: ~
 
 
 DOM_Element() 📄 🏛️
-Element() Class
+|Element|() 🏛️ Class
 
 A class to describe an <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started" target="_blank">HTML element</a>.
 Sketches can use many elements.
 Common elements include the drawing canvas, buttons, sliders, webcam feeds, and so on.
 All elements share the methods of the `p5.Element` class.
-They're created with functions such as <a href="#/p5/createCanvas">createCanvas()</a> and <a href="#/p5/createButton">createButton()</a>.
+They're created with functions such as <a href="#/p5/`createCanvas`">`createCanvas`()</a> and <a href="#/p5/createButton">createButton()</a>.
 
 Parameters: ~
                 🔢 `elt` (HTMLElement) - wrapped DOM element.
                 🔢 `{p5} [pInst] pointer to p5 instance.` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a button element and
 > // place it beneath the canvas.
 > let btn = createButton('change');
 > btn.position(0, 100);
-> 
+>
 > // Call randomColor() when
 > // the button is pressed.
 > btn.mousePressed(randomColor);
-> 
+>
 > describe('A gray square with a button that says "change" beneath it. The square changes color when the user presses the button.');
 > }
-> 
+>
 > // Paint the background either
 > // red, yellow, blue, or green.
 > function randomColor() {
@@ -191,8 +208,11 @@ Example: >
 > background(c);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-Element| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/core/p5.Element.js:54
@@ -200,7 +220,7 @@ Source: ~
 
 
 DOM_File() 📄 🏛️
-File() Class
+|File|() 🏛️ Class
 
 A class to describe a file.
 `p5.File` objects are used by <a href="#/p5.Element/drop">myElement.drop()</a> and created by <a href="#/p5/createFileInput">createFileInput</a>.
@@ -209,75 +229,74 @@ Parameters: ~
                 🔢 `file` (File) - wrapped file.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > // Use the file input to load a
 > // file and display its info.
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a file input and place it beneath the canvas.
 > // Call displayInfo() when the file loads.
 > let input = createFileInput(displayInfo);
 > input.position(0, 100);
-> 
+>
 > describe('A gray square with a file input beneath it. If the user loads a file, its info is written in black.');
 > }
-> 
+>
 > // Display the p5.File's info once it loads.
 > function displayInfo(file) {
 > background(200);
-> 
+>
 > // Display the p5.File's name.
 > text(file.name, 10, 10, 80, 40);
-> 
+>
 > // Display the p5.File's type and subtype.
 > text(`${file.type}/${file.subtype}`, 10, 70);
-> 
+>
 > // Display the p5.File's size in bytes.
 > text(file.size, 10, 90);
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > // Use the file input to select an image to
 > // load and display.
 > let img;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a file input and place it beneath the canvas.
 > // Call handleImage() when the file image loads.
 > let input = createFileInput(handleImage);
 > input.position(0, 100);
-> 
+>
 > describe('A gray square with a file input beneath it. If the user selects an image file to load, it is displayed on the square.');
 > }
-> 
+>
 > function draw() {
 > background(200);
-> 
+>
 > // Draw the image if it's ready.
 > if (img) {
 > image(img, 0, 0, width, height);
 > }
 > }
-> 
+>
 > // Use the p5.File's data once it loads.
 > function handleImage(file) {
 > // Check the p5.File's type.
 > if (file.type === 'image') {
 > // Create an image using using the p5.File's data.
 > img = createImg(file.data, '');
-> 
+>
 > // Hide the image element so it doesn't appear twice.
 > img.hide();
 > } else {
@@ -285,18 +304,21 @@ Example: >
 > }
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-File| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5571
 ~
 
 
-FUNCTIONS                                                   *p5-module-functions*
+FUNCTIONS                                                   *p5-DOM-functions*
 
 DOM_addClass() 📄 ⚡
-addClass(class) Function
+|addClass|(class) ⚡ Function
 
 Adds a class to the element.
 
@@ -304,26 +326,28 @@ Parameters: ~
                 📝 `class` (String) - name of class to add.
 ~
 
-Example: >
+Examples: >
 >
-> <div class='norender'>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a div element.
 > let div = createDiv('div');
-> 
+>
 > // Add a class to the div.
 > div.addClass('myClass');
-> 
+>
 > describe('A gray square.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-addClass| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2582
@@ -331,9 +355,12 @@ Source: ~
 
 
 DOM_addElement() 📄 ⚡
-addElement() Function
+|addElement|() ⚡ Function
 
 Helpers for create methods.
+
+See also: ~
+   |help p5-addElement| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:481
@@ -341,9 +368,12 @@ Source: ~
 
 
 DOM_anonymous() 📄 ⚡
-anonymous() Function
+|anonymous|() ⚡ Function
 
 Sets up logic to check that autoplay succeeded.
+
+See also: ~
+   |help p5-anonymous| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:4525
@@ -351,12 +381,15 @@ Source: ~
 
 
 DOM_attribute() 📄 ⚡
-attribute(attr, value) Function
+|attribute|(attr, value) ⚡ Function
 
 Parameters: ~
                 📝 `attr` (String) - attribute to set.
                 📝 `value` (String) - value to assign to the attribute.
 ~
+
+See also: ~
+   |help p5-attribute| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:3336
@@ -364,7 +397,7 @@ Source: ~
 
 
 DOM_center() 📄 ⚡
-center({String} [align] passing 'vertical', 'horizontal' aligns element accordingly) Function
+|center|({String} [align] passing 'vertical', 'horizontal' aligns element accordingly) ⚡ Function
 
 Centers the element either vertically, horizontally, or both.
 `center()` will center the element relative to its parent or according to the page's body if the element has no parent.
@@ -374,28 +407,30 @@ Parameters: ~
                 🔢 `{String} [align] passing 'vertical', 'horizontal' aligns element accordingly` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create the div element and style it.
 > let div = createDiv('');
 > div.size(10, 10);
 > div.style('background-color', 'orange');
-> 
+>
 > // Center the div relative to the page's body.
 > div.center();
-> 
+>
 > describe('A gray square and an orange rectangle. The rectangle is at the center of the page.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-center| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2861
@@ -403,7 +438,7 @@ Source: ~
 
 
 DOM_changed() 📄 ⚡
-changed(fxn) Function
+|changed|(fxn) ⚡ Function
 
 Calls a function when the element changes.
 Calling `myElement.changed(false)` disables the function.
@@ -412,30 +447,29 @@ Parameters: ~
                 🔢 `fxn` (Function|Boolean) - function to call when the element changes.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let dropdown;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a dropdown menu and add a few color options.
 > dropdown = createSelect();
 > dropdown.position(0, 0);
 > dropdown.option('red');
 > dropdown.option('green');
 > dropdown.option('blue');
-> 
+>
 > // Call paintBackground() when the color option changes.
 > dropdown.changed(paintBackground);
-> 
+>
 > describe('A gray square with a dropdown menu at the top. The square changes color when an option is selected.');
 > }
-> 
+>
 > // Paint the background with the selected color.
 > function paintBackground() {
 > let c = dropdown.value();
@@ -443,26 +477,26 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let checkbox;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a checkbox and place it beneath the canvas.
 > checkbox = createCheckbox(' circle');
 > checkbox.position(0, 100);
-> 
+>
 > // Call repaint() when the checkbox changes.
 > checkbox.changed(repaint);
-> 
+>
 > describe('A gray square with a checkbox underneath it that says "circle". A white circle appears when the box is checked and disappears otherwise.');
 > }
-> 
+>
 > // Paint the background gray and determine whether to draw a circle.
 > function repaint() {
 > background(200);
@@ -471,8 +505,11 @@ Example: >
 > }
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-changed| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:400
@@ -480,11 +517,14 @@ Source: ~
 
 
 DOM_child() 📄 ⚡
-child({String|p5.Element} [child] the ID, DOM node, or <a href="#/p5.Element">p5.Element</a>) Function
+|child|({String|p5.Element} [child] the ID, DOM node, or <a href="#/p5.Element">p5.Element</a>) ⚡ Function
 
 Parameters: ~
                 🔢 `{String|p5.Element} [child] the ID, DOM node, or <a href="#/p5.Element">p5.Element</a>` (unknown)
 ~
+
+See also: ~
+   |help p5-child| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2808
@@ -492,35 +532,34 @@ Source: ~
 
 
 DOM_controls() 📄 ⚡
-controls() Function
+|controls|() ⚡ Function
 
 Hide the default <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement" target="_blank">HTMLMediaElement</a> controls.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let dragon;
 > let isHidden = false;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a p5.MediaElement using createAudio().
 > dragon = createAudio('assets/lucky_dragons.mp3');
-> 
+>
 > // Show the default media controls.
 > dragon.showControls();
-> 
+>
 > describe('The text "Double-click to hide controls" written in the middle of a gray square. A song plays in the background. Audio controls are displayed beneath the canvas. The controls appear/disappear when the user double-clicks the square.');
 > }
-> 
+>
 > function draw() {
 > background(200);
-> 
+>
 > // Style the text.
 > textAlign(CENTER);
-> 
+>
 > // Display a different message when controls are hidden or shown.
 > if (isHidden === true) {
 > text('Double-click to show controls', 10, 20, 80, 80);
@@ -528,7 +567,7 @@ Example: >
 > text('Double-click to hide controls', 10, 20, 80, 80);
 > }
 > }
-> 
+>
 > // Show/hide controls based on a double-click.
 > function doubleClicked() {
 > if (isHidden === true) {
@@ -540,8 +579,11 @@ Example: >
 > }
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-controls| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5260
@@ -549,12 +591,12 @@ Source: ~
 
 
 DOM_createA() 📄 ⚡
-createA(href, html, {String} [target]   target where the new link should open,) Function
+|createA|(href, html, {String} [target]   target where the new link should open,) ⚡ Function
 
 Creates an `&lt;a&gt;&lt;/a&gt;` element that links to another web page.
 The first parmeter, `href`, is a string that sets the URL of the linked page.
 The second parameter, `html`, is a string that sets the inner HTML of the link.
-It's common to use text, images, or buttons as links.
+It's common to use `text`, images, or buttons as links.
 The third parameter, `target`, is optional.
 It's a string that tells the web browser where to open the link.
 By default, links open in the current browser tab.
@@ -571,39 +613,41 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
-Example: >
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create an anchor element that links to p5js.org.
+> let a = createA('https://p5js.org/', 'p5*js');
+> a.position(25, 35);
+>
+> describe('The text "p5*js" written at the center of a gray square.');
+> }
+> </code>
+> </div>
 >
 > <div>
 > <code>
 > function setup() {
-> createCanvas(100, 100);
-> 
 > background(200);
-> 
-> // Create an anchor element that links to p5js.org.
-> let a = createA('https://p5js.org/', 'p5*js');
-> a.position(25, 35);
-> 
-> describe('The text "p5*js" written at the center of a gray square.');
-> }
-> </code>
-> </div>
-> 
-> <div>
-> <code>
-> function setup() {
-> background(200);
-> 
+>
 > // Create an anchor tag that links to p5js.org.
 > // Open the link in a new tab.
 > let a = createA('https://p5js.org/', 'p5*js', '_blank');
 > a.position(25, 35);
-> 
+>
 > describe('The text "p5*js" written at the center of a gray square.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createA| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:778
@@ -611,7 +655,7 @@ Source: ~
 
 
 DOM_createAudio() 📄 ⚡
-createAudio({String|String[]} [src] path to an audio file, or an array of paths, {Function} [callback]   function to call once the audio is ready to play.) Function
+|createAudio|({String|String[]} [src] path to an audio file, or an array of paths, {Function} [callback]   function to call once the audio is ready to play.) ⚡ Function
 
 Creates a hidden `&lt;audio&gt;` element for simple audio playback.
 `createAudio()` returns a new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
@@ -633,24 +677,26 @@ Returns: ~
                 🔢 Returns p5.MediaElement: new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
 ~
 
-Example: >
+Examples: >
 >
-> <div class='notest'>
 > <code>
 > function setup() {
 > noCanvas();
-> 
+>
 > // Load the audio.
 > let beat = createAudio('assets/beat.mp3');
-> 
+>
 > // Show the default audio controls.
 > beat.showControls();
-> 
+>
 > describe('An audio beat plays when the user double-clicks the square.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createAudio| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2254
@@ -658,7 +704,7 @@ Source: ~
 
 
 DOM_createButton() 📄 ⚡
-createButton(label, {String} [value] value of the button.) Function
+|createButton|(label, {String} [value] value of the button.) ⚡ Function
 
 Creates a `&lt;button&gt;&lt;/button&gt;` element.
 The first parameter, `label`, is a string that sets the label displayed on the button.
@@ -675,25 +721,24 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a button and place it beneath the canvas.
 > let button = createButton('click me');
 > button.position(0, 100);
-> 
+>
 > // Call repaint() when the button is pressed.
 > button.mousePressed(repaint);
-> 
+>
 > describe('A gray square with a button that says "click me" beneath it. The square changes color when the button is clicked.');
 > }
-> 
+>
 > // Change the background color.
 > function repaint() {
 > let g = random(255);
@@ -701,41 +746,44 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let button;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a button and set its value to 0.
 > // Place the button beneath the canvas.
 > button = createButton('click me', 'red');
 > button.position(0, 100);
-> 
+>
 > // Call randomColor() when the button is pressed.
 > button.mousePressed(randomColor);
-> 
+>
 > describe('A red square with a button that says "click me" beneath it. The square changes color when the button is clicked.');
 > }
-> 
+>
 > function draw() {
 > // Use the button's value to set the background color.
 > let c = button.value();
 > background(c);
 > }
-> 
+>
 > // Set the button's value to a random color.
 > function randomColor() {
 > let c = random(['red', 'green', 'blue', 'yellow']);
 > button.value(c);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createButton| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:1000
@@ -743,12 +791,12 @@ Source: ~
 
 
 DOM_createCapture() 📄 ⚡
-createCapture({String|Constant|Object}  [type] type of capture, either AUDIO or VIDEO,, {Object}                  [flipped] flip the capturing video and mirror the output with `{flipped:true}`. By, {Function}                [callback] function to call once the stream) Function
+|createCapture|({String|Constant|Object}  [type] type of capture, either AUDIO or VIDEO,, {Object}                  [flipped] flip the capturing video and mirror the output with `{flipped:true}`. By, {Function}                [callback] function to call once the stream) ⚡ Function
 
 Creates a `&lt;video&gt;` element that "captures" the audio/video stream from the webcam and microphone.
 `createCapture()` returns a new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
 Videos are shown by default.
-They can be hidden by calling `capture.hide()` and drawn to the canvas using <a href="#/p5/image">image()</a>.
+They can be hidden by calling `capture.hide()` and drawn to the canvas using <a href="#/p5/`image`">`image`()</a>.
 The first parameter, `type`, is optional.
 It sets the type of capture to use.
 By default, `createCapture()` captures both audio and video.
@@ -757,7 +805,7 @@ If `AUDIO` is passed, as in `createCapture(AUDIO)`, only audio will be captured.
 A constraints object can also be passed to customize the stream.
 See the <a href="http://w3c.github.io/mediacapture-main/getusermedia.html#media-track-constraints" target="_blank"> W3C documentation</a> for possible properties.
 Different browsers support different properties.
-The 'flipped' property is an optional property which can be set to `{flipped:true}` to mirror the video output.If it is true then it means that video will be mirrored or flipped and if nothing is mentioned then by default it will be `false`.
+The 'flipped' property is an optional property which can be `set` to `{flipped:true}` to mirror the video output.If it is true then it means that video will be mirrored or flipped and if nothing is mentioned then by default it will be `false`.
 The second parameter,`callback`, is optional.
 It's a function to call once the capture is ready for use.
 The callback function should have one parameter, `stream`, that's a <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream" target="_blank">MediaStream</a> object.
@@ -774,39 +822,38 @@ Returns: ~
                 🔢 Returns p5.MediaElement: new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
 ~
 
-Example: >
+Examples: >
 >
-> <div class='notest'>
 > <code>
 > function setup() {
 > noCanvas();
-> 
+>
 > // Create the video capture.
 > createCapture(VIDEO);
-> 
+>
 > describe('A video stream from the webcam.');
 > }
 > </code>
 > </div>
-> 
+>
 > <div class='notest'>
 > <code>
 > let capture;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create the video capture and hide the element.
 > capture = createCapture(VIDEO);
 > capture.hide();
-> 
+>
 > describe('A video stream from the webcam with inverted colors.');
 > }
-> 
+>
 > function draw() {
 > // Draw the video capture within the canvas.
 > image(capture, 0, 0, width, width * capture.height / capture.width);
-> 
+>
 > // Invert the colors in the stream.
 > filter(INVERT);
 > }
@@ -815,25 +862,25 @@ Example: >
 > <div class='notest'>
 > <code>
 > let capture;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create the video capture with mirrored output.
 > capture = createCapture(VIDEO,{ flipped:true });
 > capture.size(100,100);
-> 
+>
 > describe('A video stream from the webcam with flipped or mirrored output.');
 > }
-> 
+>
 > </code>
 > </div>
-> 
+>
 > <div class='notest norender'>
 > <code>
 > function setup() {
 > createCanvas(480, 120);
-> 
+>
 > // Create a constraints object.
 > let constraints = {
 > video: {
@@ -845,15 +892,18 @@ Example: >
 > },
 > audio: false
 > };
-> 
+>
 > // Create the video capture.
 > createCapture(constraints);
-> 
+>
 > describe('A video stream from the webcam.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createCapture| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2415
@@ -861,7 +911,7 @@ Source: ~
 
 
 DOM_createCheckbox() 📄 ⚡
-createCheckbox({String} [label] label displayed after the checkbox., {boolean} [value] value of the checkbox. Checked is `true` and unchecked is `false`.) Function
+|createCheckbox|({String} [label] label displayed after the checkbox., {boolean} [value] value of the checkbox. Checked is `true` and unchecked is `false`.) ⚡ Function
 
 Creates a checkbox `&lt;input&gt;&lt;/input&gt;` element.
 Checkboxes extend the <a href="#/p5.Element">p5.Element</a> class with a `checked()` method.
@@ -880,48 +930,47 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
-Example: >
+Examples: >
+>
+> <code>
+> let checkbox;
+>
+> function setup() {
+> createCanvas(100, 100);
+>
+> // Create a checkbox and place it beneath the canvas.
+> checkbox = createCheckbox();
+> checkbox.position(0, 100);
+>
+> describe('A black square with a checkbox beneath it. The square turns white when the box is checked.');
+> }
+>
+> function draw() {
+> // Use the checkbox to set the background color.
+> if (checkbox.checked()) {
+> background(255);
+> } else {
+> background(0);
+> }
+> }
+> </code>
+> </div>
 >
 > <div>
 > <code>
 > let checkbox;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
-> // Create a checkbox and place it beneath the canvas.
-> checkbox = createCheckbox();
-> checkbox.position(0, 100);
-> 
-> describe('A black square with a checkbox beneath it. The square turns white when the box is checked.');
-> }
-> 
-> function draw() {
-> // Use the checkbox to set the background color.
-> if (checkbox.checked()) {
-> background(255);
-> } else {
-> background(0);
-> }
-> }
-> </code>
-> </div>
-> 
-> <div>
-> <code>
-> let checkbox;
-> 
-> function setup() {
-> createCanvas(100, 100);
-> 
+>
 > // Create a checkbox and place it beneath the canvas.
 > // Label the checkbox "white".
 > checkbox = createCheckbox(' white');
 > checkbox.position(0, 100);
-> 
+>
 > describe('A black square with a checkbox labeled "white" beneath it. The square turns white when the box is checked.');
 > }
-> 
+>
 > function draw() {
 > // Use the checkbox to set the background color.
 > if (checkbox.checked()) {
@@ -932,22 +981,22 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let checkbox;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a checkbox and place it beneath the canvas.
 > // Label the checkbox "white" and set its value to true.
 > checkbox = createCheckbox(' white', true);
 > checkbox.position(0, 100);
-> 
+>
 > describe('A white square with a checkbox labeled "white" beneath it. The square turns black when the box is unchecked.');
 > }
-> 
+>
 > function draw() {
 > // Use the checkbox to set the background color.
 > if (checkbox.checked()) {
@@ -957,8 +1006,11 @@ Example: >
 > }
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createCheckbox| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:1104
@@ -966,13 +1018,13 @@ Source: ~
 
 
 DOM_createColorPicker() 📄 ⚡
-createColorPicker({String|p5.Color} [value] default color as a <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color" target="_blank">CSS color string</a>.) Function
+|createColorPicker|({String|p5.Color} [value] default color as a <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color" target="_blank">CSS color string</a>.) ⚡ Function
 
-Creates a color picker element.
+Creates a `color` picker element.
 The parameter, `value`, is optional.
-If a color string or <a href="#/p5.Color">p5.Color</a> object is passed, it will set the default color.
-Color pickers extend the <a href="#/p5.Element">p5.Element</a> class with a couple of helpful methods for managing colors: - `myPicker.value()` returns the current color as a hex string in the format `'#rrggbb'`.
-- `myPicker.color()` returns the current color as a <a href="#/p5.Color">p5.Color</a> object.
+If a `color` string or <a href="#/p5.Color">p5.Color</a> object is passed, it will `set` the default `color`.
+Color pickers extend the <a href="#/p5.Element">p5.Element</a> class with a couple of helpful methods for managing colors: - `myPicker.value()` returns the current `color` as a hex string in the format `'#rrggbb'`.
+- `myPicker.`color`()` returns the current `color` as a <a href="#/p5.Color">p5.Color</a> object.
 
 Parameters: ~
                 🔢 `{String|p5.Color} [value] default color as a <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color" target="_blank">CSS color string</a>.` (unknown)
@@ -982,22 +1034,21 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let myPicker;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a color picker and set its position.
 > myPicker = createColorPicker('deeppink');
 > myPicker.position(0, 100);
-> 
+>
 > describe('A pink square with a color picker beneath it. The square changes color when the user picks a new color.');
 > }
-> 
+>
 > function draw() {
 > // Use the color picker to paint the background.
 > let c = myPicker.color();
@@ -1005,32 +1056,35 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let myPicker;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a color picker and set its position.
 > myPicker = createColorPicker('deeppink');
 > myPicker.position(0, 100);
-> 
+>
 > describe('A number with the format "#rrggbb" is displayed on a pink canvas. The background color and number change when the user picks a new color.');
 > }
-> 
+>
 > function draw() {
 > // Use the color picker to paint the background.
 > let c = myPicker.value();
 > background(c);
-> 
+>
 > // Display the current color as a hex string.
 > text(c, 25, 55);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createColorPicker| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:1823
@@ -1038,7 +1092,7 @@ Source: ~
 
 
 DOM_createDiv() 📄 ⚡
-createDiv({String} [html] inner HTML for the new `&lt;div&gt;&lt;/div&gt;` element.) Function
+|createDiv|({String} [html] inner HTML for the new `&lt;div&gt;&lt;/div&gt;` element.) ⚡ Function
 
 Creates a `&lt;div&gt;&lt;/div&gt;` element.
 `&lt;div&gt;&lt;/div&gt;` elements are commonly used as containers for other elements.
@@ -1053,40 +1107,42 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
-Example: >
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create a div element and set its position.
+> let div = createDiv('p5*js');
+> div.position(25, 35);
+>
+> describe('A gray square with the text "p5*js" written in its center.');
+> }
+> </code>
+> </div>
 >
 > <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
-> // Create a div element and set its position.
-> let div = createDiv('p5*js');
-> div.position(25, 35);
-> 
-> describe('A gray square with the text "p5*js" written in its center.');
-> }
-> </code>
-> </div>
-> 
-> <div>
-> <code>
-> function setup() {
-> createCanvas(100, 100);
-> 
-> background(200);
-> 
+>
 > // Create an h3 element within the div.
 > let div = createDiv('<h3>p5*js</h3>');
 > div.position(20, 5);
-> 
+>
 > describe('A gray square with the text "p5*js" written in its center.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createDiv| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:537
@@ -1094,7 +1150,7 @@ Source: ~
 
 
 DOM_createElement() 📄 ⚡
-createElement(tag, {String} [content] HTML content to insert into the element.) Function
+|createElement|(tag, {String} [content] HTML content to insert into the element.) ⚡ Function
 
 Creates a new <a href="#/p5.Element">p5.Element</a> object.
 The first parameter, `tag`, is a string an HTML tag such as `'h5'`.
@@ -1111,42 +1167,44 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
-Example: >
+Examples: >
+>
+> <code>
+> function setup() {
+> createCanvas(100, 100);
+>
+> background(200);
+>
+> // Create an h5 element with nothing in it.
+> createElement('h5');
+>
+> describe('A gray square.');
+> }
+> </code>
+> </div>
 >
 > <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
-> // Create an h5 element with nothing in it.
-> createElement('h5');
-> 
-> describe('A gray square.');
-> }
-> </code>
-> </div>
-> 
-> <div>
-> <code>
-> function setup() {
-> createCanvas(100, 100);
-> 
-> background(200);
-> 
+>
 > // Create an h5 element with the content "p5*js".
 > let h5 = createElement('h5', 'p5*js');
-> 
+>
 > // Set the element's style and position.
 > h5.style('color', 'deeppink');
 > h5.position(30, 15);
-> 
+>
 > describe('The text "p5*js" written in pink in the middle of a gray square.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createElement| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2542
@@ -1154,7 +1212,7 @@ Source: ~
 
 
 DOM_createFileInput() 📄 ⚡
-createFileInput(callback, {Boolean} [multiple] allow multiple files to be selected.) Function
+|createFileInput|(callback, {Boolean} [multiple] allow multiple files to be selected.) ⚡ Function
 
 Creates an `&lt;input&gt;&lt;/input&gt;` element of type `'file'`.
 `createFileInput()` allows users to select local files for use in a sketch.
@@ -1162,7 +1220,7 @@ It returns a <a href="#/p5.File">p5.File</a> object.
 The first parameter, `callback`, is a function that's called when the file loads.
 The callback function should have one parameter, `file`, that's a <a href="#/p5.File">p5.File</a> object.
 The second parameter, `multiple`, is optional.
-It's a boolean value that allows loading multiple files if set to `true`.
+It's a boolean value that allows loading multiple files if `set` to `true`.
 If `true`, `callback` will be called once per file.
 
 Parameters: ~
@@ -1174,35 +1232,34 @@ Returns: ~
                 🔢 Returns p5.File: new <a href="#/p5.File">p5.File</a> object.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > // Use the file input to select an image to
 > // load and display.
 > let input;
 > let img;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a file input and place it beneath
 > // the canvas.
 > input = createFileInput(handleImage);
 > input.position(0, 100);
-> 
+>
 > describe('A gray square with a file input beneath it. If the user selects an image file to load, it is displayed on the square.');
 > }
-> 
+>
 > function draw() {
 > background(200);
-> 
+>
 > // Draw the image if loaded.
 > if (img) {
 > image(img, 0, 0, width, height);
 > }
 > }
-> 
+>
 > // Create an image if the file is an image.
 > function handleImage(file) {
 > if (file.type === 'image') {
@@ -1214,38 +1271,38 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > // Use the file input to select multiple images
 > // to load and display.
 > let input;
 > let images = [];
-> 
+>
 > function setup() {
 > // Create a file input and place it beneath
 > // the canvas. Allow it to load multiple files.
 > input = createFileInput(handleImage, true);
 > input.position(0, 100);
 > }
-> 
+>
 > function draw() {
 > background(200);
-> 
+>
 > // Draw the images if loaded. Each image
 > // is drawn 20 pixels lower than the
 > // previous image.
 > for (let i = 0; i < images.length; i += 1) {
 > // Calculate the y-coordinate.
 > let y = i * 20;
-> 
+>
 > // Draw the image.
 > image(images[i], 0, y, 100, 100);
 > }
-> 
+>
 > describe('A gray square with a file input beneath it. If the user selects multiple image files to load, they are displayed on the square.');
 > }
-> 
+>
 > // Create an image if the file is an image,
 > // then add it to the images array.
 > function handleImage(file) {
@@ -1256,8 +1313,11 @@ Example: >
 > }
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createFileInput| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2044
@@ -1265,7 +1325,7 @@ Source: ~
 
 
 DOM_createImg() 📄 ⚡
-createImg(src, alt, {String} [crossOrigin] crossOrigin property to use when fetching the image., {Function} [successCallback] function to call once the image loads. The new image will be passed) Function
+|createImg|(src, alt, {String} [crossOrigin] crossOrigin property to use when fetching the image., {Function} [successCallback] function to call once the image loads. The new image will be passed) ⚡ Function
 
 Parameters: ~
                 📝 `src` (String)
@@ -1278,13 +1338,16 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
+See also: ~
+   |help p5-createImg| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/dom/dom.js:702
 ~
 
 
 DOM_createInput() 📄 ⚡
-createInput({String} [value]) Function
+|createInput|({String} [value]) ⚡ Function
 
 Parameters: ~
                 🔢 `{String} [value]` (unknown)
@@ -1294,15 +1357,21 @@ Returns: ~
                 🔢 Returns p5.Element
 ~
 
+See also: ~
+   |help p5-createInput| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/dom/dom.js:1934
 ~
 
 
 DOM_createMedia() 📄 ⚡
-createMedia() Function
+|createMedia|() ⚡ Function
 
 VIDEO STUFF *
+
+See also: ~
+   |help p5-createMedia| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2071
@@ -1310,10 +1379,10 @@ Source: ~
 
 
 DOM_createP() 📄 ⚡
-createP({String} [html] inner HTML for the new `&lt;p&gt;&lt;/p&gt;` element.) Function
+|createP|({String} [html] inner HTML for the new `&lt;p&gt;&lt;/p&gt;` element.) ⚡ Function
 
 Creates a paragraph element.
-`&lt;p&gt;&lt;/p&gt;` elements are commonly used for paragraph-length text.
+`&lt;p&gt;&lt;/p&gt;` elements are commonly used for paragraph-length `text`.
 The parameter `html` is optional.
 It accepts a string that sets the inner HTML of the new `&lt;p&gt;&lt;/p&gt;`.
 
@@ -1325,24 +1394,26 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a paragraph element and set its position.
 > let p = createP('Tell me a story.');
 > p.position(5, 0);
-> 
+>
 > describe('A gray square displaying the text "Tell me a story." written in black.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createP| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:572
@@ -1350,7 +1421,7 @@ Source: ~
 
 
 DOM_createSelect() 📄 ⚡
-createSelect(existing) Function
+|createSelect|(existing) ⚡ Function
 
 Parameters: ~
                 📦 `existing` (Object) - select element to wrap, either as a <a href="#/p5.Element">p5.Element</a> or
@@ -1360,22 +1431,25 @@ Returns: ~
                 🔢 Returns p5.Element
 ~
 
+See also: ~
+   |help p5-createSelect| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/dom/dom.js:1331
 ~
 
 
 DOM_createSlider() 📄 ⚡
-createSlider(min, max, {Number} [value] default value of the slider., {Number} [step] size for each step in the slider's range.) Function
+|createSlider|(min, max, {Number} [value] default value of the slider., {Number} [step] size for each step in the slider's range.) ⚡ Function
 
 Creates a slider `&lt;input&gt;&lt;/input&gt;` element.
 Range sliders are useful for quickly selecting numbers from a given range.
-The first two parameters, `min` and `max`, are numbers that set the slider's minimum and maximum.
+The first two parameters, `min` and `max`, are numbers that `set` the slider's minimum and maximum.
 The third parameter, `value`, is optional.
 It's a number that sets the slider's default value.
 The fourth parameter, `step`, is also optional.
 It's a number that sets the spacing between each value in the slider's range.
-Setting `step` to 0 allows the slider to move smoothly from `min` to `max`.
+Setting `step` to 0 allows the slider to `move` smoothly from `min` to `max`.
 
 Parameters: ~
                 🔢 `min` (Number) - minimum value of the slider.
@@ -1388,23 +1462,22 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let slider;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a slider and place it at the top of the canvas.
 > slider = createSlider(0, 255);
 > slider.position(10, 10);
 > slider.size(80);
-> 
+>
 > describe('A dark gray square with a range slider at the top. The square changes color when the slider is moved.');
 > }
-> 
+>
 > function draw() {
 > // Use the slider as a grayscale value.
 > let g = slider.value();
@@ -1412,23 +1485,23 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let slider;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a slider and place it at the top of the canvas.
 > // Set its default value to 0.
 > slider = createSlider(0, 255, 0);
 > slider.position(10, 10);
 > slider.size(80);
-> 
+>
 > describe('A black square with a range slider at the top. The square changes color when the slider is moved.');
 > }
-> 
+>
 > function draw() {
 > // Use the slider as a grayscale value.
 > let g = slider.value();
@@ -1436,24 +1509,24 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let slider;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a slider and place it at the top of the canvas.
 > // Set its default value to 0.
 > // Set its step size to 50.
 > slider = createSlider(0, 255, 0, 50);
 > slider.position(10, 10);
 > slider.size(80);
-> 
+>
 > describe('A black square with a range slider at the top. The square changes color when the slider is moved.');
 > }
-> 
+>
 > function draw() {
 > // Use the slider as a grayscale value.
 > let g = slider.value();
@@ -1461,32 +1534,35 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let slider;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a slider and place it at the top of the canvas.
 > // Set its default value to 0.
 > // Set its step size to 0 so that it moves smoothly.
 > slider = createSlider(0, 255, 0, 0);
 > slider.position(10, 10);
 > slider.size(80);
-> 
+>
 > describe('A black square with a range slider at the top. The square changes color when the slider is moved.');
 > }
-> 
+>
 > function draw() {
 > // Use the slider as a grayscale value.
 > let g = slider.value();
 > background(g);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createSlider| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:909
@@ -1494,11 +1570,11 @@ Source: ~
 
 
 DOM_createSpan() 📄 ⚡
-createSpan({String} [html] inner HTML for the new `&lt;span&gt;&lt;/span&gt;` element.) Function
+|createSpan|({String} [html] inner HTML for the new `&lt;span&gt;&lt;/span&gt;` element.) ⚡ Function
 
 Creates a `&lt;span&gt;&lt;/span&gt;` element.
 `&lt;span&gt;&lt;/span&gt;` elements are commonly used as containers for inline elements.
-For example, a `&lt;span&gt;&lt;/span&gt;` can hold part of a sentence that's a <span style="color: deeppink;">different</span> style.
+For example, a `&lt;span&gt;&lt;/span&gt;` can hold part of a sentence that's a <span style="`color`: deeppink;">different</span> style.
 The parameter `html` is optional.
 It accepts a string that sets the inner HTML of the new `&lt;span&gt;&lt;/span&gt;`.
 
@@ -1510,57 +1586,59 @@ Returns: ~
                 🔢 Returns p5.Element: new <a href="#/p5.Element">p5.Element</a> object.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a span element and set its position.
 > let span = createSpan('p5*js');
 > span.position(25, 35);
-> 
+>
 > describe('A gray square with the text "p5*js" written in its center.');
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > function setup() {
 > background(200);
-> 
+>
 > // Create a div element as a container.
 > let div = createDiv();
-> 
+>
 > // Place the div at the center.
 > div.position(25, 35);
-> 
+>
 > // Create a span element.
 > let s1 = createSpan('p5');
-> 
+>
 > // Create a second span element.
 > let s2 = createSpan('*');
-> 
+>
 > // Set the second span's font color.
 > s2.style('color', 'deeppink');
-> 
+>
 > // Create a third span element.
 > let s3 = createSpan('js');
-> 
+>
 > // Add all the spans to the container div.
 > s1.parent(div);
 > s2.parent(div);
 > s3.parent(div);
-> 
+>
 > describe('A gray square with the text "p5*js" written in black at its center. The asterisk is pink.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createSpan| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:643
@@ -1568,12 +1646,12 @@ Source: ~
 
 
 DOM_createVideo() 📄 ⚡
-createVideo(src, {Function} [callback] function to call once the video is ready to play.) Function
+|createVideo|(src, {Function} [callback] function to call once the video is ready to play.) ⚡ Function
 
 Creates a `&lt;video&gt;` element for simple audio/video playback.
 `createVideo()` returns a new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
 Videos are shown by default.
-They can be hidden by calling `video.hide()` and drawn to the canvas using <a href="#/p5/image">image()</a>.
+They can be hidden by calling `video.hide()` and drawn to the canvas using <a href="#/p5/`image`">`image`()</a>.
 The first parameter, `src`, is the path the video.
 If a single string is passed, as in `'assets/topsecret.mp4'`, a single video is loaded.
 An array of strings can be used to load the same video in different formats.
@@ -1592,51 +1670,50 @@ Returns: ~
                 🔢 Returns p5.MediaElement: new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
 ~
 
-Example: >
+Examples: >
+>
+> <code>
+> function setup() {
+> noCanvas();
+>
+> // Load a video and add it to the page.
+> // Note: this may not work in some browsers.
+> let video = createVideo('assets/small.mp4');
+>
+> // Show the default video controls.
+> video.showControls();
+>
+> describe('A video of a toy robot with playback controls beneath it.');
+> }
+> </code>
+> </div>
 >
 > <div class='notest'>
 > <code>
 > function setup() {
 > noCanvas();
-> 
-> // Load a video and add it to the page.
-> // Note: this may not work in some browsers.
-> let video = createVideo('assets/small.mp4');
-> 
-> // Show the default video controls.
-> video.showControls();
-> 
-> describe('A video of a toy robot with playback controls beneath it.');
-> }
-> </code>
-> </div>
-> 
-> <div class='notest'>
-> <code>
-> function setup() {
-> noCanvas();
-> 
+>
 > // Load a video and add it to the page.
 > // Provide an array options for different file formats.
 > let video = createVideo(
 > ['assets/small.mp4', 'assets/small.ogv', 'assets/small.webm']
 > );
-> 
+>
 > // Show the default video controls.
 > video.showControls();
-> 
+>
 > describe('A video of a toy robot with playback controls beneath it.');
 > }
 > </code>
 > </div>
-> 
+>
 > <div class='notest'>
 > <code>
 > let video;
-> 
+>
 > function setup() {
 > noCanvas();
-> 
+>
 > // Load a video and add it to the page.
 > // Provide an array options for different file formats.
 > // Call mute() once the video loads.
@@ -1644,20 +1721,23 @@ Example: >
 > ['assets/small.mp4', 'assets/small.ogv', 'assets/small.webm'],
 > muteVideo
 > );
-> 
+>
 > // Show the default video controls.
 > video.showControls();
-> 
+>
 > describe('A video of a toy robot with playback controls beneath it.');
 > }
-> 
+>
 > // Mute the video once it loads.
 > function muteVideo() {
 > video.volume(0);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-createVideo| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2206
@@ -1665,33 +1745,36 @@ Source: ~
 
 
 DOM_display() 📄 ⚡
-display() Function
+|display|() ⚡ Function
 
 Hides the current element.
 
-Example: >
+Examples: >
 >
 > let p;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a paragraph element.
 > p = createP('p5*js');
 > p.position(10, 10);
-> 
+>
 > describe('The text "p5*js" at the center of a gray square. The text disappears when the user double-clicks the square.');
 > }
-> 
+>
 > // Hide the paragraph when the user double-clicks.
 > function doubleClicked() {
 > p.hide();
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-display| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:3558
@@ -1699,7 +1782,7 @@ Source: ~
 
 
 DOM_draggable() 📄 ⚡
-draggable({p5.Element} [elmnt]  another <a href="#/p5.Element">p5.Element</a>.) Function
+|draggable|({p5.Element} [elmnt]  another <a href="#/p5.Element">p5.Element</a>.) ⚡ Function
 
 Makes the element draggable.
 The parameter, `elmnt`, is optional.
@@ -1709,18 +1792,17 @@ Parameters: ~
                 🔢 `{p5.Element} [elmnt]  another <a href="#/p5.Element">p5.Element</a>.` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let stickyNote;
 > let textInput;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a div element and style it.
 > stickyNote = createDiv('Note');
 > stickyNote.position(5, 5);
@@ -1729,10 +1811,10 @@ Example: >
 > stickyNote.style('font-family', 'Comic Sans MS');
 > stickyNote.style('background', 'orchid');
 > stickyNote.style('padding', '5px');
-> 
+>
 > // Make the note draggable.
 > stickyNote.draggable();
-> 
+>
 > // Create a panel div and style it.
 > let panel = createDiv('');
 > panel.position(5, 40);
@@ -1741,32 +1823,35 @@ Example: >
 > panel.style('font-size', '16px');
 > panel.style('padding', '5px');
 > panel.style('text-align', 'center');
-> 
+>
 > // Make the panel draggable.
 > panel.draggable();
-> 
+>
 > // Create a text input and style it.
 > textInput = createInput('Note');
 > textInput.size(70);
-> 
+>
 > // Add the input to the panel.
 > textInput.parent(panel);
-> 
+>
 > // Call handleInput() when text is input.
 > textInput.input(handleInput);
-> 
+>
 > describe(
 > 'A gray square with two purple rectangles that move when dragged. The top rectangle displays the text that is typed into the bottom rectangle.'
 > );
 > }
-> 
+>
 > // Update stickyNote's HTML when text is input.
 > function handleInput() {
 > stickyNote.html(textInput.value());
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-draggable| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:4013
@@ -1774,7 +1859,7 @@ Source: ~
 
 
 DOM_drop() 📄 ⚡
-drop(callback, {Function} [fxn]     called once when any files are dropped.) Function
+|drop|(callback, {Function} [fxn]     called once when any files are dropped.) ⚡ Function
 
 Calls a function when the user drops a file on the element.
 The first parameter, `callback`, is a function to call once the file loads.
@@ -1788,99 +1873,101 @@ Parameters: ~
                 🔢 `{Function} [fxn]     called once when any files are dropped.` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > // Drop an image on the canvas to view
 > // this example.
 > let img;
-> 
+>
 > function setup() {
 > let c = createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Call handleFile() when a file that's dropped on the canvas has loaded.
 > c.drop(handleFile);
-> 
+>
 > describe('A gray square. When the user drops an image on the square, it is displayed.');
 > }
-> 
+>
 > // Remove the existing image and display the new one.
 > function handleFile(file) {
 > // Remove the current image, if any.
 > if (img) {
 > img.remove();
 > }
-> 
+>
 > // Create an <img> element with the
 > // dropped file.
 > img = createImg(file.data, '');
 > img.hide();
-> 
+>
 > // Draw the image.
 > image(img, 0, 0, width, height);
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > // Drop an image on the canvas to view
 > // this example.
 > let img;
 > let msg;
-> 
+>
 > function setup() {
 > let c = createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Call functions when the user drops a file on the canvas
 > // and when the file loads.
 > c.drop(handleFile, handleDrop);
-> 
+>
 > describe('A gray square. When the user drops an image on the square, it is displayed. The id attribute of canvas element is also displayed.');
 > }
-> 
+>
 > // Display the image when it loads.
 > function handleFile(file) {
 > // Remove the current image, if any.
 > if (img) {
 > img.remove();
 > }
-> 
+>
 > // Create an img element with the dropped file.
 > img = createImg(file.data, '');
 > img.hide();
-> 
+>
 > // Draw the image.
 > image(img, 0, 0, width, height);
 > }
-> 
+>
 > // Display the file's name when it loads.
 > function handleDrop(event) {
 > // Remove current paragraph, if any.
 > if (msg) {
 > msg.remove();
 > }
-> 
+>
 > // Use event to get the drop target's id.
 > let id = event.target.id;
-> 
+>
 > // Write the canvas' id beneath it.
 > msg = createP(id);
 > msg.position(0, 100);
-> 
+>
 > // Set the font color randomly for each drop.
 > let c = random(['red', 'green', 'blue']);
 > msg.style('color', c);
 > msg.style('font-size', '12px');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-drop| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:3900
@@ -1888,7 +1975,7 @@ Source: ~
 
 
 DOM_hasClass() 📄 ⚡
-hasClass(c {String} name of class to check.) Function
+|hasClass|(c {String} name of class to check.) ⚡ Function
 
 Checks if a class is already applied to element.
 
@@ -1900,26 +1987,25 @@ Returns: ~
                 🔢 Returns undefined
 ~
 
-Example: >
+Examples: >
 >
-> <div class='norender'>
 > <code>
 > let div;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a div element.
 > div = createDiv('div');
-> 
+>
 > // Add the class 'show' to the div.
 > div.addClass('show');
-> 
+>
 > describe('A gray square.');
 > }
-> 
+>
 > // Toggle the class 'show' when the mouse is pressed.
 > function mousePressed() {
 > if (div.hasClass('show')) {
@@ -1929,8 +2015,11 @@ Example: >
 > }
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-hasClass| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2673
@@ -1938,33 +2027,36 @@ Source: ~
 
 
 DOM_hide() 📄 ⚡
-hide() Function
+|hide|() ⚡ Function
 
 Hides the current element.
 
-Example: >
+Examples: >
 >
 > let p;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a paragraph element.
 > p = createP('p5*js');
 > p.position(10, 10);
-> 
+>
 > describe('The text "p5*js" at the center of a gray square. The text disappears when the user double-clicks the square.');
 > }
-> 
+>
 > // Hide the paragraph when the user double-clicks.
 > function doubleClicked() {
 > p.hide();
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-hide| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:3557
@@ -1972,12 +2064,15 @@ Source: ~
 
 
 DOM_html() 📄 ⚡
-html({String} [html] the HTML to be placed inside the element, {boolean} [append] whether to append HTML to existing) Function
+|html|({String} [html] the HTML to be placed inside the element, {boolean} [append] whether to append HTML to existing) ⚡ Function
 
 Parameters: ~
                 🔢 `{String} [html] the HTML to be placed inside the element` (unknown)
                 🔢 `{boolean} [append] whether to append HTML to existing` (unknown)
 ~
+
+See also: ~
+   |help p5-html| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2968
@@ -1985,37 +2080,36 @@ Source: ~
 
 
 DOM_input() 📄 ⚡
-input(fxn) Function
+|input|(fxn) ⚡ Function
 
 Calls a function when the element receives input.
-`myElement.input()` is often used to with text inputs and sliders.
+`myElement.input()` is often used to with `text` inputs and sliders.
 Calling `myElement.input(false)` disables the function.
 
 Parameters: ~
                 🔢 `fxn` (Function|Boolean) - function to call when input is detected within
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let slider;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a slider and place it beneath the canvas.
 > slider = createSlider(0, 255, 200);
 > slider.position(0, 100);
-> 
+>
 > // Call repaint() when the slider changes.
 > slider.input(repaint);
-> 
+>
 > describe('A gray square with a range slider underneath it. The background changes shades of gray when the slider is moved.');
 > }
-> 
+>
 > // Paint the background using slider's value.
 > function repaint() {
 > let g = slider.value();
@@ -2023,26 +2117,26 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let input;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create an input and place it beneath the canvas.
 > input = createInput('');
 > input.position(0, 100);
-> 
+>
 > // Call repaint() when input is detected.
 > input.input(repaint);
-> 
+>
 > describe('A gray square with a text input bar beneath it. Any text written in the input appears in the middle of the square.');
 > }
-> 
+>
 > // Paint the background gray and display the input's value.
 > function repaint() {
 > background(200);
@@ -2050,8 +2144,11 @@ Example: >
 > text(msg, 5, 50);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-input| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:473
@@ -2059,7 +2156,7 @@ Source: ~
 
 
 DOM_position() 📄 ⚡
-position({Number} [x] x-position relative to top-left of window (optional), {Number} [y] y-position relative to top-left of window (optional), {String} [positionType] it can be static, fixed, relative, sticky, initial or inherit (optional)) Function
+|position|({Number} [x] x-position relative to top-left of window (optional), {Number} [y] y-position relative to top-left of window (optional), {String} [positionType] it can be static, fixed, relative, sticky, initial or inherit (optional)) ⚡ Function
 
 Parameters: ~
                 🔢 `{Number} [x] x-position relative to top-left of window (optional)` (unknown)
@@ -2067,41 +2164,46 @@ Parameters: ~
                 🔢 `{String} [positionType] it can be static, fixed, relative, sticky, initial or inherit (optional)` (unknown)
 ~
 
+See also: ~
+   |help p5-position| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/dom/dom.js:3038
 ~
 
 
 DOM_remove() 📄 ⚡
-remove() Function
+|remove|() ⚡ Function
 
 Removes the element, stops all audio/video streams, and removes all callback functions.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let p;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a paragraph element.
 > p = createP('p5*js');
 > p.position(10, 10);
-> 
+>
 > describe('The text "p5*js" written at the center of a gray square. ');
 > }
-> 
+>
 > // Remove the paragraph when the user double-clicks.
 > function doubleClicked() {
 > p.remove();
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-remove| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:3761
@@ -2109,43 +2211,45 @@ Source: ~
 
 
 DOM_removeAttribute() 📄 ⚡
-removeAttribute(attr) Function
+|removeAttribute|(attr) ⚡ Function
 
 Removes an attribute from the element.
 The parameter `attr` is the attribute's name as a string.
-For example, calling `myElement.removeAttribute('align')` removes its `align` attribute if it's been set.
+For example, calling `myElement.removeAttribute('align')` removes its `align` attribute if it's been `set`.
 
 Parameters: ~
                 📝 `attr` (String) - attribute to remove.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let p;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a paragraph element and place it in the center of the canvas.
 > // Set its "align" attribute to "center".
 > p = createP('hi');
 > p.position(0, 20);
 > p.attribute('align', 'center');
-> 
+>
 > describe('The text "hi" written in black at the center of a gray square. The text moves to the left edge when double-clicked.');
 > }
-> 
+>
 > // Remove the 'align' attribute when the user double-clicks the paragraph.
 > function doubleClicked() {
 > p.removeAttribute('align');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-removeAttribute| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:3396
@@ -2153,7 +2257,7 @@ Source: ~
 
 
 DOM_removeClass() 📄 ⚡
-removeClass(class) Function
+|removeClass|(class) ⚡ Function
 
 Removes a class from the element.
 
@@ -2161,37 +2265,39 @@ Parameters: ~
                 📝 `class` (String) - name of class to remove.
 ~
 
-Example: >
+Examples: >
 >
-> <div class='norender'>
 > <code>
 > // In this example, a class is set when the div is created
 > // and removed when mouse is pressed. This could link up
 > // with a CSS style rule to toggle style properties.
-> 
+>
 > let div;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a div element.
 > div = createDiv('div');
-> 
+>
 > // Add a class to the div.
 > div.addClass('myClass');
-> 
+>
 > describe('A gray square.');
 > }
-> 
+>
 > // Remove 'myClass' from the div when the user presses the mouse.
 > function mousePressed() {
 > div.removeClass('myClass');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-removeClass| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2630
@@ -2199,68 +2305,70 @@ Source: ~
 
 
 DOM_removeElements() 📄 ⚡
-removeElements() Function
+|removeElements|() ⚡ Function
 
 Removes all elements created by p5.js, including any event handlers.
-There are two exceptions: canvas elements created by <a href="#/p5/createCanvas">createCanvas()</a> and <a href="#/p5.Renderer">p5.Render</a> objects created by <a href="#/p5/createGraphics">createGraphics()</a>.
+There are two exceptions: canvas elements created by <a href="#/p5/`createCanvas`">`createCanvas`()</a> and <a href="#/p5.Renderer">p5.Render</a> objects created by <a href="#/p5/`createGraphics`">`createGraphics`()</a>.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a paragraph element and place
 > // it in the middle of the canvas.
 > let p = createP('p5*js');
 > p.position(25, 25);
-> 
+>
 > describe('A gray square with the text "p5*js" written in its center. The text disappears when the mouse is pressed.');
 > }
-> 
+>
 > // Remove all elements when the mouse is pressed.
 > function mousePressed() {
 > removeElements();
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > let slider;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a paragraph element and place
 > // it at the top of the canvas.
 > let p = createP('p5*js');
 > p.position(25, 25);
-> 
+>
 > // Create a slider element and place it
 > // beneath the canvas.
 > slider = createSlider(0, 255, 200);
 > slider.position(0, 100);
-> 
+>
 > describe('A gray square with the text "p5*js" written in its center and a range slider beneath it. The square changes color when the slider is moved. The text and slider disappear when the square is double-clicked.');
 > }
-> 
+>
 > function draw() {
 > // Use the slider value to change the background color.
 > let g = slider.value();
 > background(g);
 > }
-> 
+>
 > // Remove all elements when the mouse is double-clicked.
 > function doubleClicked() {
 > removeElements();
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-removeElements| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:322
@@ -2268,7 +2376,7 @@ Source: ~
 
 
 DOM_select() 📄 ⚡
-select(selectors, {String|p5.Element|HTMLElement} [container] CSS selector string, <a href="#/p5.Element">p5.Element</a>, or) Function
+|select|(selectors, {String|p5.Element|HTMLElement} [container] CSS selector string, <a href="#/p5.Element">p5.Element</a>, or) ⚡ Function
 
 Searches the page for the first element that matches the given <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics#different_types_of_selectors" target="_blank">CSS selector string</a>.
 The selector string can be an ID, class, tag name, or a combination.
@@ -2286,65 +2394,67 @@ Returns: ~
                 🔢 Returns p5.Element|null: <a href="#/p5.Element">p5.Element</a> containing the element.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
 > background(200);
-> 
+>
 > // Select the canvas by its tag.
 > let cnv = select('canvas');
 > cnv.style('border', '5px deeppink dashed');
-> 
+>
 > describe('A gray square with a dashed pink border.');
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > function setup() {
 > let cnv = createCanvas(100, 100);
-> 
+>
 > // Add a class attribute to the canvas.
 > cnv.class('pinkborder');
-> 
+>
 > background(200);
-> 
+>
 > // Select the canvas by its class.
 > cnv = select('.pinkborder');
-> 
+>
 > // Style its border.
 > cnv.style('border', '5px deeppink dashed');
-> 
+>
 > describe('A gray square with a dashed pink border.');
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > function setup() {
 > let cnv = createCanvas(100, 100);
-> 
+>
 > // Set the canvas' ID.
 > cnv.id('mycanvas');
-> 
+>
 > background(200);
-> 
+>
 > // Select the canvas by its ID.
 > cnv = select('#mycanvas');
-> 
+>
 > // Style its border.
 > cnv.style('border', '5px deeppink dashed');
-> 
+>
 > describe('A gray square with a dashed pink border.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-select| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:98
@@ -2352,7 +2462,7 @@ Source: ~
 
 
 DOM_selectAll() 📄 ⚡
-selectAll(selectors, {String|p5.Element|HTMLElement} [container] CSS selector string, <a href="#/p5.Element">p5.Element</a>, or) Function
+|selectAll|(selectors, {String|p5.Element|HTMLElement} [container] CSS selector string, <a href="#/p5.Element">p5.Element</a>, or) ⚡ Function
 
 Searches the page for all elements that matches the given <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics#different_types_of_selectors" target="_blank">CSS selector string</a>.
 The selector string can be an ID, class, tag name, or a combination.
@@ -2370,31 +2480,30 @@ Returns: ~
                 🔢 Returns p5.Element[]: array of <a href="#/p5.Element">p5.Element</a>s containing any elements found.
 ~
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create three buttons.
 > createButton('1');
 > createButton('2');
 > createButton('3');
-> 
+>
 > // Select the buttons by their tag.
 > let buttons = selectAll('button');
-> 
+>
 > // Position the buttons.
 > for (let i = 0; i < 3; i += 1) {
 > buttons[i].position(0, i * 30);
 > }
-> 
+>
 > describe('Three buttons stacked vertically. The buttons are labeled, "1", "2", and "3".');
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > function setup() {
@@ -2405,36 +2514,39 @@ Example: >
 > b2.position(0, 30);
 > let b3 = createButton('3');
 > b3.position(0, 60);
-> 
+>
 > // Add a class attribute to each button.
 > b1.class('btn');
 > b2.class('btn btn-pink');
 > b3.class('btn');
-> 
+>
 > // Select the buttons by their class.
 > let buttons = selectAll('.btn');
 > let pinkButtons = selectAll('.btn-pink');
-> 
+>
 > // Style the selected buttons.
 > buttons.forEach(setFont);
 > pinkButtons.forEach(setColor);
-> 
+>
 > describe('Three buttons stacked vertically. The buttons are labeled, "1", "2", and "3". Buttons "1" and "3" are gray. Button "2" is pink.');
 > }
-> 
+>
 > // Set a button's font to Comic Sans MS.
 > function setFont(btn) {
 > btn.style('font-family', 'Comic Sans MS');
 > }
-> 
+>
 > // Set a button's background and font color.
 > function setColor(btn) {
 > btn.style('background', 'deeppink');
 > btn.style('color', 'white');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-selectAll| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:192
@@ -2442,36 +2554,38 @@ Source: ~
 
 
 DOM_show() 📄 ⚡
-show() Function
+|show|() ⚡ Function
 
 Shows the current element.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let p;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a paragraph element and hide it.
 > p = createP('p5*js');
 > p.position(10, 10);
 > p.hide();
-> 
+>
 > describe('A gray square. The text "p5*js" appears when the user double-clicks the square.');
 > }
-> 
+>
 > // Show the paragraph when the user double-clicks.
 > function doubleClicked() {
 > p.show();
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-show| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:3524
@@ -2479,7 +2593,7 @@ Source: ~
 
 
 DOM_style() 📄 ⚡
-style(property, value) Function
+|style|(property, value) ⚡ Function
 
 Parameters: ~
                 📝 `property` (String)
@@ -2490,13 +2604,16 @@ Returns: ~
                 📝 Returns String: value of the property.
 ~
 
+See also: ~
+   |help p5-style| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/dom/dom.js:3225
 ~
 
 
 DOM_toggleClass() 📄 ⚡
-toggleClass(c {String} class name to toggle.) Function
+|toggleClass|(c {String} class name to toggle.) ⚡ Function
 
 Toggles whether a class is applied to the element.
 
@@ -2504,33 +2621,35 @@ Parameters: ~
                 🔢 `c {String} class name to toggle.` (unknown)
 ~
 
-Example: >
+Examples: >
 >
-> <div class='norender'>
 > <code>
 > let div;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a div element.
 > div = createDiv('div');
-> 
+>
 > // Add the 'show' class to the div.
 > div.addClass('show');
-> 
+>
 > describe('A gray square.');
 > }
-> 
+>
 > // Toggle the 'show' class when the mouse is pressed.
 > function mousePressed() {
 > div.toggleClass('show');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-toggleClass| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2710
@@ -2538,54 +2657,59 @@ Source: ~
 
 
 DOM_value() 📄 ⚡
-value(value) Function
+|value|(value) ⚡ Function
 
 Parameters: ~
                 🔢 `value` (String|Number)
 ~
+
+See also: ~
+   |help p5-value| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:3482
 ~
 
 
-PROPERTIES                                                   *p5-module-properties*
+PROPERTIES                                                   *p5-DOM-properties*
 
 DOM_data() 📄 🔧
-data Function
+|data| ⚡ Function
 
 A string containing the file's data.
-Data can be either image data, text contents, or a parsed object in the case of JSON and <a href="#/p5.XML">p5.XML</a> objects.
+Data can be either `image` data, `text` contents, or a parsed object in the case of JSON and <a href="#/p5.XML">p5.XML</a> objects.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > // Use the file input to load a file and display its info.
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a file input and place it beneath the canvas.
 > // Call displayData() when the file loads.
 > let input = createFileInput(displayData);
 > input.position(0, 100);
-> 
+>
 > describe('A gray square with a file input beneath it. If the user loads a file, its data is written in black.');
 > }
-> 
+>
 > // Display the p5.File's data once it loads.
 > function displayData(file) {
 > background(200);
-> 
+>
 > // Display the p5.File's data, which looks like a random string of characters.
 > text(file.data, 10, 10, 80, 80);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-data| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5805
@@ -2593,47 +2717,49 @@ Source: ~
 
 
 DOM_file() 📄 🔧
-file Function
+|file| ⚡ Function
 
 Underlying <a href="https://developer.mozilla.org/en-US/docs/Web/API/File" target="_blank">File</a> object.
 All `File` properties and methods are accessible.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > // Use the file input to load a
 > // file and display its info.
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a file input and place it beneath the canvas.
 > // Call displayInfo() when the file loads.
 > let input = createFileInput(displayInfo);
 > input.position(0, 100);
-> 
+>
 > describe('A gray square with a file input beneath it. If the user loads a file, its info is written in black.');
 > }
-> 
+>
 > // Use the p5.File once it loads.
 > function displayInfo(file) {
 > background(200);
-> 
+>
 > // Display the p5.File's name.
 > text(file.name, 10, 10, 80, 40);
-> 
+>
 > // Display the p5.File's type and subtype.
 > text(`${file.type}/${file.subtype}`, 10, 70);
-> 
+>
 > // Display the p5.File's size in bytes.
 > text(file.size, 10, 90);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-file| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5615
@@ -2641,9 +2767,12 @@ Source: ~
 
 
 DOM_height() 📄 🔧
-height Function
+|height| ⚡ Function
 
-A `Number` property that stores the element's height.
+A `Number` property that stores the element's `height`.
+
+See also: ~
+   |help p5-height| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/core/p5.Element.js:109
@@ -2651,40 +2780,42 @@ Source: ~
 
 
 DOM_name() 📄 🔧
-name Function
+|name| ⚡ Function
 
 The file name as a string.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > // Use the file input to load a
 > // file and display its info.
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a file input and place it beneath the canvas.
 > // Call displayName() when the file loads.
 > let input = createFileInput(displayName);
 > input.position(0, 100);
-> 
+>
 > describe('A gray square with a file input beneath it. If the user loads a file, its name is written in black.');
 > }
-> 
+>
 > // Display the p5.File's name once it loads.
 > function displayName(file) {
 > background(200);
-> 
+>
 > // Display the p5.File's name.
 > text(`This is file's name is: ${file.name}`, 10, 10, 80, 80);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-name| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5733
@@ -2692,9 +2823,12 @@ Source: ~
 
 
 DOM_prop() 📄 🔧
-prop Function
+|prop| ⚡ Function
 
 Helper fxn for sharing pixel methods
+
+See also: ~
+   |help p5-prop| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/core/p5.Element.js:1019
@@ -2702,39 +2836,41 @@ Source: ~
 
 
 DOM_size() 📄 🔧
-size Function
+|size| ⚡ Function
 
 The number of bytes in the file.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > // Use the file input to load a file and display its info.
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a file input and place it beneath the canvas.
 > // Call displaySize() when the file loads.
 > let input = createFileInput(displaySize);
 > input.position(0, 100);
-> 
+>
 > describe('A gray square with a file input beneath it. If the user loads a file, its size in bytes is written in black.');
 > }
-> 
+>
 > // Display the p5.File's size in bytes once it loads.
 > function displaySize(file) {
 > background(200);
-> 
+>
 > // Display the p5.File's size.
 > text(`This is file has ${file.size} bytes.`, 10, 10, 80, 80);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-size| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5767
@@ -2742,41 +2878,43 @@ Source: ~
 
 
 DOM_subtype() 📄 🔧
-subtype Function
+|subtype| ⚡ Function
 
 The file subtype as a string.
-For example, a file with an `'image'` <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types" target="_blank">MIME type</a> may have a subtype such as ``png`` or ``jpeg``.
+For example, a file with an `'`image`'` <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types" target="_blank">MIME type</a> may have a subtype such as ``png`` or ``jpeg``.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > // Use the file input to load a
 > // file and display its info.
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a file input and place it beneath the canvas.
 > // Call displaySubtype() when the file loads.
 > let input = createFileInput(displaySubtype);
 > input.position(0, 100);
-> 
+>
 > describe('A gray square with a file input beneath it. If the user loads a file, its subtype is written in black.');
 > }
-> 
+>
 > // Display the p5.File's type once it loads.
 > function displaySubtype(file) {
 > background(200);
-> 
+>
 > // Display the p5.File's subtype.
 > text(`This is file's subtype is: ${file.subtype}`, 10, 10, 80, 80);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-subtype| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5698
@@ -2784,40 +2922,42 @@ Source: ~
 
 
 DOM_type() 📄 🔧
-type Function
+|type| ⚡ Function
 
 The file <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types" target="_blank">MIME type</a> as a string.
-For example, `'image'` and `'text'` are both MIME types.
+For example, `'`image`'` and `'`text`'` are both MIME types.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > // Use the file input to load a file and display its info.
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a file input and place it beneath the canvas.
 > // Call displayType() when the file loads.
 > let input = createFileInput(displayType);
 > input.position(0, 100);
-> 
+>
 > describe('A gray square with a file input beneath it. If the user loads a file, its type is written in black.');
 > }
-> 
+>
 > // Display the p5.File's type once it loads.
 > function displayType(file) {
 > background(200);
-> 
+>
 > // Display the p5.File's type.
 > text(`This is file's type is: ${file.type}`, 10, 10, 80, 80);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-type| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5659
@@ -2825,9 +2965,12 @@ Source: ~
 
 
 DOM_VIDEO() 📄 🔧
-VIDEO Function
+|VIDEO| ⚡ Function
 
 CAMERA STUFF *
+
+See also: ~
+   |help p5-VIDEO| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:2261
@@ -2835,19 +2978,22 @@ Source: ~
 
 
 DOM_width() 📄 🔧
-width Function
+|width| ⚡ Function
 
-A `Number` property that stores the element's width.
+A `Number` property that stores the element's `width`.
+
+See also: ~
+   |help p5-width| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/core/p5.Element.js:101
 ~
 
 
-VARIABLES                                                   *p5-module-variables*
+VARIABLES                                                   *p5-DOM-variables*
 
 DOM_audioContext() 📄 📌
-audioContext Function
+|audioContext| ⚡ Function
 
 Sends the element's audio to an output.
 The parameter, `audioNode`, can be an `AudioNode` or an object from the `p5.sound` library.
@@ -2855,15 +3001,21 @@ If no element is provided, as in `myElement.connect()`, the element connects to 
 All connections are removed by the `.disconnect()` method.
 Note: This method is meant to be used with the p5.sound.js addon library.
 
+See also: ~
+   |help p5-audioContext| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/dom/dom.js:5112
 ~
 
 
 DOM_children() 📄 📌
-children Function
+|children| ⚡ Function
 
 Helper function for getElement and getElements.
+
+See also: ~
+   |help p5-children| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:225
@@ -2871,9 +3023,12 @@ Source: ~
 
 
 DOM_container() 📄 📌
-container Function
+|container| ⚡ Function
 
 Helper function for select and selectAll
+
+See also: ~
+   |help p5-container| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:210
@@ -2881,65 +3036,67 @@ Source: ~
 
 
 DOM_elt() 📄 📌
-elt Function
+|elt| ⚡ Function
 
 Creates a `&lt;span&gt;&lt;/span&gt;` element.
 `&lt;span&gt;&lt;/span&gt;` elements are commonly used as containers for inline elements.
-For example, a `&lt;span&gt;&lt;/span&gt;` can hold part of a sentence that's a <span style="color: deeppink;">different</span> style.
+For example, a `&lt;span&gt;&lt;/span&gt;` can hold part of a sentence that's a <span style="`color`: deeppink;">different</span> style.
 The parameter `html` is optional.
 It accepts a string that sets the inner HTML of the new `&lt;span&gt;&lt;/span&gt;`.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a span element and set its position.
 > let span = createSpan('p5*js');
 > span.position(25, 35);
-> 
+>
 > describe('A gray square with the text "p5*js" written in its center.');
 > }
 > </code>
 > </div>
-> 
+>
 > <div>
 > <code>
 > function setup() {
 > background(200);
-> 
+>
 > // Create a div element as a container.
 > let div = createDiv();
-> 
+>
 > // Place the div at the center.
 > div.position(25, 35);
-> 
+>
 > // Create a span element.
 > let s1 = createSpan('p5');
-> 
+>
 > // Create a second span element.
 > let s2 = createSpan('*');
-> 
+>
 > // Set the second span's font color.
 > s2.style('color', 'deeppink');
-> 
+>
 > // Create a third span element.
 > let s3 = createSpan('js');
-> 
+>
 > // Add all the spans to the container div.
 > s1.parent(div);
 > s2.parent(div);
 > s3.parent(div);
-> 
+>
 > describe('A gray square with the text "p5*js" written in black at its center. The asterisk is pink.');
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-elt| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:644
@@ -2947,40 +3104,39 @@ Source: ~
 
 
 DOM_i() 📄 📌
-i Function
+|i| ⚡ Function
 
 Removes a callback based on its ID.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let lavenderID;
 > let isRemoved = false;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a p5.MediaElement using createAudio().
 > let beat = createAudio('assets/beat.mp3');
-> 
+>
 > // Play the beat in a loop.
 > beat.loop();
-> 
+>
 > // Schedule a few events.
 > beat.addCue(0, changeBackground, 'red');
 > beat.addCue(2, changeBackground, 'deeppink');
 > beat.addCue(4, changeBackground, 'orchid');
-> 
+>
 > // Record the ID of the "lavender" callback.
 > lavenderID = beat.addCue(6, changeBackground, 'lavender');
-> 
+>
 > describe('The text "Double-click to remove lavender." written on a red square. The color changes every 2 seconds while the audio plays. The lavender option is removed when the user double-clicks the square.');
 > }
-> 
+>
 > function draw() {
 > background(200);
-> 
+>
 > // Display different instructions based on the available callbacks.
 > if (isRemoved === false) {
 > text('Double-click to remove lavender.', 10, 10, 80, 80);
@@ -2988,12 +3144,12 @@ Example: >
 > text('No more lavender.', 10, 10, 80, 80);
 > }
 > }
-> 
+>
 > // Change the background color.
 > function changeBackground(c) {
 > background(c);
 > }
-> 
+>
 > // Remove the lavender color-change cue when the user double-clicks.
 > function doubleClicked() {
 > if (isRemoved === false) {
@@ -3002,8 +3158,11 @@ Example: >
 > }
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-i| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5387
@@ -3011,7 +3170,7 @@ Source: ~
 
 
 DOM_id() 📄 📌
-id Function
+|id| ⚡ Function
 
 Schedules a function to call when the audio/video reaches a specific time during its playback.
 The first parameter, `time`, is the time, in seconds, when the function should run.
@@ -3022,35 +3181,37 @@ The third parameter, `value`, is optional and can be any type of value.
 Calling `media.addCue()` returns an ID as a string.
 This is useful for removing the cue later.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > // Create a p5.MediaElement using createAudio().
 > let beat = createAudio('assets/beat.mp3');
-> 
+>
 > // Play the beat in a loop.
 > beat.loop();
-> 
+>
 > // Schedule a few events.
 > beat.addCue(0, changeBackground, 'red');
 > beat.addCue(2, changeBackground, 'deeppink');
 > beat.addCue(4, changeBackground, 'orchid');
 > beat.addCue(6, changeBackground, 'lavender');
-> 
+>
 > describe('A red square with a beat playing in the background. Its color changes every 2 seconds while the audio plays.');
 > }
-> 
+>
 > // Change the background color.
 > function changeBackground(c) {
 > background(c);
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-id| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:5316
@@ -3058,24 +3219,23 @@ Source: ~
 
 
 DOM_isTouch() 📄 📌
-isTouch Function
+|isTouch| ⚡ Function
 
 Makes the element draggable.
 The parameter, `elmnt`, is optional.
 If another <a href="#/p5.Element">p5.Element</a> object is passed, as in `myElement.draggable(otherElement)`, the other element will become draggable.
 
-Example: >
+Examples: >
 >
-> <div>
 > <code>
 > let stickyNote;
 > let textInput;
-> 
+>
 > function setup() {
 > createCanvas(100, 100);
-> 
+>
 > background(200);
-> 
+>
 > // Create a div element and style it.
 > stickyNote = createDiv('Note');
 > stickyNote.position(5, 5);
@@ -3084,10 +3244,10 @@ Example: >
 > stickyNote.style('font-family', 'Comic Sans MS');
 > stickyNote.style('background', 'orchid');
 > stickyNote.style('padding', '5px');
-> 
+>
 > // Make the note draggable.
 > stickyNote.draggable();
-> 
+>
 > // Create a panel div and style it.
 > let panel = createDiv('');
 > panel.position(5, 40);
@@ -3096,32 +3256,35 @@ Example: >
 > panel.style('font-size', '16px');
 > panel.style('padding', '5px');
 > panel.style('text-align', 'center');
-> 
+>
 > // Make the panel draggable.
 > panel.draggable();
-> 
+>
 > // Create a text input and style it.
 > textInput = createInput('Note');
 > textInput.size(70);
-> 
+>
 > // Add the input to the panel.
 > textInput.parent(panel);
-> 
+>
 > // Call handleInput() when text is input.
 > textInput.input(handleInput);
-> 
+>
 > describe(
 > 'A gray square with two purple rectangles that move when dragged. The top rectangle displays the text that is typed into the bottom rectangle.'
 > );
 > }
-> 
+>
 > // Update stickyNote's HTML when text is input.
 > function handleInput() {
 > stickyNote.html(textInput.value());
 > }
 > </code>
-> </div>
+>
 <
+
+See also: ~
+   |help p5-isTouch| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:4014
@@ -3129,7 +3292,7 @@ Source: ~
 
 
 DOM_mainOutput() 📄 📌
-mainOutput Function
+|mainOutput| ⚡ Function
 
 Sends the element's audio to an output.
 The parameter, `audioNode`, can be an `AudioNode` or an object from the `p5.sound` library.
@@ -3137,15 +3300,21 @@ If no element is provided, as in `myElement.connect()`, the element connects to 
 All connections are removed by the `.disconnect()` method.
 Note: This method is meant to be used with the p5.sound.js addon library.
 
+See also: ~
+   |help p5-mainOutput| for detailed help on this symbol~
+
 Source: ~
                 ../temp/src/dom/dom.js:5112
 ~
 
 
 DOM_node() 📄 📌
-node Function
+|node| ⚡ Function
 
 Helpers for create methods.
+
+See also: ~
+   |help p5-node| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:482
@@ -3153,7 +3322,7 @@ Source: ~
 
 
 DOM_oldVal() 📄 📌
-oldVal Function
+|oldVal| ⚡ Function
 
 Sets the audio/video to play once it's loaded.
 The parameter, `shouldAutoplay`, is optional.
@@ -3161,21 +3330,20 @@ Calling `media.autoplay()` without an argument causes the media to play automati
 If `true` is passed, as in `media.autoplay(true)`, the media will automatically play.
 If `false` is passed, as in `media.autoPlay(false)`, it won't play automatically.
 
-Example: >
+Examples: >
 >
-> <div class='notest'>
 > <code>
 > let video;
-> 
+>
 > function setup() {
 > noCanvas();
-> 
+>
 > // Call handleVideo() once the video loads.
 > video = createVideo('assets/fingers.mov', handleVideo);
-> 
+>
 > describe('A video of fingers walking on a treadmill.');
 > }
-> 
+>
 > // Set the video's size and play it.
 > function handleVideo() {
 > video.size(100, 100);
@@ -3183,34 +3351,37 @@ Example: >
 > }
 > </code>
 > </div>
-> 
+>
 > <div class='notest'>
 > <code>
 > function setup() {
 > noCanvas();
-> 
+>
 > // Load a video, but don't play it automatically.
 > let video = createVideo('assets/fingers.mov', handleVideo);
-> 
+>
 > // Play the video when the user clicks on it.
 > video.mousePressed(handlePress);
-> 
+>
 > describe('An image of fingers on a treadmill. They start walking when the user double-clicks on them.');
 > }
 > </code>
 > </div>
-> 
+>
 > // Set the video's size and playback mode.
 > function handleVideo() {
 > video.size(100, 100);
 > video.autoplay(false);
 > }
-> 
+>
 > // Play the video.
 > function handleClick() {
 > video.play();
 > }
 <
+
+See also: ~
+   |help p5-oldVal| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:4601
@@ -3218,9 +3389,12 @@ Source: ~
 
 
 DOM_timeout() 📄 📌
-timeout Function
+|timeout| ⚡ Function
 
 Sets up logic to check that autoplay succeeded.
+
+See also: ~
+   |help p5-timeout| for detailed help on this symbol~
 
 Source: ~
                 ../temp/src/dom/dom.js:4525
