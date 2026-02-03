@@ -1,259 +1,85 @@
-# p5.nvim
+# p5.js Core Modules
 
-A comprehensive Neovim plugin for p5.js development with live preview, library management, and browser console integration.
+This directory contains the non-minified core modules from p5.js, automatically generated for the p5.nvim plugin.
 
-## Features
+## Structure
 
-- 🚀 **Project Creation**: Create new p5.js projects with proper TypeScript support
-- 📦 **Library Management**: Download and manage contributor libraries from CDNs
-- 🌐 **Live Server**: Auto-detect and start live servers (Python, Bun, Deno, Node.js)
-- 🖥️ **Browser Console**: Real-time browser logs in a toggleable terminal
-- 📝 **GitHub Gists**: Upload sketches as GitHub gists using gh CLI
-- ⚡ **TypeScript Support**: Enhanced type bundling system with comprehensive p5.js IntelliSense
-- 🔄 **Automated Workflows**: GitHub Actions for automatic type updates and asset management
-- 🔄 **Workspace Config**: JSON-based project configuration for reproducible setups
+- `modules/` - Core p5.js modules organized by category
 
-## Requirements
+- `modules.js` - Index file for importing modules
+- `README.md` - This file
 
-- Neovim >= 0.9.0
-- [lazy.nvim](https://github.com/folke/lazy.nvim) plugin manager
-- snacks.nvim (required)
-- websocket.nvim (required for browser console)
-- gh CLI (optional, for gist functionality)
-- curl or wget (for library downloads)
+## Usage
 
-## Installation
+### Importing specific modules:
 
-### Using lazy.nvim (Recommended)
+```javascript
+import { loadModule, getCategories } from './modules.js';
 
-**For development/installation from local directory:**
+// Available categories
+console.log(getCategories()); // ['accessibility', 'color', 'core', ...]
 
-```lua
-{
-  dir = vim.fn.stdpath("config") .. "/lazy/p5.nvim",
-  name = "p5.nvim",
-  dependencies = {
-    'folke/snacks.nvim',
-    'samuelcolvin/websocket.nvim', -- required for browser console
-  },
-  config = function()
-    require('p5').setup({
-      -- your configuration here
-    })
-  end
-}
+// Load a specific module
+const p5Main = await loadModule('core', 'main');
+const p5Vector = await loadModule('math', 'p5_vector');
+const p5Color = await loadModule('color', 'p5_color');
 ```
 
-**For installation from remote repository:**
+### Importing all modules in a category:
 
-```lua
-{
-  'your-username/p5.nvim',
-  dependencies = {
-    'folke/snacks.nvim',
-    'samuelcolvin/websocket.nvim', -- required for browser console
-  },
-  config = function()
-    require('p5').setup({
-      -- your configuration here
-    })
-  end
-}
+```javascript
+import { loadCategory } from './modules.js';
+
+// Load all math modules
+const mathModules = await loadCategory('math');
+
+// Load all color modules
+const colorModules = await loadCategory('color');
 ```
 
-### Dependency Management
+### Importing all modules:
 
-p5.nvim uses lazy.nvim's built-in dependency management:
-- **Required dependencies** (`snacks.nvim`, `websocket.nvim`) are automatically loaded
-- **Optional tools** (`gh` CLI) provide additional functionality
-- The plugin requires all dependencies for full functionality
+```javascript
+import { loadAll } from './modules.js';
 
-## Health Checks
-
-p5.nvim includes comprehensive health checks accessible via `:checkhealth p5`:
-
-**Health Check Categories:**
-- **Dependencies** - snacks.nvim, websocket.nvim availability
-- **External Tools** - curl/wget, gh CLI, Python, Node.js, Bun, Deno
-- **Plugin Environment** - asset directories, template files
-- **Workspace** - write permissions, cache directory
-- **Project Configuration** - p5.json validation, project structure
-- **Neovim Compatibility** - version requirements, required features
-
-**Usage:**
-```vim
-:checkhealth p5
+// Load all p5.js modules
+const allModules = await loadAll();
+console.log(allModules.core); // All core modules
+console.log(allModules.color); // All color modules
 ```
 
-## Configuration
+## Available Categories
 
-```lua
-require('p5').setup({
-  server = {
-    port = 8000,
-    auto_start = false,
-    preferred_order = {"python", "bun", "deno", "live-server"}
-  },
-  console = {
-    enabled = true,
-    auto_show = true,
-    position = "below",  -- "left", "right", "above", "below"
-    height = 10
-  },
-  libraries = {
-    cdn_sources = {"jsdelivr", "cdnjs", "unpkg"},
-    auto_update = false
-  }
-})
-```
 
-## Commands
 
-### Project Management
+## Generated Files
 
-- `:P5NewProject [name]` - Create a new p5.js project
-- `:P5Setup` - Set up plugin environment
+**Total modules**: 0  
+**Total categories**: 0
 
-### Server Management
 
-- `:P5StartServer [port]` - Start live server
-- `:P5StopServer` - Stop live server
 
-### Library Management
+## Module Statistics
 
-- `:P5InstallLib [library...]` - Install contributor libraries
-- `:P5RemoveLib [library...]` - Remove installed libraries  
-- `:P5UpdateLibs` - Update all installed libraries
 
-### Console & Gists
 
-- `:P5ToggleConsole` - Toggle browser console terminal
-- `:P5CreateGist [description]` - Upload sketch as GitHub gist
+## Generation Info
 
-## Available Libraries
+- **Source**: processing/p5.js
+- **Generated**: 2026-02-03T08:59:33.178Z
+- **Version**: Latest from main branch
+- **Total Size**: 0 bytes
 
-The plugin supports downloading these popular p5.js contributor libraries:
+**DO NOT EDIT** - These files are automatically generated and will be overwritten on the next update.
 
-- **p5.anaglyph** - Create 3D stereoscopic scenes
-- **p5.bezier** - Draw complex Bézier curves
-- **p5.brush** - Custom brushes and effects
-- **p5.fillGradient** - Gradient fills for shapes
-- **p5.cmyk** - CMYK color support
-- **p5.play** - Game engine with physics
-- **p5.collide2d** - 2D collision detection
-- **ml5** - Machine learning for web
-- **p5.speech** - Speech synthesis and recognition
-- **p5.party** - Networked multiplayer support
+## API Reference
 
-## Removed Dependencies
+See the generated `modules.js` file for the complete API:
 
-- **live-server npm package**: Removed in favor of native implementations with live reload support
-- **External server dependencies**: All server functionality is now self-contained
-
-## Project Structure
-
-When you create a new project, it will have this structure:
-
-```
-my-project/
-├── index.html      # Main HTML file with p5.js
-├── sketch.js       # Your p5.js code  
-├── jsconfig.json   # TypeScript configuration
-├── p5.json        # Project configuration
-└── assets/
-    ├── types/      # TypeScript definitions
-    └── contrib/   # Downloaded libraries
-```
-
-## Workspace Configuration
-
-Each project has a `p5.json` file that tracks libraries and settings:
-
-```json
-{
-  "name": "my-sketch",
-  "version": "1.0.0",
-  "p5js_version": "latest",
-  "libraries": [
-    {
-      "name": "p5.play",
-      "version": "latest", 
-      "cdn": "https://cdn.jsdelivr.net/npm/p5play@latest/lib/p5play.js",
-      "local_path": "assets/contrib/p5.play.js"
-    }
-  ],
-  "server": {
-    "type": "python",
-    "port": 8000
-  },
-  "console": {
-    "enabled": true,
-    "position": "below",
-    "height": 10
-  }
-}
-```
-
-This file allows you to:
-- Share project setups across machines
-- Automatically install required libraries
-- Configure server and console preferences
-
-## Browser Console Integration
-
-The plugin provides real-time browser console logs through WebSocket:
-
-1. Start a live server with `:P5StartServer`
-2. The console window appears automatically (if enabled)
-3. Browser logs, errors, and console outputs appear in real-time
-4. Use `:P5ToggleConsole` to show/hide the console
-
-## Server Detection
-
-The plugin automatically detects available servers in this order:
-
-1. **Python** - Custom Python server with live reload
-2. **Bun** - Custom Bun server script with live reload
-3. **Deno** - Custom Deno server script with live reload  
-4. **Node.js** - Custom Node.js server with live reload
-
-## Live Reload
-
-All server implementations now include automatic browser live reload functionality:
-
-- **File Watching**: Monitors `.js`, `.css`, `.html`, `.json` files
-- **Debouncing**: 300ms delay to prevent multiple reloads
-- **WebSocket Communication**: Sends reload signals to connected browsers
-- **Auto-Reconnection**: Browser reconnects if connection is lost
-- **Smart Filtering**: Ignores `.git`, `node_modules`, `dist`, `build` directories
-
-## Gist Integration
-
-If you have `gh` CLI installed, you can:
-
-- Create gists from current project
-- Clone existing gists as new projects
-- Update existing gists
-- Auto-copy gist URLs to clipboard
-
-## TypeScript Support
-
-Every project includes `jsconfig.json` for full TypeScript IntelliSense:
-
-- **Type checking** for JavaScript files
-- **Autocomplete** for p5.js functions
-- **Parameter hints** and documentation
-- **Error checking** with p5.js types
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-MIT License - see LICENSE file for details.
+- `modules` - Object containing all module loaders by category
+- `getCategories()` - Array of available categories
+- `getCategoryModules(category)` - Get modules in a specific category
+- `loadModule(category, name)` - Load a specific module
+- `loadCategory(category)` - Load all modules in a category
+- `loadAll()` - Load all modules
+- `moduleInfo` - Object with module metadata
