@@ -66,7 +66,7 @@ console.log(allModules.color); // All color modules
 ## Generation Info
 
 - **Source**: processing/p5.js
-- **Generated**: 2026-02-03T08:59:33.178Z
+- **Generated**: 2026-02-04T04:02:04.681Z
 - **Version**: Latest from main branch
 - **Total Size**: 0 bytes
 
