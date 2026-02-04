@@ -1,0 +1,1004 @@
+📄 *p5.Unknown*📄
+unknown module functions and properties
+
+==============================================================================
+Tags p5.Unknown unknown module functions and properties
+==============================================================================
+
+
+
+CONTENTS                                                           *${this.getCurrentModuleName()}-contents*
+
+🔍 NAVIGATION:~
+   Use | to jump to sections, :help p5-[symbol] to jump to symbols~
+
+⚡ FUNCTIONS:
+  |$prettyPrint             |
+  |$prettyPrintOne          |
+  |anonymous                |
+  |appendDecorations        |
+  |background               |
+  |childContentWrapper      |
+  |createSimpleLexer        |
+  |extractSourceSpans       |
+  |findMatches              |
+  |methodName               |
+  |numberLines              |
+  |recombineTagsAndDecorations|
+  |registerLangHandler      |
+  |sourceDecorator          |
+
+🔧 PROPERTIES:
+  |PR                       |
+  |PR_SHOULD_USE_CONTINUATION|
+  |sourceCode               |
+
+📌 VARIABLES:
+  |App                      |
+  |basePos                  |
+  |capturedGroupIndex       |
+  |classes                  |
+  |cleanItem                |
+  |container                |
+  |decorate                 |
+  |decorations              |
+  |ext                      |
+  |fallthroughStylePatterns |
+  |i                        |
+  |isIE8OrEarlier           |
+  |langHandlerRegistry      |
+  |modName                  |
+  |nocode                   |
+  |pos                      |
+  |PR_ATTRIB_NAME           |
+  |PR_ATTRIB_VALUE          |
+  |PR_COMMENT               |
+  |PR_DECLARATION           |
+  |PR_KEYWORD               |
+  |PR_LITERAL               |
+  |PR_NOCODE                |
+  |PR_PLAIN                 |
+  |PR_PUNCTUATION           |
+  |PR_SOURCE                |
+  |PR_STRING                |
+  |PR_TAG                   |
+  |PR_TYPE                  |
+  |prettyPrint              |
+  |prettyPrintOne           |
+  |REGEXP_PRECEDER_PATTERN  |
+  |root                     |
+  |self                     |
+  |shortcuts                |
+  |shortcutStylePatterns    |
+  |source                   |
+  |temp                     |
+  |uHostName                |
+  |uPort                    |
+  |uProtocol                |
+  |wrapper                  |
+
+
+
+🔗 RELATED SYMBOLS:~
+   See |p5| for complete p5.js API reference~
+
+
+
+⚡ QUICK REFERENCE:~
+   :help p5-[symbolname] - Jump directly to any function~
+
+
+
+FUNCTIONS                                                   *p5-unknown-functions*
+
+p5-unknown_$prettyPrint() 📄 ⚡
+|$prettyPrint|(opt_whenDone, opt_root) ⚡ Function
+
+Find all the {@code <pre>} and {@code <code>} tags in the DOM with {@code class=prettyprint} and prettify them.
+
+Parameters: ~
+                ⚡ `opt_whenDone` (Function) - called when prettifying is done.
+                🔢 `opt_root` (HTMLElement|HTMLDocument) - an element or document
+~
+
+See also: ~
+   |help p5-$prettyPrint| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3902
+~
+
+
+p5-unknown_$prettyPrintOne() 📄 ⚡
+|$prettyPrintOne|(sourceCodeHtml {string} The HTML to pretty print., opt_langExtension {string} The language name to use., opt_numberLines {number|boolean} True to number lines,) ⚡ Function
+
+Pretty `print` a chunk of code.
+
+Parameters: ~
+                🔢 `sourceCodeHtml {string} The HTML to pretty print.` (unknown)
+                🔢 `opt_langExtension {string} The language name to use.` (unknown)
+                🔢 `opt_numberLines {number|boolean} True to number lines,` (unknown)
+~
+
+See also: ~
+   |help p5-$prettyPrintOne| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3868
+~
+
+
+p5-unknown_anonymous() 📄 ⚡
+|anonymous|() ⚡ Function
+
+Define global App.
+
+See also: ~
+   |help p5-anonymous| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:4864
+~
+
+
+p5-unknown_appendDecorations() 📄 ⚡
+|appendDecorations|(basePos) ⚡ Function
+
+Apply the given language handler to sourceCode and add the resulting decorations to out.
+
+Parameters: ~
+                🔢 `basePos` (number) - the index of sourceCode within the chunk of source
+~
+
+See also: ~
+   |help p5-appendDecorations| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3035
+~
+
+
+p5-unknown_background() 📄 ⚡
+|background|(colorString, {Number} [a]) ⚡ Function
+
+Parameters: ~
+                📝 `colorString` (String) - Color in string datatype, possible formats
+                🔢 `{Number} [a]` (unknown)
+~
+
+See also: ~
+   |help p5-background| for detailed help on this symbol~
+
+Source: ~
+                ../temp/contributor_docs/method.example.js:92
+~
+
+
+p5-unknown_childContentWrapper() 📄 ⚡
+|childContentWrapper|() ⚡ Function
+
+Given an element, if it contains only one child element and any `text` nodes it contains contain only space characters, return the sole child element.
+Otherwise returns undefined.
+<p> This is meant to return the CODE element in {@code <pre><code ...>} when there is a single child element that contains all the non-space textual content, but not to return anything where there are multiple child elements as in {@code <pre><code>...</code><code>...</code></pre>} or when there is textual content.
+
+See also: ~
+   |help p5-childContentWrapper| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3058
+~
+
+
+p5-unknown_createSimpleLexer() 📄 ⚡
+|createSimpleLexer|(shortcutStylePatterns, fallthroughStylePatterns) ⚡ Function
+
+Given triples of [style, pattern, context] returns a lexing function, The lexing function interprets the patterns to find token boundaries and returns a decoration list of the form [index_0, style_0, index_1, style_1, ..., index_n, style_n] where index_n is an index into the sourceCode, and style_n is a style constant like PR_PLAIN.
+index_n-1 <= index_n, and style_n-1 applies to all characters in sourceCode[index_n-1:index_n].
+The stylePatterns is a list whose elements have the form [style : string, pattern : RegExp, DEPRECATED, shortcut : string].
+Style is a style constant like PR_PLAIN, or can be a string of the form 'lang-FOO', where FOO is a language extension describing the language of the portion of the token in $1 after pattern executes.
+E.g., if style is 'lang-lisp', and group 1 contains the `text` '(hello (world))', then that portion of the token will be passed to the registered lisp handler for formatting.
+The `text` before and after group 1 will be restyled using this decorator so decorators should take care that this doesn't result in infinite recursion.
+For example, the HTML lexer rule for SCRIPT elements looks something like ['lang-js', /<[s]cript>(.+?)<\/script>/].
+This may match '<script>foo()<\/script>', which would cause the current decorator to be called with '<script>' which would not match the same rule since group 1 must not be empty, so it would be instead styled as PR_TAG by the generic tag rule.
+The handler registered for the 'js' extension would then be called with 'foo()', and finally, the current decorator would be called with '<\/script>' which would not match the original rule and so the generic tag rule would identify it as a tag.
+Pattern must only match prefixes, and if it matches a prefix, then that match is considered a token with the same style.
+Context is applied to the last non-whitespace, non-comment token recognized.
+Shortcut is an optional string of characters, any of which, if the first character, guarantee that this pattern and only this pattern matches.
+
+Parameters: ~
+                📚 `shortcutStylePatterns` (Array) - patterns that always start with
+                📚 `fallthroughStylePatterns` (Array) - patterns that will be tried in
+~
+
+Returns: ~
+                🔢 Returns function (Object): a
+~
+
+See also: ~
+   |help p5-createSimpleLexer| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3117
+~
+
+
+p5-unknown_extractSourceSpans() 📄 ⚡
+|extractSourceSpans|(node, isPreformatted) ⚡ Function
+
+Split markup into a string of source code and an array mapping ranges in that string to the `text` nodes in which they appear.
+<p> The HTML DOM structure:</p> <pre> (Element "p" (Element "b" (Text "`print` ")) ; #1 (Text "'Hello '") ; #2 (Element "br") ; #3 (Text " + 'World';")) ; #4 </pre> <p> corresponds to the HTML {@code <p><b>`print` </b>'Hello '<br> + 'World';</p>}.</p> <p> It will produce the output:</p> <pre> { sourceCode: "`print` 'Hello '\n + 'World';", // 1 2 // 012345678901234 5678901234567 spans: [0, #1, 6, #2, 14, #3, 15, #4] } </pre> <p> where #1 is a reference to the {@code "`print` "} `text` node above, and so on for the other `text` nodes.
+</p> <p> The {@code} spans array is an array of pairs.
+Even elements are the start indices of substrings, and odd elements are the `text` nodes (or BR elements) that contain the `text` for those substrings.
+Substrings continue until the next index or the end of the source.
+</p>
+
+Parameters: ~
+                🔢 `node` (Node) - an HTML DOM subtree containing source-code.
+                🔢 `isPreformatted` (boolean) - true if white-space in text nodes should
+~
+
+Returns: ~
+                📦 Returns Object: source code and the text nodes in which they occur.
+~
+
+See also: ~
+   |help p5-extractSourceSpans| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2983
+~
+
+
+p5-unknown_findMatches() 📄 ⚡
+|findMatches|(array) ⚡ Function
+
+substringMatcher function for Typehead (search for strings in an array).
+
+Parameters: ~
+                🔢 `array` (array)
+~
+
+Returns: ~
+                🔢 Returns undefined
+~
+
+See also: ~
+   |help p5-findMatches| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2272
+~
+
+
+p5-unknown_methodName() 📄 ⚡
+|methodName|({"dataType"} "paramName" "Description of the param", {"dataType"} "paramName" "Description of the param") ⚡ Function
+
+Parameters: ~
+                🔢 `{"dataType"} "paramName" "Description of the param"` (unknown)
+                🔢 `{"dataType"} "paramName" "Description of the param"` (unknown)
+~
+
+See also: ~
+   |help p5-methodName| for detailed help on this symbol~
+
+Source: ~
+                ../temp/contributor_docs/method.example.js:43
+~
+
+
+p5-unknown_numberLines() 📄 ⚡
+|numberLines|(node, isPreformatted) ⚡ Function
+
+Given a DOM subtree, wraps it in a list, and puts each `line` into its own list item.
+
+Parameters: ~
+                🔢 `node` (Node) - modified in place.  Its content is pulled into an
+                🔢 `isPreformatted` (boolean) - true iff white-space in text nodes should
+~
+
+See also: ~
+   |help p5-numberLines| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3446
+~
+
+
+p5-unknown_recombineTagsAndDecorations() 📄 ⚡
+|recombineTagsAndDecorations|(job) ⚡ Function
+
+Breaks {@code job.sourceCode} around style boundaries in {@code job.decorations} and modifies {@code job.sourceNode} in place.
+
+Parameters: ~
+                📦 `job` (Object) - like <pre>{
+~
+
+See also: ~
+   |help p5-recombineTagsAndDecorations| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3582
+~
+
+
+p5-unknown_registerLangHandler() 📄 ⚡
+|registerLangHandler|(handler, fileExtensions) ⚡ Function
+
+Register a language handler for the given file extensions.
+
+Parameters: ~
+                🔢 `handler` (function (Object)) - a function from source code to a list
+                🔢 `fileExtensions` (Array.<string>)
+~
+
+See also: ~
+   |help p5-registerLangHandler| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3710
+~
+
+
+p5-unknown_sourceDecorator() 📄 ⚡
+|sourceDecorator|(options) ⚡ Function
+
+returns a function that produces a list of decorations from source `text`.
+This code treats ", ', and ` as string delimiters, and \ as a string escape.
+It does not recognize perl's qq() style strings.
+It has no special handling for double delimiter escapes as in basic, or the tripled delimiters used in python, but should work on those regardless although in those cases a single string literal may be broken up into multiple adjacent string literals.
+It recognizes C, C++, and shell style comments.
+
+Parameters: ~
+                📦 `options` (Object) - a set of optional parameters.
+~
+
+Returns: ~
+                🔢 Returns function (Object): a function that examines the source code
+~
+
+See also: ~
+   |help p5-sourceDecorator| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3260
+~
+
+
+PROPERTIES                                                   *p5-unknown-properties*
+
+p5-unknown_PR() 📄 🔧
+|PR| ⚡ Function
+
+Contains functions for creating and registering new language handlers.
+
+See also: ~
+   |help p5-PR| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:4066
+~
+
+
+p5-unknown_PR_SHOULD_USE_CONTINUATION() 📄 🔧
+|PR_SHOULD_USE_CONTINUATION| ⚡ Function
+
+Split {@code prettyPrint} into multiple timeouts so as not to interfere with UI events.
+If `set` to {@code false}, {@code prettyPrint()} is synchronous.
+
+See also: ~
+   |help p5-PR_SHOULD_USE_CONTINUATION| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2521
+~
+
+
+p5-unknown_sourceCode() 📄 🔧
+|sourceCode| ⚡ Function
+
+Plain `text`.
+@type {string}
+
+See also: ~
+   |help p5-sourceCode| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3843
+~
+
+
+VARIABLES                                                   *p5-unknown-variables*
+
+p5-unknown_App() 📄 📌
+|App| ⚡ Function
+
+Define global App.
+
+See also: ~
+   |help p5-App| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:4863
+~
+
+
+p5-unknown_basePos() 📄 📌
+|basePos| ⚡ Function
+
+Lexes job.sourceCode and produces an output array job.decorations of style classes preceded by the position at which they start in job.sourceCode in order.
+
+See also: ~
+   |help p5-basePos| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3157
+~
+
+
+p5-unknown_capturedGroupIndex() 📄 📌
+|capturedGroupIndex| ⚡ Function
+
+Given a group of {@link RegExp}s, returns a {@code RegExp} that globally matches the union of the sets of strings matched by the input RegExp.
+Since it matches globally, if the input strings have a start-of-input anchor (/^.../), it is ignored for the purposes of unioning.
+
+See also: ~
+   |help p5-capturedGroupIndex| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2706
+~
+
+
+p5-unknown_classes() 📄 📌
+|classes| ⚡ Function
+
+Returns one item object by searching a class or a class item (method, property or event).
+
+See also: ~
+   |help p5-classes| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:4729
+~
+
+
+p5-unknown_cleanItem() 📄 📌
+|cleanItem| ⚡ Function
+
+Clean item properties: url encode properties containing paths.
+
+See also: ~
+   |help p5-cleanItem| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:4275
+~
+
+
+p5-unknown_container() 📄 📌
+|container| ⚡ Function
+
+Pretty `print` a chunk of code.
+
+See also: ~
+   |help p5-container| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3869
+~
+
+
+p5-unknown_decorate() 📄 📌
+|decorate| ⚡ Function
+
+Lexes job.sourceCode and produces an output array job.decorations of style classes preceded by the position at which they start in job.sourceCode in order.
+
+See also: ~
+   |help p5-decorate| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3156
+~
+
+
+p5-unknown_decorations() 📄 📌
+|decorations| ⚡ Function
+
+Even entries are positions in source in ascending order.
+Odd enties are style markers (e.g., PR_COMMENT) that run from that position until the end.
+
+See also: ~
+   |help p5-decorations| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3163
+~
+
+
+p5-unknown_ext() 📄 📌
+|ext| ⚡ Function
+
+Parses a resource name into its component parts.
+Resource names look like: module/name.ext!strip, where the !strip part is optional.
+
+See also: ~
+   |help p5-ext| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:148
+~
+
+
+p5-unknown_fallthroughStylePatterns() 📄 📌
+|fallthroughStylePatterns| ⚡ Function
+
+returns a function that produces a list of decorations from source `text`.
+This code treats ", ', and ` as string delimiters, and \ as a string escape.
+It does not recognize perl's qq() style strings.
+It has no special handling for double delimiter escapes as in basic, or the tripled delimiters used in python, but should work on those regardless although in those cases a single string literal may be broken up into multiple adjacent string literals.
+It recognizes C, C++, and shell style comments.
+
+See also: ~
+   |help p5-fallthroughStylePatterns| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3261
+~
+
+
+p5-unknown_i() 📄 📌
+|i| ⚡ Function
+
+Register a language handler for the given file extensions.
+
+See also: ~
+   |help p5-i| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3711
+~
+
+
+p5-unknown_isIE8OrEarlier() 📄 📌
+|isIE8OrEarlier| ⚡ Function
+
+Breaks {@code job.sourceCode} around style boundaries in {@code job.decorations} and modifies {@code job.sourceNode} in place.
+
+See also: ~
+   |help p5-isIE8OrEarlier| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3583
+~
+
+
+p5-unknown_langHandlerRegistry() 📄 📌
+|langHandlerRegistry| ⚡ Function
+
+Maps language-specific file extensions to handlers.
+
+See also: ~
+   |help p5-langHandlerRegistry| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3693
+~
+
+
+p5-unknown_modName() 📄 📌
+|modName| ⚡ Function
+
+Parses a resource name into its component parts.
+Resource names look like: module/name.ext!strip, where the !strip part is optional.
+
+See also: ~
+   |help p5-modName| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:148
+~
+
+
+p5-unknown_nocode() 📄 📌
+|nocode| ⚡ Function
+
+Given a DOM subtree, wraps it in a list, and puts each `line` into its own list item.
+
+See also: ~
+   |help p5-nocode| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3447
+~
+
+
+p5-unknown_pos() 📄 📌
+|pos| ⚡ Function
+
+Even entries are positions in source in ascending order.
+Odd enties are style markers (e.g., PR_COMMENT) that run from that position until the end.
+
+See also: ~
+   |help p5-pos| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3164
+~
+
+
+p5-unknown_PR_ATTRIB_NAME() 📄 📌
+|PR_ATTRIB_NAME| ⚡ Function
+
+token style for an sgml attribute name.
+
+See also: ~
+   |help p5-PR_ATTRIB_NAME| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2654
+~
+
+
+p5-unknown_PR_ATTRIB_VALUE() 📄 📌
+|PR_ATTRIB_VALUE| ⚡ Function
+
+token style for an sgml attribute value.
+
+See also: ~
+   |help p5-PR_ATTRIB_VALUE| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2659
+~
+
+
+p5-unknown_PR_COMMENT() 📄 📌
+|PR_COMMENT| ⚡ Function
+
+token style for a comment
+
+See also: ~
+   |help p5-PR_COMMENT| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2613
+~
+
+
+p5-unknown_PR_DECLARATION() 📄 📌
+|PR_DECLARATION| ⚡ Function
+
+token style for a markup declaration such as a DOCTYPE.
+
+See also: ~
+   |help p5-PR_DECLARATION| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2644
+~
+
+
+p5-unknown_PR_KEYWORD() 📄 📌
+|PR_KEYWORD| ⚡ Function
+
+token style for a keyword
+
+See also: ~
+   |help p5-PR_KEYWORD| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2608
+~
+
+
+p5-unknown_PR_LITERAL() 📄 📌
+|PR_LITERAL| ⚡ Function
+
+token style for a literal value.
+e.g.
+1, null, true.
+
+See also: ~
+   |help p5-PR_LITERAL| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2623
+~
+
+
+p5-unknown_PR_NOCODE() 📄 📌
+|PR_NOCODE| ⚡ Function
+
+A class that indicates a section of markup that is not code, e.g.
+to allow embedding of `line` numbers within code listings.
+
+See also: ~
+   |help p5-PR_NOCODE| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2666
+~
+
+
+p5-unknown_PR_PLAIN() 📄 📌
+|PR_PLAIN| ⚡ Function
+
+token style for plain `text`.
+
+See also: ~
+   |help p5-PR_PLAIN| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2633
+~
+
+
+p5-unknown_PR_PUNCTUATION() 📄 📌
+|PR_PUNCTUATION| ⚡ Function
+
+token style for a punctuation string.
+
+See also: ~
+   |help p5-PR_PUNCTUATION| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2628
+~
+
+
+p5-unknown_PR_SOURCE() 📄 📌
+|PR_SOURCE| ⚡ Function
+
+token style for embedded source.
+
+See also: ~
+   |help p5-PR_SOURCE| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2649
+~
+
+
+p5-unknown_PR_STRING() 📄 📌
+|PR_STRING| ⚡ Function
+
+token style for a string literal
+
+See also: ~
+   |help p5-PR_STRING| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2603
+~
+
+
+p5-unknown_PR_TAG() 📄 📌
+|PR_TAG| ⚡ Function
+
+token style for an sgml tag.
+
+See also: ~
+   |help p5-PR_TAG| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2639
+~
+
+
+p5-unknown_PR_TYPE() 📄 📌
+|PR_TYPE| ⚡ Function
+
+token style for a type
+
+See also: ~
+   |help p5-PR_TYPE| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2618
+~
+
+
+p5-unknown_prettyPrint() 📄 📌
+|prettyPrint| ⚡ Function
+
+Find all the {@code <pre>} and {@code <code>} tags in the DOM with {@code class=prettyprint} and prettify them.
+
+See also: ~
+   |help p5-prettyPrint| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2542
+~
+
+
+p5-unknown_prettyPrintOne() 📄 📌
+|prettyPrintOne| ⚡ Function
+
+Pretty `print` a chunk of code.
+
+See also: ~
+   |help p5-prettyPrintOne| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2532
+~
+
+
+p5-unknown_REGEXP_PRECEDER_PATTERN() 📄 📌
+|REGEXP_PRECEDER_PATTERN| ⚡ Function
+
+A `set` of tokens that can precede a regular expression literal in javascript http://web.archive.org/web/20070717142515/http://www.mozilla.org/js/language/js20/rationale/syntax.html has the full list, but I've removed ones that might be problematic when seen in languages that don't support regular expression literals.
+<p>Specifically, I've removed any keywords that can't precede a regexp literal in a syntactically legal javascript program, and I've removed the "in" keyword since it's not a keyword in many languages, and might be used as a count of inches.
+<p>The link above does not accurately describe EcmaScript rules since it fails to distinguish between (a=++/b/i) and (a++/b/i) but it works very well in practice.
+
+See also: ~
+   |help p5-REGEXP_PRECEDER_PATTERN| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:2689
+~
+
+
+p5-unknown_root() 📄 📌
+|root| ⚡ Function
+
+Find all the {@code <pre>} and {@code <code>} tags in the DOM with {@code class=prettyprint} and prettify them.
+
+See also: ~
+   |help p5-root| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3903
+~
+
+
+p5-unknown_self() 📄 📌
+|self| ⚡ Function
+
+Initialize the app: load json API data and create searchable arrays.
+
+See also: ~
+   |help p5-self| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:4659
+~
+
+
+p5-unknown_shortcuts() 📄 📌
+|shortcuts| ⚡ Function
+
+Given triples of [style, pattern, context] returns a lexing function, The lexing function interprets the patterns to find token boundaries and returns a decoration list of the form [index_0, style_0, index_1, style_1, ..., index_n, style_n] where index_n is an index into the sourceCode, and style_n is a style constant like PR_PLAIN.
+index_n-1 <= index_n, and style_n-1 applies to all characters in sourceCode[index_n-1:index_n].
+The stylePatterns is a list whose elements have the form [style : string, pattern : RegExp, DEPRECATED, shortcut : string].
+Style is a style constant like PR_PLAIN, or can be a string of the form 'lang-FOO', where FOO is a language extension describing the language of the portion of the token in $1 after pattern executes.
+E.g., if style is 'lang-lisp', and group 1 contains the `text` '(hello (world))', then that portion of the token will be passed to the registered lisp handler for formatting.
+The `text` before and after group 1 will be restyled using this decorator so decorators should take care that this doesn't result in infinite recursion.
+For example, the HTML lexer rule for SCRIPT elements looks something like ['lang-js', /<[s]cript>(.+?)<\/script>/].
+This may match '<script>foo()<\/script>', which would cause the current decorator to be called with '<script>' which would not match the same rule since group 1 must not be empty, so it would be instead styled as PR_TAG by the generic tag rule.
+The handler registered for the 'js' extension would then be called with 'foo()', and finally, the current decorator would be called with '<\/script>' which would not match the original rule and so the generic tag rule would identify it as a tag.
+Pattern must only match prefixes, and if it matches a prefix, then that match is considered a token with the same style.
+Context is applied to the last non-whitespace, non-comment token recognized.
+Shortcut is an optional string of characters, any of which, if the first character, guarantee that this pattern and only this pattern matches.
+
+See also: ~
+   |help p5-shortcuts| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3118
+~
+
+
+p5-unknown_shortcutStylePatterns() 📄 📌
+|shortcutStylePatterns| ⚡ Function
+
+returns a function that produces a list of decorations from source `text`.
+This code treats ", ', and ` as string delimiters, and \ as a string escape.
+It does not recognize perl's qq() style strings.
+It has no special handling for double delimiter escapes as in basic, or the tripled delimiters used in python, but should work on those regardless although in those cases a single string literal may be broken up into multiple adjacent string literals.
+It recognizes C, C++, and shell style comments.
+
+See also: ~
+   |help p5-shortcutStylePatterns| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3261
+~
+
+
+p5-unknown_source() 📄 📌
+|source| ⚡ Function
+
+Plain `text`.
+@type {string}
+
+See also: ~
+   |help p5-source| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3842
+~
+
+
+p5-unknown_temp() 📄 📌
+|temp| ⚡ Function
+
+Parses a resource name into its component parts.
+Resource names look like: module/name.ext!strip, where the !strip part is optional.
+
+See also: ~
+   |help p5-temp| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:148
+~
+
+
+p5-unknown_uHostName() 📄 📌
+|uHostName| ⚡ Function
+
+Is an URL on another domain.
+Only works for browser use, returns false in non-browser environments.
+Only used to know if an optimized .js version of a `text` resource should be loaded instead.
+
+See also: ~
+   |help p5-uHostName| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:192
+~
+
+
+p5-unknown_uPort() 📄 📌
+|uPort| ⚡ Function
+
+Is an URL on another domain.
+Only works for browser use, returns false in non-browser environments.
+Only used to know if an optimized .js version of a `text` resource should be loaded instead.
+
+See also: ~
+   |help p5-uPort| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:192
+~
+
+
+p5-unknown_uProtocol() 📄 📌
+|uProtocol| ⚡ Function
+
+Is an URL on another domain.
+Only works for browser use, returns false in non-browser environments.
+Only used to know if an optimized .js version of a `text` resource should be loaded instead.
+
+See also: ~
+   |help p5-uProtocol| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:192
+~
+
+
+p5-unknown_wrapper() 📄 📌
+|wrapper| ⚡ Function
+
+Given an element, if it contains only one child element and any `text` nodes it contains contain only space characters, return the sole child element.
+Otherwise returns undefined.
+<p> This is meant to return the CODE element in {@code <pre><code ...>} when there is a single child element that contains all the non-space textual content, but not to return anything where there are multiple child elements as in {@code <pre><code>...</code><code>...</code></pre>} or when there is textual content.
+
+See also: ~
+   |help p5-wrapper| for detailed help on this symbol~
+
+Source: ~
+                ../temp/docs/yuidoc-p5-theme/assets/js/reference.js:3059
+~
+
+
+
+
+==============================================================================
+Generated by p5.js Documentation Automation
+See: https://github.com/prjctimg/automata
+Last updated: 2026-02-03
+📄 End of unknown documentation 📄
+==============================================================================
