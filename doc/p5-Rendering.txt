@@ -1,0 +1,610 @@
+📄 p5.Rendering📄 Rendering module functions and properties
+
+==============================================================================
+Tags p5.Rendering Rendering module functions and properties
+==============================================================================
+
+CONTENTS ${this.getCurrentModuleName()}-contents
+
+🔍 NAVIGATION:~ Use | to jump to sections, :help p5-[symbol] to jump to
+symbols~
+
+🏛️ CLASSES: |Anonymous | |framebuffer | |Graphics | |Renderer |
+|RendererGL | |target |
+
+⚡ FUNCTIONS: |anonymous | |calculateOffset | |createCanvas |
+|createGraphics | |noCanvas | |prevFramebuffer | |readPixelsWebGL |
+|readPixelWebGL | |resizeCanvas | |setAttributes |
+
+🔧 PROPERTIES: |Framebuffer | |pixels | |uModelMatrix | |uViewMatrix |
+|width |
+
+📌 VARIABLES: |a0 | |cam | |color | |currentLeft | |format | |gl |
+|oldColor | |styleEmpty | |type |
+
+🔗 RELATED SYMBOLS:~ See |p5| for complete p5.js API reference~
+
+⚡ QUICK REFERENCE:~ :help p5-[symbolname] - Jump directly to any
+function~
+
+CLASSES p5-Rendering-classes
+
+p5-Rendering_Anonymous() 📄 🏛️ |Anonymous|() 🏛️ Class
+
+A class to describe a drawing surface that’s separate from the main
+canvas. Each p5.Graphics object provides a dedicated drawing surface
+called a graphics buffer. Graphics buffers are helpful when drawing
+should happen offscreen. For example, separate scenes can be drawn
+offscreen and displayed only when needed. p5.Graphics objects have
+nearly all the drawing features of the main canvas. For example, calling
+the method myGraphics.circle(50, 50, 20) draws to the graphics buffer.
+The resulting image can be displayed on the main canvas by passing the
+p5.Graphics object to the image() function, as in `image(myGraphics, 0,
+0). Note: <a href="#/p5/createGraphics">createGraphics`() is the
+recommended way to create an instance of this class.
+
+Parameters: ~ 🔢 width (Number) - width of the graphics buffer in
+pixels. 🔢 height (Number) - height of the graphics buffer in pixels. 📋
+renderer (Constant) - renderer to use, either P2D or WEBGL. 🔢
+{p5} [pInst] sketch instance. (unknown) 🔢
+{HTMLCanvasElement} [canvas] existing<canvas>element to use. (unknown) ~
+
+Examples: > > >  > let pg; > > function setup() { > createCanvas(100,
+100); > > // Create a p5.Graphics object. > pg = createGraphics(50,
+50); > > // Draw to the p5.Graphics object. > pg.background(100); >
+pg.circle(25, 25, 20); > > describe(‘A dark gray square with a white
+circle at its center drawn on a gray background.’); > } > > function
+draw() { > background(200); > > // Display the p5.Graphics object. >
+image(pg, 25, 25); > } > >
+  // Click the canvas to display the graphics buffer.
+
+  let pg;
+
+  function setup() { createCanvas(100, 100);
+
+  // Create a p5.Graphics object. pg = createGraphics(50, 50);
+
+  describe(‘A square appears on a gray background when the user presses
+  the mouse. The square cycles between white and black.’); }
+
+  function draw() { background(200);
+
+  // Calculate the background color. let bg = frameCount % 255;
+
+  // Draw to the p5.Graphics object. pg.background(bg);
+
+  // Display the p5.Graphics object while // the user presses the mouse.
+  if (mouseIsPressed === true) { image(pg, 25, 25); } }
+
+  <
+
+See also: ~ |help p5-Anonymous| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/p5.Graphics.js:96 ~
+
+p5-Rendering_framebuffer() 📄 🏛️ |framebuffer|() 🏛️ Class
+
+A p5.Texture corresponding to a property of a p5.Framebuffer.
+
+Parameters: ~ 🔢 framebuffer (p5.Framebuffer) - The framebuffer
+represented by this 📝 property (String) - The property of the
+framebuffer represented by ~
+
+See also: ~ |help p5-framebuffer| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:56 ~
+
+p5-Rendering_Graphics() 📄 🏛️ |Graphics|() 🏛️ Class
+
+A class to describe a drawing surface that’s separate from the main
+canvas. Each p5.Graphics object provides a dedicated drawing surface
+called a graphics buffer. Graphics buffers are helpful when drawing
+should happen offscreen. For example, separate scenes can be drawn
+offscreen and displayed only when needed. p5.Graphics objects have
+nearly all the drawing features of the main canvas. For example, calling
+the method myGraphics.circle(50, 50, 20) draws to the graphics buffer.
+The resulting image can be displayed on the main canvas by passing the
+p5.Graphics object to the image() function, as in `image(myGraphics, 0,
+0). Note: <a href="#/p5/createGraphics">createGraphics`() is the
+recommended way to create an instance of this class.
+
+Parameters: ~ 🔢 width (Number) - width of the graphics buffer in
+pixels. 🔢 height (Number) - height of the graphics buffer in pixels. 📋
+renderer (Constant) - renderer to use, either P2D or WEBGL. 🔢
+{p5} [pInst] sketch instance. (unknown) 🔢
+{HTMLCanvasElement} [canvas] existing<canvas>element to use. (unknown) ~
+
+Examples: > > >  > let pg; > > function setup() { > createCanvas(100,
+100); > > // Create a p5.Graphics object. > pg = createGraphics(50,
+50); > > // Draw to the p5.Graphics object. > pg.background(100); >
+pg.circle(25, 25, 20); > > describe(‘A dark gray square with a white
+circle at its center drawn on a gray background.’); > } > > function
+draw() { > background(200); > > // Display the p5.Graphics object. >
+image(pg, 25, 25); > } > >
+  // Click the canvas to display the graphics buffer.
+
+  let pg;
+
+  function setup() { createCanvas(100, 100);
+
+  // Create a p5.Graphics object. pg = createGraphics(50, 50);
+
+  describe(‘A square appears on a gray background when the user presses
+  the mouse. The square cycles between white and black.’); }
+
+  function draw() { background(200);
+
+  // Calculate the background color. let bg = frameCount % 255;
+
+  // Draw to the p5.Graphics object. pg.background(bg);
+
+  // Display the p5.Graphics object while // the user presses the mouse.
+  if (mouseIsPressed === true) { image(pg, 25, 25); } }
+
+  <
+
+See also: ~ |help p5-Graphics| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/p5.Graphics.js:96 ~
+
+p5-Rendering_Renderer() 📄 🏛️ |Renderer|() 🏛️ Class
+
+Main graphics and rendering context, as well as the base API
+implementation for p5.js “core”. To be used as the superclass for
+Renderer2D and Renderer3D classes, respectively.
+
+Parameters: ~ 🔢 elt (HTMLElement) - DOM node that is wrapped 🔢
+{p5} [pInst] pointer to p5 instance (unknown) 🔢
+{Boolean} [isMainCanvas] whether we're using it as main canvas (unknown)
+~
+
+See also: ~ |help p5-Renderer| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/p5.Renderer.js:22 ~
+
+p5-Rendering_RendererGL() 📄 🏛️ |RendererGL|() 🏛️ Class
+
+3D graphics class
+
+See also: ~ |help p5-RendererGL| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.RendererGL.js:438 ~
+
+p5-Rendering_target() 📄 🏛️ |target|() 🏛️ Class
+
+A class to describe a high-performance drawing surface for textures.
+Each p5.Framebuffer object provides a dedicated drawing surface called a
+framebuffer. They’re similar to p5.Graphics objects but can run much
+faster. Performance is improved because the framebuffer shares the same
+WebGL context as the canvas used to create it. p5.Framebuffer objects
+have all the drawing features of the main canvas. Drawing instructions
+meant for the framebuffer must be placed between calls to
+myBuffer.begin() and myBuffer.end(). The resulting image can be applied
+as a texture by passing the p5.Framebuffer object to the texture()
+function, as in texture(myBuffer). It can also be displayed on the main
+canvas by passing it to the image() function, as in `image(myBuffer, 0,
+0)`. Note: createFramebuffer() is the recommended way to create an
+instance of this class.
+
+Parameters: ~ 🔢 target (p5.Graphics|p5) - sketch instance or 🔢
+{Object} [settings] configuration options. (unknown) ~
+
+See also: ~ |help p5-target| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:106 ~
+
+FUNCTIONS p5-Rendering-functions
+
+p5-Rendering_anonymous() 📄 ⚡ |anonymous|(arr) ⚡ Function
+
+turn a p5.Vector Array into a one dimensional number array
+
+Parameters: ~ 🔢 arr (p5.Vector[]) - an array of p5.Vector ~
+
+Returns: ~ 🔢 Returns Number[]: a one dimensional array of numbers ~
+
+See also: ~ |help p5-anonymous| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.RendererGL.js:2438 ~
+
+p5-Rendering_calculateOffset() 📄 ⚡ |calculateOffset|() ⚡ Function
+
+Helper fxn to measure ascent and descent. Adapted from
+http://stackoverflow.com/a/25355178
+
+See also: ~ |help p5-calculateOffset| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/p5.Renderer.js:524 ~
+
+p5-Rendering_createCanvas() 📄 ⚡ |createCanvas|({Number} [width],
+{Number} [height], {HTMLCanvasElement} [canvas]) ⚡ Function
+
+Parameters: ~ 🔢 {Number} [width] (unknown) 🔢 {Number} [height]
+(unknown) 🔢 {HTMLCanvasElement} [canvas] (unknown) ~
+
+Returns: ~ 🔢 Returns p5.Renderer ~
+
+See also: ~ |help p5-createCanvas| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/rendering.js:126 ~
+
+p5-Rendering_createGraphics() 📄 ⚡ |createGraphics|(width, height,
+{HTMLCanvasElement} [canvas]) ⚡ Function
+
+Parameters: ~ 🔢 width (Number) 🔢 height (Number) 🔢
+{HTMLCanvasElement} [canvas] (unknown) ~
+
+Returns: ~ 🔢 Returns p5.Graphics ~
+
+See also: ~ |help p5-createGraphics| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/rendering.js:482 ~
+
+p5-Rendering_noCanvas() 📄 ⚡ |noCanvas|() ⚡ Function
+
+Removes the default canvas. By default, a 100×100 pixels canvas is
+created without needing to call createCanvas(). noCanvas() removes the
+default canvas for sketches that don’t need it.
+
+Examples: > > >  > function setup() { > noCanvas(); > } >  > <
+
+See also: ~ |help p5-noCanvas| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/rendering.js:364 ~
+
+p5-Rendering_prevFramebuffer() 📄 ⚡ |prevFramebuffer|() ⚡ Function
+
+Begins drawing shapes to the framebuffer. myBuffer.begin() and
+myBuffer.end() allow shapes to be drawn to the framebuffer.
+myBuffer.begin() begins drawing to the framebuffer and myBuffer.end()
+stops drawing to the framebuffer. Changes won’t be visible until the
+framebuffer is displayed as an image or texture.
+
+Examples: > > >  > let myBuffer; > > function setup() { >
+createCanvas(100, 100, WEBGL); > > // Create a p5.Framebuffer object. >
+myBuffer = createFramebuffer(); > > describe(‘An empty gray canvas. The
+canvas gets darker and a rotating, multicolor torus appears while the
+user presses and holds the mouse.’); > } > > function draw() { >
+background(200); > > // Start drawing to the p5.Framebuffer object. >
+myBuffer.begin(); > > background(50); > rotateY(frameCount * 0.01); >
+normalMaterial(); > torus(30); > > // Stop drawing to the p5.Framebuffer
+object. > myBuffer.end(); > > // Display the p5.Framebuffer object
+while > // the user presses the mouse. > if (mouseIsPressed === true)
+{ > image(myBuffer, -50, -50); > } > } >  > <
+
+See also: ~ |help p5-prevFramebuffer| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:1168 ~
+
+p5-Rendering_readPixelsWebGL() 📄 ⚡ |readPixelsWebGL|(pixels, gl,
+framebuffer, x, y, width, height, format, type, flipY) ⚡ Function
+
+Parameters: ~ 🔢 pixels (Uint8Array|Float32Array|undefined) - An
+existing pixels array to reuse if the size is the same 🔢 gl
+(WebGLRenderingContext) - The WebGL context 🔢 framebuffer
+(WebGLFramebuffer|null) - The Framebuffer to read 🔢 x (Number) - The x
+coordiante to read, premultiplied by pixel density 🔢 y (Number) - The y
+coordiante to read, premultiplied by pixel density 🔢 width (Number) -
+The width in pixels to be read (factoring in pixel density) 🔢 height
+(Number) - The height in pixels to be read (factoring in pixel density)
+🔢 format (GLEnum) - Either RGB or RGBA depending on how many channels
+to read 🔢 type (GLEnum) - The datatype of each channel,
+e.g. UNSIGNED_BYTE or FLOAT 🔢 flipY (Number|undefined) - If provided,
+the total height with which to flip the y axis about ~
+
+Returns: ~ 🔢 Returns undefined ~
+
+See also: ~ |help p5-readPixelsWebGL| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.RendererGL.js:333 ~
+
+p5-Rendering_readPixelWebGL() 📄 ⚡ |readPixelWebGL|(gl, framebuffer, x,
+y, format, type, flipY) ⚡ Function
+
+Parameters: ~ 🔢 gl (WebGLRenderingContext) - The WebGL context 🔢
+framebuffer (WebGLFramebuffer|null) - The Framebuffer to read 🔢 x
+(Number) - The x coordinate to read, premultiplied by pixel density 🔢 y
+(Number) - The y coordinate to read, premultiplied by pixel density 🔢
+format (GLEnum) - Either RGB or RGBA depending on how many channels to
+read 🔢 type (GLEnum) - The datatype of each channel, e.g. UNSIGNED_BYTE
+or FLOAT 🔢 flipY (Number|undefined) - If provided, the total height
+with which to flip the y axis about ~
+
+Returns: ~ 🔢 Returns undefined ~
+
+See also: ~ |help p5-readPixelWebGL| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.RendererGL.js:400 ~
+
+p5-Rendering_resizeCanvas() 📄 ⚡ |resizeCanvas|(width, height,
+{Boolean} [noRedraw] whether to delay calling) ⚡ Function
+
+Resizes the canvas to a given width and height.
+resizeCanvas`()` immediately clears the canvas and calls <a href="#/p5/`redraw`">`redraw`()</a>. It's common to callresizeCanvas()
+within the body of windowResized() like so:
+js function windowResized() { `resizeCanvas`(windowWidth, windowHeight); }
+The first two parameters, width and height, set the dimensions of the
+canvas. They also the values of the width and height system variables.
+For example, calling
+resizeCanvas`(300, 500)` resizes the canvas to 300×500 `pixels`, then sets <a href="#/p5/`width`">`width`</a> to 300 and <a href="#/p5/`height`">`height`</a> 500. The third parameter, `noRedraw`, is optional. If `true` is passed, as inresizeCanvas(300, 500, true),
+then the canvas will be canvas to 300×500 pixels but the redraw()
+function won’t be called immediately. By default, redraw() is called
+immediately when `resizeCanvas()` finishes executing.
+
+Parameters: ~ 🔢 width (Number) - width of the canvas. 🔢 height
+(Number) - height of the canvas. 🔢
+{Boolean} [noRedraw] whether to delay calling (unknown) ~
+
+Examples: > > >  > // Double-click to resize the canvas. > > function
+setup() { > createCanvas(100, 100); > > describe( > ‘A white circle
+drawn on a gray background. The canvas shrinks by half the first time
+the user double-clicks.’ > ); > } > > function draw() { >
+background(180); > > // Draw a circle at the center of the canvas. >
+circle(width / 2, height / 2, 20); > } > > // Resize the canvas when the
+user double-clicks. > function doubleClicked() { > resizeCanvas(50,
+50); > } > >
+  // Resize the web browser to change the canvas size.
+
+  function setup() { createCanvas(windowWidth, windowHeight);
+
+  describe(‘A white circle drawn on a gray background.’); }
+
+  function draw() { background(180);
+
+  // Draw a circle at the center of the canvas. circle(width / 2, height
+  / 2, 20); }
+
+  // Always resize the canvas to fill the browser window. function
+  windowResized() { resizeCanvas(windowWidth, windowHeight); }
+
+  <
+
+See also: ~ |help p5-resizeCanvas| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/rendering.js:306 ~
+
+p5-Rendering_setAttributes() 📄 ⚡ |setAttributes|(obj) ⚡ Function
+
+Parameters: ~ 📦 obj (Object) - object with key-value pairs ~
+
+See also: ~ |help p5-setAttributes| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.RendererGL.js:267 ~
+
+PROPERTIES p5-Rendering-properties
+
+p5-Rendering_Framebuffer() 📄 🔧 |Framebuffer| ⚡ Function
+
+An object that stores the framebuffer’s depth data. Each framebuffer
+uses a WebGLTexture object internally to store its depth data. The
+myBuffer.depth property makes it possible to pass this data directly to
+other functions. For example, calling texture(myBuffer.depth) or
+myShader.setUniform('depthTexture', myBuffer.depth) may be helpful for
+advanced use cases. Note: By default, a framebuffer’s y-coordinates are
+flipped compared to images and videos. It’s easy to flip a framebuffer’s
+y-coordinates as needed when applying it as a texture. For example,
+calling plane(myBuffer.width, -myBuffer.height) will flip the
+framebuffer.
+
+Examples: > > >  > // Note: A “uniform” is a global variable within a
+shader program. > > // Create a string with the vertex shader program. >
+// The vertex shader is called for each vertex. > let vertSrc =
+> precision highp float; > attribute vec3 aPosition; > attribute vec2 aTexCoord; > uniform mat4 uModelViewMatrix; > uniform mat4 uProjectionMatrix; > varying vec2 vTexCoord; > > void main() { > vec4 viewModelPosition = uModelViewMatrix * vec4(aPosition, 1.0); > gl_Position = uProjectionMatrix * viewModelPosition; > vTexCoord = aTexCoord; > } >; > >
+// Create a string with the fragment shader program. > // The fragment
+shader is called for each pixel. > let fragSrc =
+> precision highp float; > varying vec2 vTexCoord; > uniform sampler2D depth; > > void main() { > // Get the pixel's depth value. > float depthVal = texture2D(depth, vTexCoord).r; > > // Set the pixel's color based on its depth. > gl_FragColor = mix( > vec4(0., 0., 0., 1.), > vec4(1., 0., 1., 1.), > depthVal); > } >; > >
+let myBuffer; > let myShader; > > function setup() { > createCanvas(100,
+100, WEBGL); > > // Create a p5.Framebuffer object. > myBuffer =
+createFramebuffer(); > > // Create a p5.Shader object. > myShader =
+createShader(vertSrc, fragSrc); > > // Compile and apply the shader. >
+shader(myShader); > > describe(‘The shadow of a box rotates slowly
+against a magenta background.’); > } > > function draw() { > // Draw to
+the p5.Framebuffer object. > myBuffer.begin(); > background(255); >
+rotateX(frameCount * 0.01); > box(20, 20, 80); > myBuffer.end(); > > //
+Set the shader’s depth uniform using > // the framebuffer’s depth
+texture. > myShader.setUniform(‘depth’, myBuffer.depth); > > // Style
+the plane. > noStroke(); > > // Draw the plane. > plane(myBuffer.width,
+myBuffer.height); > } >  > <
+
+See also: ~ |help p5-Framebuffer| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:1854 ~
+
+p5-Rendering_pixels() 📄 🔧 |pixels| ⚡ Function
+
+An array containing the color of each pixel in the framebuffer.
+myBuffer.loadPixels() must be called before accessing the
+myBuffer.pixelsarray. <a href="#/p5.Framebuffer/`updatePixels`">myBuffer.`updatePixels`()</a> must be called after any changes are made. Note: Updating `pixels` via this property is slower than drawing to the framebuffer directly. Consider using a <a href="#/p5.Shader">p5.Shader</a> object instead of looping over `myBuffer.`pixels.
+
+Examples: > > >  > function setup() { > createCanvas(100, 100,
+WEBGL); > > background(200); > > // Create a p5.Framebuffer object. >
+let myBuffer = createFramebuffer(); > > // Load the pixels array. >
+myBuffer.loadPixels(); > > // Get the number of pixels in the > // top
+half of the framebuffer. > let numPixels = myBuffer.pixels.length /
+2; > > // Set the framebuffer’s top half to pink. > for (let i = 0; i <
+numPixels; i += 4) { > myBuffer.pixels[i] = 255; > myBuffer.pixels[i +
+1] = 102; > myBuffer.pixels[i + 2] = 204; > myBuffer.pixels[i + 3] =
+255; > } > > // Update the pixels array. > myBuffer.updatePixels(); > >
+// Draw the p5.Framebuffer object to the canvas. > image(myBuffer, -50,
+-50); > > describe(‘A pink rectangle above a gray rectangle.’); > } >  >
+<
+
+See also: ~ |help p5-pixels| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:163 ~
+
+p5-Rendering_uModelMatrix() 📄 🔧 |uModelMatrix| ⚡ Function
+
+model view, projection, & normal matrices
+
+See also: ~ |help p5-uModelMatrix| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.RendererGL.js:539 ~
+
+p5-Rendering_uViewMatrix() 📄 🔧 |uViewMatrix| ⚡ Function
+
+model view, projection, & normal matrices
+
+See also: ~ |help p5-uViewMatrix| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.RendererGL.js:540 ~
+
+p5-Rendering_width() 📄 🔧 |width| ⚡ Function
+
+Resize our canvas element.
+
+See also: ~ |help p5-width| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/p5.Renderer.js:124 ~
+
+VARIABLES p5-Rendering-variables
+
+p5-Rendering_a0() 📄 📌 |a0| ⚡ Function
+
+[background description]
+
+See also: ~ |help p5-a0| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.RendererGL.js:940 ~
+
+p5-Rendering_cam() 📄 📌 |cam| ⚡ Function
+
+Creates a new p5.Camera object to use with the framebuffer. The new
+camera is initialized with a default position (0, 0, 800) and a default
+perspective projection. Its properties can be controlled with p5.Camera
+methods such as myCamera.lookAt(0, 0, 0). Framebuffer cameras should be
+created between calls to myBuffer.begin() and myBuffer.end() like so:
+js let myCamera; myBuffer.begin(); // Create the camera for the framebuffer. myCamera = myBuffer.createCamera(); myBuffer.end();
+Calling setCamera() updates the framebuffer’s projection using the
+camera. resetMatrix() must also be called for the view to change
+properly:
+js myBuffer.begin(); // Set the camera for the framebuffer. setCamera(myCamera); // Reset all transformations. `resetMatrix`(); // Draw stuff... myBuffer.end();
+
+Examples: > > >  > // Double-click to toggle between cameras. > > let
+myBuffer; > let cam1; > let cam2; > let usingCam1 = true; > > function
+setup() { > createCanvas(100, 100, WEBGL); > > // Create a
+p5.Framebuffer object. > myBuffer = createFramebuffer(); > > // Create
+the cameras between begin() and end(). > myBuffer.begin(); > > // Create
+the first camera. > // Keep its default settings. > cam1 =
+myBuffer.createCamera(); > > // Create the second camera. > // Place it
+at the top-left. > // Point it at the origin. > cam2 =
+myBuffer.createCamera(); > cam2.setPosition(400, -400, 800); >
+cam2.lookAt(0, 0, 0); > > myBuffer.end(); > > describe( > ‘A white cube
+on a gray background. The camera toggles between frontal and aerial
+views when the user double-clicks.’ > ); > } > > function draw() { > //
+Draw to the p5.Framebuffer object. > myBuffer.begin(); >
+background(200); > > // Set the camera. > if (usingCam1 === true) { >
+setCamera(cam1); > } else { > setCamera(cam2); > } > > // Reset all
+transformations. > resetMatrix(); > > // Draw the box. > box(); > >
+myBuffer.end(); > > // Display the p5.Framebuffer object. >
+image(myBuffer, -50, -50); > } > > // Toggle the current camera when the
+user double-clicks. > function doubleClicked() { > if (usingCam1 ===
+true) { > usingCam1 = false; > } else { > usingCam1 = true; > } > } >  >
+<
+
+See also: ~ |help p5-cam| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:1010 ~
+
+p5-Rendering_color() 📄 📌 |color| ⚡ Function
+
+Basic stroke material for geometry with a given color
+
+Examples: > > >  > function setup() { > createCanvas(200, 200, WEBGL); >
+} > > function draw() { > background(0); > stroke(240, 150, 150); >
+fill(100, 100, 240); > rotateX(frameCount * 0.01); >
+rotateY(frameCount * 0.01); > box(75, 75, 75); > } >  > <
+
+See also: ~ |help p5-color| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.RendererGL.js:1047 ~
+
+p5-Rendering_currentLeft() 📄 📌 |currentLeft| ⚡ Function
+
+Helper fxn to measure ascent and descent. Adapted from
+http://stackoverflow.com/a/25355178
+
+See also: ~ |help p5-currentLeft| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/p5.Renderer.js:525 ~
+
+p5-Rendering_format() 📄 📌 |format| ⚡ Function
+
+To create a WebGL texture, one needs to supply three pieces of
+information: the type (the data type each channel will be stored as,
+e.g. int or float), the format (the color channels that will each be
+stored in the previously specified type, e.g. rgb or rgba), and the
+internal format (the specifics of how data for each channel, in the
+aforementioned type, will be packed together, such as how many bits to
+use, e.g. RGBA32F or RGB565.) This method takes into account the
+settings asked for by the user and returns values for these three
+properties that can be used for the texture storing depth information.
+
+See also: ~ |help p5-format| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:795 ~
+
+p5-Rendering_gl() 📄 📌 |gl| ⚡ Function
+
+Updates the framebuffer with the RGBA values in the pixels array.
+myBuffer.updatePixels() only needs to be called after changing values in
+the myBuffer.pixels array. Such changes can be made directly after
+calling myBuffer.loadPixels().
+
+Examples: > > >  > function setup() { > createCanvas(100, 100,
+WEBGL); > > background(200); > > // Create a p5.Framebuffer object. >
+let myBuffer = createFramebuffer(); > > // Load the pixels array. >
+myBuffer.loadPixels(); > > // Get the number of pixels in the > // top
+half of the framebuffer. > let numPixels = myBuffer.pixels.length /
+2; > > // Set the framebuffer’s top half to pink. > for (let i = 0; i <
+numPixels; i += 4) { > myBuffer.pixels[i] = 255; > myBuffer.pixels[i +
+1] = 102; > myBuffer.pixels[i + 2] = 204; > myBuffer.pixels[i + 3] =
+255; > } > > // Update the pixels array. > myBuffer.updatePixels(); > >
+// Draw the p5.Framebuffer object to the canvas. > image(myBuffer, -50,
+-50); > > describe(‘A pink rectangle above a gray rectangle.’); > } >  >
+<
+
+See also: ~ |help p5-gl| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:1630 ~
+
+p5-Rendering_oldColor() 📄 📌 |oldColor| ⚡ Function
+
+Called when the size of the framebuffer has changed (either by being
+manually updated or from auto-size updates when its canvas changes
+size.) Old textures and renderbuffers will be deleted, and then
+recreated with the new size.
+
+See also: ~ |help p5-oldColor| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:877 ~
+
+p5-Rendering_styleEmpty() 📄 📌 |styleEmpty| ⚡ Function
+
+p5.Renderer2D The 2D graphics canvas renderer class. extends p5.Renderer
+
+See also: ~ |help p5-styleEmpty| for detailed help on this symbol~
+
+Source: ~ ../temp/src/core/p5.Renderer2D.js:11 ~
+
+p5-Rendering_type() 📄 📌 |type| ⚡ Function
+
+To create a WebGL texture, one needs to supply three pieces of
+information: the type (the data type each channel will be stored as,
+e.g. int or float), the format (the color channels that will each be
+stored in the previously specified type, e.g. rgb or rgba), and the
+internal format (the specifics of how data for each channel, in the
+aforementioned type, will be packed together, such as how many bits to
+use, e.g. RGBA32F or RGB565.) This method takes into account the
+settings asked for by the user and returns values for these three
+properties that can be used for the texture storing depth information.
+
+See also: ~ |help p5-type| for detailed help on this symbol~
+
+Source: ~ ../temp/src/webgl/p5.Framebuffer.js:795 ~
+
+==============================================================================
+Generated by p5.js Documentation Automation See:
+https://github.com/prjctimg/automata Last updated: 2026-02-03 📄 End of
+Rendering documentation 📄
+==============================================================================
