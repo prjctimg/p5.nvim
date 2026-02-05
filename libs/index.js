@@ -1,5 +1,5 @@
 // p5.js Core Modules
-// Generated: 2026-02-05T08:35:36.566Z
+// Generated: 2026-02-05T09:03:32.976Z
 // Source: https://github.com/processing/p5.js
 
 export { default as p5 } from './p5.js';
