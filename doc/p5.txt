@@ -5,7 +5,7 @@ CONTENTS                                                    *p5-contents*
 
 # p5.js Complete API Documentation
 
-Generated: 2026-02-05T11:18:00.098Z
+Generated: 2026-02-05T11:24:40.874Z
 Source: TypeScript Definitions
 
 ## Table of Contents
