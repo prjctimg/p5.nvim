@@ -104,6 +104,7 @@ function draw() {
   
   -- Create assets directory
   vim.fn.mkdir(project_path .. "/assets/types", "p")
+  vim.fn.mkdir(project_path .. "/assets/libs", "p")
   vim.fn.mkdir(project_path .. "/assets/contrib", "p")
 end
 
@@ -116,6 +117,7 @@ M.copy_assets_to_project = function(project_path)
   vim.fn.mkdir(project_assets, "p")
   vim.fn.mkdir(project_assets .. "/types", "p")
   vim.fn.mkdir(project_assets .. "/core", "p")
+  vim.fn.mkdir(project_assets .. "/libs", "p")
   vim.fn.mkdir(project_assets .. "/contrib", "p")
   
   -- Copy bundled p5.d.ts if it exists

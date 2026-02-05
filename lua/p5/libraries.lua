@@ -182,9 +182,9 @@ M.install_libs = function(lib_names)
   
   core.notify_fallback("Installing " .. #libs .. " libraries...", "info")
   
-  -- Create contrib directory
-  local contrib_dir = vim.fn.getcwd() .. "/assets/contrib"
-  vim.fn.mkdir(contrib_dir, "p")
+  -- Create libs directory
+  local libs_dir = vim.fn.getcwd() .. "/assets/libs"
+  vim.fn.mkdir(libs_dir, "p")
   
   M.process_libraries(libs, "install", function(completed)
     local message = "Library installation complete: " .. completed .. "/" .. #libs
