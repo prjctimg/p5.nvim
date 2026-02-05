@@ -1,6 +1,6 @@
 # p5.js Documentation
 
-Generated: 2026-02-05T09:32:46.134Z
+Generated: 2026-02-05T09:38:28.226Z
 
 ## Core Functions
 
