@@ -4,7 +4,7 @@ p5-image🖼️.txt    p5.js image documentation    p5
 p5.js Image Module    *p5-image*
 
 p5.js Version: 1.7.7~
-Last Updated: 2026-02-06 17:39:09~
+Last Updated: 2026-02-06 18:39:17~
 
 ==============================================================================
 CONTENTS                                                    *p5-image-contents*

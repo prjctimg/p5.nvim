@@ -4,7 +4,7 @@ p5-core⚙️.txt    p5.js core documentation    p5
 p5.js Core Module    *p5-core*
 
 p5.js Version: 1.7.7~
-Last Updated: 2026-02-06 17:39:09~
+Last Updated: 2026-02-06 18:39:17~
 
 ==============================================================================
 CONTENTS                                                    *p5-core-contents*
