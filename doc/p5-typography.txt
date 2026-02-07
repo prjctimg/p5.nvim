@@ -1,0 +1,327 @@
+p5-typography.txt    p5.js typography documentation    p5
+
+==============================================================================
+📝 p5.js Typography Module 📝    *p5-typography*
+
+📦 p5.js Version: 1.7.7~
+⏰ Last Updated: 2026-02-07 03:56:57~
+
+==============================================================================
+📋 CONTENTS                                                    *p5-typography-contents*
+
+
+## Table of Contents
+
+### 🔧 Functions
+
+- horizAlign 🔧
+- horizAlign 🔧
+- text 🔧
+- text 🔧
+- text 🔧
+- text 🔧
+- fonts 🔧
+- fonts 🔧
+- textWidth 🔧
+- textAscent 🔧
+- textDescent 🔧
+- text 🔧
+- file 🔧
+- text 🔧
+- text 🔧
+- constructor 🔧
+- use 🔧
+
+### 📊 Variables
+
+- properties 📊
+
+---
+
+## 🔧 Functions
+
+### 🔧 horizAlign
+
+*   Sets the current alignment for drawing text.
+  Accepts two arguments: horizAlign (LEFT, CENTER,
+  or RIGHT) and vertAlign (TOP, BOTTOM, CENTER, or
+  BASELINE). The horizAlign parameter is in
+  reference to the x value of the text() function,
+  while the vertAlign parameter is in reference to
+  the y value.
+         *   So if you write textAlign(LEFT), you are aligning
+  the left edge of your text to the x value you give
+  in text(). If you write textAlign(RIGHT, TOP), you
+  are aligning the right edge of your text to the x
+  value and the top edge of the text to the y value.
+  - **horizAlign**: horizontal alignment, either
+  LEFT, CENTER, or RIGHT
+  @param [vertAlign] vertical alignment, either TOP,
+  BOTTOM, CENTER, or BASELINE
+  @chainable
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 horizAlign
+
+*   Sets the current alignment for drawing text.
+  Accepts two arguments: horizAlign (LEFT, CENTER,
+  or RIGHT) and vertAlign (TOP, BOTTOM, CENTER, or
+  BASELINE). The horizAlign parameter is in
+  reference to the x value of the text() function,
+  while the vertAlign parameter is in reference to
+  the y value.
+         *   So if you write textAlign(LEFT), you are aligning
+  the left edge of your text to the x value you give
+  in text(). If you write textAlign(RIGHT, TOP), you
+  are aligning the right edge of your text to the x
+  value and the top edge of the text to the y value.
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 text
+
+*   Sets/gets the spacing, in pixels, between lines of
+  text. This setting will be used in all subsequent
+  calls to the text() function.
+  - **leading**: the size in pixels for spacing
+  between lines
+  @chainable
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 text
+
+*   Sets/gets the spacing, in pixels, between lines of
+  text. This setting will be used in all subsequent
+  calls to the text() function.
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 text
+
+*   Sets/gets the current font size. This size will be
+  used in all subsequent calls to the text()
+  function. Font size is measured in pixels.
+  - **theSize**: the size of the letters in units of
+  pixels
+  @chainable
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 text
+
+*   Sets/gets the current font size. This size will be
+  used in all subsequent calls to the text()
+  function. Font size is measured in pixels.
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 fonts
+
+*   Sets/gets the style of the text for system fonts
+  to NORMAL, ITALIC, BOLD or BOLDITALIC. Note: this
+  may be is overridden by CSS styling. For
+  non-system fonts (opentype, truetype, etc.) please
+  load styled fonts instead.
+  - **theStyle**: styling for text, either NORMAL,
+  ITALIC, BOLD or BOLDITALIC
+  @chainable
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 fonts
+
+*   Sets/gets the style of the text for system fonts
+  to NORMAL, ITALIC, BOLD or BOLDITALIC. Note: this
+  may be is overridden by CSS styling. For
+  non-system fonts (opentype, truetype, etc.) please
+  load styled fonts instead.
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 textWidth
+
+*   Calculates and returns the width of any character
+  or text string.
+  - **theText**: the String of characters to measure
+  - **Returns**: the calculated width
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 textAscent
+
+*   Returns the ascent of the current font at its
+  current size. The ascent represents the distance,
+  in pixels, of the tallest character above the
+  baseline.
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 textDescent
+
+*   Returns the descent of the current font at its
+  current size. The descent represents the distance,
+  in pixels, of the character with the longest
+  descender below the baseline.
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 text
+
+*   Specifies how lines of text are wrapped within a
+  text box. This requires a max-width set on the
+  text area, specified in text() as parameter x2.
+  WORD wrap style only breaks lines at spaces. A
+  single string without spaces that exceeds the
+  boundaries of the canvas or text area is not
+  truncated, and will overflow the desired area,
+  disappearing at the canvas edge.
+         *   CHAR wrap style breaks lines wherever needed to
+  stay within the text box.
+         *   WORD is the default wrap style, and both styles
+  will still break lines at any line breaks (\n)
+  specified in the original text. The text area
+  max-height parameter (y2) also still applies to
+  wrapped text in both styles, lines of text that do
+  not fit within the text area will not be drawn to
+  the screen.
+  - **wrapStyle**: text wrapping style, either WORD
+  or CHAR
+  - **Returns**: wrapStyle
+
+📂 *Sub-module: attributes*
+
+---
+
+### 🔧 file
+
+*   Loads an opentype font file (.otf, .ttf) from a
+  file or a URL, and returns a p5.Font object. This
+  function is asynchronous, meaning it may not
+  finish before the next line in your sketch is
+  executed. The path to the font should be relative
+  to the HTML file that links in your sketch.
+  Loading fonts from a URL or other remote location
+  may be blocked due to your browser's built-in
+  security.
+  - **path**: name of the file or url to load
+  @param [callback] function to be executed after
+  loadFont() completes
+  @param [onError] function to be executed if an
+  error occurs
+  - **Returns**: p5.Font object
+
+📂 *Sub-module: loading_displaying*
+
+---
+
+### 🔧 text
+
+*   Sets the current font that will be drawn with the
+  text() function. If textFont() is called without
+  any argument, it will return the current font if
+  one has been set already. If not, it will return
+  the name of the default font as a string. If
+  textFont() is called with a font to use, it will
+  return the p5 object. WEBGL: Only fonts loaded via
+  loadFont() are supported.
+  - **Returns**: the current font / p5 Object
+
+📂 *Sub-module: loading_displaying*
+
+---
+
+### 🔧 text
+
+*   Sets the current font that will be drawn with the
+  text() function. If textFont() is called without
+  any argument, it will return the current font if
+  one has been set already. If not, it will return
+  the name of the default font as a string. If
+  textFont() is called with a font to use, it will
+  return the p5 object. WEBGL: Only fonts loaded via
+  loadFont() are supported.
+  - **font**: a font loaded via loadFont(), or a
+  String representing a web safe font (a font that
+  is generally available across all systems)
+  @param [size] the font size to use
+  @chainable
+
+📂 *Sub-module: loading_displaying*
+
+---
+
+### 🔧 constructor
+
+*   Base class for font handling
+         *   @param [pInst] pointer to p5 instance
+
+📂 *Sub-module: p5.Font*
+
+---
+
+### 🔧 use
+
+*   Computes an array of points following the path for
+  specified text
+  - **txt**: a line of text
+  - **x**: x-position
+  - **y**: y-position
+  - **fontSize**: font size to use (optional)
+  @param [options] an (optional) object that can
+  contain:
+         *
+  sampleFactor - the ratio of path-length to number
+  of samples (default=.1); higher values yield more
+  points and are therefore more precise
+         *
+  simplifyThreshold - if set to a non-zero value,
+  collinear points will be be removed from the
+  polygon; the value represents the threshold angle
+  to use when determining whether two edges are
+  collinear
+  - **Returns**: an array of points, each with x, y, alpha
+  (the path angle)
+
+📂 *Sub-module: p5.Font*
+
+---
+
+## 📊 Variables
+
+### 📊 properties
+
+*   Base class for font handling
+         *   @param [pInst] pointer to p5 instance
+
+📂 *Sub-module: p5.Font*
+
+---
+
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
