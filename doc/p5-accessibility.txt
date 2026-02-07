@@ -12,7 +12,7 @@ Table of Contents                      *p5-accessibility-table-of-contents*
 ♿ Accessibility module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 11:17:20~
+⏰ Last Updated: 2026-02-07 12:30:16~
 
 ==============================================================================
 2. Functions                                           |p5-accessibility-functions|
