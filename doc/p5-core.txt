@@ -7,58 +7,37 @@ Table of Contents                      *p5-core-table-of-contents*
   - print()             |p5-core-print|
   - images()             |p5-core-images|
   - frameRate()             |p5-core-frameRate|
-  - frameRate()             |p5-core-frameRate|
-  - frameRate()             |p5-core-frameRate|
   - noCursor()             |p5-core-noCursor|
   - windowResized()             |p5-core-windowResized|
   - fullscreen()             |p5-core-fullscreen|
-  - pixelDensity()             |p5-core-pixelDensity|
   - pixelDensity()             |p5-core-pixelDensity|
   - displayDensity()             |p5-core-displayDensity|
   - getURL()             |p5-core-getURL|
   - getURLPath()             |p5-core-getURLPath|
   - getURLParams()             |p5-core-getURLParams|
   - setup()             |p5-core-setup|
-  - setup()             |p5-core-setup|
   - resizeCanvas()             |p5-core-resizeCanvas|
   - noCanvas()             |p5-core-noCanvas|
-  - setAttributes()             |p5-core-setAttributes|
   - setAttributes()             |p5-core-setAttributes|
   - canvas()             |p5-core-canvas|
   - pixels()             |p5-core-pixels|
   - draw()             |p5-core-draw|
-  - draw()             |p5-core-draw|
-  - draw()             |p5-core-draw|
   - push()             |p5-core-push|
-  - push()             |p5-core-push|
-  - draw()             |p5-core-draw|
   - p5()             |p5-core-p5|
   - length()             |p5-core-length|
   - applyMatrix()             |p5-core-applyMatrix|
-  - applyMatrix()             |p5-core-applyMatrix|
   - resetMatrix()             |p5-core-resetMatrix|
   - rotate()             |p5-core-rotate|
-  - draw()             |p5-core-draw|
-  - draw()             |p5-core-draw|
-  - draw()             |p5-core-draw|
-  - scale()             |p5-core-scale|
   - scale()             |p5-core-scale|
   - shearX()             |p5-core-shearX|
   - shearY()             |p5-core-shearY|
   - translate()             |p5-core-translate|
-  - translate()             |p5-core-translate|
   - createCanvas()             |p5-core-createCanvas|
   - parent()             |p5-core-parent|
-  - class()             |p5-core-class|
-  - class()             |p5-core-class|
-  - class()             |p5-core-class|
   - class()             |p5-core-class|
   - constructor()             |p5-core-constructor|
   - remove()             |p5-core-remove|
   - createFramebuffer()             |p5-core-createFramebuffer|
-  - constructor()             |p5-core-constructor|
-  - setup()             |p5-core-setup|
-  - setup()             |p5-core-setup|
   - remove()             |p5-core-remove|
 
 2. Variables                                           |p5-core-variables|
@@ -74,12 +53,11 @@ Table of Contents                      *p5-core-table-of-contents*
   - height     |p5-core-height|
   - note     |p5-core-note|
   - elt     |p5-core-elt|
-  - elt     |p5-core-elt|
 
 ⚙️ Core module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 11:12:52~
+⏰ Last Updated: 2026-02-07 11:17:20~
 
 ==============================================================================
 3. Functions                                           |p5-core-functions|
@@ -158,47 +136,6 @@ Table of Contents                      *p5-core-table-of-contents*
 
 ---
 
-`frameRate()`                                          |p5-core-frameRate|
-
-*   Specifies the number of frames to be displayed
-  every second. For example, the function call
-  frameRate(30) will attempt to refresh 30 times a
-  second. If the processor is not fast enough to
-  maintain the specified rate, the frame rate will
-  not be achieved. Setting the frame rate within
-  setup() is recommended. The default frame rate is
-  based on the frame rate of the display (here also
-  called "refresh rate"), which is set to 60 frames
-  per second on most computers. A frame rate of 24
-  frames per second (usual for movies) or above will
-  be enough for smooth animations. This is the same
-  as setFrameRate(val). Calling frameRate() with no
-  arguments returns the current framerate. The draw
-  function must run at least once before it will
-  return a value. This is the same as
-  getFrameRate().
-         *   Calling frameRate() with arguments that are not of
-  the type Number or are non-positive also returns
-  current framerate.
-  - **Returns**: current frameRate
-
-📂 *Sub-module: environment*
-
----
-
-`frameRate()`                                          |p5-core-frameRate|
-
-*   Returns _targetFrameRate variable. The default
-  _targetFrameRate is set to 60. This could be
-  changed by calling frameRate() and setting it to
-  the desired value. When getTargetFrameRate() is
-  called, it should return the value that was set.
-  - **Returns**: _targetFrameRate
-
-📂 *Sub-module: environment*
-
----
-
 `noCursor()`                                          |p5-core-noCursor|
 
 *   Hides the cursor from view.
@@ -246,19 +183,6 @@ Table of Contents                      *p5-core-table-of-contents*
   - **val**: whether or how much the sketch should
   scale
   @chainable
-
-📂 *Sub-module: environment*
-
----
-
-`pixelDensity()`                                          |p5-core-pixelDensity|
-
-*   Sets the pixel scaling for high pixel density
-  displays. By default pixel density is set to match
-  display density, call pixelDensity(1) to turn this
-  off. Calling pixelDensity() with no arguments
-  returns the current pixel density of the sketch.
-  - **Returns**: current pixel density of the sketch
 
 📂 *Sub-module: environment*
 
@@ -354,46 +278,6 @@ Table of Contents                      *p5-core-table-of-contents*
 
 ---
 
-`setup()`                                          |p5-core-setup|
-
-*   Creates a canvas element in the document and sets
-  its dimensions in pixels. This method should be
-  called only once at the start of setup(). Calling
-  createCanvas more than once in a sketch will
-  result in very unpredictable behavior. If you want
-  more than one drawing canvas you could use
-  createGraphics() (hidden by default but it can be
-  shown). Important note: in 2D mode (i.e. when
-  p5.Renderer is not set) the origin (0,0) is
-  positioned at the top left of the screen. In 3D
-  mode (i.e. when p5.Renderer is set to WEBGL), the
-  origin is positioned at the center of the canvas.
-  See this issue for more information.
-         *   A WebGL canvas will use a WebGL2 context if it is
-  supported by the browser. Check the webglVersion
-  property to check what version is being used, or
-  call setAttributes({ version: 1 }) to create a
-  WebGL1 context.
-         *   The system variables width and height are set by
-  the parameters passed to this function. If
-  createCanvas() is not used, the window will be
-  given a default size of 100×100 pixels.
-         *   Optionally, an existing canvas can be passed using
-  a selector, ie. document.getElementById(''). If
-  specified, avoid using setAttributes() afterwards,
-  as this will remove and recreate the existing
-  canvas.
-         *   For more ways to position the canvas, see the
-  positioning the canvas wiki page.
-  - **w**: width of the canvas
-  - **h**: height of the canvas
-  @param [canvas] existing html canvas element
-  - **Returns**: pointer to p5.Renderer holding canvas
-
-📂 *Sub-module: rendering*
-
----
-
 `resizeCanvas()`                                          |p5-core-resizeCanvas|
 
 *   Resizes the canvas to given width and height. The
@@ -438,31 +322,6 @@ Table of Contents                      *p5-core-table-of-contents*
   - **h**: height of the offscreen graphics buffer
   @param [renderer] either P2D or WEBGL undefined
   defaults to p2d
-  @param [canvas] existing html canvas element
-  - **Returns**: offscreen graphics buffer
-
-📂 *Sub-module: rendering*
-
----
-
-`setAttributes()`                                          |p5-core-setAttributes|
-
-*   Creates and returns a new p5.Graphics object. Use
-  this class if you need to draw into an off-screen
-  graphics buffer. The two parameters define the
-  width and height in pixels. A WebGL p5.Graphics
-  will use a WebGL2 context if it is supported by
-  the browser. Check the pg.webglVersion property of
-  the renderer to check what version is being used,
-  or call pg.setAttributes({ version: 1 }) to create
-  a WebGL1 context.
-         *   Optionally, an existing canvas can be passed using
-  a selector, ie. document.getElementById(''). By
-  default this canvas will be hidden (offscreen
-  buffer), to make visible, set element's style to
-  display:block;
-  - **w**: width of the offscreen graphics buffer
-  - **h**: height of the offscreen graphics buffer
   @param [canvas] existing html canvas element
   - **Returns**: offscreen graphics buffer
 
@@ -595,33 +454,6 @@ Table of Contents                      *p5-core-table-of-contents*
 
 ---
 
-`draw()`                                          |p5-core-draw|
-
-*   By default, p5.js loops through draw()
-  continuously, executing the code within it.
-  However, the draw() loop may be stopped by calling
-  noLoop(). In that case, the draw() loop can be
-  resumed with loop(). Avoid calling loop() from
-  inside setup().
-         *   Use isLooping() to check the current state of
-  loop().
-
-📂 *Sub-module: structure*
-
----
-
-`draw()`                                          |p5-core-draw|
-
-*   By default, p5.js loops through draw()
-  continuously, executing the code within it. If the
-  sketch is stopped with noLoop() or resumed with
-  loop(), isLooping() returns the current state for
-  use within custom event handlers.
-
-📂 *Sub-module: structure*
-
----
-
 `push()`                                          |p5-core-push|
 
 *   The push() function saves the current drawing
@@ -650,63 +482,6 @@ Table of Contents                      *p5-core-table-of-contents*
   directionalLight(), pointLight(), texture(),
   specularMaterial(), shininess(), normalMaterial()
   and shader().
-
-📂 *Sub-module: structure*
-
----
-
-`push()`                                          |p5-core-push|
-
-*   The push() function saves the current drawing
-  style settings and transformations, while pop()
-  restores these settings. Note that these functions
-  are always used together. They allow you to change
-  the style and transformation settings and later
-  return to what you had. When a new state is
-  started with push(), it builds on the current
-  style and transform information. The push() and
-  pop() functions can be embedded to provide more
-  control. (See the second example for a
-  demonstration.) push() stores information related
-  to the current transformation state and style
-  settings controlled by the following functions:
-  fill(), noFill(), noStroke(), stroke(), tint(),
-  noTint(), strokeWeight(), strokeCap(),
-  strokeJoin(), imageMode(), rectMode(),
-  ellipseMode(), colorMode(), textAlign(),
-  textFont(), textSize(), textLeading(),
-  applyMatrix(), resetMatrix(), rotate(), scale(),
-  shearX(), shearY(), translate(), noiseSeed().
-         *   In WEBGL mode additional style settings are
-  stored. These are controlled by the following
-  functions: setCamera(), ambientLight(),
-  directionalLight(), pointLight(), texture(),
-  specularMaterial(), shininess(), normalMaterial()
-  and shader().
-
-📂 *Sub-module: structure*
-
----
-
-`draw()`                                          |p5-core-draw|
-
-*   Executes the code within draw() one time. This
-  function allows the program to update the display
-  window only when necessary, for example when an
-  event registered by mousePressed() or keyPressed()
-  occurs. In structuring a program, it only makes
-  sense to call redraw() within events such as
-  mousePressed(). This is because redraw() does not
-  run draw() immediately (it only sets a flag that
-  indicates an update is needed).
-         *   The redraw() function does not work properly when
-  called inside draw().To enable/disable animations,
-  use loop() and noLoop().
-         *   In addition you can set the number of redraws per
-  method call. Just add an integer as single
-  parameter for the number of redraws.
-  @param [n] Redraw for n-times. The default value
-  is 1.
 
 📂 *Sub-module: structure*
 
@@ -796,55 +571,6 @@ Table of Contents                      *p5-core-table-of-contents*
 
 ---
 
-`applyMatrix()`                                          |p5-core-applyMatrix|
-
-*   Multiplies the current matrix by the one specified
-  through the parameters. This is a powerful
-  operation that can perform the equivalent of
-  translate, scale, shear and rotate all at once.
-  You can learn more about transformation matrices
-  on  Wikipedia. The naming of the arguments here
-  follows the naming of the  WHATWG specification
-  and corresponds to a transformation matrix of the
-  form:
-  - **a**: numbers which define the 2×3 or 4×4
-  matrix to be multiplied
-  - **b**: numbers which define the 2×3 or 4×4
-  matrix to be multiplied
-  - **c**: numbers which define the 2×3 or 4×4
-  matrix to be multiplied
-  - **d**: numbers which define the 2×3 or 4×4
-  matrix to be multiplied
-  - **e**: numbers which define the 2×3 or 4×4
-  matrix to be multiplied
-  - **f**: numbers which define the 2×3 or 4×4
-  matrix to be multiplied
-  - **g**: numbers which define the 4×4 matrix to be
-  multiplied
-  - **h**: numbers which define the 4×4 matrix to be
-  multiplied
-  - **i**: numbers which define the 4×4 matrix to be
-  multiplied
-  - **j**: numbers which define the 4×4 matrix to be
-  multiplied
-  - **k**: numbers which define the 4×4 matrix to be
-  multiplied
-  - **l**: numbers which define the 4×4 matrix to be
-  multiplied
-  - **m**: numbers which define the 4×4 matrix to be
-  multiplied
-  - **n**: numbers which define the 4×4 matrix to be
-  multiplied
-  - **o**: numbers which define the 4×4 matrix to be
-  multiplied
-  - **p**: numbers which define the 4×4 matrix to be
-  multiplied
-  @chainable
-
-📂 *Sub-module: transform*
-
----
-
 `resetMatrix()`                                          |p5-core-resetMatrix|
 
 *   Replaces the current matrix with the identity
@@ -882,59 +608,6 @@ Table of Contents                      *p5-core-table-of-contents*
 
 ---
 
-`draw()`                                          |p5-core-draw|
-
-*   Rotates a shape around X axis by the amount
-  specified in angle parameter. The angles can be
-  entered in either RADIANS or DEGREES. Objects are
-  always rotated around their relative position to
-  the origin and positive numbers rotate objects in
-  a clockwise direction. All transformations are
-  reset when draw() begins again.
-  - **angle**: the angle of rotation, specified in
-  radians or degrees, depending on current angleMode
-  @chainable
-
-📂 *Sub-module: transform*
-
----
-
-`draw()`                                          |p5-core-draw|
-
-*   Rotates a shape around Y axis by the amount
-  specified in angle parameter. The angles can be
-  entered in either RADIANS or DEGREES. Objects are
-  always rotated around their relative position to
-  the origin and positive numbers rotate objects in
-  a clockwise direction. All transformations are
-  reset when draw() begins again.
-  - **angle**: the angle of rotation, specified in
-  radians or degrees, depending on current angleMode
-  @chainable
-
-📂 *Sub-module: transform*
-
----
-
-`draw()`                                          |p5-core-draw|
-
-*   Rotates a shape around Z axis by the amount
-  specified in angle parameter. The angles can be
-  entered in either RADIANS or DEGREES. This method
-  works in WEBGL mode only.
-         *   Objects are always rotated around their relative
-  position to the origin and positive numbers rotate
-  objects in a clockwise direction. All
-  transformations are reset when draw() begins
-  again.
-  - **angle**: the angle of rotation, specified in
-  radians or degrees, depending on current angleMode
-  @chainable
-
-📂 *Sub-module: transform*
-
----
-
 `scale()`                                          |p5-core-scale|
 
 *   Increases or decreases the size of a shape by
@@ -960,32 +633,6 @@ Table of Contents                      *p5-core-table-of-contents*
   y-axis
   @param [z] percent to scale the object in the
   z-axis (webgl only)
-  @chainable
-
-📂 *Sub-module: transform*
-
----
-
-`scale()`                                          |p5-core-scale|
-
-*   Increases or decreases the size of a shape by
-  expanding or contracting vertices. Objects always
-  scale from their relative origin to the coordinate
-  system. Scale values are specified as decimal
-  percentages. For example, the function call
-  scale(2.0) increases the dimension of a shape by
-  200%. Transformations apply to everything that
-  happens after and subsequent calls to the function
-  multiply the effect. For example, calling
-  scale(2.0) and then scale(1.5) is the same as
-  scale(3.0). If scale() is called within draw(),
-  the transformation is reset when the loop begins
-  again.
-         *   Using this function with the z parameter is only
-  available in WEBGL mode. This function can be
-  further controlled with push() and pop().
-  - **scales**: per-axis percents to scale the
-  object
   @chainable
 
 📂 *Sub-module: transform*
@@ -1070,27 +717,6 @@ Table of Contents                      *p5-core-table-of-contents*
 
 ---
 
-`translate()`                                          |p5-core-translate|
-
-*   Specifies an amount to displace objects within the
-  display window. The x parameter specifies
-  left/right translation, the y parameter specifies
-  up/down translation. Transformations are
-  cumulative and apply to everything that happens
-  after and subsequent calls to the function
-  accumulates the effect. For example, calling
-  translate(50, 0) and then translate(20, 0) is the
-  same as translate(70, 0). If translate() is called
-  within draw(), the transformation is reset when
-  the loop begins again. This function can be
-  further controlled by using push() and pop().
-  - **vector**: the vector to translate by
-  @chainable
-
-📂 *Sub-module: transform*
-
----
-
 `createCanvas()`                                          |p5-core-createCanvas|
 
 *   Base class for all elements added to a sketch,
@@ -1134,43 +760,6 @@ Table of Contents                      *p5-core-table-of-contents*
 
 ---
 
-`class()`                                          |p5-core-class|
-
-*   Sets the ID of the element. If no ID argument is
-  passed in, it instead returns the current ID of
-  the element. Note that only one element can have a
-  particular id in a page. The class() method can be
-  used to identify multiple elements with the same
-  class name.
-  - **Returns**: the id of the element
-
-📂 *Sub-module: p5.Element*
-
----
-
-`class()`                                          |p5-core-class|
-
-*   Adds given class to the element. If no class
-  argument is passed in, it instead returns a string
-  containing the current class(es) of the element.
-  - **class**: class to add
-  @chainable
-
-📂 *Sub-module: p5.Element*
-
----
-
-`class()`                                          |p5-core-class|
-
-*   Adds given class to the element. If no class
-  argument is passed in, it instead returns a string
-  containing the current class(es) of the element.
-  - **Returns**: the class of the element
-
-📂 *Sub-module: p5.Element*
-
----
-
 `constructor()`                                          |p5-core-constructor|
 
 *   Thin wrapper around a renderer, to be used for
@@ -1208,75 +797,6 @@ Table of Contents                      *p5-core-table-of-contents*
   function.
 
 📂 *Sub-module: p5.Graphics*
-
----
-
-`constructor()`                                          |p5-core-constructor|
-
-*   Main graphics and rendering context, as well as
-  the base API implementation for p5.js "core". To
-  be used as the superclass for Renderer2D and
-  Renderer3D classes, respectively.
-         *   - **elt**: DOM node that is wrapped
-  @param [pInst] pointer to p5 instance
-  @param [isMainCanvas] whether we're using it as
-  main canvas
-
-📂 *Sub-module: p5.Renderer*
-
----
-
-`setup()`                                          |p5-core-setup|
-
-*   The setup() function is called once when the
-  program starts. It's used to define initial
-  environment properties such as screen size and
-  background color and to load media such as images
-  and fonts as the program starts. There can only be
-  one setup() function for each program and it
-  shouldn't be called again after its initial
-  execution. Note: Variables declared within setup()
-  are not accessible within other functions,
-  including draw().
-
-📂 *Sub-module: p5.Renderer*
-
----
-
-`setup()`                                          |p5-core-setup|
-
-*   Called directly after setup(), the draw() function
-  continuously executes the lines of code contained
-  inside its block until the program is stopped or
-  noLoop() is called. Note if noLoop() is called in
-  setup(), draw() will still be executed once before
-  stopping. draw() is called automatically and
-  should never be called explicitly. It should
-  always be controlled with noLoop(), redraw() and
-  loop(). After noLoop() stops the code in draw()
-  from executing, redraw() causes the code inside
-  draw() to execute once, and loop() will cause the
-  code inside draw() to resume executing
-  continuously.
-     *   The number of times draw() executes in each second
-  may be controlled with the frameRate() function.
-     *   There can only be one draw() function for each
-  sketch, and draw() must exist if you want the code
-  to run continuously, or to process events such as
-  mousePressed(). Sometimes, you might have an empty
-  call to draw() in your program, as shown in the
-  above example.
-     *   It is important to note that the drawing
-  coordinate system will be reset at the beginning
-  of each draw() call. If any transformations are
-  performed within draw() (ex: scale, rotate,
-  translate), their effects will be undone at the
-  beginning of draw(), so transformations will not
-  accumulate over time. On the other hand, styling
-  applied (ex: fill, stroke, etc) will remain in
-  effect.
-
-📂 *Sub-module: p5.Renderer*
 
 ---
 
@@ -1483,21 +1003,6 @@ Table of Contents                      *p5-core-table-of-contents*
   @param [pInst] pointer to p5 instance
 
 📂 *Sub-module: p5.Element*
-
----
-
-`elt`                                          |p5-core-elt|
-
-*   Main graphics and rendering context, as well as
-  the base API implementation for p5.js "core". To
-  be used as the superclass for Renderer2D and
-  Renderer3D classes, respectively.
-         *   - **elt**: DOM node that is wrapped
-  @param [pInst] pointer to p5 instance
-  @param [isMainCanvas] whether we're using it as
-  main canvas
-
-📂 *Sub-module: p5.Renderer*
 
 ---
 

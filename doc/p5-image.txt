@@ -9,45 +9,25 @@ Table of Contents                      *p5-image-table-of-contents*
   - saveCanvas()             |p5-image-saveCanvas|
   - loadImage()             |p5-image-loadImage|
   - where()             |p5-image-where|
-  - where()             |p5-image-where|
-  - tint()             |p5-image-tint|
-  - tint()             |p5-image-tint|
-  - tint()             |p5-image-tint|
-  - tint()             |p5-image-tint|
   - tint()             |p5-image-tint|
   - noTint()             |p5-image-noTint|
   - image()             |p5-image-image|
   - blend()             |p5-image-blend|
-  - blend()             |p5-image-blend|
-  - copy()             |p5-image-copy|
   - copy()             |p5-image-copy|
   - 0()             |p5-image-0|
-  - imageMode()             |p5-image-imageMode|
-  - imageMode()             |p5-image-imageMode|
   - imageMode()             |p5-image-imageMode|
   - set()             |p5-image-set|
-  - imageMode()             |p5-image-imageMode|
   - loadPixels()             |p5-image-loadPixels|
-  - loadImage()             |p5-image-loadImage|
-  - updatePixels()             |p5-image-updatePixels|
   - updatePixels()             |p5-image-updatePixels|
   - get()             |p5-image-get|
-  - get()             |p5-image-get|
-  - get()             |p5-image-get|
-  - updatePixels()             |p5-image-updatePixels|
   - resize()             |p5-image-resize|
-  - copy()             |p5-image-copy|
-  - copy()             |p5-image-copy|
   - mask()             |p5-image-mask|
-  - 0()             |p5-image-0|
-  - blend()             |p5-image-blend|
   - blend()             |p5-image-blend|
   - png()             |p5-image-png|
   - reset()             |p5-image-reset|
   - getCurrentFrame()             |p5-image-getCurrentFrame|
   - setFrame()             |p5-image-setFrame|
   - numFrames()             |p5-image-numFrames|
-  - pause()             |p5-image-pause|
   - pause()             |p5-image-pause|
   - delay()             |p5-image-delay|
 
@@ -60,7 +40,7 @@ Table of Contents                      *p5-image-table-of-contents*
 🖼️ Image module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 11:12:52~
+⏰ Last Updated: 2026-02-07 11:17:20~
 
 ==============================================================================
 3. Functions                                           |p5-image-functions|
@@ -183,62 +163,6 @@ Table of Contents                      *p5-image-table-of-contents*
 
 ---
 
-`where()`                                          |p5-image-where|
-
-*   Draw an image to the p5.js canvas. This function
-  can be used with different numbers of parameters.
-  The simplest use requires only three parameters:
-  img, x, and y—where (x, y) is the position of the
-  image. Two more parameters can optionally be added
-  to specify the width and height of the image.
-         *   This function can also be used with eight Number
-  parameters. To differentiate between all these
-  parameters, p5.js uses the language of
-  "destination rectangle" (which corresponds to
-  "dx", "dy", etc.) and "source image" (which
-  corresponds to "sx", "sy", etc.) below. Specifying
-  the "source image" dimensions can be useful when
-  you want to display a subsection of the source
-  image instead of the whole thing. Here's a diagram
-  to explain further:
-         *   This function can also be used to draw images
-  without distorting the orginal aspect ratio, by
-  adding 9th parameter, fit, which can either be
-  COVER or CONTAIN. CONTAIN, as the name suggests,
-  contains the whole image within the specified
-  destination box without distorting the image
-  ratio. COVER covers the entire destination box.
-  - **img**: the image to display
-  - **dx**: the x-coordinate of the destination
-  rectangle in which to draw the source image
-  - **dy**: the y-coordinate of the destination
-  rectangle in which to draw the source image
-  - **dWidth**: the width of the destination
-  rectangle
-  - **dHeight**: the height of the destination
-  rectangle
-  - **sx**: the x-coordinate of the subsection of
-  the source image to draw into the destination
-  rectangle
-  - **sy**: the y-coordinate of the subsection of
-  the source image to draw into the destination
-  rectangle
-  @param [sWidth] the width of the subsection of the
-  source image to draw into the destination
-  rectangle
-  @param [sHeight] the height of the subsection of
-  the source image to draw into the destination
-  rectangle
-  @param [fit] either CONTAIN or COVER
-  @param [xAlign] either LEFT, RIGHT or CENTER
-  default is CENTER
-  @param [yAlign] either TOP, BOTTOM or CENTER
-  default is CENTER
-
-📂 *Sub-module: loading_displaying*
-
----
-
 `tint()`                                          |p5-image-tint|
 
 *   Sets the fill value for displaying images. Images
@@ -259,87 +183,6 @@ Table of Contents                      *p5-image-table-of-contents*
   the current color range
   - **v3**: blue or brightness value relative to the
   current color range
-
-📂 *Sub-module: loading_displaying*
-
----
-
-`tint()`                                          |p5-image-tint|
-
-*   Sets the fill value for displaying images. Images
-  can be tinted to specified colors or made
-  transparent by including an alpha value. To apply
-  transparency to an image without affecting its
-  color, use white as the tint color and specify an
-  alpha value. For instance, tint(255, 128) will
-  make an image 50% transparent (assuming the
-  default alpha range of 0-255, which can be changed
-  with colorMode()).
-         *   The value for the gray parameter must be less than
-  or equal to the current maximum value as specified
-  by colorMode(). The default maximum value is 255.
-  - **value**: a color string
-
-📂 *Sub-module: loading_displaying*
-
----
-
-`tint()`                                          |p5-image-tint|
-
-*   Sets the fill value for displaying images. Images
-  can be tinted to specified colors or made
-  transparent by including an alpha value. To apply
-  transparency to an image without affecting its
-  color, use white as the tint color and specify an
-  alpha value. For instance, tint(255, 128) will
-  make an image 50% transparent (assuming the
-  default alpha range of 0-255, which can be changed
-  with colorMode()).
-         *   The value for the gray parameter must be less than
-  or equal to the current maximum value as specified
-  by colorMode(). The default maximum value is 255.
-  - **gray**: a gray value
-
-📂 *Sub-module: loading_displaying*
-
----
-
-`tint()`                                          |p5-image-tint|
-
-*   Sets the fill value for displaying images. Images
-  can be tinted to specified colors or made
-  transparent by including an alpha value. To apply
-  transparency to an image without affecting its
-  color, use white as the tint color and specify an
-  alpha value. For instance, tint(255, 128) will
-  make an image 50% transparent (assuming the
-  default alpha range of 0-255, which can be changed
-  with colorMode()).
-         *   The value for the gray parameter must be less than
-  or equal to the current maximum value as specified
-  by colorMode(). The default maximum value is 255.
-  - **values**: an array containing the
-  red,green,blue & and alpha components of the color
-
-📂 *Sub-module: loading_displaying*
-
----
-
-`tint()`                                          |p5-image-tint|
-
-*   Sets the fill value for displaying images. Images
-  can be tinted to specified colors or made
-  transparent by including an alpha value. To apply
-  transparency to an image without affecting its
-  color, use white as the tint color and specify an
-  alpha value. For instance, tint(255, 128) will
-  make an image 50% transparent (assuming the
-  default alpha range of 0-255, which can be changed
-  with colorMode()).
-         *   The value for the gray parameter must be less than
-  or equal to the current maximum value as specified
-  by colorMode(). The default maximum value is 255.
-  - **color**: the tint color
 
 📂 *Sub-module: loading_displaying*
 
@@ -406,32 +249,6 @@ Table of Contents                      *p5-image-table-of-contents*
 
 ---
 
-`blend()`                                          |p5-image-blend|
-
-*   Copies a region of pixels from one image to
-  another, using a specified blend mode to do the
-  operation.
-  - **sx**: X coordinate of the source's upper left
-  corner
-  - **sy**: Y coordinate of the source's upper left
-  corner
-  - **sw**: source image width
-  - **sh**: source image height
-  - **dx**: X coordinate of the destination's upper
-  left corner
-  - **dy**: Y coordinate of the destination's upper
-  left corner
-  - **dw**: destination image width
-  - **dh**: destination image height
-  - **blendMode**: the blend mode. either BLEND,
-  DARKEST, LIGHTEST, DIFFERENCE, MULTIPLY,
-  EXCLUSION, SCREEN, REPLACE, OVERLAY, HARD_LIGHT,
-  SOFT_LIGHT, DODGE, BURN, ADD or NORMAL.
-
-📂 *Sub-module: pixels*
-
----
-
 `copy()`                                          |p5-image-copy|
 
 *   Copies a region of the canvas to another region of
@@ -442,32 +259,6 @@ Table of Contents                      *p5-image-table-of-contents*
   same size, it will automatically resize source
   pixels to fit the specified target region.
   - **srcImage**: source image
-  - **sx**: X coordinate of the source's upper left
-  corner
-  - **sy**: Y coordinate of the source's upper left
-  corner
-  - **sw**: source image width
-  - **sh**: source image height
-  - **dx**: X coordinate of the destination's upper
-  left corner
-  - **dy**: Y coordinate of the destination's upper
-  left corner
-  - **dw**: destination image width
-  - **dh**: destination image height
-
-📂 *Sub-module: pixels*
-
----
-
-`copy()`                                          |p5-image-copy|
-
-*   Copies a region of the canvas to another region of
-  the canvas and copies a region of pixels from an
-  image used as the srcImg parameter into the canvas
-  srcImage is specified this is used as the source.
-  If the source and destination regions aren't the
-  same size, it will automatically resize source
-  pixels to fit the specified target region.
   - **sx**: X coordinate of the source's upper left
   corner
   - **sy**: Y coordinate of the source's upper left
@@ -566,75 +357,6 @@ Table of Contents                      *p5-image-table-of-contents*
 
 ---
 
-`imageMode()`                                          |p5-image-imageMode|
-
-*   Get a region of pixels, or a single pixel, from
-  the canvas. Returns an array of [R,G,B,A] values
-  for any pixel or grabs a section of an image. If
-  no parameters are specified, the entire image is
-  returned. Use the x and y parameters to get the
-  value of one pixel. Get a section of the display
-  window by specifying additional w and h
-  parameters. When getting an image, the x and y
-  parameters define the coordinates for the
-  upper-left corner of the image, regardless of the
-  current imageMode().
-         *   Getting the color of a single pixel with get(x, y)
-  is easy, but not as fast as grabbing the data
-  directly from pixels[]. The equivalent statement
-  to get(x, y) using pixels[] with pixel density d
-  is
-         *   let x, y, d; // set these to the coordinates let
-  off = (y * width + x) * d * 4; let components = [
-  pixels[off], pixels[off + 1], pixels[off + 2],
-  pixels[off + 3] ]; print(components);
-         *   See the reference for pixels[] for more
-  information.
-         *   If you want to extract an array of colors or a
-  subimage from an p5.Image object, take a look at
-  p5.Image.get()
-  - **Returns**: the whole p5.Image
-
-📂 *Sub-module: pixels*
-
----
-
-`imageMode()`                                          |p5-image-imageMode|
-
-*   Get a region of pixels, or a single pixel, from
-  the canvas. Returns an array of [R,G,B,A] values
-  for any pixel or grabs a section of an image. If
-  no parameters are specified, the entire image is
-  returned. Use the x and y parameters to get the
-  value of one pixel. Get a section of the display
-  window by specifying additional w and h
-  parameters. When getting an image, the x and y
-  parameters define the coordinates for the
-  upper-left corner of the image, regardless of the
-  current imageMode().
-         *   Getting the color of a single pixel with get(x, y)
-  is easy, but not as fast as grabbing the data
-  directly from pixels[]. The equivalent statement
-  to get(x, y) using pixels[] with pixel density d
-  is
-         *   let x, y, d; // set these to the coordinates let
-  off = (y * width + x) * d * 4; let components = [
-  pixels[off], pixels[off + 1], pixels[off + 2],
-  pixels[off + 3] ]; print(components);
-         *   See the reference for pixels[] for more
-  information.
-         *   If you want to extract an array of colors or a
-  subimage from an p5.Image object, take a look at
-  p5.Image.get()
-  - **x**: x-coordinate of the pixel
-  - **y**: y-coordinate of the pixel
-  - **Returns**: color of pixel at x,y in array format [R,
-  G, B, A]
-
-📂 *Sub-module: pixels*
-
----
-
 `set()`                                          |p5-image-set|
 
 *   Loads the pixel data for the display window into
@@ -642,38 +364,6 @@ Table of Contents                      *p5-image-table-of-contents*
   called before reading from or writing to pixels[].
   Note that only changes made with set() or direct
   manipulation of pixels[] will occur.
-
-📂 *Sub-module: pixels*
-
----
-
-`imageMode()`                                          |p5-image-imageMode|
-
-*   Changes the color of any pixel, or writes an image
-  directly to the display window. The x and y
-  parameters specify the pixel to change and the c
-  parameter specifies the color value. This can be a
-  p5.Color object, or [R, G, B, A] pixel array. It
-  can also be a single grayscale value. When setting
-  an image, the x and y parameters define the
-  coordinates for the upper-left corner of the
-  image, regardless of the current imageMode().
-  After using set(), you must call updatePixels()
-  for your changes to appear. This should be called
-  once all pixels have been set, and must be called
-  before calling .get() or drawing the image.
-         *   Setting the color of a single pixel with set(x, y)
-  is easy, but not as fast as putting the data
-  directly into pixels[]. Setting the pixels[]
-  values directly may be complicated when working
-  with a retina display, but will perform better
-  when lots of pixels need to be set directly on
-  every loop. See the reference for pixels[] for
-  more information.
-  - **x**: x-coordinate of the pixel
-  - **y**: y-coordinate of the pixel
-  - **c**: insert a grayscale value | a pixel array
-  | a p5.Color object | a p5.Image to copy
 
 📂 *Sub-module: pixels*
 
@@ -701,28 +391,6 @@ Table of Contents                      *p5-image-table-of-contents*
 
 ---
 
-`loadImage()`                                          |p5-image-loadImage|
-
-*   Creates a new p5.Image. A p5.Image is a canvas
-  backed representation of an image. p5 can display
-  .gif, .jpg and .png images. Images may be
-  displayed in 2D and 3D space. Before an image is
-  used, it must be loaded with the loadImage()
-  function. The p5.Image class contains fields for
-  the width and height of the image, as well as an
-  array called pixels[] that contains the values for
-  every pixel in the image.
-         *   The methods described below allow easy access to
-  the image's pixels and alpha channel and simplify
-  the process of compositing.
-         *   Before using the pixels[] array, be sure to use
-  the loadPixels() method on the image to make sure
-  that the pixel data is properly loaded.
-
-📂 *Sub-module: p5.Image*
-
----
-
 `updatePixels()`                                          |p5-image-updatePixels|
 
 *   Updates the backing canvas for this image with the
@@ -737,17 +405,6 @@ Table of Contents                      *p5-image-table-of-contents*
   underlying canvas
   - **h**: height of the target update area for the
   underlying canvas
-
-📂 *Sub-module: p5.Image*
-
----
-
-`updatePixels()`                                          |p5-image-updatePixels|
-
-*   Updates the backing canvas for this image with the
-  contents of the [pixels] array. If this image is
-  an animated GIF then the pixels will be updated in
-  the frame that is currently displayed.
 
 📂 *Sub-module: p5.Image*
 
@@ -770,51 +427,6 @@ Table of Contents                      *p5-image-table-of-contents*
 
 ---
 
-`get()`                                          |p5-image-get|
-
-*   Get a region of pixels from an image. If no params
-  are passed, the whole image is returned. If x and
-  y are the only params passed a single pixel is
-  extracted. If all params are passed a rectangle
-  region is extracted and a p5.Image is returned.
-  - **Returns**: the whole p5.Image
-
-📂 *Sub-module: p5.Image*
-
----
-
-`get()`                                          |p5-image-get|
-
-*   Get a region of pixels from an image. If no params
-  are passed, the whole image is returned. If x and
-  y are the only params passed a single pixel is
-  extracted. If all params are passed a rectangle
-  region is extracted and a p5.Image is returned.
-  - **x**: x-coordinate of the pixel
-  - **y**: y-coordinate of the pixel
-  - **Returns**: color of pixel at x,y in array format [R,
-  G, B, A]
-
-📂 *Sub-module: p5.Image*
-
----
-
-`updatePixels()`                                          |p5-image-updatePixels|
-
-*   Set the color of a single pixel or write an image
-  into this p5.Image. Note that for a large number
-  of pixels this will be slower than directly
-  manipulating the pixels array and then calling
-  updatePixels().
-  - **x**: x-coordinate of the pixel
-  - **y**: y-coordinate of the pixel
-  - **a**: grayscale value | pixel array | a
-  p5.Color | image to copy
-
-📂 *Sub-module: p5.Image*
-
----
-
 `resize()`                                          |p5-image-resize|
 
 *   Resize the image to a new width and height. To
@@ -825,57 +437,6 @@ Table of Contents                      *p5-image-table-of-contents*
   proportion, use resize(150, 0).
   - **width**: the resized image width
   - **height**: the resized image height
-
-📂 *Sub-module: p5.Image*
-
----
-
-`copy()`                                          |p5-image-copy|
-
-*   Copies a region of pixels from one image to
-  another. If no srcImage is specified this is used
-  as the source. If the source and destination
-  regions aren't the same size, it will
-  automatically resize source pixels to fit the
-  specified target region.
-  - **srcImage**: source image
-  - **sx**: X coordinate of the source's upper left
-  corner
-  - **sy**: Y coordinate of the source's upper left
-  corner
-  - **sw**: source image width
-  - **sh**: source image height
-  - **dx**: X coordinate of the destination's upper
-  left corner
-  - **dy**: Y coordinate of the destination's upper
-  left corner
-  - **dw**: destination image width
-  - **dh**: destination image height
-
-📂 *Sub-module: p5.Image*
-
----
-
-`copy()`                                          |p5-image-copy|
-
-*   Copies a region of pixels from one image to
-  another. If no srcImage is specified this is used
-  as the source. If the source and destination
-  regions aren't the same size, it will
-  automatically resize source pixels to fit the
-  specified target region.
-  - **sx**: X coordinate of the source's upper left
-  corner
-  - **sy**: Y coordinate of the source's upper left
-  corner
-  - **sw**: source image width
-  - **sh**: source image height
-  - **dx**: X coordinate of the destination's upper
-  left corner
-  - **dy**: Y coordinate of the destination's upper
-  left corner
-  - **dw**: destination image width
-  - **dh**: destination image height
 
 📂 *Sub-module: p5.Image*
 
@@ -894,87 +455,12 @@ Table of Contents                      *p5-image-table-of-contents*
 
 ---
 
-`0()`                                          |p5-image-0|
-
-*   Applies an image filter to a p5.Image THRESHOLD
-  Converts the image to black and white pixels
-  depending if they are above or below the threshold
-  defined by the level parameter. The parameter must
-  be between 0.0 (black) and 1.0 (white). If no
-  level is specified, 0.5 is used.
-         *   GRAY Converts any colors in the image to grayscale
-  equivalents. No parameter is used.
-         *   OPAQUE Sets the alpha channel to entirely opaque.
-  No parameter is used.
-         *   INVERT Sets each pixel to its inverse value. No
-  parameter is used.
-         *   POSTERIZE Limits each channel of the image to the
-  number of colors specified as the parameter. The
-  parameter can be set to values between 2 and 255,
-  but results are most noticeable in the lower
-  ranges.
-         *   BLUR Executes a Gaussian blur with the level
-  parameter specifying the extent of the blurring.
-  If no parameter is used, the blur is equivalent to
-  Gaussian blur of radius 1. Larger values increase
-  the blur.
-         *   ERODE Reduces the light areas. No parameter is
-  used.
-         *   DILATE Increases the light areas. No parameter is
-  used.
-         *   filter() does not work in WEBGL mode. A similar
-  effect can be achieved in WEBGL mode using custom
-  shaders. Adam Ferriss has written a selection of
-  shader examples that contains many of the effects
-  present in the filter examples.
-  - **filterType**: either THRESHOLD, GRAY, OPAQUE,
-  INVERT, POSTERIZE, ERODE, DILATE or BLUR. See
-  Filters.js for docs on each available filter
-  @param [filterParam] an optional parameter unique
-  to each filter, see above
-
-📂 *Sub-module: p5.Image*
-
----
-
 `blend()`                                          |p5-image-blend|
 
 *   Copies a region of pixels from one image to
   another, using a specified blend mode to do the
   operation.
   - **srcImage**: source image
-  - **sx**: X coordinate of the source's upper left
-  corner
-  - **sy**: Y coordinate of the source's upper left
-  corner
-  - **sw**: source image width
-  - **sh**: source image height
-  - **dx**: X coordinate of the destination's upper
-  left corner
-  - **dy**: Y coordinate of the destination's upper
-  left corner
-  - **dw**: destination image width
-  - **dh**: destination image height
-  - **blendMode**: the blend mode. either BLEND,
-  DARKEST, LIGHTEST, DIFFERENCE, MULTIPLY,
-  EXCLUSION, SCREEN, REPLACE, OVERLAY, HARD_LIGHT,
-  SOFT_LIGHT, DODGE, BURN, ADD or NORMAL.
-         *   Available blend modes are: normal | multiply |
-  screen | overlay | darken | lighten | color-dodge
-  | color-burn | hard-light | soft-light |
-  difference | exclusion | hue | saturation | color
-  | luminosity
-         *   http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
-
-📂 *Sub-module: p5.Image*
-
----
-
-`blend()`                                          |p5-image-blend|
-
-*   Copies a region of pixels from one image to
-  another, using a specified blend mode to do the
-  operation.
   - **sx**: X coordinate of the source's upper left
   corner
   - **sy**: Y coordinate of the source's upper left
@@ -1059,14 +545,6 @@ Table of Contents                      *p5-image-table-of-contents*
 `pause()`                                          |p5-image-pause|
 
 *   Plays an animated GIF that was paused with pause()
-
-📂 *Sub-module: p5.Image*
-
----
-
-`pause()`                                          |p5-image-pause|
-
-*   Pauses an animated GIF.
 
 📂 *Sub-module: p5.Image*
 

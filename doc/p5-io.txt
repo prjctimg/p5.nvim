@@ -19,34 +19,20 @@ Table of Contents                      *p5-io-table-of-contents*
   - findRow()             |p5-io-findRow|
   - findRows()             |p5-io-findRows|
   - ID()             |p5-io-ID|
-  - ID()             |p5-io-ID|
   - getColumn()             |p5-io-getColumn|
   - clearRows()             |p5-io-clearRows|
   - addColumn()             |p5-io-addColumn|
   - getColumnCount()             |p5-io-getColumnCount|
   - getRowCount()             |p5-io-getRowCount|
   - characters()             |p5-io-characters|
-  - ID()             |p5-io-ID|
   - removeColumn()             |p5-io-removeColumn|
-  - ID()             |p5-io-ID|
-  - ID()             |p5-io-ID|
-  - ID()             |p5-io-ID|
-  - columnName()             |p5-io-columnName|
-  - columnName()             |p5-io-columnName|
   - columnName()             |p5-io-columnName|
   - object()             |p5-io-object|
   - getArray()             |p5-io-getArray|
-  - values()             |p5-io-values|
-  - ID()             |p5-io-ID|
-  - ID()             |p5-io-ID|
-  - columnName()             |p5-io-columnName|
-  - columnName()             |p5-io-columnName|
-  - columnName()             |p5-io-columnName|
   - loadXML()             |p5-io-loadXML|
   - getName()             |p5-io-getName|
   - setName()             |p5-io-setName|
   - hasChildren()             |p5-io-hasChildren|
-  - getName()             |p5-io-getName|
   - getChildren()             |p5-io-getChildren|
   - getChild()             |p5-io-getChild|
   - addChild()             |p5-io-addChild|
@@ -68,7 +54,7 @@ Table of Contents                      *p5-io-table-of-contents*
 📁 Io module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 11:12:52~
+⏰ Last Updated: 2026-02-07 11:17:20~
 
 ==============================================================================
 3. Functions                                           |p5-io-functions|
@@ -281,23 +267,6 @@ Table of Contents                      *p5-io-table-of-contents*
 
 ---
 
-`ID()`                                          |p5-io-ID|
-
-*   Finds the rows in the Table that match the regular
-  expression provided, and returns references to
-  those rows. Returns an array, so for must be used
-  to iterate through all the rows, as shown in the
-  example. The column to search may be specified by
-  either its ID or title.
-  - **regexp**: The regular expression to match
-  @param [column] The column ID (number) or title
-  (string)
-  - **Returns**: An Array of TableRow objects
-
-📂 *Sub-module: p5.Table*
-
----
-
 `getColumn()`                                          |p5-io-getColumn|
 
 *   Retrieves all values in the specified column, and
@@ -367,20 +336,6 @@ Table of Contents                      *p5-io-table-of-contents*
 
 ---
 
-`ID()`                                          |p5-io-ID|
-
-*   Trims leading and trailing whitespace, such as
-  spaces and tabs, from String table values. If no
-  column is specified, then the values in all
-  columns and rows are trimmed. A specific column
-  may be referenced by either its ID or title.
-  @param [column] Column ID (number) or name
-  (string)
-
-📂 *Sub-module: p5.Table*
-
----
-
 `removeColumn()`                                          |p5-io-removeColumn|
 
 *   Use removeColumn() to remove an existing column
@@ -395,79 +350,12 @@ Table of Contents                      *p5-io-table-of-contents*
 
 ---
 
-`ID()`                                          |p5-io-ID|
-
-*   Stores a value in the Table's specified row and
-  column. The row is specified by its ID, while the
-  column may be specified by either its ID or title.
-  - **row**: row ID
-  - **column**: column ID (Number) or title (String)
-  - **value**: value to assign
-
-📂 *Sub-module: p5.Table*
-
----
-
-`ID()`                                          |p5-io-ID|
-
-*   Stores a Float value in the Table's specified row
-  and column. The row is specified by its ID, while
-  the column may be specified by either its ID or
-  title.
-  - **row**: row ID
-  - **column**: column ID (Number) or title (String)
-  - **value**: value to assign
-
-📂 *Sub-module: p5.Table*
-
----
-
-`ID()`                                          |p5-io-ID|
-
-*   Stores a String value in the Table's specified row
-  and column. The row is specified by its ID, while
-  the column may be specified by either its ID or
-  title.
-  - **row**: row ID
-  - **column**: column ID (Number) or title (String)
-  - **value**: value to assign
-
-📂 *Sub-module: p5.Table*
-
----
-
 `columnName()`                                          |p5-io-columnName|
 
 *   Retrieves a value from the Table's specified row
   and column. The row is specified by its ID, while
   the column may be specified by either its ID or
   title.
-  - **row**: row ID
-  - **column**: columnName (string) or ID (number)
-
-📂 *Sub-module: p5.Table*
-
----
-
-`columnName()`                                          |p5-io-columnName|
-
-*   Retrieves a Float value from the Table's specified
-  row and column. The row is specified by its ID,
-  while the column may be specified by either its ID
-  or title.
-  - **row**: row ID
-  - **column**: columnName (string) or ID (number)
-
-📂 *Sub-module: p5.Table*
-
----
-
-`columnName()`                                          |p5-io-columnName|
-
-*   Retrieves a String value from the Table's
-  specified row and column. The row is specified by
-  its ID, while the column may be specified by
-  either its ID or title.
   - **row**: row ID
   - **column**: columnName (string) or ID (number)
 
@@ -493,80 +381,6 @@ Table of Contents                      *p5-io-table-of-contents*
   multidimensional array.
 
 📂 *Sub-module: p5.Table*
-
----
-
-`values()`                                          |p5-io-values|
-
-*   A TableRow object represents a single row of data
-  values, stored in columns, from a table. A Table
-  Row contains both an ordered array, and an
-  unordered JSON object.
-         *   @param [str] optional: populate the row with a
-  string of values, separated by the separator
-  @param [separator] comma separated values (csv) by
-  default
-
-📂 *Sub-module: p5.TableRow*
-
----
-
-`ID()`                                          |p5-io-ID|
-
-*   Stores a Float value in the TableRow's specified
-  column. The column may be specified by either its
-  ID or title.
-  - **column**: Column ID (Number) or Title (String)
-  - **value**: The value to be stored as a Float
-
-📂 *Sub-module: p5.TableRow*
-
----
-
-`ID()`                                          |p5-io-ID|
-
-*   Stores a String value in the TableRow's specified
-  column. The column may be specified by either its
-  ID or title.
-  - **column**: Column ID (Number) or Title (String)
-  - **value**: The value to be stored as a String
-
-📂 *Sub-module: p5.TableRow*
-
----
-
-`columnName()`                                          |p5-io-columnName|
-
-*   Retrieves a value from the TableRow's specified
-  column. The column may be specified by either its
-  ID or title.
-  - **column**: columnName (string) or ID (number)
-
-📂 *Sub-module: p5.TableRow*
-
----
-
-`columnName()`                                          |p5-io-columnName|
-
-*   Retrieves a Float value from the TableRow's
-  specified column. The column may be specified by
-  either its ID or title.
-  - **column**: columnName (string) or ID (number)
-  - **Returns**: Float Floating point number
-
-📂 *Sub-module: p5.TableRow*
-
----
-
-`columnName()`                                          |p5-io-columnName|
-
-*   Retrieves an String value from the TableRow's
-  specified column. The column may be specified by
-  either its ID or title.
-  - **column**: columnName (string) or ID (number)
-  - **Returns**: String
-
-📂 *Sub-module: p5.TableRow*
 
 ---
 
@@ -604,18 +418,6 @@ Table of Contents                      *p5-io-table-of-contents*
 
 *   Checks whether or not the element has any
   children, and returns the result as a boolean.
-
-📂 *Sub-module: p5.XML*
-
----
-
-`getName()`                                          |p5-io-getName|
-
-*   Get the names of all of the element's children,
-  and returns the names as an array of Strings. This
-  is the same as looping through and calling
-  getName() on each child element individually.
-  - **Returns**: names of the children of the element
 
 📂 *Sub-module: p5.XML*
 

@@ -11,8 +11,6 @@ Table of Contents                      *p5-dom-table-of-contents*
   - noLoop()             |p5-dom-noLoop|
   - autoplay()             |p5-dom-autoplay|
   - volume()             |p5-dom-volume|
-  - volume()             |p5-dom-volume|
-  - speed()             |p5-dom-speed|
   - speed()             |p5-dom-speed|
   - time()             |p5-dom-time|
   - to()             |p5-dom-to|
@@ -23,48 +21,29 @@ Table of Contents                      *p5-dom-table-of-contents*
   - hideControls()             |p5-dom-hideControls|
   - MediaElement()             |p5-dom-MediaElement|
   - clearCues()             |p5-dom-clearCues|
-  - constructor()             |p5-dom-constructor|
   - string()             |p5-dom-string|
   - removeElements()             |p5-dom-removeElements|
   - changed()             |p5-dom-changed|
   - createP()             |p5-dom-createP|
   - createSpan()             |p5-dom-createSpan|
-  - string()             |p5-dom-string|
-  - string()             |p5-dom-string|
-  - size()             |p5-dom-size|
   - size()             |p5-dom-size|
   - checked()             |p5-dom-checked|
   - name()             |p5-dom-name|
-  - name()             |p5-dom-name|
-  - option()             |p5-dom-option|
-  - option()             |p5-dom-option|
   - option()             |p5-dom-option|
   - value()             |p5-dom-value|
-  - size()             |p5-dom-size|
-  - size()             |p5-dom-size|
   - createFileInput()             |p5-dom-createFileInput|
   - addClass()             |p5-dom-addClass|
   - removeClass()             |p5-dom-removeClass|
   - hasClass()             |p5-dom-hasClass|
   - toggleClass()             |p5-dom-toggleClass|
   - child()             |p5-dom-child|
-  - child()             |p5-dom-child|
   - center()             |p5-dom-center|
   - html()             |p5-dom-html|
-  - html()             |p5-dom-html|
-  - to()             |p5-dom-to|
-  - to()             |p5-dom-to|
   - style()             |p5-dom-style|
-  - style()             |p5-dom-style|
-  - attribute()             |p5-dom-attribute|
   - attribute()             |p5-dom-attribute|
   - removeAttribute()             |p5-dom-removeAttribute|
-  - value()             |p5-dom-value|
-  - value()             |p5-dom-value|
   - show()             |p5-dom-show|
   - hide()             |p5-dom-hide|
-  - size()             |p5-dom-size|
-  - size()             |p5-dom-size|
   - remove()             |p5-dom-remove|
 
 2. Variables                                           |p5-dom-variables|
@@ -79,7 +58,7 @@ Table of Contents                      *p5-dom-table-of-contents*
 🌐 Dom module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 11:12:52~
+⏰ Last Updated: 2026-02-07 11:17:20~
 
 ==============================================================================
 3. Functions                                           |p5-dom-functions|
@@ -160,17 +139,6 @@ Table of Contents                      *p5-dom-table-of-contents*
 
 ---
 
-`volume()`                                          |p5-dom-volume|
-
-*   Sets volume for this HTML5 media element. If no
-  argument is given, returns the current volume.
-  - **val**: volume between 0.0 and 1.0
-  @chainable
-
-📂 *Sub-module: dom*
-
----
-
 `speed()`                                          |p5-dom-speed|
 
 *   If no arguments are given, returns the current
@@ -182,23 +150,6 @@ Table of Contents                      *p5-dom-table-of-contents*
   backward playback and even if they do, playback
   might not be smooth.)
   - **Returns**: current playback speed of the element
-
-📂 *Sub-module: dom*
-
----
-
-`speed()`                                          |p5-dom-speed|
-
-*   If no arguments are given, returns the current
-  playback speed of the element. The speed parameter
-  sets the speed where 2.0 will play the element
-  twice as fast, 0.5 will play at half the speed,
-  and -1 will play the element in normal speed in
-  reverse.(Note that not all browsers support
-  backward playback and even if they do, playback
-  might not be smooth.)
-  - **speed**: speed multiplier for element playback
-  @chainable
 
 📂 *Sub-module: dom*
 
@@ -317,14 +268,6 @@ Table of Contents                      *p5-dom-table-of-contents*
 
 ---
 
-`constructor()`                                          |p5-dom-constructor|
-
-*   Path to the media element source.
-
-📂 *Sub-module: dom*
-
----
-
 `string()`                                          |p5-dom-string|
 
 *   Searches the page for elements that match the
@@ -393,42 +336,6 @@ Table of Contents                      *p5-dom-table-of-contents*
 
 ---
 
-`string()`                                          |p5-dom-string|
-
-*   Creates an <img> element in the DOM with given src
-  and alternate text.
-  - **src**: src path or url for image
-  - **alt**: alternate text to be used if image does
-  not load. You can use also an empty string ("") if
-  that an image is not intended to be viewed.
-  - **Returns**: pointer to p5.Element holding created node
-
-📂 *Sub-module: dom*
-
----
-
-`string()`                                          |p5-dom-string|
-
-*   Creates an <img> element in the DOM with given src
-  and alternate text.
-  - **src**: src path or url for image
-  - **alt**: alternate text to be used if image does
-  not load. You can use also an empty string ("") if
-  that an image is not intended to be viewed.
-  - **crossOrigin**: crossOrigin property of the img
-  element; use either 'anonymous' or
-  'use-credentials' to retrieve the image with
-  cross-origin access (for later use with canvas. if
-  an empty string("") is passed, CORS is not used
-  @param [successCallback] callback to be called
-  once image data is loaded with the p5.Element as
-  argument
-  - **Returns**: pointer to p5.Element holding created node
-
-📂 *Sub-module: dom*
-
----
-
 `size()`                                          |p5-dom-size|
 
 *   Creates a slider <input></input> element in the
@@ -443,19 +350,6 @@ Table of Contents                      *p5-dom-table-of-contents*
   value)
   - **Returns**: pointer to p5.Element holding the created
   node
-
-📂 *Sub-module: dom*
-
----
-
-`size()`                                          |p5-dom-size|
-
-*   Creates a <button></button> element in the DOM.
-  Use .size() to set the display size of the button.
-  Use .mousePressed() to specify behavior on press.
-  - **label**: label displayed on the button
-  @param [value] value of the button
-  - **Returns**: pointer to p5.Element holding created node
 
 📂 *Sub-module: dom*
 
@@ -510,39 +404,6 @@ Table of Contents                      *p5-dom-table-of-contents*
 
 ---
 
-`name()`                                          |p5-dom-name|
-
-*   Creates a dropdown menu <select></select> element
-  in the DOM. It also assigns select-related methods
-  to p5.Element when selecting an existing select
-  box. Options in the menu are unique by name (the
-  display text). - .option(name, [value]) can be
-  used to add an option with name (the display text)
-  and value to the select element. If an option with
-  name already exists within the select element,
-  this method will change its value to value.
-  - .value() will return the currently selected
-  option.
-  - .selected() will return the current dropdown
-  element which is an instance of p5.Element.
-  - .selected(value) can be used to make given
-  option selected by default when the page first
-  loads.
-  - .disable() marks the whole dropdown element as
-  disabled.
-  - .disable(value) marks a given option as
-  disabled.
-  - .enable() marks the whole dropdown element as
-  enabled if whole dropdown element is disabled
-  intially.
-  - .enable(value) marks a given option as enable if
-  the initial option is disabled.
-  - **existing**: DOM select element
-
-📂 *Sub-module: dom*
-
----
-
 `option()`                                          |p5-dom-option|
 
 *   Creates a radio button element in the DOM. It also
@@ -576,64 +437,6 @@ Table of Contents                      *p5-dom-table-of-contents*
 
 ---
 
-`option()`                                          |p5-dom-option|
-
-*   Creates a radio button element in the DOM. It also
-  helps existing radio buttons assign methods of
-  p5.Element. - .option(value, [label]) can be used
-  to create a new option for the element. If an
-  option with a value already exists, it will be
-  returned. It is recommended to use string values
-  as input for value. Optionally, a label can be
-  provided as second argument for the option.
-  - .remove(value) can be used to remove an option
-  for the element. String values recommended as
-  input for value.
-  - .value() method will return the currently
-  selected value.
-  - .selected() method will return the currently
-  selected input element.
-  - .selected(value) method will select the option
-  and return it. String values recommended as input
-  for value.
-  - .disable(Boolean) method will enable/disable the
-  whole radio button element.
-  - **name**: A name parameter for each Input
-  Element.
-  - **Returns**: pointer to p5.Element holding created node
-
-📂 *Sub-module: dom*
-
----
-
-`option()`                                          |p5-dom-option|
-
-*   Creates a radio button element in the DOM. It also
-  helps existing radio buttons assign methods of
-  p5.Element. - .option(value, [label]) can be used
-  to create a new option for the element. If an
-  option with a value already exists, it will be
-  returned. It is recommended to use string values
-  as input for value. Optionally, a label can be
-  provided as second argument for the option.
-  - .remove(value) can be used to remove an option
-  for the element. String values recommended as
-  input for value.
-  - .value() method will return the currently
-  selected value.
-  - .selected() method will return the currently
-  selected input element.
-  - .selected(value) method will select the option
-  and return it. String values recommended as input
-  for value.
-  - .disable(Boolean) method will enable/disable the
-  whole radio button element.
-  - **Returns**: pointer to p5.Element holding created node
-
-📂 *Sub-module: dom*
-
----
-
 `value()`                                          |p5-dom-value|
 
 *   Creates a colorPicker element in the DOM for color
@@ -643,32 +446,6 @@ Table of Contents                      *p5-dom-table-of-contents*
   chosen color.
   @param [value] default color of element
   - **Returns**: pointer to p5.Element holding created node
-
-📂 *Sub-module: dom*
-
----
-
-`size()`                                          |p5-dom-size|
-
-*   Creates an <input></input> element in the DOM for
-  text input. Use .size() to set the display length
-  of the box.
-  - **value**: default value of the input box
-  @param [type] type of text, ie text, password etc.
-  Defaults to text. Needs a value to be specified
-  first.
-  - **Returns**: pointer to p5.Element holding created node
-
-📂 *Sub-module: dom*
-
----
-
-`size()`                                          |p5-dom-size|
-
-*   Creates an <input></input> element in the DOM for
-  text input. Use .size() to set the display length
-  of the box.
-  @param [value] default value of the input box
 
 📂 *Sub-module: dom*
 
@@ -744,20 +521,6 @@ Table of Contents                      *p5-dom-table-of-contents*
 
 ---
 
-`child()`                                          |p5-dom-child|
-
-*   Attaches the element as a child to the parent
-  specified. Accepts either a string ID, DOM node,
-  or p5.Element. If no argument is specified, an
-  array of children DOM nodes is returned.
-  @param [child] the ID, DOM node, or p5.Element to
-  add to the current element
-  @chainable
-
-📂 *Sub-module: dom*
-
----
-
 `center()`                                          |p5-dom-center|
 
 *   Centers a p5.Element either vertically,
@@ -787,70 +550,6 @@ Table of Contents                      *p5-dom-table-of-contents*
 
 ---
 
-`html()`                                          |p5-dom-html|
-
-*   If an argument is given, sets the inner HTML of
-  the element, replacing any existing HTML. If true
-  is included as a second argument, HTML is appended
-  instead of replacing existing HTML. If no
-  arguments are given, returns the inner HTML of the
-  element.
-  @param [html] the HTML to be placed inside the
-  element
-  @param [append] whether to append HTML to existing
-  @chainable
-
-📂 *Sub-module: dom*
-
----
-
-`to()`                                          |p5-dom-to|
-
-*   Sets the position of the element. If no position
-  type argument is given, the position will be
-  relative to (0, 0) of the window. Essentially,
-  this sets position:absolute and left and top
-  properties of style. If an optional third argument
-  specifying position type is given, the x and
-  y-coordinates will be interpreted based on the
-  positioning scheme. If no arguments given, the
-  function returns the x and y position of the
-  element. found documentation on how to be more
-  specific with object type
-  https://stackoverflow.com/questions/14714314/how-do-i-comment-object-literals-in-yuidoc
-  - **Returns**: object of form { x: 0, y: 0 } containing
-  the position of the element in an object
-
-📂 *Sub-module: dom*
-
----
-
-`to()`                                          |p5-dom-to|
-
-*   Sets the position of the element. If no position
-  type argument is given, the position will be
-  relative to (0, 0) of the window. Essentially,
-  this sets position:absolute and left and top
-  properties of style. If an optional third argument
-  specifying position type is given, the x and
-  y-coordinates will be interpreted based on the
-  positioning scheme. If no arguments given, the
-  function returns the x and y position of the
-  element. found documentation on how to be more
-  specific with object type
-  https://stackoverflow.com/questions/14714314/how-do-i-comment-object-literals-in-yuidoc
-  @param [x] x-position relative to upper left of
-  window (optional)
-  @param [y] y-position relative to upper left of
-  window (optional)
-  @param [positionType] it can be static, fixed,
-  relative, sticky, initial or inherit (optional)
-  @chainable
-
-📂 *Sub-module: dom*
-
----
-
 `style()`                                          |p5-dom-style|
 
 *   Sets the given style (CSS) property (1st arg) of
@@ -862,23 +561,6 @@ Table of Contents                      *p5-dom-table-of-contents*
   appropriately.
   - **property**: property to be set
   - **Returns**: value of property
-
-📂 *Sub-module: dom*
-
----
-
-`style()`                                          |p5-dom-style|
-
-*   Sets the given style (CSS) property (1st arg) of
-  the element with the given value (2nd arg). If a
-  single argument is given, .style() returns the
-  value of the given property; however, if a single
-  argument is given in CSS syntax
-  ('text-align:center'), .style() sets the CSS
-  appropriately.
-  - **property**: property to be set
-  - **value**: value to assign to property
-  @chainable
 
 📂 *Sub-module: dom*
 
@@ -896,44 +578,10 @@ Table of Contents                      *p5-dom-table-of-contents*
 
 ---
 
-`attribute()`                                          |p5-dom-attribute|
-
-*   Adds a new attribute or changes the value of an
-  existing attribute on the specified element. If no
-  value is specified, returns the value of the given
-  attribute, or null if the attribute is not set.
-  - **attr**: attribute to set
-  - **value**: value to assign to attribute
-  @chainable
-
-📂 *Sub-module: dom*
-
----
-
 `removeAttribute()`                                          |p5-dom-removeAttribute|
 
 *   Removes an attribute on the specified element.
   - **attr**: attribute to remove
-  @chainable
-
-📂 *Sub-module: dom*
-
----
-
-`value()`                                          |p5-dom-value|
-
-*   Either returns the value of the element if no
-  arguments given, or sets the value of the element.
-  - **Returns**: value of the element
-
-📂 *Sub-module: dom*
-
----
-
-`value()`                                          |p5-dom-value|
-
-*   Either returns the value of the element if no
-  arguments given, or sets the value of the element.
   @chainable
 
 📂 *Sub-module: dom*
@@ -954,41 +602,6 @@ Table of Contents                      *p5-dom-table-of-contents*
 
 *   Hides the current element. Essentially, setting
   display:none for the style.
-  @chainable
-
-📂 *Sub-module: dom*
-
----
-
-`size()`                                          |p5-dom-size|
-
-*   Sets the width and height of the element. AUTO can
-  be used to only adjust one dimension at a time. If
-  no arguments are given, it returns the width and
-  height of the element in an Object. In the case of
-  elements that need to be loaded, such as images,
-  it is recommended to call the function after the
-  element has finished loading.
-  - **Returns**: the width and height of the element in an
-  object
-
-📂 *Sub-module: dom*
-
----
-
-`size()`                                          |p5-dom-size|
-
-*   Sets the width and height of the element. AUTO can
-  be used to only adjust one dimension at a time. If
-  no arguments are given, it returns the width and
-  height of the element in an Object. In the case of
-  elements that need to be loaded, such as images,
-  it is recommended to call the function after the
-  element has finished loading.
-  - **w**: width of the element, either AUTO, or a
-  number
-  @param [h] height of the element, either AUTO, or
-  a number
   @chainable
 
 📂 *Sub-module: dom*

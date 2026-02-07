@@ -6,7 +6,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
 1. Functions                                           |p5-utilities-functions|
   - push()             |p5-utilities-push|
   - array()             |p5-utilities-array|
-  - array()             |p5-utilities-array|
   - concat()             |p5-utilities-concat|
   - reverse()             |p5-utilities-reverse|
   - pop()             |p5-utilities-pop|
@@ -16,33 +15,19 @@ Table of Contents                      *p5-utilities-table-of-contents*
   - subset()             |p5-utilities-subset|
   - NaN()             |p5-utilities-NaN|
   - to()             |p5-utilities-to|
-  - to()             |p5-utilities-to|
   - str()             |p5-utilities-str|
   - boolean()             |p5-utilities-boolean|
   - byte()             |p5-utilities-byte|
-  - byte()             |p5-utilities-byte|
-  - char()             |p5-utilities-char|
   - char()             |p5-utilities-char|
   - unchar()             |p5-utilities-unchar|
-  - unchar()             |p5-utilities-unchar|
   - hex()             |p5-utilities-hex|
-  - hex()             |p5-utilities-hex|
-  - unhex()             |p5-utilities-unhex|
   - unhex()             |p5-utilities-unhex|
   - character()             |p5-utilities-character|
   - groups()             |p5-utilities-groups|
-  - groups()             |p5-utilities-groups|
-  - nf()             |p5-utilities-nf|
   - nf()             |p5-utilities-nf|
   - nfc()             |p5-utilities-nfc|
-  - nfc()             |p5-utilities-nfc|
-  - nf()             |p5-utilities-nf|
-  - nf()             |p5-utilities-nf|
-  - nf()             |p5-utilities-nf|
-  - nf()             |p5-utilities-nf|
   - split()             |p5-utilities-split|
   - splitTokens()             |p5-utilities-splitTokens|
-  - trim()             |p5-utilities-trim|
   - trim()             |p5-utilities-trim|
   - day()             |p5-utilities-day|
   - hour()             |p5-utilities-hour|
@@ -55,7 +40,7 @@ Table of Contents                      *p5-utilities-table-of-contents*
 🛠️ Utilities module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 11:12:52~
+⏰ Last Updated: 2026-02-07 11:17:20~
 
 ==============================================================================
 2. Functions                                           |p5-utilities-functions|
@@ -97,33 +82,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
   - **dstPosition**: starting position in the
   destination Array
   - **length**: number of Array elements to be
-  copied
-
-📂 *Sub-module: array_functions*
-
----
-
-`array()`                                          |p5-utilities-array|
-
-*   Copies an array (or part of an array) to another
-  array. The src array is copied to the dst array,
-  beginning at the position specified by srcPosition
-  and into the position specified by dstPosition.
-  The number of elements to copy is determined by
-  length. Note that copying values overwrites
-  existing values in the destination array. To
-  append values instead of overwriting them, use
-  concat(). The simplified version with only two
-  arguments, arrayCopy(src, dst), copies an entire
-  array to another of the same size. It is
-  equivalent to arrayCopy(src, 0, dst, 0,
-  src.length).
-         *   Using this function is far more efficient for
-  copying array data than iterating through a for()
-  loop and copying each element individually.
-  - **src**: the source Array
-  - **dst**: the destination Array
-  @param [length] number of Array elements to be
   copied
 
 📂 *Sub-module: array_functions*
@@ -267,21 +225,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
 
 ---
 
-`to()`                                          |p5-utilities-to|
-
-*   Converts a boolean, string, or float to its
-  integer representation. When an array of values is
-  passed in, then an int array of the same length is
-  returned.
-  - **ns**: values to parse
-  @param [radix] the radix to convert to (default:
-  10)
-  - **Returns**: integer representation of values
-
-📂 *Sub-module: conversion*
-
----
-
 `str()`                                          |p5-utilities-str|
 
 *   Converts a boolean, string or number to its string
@@ -329,23 +272,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
 
 ---
 
-`byte()`                                          |p5-utilities-byte|
-
-*   Converts a number, string representation of a
-  number, or boolean to its byte representation. A
-  byte can be only a whole number between -128 and
-  127, so when a value outside of this range is
-  converted, it wraps around to the corresponding
-  byte representation. When an array of number,
-  string or boolean values is passed in, then an
-  array of bytes the same length is returned.
-  - **ns**: values to parse
-  - **Returns**: array of byte representation of values
-
-📂 *Sub-module: conversion*
-
----
-
 `char()`                                          |p5-utilities-char|
 
 *   Converts a number or string to its corresponding
@@ -363,23 +289,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
 
 ---
 
-`char()`                                          |p5-utilities-char|
-
-*   Converts a number or string to its corresponding
-  single-character string representation. If a
-  string parameter is provided, it is first parsed
-  as an integer and then translated into a
-  single-character string. When an array of number
-  or string values is passed in, then an array of
-  single-character strings of the same length is
-  returned.
-  - **ns**: values to parse
-  - **Returns**: array of string representation of values
-
-📂 *Sub-module: conversion*
-
----
-
 `unchar()`                                          |p5-utilities-unchar|
 
 *   Converts a single-character string to its
@@ -389,20 +298,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
   is returned.
   - **n**: value to parse
   - **Returns**: integer representation of value
-
-📂 *Sub-module: conversion*
-
----
-
-`unchar()`                                          |p5-utilities-unchar|
-
-*   Converts a single-character string to its
-  corresponding integer representation. When an
-  array of single-character string values is passed
-  in, then an array of integers of the same length
-  is returned.
-  - **ns**: values to parse
-  - **Returns**: integer representation of values
 
 📂 *Sub-module: conversion*
 
@@ -424,23 +319,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
 
 ---
 
-`hex()`                                          |p5-utilities-hex|
-
-*   Converts a number to a string in its equivalent
-  hexadecimal notation. If a second parameter is
-  passed, it is used to set the number of characters
-  to generate in the hexadecimal notation. When an
-  array is passed in, an array of strings in
-  hexadecimal notation of the same length is
-  returned.
-  - **ns**: array of values to parse
-  - **Returns**: hexadecimal string representation of
-  values
-
-📂 *Sub-module: conversion*
-
----
-
 `unhex()`                                          |p5-utilities-unhex|
 
 *   Converts a string representation of a hexadecimal
@@ -450,21 +328,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
   returned.
   - **n**: value to parse
   - **Returns**: integer representation of hexadecimal
-  value
-
-📂 *Sub-module: conversion*
-
----
-
-`unhex()`                                          |p5-utilities-unhex|
-
-*   Converts a string representation of a hexadecimal
-  number to its equivalent integer value. When an
-  array of strings in hexadecimal notation is passed
-  in, an array of integers of the same length is
-  returned.
-  - **ns**: values to parse
-  - **Returns**: integer representations of hexadecimal
   value
 
 📂 *Sub-module: conversion*
@@ -516,37 +379,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
 
 ---
 
-`groups()`                                          |p5-utilities-groups|
-
-*   This function is used to apply a regular
-  expression to a piece of text, and return a list
-  of matching groups (elements found inside
-  parentheses) as a two-dimensional String array. If
-  there are no matches, a null value will be
-  returned. If no groups are specified in the
-  regular expression, but the sequence matches, a
-  two dimensional array is still returned, but the
-  second dimension is only of length one. To use the
-  function, first check to see if the result is
-  null. If the result is null, then the sequence did
-  not match at all. If the sequence did match, a 2D
-  array is returned.
-         *   If there are groups (specified by sets of
-  parentheses) in the regular expression, then the
-  contents of each will be returned in the array.
-  Assuming a loop with counter variable i, element
-  [i][0] of a regular expression match returns the
-  entire matching string, and the match groups start
-  at element [i][1] (the first group is [i][1], the
-  second [i][2], and so on).
-  - **str**: the String to be searched
-  - **regexp**: the regexp to be used for matching
-  - **Returns**: 2d Array of Strings found
-
-📂 *Sub-module: string_functions*
-
----
-
 `nf()`                                          |p5-utilities-nf|
 
 *   Utility function for formatting numbers into
@@ -574,33 +406,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
 
 ---
 
-`nf()`                                          |p5-utilities-nf|
-
-*   Utility function for formatting numbers into
-  strings. There are two versions: one for
-  formatting floats, and one for formatting ints.
-  The values for the digits, left, and right
-  parameters should always be positive integers.
-         *   (NOTE): Be cautious when using left and right
-  parameters as it prepends numbers of 0's if the
-  parameter if greater than the current length of
-  the number.
-         *   For example if number is 123.2 and left parameter
-  passed is 4 which is greater than length of 123
-  (integer part) i.e 3 than result will be 0123.2.
-  Same case for right parameter i.e. if right is 3
-  than the result will be 123.200.
-  - **nums**: the Numbers to format
-  @param [left] number of digits to the left of the
-  decimal point
-  @param [right] number of digits to the right of
-  the decimal point
-  - **Returns**: formatted Strings
-
-📂 *Sub-module: string_functions*
-
----
-
 `nfc()`                                          |p5-utilities-nfc|
 
 *   Utility function for formatting numbers into
@@ -613,137 +418,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
   @param [right] number of digits to the right of
   the decimal point
   - **Returns**: formatted String
-
-📂 *Sub-module: string_functions*
-
----
-
-`nfc()`                                          |p5-utilities-nfc|
-
-*   Utility function for formatting numbers into
-  strings and placing appropriate commas to mark
-  units of 1000. There are two versions: one for
-  formatting ints, and one for formatting an array
-  of ints. The value for the right parameter should
-  always be a positive integer.
-  - **nums**: the Numbers to format
-  @param [right] number of digits to the right of
-  the decimal point
-  - **Returns**: formatted Strings
-
-📂 *Sub-module: string_functions*
-
----
-
-`nf()`                                          |p5-utilities-nf|
-
-*   Utility function for formatting numbers into
-  strings. Similar to nf() but puts a "+" in front
-  of positive numbers and a "-" in front of negative
-  numbers. There are two versions: one for
-  formatting floats, and one for formatting ints.
-  The values for left, and right parameters should
-  always be positive integers.
-  - **num**: the Number to format
-  @param [left] number of digits to the left of the
-  decimal point
-  @param [right] number of digits to the right of
-  the decimal point
-  - **Returns**: formatted String
-
-📂 *Sub-module: string_functions*
-
----
-
-`nf()`                                          |p5-utilities-nf|
-
-*   Utility function for formatting numbers into
-  strings. Similar to nf() but puts a "+" in front
-  of positive numbers and a "-" in front of negative
-  numbers. There are two versions: one for
-  formatting floats, and one for formatting ints.
-  The values for left, and right parameters should
-  always be positive integers.
-  - **nums**: the Numbers to format
-  @param [left] number of digits to the left of the
-  decimal point
-  @param [right] number of digits to the right of
-  the decimal point
-  - **Returns**: formatted Strings
-
-📂 *Sub-module: string_functions*
-
----
-
-`nf()`                                          |p5-utilities-nf|
-
-*   Utility function for formatting numbers into
-  strings. Similar to nf() but puts an additional
-  "_" (space) in front of positive numbers just in
-  case to align it with negative numbers which
-  includes "-" (minus) sign. The main usecase of
-  nfs() can be seen when one wants to align the
-  digits (place values) of a non-negative number
-  with some negative number (See the example to get
-  a clear picture). There are two versions: one for
-  formatting float, and one for formatting int.
-         *   The values for the digits, left, and right
-  parameters should always be positive integers.
-         *   (IMP): The result on the canvas basically the
-  expected alignment can vary based on the typeface
-  you are using.
-         *   (NOTE): Be cautious when using left and right
-  parameters as it prepends numbers of 0's if the
-  parameter if greater than the current length of
-  the number.
-         *   For example if number is 123.2 and left parameter
-  passed is 4 which is greater than length of 123
-  (integer part) i.e 3 than result will be 0123.2.
-  Same case for right parameter i.e. if right is 3
-  than the result will be 123.200.
-  - **num**: the Number to format
-  @param [left] number of digits to the left of the
-  decimal point
-  @param [right] number of digits to the right of
-  the decimal point
-  - **Returns**: formatted String
-
-📂 *Sub-module: string_functions*
-
----
-
-`nf()`                                          |p5-utilities-nf|
-
-*   Utility function for formatting numbers into
-  strings. Similar to nf() but puts an additional
-  "_" (space) in front of positive numbers just in
-  case to align it with negative numbers which
-  includes "-" (minus) sign. The main usecase of
-  nfs() can be seen when one wants to align the
-  digits (place values) of a non-negative number
-  with some negative number (See the example to get
-  a clear picture). There are two versions: one for
-  formatting float, and one for formatting int.
-         *   The values for the digits, left, and right
-  parameters should always be positive integers.
-         *   (IMP): The result on the canvas basically the
-  expected alignment can vary based on the typeface
-  you are using.
-         *   (NOTE): Be cautious when using left and right
-  parameters as it prepends numbers of 0's if the
-  parameter if greater than the current length of
-  the number.
-         *   For example if number is 123.2 and left parameter
-  passed is 4 which is greater than length of 123
-  (integer part) i.e 3 than result will be 0123.2.
-  Same case for right parameter i.e. if right is 3
-  than the result will be 123.200.
-  - **nums**: the Numbers to format
-  @param [left] number of digits to the left of the
-  decimal point
-  @param [right] number of digits to the right of
-  the decimal point
-  - **Returns**: formatted Strings
 
 📂 *Sub-module: string_functions*
 
@@ -797,20 +471,6 @@ Table of Contents                      *p5-utilities-table-of-contents*
   Unicode "nbsp" character.
   - **str**: a String to be trimmed
   - **Returns**: a trimmed String
-
-📂 *Sub-module: string_functions*
-
----
-
-`trim()`                                          |p5-utilities-trim|
-
-*   Removes whitespace characters from the beginning
-  and end of a String. In addition to standard
-  whitespace characters such as space, carriage
-  return, and tab, this function also removes the
-  Unicode "nbsp" character.
-  - **strs**: an Array of Strings to be trimmed
-  - **Returns**: an Array of trimmed Strings
 
 📂 *Sub-module: string_functions*
 

@@ -35,8 +35,6 @@ Table of Contents                      *p5-events-table-of-contents*
   - pAccelerationY     |p5-events-pAccelerationY|
   - pAccelerationZ     |p5-events-pAccelerationZ|
   - Note     |p5-events-Note|
-  - Note     |p5-events-Note|
-  - Note     |p5-events-Note|
   - pRotationX     |p5-events-pRotationX|
   - pRotationY     |p5-events-pRotationY|
   - pRotationZ     |p5-events-pRotationZ|
@@ -48,12 +46,8 @@ Table of Contents                      *p5-events-table-of-contents*
   - movedY     |p5-events-movedY|
   - mouseX     |p5-events-mouseX|
   - mouseY     |p5-events-mouseY|
-  - Note     |p5-events-Note|
-  - Note     |p5-events-Note|
   - winMouseX     |p5-events-winMouseX|
   - winMouseY     |p5-events-winMouseY|
-  - Note     |p5-events-Note|
-  - Note     |p5-events-Note|
   - Warning     |p5-events-Warning|
   - mouseIsPressed     |p5-events-mouseIsPressed|
   - touches     |p5-events-touches|
@@ -61,7 +55,7 @@ Table of Contents                      *p5-events-table-of-contents*
 🖱️ Events module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 11:12:52~
+⏰ Last Updated: 2026-02-07 11:17:20~
 
 ==============================================================================
 3. Functions                                           |p5-events-functions|
@@ -523,39 +517,6 @@ Table of Contents                      *p5-events-table-of-contents*
 
 ---
 
-`Note`                                          |p5-events-Note|
-
-*   The system variable rotationY always contains the
-  rotation of the device along the y axis. If the
-  sketch  angleMode() is set to DEGREES, the value
-  will be -90 to 90. If it is set to RADIANS, the
-  value will be -PI/2 to PI/2. Note: The order the
-  rotations are called is important, ie. if used
-  together, it must be called in the order Z-X-Y or
-  there might be unexpected behaviour.
-
-📂 *Sub-module: acceleration*
-
----
-
-`Note`                                          |p5-events-Note|
-
-*   The system variable rotationZ always contains the
-  rotation of the device along the z axis. If the
-  sketch  angleMode() is set to DEGREES, the value
-  will be 0 to 360. If it is set to RADIANS, the
-  value will be 0 to 2*PI. Unlike rotationX and
-  rotationY, this variable is available for devices
-  with a built-in compass only.
-         *   Note: The order the rotations are called is
-  important, ie. if used together, it must be called
-  in the order Z-X-Y or there might be unexpected
-  behaviour.
-
-📂 *Sub-module: acceleration*
-
----
-
 `pRotationX`                                          |p5-events-pRotationX|
 
 *   The system variable pRotationX always contains the
@@ -723,36 +684,6 @@ Table of Contents                      *p5-events-table-of-contents*
 
 ---
 
-`Note`                                          |p5-events-Note|
-
-*   The system variable pmouseX always contains the
-  horizontal position of the mouse or finger in the
-  frame previous to the current frame, relative to
-  (0, 0) of the canvas. The value at the top-left
-  corner is (0, 0) for 2-D and (-width/2, -height/2)
-  for WebGL. Note: pmouseX will be reset to the
-  current mouseX value at the start of each touch
-  event.
-
-📂 *Sub-module: mouse*
-
----
-
-`Note`                                          |p5-events-Note|
-
-*   The system variable pmouseY always contains the
-  vertical position of the mouse or finger in the
-  frame previous to the current frame, relative to
-  (0, 0) of the canvas. The value at the top-left
-  corner is (0, 0) for 2-D and (-width/2, -height/2)
-  for WebGL. Note: pmouseY will be reset to the
-  current mouseY value at the start of each touch
-  event.
-
-📂 *Sub-module: mouse*
-
----
-
 `winMouseX`                                          |p5-events-winMouseX|
 
 *   The system variable winMouseX always contains the
@@ -768,32 +699,6 @@ Table of Contents                      *p5-events-table-of-contents*
 *   The system variable winMouseY always contains the
   current vertical position of the mouse, relative
   to (0, 0) of the window.
-
-📂 *Sub-module: mouse*
-
----
-
-`Note`                                          |p5-events-Note|
-
-*   The system variable pwinMouseX always contains the
-  horizontal position of the mouse in the frame
-  previous to the current frame, relative to (0, 0)
-  of the window. Note: pwinMouseX will be reset to
-  the current winMouseX value at the start of each
-  touch event.
-
-📂 *Sub-module: mouse*
-
----
-
-`Note`                                          |p5-events-Note|
-
-*   The system variable pwinMouseY always contains the
-  vertical position of the mouse in the frame
-  previous to the current frame, relative to (0, 0)
-  of the window. Note: pwinMouseY will be reset to
-  the current winMouseY value at the start of each
-  touch event.
 
 📂 *Sub-module: mouse*
 

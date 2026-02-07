@@ -8,7 +8,6 @@ Table of Contents                      *p5-math-table-of-contents*
   - ceil()             |p5-math-ceil|
   - constrain()             |p5-math-constrain|
   - dist()             |p5-math-dist|
-  - dist()             |p5-math-dist|
   - e()             |p5-math-e|
   - floor()             |p5-math-floor|
   - lerp()             |p5-math-lerp|
@@ -16,8 +15,6 @@ Table of Contents                      *p5-math-table-of-contents*
   - magnitude()             |p5-math-magnitude|
   - window()             |p5-math-window|
   - max()             |p5-math-max|
-  - max()             |p5-math-max|
-  - min()             |p5-math-min|
   - min()             |p5-math-min|
   - map()             |p5-math-map|
   - pow()             |p5-math-pow|
@@ -29,42 +26,23 @@ Table of Contents                      *p5-math-table-of-contents*
   - random()             |p5-math-random|
   - impact()             |p5-math-impact|
   - noise()             |p5-math-noise|
-  - random()             |p5-math-random|
-  - to()             |p5-math-to|
   - to()             |p5-math-to|
   - randomGaussian()             |p5-math-randomGaussian|
   - cos()             |p5-math-cos|
   - sin()             |p5-math-sin|
   - tan()             |p5-math-tan|
   - angle()             |p5-math-angle|
-  - cos()             |p5-math-cos|
-  - sin()             |p5-math-sin|
-  - tan()             |p5-math-tan|
   - angleMode()             |p5-math-angleMode|
   - radians()             |p5-math-radians|
-  - angleMode()             |p5-math-angleMode|
-  - angleMode()             |p5-math-angleMode|
   - Euclidean()             |p5-math-Euclidean|
-  - set()             |p5-math-set|
   - set()             |p5-math-set|
   - copy()             |p5-math-copy|
   - add()             |p5-math-add|
-  - add()             |p5-math-add|
-  - rem()             |p5-math-rem|
   - rem()             |p5-math-rem|
   - sub()             |p5-math-sub|
-  - sub()             |p5-math-sub|
-  - other()             |p5-math-other|
-  - other()             |p5-math-other|
-  - other()             |p5-math-other|
   - other()             |p5-math-other|
   - div()             |p5-math-div|
-  - div()             |p5-math-div|
-  - div()             |p5-math-div|
-  - div()             |p5-math-div|
-  - magnitude()             |p5-math-magnitude|
   - magSq()             |p5-math-magSq|
-  - dot()             |p5-math-dot|
   - dot()             |p5-math-dot|
   - cross()             |p5-math-cross|
   - points()             |p5-math-points|
@@ -72,15 +50,9 @@ Table of Contents                      *p5-math-table-of-contents*
   - limit()             |p5-math-limit|
   - setMag()             |p5-math-setMag|
   - createVector()             |p5-math-createVector|
-  - angle()             |p5-math-angle|
-  - angle()             |p5-math-angle|
   - angleBetween()             |p5-math-angleBetween|
   - 0()             |p5-math-0|
-  - 0()             |p5-math-0|
-  - 0()             |p5-math-0|
   - reflect()             |p5-math-reflect|
-  - copy()             |p5-math-copy|
-  - equals()             |p5-math-equals|
   - equals()             |p5-math-equals|
 
 2. Variables                                           |p5-math-variables|
@@ -91,7 +63,7 @@ Table of Contents                      *p5-math-table-of-contents*
 🔢 Math module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 11:12:52~
+⏰ Last Updated: 2026-02-07 11:17:20~
 
 ==============================================================================
 3. Functions                                           |p5-math-functions|
@@ -143,23 +115,6 @@ Table of Contents                      *p5-math-table-of-contents*
   - **y1**: y-coordinate of the first point
   - **x2**: x-coordinate of the second point
   - **y2**: y-coordinate of the second point
-  - **Returns**: distance between the two points
-
-📂 *Sub-module: calculation*
-
----
-
-`dist()`                                          |p5-math-dist|
-
-*   Calculates the distance between two points, in
-  either two or three dimensions. If you looking for
-  distance between two vectors see p5.Vector.dist()
-  - **x1**: x-coordinate of the first point
-  - **y1**: y-coordinate of the first point
-  - **z1**: z-coordinate of the first point
-  - **x2**: x-coordinate of the second point
-  - **y2**: y-coordinate of the second point
-  - **z2**: z-coordinate of the second point
   - **Returns**: distance between the two points
 
 📂 *Sub-module: calculation*
@@ -279,18 +234,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`max()`                                          |p5-math-max|
-
-*   Determines the largest value in a sequence of
-  numbers, and then returns that value. max()
-  accepts any number of Number parameters, or an
-  Array of any length.
-  - **nums**: Numbers to compare
-
-📂 *Sub-module: calculation*
-
----
-
 `min()`                                          |p5-math-min|
 
 *   Determines the smallest value in a sequence of
@@ -300,18 +243,6 @@ Table of Contents                      *p5-math-table-of-contents*
   - **n0**: Number to compare
   - **n1**: Number to compare
   - **Returns**: minimum Number
-
-📂 *Sub-module: calculation*
-
----
-
-`min()`                                          |p5-math-min|
-
-*   Determines the smallest value in a sequence of
-  numbers, and then returns that value. min()
-  accepts any number of Number parameters, or an
-  Array of any length.
-  - **nums**: Numbers to compare
 
 📂 *Sub-module: calculation*
 
@@ -514,19 +445,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`random()`                                          |p5-math-random|
-
-*   Sets the seed value for random(). By default,
-  random() produces different results each time the
-  program is run. Set the seed parameter to a
-  constant to return the same pseudo-random numbers
-  each time the software is run.
-  - **seed**: the seed value
-
-📂 *Sub-module: random*
-
----
-
 `to()`                                          |p5-math-to|
 
 *   Return a random floating-point number. Takes
@@ -544,27 +462,6 @@ Table of Contents                      *p5-math-table-of-contents*
   @param [min] the lower bound (inclusive)
   @param [max] the upper bound (exclusive)
   - **Returns**: the random number
-
-📂 *Sub-module: random*
-
----
-
-`to()`                                          |p5-math-to|
-
-*   Return a random floating-point number. Takes
-  either 0, 1 or 2 arguments.
-         *   If no argument is given, returns a random number
-  from 0 up to (but not including) 1.
-         *   If one argument is given and it is a number,
-  returns a random number from 0 up to (but not
-  including) the number.
-         *   If one argument is given and it is an array,
-  returns a random element from that array.
-         *   If two arguments are given, returns a random
-  number from the first argument up to (but not
-  including) the second argument.
-  - **choices**: the array to choose from
-  - **Returns**: the random element from the array
 
 📂 *Sub-module: random*
 
@@ -660,42 +557,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`cos()`                                          |p5-math-cos|
-
-*   Calculates the cosine of an angle. This function
-  takes into account the current angleMode. Values
-  are returned in the range -1 to 1.
-  - **angle**: the angle
-  - **Returns**: the cosine of the angle
-
-📂 *Sub-module: trigonometry*
-
----
-
-`sin()`                                          |p5-math-sin|
-
-*   Calculates the sine of an angle. This function
-  takes into account the current angleMode. Values
-  are returned in the range -1 to 1.
-  - **angle**: the angle
-  - **Returns**: the sine of the angle
-
-📂 *Sub-module: trigonometry*
-
----
-
-`tan()`                                          |p5-math-tan|
-
-*   Calculates the tangent of an angle. This function
-  takes into account the current angleMode. Values
-  are returned in the range of all real numbers.
-  - **angle**: the angle
-  - **Returns**: the tangent of the angle
-
-📂 *Sub-module: trigonometry*
-
----
-
 `angleMode()`                                          |p5-math-angleMode|
 
 *   Converts a radian measurement to its corresponding
@@ -724,28 +585,6 @@ Table of Contents                      *p5-math-table-of-contents*
   - **degrees**: the degree value to convert to
   radians
   - **Returns**: the converted angle
-
-📂 *Sub-module: trigonometry*
-
----
-
-`angleMode()`                                          |p5-math-angleMode|
-
-*   Sets the current mode of p5 to the given mode.
-  Default mode is RADIANS. Calling angleMode() with
-  no arguments returns current anglemode.
-  - **mode**: either RADIANS or DEGREES
-
-📂 *Sub-module: trigonometry*
-
----
-
-`angleMode()`                                          |p5-math-angleMode|
-
-*   Sets the current mode of p5 to the given mode.
-  Default mode is RADIANS. Calling angleMode() with
-  no arguments returns current anglemode.
-  - **Returns**: mode either RADIANS or DEGREES
 
 📂 *Sub-module: trigonometry*
 
@@ -799,19 +638,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`set()`                                          |p5-math-set|
-
-*   Sets the x, y, and z components of the vector
-  using two or three separate variables, the data
-  from a p5.Vector, or the values from a float
-  array.
-  - **value**: The vector to set
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
 `copy()`                                          |p5-math-copy|
 
 *   Gets a copy of the vector, returns a p5.Vector
@@ -843,23 +669,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`add()`                                          |p5-math-add|
-
-*   Adds x, y, and z components to a vector, adds one
-  vector to another, or adds two independent vectors
-  together. The version of the method that adds two
-  vectors together is a static method and returns a
-  p5.Vector, the others act directly on the vector.
-  Additionally, you may provide arguments to this
-  method as an array. See the examples for more
-  context.
-  - **value**: The vector to add
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
 `rem()`                                          |p5-math-rem|
 
 *   Gives the remainder of a vector when it is divided
@@ -867,17 +676,6 @@ Table of Contents                      *p5-math-table-of-contents*
   - **x**: The x component of divisor vector
   - **y**: The y component of divisor vector
   - **z**: The z component of divisor vector
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`rem()`                                          |p5-math-rem|
-
-*   Gives the remainder of a vector when it is divided
-  by another vector. See examples for more context.
-  - **value**: The divisor vector
   @chainable
 
 📂 *Sub-module: p5.Vector*
@@ -905,23 +703,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`sub()`                                          |p5-math-sub|
-
-*   Subtracts x, y, and z components from a vector,
-  subtracts one vector from another, or subtracts
-  two independent vectors. The version of the method
-  that subtracts two vectors is a static method and
-  returns a p5.Vector, the others act directly on
-  the vector. Additionally, you may provide
-  arguments to this method as an array. See the
-  examples for more context.
-  - **value**: the vector to subtract
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
 `other()`                                          |p5-math-other|
 
 *   Multiplies the vector by a scalar, multiplies the
@@ -940,85 +721,6 @@ Table of Contents                      *p5-math-table-of-contents*
   function as an array. See the examples for more
   context.
   - **n**: The number to multiply with the vector
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`other()`                                          |p5-math-other|
-
-*   Multiplies the vector by a scalar, multiplies the
-  x, y, and z components from a vector, or
-  multiplies the x, y, and z components of two
-  independent vectors. When multiplying a vector by
-  a scalar, the x, y, and z components of the vector
-  are all multiplied by the scalar. When multiplying
-  a vector by a vector, the x, y, z components of
-  both vectors are multiplied by each other (for
-  example, with two vectors a and b: a.x * b.x, a.y
-  * b.y, a.z * b.z). The static version of this
-  method creates a new p5.Vector while the
-  non-static version acts on the vector directly.
-  Additionally, you may provide arguments to this
-  function as an array. See the examples for more
-  context.
-  - **x**: The number to multiply with the x
-  component of the vector
-  - **y**: The number to multiply with the y
-  component of the vector
-  @param [z] The number to multiply with the z
-  component of the vector
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`other()`                                          |p5-math-other|
-
-*   Multiplies the vector by a scalar, multiplies the
-  x, y, and z components from a vector, or
-  multiplies the x, y, and z components of two
-  independent vectors. When multiplying a vector by
-  a scalar, the x, y, and z components of the vector
-  are all multiplied by the scalar. When multiplying
-  a vector by a vector, the x, y, z components of
-  both vectors are multiplied by each other (for
-  example, with two vectors a and b: a.x * b.x, a.y
-  * b.y, a.z * b.z). The static version of this
-  method creates a new p5.Vector while the
-  non-static version acts on the vector directly.
-  Additionally, you may provide arguments to this
-  function as an array. See the examples for more
-  context.
-  - **arr**: The array to multiply with the
-  components of the vector
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`other()`                                          |p5-math-other|
-
-*   Multiplies the vector by a scalar, multiplies the
-  x, y, and z components from a vector, or
-  multiplies the x, y, and z components of two
-  independent vectors. When multiplying a vector by
-  a scalar, the x, y, and z components of the vector
-  are all multiplied by the scalar. When multiplying
-  a vector by a vector, the x, y, z components of
-  both vectors are multiplied by each other (for
-  example, with two vectors a and b: a.x * b.x, a.y
-  * b.y, a.z * b.z). The static version of this
-  method creates a new p5.Vector while the
-  non-static version acts on the vector directly.
-  Additionally, you may provide arguments to this
-  function as an array. See the examples for more
-  context.
-  - **v**: The vector to multiply with the
-  components of the original vector
   @chainable
 
 📂 *Sub-module: p5.Vector*
@@ -1054,111 +756,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`div()`                                          |p5-math-div|
-
-*   Divides the vector by a scalar, divides a vector
-  by the x, y, and z arguments, or divides the x, y,
-  and z components of two vectors against each
-  other. When dividing a vector by a scalar, the x,
-  y, and z components of the vector are all divided
-  by the scalar. When dividing a vector by a vector,
-  the x, y, z components of the source vector are
-  treated as the dividend, and the x, y, z
-  components of the argument is treated as the
-  divisor. (For example, with two vectors a and b:
-  a.x / b.x, a.y / b.y, a.z / b.z.) If any component
-  of the second vector is 0, a division by 0 error
-  will be logged, unless both two vectors have 0 in
-  their z components, in which case only the x and y
-  components will be divided. The static version of
-  this method creates a new p5.Vector while the
-  non-static version acts on the vector directly.
-  Additionally, you may provide arguments to this
-  method as an array. See the examples for more
-  context.
-  - **x**: The number to divide with the x component
-  of the vector
-  - **y**: The number to divide with the y component
-  of the vector
-  @param [z] The number to divide with the z
-  component of the vector
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`div()`                                          |p5-math-div|
-
-*   Divides the vector by a scalar, divides a vector
-  by the x, y, and z arguments, or divides the x, y,
-  and z components of two vectors against each
-  other. When dividing a vector by a scalar, the x,
-  y, and z components of the vector are all divided
-  by the scalar. When dividing a vector by a vector,
-  the x, y, z components of the source vector are
-  treated as the dividend, and the x, y, z
-  components of the argument is treated as the
-  divisor. (For example, with two vectors a and b:
-  a.x / b.x, a.y / b.y, a.z / b.z.) If any component
-  of the second vector is 0, a division by 0 error
-  will be logged, unless both two vectors have 0 in
-  their z components, in which case only the x and y
-  components will be divided. The static version of
-  this method creates a new p5.Vector while the
-  non-static version acts on the vector directly.
-  Additionally, you may provide arguments to this
-  method as an array. See the examples for more
-  context.
-  - **arr**: The array to divide the components of
-  the vector by
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`div()`                                          |p5-math-div|
-
-*   Divides the vector by a scalar, divides a vector
-  by the x, y, and z arguments, or divides the x, y,
-  and z components of two vectors against each
-  other. When dividing a vector by a scalar, the x,
-  y, and z components of the vector are all divided
-  by the scalar. When dividing a vector by a vector,
-  the x, y, z components of the source vector are
-  treated as the dividend, and the x, y, z
-  components of the argument is treated as the
-  divisor. (For example, with two vectors a and b:
-  a.x / b.x, a.y / b.y, a.z / b.z.) If any component
-  of the second vector is 0, a division by 0 error
-  will be logged, unless both two vectors have 0 in
-  their z components, in which case only the x and y
-  components will be divided. The static version of
-  this method creates a new p5.Vector while the
-  non-static version acts on the vector directly.
-  Additionally, you may provide arguments to this
-  method as an array. See the examples for more
-  context.
-  - **v**: The vector to divide the components of
-  the original vector by
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`magnitude()`                                          |p5-math-magnitude|
-
-*   Calculates the magnitude (length) of the vector
-  and returns the result as a float. (This is simply
-  the equation sqrt(x*x + y*y + z*z).)
-  - **Returns**: The magnitude of the vector
-
-📂 *Sub-module: p5.Vector*
-
----
-
 `magSq()`                                          |p5-math-magSq|
 
 *   Calculates the squared magnitude of the vector and
@@ -1182,19 +779,6 @@ Table of Contents                      *p5-math-table-of-contents*
   @param [y] The y component of the vector
   @param [z] The z component of the vector
   - **Returns**: The dot product
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`dot()`                                          |p5-math-dot|
-
-*   Calculates the dot product of two vectors. The
-  version of the method that computes the dot
-  product of two independent vectors is a static
-  method. See the examples for more context.
-  - **value**: value component of the vector or a
-  p5.Vector
 
 📂 *Sub-module: p5.Vector*
 
@@ -1272,28 +856,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`angle()`                                          |p5-math-angle|
-
-*   Rotate the vector to a specific angle (only 2D
-  vectors); magnitude remains the same.
-  - **angle**: The angle of rotation
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`angle()`                                          |p5-math-angle|
-
-*   Rotate the vector by an angle (only 2D vectors);
-  magnitude remains the same.
-  - **angle**: The angle of rotation
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
 `angleBetween()`                                          |p5-math-angleBetween|
 
 *   Calculates and returns the angle between two
@@ -1324,37 +886,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`0()`                                          |p5-math-0|
-
-*   Linear interpolate the vector to another vector.
-  - **v**: The p5.Vector to lerp to
-  - **amt**: The amount of interpolation; some value
-  between 0.0 (old vector) and 1.0 (new vector). 0.9
-  is very near the new vector. 0.5 is halfway in
-  between.
-  @chainable
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`0()`                                          |p5-math-0|
-
-*   Performs spherical linear interpolation with the
-  other vector and returns the resulting vector.
-  This works in both 3D and 2D. As for 2D, the
-  result of slerping between 2D vectors is always a
-  2D vector.
-  - **v**: the p5.Vector to slerp to
-  - **amt**: The amount of interpolation. some value
-  between 0.0 (old vector) and 1.0 (new vector). 0.9
-  is very near the new vector. 0.5 is halfway in
-  between.
-
-📂 *Sub-module: p5.Vector*
-
----
-
 `reflect()`                                          |p5-math-reflect|
 
 *   Reflect a vector about a normal to a line in 2D,
@@ -1367,19 +898,6 @@ Table of Contents                      *p5-math-table-of-contents*
 
 ---
 
-`copy()`                                          |p5-math-copy|
-
-*   Return a representation of this vector as a float
-  array. This is only for temporary use. If used in
-  any other fashion, the contents should be copied
-  by using the p5.Vector.copy() method to copy into
-  your own vector.
-  - **Returns**: An Array with the 3 values
-
-📂 *Sub-module: p5.Vector*
-
----
-
 `equals()`                                          |p5-math-equals|
 
 *   Equality check against a p5.Vector.
@@ -1387,15 +905,6 @@ Table of Contents                      *p5-math-table-of-contents*
   @param [y] The y component of the vector
   @param [z] The z component of the vector
   - **Returns**: Whether the vectors are equal
-
-📂 *Sub-module: p5.Vector*
-
----
-
-`equals()`                                          |p5-math-equals|
-
-*   Equality check against a p5.Vector.
-  - **value**: The vector to compare
 
 📂 *Sub-module: p5.Vector*
 

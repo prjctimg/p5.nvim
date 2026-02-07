@@ -5,19 +5,12 @@ Table of Contents                      *p5-typography-table-of-contents*
 
 1. Functions                                           |p5-typography-functions|
   - horizAlign()             |p5-typography-horizAlign|
-  - horizAlign()             |p5-typography-horizAlign|
   - text()             |p5-typography-text|
-  - text()             |p5-typography-text|
-  - text()             |p5-typography-text|
-  - text()             |p5-typography-text|
-  - fonts()             |p5-typography-fonts|
   - fonts()             |p5-typography-fonts|
   - textWidth()             |p5-typography-textWidth|
   - textAscent()             |p5-typography-textAscent|
   - textDescent()             |p5-typography-textDescent|
-  - text()             |p5-typography-text|
   - file()             |p5-typography-file|
-  - text()             |p5-typography-text|
   - text()             |p5-typography-text|
   - constructor()             |p5-typography-constructor|
   - use()             |p5-typography-use|
@@ -28,7 +21,7 @@ Table of Contents                      *p5-typography-table-of-contents*
 📝 Typography module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 11:12:52~
+⏰ Last Updated: 2026-02-07 11:17:20~
 
 ==============================================================================
 3. Functions                                           |p5-typography-functions|
@@ -57,25 +50,6 @@ Table of Contents                      *p5-typography-table-of-contents*
 
 ---
 
-`horizAlign()`                                          |p5-typography-horizAlign|
-
-*   Sets the current alignment for drawing text.
-  Accepts two arguments: horizAlign (LEFT, CENTER,
-  or RIGHT) and vertAlign (TOP, BOTTOM, CENTER, or
-  BASELINE). The horizAlign parameter is in
-  reference to the x value of the text() function,
-  while the vertAlign parameter is in reference to
-  the y value.
-         *   So if you write textAlign(LEFT), you are aligning
-  the left edge of your text to the x value you give
-  in text(). If you write textAlign(RIGHT, TOP), you
-  are aligning the right edge of your text to the x
-  value and the top edge of the text to the y value.
-
-📂 *Sub-module: attributes*
-
----
-
 `text()`                                          |p5-typography-text|
 
 *   Sets/gets the spacing, in pixels, between lines of
@@ -84,39 +58,6 @@ Table of Contents                      *p5-typography-table-of-contents*
   - **leading**: the size in pixels for spacing
   between lines
   @chainable
-
-📂 *Sub-module: attributes*
-
----
-
-`text()`                                          |p5-typography-text|
-
-*   Sets/gets the spacing, in pixels, between lines of
-  text. This setting will be used in all subsequent
-  calls to the text() function.
-
-📂 *Sub-module: attributes*
-
----
-
-`text()`                                          |p5-typography-text|
-
-*   Sets/gets the current font size. This size will be
-  used in all subsequent calls to the text()
-  function. Font size is measured in pixels.
-  - **theSize**: the size of the letters in units of
-  pixels
-  @chainable
-
-📂 *Sub-module: attributes*
-
----
-
-`text()`                                          |p5-typography-text|
-
-*   Sets/gets the current font size. This size will be
-  used in all subsequent calls to the text()
-  function. Font size is measured in pixels.
 
 📂 *Sub-module: attributes*
 
@@ -132,18 +73,6 @@ Table of Contents                      *p5-typography-table-of-contents*
   - **theStyle**: styling for text, either NORMAL,
   ITALIC, BOLD or BOLDITALIC
   @chainable
-
-📂 *Sub-module: attributes*
-
----
-
-`fonts()`                                          |p5-typography-fonts|
-
-*   Sets/gets the style of the text for system fonts
-  to NORMAL, ITALIC, BOLD or BOLDITALIC. Note: this
-  may be is overridden by CSS styling. For
-  non-system fonts (opentype, truetype, etc.) please
-  load styled fonts instead.
 
 📂 *Sub-module: attributes*
 
@@ -182,33 +111,6 @@ Table of Contents                      *p5-typography-table-of-contents*
 
 ---
 
-`text()`                                          |p5-typography-text|
-
-*   Specifies how lines of text are wrapped within a
-  text box. This requires a max-width set on the
-  text area, specified in text() as parameter x2.
-  WORD wrap style only breaks lines at spaces. A
-  single string without spaces that exceeds the
-  boundaries of the canvas or text area is not
-  truncated, and will overflow the desired area,
-  disappearing at the canvas edge.
-         *   CHAR wrap style breaks lines wherever needed to
-  stay within the text box.
-         *   WORD is the default wrap style, and both styles
-  will still break lines at any line breaks (\n)
-  specified in the original text. The text area
-  max-height parameter (y2) also still applies to
-  wrapped text in both styles, lines of text that do
-  not fit within the text area will not be drawn to
-  the screen.
-  - **wrapStyle**: text wrapping style, either WORD
-  or CHAR
-  - **Returns**: wrapStyle
-
-📂 *Sub-module: attributes*
-
----
-
 `file()`                                          |p5-typography-file|
 
 *   Loads an opentype font file (.otf, .ttf) from a
@@ -242,26 +144,6 @@ Table of Contents                      *p5-typography-table-of-contents*
   return the p5 object. WEBGL: Only fonts loaded via
   loadFont() are supported.
   - **Returns**: the current font / p5 Object
-
-📂 *Sub-module: loading_displaying*
-
----
-
-`text()`                                          |p5-typography-text|
-
-*   Sets the current font that will be drawn with the
-  text() function. If textFont() is called without
-  any argument, it will return the current font if
-  one has been set already. If not, it will return
-  the name of the default font as a string. If
-  textFont() is called with a font to use, it will
-  return the p5 object. WEBGL: Only fonts loaded via
-  loadFont() are supported.
-  - **font**: a font loaded via loadFont(), or a
-  String representing a web safe font (a font that
-  is generally available across all systems)
-  @param [size] the font size to use
-  @chainable
 
 📂 *Sub-module: loading_displaying*
 
