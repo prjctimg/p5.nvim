@@ -4,7 +4,7 @@ p5-index.txt    p5.js Complete Documentation Index    p5
 p5.js Complete Documentation Index                    *p5-index*
 
 p5.js Version: 1.7.7~
-Last Updated: 2026-02-07 12:42:51~
+Last Updated: 2026-02-07 12:53:20~
 
 ==============================================================================
 CONTENTS                                                    *p5-index-contents*
