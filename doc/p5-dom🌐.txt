@@ -4,7 +4,7 @@ p5-dom🌐.txt    p5.js dom documentation    p5
 p5.js Dom Module    *p5-dom*
 
 p5.js Version: 1.7.7~
-Last Updated: 2026-02-07 02:23:19~
+Last Updated: 2026-02-07 02:24:03~
 
 ==============================================================================
 CONTENTS                                                    *p5-dom-contents*
