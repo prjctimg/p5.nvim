@@ -4,7 +4,7 @@ p5-events🖱️.txt    p5.js events documentation    p5
 p5.js Events Module    *p5-events*
 
 p5.js Version: 1.7.7~
-Last Updated: 2026-02-06 18:39:17~
+Last Updated: 2026-02-07 02:23:19~
 
 ==============================================================================
 CONTENTS                                                    *p5-events-contents*
