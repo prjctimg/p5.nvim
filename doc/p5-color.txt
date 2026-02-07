@@ -4,7 +4,7 @@ p5-color.txt    p5.js color documentation    p5
 🎨 p5.js Color Module 🎨    *p5-color*
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 06:32:21~
+⏰ Last Updated: 2026-02-07 06:33:46~
 
 ==============================================================================
 📋 CONTENTS                                                    *p5-color-contents*
