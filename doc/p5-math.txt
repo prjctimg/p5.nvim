@@ -1,0 +1,1465 @@
+p5-math.txt    p5.js math documentation    p5
+
+==============================================================================
+🔢 p5.js Math Module 🔢    *p5-math*
+
+📦 p5.js Version: 1.7.7~
+⏰ Last Updated: 2026-02-07 06:32:21~
+
+==============================================================================
+📋 CONTENTS                                                    *p5-math-contents*
+
+
+## Table of Contents
+
+### 🔧 Functions
+
+- value 🔧
+- ceil 🔧
+- constrain 🔧
+- dist 🔧
+- dist 🔧
+- e 🔧
+- floor 🔧
+- lerp 🔧
+- logarithm 🔧
+- magnitude 🔧
+- window 🔧
+- max 🔧
+- max 🔧
+- min 🔧
+- min 🔧
+- map 🔧
+- pow 🔧
+- round 🔧
+- number 🔧
+- sqrt 🔧
+- fract 🔧
+- Vector 🔧
+- random 🔧
+- impact 🔧
+- noise 🔧
+- random 🔧
+- to 🔧
+- to 🔧
+- randomGaussian 🔧
+- cos 🔧
+- sin 🔧
+- tan 🔧
+- angle 🔧
+- cos 🔧
+- sin 🔧
+- tan 🔧
+- angleMode 🔧
+- radians 🔧
+- angleMode 🔧
+- angleMode 🔧
+- Euclidean 🔧
+- set 🔧
+- set 🔧
+- copy 🔧
+- add 🔧
+- add 🔧
+- rem 🔧
+- rem 🔧
+- sub 🔧
+- sub 🔧
+- other 🔧
+- other 🔧
+- other 🔧
+- other 🔧
+- div 🔧
+- div 🔧
+- div 🔧
+- div 🔧
+- magnitude 🔧
+- magSq 🔧
+- dot 🔧
+- dot 🔧
+- cross 🔧
+- points 🔧
+- 1 🔧
+- limit 🔧
+- setMag 🔧
+- createVector 🔧
+- angle 🔧
+- angle 🔧
+- angleBetween 🔧
+- 0 🔧
+- 0 🔧
+- 0 🔧
+- reflect 🔧
+- copy 🔧
+- equals 🔧
+- equals 🔧
+
+### 📊 Variables
+
+- v 📊
+- y 📊
+- z 📊
+
+---
+
+## 🔧 Functions
+
+### 🔧 value
+
+*   Calculates the absolute value (magnitude) of a
+  number. Maps to Math.abs(). The absolute value of
+  a number is always positive.
+  - **n**: number to compute
+  - **Returns**: absolute value of given number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 ceil
+
+*   Calculates the closest int value that is greater
+  than or equal to the value of the parameter. Maps
+  to Math.ceil(). For example, ceil(9.03) returns
+  the value 10.
+  - **n**: number to round up
+  - **Returns**: rounded up number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 constrain
+
+*   Constrains a value between a minimum and maximum
+  value.
+  - **n**: number to constrain
+  - **low**: minimum limit
+  - **high**: maximum limit
+  - **Returns**: constrained number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 dist
+
+*   Calculates the distance between two points, in
+  either two or three dimensions. If you looking for
+  distance between two vectors see p5.Vector.dist()
+  - **x1**: x-coordinate of the first point
+  - **y1**: y-coordinate of the first point
+  - **x2**: x-coordinate of the second point
+  - **y2**: y-coordinate of the second point
+  - **Returns**: distance between the two points
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 dist
+
+*   Calculates the distance between two points, in
+  either two or three dimensions. If you looking for
+  distance between two vectors see p5.Vector.dist()
+  - **x1**: x-coordinate of the first point
+  - **y1**: y-coordinate of the first point
+  - **z1**: z-coordinate of the first point
+  - **x2**: x-coordinate of the second point
+  - **y2**: y-coordinate of the second point
+  - **z2**: z-coordinate of the second point
+  - **Returns**: distance between the two points
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 e
+
+*   Returns Euler's number e (2.71828...) raised to
+  the power of the n parameter. Maps to Math.exp().
+  - **n**: exponent to raise
+  - **Returns**: e^n
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 floor
+
+*   Calculates the closest int value that is less than
+  or equal to the value of the parameter. Maps to
+  Math.floor().
+  - **n**: number to round down
+  - **Returns**: rounded down number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 lerp
+
+*   Calculates a number between two numbers at a
+  specific increment. The amt parameter is the
+  amount to interpolate between the two values where
+  0.0 is equal to the first point, 0.1 is very near
+  the first point, 0.5 is half-way in between, and
+  1.0 is equal to the second point. If the value of
+  amt is more than 1.0 or less than 0.0, the number
+  will be calculated accordingly in the ratio of the
+  two given numbers. The lerp() function is
+  convenient for creating motion along a straight
+  path and for drawing dotted lines.
+  - **start**: first value
+  - **stop**: second value
+  - **amt**: number
+  - **Returns**: lerped value
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 logarithm
+
+*   Calculates the natural logarithm (the base-e
+  logarithm) of a number. This function expects the
+  n parameter to be a value greater than 0.0. Maps
+  to Math.log().
+  - **n**: number greater than 0
+  - **Returns**: natural logarithm of n
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 magnitude
+
+*   Calculates the magnitude (or length) of a vector.
+  A vector is a direction in space commonly used in
+  computer graphics and linear algebra. Because it
+  has no "start" position, the magnitude of a vector
+  can be thought of as the distance from the
+  coordinate 0,0 to its x,y value. Therefore, mag()
+  is a shortcut for writing dist(0, 0, x, y).
+  - **a**: first value
+  - **b**: second value
+  - **Returns**: magnitude of vector from (0,0) to (a,b)
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 window
+
+*   Re-maps a number from one range to another. In the
+  first example above, the number 25 is converted
+  from a value in the range of 0 to 100 into a value
+  that ranges from the left edge of the window (0)
+  to the right edge (width).
+  - **value**: the incoming value to be converted
+  - **start1**: lower bound of the value's current
+  range
+  - **stop1**: upper bound of the value's current
+  range
+  - **start2**: lower bound of the value's target
+  range
+  - **stop2**: upper bound of the value's target
+  range
+  @param [withinBounds] constrain the value to the
+  newly mapped range
+  - **Returns**: remapped number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 max
+
+*   Determines the largest value in a sequence of
+  numbers, and then returns that value. max()
+  accepts any number of Number parameters, or an
+  Array of any length.
+  - **n0**: Number to compare
+  - **n1**: Number to compare
+  - **Returns**: maximum Number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 max
+
+*   Determines the largest value in a sequence of
+  numbers, and then returns that value. max()
+  accepts any number of Number parameters, or an
+  Array of any length.
+  - **nums**: Numbers to compare
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 min
+
+*   Determines the smallest value in a sequence of
+  numbers, and then returns that value. min()
+  accepts any number of Number parameters, or an
+  Array of any length.
+  - **n0**: Number to compare
+  - **n1**: Number to compare
+  - **Returns**: minimum Number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 min
+
+*   Determines the smallest value in a sequence of
+  numbers, and then returns that value. min()
+  accepts any number of Number parameters, or an
+  Array of any length.
+  - **nums**: Numbers to compare
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 map
+
+*   Normalizes a number from another range into a
+  value between 0 and 1. Identical to map(value,
+  low, high, 0, 1). Numbers outside of the range are
+  not clamped to 0 and 1, because out-of-range
+  values are often intentional and useful. (See the
+  example above.)
+  - **value**: incoming value to be normalized
+  - **start**: lower bound of the value's current
+  range
+  - **stop**: upper bound of the value's current
+  range
+  - **Returns**: normalized number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 pow
+
+*   Facilitates exponential expressions. The pow()
+  function is an efficient way of multiplying
+  numbers by themselves (or their reciprocals) in
+  large quantities. For example, pow(3, 5) is
+  equivalent to the expression 3 × 3 × 3 × 3 × 3 and
+  pow(3, -5) is equivalent to 1 / 3 × 3 × 3 × 3 × 3.
+  Maps to Math.pow().
+  - **n**: base of the exponential expression
+  - **e**: power by which to raise the base
+  - **Returns**: n^e
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 round
+
+*   Calculates the integer closest to the n parameter.
+  For example, round(133.8) returns the value 134.
+  Maps to Math.round().
+  - **n**: number to round
+  @param [decimals] number of decimal places to
+  round to, default is 0
+  - **Returns**: rounded number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 number
+
+*   Squares a number (multiplies a number by itself).
+  The result is always a positive number, as
+  multiplying two negative numbers always yields a
+  positive result. For example, -1 * -1 = 1.
+  - **n**: number to square
+  - **Returns**: squared number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 sqrt
+
+*   Calculates the square root of a number. The square
+  root of a number is always positive, even though
+  there may be a valid negative root. The square
+  root s of number a is such that s*s = a. It is the
+  opposite of squaring. Maps to Math.sqrt().
+  - **n**: non-negative number to square root
+  - **Returns**: square root of number
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 fract
+
+*   Calculates the fractional part of a number.
+  - **num**: Number whose fractional part needs to
+  be found out
+  - **Returns**: fractional part of x, i.e, {x}
+
+📂 *Sub-module: calculation*
+
+---
+
+### 🔧 Vector
+
+*   Creates a new p5.Vector (the datatype for storing
+  vectors). This provides a two or three-dimensional
+  vector, specifically a Euclidean (also known as
+  geometric) vector. A vector is an entity that has
+  both magnitude and direction.
+  @param [x] x component of the vector
+  @param [y] y component of the vector
+  @param [z] z component of the vector
+
+📂 *Sub-module: math*
+
+---
+
+### 🔧 random
+
+*   Returns the Perlin noise value at specified
+  coordinates. Perlin noise is a random sequence
+  generator producing a more naturally ordered,
+  harmonic succession of numbers compared to the
+  standard random() function. It was invented by Ken
+  Perlin in the 1980s and been used since in
+  graphical applications to produce procedural
+  textures, natural motion, shapes, terrains etc.
+  The main difference to the random() function is
+  that Perlin noise is defined in an infinite
+  n-dimensional space where each pair of coordinates
+  corresponds to a fixed semi-random value (fixed
+  only for the lifespan of the program; see the
+  noiseSeed() function). p5.js can compute 1D, 2D
+  and 3D noise, depending on the number of
+  coordinates given. The resulting value will always
+  be between 0.0 and 1.0. The noise value can be
+  animated by moving through the noise space as
+  demonstrated in the example above. The 2nd and 3rd
+  dimensions can also be interpreted as time.
+         *   The actual noise is structured similar to an audio
+  signal, in respect to the function's use of
+  frequencies. Similar to the concept of harmonics
+  in physics, Perlin noise is computed over several
+  octaves which are added together for the final
+  result.
+         *   Another way to adjust the character of the
+  resulting sequence is the scale of the input
+  coordinates. As the function works within an
+  infinite space the value of the coordinates
+  doesn't matter as such, only the distance between
+  successive coordinates does (eg. when using
+  noise() within a loop). As a general rule the
+  smaller the difference between coordinates, the
+  smoother the resulting noise sequence will be.
+  Steps of 0.005-0.03 work best for most
+  applications, but this will differ depending on
+  use.
+  - **x**: x-coordinate in noise space
+  @param [y] y-coordinate in noise space
+  @param [z] z-coordinate in noise space
+  - **Returns**: Perlin noise value (between 0 and 1) at
+  specified coordinates
+
+📂 *Sub-module: noise*
+
+---
+
+### 🔧 impact
+
+*   Adjusts the character and level of detail produced
+  by the Perlin noise function. Similar to harmonics
+  in physics, noise is computed over several
+  octaves. Lower octaves contribute more to the
+  output signal and as such define the overall
+  intensity of the noise, whereas higher octaves
+  create finer-grained details in the noise
+  sequence. By default, noise is computed over 4
+  octaves with each octave contributing exactly half
+  as much as its predecessor, starting at 50%
+  strength for the 1st octave. This falloff amount
+  can be changed by adding an additional function
+  parameter. Eg. a falloff factor of 0.75 means each
+  octave will now have 75% impact (25% less) of the
+  previous lower octave. Any value between 0.0 and
+  1.0 is valid, however, note that values greater
+  than 0.5 might result in greater than 1.0 values
+  returned by noise(). By changing these parameters,
+  the signal created by the noise() function can be
+  adapted to fit very specific needs and
+  characteristics.
+  - **lod**: number of octaves to be used by the
+  noise
+  - **falloff**: falloff factor for each octave
+
+📂 *Sub-module: noise*
+
+---
+
+### 🔧 noise
+
+*   Sets the seed value for noise(). By default,
+  noise() produces different results each time the
+  program is run. Set the seed parameter to a
+  constant to return the same pseudo-random numbers
+  each time the software is run.
+  - **seed**: the seed value
+
+📂 *Sub-module: noise*
+
+---
+
+### 🔧 random
+
+*   Sets the seed value for random(). By default,
+  random() produces different results each time the
+  program is run. Set the seed parameter to a
+  constant to return the same pseudo-random numbers
+  each time the software is run.
+  - **seed**: the seed value
+
+📂 *Sub-module: random*
+
+---
+
+### 🔧 to
+
+*   Return a random floating-point number. Takes
+  either 0, 1 or 2 arguments.
+         *   If no argument is given, returns a random number
+  from 0 up to (but not including) 1.
+         *   If one argument is given and it is a number,
+  returns a random number from 0 up to (but not
+  including) the number.
+         *   If one argument is given and it is an array,
+  returns a random element from that array.
+         *   If two arguments are given, returns a random
+  number from the first argument up to (but not
+  including) the second argument.
+  @param [min] the lower bound (inclusive)
+  @param [max] the upper bound (exclusive)
+  - **Returns**: the random number
+
+📂 *Sub-module: random*
+
+---
+
+### 🔧 to
+
+*   Return a random floating-point number. Takes
+  either 0, 1 or 2 arguments.
+         *   If no argument is given, returns a random number
+  from 0 up to (but not including) 1.
+         *   If one argument is given and it is a number,
+  returns a random number from 0 up to (but not
+  including) the number.
+         *   If one argument is given and it is an array,
+  returns a random element from that array.
+         *   If two arguments are given, returns a random
+  number from the first argument up to (but not
+  including) the second argument.
+  - **choices**: the array to choose from
+  - **Returns**: the random element from the array
+
+📂 *Sub-module: random*
+
+---
+
+### 🔧 randomGaussian
+
+*   Returns a random number fitting a Gaussian, or
+  normal, distribution. There is theoretically no
+  minimum or maximum value that randomGaussian()
+  might return. Rather, there is just a very low
+  probability that values far from the mean will be
+  returned; and a higher probability that numbers
+  near the mean will be returned. Takes either 0, 1
+  or 2 arguments. If no args, the mean is 0 and the
+  standard deviation is 1.
+         *   If one arg, that arg is the mean and the standard
+  deviation is 1.
+         *   If two args, the first arg is the mean and the
+  second is the standard deviation.
+  @param [mean] the mean
+  @param [sd] the standard deviation
+  - **Returns**: the random number
+
+📂 *Sub-module: random*
+
+---
+
+### 🔧 cos
+
+*   The inverse of cos(), returns the arc cosine of a
+  value. This function expects the values in the
+  range of -1 to 1 and values are returned in the
+  range 0 to PI (3.1415927) if the angleMode() is
+  RADIANS or 0 to 180 if the angleMode() is DEGREES.
+  - **value**: the value whose arc cosine is to be
+  returned
+  - **Returns**: the arc cosine of the given value
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 sin
+
+*   The inverse of sin(), returns the arc sine of a
+  value. This function expects the values in the
+  range of -1 to 1 and values are returned in the
+  range -PI/2 to PI/2 if the angleMode is RADIANS or
+  -90 to 90 if the angle mode is DEGREES.
+  - **value**: the value whose arc sine is to be
+  returned
+  - **Returns**: the arc sine of the given value
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 tan
+
+*   The inverse of tan(), returns the arc tangent of a
+  value. This function expects the values in the
+  range of -Infinity to Infinity (exclusive) and
+  values are returned in the range -PI/2 to PI/2 if
+  the angleMode is RADIANS or -90 to 90 if the angle
+  mode is DEGREES.
+  - **value**: the value whose arc tangent is to be
+  returned
+  - **Returns**: the arc tangent of the given value
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 angle
+
+*   Calculates the angle (in radians) from a specified
+  point to the coordinate origin as measured from
+  the positive x-axis. Values are returned as a
+  float in the range from PI to -PI if the
+  angleMode() is RADIANS or 180 to -180 if the
+  angleMode() is DEGREES. The atan2() function is
+  most often used for orienting geometry to the
+  position of the cursor. Note: The y-coordinate of
+  the point is the first parameter, and the
+  x-coordinate is the second parameter, due to the
+  structure of calculating the tangent.
+  - **y**: y-coordinate of the point
+  - **x**: x-coordinate of the point
+  - **Returns**: the arc tangent of the given point
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 cos
+
+*   Calculates the cosine of an angle. This function
+  takes into account the current angleMode. Values
+  are returned in the range -1 to 1.
+  - **angle**: the angle
+  - **Returns**: the cosine of the angle
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 sin
+
+*   Calculates the sine of an angle. This function
+  takes into account the current angleMode. Values
+  are returned in the range -1 to 1.
+  - **angle**: the angle
+  - **Returns**: the sine of the angle
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 tan
+
+*   Calculates the tangent of an angle. This function
+  takes into account the current angleMode. Values
+  are returned in the range of all real numbers.
+  - **angle**: the angle
+  - **Returns**: the tangent of the angle
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 angleMode
+
+*   Converts a radian measurement to its corresponding
+  value in degrees. Radians and degrees are two ways
+  of measuring the same thing. There are 360 degrees
+  in a circle and 2*PI radians in a circle. For
+  example, 90° = PI/2 = 1.5707964. This function
+  does not take into account the current
+  angleMode().
+  - **radians**: the radians value to convert to
+  degrees
+  - **Returns**: the converted angle
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 radians
+
+*   Converts a degree measurement to its corresponding
+  value in radians. Radians and degrees are two ways
+  of measuring the same thing. There are 360 degrees
+  in a circle and 2*PI radians in a circle. For
+  example, 90° = PI/2 = 1.5707964. This function
+  does not take into account the current angleMode.
+  - **degrees**: the degree value to convert to
+  radians
+  - **Returns**: the converted angle
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 angleMode
+
+*   Sets the current mode of p5 to the given mode.
+  Default mode is RADIANS. Calling angleMode() with
+  no arguments returns current anglemode.
+  - **mode**: either RADIANS or DEGREES
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 angleMode
+
+*   Sets the current mode of p5 to the given mode.
+  Default mode is RADIANS. Calling angleMode() with
+  no arguments returns current anglemode.
+  - **Returns**: mode either RADIANS or DEGREES
+
+📂 *Sub-module: trigonometry*
+
+---
+
+### 🔧 Euclidean
+
+*   A class to describe a two or three-dimensional
+  vector, specifically a Euclidean (also known as
+  geometric) vector. A vector is an entity that has
+  both magnitude and direction. The datatype,
+  however, stores the components of the vector (x, y
+  for 2D; or x, y, z for 3D). The magnitude and
+  direction can be accessed via the methods
+  p5.Vector.mag() and heading(). In many of the
+  p5.js examples, you will see p5.Vector used to
+  describe a position, velocity, or acceleration.
+  For example, if you consider a rectangle moving
+  across the screen, at any given instant it has a
+  position (a vector that points from the origin to
+  its location), a velocity (the rate at which the
+  object's position changes per time unit, expressed
+  as a vector), and acceleration (the rate at which
+  the object's velocity changes per time unit,
+  expressed as a vector).
+         *   Since vectors represent groupings of values, we
+  cannot simply use traditional
+  addition/multiplication/etc. Instead, we'll need
+  to do some "vector" math, which is made easy by
+  the methods inside the p5.Vector class.
+         *   @param [x] x component of the vector
+  @param [y] y component of the vector
+  @param [z] z component of the vector
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 set
+
+*   Sets the x, y, and z components of the vector
+  using two or three separate variables, the data
+  from a p5.Vector, or the values from a float
+  array.
+  @param [x] The x component of the vector
+  @param [y] The y component of the vector
+  @param [z] The z component of the vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 set
+
+*   Sets the x, y, and z components of the vector
+  using two or three separate variables, the data
+  from a p5.Vector, or the values from a float
+  array.
+  - **value**: The vector to set
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 copy
+
+*   Gets a copy of the vector, returns a p5.Vector
+  object.
+  - **Returns**: A copy of the p5.Vector object
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 add
+
+*   Adds x, y, and z components to a vector, adds one
+  vector to another, or adds two independent vectors
+  together. The version of the method that adds two
+  vectors together is a static method and returns a
+  p5.Vector, the others act directly on the vector.
+  Additionally, you may provide arguments to this
+  method as an array. See the examples for more
+  context.
+  - **x**: The x component of the vector to be added
+  @param [y] The y component of the vector to be
+  added
+  @param [z] The z component of the vector to be
+  added
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 add
+
+*   Adds x, y, and z components to a vector, adds one
+  vector to another, or adds two independent vectors
+  together. The version of the method that adds two
+  vectors together is a static method and returns a
+  p5.Vector, the others act directly on the vector.
+  Additionally, you may provide arguments to this
+  method as an array. See the examples for more
+  context.
+  - **value**: The vector to add
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 rem
+
+*   Gives the remainder of a vector when it is divided
+  by another vector. See examples for more context.
+  - **x**: The x component of divisor vector
+  - **y**: The y component of divisor vector
+  - **z**: The z component of divisor vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 rem
+
+*   Gives the remainder of a vector when it is divided
+  by another vector. See examples for more context.
+  - **value**: The divisor vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 sub
+
+*   Subtracts x, y, and z components from a vector,
+  subtracts one vector from another, or subtracts
+  two independent vectors. The version of the method
+  that subtracts two vectors is a static method and
+  returns a p5.Vector, the others act directly on
+  the vector. Additionally, you may provide
+  arguments to this method as an array. See the
+  examples for more context.
+  - **x**: The x component of the vector to subtract
+  @param [y] The y component of the vector to
+  subtract
+  @param [z] The z component of the vector to
+  subtract
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 sub
+
+*   Subtracts x, y, and z components from a vector,
+  subtracts one vector from another, or subtracts
+  two independent vectors. The version of the method
+  that subtracts two vectors is a static method and
+  returns a p5.Vector, the others act directly on
+  the vector. Additionally, you may provide
+  arguments to this method as an array. See the
+  examples for more context.
+  - **value**: the vector to subtract
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 other
+
+*   Multiplies the vector by a scalar, multiplies the
+  x, y, and z components from a vector, or
+  multiplies the x, y, and z components of two
+  independent vectors. When multiplying a vector by
+  a scalar, the x, y, and z components of the vector
+  are all multiplied by the scalar. When multiplying
+  a vector by a vector, the x, y, z components of
+  both vectors are multiplied by each other (for
+  example, with two vectors a and b: a.x * b.x, a.y
+  * b.y, a.z * b.z). The static version of this
+  method creates a new p5.Vector while the
+  non-static version acts on the vector directly.
+  Additionally, you may provide arguments to this
+  function as an array. See the examples for more
+  context.
+  - **n**: The number to multiply with the vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 other
+
+*   Multiplies the vector by a scalar, multiplies the
+  x, y, and z components from a vector, or
+  multiplies the x, y, and z components of two
+  independent vectors. When multiplying a vector by
+  a scalar, the x, y, and z components of the vector
+  are all multiplied by the scalar. When multiplying
+  a vector by a vector, the x, y, z components of
+  both vectors are multiplied by each other (for
+  example, with two vectors a and b: a.x * b.x, a.y
+  * b.y, a.z * b.z). The static version of this
+  method creates a new p5.Vector while the
+  non-static version acts on the vector directly.
+  Additionally, you may provide arguments to this
+  function as an array. See the examples for more
+  context.
+  - **x**: The number to multiply with the x
+  component of the vector
+  - **y**: The number to multiply with the y
+  component of the vector
+  @param [z] The number to multiply with the z
+  component of the vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 other
+
+*   Multiplies the vector by a scalar, multiplies the
+  x, y, and z components from a vector, or
+  multiplies the x, y, and z components of two
+  independent vectors. When multiplying a vector by
+  a scalar, the x, y, and z components of the vector
+  are all multiplied by the scalar. When multiplying
+  a vector by a vector, the x, y, z components of
+  both vectors are multiplied by each other (for
+  example, with two vectors a and b: a.x * b.x, a.y
+  * b.y, a.z * b.z). The static version of this
+  method creates a new p5.Vector while the
+  non-static version acts on the vector directly.
+  Additionally, you may provide arguments to this
+  function as an array. See the examples for more
+  context.
+  - **arr**: The array to multiply with the
+  components of the vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 other
+
+*   Multiplies the vector by a scalar, multiplies the
+  x, y, and z components from a vector, or
+  multiplies the x, y, and z components of two
+  independent vectors. When multiplying a vector by
+  a scalar, the x, y, and z components of the vector
+  are all multiplied by the scalar. When multiplying
+  a vector by a vector, the x, y, z components of
+  both vectors are multiplied by each other (for
+  example, with two vectors a and b: a.x * b.x, a.y
+  * b.y, a.z * b.z). The static version of this
+  method creates a new p5.Vector while the
+  non-static version acts on the vector directly.
+  Additionally, you may provide arguments to this
+  function as an array. See the examples for more
+  context.
+  - **v**: The vector to multiply with the
+  components of the original vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 div
+
+*   Divides the vector by a scalar, divides a vector
+  by the x, y, and z arguments, or divides the x, y,
+  and z components of two vectors against each
+  other. When dividing a vector by a scalar, the x,
+  y, and z components of the vector are all divided
+  by the scalar. When dividing a vector by a vector,
+  the x, y, z components of the source vector are
+  treated as the dividend, and the x, y, z
+  components of the argument is treated as the
+  divisor. (For example, with two vectors a and b:
+  a.x / b.x, a.y / b.y, a.z / b.z.) If any component
+  of the second vector is 0, a division by 0 error
+  will be logged, unless both two vectors have 0 in
+  their z components, in which case only the x and y
+  components will be divided. The static version of
+  this method creates a new p5.Vector while the
+  non-static version acts on the vector directly.
+  Additionally, you may provide arguments to this
+  method as an array. See the examples for more
+  context.
+  - **n**: The number to divide the vector by
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 div
+
+*   Divides the vector by a scalar, divides a vector
+  by the x, y, and z arguments, or divides the x, y,
+  and z components of two vectors against each
+  other. When dividing a vector by a scalar, the x,
+  y, and z components of the vector are all divided
+  by the scalar. When dividing a vector by a vector,
+  the x, y, z components of the source vector are
+  treated as the dividend, and the x, y, z
+  components of the argument is treated as the
+  divisor. (For example, with two vectors a and b:
+  a.x / b.x, a.y / b.y, a.z / b.z.) If any component
+  of the second vector is 0, a division by 0 error
+  will be logged, unless both two vectors have 0 in
+  their z components, in which case only the x and y
+  components will be divided. The static version of
+  this method creates a new p5.Vector while the
+  non-static version acts on the vector directly.
+  Additionally, you may provide arguments to this
+  method as an array. See the examples for more
+  context.
+  - **x**: The number to divide with the x component
+  of the vector
+  - **y**: The number to divide with the y component
+  of the vector
+  @param [z] The number to divide with the z
+  component of the vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 div
+
+*   Divides the vector by a scalar, divides a vector
+  by the x, y, and z arguments, or divides the x, y,
+  and z components of two vectors against each
+  other. When dividing a vector by a scalar, the x,
+  y, and z components of the vector are all divided
+  by the scalar. When dividing a vector by a vector,
+  the x, y, z components of the source vector are
+  treated as the dividend, and the x, y, z
+  components of the argument is treated as the
+  divisor. (For example, with two vectors a and b:
+  a.x / b.x, a.y / b.y, a.z / b.z.) If any component
+  of the second vector is 0, a division by 0 error
+  will be logged, unless both two vectors have 0 in
+  their z components, in which case only the x and y
+  components will be divided. The static version of
+  this method creates a new p5.Vector while the
+  non-static version acts on the vector directly.
+  Additionally, you may provide arguments to this
+  method as an array. See the examples for more
+  context.
+  - **arr**: The array to divide the components of
+  the vector by
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 div
+
+*   Divides the vector by a scalar, divides a vector
+  by the x, y, and z arguments, or divides the x, y,
+  and z components of two vectors against each
+  other. When dividing a vector by a scalar, the x,
+  y, and z components of the vector are all divided
+  by the scalar. When dividing a vector by a vector,
+  the x, y, z components of the source vector are
+  treated as the dividend, and the x, y, z
+  components of the argument is treated as the
+  divisor. (For example, with two vectors a and b:
+  a.x / b.x, a.y / b.y, a.z / b.z.) If any component
+  of the second vector is 0, a division by 0 error
+  will be logged, unless both two vectors have 0 in
+  their z components, in which case only the x and y
+  components will be divided. The static version of
+  this method creates a new p5.Vector while the
+  non-static version acts on the vector directly.
+  Additionally, you may provide arguments to this
+  method as an array. See the examples for more
+  context.
+  - **v**: The vector to divide the components of
+  the original vector by
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 magnitude
+
+*   Calculates the magnitude (length) of the vector
+  and returns the result as a float. (This is simply
+  the equation sqrt(x*x + y*y + z*z).)
+  - **Returns**: The magnitude of the vector
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 magSq
+
+*   Calculates the squared magnitude of the vector and
+  returns the result as a float. (This is simply the
+  equation x*x + y*y + z*z.) Faster if the real
+  length is not required in the case of comparing
+  vectors, etc.
+  - **Returns**: The squared magnitude of the vector
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 dot
+
+*   Calculates the dot product of two vectors. The
+  version of the method that computes the dot
+  product of two independent vectors is a static
+  method. See the examples for more context.
+  - **x**: The x component of the vector
+  @param [y] The y component of the vector
+  @param [z] The z component of the vector
+  - **Returns**: The dot product
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 dot
+
+*   Calculates the dot product of two vectors. The
+  version of the method that computes the dot
+  product of two independent vectors is a static
+  method. See the examples for more context.
+  - **value**: value component of the vector or a
+  p5.Vector
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 cross
+
+*   Calculates and returns a vector composed of the
+  cross product between two vectors. Both the static
+  and non-static methods return a new p5.Vector. See
+  the examples for more context.
+  - **v**: p5.Vector to be crossed
+  - **Returns**: p5.Vector composed of cross product
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 points
+
+*   Calculates the Euclidean distance between two
+  points (considering a point as a vector object).
+  If you are looking to calculate distance between 2
+  points see dist()
+  - **v**: The x, y, and z coordinates of a
+  p5.Vector
+  - **Returns**: The distance
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 1
+
+*   Normalize the vector to length 1 (make it a unit
+  vector).
+  - **Returns**: The normalized p5.Vector
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 limit
+
+*   Limit the magnitude of this vector to the value
+  used for the max parameter.
+  - **max**: The maximum magnitude for the vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 setMag
+
+*   Set the magnitude of this vector to the value used
+  for the len parameter.
+  - **len**: The new length for this vector
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 createVector
+
+*   Calculate the angle of rotation for this vector
+  (only 2D vectors). p5.Vectors created using
+  createVector() will take the current angleMode()
+  into consideration, and give the angle in radians
+  or degrees accordingly.
+  - **Returns**: The angle of rotation
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 angle
+
+*   Rotate the vector to a specific angle (only 2D
+  vectors); magnitude remains the same.
+  - **angle**: The angle of rotation
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 angle
+
+*   Rotate the vector by an angle (only 2D vectors);
+  magnitude remains the same.
+  - **angle**: The angle of rotation
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 angleBetween
+
+*   Calculates and returns the angle between two
+  vectors. This method will take the current
+  angleMode into consideration, and give the angle
+  in radians or degrees accordingly.
+  - **value**: The x, y, and z components of a
+  p5.Vector
+  - **Returns**: The angle between
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 0
+
+*   Linear interpolate the vector to another vector.
+  - **x**: The x component
+  - **y**: The y component
+  - **z**: The z component
+  - **amt**: The amount of interpolation; some value
+  between 0.0 (old vector) and 1.0 (new vector). 0.9
+  is very near the new vector. 0.5 is halfway in
+  between.
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 0
+
+*   Linear interpolate the vector to another vector.
+  - **v**: The p5.Vector to lerp to
+  - **amt**: The amount of interpolation; some value
+  between 0.0 (old vector) and 1.0 (new vector). 0.9
+  is very near the new vector. 0.5 is halfway in
+  between.
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 0
+
+*   Performs spherical linear interpolation with the
+  other vector and returns the resulting vector.
+  This works in both 3D and 2D. As for 2D, the
+  result of slerping between 2D vectors is always a
+  2D vector.
+  - **v**: the p5.Vector to slerp to
+  - **amt**: The amount of interpolation. some value
+  between 0.0 (old vector) and 1.0 (new vector). 0.9
+  is very near the new vector. 0.5 is halfway in
+  between.
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 reflect
+
+*   Reflect a vector about a normal to a line in 2D,
+  or about a normal to a plane in 3D.
+  - **surfaceNormal**: the p5.Vector to reflect
+  about.
+  @chainable
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 copy
+
+*   Return a representation of this vector as a float
+  array. This is only for temporary use. If used in
+  any other fashion, the contents should be copied
+  by using the p5.Vector.copy() method to copy into
+  your own vector.
+  - **Returns**: An Array with the 3 values
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 equals
+
+*   Equality check against a p5.Vector.
+  @param [x] The x component of the vector
+  @param [y] The y component of the vector
+  @param [z] The z component of the vector
+  - **Returns**: Whether the vectors are equal
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 🔧 equals
+
+*   Equality check against a p5.Vector.
+  - **value**: The vector to compare
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+## 📊 Variables
+
+### 📊 v
+
+*   A class to describe a two or three-dimensional
+  vector, specifically a Euclidean (also known as
+  geometric) vector. A vector is an entity that has
+  both magnitude and direction. The datatype,
+  however, stores the components of the vector (x, y
+  for 2D; or x, y, z for 3D). The magnitude and
+  direction can be accessed via the methods
+  p5.Vector.mag() and heading(). In many of the
+  p5.js examples, you will see p5.Vector used to
+  describe a position, velocity, or acceleration.
+  For example, if you consider a rectangle moving
+  across the screen, at any given instant it has a
+  position (a vector that points from the origin to
+  its location), a velocity (the rate at which the
+  object's position changes per time unit, expressed
+  as a vector), and acceleration (the rate at which
+  the object's velocity changes per time unit,
+  expressed as a vector).
+         *   Since vectors represent groupings of values, we
+  cannot simply use traditional
+  addition/multiplication/etc. Instead, we'll need
+  to do some "vector" math, which is made easy by
+  the methods inside the p5.Vector class.
+         *   @param [x] x component of the vector
+  @param [y] y component of the vector
+  @param [z] z component of the vector
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 📊 y
+
+*   The y component of the vector
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+### 📊 z
+
+*   The z component of the vector
+
+📂 *Sub-module: p5.Vector*
+
+---
+
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
