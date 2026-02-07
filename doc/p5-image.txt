@@ -1,78 +1,71 @@
-p5-image.txt    p5.js image documentation    p5
+*p5-image*                             p5.js image docs
 
 ==============================================================================
-🖼️ p5.js Image Module 🖼️    *p5-image*
+Table of Contents                      *p5-image-table-of-contents*
+
+1. Functions                                           |p5-image-functions|
+  - Image()             |p5-image-Image|
+  - canvas()             |p5-image-canvas|
+  - saveCanvas()             |p5-image-saveCanvas|
+  - loadImage()             |p5-image-loadImage|
+  - where()             |p5-image-where|
+  - where()             |p5-image-where|
+  - tint()             |p5-image-tint|
+  - tint()             |p5-image-tint|
+  - tint()             |p5-image-tint|
+  - tint()             |p5-image-tint|
+  - tint()             |p5-image-tint|
+  - noTint()             |p5-image-noTint|
+  - image()             |p5-image-image|
+  - blend()             |p5-image-blend|
+  - blend()             |p5-image-blend|
+  - copy()             |p5-image-copy|
+  - copy()             |p5-image-copy|
+  - 0()             |p5-image-0|
+  - imageMode()             |p5-image-imageMode|
+  - imageMode()             |p5-image-imageMode|
+  - imageMode()             |p5-image-imageMode|
+  - set()             |p5-image-set|
+  - imageMode()             |p5-image-imageMode|
+  - loadPixels()             |p5-image-loadPixels|
+  - loadImage()             |p5-image-loadImage|
+  - updatePixels()             |p5-image-updatePixels|
+  - updatePixels()             |p5-image-updatePixels|
+  - get()             |p5-image-get|
+  - get()             |p5-image-get|
+  - get()             |p5-image-get|
+  - updatePixels()             |p5-image-updatePixels|
+  - resize()             |p5-image-resize|
+  - copy()             |p5-image-copy|
+  - copy()             |p5-image-copy|
+  - mask()             |p5-image-mask|
+  - 0()             |p5-image-0|
+  - blend()             |p5-image-blend|
+  - blend()             |p5-image-blend|
+  - png()             |p5-image-png|
+  - reset()             |p5-image-reset|
+  - getCurrentFrame()             |p5-image-getCurrentFrame|
+  - setFrame()             |p5-image-setFrame|
+  - numFrames()             |p5-image-numFrames|
+  - pause()             |p5-image-pause|
+  - pause()             |p5-image-pause|
+  - delay()             |p5-image-delay|
+
+2. Variables                                           |p5-image-variables|
+  - srcImage     |p5-image-srcImage|
+  - width     |p5-image-width|
+  - height     |p5-image-height|
+  - pixels     |p5-image-pixels|
+
+🖼️ Image module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 06:33:46~
+⏰ Last Updated: 2026-02-07 08:33:10~
 
 ==============================================================================
-📋 CONTENTS                                                    *p5-image-contents*
+3. Functions                                           |p5-image-functions|
 
-
-## Table of Contents
-
-### 🔧 Functions
-
-- Image 🔧
-- canvas 🔧
-- saveCanvas 🔧
-- loadImage 🔧
-- where 🔧
-- where 🔧
-- tint 🔧
-- tint 🔧
-- tint 🔧
-- tint 🔧
-- tint 🔧
-- noTint 🔧
-- image 🔧
-- blend 🔧
-- blend 🔧
-- copy 🔧
-- copy 🔧
-- 0 🔧
-- imageMode 🔧
-- imageMode 🔧
-- imageMode 🔧
-- set 🔧
-- imageMode 🔧
-- loadPixels 🔧
-- loadImage 🔧
-- updatePixels 🔧
-- updatePixels 🔧
-- get 🔧
-- get 🔧
-- get 🔧
-- updatePixels 🔧
-- resize 🔧
-- copy 🔧
-- copy 🔧
-- mask 🔧
-- 0 🔧
-- blend 🔧
-- blend 🔧
-- png 🔧
-- reset 🔧
-- getCurrentFrame 🔧
-- setFrame 🔧
-- numFrames 🔧
-- pause 🔧
-- pause 🔧
-- delay 🔧
-
-### 📊 Variables
-
-- srcImage 📊
-- width 📊
-- height 📊
-- pixels 📊
-
----
-
-## 🔧 Functions
-
-### 🔧 Image
+`Image()`                                          |p5-image-Image|
 
 *   Creates a new p5.Image (the datatype for storing
   images). This provides a fresh buffer of pixels to
@@ -100,7 +93,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 canvas
+`canvas()`                                          |p5-image-canvas|
 
 *   Save the current canvas as an image. The browser
   will either save the file immediately, or prompt
@@ -113,7 +106,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 saveCanvas
+`saveCanvas()`                                          |p5-image-saveCanvas|
 
 *   Save the current canvas as an image. The browser
   will either save the file immediately, or prompt
@@ -124,7 +117,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 loadImage
+`loadImage()`                                          |p5-image-loadImage|
 
 *   Loads an image from a path and creates a p5.Image
   from it. The image may not be immediately
@@ -153,7 +146,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 where
+`where()`                                          |p5-image-where|
 
 *   Draw an image to the p5.js canvas. This function
   can be used with different numbers of parameters.
@@ -190,7 +183,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 where
+`where()`                                          |p5-image-where|
 
 *   Draw an image to the p5.js canvas. This function
   can be used with different numbers of parameters.
@@ -246,7 +239,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 tint
+`tint()`                                          |p5-image-tint|
 
 *   Sets the fill value for displaying images. Images
   can be tinted to specified colors or made
@@ -271,7 +264,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 tint
+`tint()`                                          |p5-image-tint|
 
 *   Sets the fill value for displaying images. Images
   can be tinted to specified colors or made
@@ -291,7 +284,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 tint
+`tint()`                                          |p5-image-tint|
 
 *   Sets the fill value for displaying images. Images
   can be tinted to specified colors or made
@@ -311,7 +304,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 tint
+`tint()`                                          |p5-image-tint|
 
 *   Sets the fill value for displaying images. Images
   can be tinted to specified colors or made
@@ -332,7 +325,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 tint
+`tint()`                                          |p5-image-tint|
 
 *   Sets the fill value for displaying images. Images
   can be tinted to specified colors or made
@@ -352,7 +345,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 noTint
+`noTint()`                                          |p5-image-noTint|
 
 *   Removes the current fill value for displaying
   images and reverts to displaying images with their
@@ -362,7 +355,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 image
+`image()`                                          |p5-image-image|
 
 *   Set image mode. Modifies the location from which
   images are drawn by changing the way in which
@@ -386,7 +379,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 blend
+`blend()`                                          |p5-image-blend|
 
 *   Copies a region of pixels from one image to
   another, using a specified blend mode to do the
@@ -413,7 +406,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 blend
+`blend()`                                          |p5-image-blend|
 
 *   Copies a region of pixels from one image to
   another, using a specified blend mode to do the
@@ -439,7 +432,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 copy
+`copy()`                                          |p5-image-copy|
 
 *   Copies a region of the canvas to another region of
   the canvas and copies a region of pixels from an
@@ -466,7 +459,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 copy
+`copy()`                                          |p5-image-copy|
 
 *   Copies a region of the canvas to another region of
   the canvas and copies a region of pixels from an
@@ -492,7 +485,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 0
+`0()`                                          |p5-image-0|
 
 *   Applies a filter to the canvas. The presets
   options are: THRESHOLD Converts the image to black
@@ -536,7 +529,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 imageMode
+`imageMode()`                                          |p5-image-imageMode|
 
 *   Get a region of pixels, or a single pixel, from
   the canvas. Returns an array of [R,G,B,A] values
@@ -573,7 +566,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 imageMode
+`imageMode()`                                          |p5-image-imageMode|
 
 *   Get a region of pixels, or a single pixel, from
   the canvas. Returns an array of [R,G,B,A] values
@@ -606,7 +599,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 imageMode
+`imageMode()`                                          |p5-image-imageMode|
 
 *   Get a region of pixels, or a single pixel, from
   the canvas. Returns an array of [R,G,B,A] values
@@ -642,7 +635,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 set
+`set()`                                          |p5-image-set|
 
 *   Loads the pixel data for the display window into
   the pixels[] array. This function must always be
@@ -654,7 +647,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 imageMode
+`imageMode()`                                          |p5-image-imageMode|
 
 *   Changes the color of any pixel, or writes an image
   directly to the display window. The x and y
@@ -686,7 +679,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 loadPixels
+`loadPixels()`                                          |p5-image-loadPixels|
 
 *   Updates the display window with the data in the
   pixels[] array. Use in conjunction with
@@ -708,7 +701,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 loadImage
+`loadImage()`                                          |p5-image-loadImage|
 
 *   Creates a new p5.Image. A p5.Image is a canvas
   backed representation of an image. p5 can display
@@ -730,7 +723,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 updatePixels
+`updatePixels()`                                          |p5-image-updatePixels|
 
 *   Updates the backing canvas for this image with the
   contents of the [pixels] array. If this image is
@@ -749,7 +742,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 updatePixels
+`updatePixels()`                                          |p5-image-updatePixels|
 
 *   Updates the backing canvas for this image with the
   contents of the [pixels] array. If this image is
@@ -760,7 +753,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 get
+`get()`                                          |p5-image-get|
 
 *   Get a region of pixels from an image. If no params
   are passed, the whole image is returned. If x and
@@ -777,7 +770,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 get
+`get()`                                          |p5-image-get|
 
 *   Get a region of pixels from an image. If no params
   are passed, the whole image is returned. If x and
@@ -790,7 +783,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 get
+`get()`                                          |p5-image-get|
 
 *   Get a region of pixels from an image. If no params
   are passed, the whole image is returned. If x and
@@ -806,7 +799,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 updatePixels
+`updatePixels()`                                          |p5-image-updatePixels|
 
 *   Set the color of a single pixel or write an image
   into this p5.Image. Note that for a large number
@@ -822,7 +815,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 resize
+`resize()`                                          |p5-image-resize|
 
 *   Resize the image to a new width and height. To
   make the image scale proportionally, use 0 as the
@@ -837,7 +830,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 copy
+`copy()`                                          |p5-image-copy|
 
 *   Copies a region of pixels from one image to
   another. If no srcImage is specified this is used
@@ -863,7 +856,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 copy
+`copy()`                                          |p5-image-copy|
 
 *   Copies a region of pixels from one image to
   another. If no srcImage is specified this is used
@@ -888,7 +881,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 mask
+`mask()`                                          |p5-image-mask|
 
 *   Masks part of an image from displaying by loading
   another image and using its alpha channel as an
@@ -901,7 +894,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 0
+`0()`                                          |p5-image-0|
 
 *   Applies an image filter to a p5.Image THRESHOLD
   Converts the image to black and white pixels
@@ -944,7 +937,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 blend
+`blend()`                                          |p5-image-blend|
 
 *   Copies a region of pixels from one image to
   another, using a specified blend mode to do the
@@ -977,7 +970,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 blend
+`blend()`                                          |p5-image-blend|
 
 *   Copies a region of pixels from one image to
   another, using a specified blend mode to do the
@@ -1009,7 +1002,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 png
+`png()`                                          |p5-image-png|
 
 *   Saves the image to a file and force the browser to
   download it. Accepts two strings for filename and
@@ -1024,7 +1017,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 reset
+`reset()`                                          |p5-image-reset|
 
 *   Starts an animated GIF over at the beginning
   state.
@@ -1033,7 +1026,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 getCurrentFrame
+`getCurrentFrame()`                                          |p5-image-getCurrentFrame|
 
 *   Gets the index for the frame that is currently
   visible in an animated GIF.
@@ -1044,7 +1037,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 setFrame
+`setFrame()`                                          |p5-image-setFrame|
 
 *   Sets the index of the frame that is currently
   visible in an animated GIF
@@ -1055,7 +1048,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 numFrames
+`numFrames()`                                          |p5-image-numFrames|
 
 *   Returns the number of frames in an animated GIF
 
@@ -1063,7 +1056,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 pause
+`pause()`                                          |p5-image-pause|
 
 *   Plays an animated GIF that was paused with pause()
 
@@ -1071,7 +1064,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 pause
+`pause()`                                          |p5-image-pause|
 
 *   Pauses an animated GIF.
 
@@ -1079,7 +1072,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 🔧 delay
+`delay()`                                          |p5-image-delay|
 
 *   Changes the delay between frames in an animated
   GIF. There is an optional second parameter that
@@ -1095,9 +1088,10 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-## 📊 Variables
+==============================================================================
+3. Variables                                           |p5-image-variables|
 
-### 📊 srcImage
+`srcImage`                                          |p5-image-srcImage|
 
 *   Copies a region of pixels from one image to
   another, using a specified blend mode to do the
@@ -1124,7 +1118,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 📊 width
+`width`                                          |p5-image-width|
 
 *   Creates a new p5.Image. A p5.Image is a canvas
   backed representation of an image. p5 can display
@@ -1146,7 +1140,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 📊 height
+`height`                                          |p5-image-height|
 
 *   Image height.
 
@@ -1154,7 +1148,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-### 📊 pixels
+`pixels`                                          |p5-image-pixels|
 
 *   Array containing the values for all the pixels in
   the display window. These values are numbers. This
@@ -1186,7 +1180,7 @@ p5-image.txt    p5.js image documentation    p5
 
 ---
 
-
-
 ==============================================================================
+Generated by p5.nvim documentation generator <https://github.com/prjctimg/p5.nvim>
+
 vim:tw=78:ts=8:ft=help:norl:

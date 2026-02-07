@@ -1,115 +1,109 @@
-p5-color.txt    p5.js color documentation    p5
+*p5-color*                             p5.js color docs
 
 ==============================================================================
-🎨 p5.js Color Module 🎨    *p5-color*
+Table of Contents                      *p5-color-table-of-contents*
+
+1. Functions                                           |p5-color-functions|
+  - alpha()             |p5-color-alpha|
+  - blue()             |p5-color-blue|
+  - brightness()             |p5-color-brightness|
+  - color()             |p5-color-color|
+  - color()             |p5-color-color|
+  - color()             |p5-color-color|
+  - color()             |p5-color-color|
+  - color()             |p5-color-color|
+  - green()             |p5-color-green|
+  - colorMode()             |p5-color-colorMode|
+  - colorMode()             |p5-color-colorMode|
+  - lightness()             |p5-color-lightness|
+  - red()             |p5-color-red|
+  - colorMode()             |p5-color-colorMode|
+  - draw()             |p5-color-draw|
+  - draw()             |p5-color-draw|
+  - draw()             |p5-color-draw|
+  - draw()             |p5-color-draw|
+  - draw()             |p5-color-draw|
+  - draw()             |p5-color-draw|
+  - clear()             |p5-color-clear|
+  - clear()             |p5-color-clear|
+  - fill()             |p5-color-fill|
+  - fill()             |p5-color-fill|
+  - fill()             |p5-color-fill|
+  - fill()             |p5-color-fill|
+  - fill()             |p5-color-fill|
+  - fill()             |p5-color-fill|
+  - fill()             |p5-color-fill|
+  - noStroke()             |p5-color-noStroke|
+  - stroke()             |p5-color-stroke|
+  - stroke()             |p5-color-stroke|
+  - stroke()             |p5-color-stroke|
+  - stroke()             |p5-color-stroke|
+  - stroke()             |p5-color-stroke|
+  - stroke()             |p5-color-stroke|
+  - erase()             |p5-color-erase|
+  - erase()             |p5-color-erase|
+  - ellipse()             |p5-color-ellipse|
+  - ellipse()             |p5-color-ellipse|
+  - ellipse()             |p5-color-ellipse|
+  - height()             |p5-color-height|
+  - line()             |p5-color-line|
+  - line()             |p5-color-line|
+  - stroke()             |p5-color-stroke|
+  - stroke()             |p5-color-stroke|
+  - quad()             |p5-color-quad|
+  - quad()             |p5-color-quad|
+  - rectMode()             |p5-color-rectMode|
+  - rectMode()             |p5-color-rectMode|
+  - rectMode()             |p5-color-rectMode|
+  - point()             |p5-color-point|
+  - ellipseMode()             |p5-color-ellipseMode|
+  - jagged()             |p5-color-jagged|
+  - rectMode()             |p5-color-rectMode|
+  - smooth()             |p5-color-smooth|
+  - rounded()             |p5-color-rounded|
+  - mitered()             |p5-color-mitered|
+  - strokeWeight()             |p5-color-strokeWeight|
+  - curve()             |p5-color-curve|
+  - curve()             |p5-color-curve|
+  - bezierDetail()             |p5-color-bezierDetail|
+  - bezierPoint()             |p5-color-bezierPoint|
+  - bezierTangent()             |p5-color-bezierTangent|
+  - curve()             |p5-color-curve|
+  - curve()             |p5-color-curve|
+  - curveDetail()             |p5-color-curveDetail|
+  - curve()             |p5-color-curve|
+  - curvePoint()             |p5-color-curvePoint|
+  - curveTangent()             |p5-color-curveTangent|
+  - beginContour()             |p5-color-beginContour|
+  - beginShape()             |p5-color-beginShape|
+  - bezierVertex()             |p5-color-bezierVertex|
+  - bezierVertex()             |p5-color-bezierVertex|
+  - beginShape()             |p5-color-beginShape|
+  - beginShape()             |p5-color-beginShape|
+  - beginContour()             |p5-color-beginContour|
+  - endShape()             |p5-color-endShape|
+  - quadraticVertex()             |p5-color-quadraticVertex|
+  - quadraticVertex()             |p5-color-quadraticVertex|
+  - vertex()             |p5-color-vertex|
+  - vertex()             |p5-color-vertex|
+  - vertex()             |p5-color-vertex|
+  - vertex()             |p5-color-vertex|
+  - vertex()             |p5-color-vertex|
+  - rgba()             |p5-color-rgba|
+  - colorMode()             |p5-color-colorMode|
+  - colorMode()             |p5-color-colorMode|
+  - colorMode()             |p5-color-colorMode|
+  - alpha()             |p5-color-alpha|
+
+🎨 Color module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 06:33:46~
+⏰ Last Updated: 2026-02-07 08:33:10~
 
 ==============================================================================
-📋 CONTENTS                                                    *p5-color-contents*
+2. Functions                                           |p5-color-functions|
 
-
-## Table of Contents
-
-### 🔧 Functions
-
-- alpha 🔧
-- blue 🔧
-- brightness 🔧
-- color 🔧
-- color 🔧
-- color 🔧
-- color 🔧
-- color 🔧
-- green 🔧
-- colorMode 🔧
-- colorMode 🔧
-- lightness 🔧
-- red 🔧
-- colorMode 🔧
-- draw 🔧
-- draw 🔧
-- draw 🔧
-- draw 🔧
-- draw 🔧
-- draw 🔧
-- clear 🔧
-- clear 🔧
-- fill 🔧
-- fill 🔧
-- fill 🔧
-- fill 🔧
-- fill 🔧
-- fill 🔧
-- fill 🔧
-- noStroke 🔧
-- stroke 🔧
-- stroke 🔧
-- stroke 🔧
-- stroke 🔧
-- stroke 🔧
-- stroke 🔧
-- erase 🔧
-- erase 🔧
-- ellipse 🔧
-- ellipse 🔧
-- ellipse 🔧
-- height 🔧
-- line 🔧
-- line 🔧
-- stroke 🔧
-- stroke 🔧
-- quad 🔧
-- quad 🔧
-- rectMode 🔧
-- rectMode 🔧
-- rectMode 🔧
-- point 🔧
-- ellipseMode 🔧
-- jagged 🔧
-- rectMode 🔧
-- smooth 🔧
-- rounded 🔧
-- mitered 🔧
-- strokeWeight 🔧
-- curve 🔧
-- curve 🔧
-- bezierDetail 🔧
-- bezierPoint 🔧
-- bezierTangent 🔧
-- curve 🔧
-- curve 🔧
-- curveDetail 🔧
-- curve 🔧
-- curvePoint 🔧
-- curveTangent 🔧
-- beginContour 🔧
-- beginShape 🔧
-- bezierVertex 🔧
-- bezierVertex 🔧
-- beginShape 🔧
-- beginShape 🔧
-- beginContour 🔧
-- endShape 🔧
-- quadraticVertex 🔧
-- quadraticVertex 🔧
-- vertex 🔧
-- vertex 🔧
-- vertex 🔧
-- vertex 🔧
-- vertex 🔧
-- rgba 🔧
-- colorMode 🔧
-- colorMode 🔧
-- colorMode 🔧
-- alpha 🔧
-
----
-
-## 🔧 Functions
-
-### 🔧 alpha
+`alpha()`                                          |p5-color-alpha|
 
 *   Extracts the alpha (transparency) value from a
   p5.Color object, array of color components, or CSS
@@ -122,7 +116,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 blue
+`blue()`                                          |p5-color-blue|
 
 *   Extracts the blue value from a p5.Color object,
   array of color components, or CSS color string.
@@ -134,7 +128,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 brightness
+`brightness()`                                          |p5-color-brightness|
 
 *   Extracts the HSB brightness value from a p5.Color
   object, array of color components, or CSS color
@@ -147,7 +141,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 color
+`color()`                                          |p5-color-color|
 
 *   Creates a p5.Color object. By default, the
   parameters are interpreted as RGB values. Calling
@@ -180,7 +174,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 color
+`color()`                                          |p5-color-color|
 
 *   Creates a p5.Color object. By default, the
   parameters are interpreted as RGB values. Calling
@@ -216,7 +210,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 color
+`color()`                                          |p5-color-color|
 
 *   Creates a p5.Color object. By default, the
   parameters are interpreted as RGB values. Calling
@@ -245,7 +239,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 color
+`color()`                                          |p5-color-color|
 
 *   Creates a p5.Color object. By default, the
   parameters are interpreted as RGB values. Calling
@@ -275,7 +269,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 color
+`color()`                                          |p5-color-color|
 
 *   Creates a p5.Color object. By default, the
   parameters are interpreted as RGB values. Calling
@@ -303,7 +297,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 green
+`green()`                                          |p5-color-green|
 
 *   Extracts the green value from a p5.Color object,
   array of color components, or CSS color string.
@@ -315,7 +309,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 colorMode
+`colorMode()`                                          |p5-color-colorMode|
 
 *   Extracts the hue value from a p5.Color object,
   array of color components, or CSS color string.
@@ -332,7 +326,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 colorMode
+`colorMode()`                                          |p5-color-colorMode|
 
 *   Blends two colors to find a third color between
   them. The amt parameter specifies the amount to
@@ -355,7 +349,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 lightness
+`lightness()`                                          |p5-color-lightness|
 
 *   Extracts the HSL lightness value from a p5.Color
   object, array of color components, or CSS color
@@ -368,7 +362,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 red
+`red()`                                          |p5-color-red|
 
 *   Extracts the red value from a p5.Color object,
   array of color components, or CSS color string.
@@ -380,7 +374,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 colorMode
+`colorMode()`                                          |p5-color-colorMode|
 
 *   Extracts the saturation value from a p5.Color
   object, array of color components, or CSS color
@@ -396,7 +390,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-color-draw|
 
 *   Sets the color used for the background of the
   canvas. By default, the background is transparent.
@@ -432,7 +426,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-color-draw|
 
 *   Sets the color used for the background of the
   canvas. By default, the background is transparent.
@@ -471,7 +465,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-color-draw|
 
 *   Sets the color used for the background of the
   canvas. By default, the background is transparent.
@@ -509,7 +503,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-color-draw|
 
 *   Sets the color used for the background of the
   canvas. By default, the background is transparent.
@@ -551,7 +545,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-color-draw|
 
 *   Sets the color used for the background of the
   canvas. By default, the background is transparent.
@@ -587,7 +581,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-color-draw|
 
 *   Sets the color used for the background of the
   canvas. By default, the background is transparent.
@@ -626,7 +620,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 clear
+`clear()`                                          |p5-color-clear|
 
 *   Clears the pixels on the canvas. This function
   makes every pixel 100% transparent. Calling
@@ -650,7 +644,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 clear
+`clear()`                                          |p5-color-clear|
 
 *   Clears the pixels on the canvas. This function
   makes every pixel 100% transparent. Calling
@@ -670,7 +664,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 fill
+`fill()`                                          |p5-color-fill|
 
 *   Changes the way p5.js interprets color data. By
   default, the numeric parameters for fill(),
@@ -697,7 +691,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 fill
+`fill()`                                          |p5-color-fill|
 
 *   Changes the way p5.js interprets color data. By
   default, the numeric parameters for fill(),
@@ -731,7 +725,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 fill
+`fill()`                                          |p5-color-fill|
 
 *   Sets the color used to fill shapes. Calling
   fill(255, 165, 0) or fill('orange') means all
@@ -760,7 +754,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 fill
+`fill()`                                          |p5-color-fill|
 
 *   Sets the color used to fill shapes. Calling
   fill(255, 165, 0) or fill('orange') means all
@@ -784,7 +778,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 fill
+`fill()`                                          |p5-color-fill|
 
 *   Sets the color used to fill shapes. Calling
   fill(255, 165, 0) or fill('orange') means all
@@ -808,7 +802,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 fill
+`fill()`                                          |p5-color-fill|
 
 *   Sets the color used to fill shapes. Calling
   fill(255, 165, 0) or fill('orange') means all
@@ -833,7 +827,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 fill
+`fill()`                                          |p5-color-fill|
 
 *   Sets the color used to fill shapes. Calling
   fill(255, 165, 0) or fill('orange') means all
@@ -857,7 +851,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 noStroke
+`noStroke()`                                          |p5-color-noStroke|
 
 *   Disables setting the interior color of shapes.
   This is the same as making the fill completely
@@ -869,7 +863,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 stroke
+`stroke()`                                          |p5-color-stroke|
 
 *   Disables drawing the stroke (outline). If both
   noStroke() and noFill() are called, nothing will
@@ -880,7 +874,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 stroke
+`stroke()`                                          |p5-color-stroke|
 
 *   Sets the color used to draw lines and borders
   around shapes. Calling stroke(255, 165, 0) or
@@ -917,7 +911,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 stroke
+`stroke()`                                          |p5-color-stroke|
 
 *   Sets the color used to draw lines and borders
   around shapes. Calling stroke(255, 165, 0) or
@@ -949,7 +943,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 stroke
+`stroke()`                                          |p5-color-stroke|
 
 *   Sets the color used to draw lines and borders
   around shapes. Calling stroke(255, 165, 0) or
@@ -981,7 +975,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 stroke
+`stroke()`                                          |p5-color-stroke|
 
 *   Sets the color used to draw lines and borders
   around shapes. Calling stroke(255, 165, 0) or
@@ -1014,7 +1008,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 stroke
+`stroke()`                                          |p5-color-stroke|
 
 *   Sets the color used to draw lines and borders
   around shapes. Calling stroke(255, 165, 0) or
@@ -1046,7 +1040,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 erase
+`erase()`                                          |p5-color-erase|
 
 *   All drawing that follows erase() will subtract
   from the canvas, revealing the web page
@@ -1083,7 +1077,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 erase
+`erase()`                                          |p5-color-erase|
 
 *   Ends erasing that was started with erase(). The
   fill(), stroke(), and blendMode() settings will
@@ -1094,7 +1088,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 ellipse
+`ellipse()`                                          |p5-color-ellipse|
 
 *   Draws an arc to the canvas. Arcs are drawn along
   the outer edge of an ellipse (oval) defined by the
@@ -1130,7 +1124,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 ellipse
+`ellipse()`                                          |p5-color-ellipse|
 
 *   Draws an ellipse (oval) to the canvas. An ellipse
   with equal width and height is a circle. By
@@ -1154,7 +1148,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 ellipse
+`ellipse()`                                          |p5-color-ellipse|
 
 *   Draws an ellipse (oval) to the canvas. An ellipse
   with equal width and height is a circle. By
@@ -1182,7 +1176,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 height
+`height()`                                          |p5-color-height|
 
 *   Draws a circle to the canvas. A circle is a round
   shape. Every point on the edge of a circle is the
@@ -1200,7 +1194,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 line
+`line()`                                          |p5-color-line|
 
 *   Draws a line, a straight path between two points.
   Its default width is one pixel. The version of
@@ -1222,7 +1216,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 line
+`line()`                                          |p5-color-line|
 
 *   Draws a line, a straight path between two points.
   Its default width is one pixel. The version of
@@ -1246,7 +1240,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 stroke
+`stroke()`                                          |p5-color-stroke|
 
 *   Draws a point, a single coordinate in space. Its
   default size is one pixel. The first two
@@ -1269,7 +1263,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 stroke
+`stroke()`                                          |p5-color-stroke|
 
 *   Draws a point, a single coordinate in space. Its
   default size is one pixel. The first two
@@ -1290,7 +1284,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 quad
+`quad()`                                          |p5-color-quad|
 
 *   Draws a quad to the canvas. A quad is a
   quadrilateral, a four-sided polygon. Some examples
@@ -1322,7 +1316,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 quad
+`quad()`                                          |p5-color-quad|
 
 *   Draws a quad to the canvas. A quad is a
   quadrilateral, a four-sided polygon. Some examples
@@ -1358,7 +1352,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 rectMode
+`rectMode()`                                          |p5-color-rectMode|
 
 *   Draws a rectangle to the canvas. A rectangle is a
   four-sided polygon with every angle at ninety
@@ -1394,7 +1388,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 rectMode
+`rectMode()`                                          |p5-color-rectMode|
 
 *   Draws a rectangle to the canvas. A rectangle is a
   four-sided polygon with every angle at ninety
@@ -1429,7 +1423,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 rectMode
+`rectMode()`                                          |p5-color-rectMode|
 
 *   Draws a square to the canvas. A square is a
   four-sided polygon with every angle at ninety
@@ -1464,7 +1458,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 point
+`point()`                                          |p5-color-point|
 
 *   Draws a triangle to the canvas. A triangle is a
   three-sided polygon. The first two parameters
@@ -1484,7 +1478,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 ellipseMode
+`ellipseMode()`                                          |p5-color-ellipseMode|
 
 *   Modifies the location from which ellipses,
   circles, and arcs are drawn. By default, the first
@@ -1516,7 +1510,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 jagged
+`jagged()`                                          |p5-color-jagged|
 
 *   Draws all geometry with jagged (aliased) edges.
   smooth() is active by default in 2D mode. It's
@@ -1531,7 +1525,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 rectMode
+`rectMode()`                                          |p5-color-rectMode|
 
 *   Modifies the location from which rectangles and
   squares are drawn. By default, the first two
@@ -1562,7 +1556,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 smooth
+`smooth()`                                          |p5-color-smooth|
 
 *   Draws all geometry with smooth (anti-aliased)
   edges. smooth() will also improve image quality of
@@ -1578,7 +1572,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 rounded
+`rounded()`                                          |p5-color-rounded|
 
 *   Sets the style for rendering line endings. These
   ends are either rounded (ROUND), squared (SQUARE),
@@ -1594,7 +1588,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 mitered
+`mitered()`                                          |p5-color-mitered|
 
 *   Sets the style of the joints which connect line
   segments. These joints are either mitered (MITER),
@@ -1611,7 +1605,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 strokeWeight
+`strokeWeight()`                                          |p5-color-strokeWeight|
 
 *   Sets the width of the stroke used for lines,
   points, and the border around shapes. All widths
@@ -1626,7 +1620,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 curve
+`curve()`                                          |p5-color-curve|
 
 *   Draws a cubic Bezier curve on the screen. These
   curves are defined by a series of anchor and
@@ -1657,7 +1651,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 curve
+`curve()`                                          |p5-color-curve|
 
 *   Draws a cubic Bezier curve on the screen. These
   curves are defined by a series of anchor and
@@ -1693,7 +1687,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 bezierDetail
+`bezierDetail()`                                          |p5-color-bezierDetail|
 
 *   Sets the resolution at which Bezier's curve is
   displayed. The default value is 20. Note, This
@@ -1707,7 +1701,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 bezierPoint
+`bezierPoint()`                                          |p5-color-bezierPoint|
 
 *   Given the x or y co-ordinate values of control and
   anchor points of a bezier curve, it evaluates the
@@ -1731,7 +1725,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 bezierTangent
+`bezierTangent()`                                          |p5-color-bezierTangent|
 
 *   Evaluates the tangent to the Bezier at position t
   for points a, b, c, d. The parameters a and d are
@@ -1749,7 +1743,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 curve
+`curve()`                                          |p5-color-curve|
 
 *   Draws a curved line on the screen between two
   points, given as the middle four parameters. The
@@ -1781,7 +1775,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 curve
+`curve()`                                          |p5-color-curve|
 
 *   Draws a curved line on the screen between two
   points, given as the middle four parameters. The
@@ -1819,7 +1813,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 curveDetail
+`curveDetail()`                                          |p5-color-curveDetail|
 
 *   Sets the resolution at which curves display. The
   default value is 20 while the minimum value is 3.
@@ -1833,7 +1827,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 curve
+`curve()`                                          |p5-color-curve|
 
 *   Modifies the quality of forms created with curve()
   and curveVertex().The parameter tightness
@@ -1854,7 +1848,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 curvePoint
+`curvePoint()`                                          |p5-color-curvePoint|
 
 *   Evaluates the curve at position t for points a, b,
   c, d. The parameter t varies between 0 and 1, a
@@ -1875,7 +1869,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 curveTangent
+`curveTangent()`                                          |p5-color-curveTangent|
 
 *   Evaluates the tangent to the curve at position t
   for points a, b, c, d. The parameter t varies
@@ -1892,7 +1886,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 beginContour
+`beginContour()`                                          |p5-color-beginContour|
 
 *   Use the beginContour() and endContour() functions
   to create negative shapes within shapes such as
@@ -1916,7 +1910,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 beginShape
+`beginShape()`                                          |p5-color-beginShape|
 
 *   Using the beginShape() and endShape() functions
   allow creating more complex forms. beginShape()
@@ -1957,7 +1951,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 bezierVertex
+`bezierVertex()`                                          |p5-color-bezierVertex|
 
 *   Specifies vertex coordinates for Bezier curves.
   Each call to bezierVertex() defines the position
@@ -1987,7 +1981,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 bezierVertex
+`bezierVertex()`                                          |p5-color-bezierVertex|
 
 *   Specifies vertex coordinates for Bezier curves.
   Each call to bezierVertex() defines the position
@@ -2023,7 +2017,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 beginShape
+`beginShape()`                                          |p5-color-beginShape|
 
 *   Specifies vertex coordinates for curves. This
   function may only be used between beginShape() and
@@ -2048,7 +2042,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 beginShape
+`beginShape()`                                          |p5-color-beginShape|
 
 *   Specifies vertex coordinates for curves. This
   function may only be used between beginShape() and
@@ -2075,7 +2069,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 beginContour
+`beginContour()`                                          |p5-color-beginContour|
 
 *   Use the beginContour() and endContour() functions
   to create negative shapes within shapes such as
@@ -2099,7 +2093,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 endShape
+`endShape()`                                          |p5-color-endShape|
 
 *   The endShape() function is the companion to
   beginShape() and may only be called after
@@ -2116,7 +2110,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 quadraticVertex
+`quadraticVertex()`                                          |p5-color-quadraticVertex|
 
 *   Specifies vertex coordinates for quadratic Bezier
   curves. Each call to quadraticVertex() defines the
@@ -2142,7 +2136,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 quadraticVertex
+`quadraticVertex()`                                          |p5-color-quadraticVertex|
 
 *   Specifies vertex coordinates for quadratic Bezier
   curves. Each call to quadraticVertex() defines the
@@ -2172,7 +2166,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 vertex
+`vertex()`                                          |p5-color-vertex|
 
 *   All shapes are constructed by connecting a series
   of vertices. vertex() is used to specify the
@@ -2187,7 +2181,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 vertex
+`vertex()`                                          |p5-color-vertex|
 
 *   All shapes are constructed by connecting a series
   of vertices. vertex() is used to specify the
@@ -2204,7 +2198,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 vertex
+`vertex()`                                          |p5-color-vertex|
 
 *   All shapes are constructed by connecting a series
   of vertices. vertex() is used to specify the
@@ -2223,7 +2217,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 vertex
+`vertex()`                                          |p5-color-vertex|
 
 *   Sets the 3d vertex normal to use for subsequent
   vertices drawn with vertex(). A normal is a vector
@@ -2238,7 +2232,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 vertex
+`vertex()`                                          |p5-color-vertex|
 
 *   Sets the 3d vertex normal to use for subsequent
   vertices drawn with vertex(). A normal is a vector
@@ -2254,7 +2248,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 rgba
+`rgba()`                                          |p5-color-rgba|
 
 *   Returns the color formatted as a string. Doing so
   can be useful for debugging, or for using p5.js
@@ -2274,7 +2268,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 colorMode
+`colorMode()`                                          |p5-color-colorMode|
 
 *   Sets the red component of a color. The range
   depends on the colorMode(). In the default RGB
@@ -2285,7 +2279,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 colorMode
+`colorMode()`                                          |p5-color-colorMode|
 
 *   Sets the green component of a color. The range
   depends on the colorMode(). In the default RGB
@@ -2296,7 +2290,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 colorMode
+`colorMode()`                                          |p5-color-colorMode|
 
 *   Sets the blue component of a color. The range
   depends on the colorMode(). In the default RGB
@@ -2307,7 +2301,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-### 🔧 alpha
+`alpha()`                                          |p5-color-alpha|
 
 *   Sets the alpha (transparency) value of a color.
   The range depends on the colorMode(). In the
@@ -2318,7 +2312,7 @@ p5-color.txt    p5.js color documentation    p5
 
 ---
 
-
-
 ==============================================================================
+Generated by p5.nvim documentation generator <https://github.com/prjctimg/p5.nvim>
+
 vim:tw=78:ts=8:ft=help:norl:

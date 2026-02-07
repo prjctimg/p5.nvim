@@ -1,97 +1,90 @@
-p5-core.txt    p5.js core documentation    p5
+*p5-core*                             p5.js core docs
 
 ==============================================================================
-⚙️ p5.js Core Module ⚙️    *p5-core*
+Table of Contents                      *p5-core-table-of-contents*
+
+1. Functions                                           |p5-core-functions|
+  - print()             |p5-core-print|
+  - images()             |p5-core-images|
+  - frameRate()             |p5-core-frameRate|
+  - frameRate()             |p5-core-frameRate|
+  - frameRate()             |p5-core-frameRate|
+  - noCursor()             |p5-core-noCursor|
+  - windowResized()             |p5-core-windowResized|
+  - fullscreen()             |p5-core-fullscreen|
+  - pixelDensity()             |p5-core-pixelDensity|
+  - pixelDensity()             |p5-core-pixelDensity|
+  - displayDensity()             |p5-core-displayDensity|
+  - getURL()             |p5-core-getURL|
+  - getURLPath()             |p5-core-getURLPath|
+  - getURLParams()             |p5-core-getURLParams|
+  - setup()             |p5-core-setup|
+  - setup()             |p5-core-setup|
+  - resizeCanvas()             |p5-core-resizeCanvas|
+  - noCanvas()             |p5-core-noCanvas|
+  - setAttributes()             |p5-core-setAttributes|
+  - setAttributes()             |p5-core-setAttributes|
+  - canvas()             |p5-core-canvas|
+  - pixels()             |p5-core-pixels|
+  - draw()             |p5-core-draw|
+  - draw()             |p5-core-draw|
+  - draw()             |p5-core-draw|
+  - push()             |p5-core-push|
+  - push()             |p5-core-push|
+  - draw()             |p5-core-draw|
+  - p5()             |p5-core-p5|
+  - length()             |p5-core-length|
+  - applyMatrix()             |p5-core-applyMatrix|
+  - applyMatrix()             |p5-core-applyMatrix|
+  - resetMatrix()             |p5-core-resetMatrix|
+  - rotate()             |p5-core-rotate|
+  - draw()             |p5-core-draw|
+  - draw()             |p5-core-draw|
+  - draw()             |p5-core-draw|
+  - scale()             |p5-core-scale|
+  - scale()             |p5-core-scale|
+  - shearX()             |p5-core-shearX|
+  - shearY()             |p5-core-shearY|
+  - translate()             |p5-core-translate|
+  - translate()             |p5-core-translate|
+  - createCanvas()             |p5-core-createCanvas|
+  - parent()             |p5-core-parent|
+  - class()             |p5-core-class|
+  - class()             |p5-core-class|
+  - class()             |p5-core-class|
+  - class()             |p5-core-class|
+  - constructor()             |p5-core-constructor|
+  - remove()             |p5-core-remove|
+  - createFramebuffer()             |p5-core-createFramebuffer|
+  - constructor()             |p5-core-constructor|
+  - setup()             |p5-core-setup|
+  - setup()             |p5-core-setup|
+  - remove()             |p5-core-remove|
+
+2. Variables                                           |p5-core-variables|
+  - contents     |p5-core-contents|
+  - deltaTime     |p5-core-deltaTime|
+  - focused     |p5-core-focused|
+  - version     |p5-core-version|
+  - displayWidth     |p5-core-displayWidth|
+  - displayHeight     |p5-core-displayHeight|
+  - windowWidth     |p5-core-windowWidth|
+  - windowHeight     |p5-core-windowHeight|
+  - width     |p5-core-width|
+  - height     |p5-core-height|
+  - note     |p5-core-note|
+  - elt     |p5-core-elt|
+  - elt     |p5-core-elt|
+
+⚙️ Core module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 06:33:46~
+⏰ Last Updated: 2026-02-07 08:33:10~
 
 ==============================================================================
-📋 CONTENTS                                                    *p5-core-contents*
+3. Functions                                           |p5-core-functions|
 
-
-## Table of Contents
-
-### 🔧 Functions
-
-- print 🔧
-- images 🔧
-- frameRate 🔧
-- frameRate 🔧
-- frameRate 🔧
-- noCursor 🔧
-- windowResized 🔧
-- fullscreen 🔧
-- pixelDensity 🔧
-- pixelDensity 🔧
-- displayDensity 🔧
-- getURL 🔧
-- getURLPath 🔧
-- getURLParams 🔧
-- setup 🔧
-- setup 🔧
-- resizeCanvas 🔧
-- noCanvas 🔧
-- setAttributes 🔧
-- setAttributes 🔧
-- canvas 🔧
-- pixels 🔧
-- draw 🔧
-- draw 🔧
-- draw 🔧
-- push 🔧
-- push 🔧
-- draw 🔧
-- p5 🔧
-- length 🔧
-- applyMatrix 🔧
-- applyMatrix 🔧
-- resetMatrix 🔧
-- rotate 🔧
-- draw 🔧
-- draw 🔧
-- draw 🔧
-- scale 🔧
-- scale 🔧
-- shearX 🔧
-- shearY 🔧
-- translate 🔧
-- translate 🔧
-- createCanvas 🔧
-- parent 🔧
-- class 🔧
-- class 🔧
-- class 🔧
-- class 🔧
-- constructor 🔧
-- remove 🔧
-- createFramebuffer 🔧
-- constructor 🔧
-- setup 🔧
-- setup 🔧
-- remove 🔧
-
-### 📊 Variables
-
-- contents 📊
-- deltaTime 📊
-- focused 📊
-- version 📊
-- displayWidth 📊
-- displayHeight 📊
-- windowWidth 📊
-- windowHeight 📊
-- width 📊
-- height 📊
-- note 📊
-- elt 📊
-- elt 📊
-
----
-
-## 🔧 Functions
-
-### 🔧 print
+`print()`                                          |p5-core-print|
 
 *   The print() function writes to the console area of
   your browser. This function is often helpful for
@@ -111,7 +104,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 images
+`images()`                                          |p5-core-images|
 
 *   Sets the cursor to a predefined symbol or an
   image, or makes it visible if already hidden. If
@@ -135,7 +128,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 frameRate
+`frameRate()`                                          |p5-core-frameRate|
 
 *   Specifies the number of frames to be displayed
   every second. For example, the function call
@@ -165,7 +158,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 frameRate
+`frameRate()`                                          |p5-core-frameRate|
 
 *   Specifies the number of frames to be displayed
   every second. For example, the function call
@@ -193,7 +186,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 frameRate
+`frameRate()`                                          |p5-core-frameRate|
 
 *   Returns _targetFrameRate variable. The default
   _targetFrameRate is set to 60. This could be
@@ -206,7 +199,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 noCursor
+`noCursor()`                                          |p5-core-noCursor|
 
 *   Hides the cursor from view.
 
@@ -214,7 +207,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 windowResized
+`windowResized()`                                          |p5-core-windowResized|
 
 *   The windowResized() function is called once every
   time the browser window is resized. This is a good
@@ -226,7 +219,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 fullscreen
+`fullscreen()`                                          |p5-core-fullscreen|
 
 *   If argument is given, sets the sketch to
   fullscreen or not based on the value of the
@@ -243,7 +236,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 pixelDensity
+`pixelDensity()`                                          |p5-core-pixelDensity|
 
 *   Sets the pixel scaling for high pixel density
   displays. By default pixel density is set to match
@@ -258,7 +251,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 pixelDensity
+`pixelDensity()`                                          |p5-core-pixelDensity|
 
 *   Sets the pixel scaling for high pixel density
   displays. By default pixel density is set to match
@@ -271,7 +264,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 displayDensity
+`displayDensity()`                                          |p5-core-displayDensity|
 
 *   Returns the pixel density of the current display
   the sketch is running on.
@@ -281,7 +274,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 getURL
+`getURL()`                                          |p5-core-getURL|
 
 *   Gets the current URL. Note: when using the p5
   Editor, this will return an empty object because
@@ -294,7 +287,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 getURLPath
+`getURLPath()`                                          |p5-core-getURLPath|
 
 *   Gets the current URL path as an array. Note: when
   using the p5 Editor, this will return an empty
@@ -307,7 +300,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 getURLParams
+`getURLParams()`                                          |p5-core-getURLParams|
 
 *   Gets the current URL params as an Object. Note:
   when using the p5 Editor, this will return an
@@ -320,7 +313,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 setup
+`setup()`                                          |p5-core-setup|
 
 *   Creates a canvas element in the document and sets
   its dimensions in pixels. This method should be
@@ -361,7 +354,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 setup
+`setup()`                                          |p5-core-setup|
 
 *   Creates a canvas element in the document and sets
   its dimensions in pixels. This method should be
@@ -401,7 +394,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 resizeCanvas
+`resizeCanvas()`                                          |p5-core-resizeCanvas|
 
 *   Resizes the canvas to given width and height. The
   canvas will be cleared and draw will be called
@@ -416,7 +409,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 noCanvas
+`noCanvas()`                                          |p5-core-noCanvas|
 
 *   Removes the default canvas for a p5 sketch that
   doesn't require a canvas
@@ -425,7 +418,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 setAttributes
+`setAttributes()`                                          |p5-core-setAttributes|
 
 *   Creates and returns a new p5.Graphics object. Use
   this class if you need to draw into an off-screen
@@ -452,7 +445,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 setAttributes
+`setAttributes()`                                          |p5-core-setAttributes|
 
 *   Creates and returns a new p5.Graphics object. Use
   this class if you need to draw into an off-screen
@@ -477,7 +470,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 canvas
+`canvas()`                                          |p5-core-canvas|
 
 *   Creates and returns a new p5.Framebuffer, a
   high-performance WebGL object that you can draw to
@@ -525,7 +518,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 pixels
+`pixels()`                                          |p5-core-pixels|
 
 *   Blends the pixels in the display window according
   to the defined mode. There is a choice of the
@@ -576,7 +569,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-core-draw|
 
 *   Stops p5.js from continuously executing the code
   within draw(). If loop() is called, the code in
@@ -602,7 +595,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-core-draw|
 
 *   By default, p5.js loops through draw()
   continuously, executing the code within it.
@@ -617,7 +610,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-core-draw|
 
 *   By default, p5.js loops through draw()
   continuously, executing the code within it. If the
@@ -629,7 +622,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 push
+`push()`                                          |p5-core-push|
 
 *   The push() function saves the current drawing
   style settings and transformations, while pop()
@@ -662,7 +655,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 push
+`push()`                                          |p5-core-push|
 
 *   The push() function saves the current drawing
   style settings and transformations, while pop()
@@ -695,7 +688,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-core-draw|
 
 *   Executes the code within draw() one time. This
   function allows the program to update the display
@@ -719,7 +712,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 p5
+`p5()`                                          |p5-core-p5|
 
 *   The p5() constructor enables you to activate
   "instance mode" instead of normal "global mode".
@@ -755,7 +748,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 length
+`length()`                                          |p5-core-length|
 
 *   Multiplies the current matrix by the one specified
   through the parameters. This is a powerful
@@ -774,7 +767,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 applyMatrix
+`applyMatrix()`                                          |p5-core-applyMatrix|
 
 *   Multiplies the current matrix by the one specified
   through the parameters. This is a powerful
@@ -803,7 +796,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 applyMatrix
+`applyMatrix()`                                          |p5-core-applyMatrix|
 
 *   Multiplies the current matrix by the one specified
   through the parameters. This is a powerful
@@ -852,7 +845,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 resetMatrix
+`resetMatrix()`                                          |p5-core-resetMatrix|
 
 *   Replaces the current matrix with the identity
   matrix.
@@ -862,7 +855,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 rotate
+`rotate()`                                          |p5-core-rotate|
 
 *   Rotates a shape by the amount specified by the
   angle parameter. This function accounts for
@@ -889,7 +882,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-core-draw|
 
 *   Rotates a shape around X axis by the amount
   specified in angle parameter. The angles can be
@@ -906,7 +899,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-core-draw|
 
 *   Rotates a shape around Y axis by the amount
   specified in angle parameter. The angles can be
@@ -923,7 +916,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 draw
+`draw()`                                          |p5-core-draw|
 
 *   Rotates a shape around Z axis by the amount
   specified in angle parameter. The angles can be
@@ -942,7 +935,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 scale
+`scale()`                                          |p5-core-scale|
 
 *   Increases or decreases the size of a shape by
   expanding or contracting vertices. Objects always
@@ -973,7 +966,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 scale
+`scale()`                                          |p5-core-scale|
 
 *   Increases or decreases the size of a shape by
   expanding or contracting vertices. Objects always
@@ -999,7 +992,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 shearX
+`shearX()`                                          |p5-core-shearX|
 
 *   Shears a shape around the x-axis by the amount
   specified by the angle parameter. Angles should be
@@ -1026,7 +1019,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 shearY
+`shearY()`                                          |p5-core-shearY|
 
 *   Shears a shape around the y-axis the amount
   specified by the angle parameter. Angles should be
@@ -1053,7 +1046,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 translate
+`translate()`                                          |p5-core-translate|
 
 *   Specifies an amount to displace objects within the
   display window. The x parameter specifies
@@ -1077,7 +1070,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 translate
+`translate()`                                          |p5-core-translate|
 
 *   Specifies an amount to displace objects within the
   display window. The x parameter specifies
@@ -1098,7 +1091,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 createCanvas
+`createCanvas()`                                          |p5-core-createCanvas|
 
 *   Base class for all elements added to a sketch,
   including canvas, graphics buffers, and other HTML
@@ -1113,7 +1106,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 parent
+`parent()`                                          |p5-core-parent|
 
 *   Attaches the element to the parent specified. A
   way of setting the container for the element.
@@ -1126,7 +1119,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 class
+`class()`                                          |p5-core-class|
 
 *   Sets the ID of the element. If no ID argument is
   passed in, it instead returns the current ID of
@@ -1141,7 +1134,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 class
+`class()`                                          |p5-core-class|
 
 *   Sets the ID of the element. If no ID argument is
   passed in, it instead returns the current ID of
@@ -1155,7 +1148,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 class
+`class()`                                          |p5-core-class|
 
 *   Adds given class to the element. If no class
   argument is passed in, it instead returns a string
@@ -1167,7 +1160,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 class
+`class()`                                          |p5-core-class|
 
 *   Adds given class to the element. If no class
   argument is passed in, it instead returns a string
@@ -1178,7 +1171,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 constructor
+`constructor()`                                          |p5-core-constructor|
 
 *   Thin wrapper around a renderer, to be used for
   creating a graphics buffer object. Use this class
@@ -1198,7 +1191,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 remove
+`remove()`                                          |p5-core-remove|
 
 *   Removes a Graphics object from the page and frees
   any resources associated with it.
@@ -1207,7 +1200,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 createFramebuffer
+`createFramebuffer()`                                          |p5-core-createFramebuffer|
 
 *   Creates and returns a new p5.Framebuffer inside a
   p5.Graphics WebGL context. This takes the same
@@ -1218,7 +1211,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 constructor
+`constructor()`                                          |p5-core-constructor|
 
 *   Main graphics and rendering context, as well as
   the base API implementation for p5.js "core". To
@@ -1233,7 +1226,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 setup
+`setup()`                                          |p5-core-setup|
 
 *   The setup() function is called once when the
   program starts. It's used to define initial
@@ -1250,7 +1243,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 setup
+`setup()`                                          |p5-core-setup|
 
 *   Called directly after setup(), the draw() function
   continuously executes the lines of code contained
@@ -1287,7 +1280,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 🔧 remove
+`remove()`                                          |p5-core-remove|
 
 *   Removes the entire p5 sketch. This will remove the
   canvas and any elements created by p5.js. It will
@@ -1304,9 +1297,10 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-## 📊 Variables
+==============================================================================
+3. Variables                                           |p5-core-variables|
 
-### 📊 contents
+`contents`                                          |p5-core-contents|
 
 *   The print() function writes to the console area of
   your browser. This function is often helpful for
@@ -1326,7 +1320,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 deltaTime
+`deltaTime`                                          |p5-core-deltaTime|
 
 *   The system variable deltaTime contains the time
   difference between the beginning of the previous
@@ -1340,7 +1334,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 focused
+`focused`                                          |p5-core-focused|
 
 *   Confirms if the window a p5.js program is in is
   "focused," meaning that the sketch will accept
@@ -1351,7 +1345,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 version
+`version`                                          |p5-core-version|
 
 *   If the sketch was created in WebGL mode, then
   weglVersion will indicate which version of WebGL
@@ -1366,7 +1360,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 displayWidth
+`displayWidth`                                          |p5-core-displayWidth|
 
 *   System variable that stores the width of the
   screen display according to The default
@@ -1378,7 +1372,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 displayHeight
+`displayHeight`                                          |p5-core-displayHeight|
 
 *   System variable that stores the height of the
   screen display according to The default
@@ -1390,7 +1384,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 windowWidth
+`windowWidth`                                          |p5-core-windowWidth|
 
 *   System variable that stores the width of the inner
   window, it maps to window.innerWidth.
@@ -1399,7 +1393,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 windowHeight
+`windowHeight`                                          |p5-core-windowHeight|
 
 *   System variable that stores the height of the
   inner window, it maps to window.innerHeight.
@@ -1408,7 +1402,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 width
+`width`                                          |p5-core-width|
 
 *   System variable that stores the width of the
   drawing canvas. This value is set by the first
@@ -1422,7 +1416,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 height
+`height`                                          |p5-core-height|
 
 *   System variable that stores the height of the
   drawing canvas. This value is set by the second
@@ -1436,7 +1430,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 note
+`note`                                          |p5-core-note|
 
 *   Creates a canvas element in the document and sets
   its dimensions in pixels. This method should be
@@ -1477,7 +1471,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 elt
+`elt`                                          |p5-core-elt|
 
 *   Base class for all elements added to a sketch,
   including canvas, graphics buffers, and other HTML
@@ -1492,7 +1486,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-### 📊 elt
+`elt`                                          |p5-core-elt|
 
 *   Main graphics and rendering context, as well as
   the base API implementation for p5.js "core". To
@@ -1507,7 +1501,7 @@ p5-core.txt    p5.js core documentation    p5
 
 ---
 
-
-
 ==============================================================================
+Generated by p5.nvim documentation generator <https://github.com/prjctimg/p5.nvim>
+
 vim:tw=78:ts=8:ft=help:norl:

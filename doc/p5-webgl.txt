@@ -1,137 +1,130 @@
-p5-webgl.txt    p5.js webgl documentation    p5
+*p5-webgl*                             p5.js webgl docs
 
 ==============================================================================
-🎮 p5.js Webgl Module 🎮    *p5-webgl*
+Table of Contents                      *p5-webgl-table-of-contents*
+
+1. Functions                                           |p5-webgl-functions|
+  - plane()             |p5-webgl-plane|
+  - box()             |p5-webgl-box|
+  - sphere()             |p5-webgl-sphere|
+  - cylinder()             |p5-webgl-cylinder|
+  - cone()             |p5-webgl-cone|
+  - ellipsoid()             |p5-webgl-ellipsoid|
+  - torus()             |p5-webgl-torus|
+  - wheel()             |p5-webgl-wheel|
+  - debugMode()             |p5-webgl-debugMode|
+  - debugMode()             |p5-webgl-debugMode|
+  - debugMode()             |p5-webgl-debugMode|
+  - debugMode()             |p5-webgl-debugMode|
+  - debugMode()             |p5-webgl-debugMode|
+  - debugMode()             |p5-webgl-debugMode|
+  - called()             |p5-webgl-called|
+  - called()             |p5-webgl-called|
+  - called()             |p5-webgl-called|
+  - called()             |p5-webgl-called|
+  - called()             |p5-webgl-called|
+  - light()             |p5-webgl-light|
+  - light()             |p5-webgl-light|
+  - light()             |p5-webgl-light|
+  - light()             |p5-webgl-light|
+  - light()             |p5-webgl-light|
+  - as()             |p5-webgl-as|
+  - as()             |p5-webgl-as|
+  - as()             |p5-webgl-as|
+  - as()             |p5-webgl-as|
+  - point()             |p5-webgl-point|
+  - point()             |p5-webgl-point|
+  - point()             |p5-webgl-point|
+  - point()             |p5-webgl-point|
+  - ambientLight()             |p5-webgl-ambientLight|
+  - pointLight()             |p5-webgl-pointLight|
+  - pointLight()             |p5-webgl-pointLight|
+  - pointLight()             |p5-webgl-pointLight|
+  - pointLight()             |p5-webgl-pointLight|
+  - pointLight()             |p5-webgl-pointLight|
+  - pointLight()             |p5-webgl-pointLight|
+  - pointLight()             |p5-webgl-pointLight|
+  - pointLight()             |p5-webgl-pointLight|
+  - pointLight()             |p5-webgl-pointLight|
+  - functions()             |p5-webgl-functions|
+  - loadModel()             |p5-webgl-loadModel|
+  - preload()             |p5-webgl-preload|
+  - createShader()             |p5-webgl-createShader|
+  - resetShader()             |p5-webgl-resetShader|
+  - beginShape()             |p5-webgl-beginShape|
+  - points()             |p5-webgl-points|
+  - size()             |p5-webgl-size|
+  - normalMaterial()             |p5-webgl-normalMaterial|
+  - ambientMaterial()             |p5-webgl-ambientMaterial|
+  - ambientMaterial()             |p5-webgl-ambientMaterial|
+  - ambientMaterial()             |p5-webgl-ambientMaterial|
+  - range()             |p5-webgl-range|
+  - emissiveMaterial()             |p5-webgl-emissiveMaterial|
+  - emissiveMaterial()             |p5-webgl-emissiveMaterial|
+  - reflective()             |p5-webgl-reflective|
+  - reflective()             |p5-webgl-reflective|
+  - reflective()             |p5-webgl-reflective|
+  - gloss()             |p5-webgl-gloss|
+  - perspective()             |p5-webgl-perspective|
+  - ortho()             |p5-webgl-ortho|
+  - frustum()             |p5-webgl-frustum|
+  - counterclockwise()             |p5-webgl-counterclockwise|
+  - counterclockwise()             |p5-webgl-counterclockwise|
+  - lookAt()             |p5-webgl-lookAt|
+  - camera()             |p5-webgl-camera|
+  - move()             |p5-webgl-move|
+  - setPosition()             |p5-webgl-setPosition|
+  - set()             |p5-webgl-set|
+  - orbitControl()             |p5-webgl-orbitControl|
+  - sketch()             |p5-webgl-sketch|
+  - frustum()             |p5-webgl-frustum|
+  - ortho()             |p5-webgl-ortho|
+  - perspective()             |p5-webgl-perspective|
+  - current()             |p5-webgl-current|
+  - current()             |p5-webgl-current|
+  - vertexNormal()             |p5-webgl-vertexNormal|
+  - false()             |p5-webgl-false|
+  - false()             |p5-webgl-false|
+  - constructor()             |p5-webgl-constructor|
+  - pixelDensity()             |p5-webgl-pixelDensity|
+  - autoSized()             |p5-webgl-autoSized|
+  - createCamera()             |p5-webgl-createCamera|
+  - remove()             |p5-webgl-remove|
+  - end()             |p5-webgl-end|
+  - begin()             |p5-webgl-begin|
+  - begin()             |p5-webgl-begin|
+  - imageMode()             |p5-webgl-imageMode|
+  - imageMode()             |p5-webgl-imageMode|
+  - constructor()             |p5-webgl-constructor|
+  - computeNormals()             |p5-webgl-computeNormals|
+  - averageNormals()             |p5-webgl-averageNormals|
+  - averagePoleNormals()             |p5-webgl-averagePoleNormals|
+  - normalize()             |p5-webgl-normalize|
+  - programs()             |p5-webgl-programs|
+
+2. Variables                                           |p5-webgl-variables|
+  - angle     |p5-webgl-angle|
+  - eyeY     |p5-webgl-eyeY|
+  - eyeZ     |p5-webgl-eyeZ|
+  - centerX     |p5-webgl-centerX|
+  - centerY     |p5-webgl-centerY|
+  - centerZ     |p5-webgl-centerZ|
+  - upX     |p5-webgl-upX|
+  - upY     |p5-webgl-upY|
+  - upZ     |p5-webgl-upZ|
+  - target     |p5-webgl-target|
+  - color     |p5-webgl-color|
+  - depth     |p5-webgl-depth|
+
+🎮 Webgl module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 06:33:46~
+⏰ Last Updated: 2026-02-07 08:33:10~
 
 ==============================================================================
-📋 CONTENTS                                                    *p5-webgl-contents*
+3. Functions                                           |p5-webgl-functions|
 
-
-## Table of Contents
-
-### 🔧 Functions
-
-- plane 🔧
-- box 🔧
-- sphere 🔧
-- cylinder 🔧
-- cone 🔧
-- ellipsoid 🔧
-- torus 🔧
-- wheel 🔧
-- debugMode 🔧
-- debugMode 🔧
-- debugMode 🔧
-- debugMode 🔧
-- debugMode 🔧
-- debugMode 🔧
-- called 🔧
-- called 🔧
-- called 🔧
-- called 🔧
-- called 🔧
-- light 🔧
-- light 🔧
-- light 🔧
-- light 🔧
-- light 🔧
-- as 🔧
-- as 🔧
-- as 🔧
-- as 🔧
-- point 🔧
-- point 🔧
-- point 🔧
-- point 🔧
-- ambientLight 🔧
-- pointLight 🔧
-- pointLight 🔧
-- pointLight 🔧
-- pointLight 🔧
-- pointLight 🔧
-- pointLight 🔧
-- pointLight 🔧
-- pointLight 🔧
-- pointLight 🔧
-- functions 🔧
-- loadModel 🔧
-- preload 🔧
-- createShader 🔧
-- resetShader 🔧
-- beginShape 🔧
-- points 🔧
-- size 🔧
-- normalMaterial 🔧
-- ambientMaterial 🔧
-- ambientMaterial 🔧
-- ambientMaterial 🔧
-- range 🔧
-- emissiveMaterial 🔧
-- emissiveMaterial 🔧
-- reflective 🔧
-- reflective 🔧
-- reflective 🔧
-- gloss 🔧
-- perspective 🔧
-- ortho 🔧
-- frustum 🔧
-- counterclockwise 🔧
-- counterclockwise 🔧
-- lookAt 🔧
-- camera 🔧
-- move 🔧
-- setPosition 🔧
-- set 🔧
-- orbitControl 🔧
-- sketch 🔧
-- frustum 🔧
-- ortho 🔧
-- perspective 🔧
-- current 🔧
-- current 🔧
-- vertexNormal 🔧
-- false 🔧
-- false 🔧
-- constructor 🔧
-- pixelDensity 🔧
-- autoSized 🔧
-- createCamera 🔧
-- remove 🔧
-- end 🔧
-- begin 🔧
-- begin 🔧
-- imageMode 🔧
-- imageMode 🔧
-- constructor 🔧
-- computeNormals 🔧
-- averageNormals 🔧
-- averagePoleNormals 🔧
-- normalize 🔧
-- programs 🔧
-
-### 📊 Variables
-
-- angle 📊
-- eyeY 📊
-- eyeZ 📊
-- centerX 📊
-- centerY 📊
-- centerZ 📊
-- upX 📊
-- upY 📊
-- upZ 📊
-- target 📊
-- color 📊
-- depth 📊
-
----
-
-## 🔧 Functions
-
-### 🔧 plane
+`plane()`                                          |p5-webgl-plane|
 
 *   Draw a plane with given a width and height
   @param [width] width of the plane
@@ -146,7 +139,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 box
+`box()`                                          |p5-webgl-box|
 
 *   Draw a box with given width, height and depth
   @param [width] width of the box
@@ -162,7 +155,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 sphere
+`sphere()`                                          |p5-webgl-sphere|
 
 *   Draw a sphere with given radius. DetailX and
   detailY determines the number of subdivisions in
@@ -182,7 +175,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 cylinder
+`cylinder()`                                          |p5-webgl-cylinder|
 
 *   Draw a cylinder with given radius and height
   DetailX and detailY determines the number of
@@ -208,7 +201,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 cone
+`cone()`                                          |p5-webgl-cone|
 
 *   Draw a cone with given radius and height DetailX
   and detailY determine the number of subdivisions
@@ -230,7 +223,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 ellipsoid
+`ellipsoid()`                                          |p5-webgl-ellipsoid|
 
 *   Draw an ellipsoid with given radius DetailX and
   detailY determine the number of subdivisions in
@@ -255,7 +248,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 torus
+`torus()`                                          |p5-webgl-torus|
 
 *   Draw a torus with given radius and tube radius
   DetailX and detailY determine the number of
@@ -280,7 +273,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 wheel
+`wheel()`                                          |p5-webgl-wheel|
 
 *   Allows movement around a 3D sketch using a mouse
   or trackpad or touch. Left-clicking and dragging
@@ -325,7 +318,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 debugMode
+`debugMode()`                                          |p5-webgl-debugMode|
 
 *   debugMode() helps visualize 3D space by adding a
   grid to indicate where the ‘ground’ is in a sketch
@@ -352,7 +345,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 debugMode
+`debugMode()`                                          |p5-webgl-debugMode|
 
 *   debugMode() helps visualize 3D space by adding a
   grid to indicate where the ‘ground’ is in a sketch
@@ -380,7 +373,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 debugMode
+`debugMode()`                                          |p5-webgl-debugMode|
 
 *   debugMode() helps visualize 3D space by adding a
   grid to indicate where the ‘ground’ is in a sketch
@@ -414,7 +407,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 debugMode
+`debugMode()`                                          |p5-webgl-debugMode|
 
 *   debugMode() helps visualize 3D space by adding a
   grid to indicate where the ‘ground’ is in a sketch
@@ -446,7 +439,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 debugMode
+`debugMode()`                                          |p5-webgl-debugMode|
 
 *   debugMode() helps visualize 3D space by adding a
   grid to indicate where the ‘ground’ is in a sketch
@@ -477,7 +470,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 debugMode
+`debugMode()`                                          |p5-webgl-debugMode|
 
 *   Turns off debugMode() in a 3D sketch.
 
@@ -485,7 +478,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 called
+`called()`                                          |p5-webgl-called|
 
 *   Creates an ambient light with the given color.
   Ambient light does not come from a specific
@@ -511,7 +504,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 called
+`called()`                                          |p5-webgl-called|
 
 *   Creates an ambient light with the given color.
   Ambient light does not come from a specific
@@ -533,7 +526,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 called
+`called()`                                          |p5-webgl-called|
 
 *   Creates an ambient light with the given color.
   Ambient light does not come from a specific
@@ -552,7 +545,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 called
+`called()`                                          |p5-webgl-called|
 
 *   Creates an ambient light with the given color.
   Ambient light does not come from a specific
@@ -572,7 +565,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 called
+`called()`                                          |p5-webgl-called|
 
 *   Creates an ambient light with the given color.
   Ambient light does not come from a specific
@@ -591,7 +584,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 light
+`light()`                                          |p5-webgl-light|
 
 *   Sets the color of the specular highlight of a
   non-ambient light (i.e. all lights except
@@ -618,7 +611,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 light
+`light()`                                          |p5-webgl-light|
 
 *   Sets the color of the specular highlight of a
   non-ambient light (i.e. all lights except
@@ -641,7 +634,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 light
+`light()`                                          |p5-webgl-light|
 
 *   Sets the color of the specular highlight of a
   non-ambient light (i.e. all lights except
@@ -663,7 +656,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 light
+`light()`                                          |p5-webgl-light|
 
 *   Sets the color of the specular highlight of a
   non-ambient light (i.e. all lights except
@@ -686,7 +679,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 light
+`light()`                                          |p5-webgl-light|
 
 *   Sets the color of the specular highlight of a
   non-ambient light (i.e. all lights except
@@ -708,7 +701,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 as
+`as()`                                          |p5-webgl-as|
 
 *   Creates a directional light with the given color
   and direction. Directional light comes from one
@@ -748,7 +741,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 as
+`as()`                                          |p5-webgl-as|
 
 *   Creates a directional light with the given color
   and direction. Directional light comes from one
@@ -783,7 +776,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 as
+`as()`                                          |p5-webgl-as|
 
 *   Creates a directional light with the given color
   and direction. Directional light comes from one
@@ -819,7 +812,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 as
+`as()`                                          |p5-webgl-as|
 
 *   Creates a directional light with the given color
   and direction. Directional light comes from one
@@ -850,7 +843,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 point
+`point()`                                          |p5-webgl-point|
 
 *   Creates a point light with the given color and
   position. A point light emits light from a single
@@ -879,7 +872,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 point
+`point()`                                          |p5-webgl-point|
 
 *   Creates a point light with the given color and
   position. A point light emits light from a single
@@ -906,7 +899,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 point
+`point()`                                          |p5-webgl-point|
 
 *   Creates a point light with the given color and
   position. A point light emits light from a single
@@ -931,7 +924,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 point
+`point()`                                          |p5-webgl-point|
 
 *   Creates a point light with the given color and
   position. A point light emits light from a single
@@ -954,7 +947,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 ambientLight
+`ambientLight()`                                          |p5-webgl-ambientLight|
 
 *   Places an ambient and directional light in the
   scene. The lights are set to ambientLight(128,
@@ -970,7 +963,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pointLight
+`pointLight()`                                          |p5-webgl-pointLight|
 
 *   Sets the falloff rate for pointLight() and
   spotLight(). lightFalloff() affects only the
@@ -992,7 +985,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pointLight
+`pointLight()`                                          |p5-webgl-pointLight|
 
 *   Creates a spot light with the given color,
   position, light direction, angle, and
@@ -1041,7 +1034,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pointLight
+`pointLight()`                                          |p5-webgl-pointLight|
 
 *   Creates a spot light with the given color,
   position, light direction, angle, and
@@ -1078,7 +1071,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pointLight
+`pointLight()`                                          |p5-webgl-pointLight|
 
 *   Creates a spot light with the given color,
   position, light direction, angle, and
@@ -1119,7 +1112,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pointLight
+`pointLight()`                                          |p5-webgl-pointLight|
 
 *   Creates a spot light with the given color,
   position, light direction, angle, and
@@ -1158,7 +1151,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pointLight
+`pointLight()`                                          |p5-webgl-pointLight|
 
 *   Creates a spot light with the given color,
   position, light direction, angle, and
@@ -1200,7 +1193,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pointLight
+`pointLight()`                                          |p5-webgl-pointLight|
 
 *   Creates a spot light with the given color,
   position, light direction, angle, and
@@ -1243,7 +1236,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pointLight
+`pointLight()`                                          |p5-webgl-pointLight|
 
 *   Creates a spot light with the given color,
   position, light direction, angle, and
@@ -1289,7 +1282,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pointLight
+`pointLight()`                                          |p5-webgl-pointLight|
 
 *   Creates a spot light with the given color,
   position, light direction, angle, and
@@ -1333,7 +1326,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 functions
+`functions()`                                          |p5-webgl-functions|
 
 *   Removes all lights present in a sketch. All
   subsequent geometry is rendered without lighting
@@ -1347,7 +1340,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 loadModel
+`loadModel()`                                          |p5-webgl-loadModel|
 
 *   Load a 3d model from an OBJ or STL file.
   loadModel() should be placed inside of preload().
@@ -1382,7 +1375,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 preload
+`preload()`                                          |p5-webgl-preload|
 
 *   Creates a new p5.Shader object from the provided
   vertex and fragment shader files. The shader files
@@ -1406,7 +1399,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 createShader
+`createShader()`                                          |p5-webgl-createShader|
 
 *   Sets the p5.Shader object to be used to render
   subsequent shapes. Custom shaders can be created
@@ -1422,7 +1415,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 resetShader
+`resetShader()`                                          |p5-webgl-resetShader|
 
 *   Restores the default shaders. Code that runs after
   resetShader() will not be affected by the shader
@@ -1433,7 +1426,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 beginShape
+`beginShape()`                                          |p5-webgl-beginShape|
 
 *   Sets the texture that will be used to render
   subsequent shapes. A texture is like a "skin" that
@@ -1451,7 +1444,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 points
+`points()`                                          |p5-webgl-points|
 
 *   Sets the coordinate space for texture mapping. The
   default mode is IMAGE which refers to the actual
@@ -1468,7 +1461,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 size
+`size()`                                          |p5-webgl-size|
 
 *   Sets the global texture wrapping mode. This
   controls how textures behave when their uv's go
@@ -1494,7 +1487,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 normalMaterial
+`normalMaterial()`                                          |p5-webgl-normalMaterial|
 
 *   Sets the current material as a normal material. A
   normal material is not affected by light. It is
@@ -1510,7 +1503,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 ambientMaterial
+`ambientMaterial()`                                          |p5-webgl-ambientMaterial|
 
 *   Sets the ambient color of the material. The
   ambientMaterial() color represents the components
@@ -1540,7 +1533,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 ambientMaterial
+`ambientMaterial()`                                          |p5-webgl-ambientMaterial|
 
 *   Sets the ambient color of the material. The
   ambientMaterial() color represents the components
@@ -1566,7 +1559,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 ambientMaterial
+`ambientMaterial()`                                          |p5-webgl-ambientMaterial|
 
 *   Sets the ambient color of the material. The
   ambientMaterial() color represents the components
@@ -1592,7 +1585,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 range
+`range()`                                          |p5-webgl-range|
 
 *   Sets the emissive color of the material. An
   emissive material will display the emissive color
@@ -1616,7 +1609,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 emissiveMaterial
+`emissiveMaterial()`                                          |p5-webgl-emissiveMaterial|
 
 *   Sets the emissive color of the material. An
   emissive material will display the emissive color
@@ -1634,7 +1627,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 emissiveMaterial
+`emissiveMaterial()`                                          |p5-webgl-emissiveMaterial|
 
 *   Sets the emissive color of the material. An
   emissive material will display the emissive color
@@ -1652,7 +1645,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 reflective
+`reflective()`                                          |p5-webgl-reflective|
 
 *   Sets the specular color of the material. A
   specular material is reflective (shiny). The
@@ -1676,7 +1669,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 reflective
+`reflective()`                                          |p5-webgl-reflective|
 
 *   Sets the specular color of the material. A
   specular material is reflective (shiny). The
@@ -1704,7 +1697,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 reflective
+`reflective()`                                          |p5-webgl-reflective|
 
 *   Sets the specular color of the material. A
   specular material is reflective (shiny). The
@@ -1726,7 +1719,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 gloss
+`gloss()`                                          |p5-webgl-gloss|
 
 *   Sets the amount of gloss ("shininess") of a
   specularMaterial(). The default and minimum value
@@ -1738,7 +1731,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 perspective
+`perspective()`                                          |p5-webgl-perspective|
 
 *   Sets a perspective projection. Accepts the same
   parameters as the global perspective(). More
@@ -1748,7 +1741,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 ortho
+`ortho()`                                          |p5-webgl-ortho|
 
 *   Sets an orthographic projection. Accepts the same
   parameters as the global ortho(). More information
@@ -1758,7 +1751,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 frustum
+`frustum()`                                          |p5-webgl-frustum|
 
 *   Sets the camera's frustum. Accepts the same
   parameters as the global frustum(). More
@@ -1768,7 +1761,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 counterclockwise
+`counterclockwise()`                                          |p5-webgl-counterclockwise|
 
 *   Panning rotates the camera view to the left and
   right.
@@ -1780,7 +1773,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 counterclockwise
+`counterclockwise()`                                          |p5-webgl-counterclockwise|
 
 *   Tilting rotates the camera view up and down.
   - **angle**: amount to rotate camera in current
@@ -1791,7 +1784,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 lookAt
+`lookAt()`                                          |p5-webgl-lookAt|
 
 *   Reorients the camera to look at a position in
   world space.
@@ -1803,7 +1796,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 camera
+`camera()`                                          |p5-webgl-camera|
 
 *   Sets the camera's position and orientation.
   Accepts the same parameters as the global
@@ -1814,7 +1807,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 move
+`move()`                                          |p5-webgl-move|
 
 *   Move camera along its local axes while maintaining
   current camera orientation.
@@ -1829,7 +1822,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 setPosition
+`setPosition()`                                          |p5-webgl-setPosition|
 
 *   Set camera position in world-space while
   maintaining current camera orientation.
@@ -1841,7 +1834,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 set
+`set()`                                          |p5-webgl-set|
 
 *   Copies information about the argument camera's
   view and projection to the target camera. If the
@@ -1853,7 +1846,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 orbitControl
+`orbitControl()`                                          |p5-webgl-orbitControl|
 
 *   For the cameras cam0 and cam1 with the given
   arguments, their view are combined with the
@@ -1882,7 +1875,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 sketch
+`sketch()`                                          |p5-webgl-sketch|
 
 *   camera position value on x axis
 
@@ -1890,7 +1883,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 frustum
+`frustum()`                                          |p5-webgl-frustum|
 
 *   Sets a perspective projection for the current
   camera in a 3D sketch. This projection represents
@@ -1918,7 +1911,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 ortho
+`ortho()`                                          |p5-webgl-ortho|
 
 *   Sets an orthographic projection for the current
   camera in a 3D sketch and defines a box-shaped
@@ -1946,7 +1939,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 perspective
+`perspective()`                                          |p5-webgl-perspective|
 
 *   Sets the frustum of the current camera as defined
   by the parameters. A frustum is a geometric form:
@@ -1975,7 +1968,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 current
+`current()`                                          |p5-webgl-current|
 
 *   Creates a new p5.Camera object and sets it as the
   current (active) camera. The new camera is
@@ -1994,7 +1987,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 current
+`current()`                                          |p5-webgl-current|
 
 *   Sets the current (active) camera of a 3D sketch.
   Allows for switching between multiple cameras.
@@ -2004,7 +1997,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 vertexNormal
+`vertexNormal()`                                          |p5-webgl-vertexNormal|
 
 *   Sets the normal to use for subsequent vertices.
   @chainable
@@ -2013,7 +2006,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 false
+`false()`                                          |p5-webgl-false|
 
 *   Set attributes for the WebGL Drawing context. This
   is a way of adjusting how the WebGL renderer works
@@ -2056,7 +2049,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 false
+`false()`                                          |p5-webgl-false|
 
 *   Set attributes for the WebGL Drawing context. This
   is a way of adjusting how the WebGL renderer works
@@ -2098,7 +2091,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 constructor
+`constructor()`                                          |p5-webgl-constructor|
 
 *   An object that one can draw to and then read as a
   texture. While similar to a p5.Graphics, using a
@@ -2113,7 +2106,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 pixelDensity
+`pixelDensity()`                                          |p5-webgl-pixelDensity|
 
 *   Gets or sets the pixel scaling for high pixel
   density displays. By default, the density will
@@ -2129,7 +2122,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 autoSized
+`autoSized()`                                          |p5-webgl-autoSized|
 
 *   Gets or sets whether or not this framebuffer will
   automatically resize along with the canvas it's
@@ -2145,7 +2138,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 createCamera
+`createCamera()`                                          |p5-webgl-createCamera|
 
 *   Creates and returns a new p5.FramebufferCamera to
   be used while drawing to this framebuffer. The
@@ -2156,7 +2149,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 remove
+`remove()`                                          |p5-webgl-remove|
 
 *   Removes the framebuffer and frees its resources.
 
@@ -2164,7 +2157,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 end
+`end()`                                          |p5-webgl-end|
 
 *   Begin drawing to this framebuffer. Subsequent
   drawing functions to the canvas the framebuffer is
@@ -2179,7 +2172,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 begin
+`begin()`                                          |p5-webgl-begin|
 
 *   After having previously called begin(), this
   method stops drawing functions from going to the
@@ -2191,7 +2184,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 begin
+`begin()`                                          |p5-webgl-begin|
 
 *   Run a function while drawing to the framebuffer
   rather than to its canvas. This is equivalent to
@@ -2207,7 +2200,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 imageMode
+`imageMode()`                                          |p5-webgl-imageMode|
 
 *   Get a region of pixels from the canvas in the form
   of a p5.Image, or a single pixel as an array of
@@ -2229,7 +2222,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 imageMode
+`imageMode()`                                          |p5-webgl-imageMode|
 
 *   Get a region of pixels from the canvas in the form
   of a p5.Image, or a single pixel as an array of
@@ -2254,7 +2247,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 constructor
+`constructor()`                                          |p5-webgl-constructor|
 
 *   p5 Geometry class
          *   @param [detailX] number of vertices along the
@@ -2268,7 +2261,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 computeNormals
+`computeNormals()`                                          |p5-webgl-computeNormals|
 
 *   computes smooth normals per vertex as an average
   of each face.
@@ -2278,7 +2271,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 averageNormals
+`averageNormals()`                                          |p5-webgl-averageNormals|
 
 *   Averages the vertex normals. Used in curved
   surfaces
@@ -2288,7 +2281,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 averagePoleNormals
+`averagePoleNormals()`                                          |p5-webgl-averagePoleNormals|
 
 *   Averages pole normals. Used in spherical
   primitives
@@ -2298,7 +2291,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 normalize
+`normalize()`                                          |p5-webgl-normalize|
 
 *   Modifies all vertices to be centered within the
   range -100 to 100.
@@ -2308,7 +2301,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 🔧 programs
+`programs()`                                          |p5-webgl-programs|
 
 *   Used to set the uniforms of a p5.Shader object.
   Uniforms are used as a way to provide shader
@@ -2328,9 +2321,10 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-## 📊 Variables
+==============================================================================
+3. Variables                                           |p5-webgl-variables|
 
-### 📊 angle
+`angle`                                          |p5-webgl-angle|
 
 *   Sets a perspective projection. Accepts the same
   parameters as the global perspective(). More
@@ -2340,7 +2334,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 eyeY
+`eyeY`                                          |p5-webgl-eyeY|
 
 *   camera position value on y axis
 
@@ -2348,7 +2342,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 eyeZ
+`eyeZ`                                          |p5-webgl-eyeZ|
 
 *   camera position value on z axis
 
@@ -2356,7 +2350,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 centerX
+`centerX`                                          |p5-webgl-centerX|
 
 *   x coordinate representing center of the sketch
 
@@ -2364,7 +2358,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 centerY
+`centerY`                                          |p5-webgl-centerY|
 
 *   y coordinate representing center of the sketch
 
@@ -2372,7 +2366,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 centerZ
+`centerZ`                                          |p5-webgl-centerZ|
 
 *   z coordinate representing center of the sketch
 
@@ -2380,7 +2374,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 upX
+`upX`                                          |p5-webgl-upX|
 
 *   x component of direction 'up' from camera
 
@@ -2388,7 +2382,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 upY
+`upY`                                          |p5-webgl-upY|
 
 *   y component of direction 'up' from camera
 
@@ -2396,7 +2390,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 upZ
+`upZ`                                          |p5-webgl-upZ|
 
 *   z component of direction 'up' from camera
 
@@ -2404,7 +2398,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 target
+`target`                                          |p5-webgl-target|
 
 *   An object that one can draw to and then read as a
   texture. While similar to a p5.Graphics, using a
@@ -2419,7 +2413,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 color
+`color`                                          |p5-webgl-color|
 
 *   A texture with the color information of the
   framebuffer. Pass this (or the framebuffer itself)
@@ -2436,7 +2430,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-### 📊 depth
+`depth`                                          |p5-webgl-depth|
 
 *   A texture with the depth information of the
   framebuffer. If the framebuffer was created with {
@@ -2454,7 +2448,7 @@ p5-webgl.txt    p5.js webgl documentation    p5
 
 ---
 
-
-
 ==============================================================================
+Generated by p5.nvim documentation generator <https://github.com/prjctimg/p5.nvim>
+
 vim:tw=78:ts=8:ft=help:norl:

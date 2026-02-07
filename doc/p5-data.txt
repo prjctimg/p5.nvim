@@ -1,52 +1,46 @@
-p5-data.txt    p5.js data documentation    p5
+*p5-data*                             p5.js data docs
 
 ==============================================================================
-📊 p5.js Data Module 📊    *p5-data*
+Table of Contents                      *p5-data-table-of-contents*
+
+1. Functions                                           |p5-data-functions|
+  - storeItem()             |p5-data-storeItem|
+  - storeItem()             |p5-data-storeItem|
+  - storeItem()             |p5-data-storeItem|
+  - storeItem()             |p5-data-storeItem|
+  - constructor()             |p5-data-constructor|
+  - hasKey()             |p5-data-hasKey|
+  - get()             |p5-data-get|
+  - set()             |p5-data-set|
+  - create()             |p5-data-create|
+  - create()             |p5-data-create|
+  - clear()             |p5-data-clear|
+  - remove()             |p5-data-remove|
+  - print()             |p5-data-print|
+  - saveTable()             |p5-data-saveTable|
+  - saveJSON()             |p5-data-saveJSON|
+  - constructor()             |p5-data-constructor|
+  - sub()             |p5-data-sub|
+  - mult()             |p5-data-mult|
+  - div()             |p5-data-div|
+  - minValue()             |p5-data-minValue|
+  - maxValue()             |p5-data-maxValue|
+  - minKey()             |p5-data-minKey|
+  - maxKey()             |p5-data-maxKey|
+  - createStringDict()             |p5-data-createStringDict|
+  - createStringDict()             |p5-data-createStringDict|
+  - createNumberDict()             |p5-data-createNumberDict|
+  - createNumberDict()             |p5-data-createNumberDict|
+
+📊 Data module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 06:33:46~
+⏰ Last Updated: 2026-02-07 08:33:10~
 
 ==============================================================================
-📋 CONTENTS                                                    *p5-data-contents*
+2. Functions                                           |p5-data-functions|
 
-
-## Table of Contents
-
-### 🔧 Functions
-
-- storeItem 🔧
-- storeItem 🔧
-- storeItem 🔧
-- storeItem 🔧
-- constructor 🔧
-- hasKey 🔧
-- get 🔧
-- set 🔧
-- create 🔧
-- create 🔧
-- clear 🔧
-- remove 🔧
-- print 🔧
-- saveTable 🔧
-- saveJSON 🔧
-- constructor 🔧
-- sub 🔧
-- mult 🔧
-- div 🔧
-- minValue 🔧
-- maxValue 🔧
-- minKey 🔧
-- maxKey 🔧
-- createStringDict 🔧
-- createStringDict 🔧
-- createNumberDict 🔧
-- createNumberDict 🔧
-
----
-
-## 🔧 Functions
-
-### 🔧 storeItem
+`storeItem()`                                          |p5-data-storeItem|
 
 *   Stores a value in local storage under the key
   name. Local storage is saved in the browser and
@@ -61,7 +55,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 storeItem
+`storeItem()`                                          |p5-data-storeItem|
 
 *   Returns the value of an item that was stored in
   local storage using storeItem()
@@ -73,7 +67,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 storeItem
+`storeItem()`                                          |p5-data-storeItem|
 
 *   Clears all local storage items set with
   storeItem() for the current domain.
@@ -82,7 +76,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 storeItem
+`storeItem()`                                          |p5-data-storeItem|
 
 *   Removes an item that was stored with storeItem()
 
@@ -90,7 +84,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 constructor
+`constructor()`                                          |p5-data-constructor|
 
 *   Base class for all p5.Dictionary types.
   Specifically typed Dictionary classes inherit from
@@ -100,7 +94,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 hasKey
+`hasKey()`                                          |p5-data-hasKey|
 
 *   Returns true if the given key exists in the
   Dictionary, otherwise returns false.
@@ -111,7 +105,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 get
+`get()`                                          |p5-data-get|
 
 *   Returns the value stored at the given key.
   - **the**: key you want to access
@@ -121,7 +115,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 set
+`set()`                                          |p5-data-set|
 
 *   Updates the value associated with the given key in
   case it already exists in the Dictionary.
@@ -131,7 +125,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 create
+`create()`                                          |p5-data-create|
 
 *   Creates a new key-value pair in the Dictionary.
 
@@ -139,7 +133,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 create
+`create()`                                          |p5-data-create|
 
 *   Creates a new key-value pair in the Dictionary.
   - **obj**: key/value pair
@@ -148,7 +142,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 clear
+`clear()`                                          |p5-data-clear|
 
 *   Removes all previously stored key-value pairs from
   the Dictionary.
@@ -157,7 +151,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 remove
+`remove()`                                          |p5-data-remove|
 
 *   Removes the key-value pair stored at the given key
   from the Dictionary.
@@ -167,7 +161,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 print
+`print()`                                          |p5-data-print|
 
 *   Logs the set of items currently stored in the
   Dictionary to the console.
@@ -176,7 +170,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 saveTable
+`saveTable()`                                          |p5-data-saveTable|
 
 *   Converts the Dictionary into a CSV file for local
   download.
@@ -185,7 +179,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 saveJSON
+`saveJSON()`                                          |p5-data-saveJSON|
 
 *   Converts the Dictionary into a JSON file for local
   download.
@@ -194,7 +188,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 constructor
+`constructor()`                                          |p5-data-constructor|
 
 *   A simple Dictionary class for Numbers.
 
@@ -202,7 +196,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 sub
+`sub()`                                          |p5-data-sub|
 
 *   Subtract the given number from the value currently
   stored at the given key. The difference then
@@ -215,7 +209,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 mult
+`mult()`                                          |p5-data-mult|
 
 *   Multiply the given number with the value currently
   stored at the given key. The product then replaces
@@ -227,7 +221,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 div
+`div()`                                          |p5-data-div|
 
 *   Divide the given number with the value currently
   stored at the given key. The quotient then
@@ -240,7 +234,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 minValue
+`minValue()`                                          |p5-data-minValue|
 
 *   Return the lowest number currently stored in the
   Dictionary.
@@ -249,7 +243,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 maxValue
+`maxValue()`                                          |p5-data-maxValue|
 
 *   Return the highest number currently stored in the
   Dictionary.
@@ -258,7 +252,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 minKey
+`minKey()`                                          |p5-data-minKey|
 
 *   Return the lowest key currently used in the
   Dictionary.
@@ -267,7 +261,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 maxKey
+`maxKey()`                                          |p5-data-maxKey|
 
 *   Return the highest key currently used in the
   Dictionary.
@@ -276,7 +270,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 createStringDict
+`createStringDict()`                                          |p5-data-createStringDict|
 
 *   Creates a new instance of p5.StringDict using the
   key-value pair or the object you provide.
@@ -285,7 +279,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 createStringDict
+`createStringDict()`                                          |p5-data-createStringDict|
 
 *   Creates a new instance of p5.StringDict using the
   key-value pair or the object you provide.
@@ -295,7 +289,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 createNumberDict
+`createNumberDict()`                                          |p5-data-createNumberDict|
 
 *   Creates a new instance of p5.NumberDict using the
   key-value pair or object you provide.
@@ -304,7 +298,7 @@ p5-data.txt    p5.js data documentation    p5
 
 ---
 
-### 🔧 createNumberDict
+`createNumberDict()`                                          |p5-data-createNumberDict|
 
 *   Creates a new instance of p5.NumberDict using the
   key-value pair or object you provide.
@@ -313,8 +307,8 @@ p5-data.txt    p5.js data documentation    p5
 📂 *Sub-module: p5.TypedDict*
 
 ---
-
-
 
 ==============================================================================
+Generated by p5.nvim documentation generator <https://github.com/prjctimg/p5.nvim>
+
 vim:tw=78:ts=8:ft=help:norl:

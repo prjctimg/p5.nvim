@@ -1,72 +1,66 @@
-p5-utilities.txt    p5.js utilities documentation    p5
+*p5-utilities*                             p5.js utilities docs
 
 ==============================================================================
-🛠️ p5.js Utilities Module 🛠️    *p5-utilities*
+Table of Contents                      *p5-utilities-table-of-contents*
+
+1. Functions                                           |p5-utilities-functions|
+  - push()             |p5-utilities-push|
+  - array()             |p5-utilities-array|
+  - array()             |p5-utilities-array|
+  - concat()             |p5-utilities-concat|
+  - reverse()             |p5-utilities-reverse|
+  - pop()             |p5-utilities-pop|
+  - shuffle()             |p5-utilities-shuffle|
+  - sort()             |p5-utilities-sort|
+  - splice()             |p5-utilities-splice|
+  - subset()             |p5-utilities-subset|
+  - NaN()             |p5-utilities-NaN|
+  - to()             |p5-utilities-to|
+  - to()             |p5-utilities-to|
+  - str()             |p5-utilities-str|
+  - boolean()             |p5-utilities-boolean|
+  - byte()             |p5-utilities-byte|
+  - byte()             |p5-utilities-byte|
+  - char()             |p5-utilities-char|
+  - char()             |p5-utilities-char|
+  - unchar()             |p5-utilities-unchar|
+  - unchar()             |p5-utilities-unchar|
+  - hex()             |p5-utilities-hex|
+  - hex()             |p5-utilities-hex|
+  - unhex()             |p5-utilities-unhex|
+  - unhex()             |p5-utilities-unhex|
+  - character()             |p5-utilities-character|
+  - groups()             |p5-utilities-groups|
+  - groups()             |p5-utilities-groups|
+  - nf()             |p5-utilities-nf|
+  - nf()             |p5-utilities-nf|
+  - nfc()             |p5-utilities-nfc|
+  - nfc()             |p5-utilities-nfc|
+  - nf()             |p5-utilities-nf|
+  - nf()             |p5-utilities-nf|
+  - nf()             |p5-utilities-nf|
+  - nf()             |p5-utilities-nf|
+  - split()             |p5-utilities-split|
+  - splitTokens()             |p5-utilities-splitTokens|
+  - trim()             |p5-utilities-trim|
+  - trim()             |p5-utilities-trim|
+  - day()             |p5-utilities-day|
+  - hour()             |p5-utilities-hour|
+  - minute()             |p5-utilities-minute|
+  - milliseconds()             |p5-utilities-milliseconds|
+  - month()             |p5-utilities-month|
+  - second()             |p5-utilities-second|
+  - year()             |p5-utilities-year|
+
+🛠️ Utilities module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 06:33:46~
+⏰ Last Updated: 2026-02-07 08:33:10~
 
 ==============================================================================
-📋 CONTENTS                                                    *p5-utilities-contents*
+2. Functions                                           |p5-utilities-functions|
 
-
-## Table of Contents
-
-### 🔧 Functions
-
-- push 🔧
-- array 🔧
-- array 🔧
-- concat 🔧
-- reverse 🔧
-- pop 🔧
-- shuffle 🔧
-- sort 🔧
-- splice 🔧
-- subset 🔧
-- NaN 🔧
-- to 🔧
-- to 🔧
-- str 🔧
-- boolean 🔧
-- byte 🔧
-- byte 🔧
-- char 🔧
-- char 🔧
-- unchar 🔧
-- unchar 🔧
-- hex 🔧
-- hex 🔧
-- unhex 🔧
-- unhex 🔧
-- character 🔧
-- groups 🔧
-- groups 🔧
-- nf 🔧
-- nf 🔧
-- nfc 🔧
-- nfc 🔧
-- nf 🔧
-- nf 🔧
-- nf 🔧
-- nf 🔧
-- split 🔧
-- splitTokens 🔧
-- trim 🔧
-- trim 🔧
-- day 🔧
-- hour 🔧
-- minute 🔧
-- milliseconds 🔧
-- month 🔧
-- second 🔧
-- year 🔧
-
----
-
-## 🔧 Functions
-
-### 🔧 push
+`push()`                                          |p5-utilities-push|
 
 *   Adds a value to the end of an array. Extends the
   length of the array by one. Maps to Array.push().
@@ -78,7 +72,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 array
+`array()`                                          |p5-utilities-array|
 
 *   Copies an array (or part of an array) to another
   array. The src array is copied to the dst array,
@@ -109,7 +103,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 array
+`array()`                                          |p5-utilities-array|
 
 *   Copies an array (or part of an array) to another
   array. The src array is copied to the dst array,
@@ -136,7 +130,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 concat
+`concat()`                                          |p5-utilities-concat|
 
 *   Concatenates two arrays, maps to Array.concat().
   Does not modify the input arrays.
@@ -148,7 +142,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 reverse
+`reverse()`                                          |p5-utilities-reverse|
 
 *   Reverses the order of an array, maps to
   Array.reverse()
@@ -159,7 +153,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 pop
+`pop()`                                          |p5-utilities-pop|
 
 *   Decreases an array by one element and returns the
   shortened array, maps to Array.pop().
@@ -170,7 +164,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 shuffle
+`shuffle()`                                          |p5-utilities-shuffle|
 
 *   Randomizes the order of the elements of an array.
   Implements  Fisher-Yates Shuffle Algorithm.
@@ -182,7 +176,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 sort
+`sort()`                                          |p5-utilities-sort|
 
 *   Sorts an array of numbers from smallest to
   largest, or puts an array of words in alphabetical
@@ -201,7 +195,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 splice
+`splice()`                                          |p5-utilities-splice|
 
 *   Inserts a value or an array of values into an
   existing array. The first parameter specifies the
@@ -222,7 +216,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 subset
+`subset()`                                          |p5-utilities-subset|
 
 *   Extracts an array of elements from an existing
   array. The list parameter defines the array from
@@ -242,7 +236,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 NaN
+`NaN()`                                          |p5-utilities-NaN|
 
 *   Converts a string to its floating point
   representation. The contents of a string must
@@ -258,7 +252,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 to
+`to()`                                          |p5-utilities-to|
 
 *   Converts a boolean, string, or float to its
   integer representation. When an array of values is
@@ -273,7 +267,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 to
+`to()`                                          |p5-utilities-to|
 
 *   Converts a boolean, string, or float to its
   integer representation. When an array of values is
@@ -288,7 +282,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 str
+`str()`                                          |p5-utilities-str|
 
 *   Converts a boolean, string or number to its string
   representation. When an array of values is passed
@@ -301,7 +295,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 boolean
+`boolean()`                                          |p5-utilities-boolean|
 
 *   Converts a number or string to its boolean
   representation. For a number, any non-zero value
@@ -318,7 +312,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 byte
+`byte()`                                          |p5-utilities-byte|
 
 *   Converts a number, string representation of a
   number, or boolean to its byte representation. A
@@ -335,7 +329,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 byte
+`byte()`                                          |p5-utilities-byte|
 
 *   Converts a number, string representation of a
   number, or boolean to its byte representation. A
@@ -352,7 +346,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 char
+`char()`                                          |p5-utilities-char|
 
 *   Converts a number or string to its corresponding
   single-character string representation. If a
@@ -369,7 +363,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 char
+`char()`                                          |p5-utilities-char|
 
 *   Converts a number or string to its corresponding
   single-character string representation. If a
@@ -386,7 +380,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 unchar
+`unchar()`                                          |p5-utilities-unchar|
 
 *   Converts a single-character string to its
   corresponding integer representation. When an
@@ -400,7 +394,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 unchar
+`unchar()`                                          |p5-utilities-unchar|
 
 *   Converts a single-character string to its
   corresponding integer representation. When an
@@ -414,7 +408,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 hex
+`hex()`                                          |p5-utilities-hex|
 
 *   Converts a number to a string in its equivalent
   hexadecimal notation. If a second parameter is
@@ -430,7 +424,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 hex
+`hex()`                                          |p5-utilities-hex|
 
 *   Converts a number to a string in its equivalent
   hexadecimal notation. If a second parameter is
@@ -447,7 +441,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 unhex
+`unhex()`                                          |p5-utilities-unhex|
 
 *   Converts a string representation of a hexadecimal
   number to its equivalent integer value. When an
@@ -462,7 +456,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 unhex
+`unhex()`                                          |p5-utilities-unhex|
 
 *   Converts a string representation of a hexadecimal
   number to its equivalent integer value. When an
@@ -477,7 +471,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 character
+`character()`                                          |p5-utilities-character|
 
 *   Combines an array of Strings into one String, each
   separated by the character(s) used for the
@@ -493,7 +487,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 groups
+`groups()`                                          |p5-utilities-groups|
 
 *   This function is used to apply a regular
   expression to a piece of text, and return matching
@@ -522,7 +516,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 groups
+`groups()`                                          |p5-utilities-groups|
 
 *   This function is used to apply a regular
   expression to a piece of text, and return a list
@@ -553,7 +547,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 nf
+`nf()`                                          |p5-utilities-nf|
 
 *   Utility function for formatting numbers into
   strings. There are two versions: one for
@@ -580,7 +574,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 nf
+`nf()`                                          |p5-utilities-nf|
 
 *   Utility function for formatting numbers into
   strings. There are two versions: one for
@@ -607,7 +601,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 nfc
+`nfc()`                                          |p5-utilities-nfc|
 
 *   Utility function for formatting numbers into
   strings and placing appropriate commas to mark
@@ -624,7 +618,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 nfc
+`nfc()`                                          |p5-utilities-nfc|
 
 *   Utility function for formatting numbers into
   strings and placing appropriate commas to mark
@@ -641,7 +635,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 nf
+`nf()`                                          |p5-utilities-nf|
 
 *   Utility function for formatting numbers into
   strings. Similar to nf() but puts a "+" in front
@@ -661,7 +655,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 nf
+`nf()`                                          |p5-utilities-nf|
 
 *   Utility function for formatting numbers into
   strings. Similar to nf() but puts a "+" in front
@@ -681,7 +675,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 nf
+`nf()`                                          |p5-utilities-nf|
 
 *   Utility function for formatting numbers into
   strings. Similar to nf() but puts an additional
@@ -718,7 +712,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 nf
+`nf()`                                          |p5-utilities-nf|
 
 *   Utility function for formatting numbers into
   strings. Similar to nf() but puts an additional
@@ -755,7 +749,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 split
+`split()`                                          |p5-utilities-split|
 
 *   The split() function maps to String.split(), it
   breaks a String into pieces using a character or
@@ -775,7 +769,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 splitTokens
+`splitTokens()`                                          |p5-utilities-splitTokens|
 
 *   The splitTokens() function splits a String at one
   or many character delimiters or "tokens." The
@@ -794,7 +788,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 trim
+`trim()`                                          |p5-utilities-trim|
 
 *   Removes whitespace characters from the beginning
   and end of a String. In addition to standard
@@ -808,7 +802,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 trim
+`trim()`                                          |p5-utilities-trim|
 
 *   Removes whitespace characters from the beginning
   and end of a String. In addition to standard
@@ -822,7 +816,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 day
+`day()`                                          |p5-utilities-day|
 
 *   p5.js communicates with the clock on your
   computer. The day() function returns the current
@@ -833,7 +827,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 hour
+`hour()`                                          |p5-utilities-hour|
 
 *   p5.js communicates with the clock on your
   computer. The hour() function returns the current
@@ -844,7 +838,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 minute
+`minute()`                                          |p5-utilities-minute|
 
 *   p5.js communicates with the clock on your
   computer. The minute() function returns the
@@ -855,7 +849,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 milliseconds
+`milliseconds()`                                          |p5-utilities-milliseconds|
 
 *   Returns the number of milliseconds (thousandths of
   a second) since starting the sketch (when setup()
@@ -868,7 +862,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 month
+`month()`                                          |p5-utilities-month|
 
 *   p5.js communicates with the clock on your
   computer. The month() function returns the current
@@ -879,7 +873,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 second
+`second()`                                          |p5-utilities-second|
 
 *   p5.js communicates with the clock on your
   computer. The second() function returns the
@@ -890,7 +884,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-### 🔧 year
+`year()`                                          |p5-utilities-year|
 
 *   p5.js communicates with the clock on your
   computer. The year() function returns the current
@@ -901,7 +895,7 @@ p5-utilities.txt    p5.js utilities documentation    p5
 
 ---
 
-
-
 ==============================================================================
+Generated by p5.nvim documentation generator <https://github.com/prjctimg/p5.nvim>
+
 vim:tw=78:ts=8:ft=help:norl:

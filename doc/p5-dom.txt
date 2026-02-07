@@ -1,97 +1,90 @@
-p5-dom.txt    p5.js dom documentation    p5
+*p5-dom*                             p5.js dom docs
 
 ==============================================================================
-🌐 p5.js Dom Module 🌐    *p5-dom*
+Table of Contents                      *p5-dom-table-of-contents*
+
+1. Functions                                           |p5-dom-functions|
+  - constructor()             |p5-dom-constructor|
+  - element()             |p5-dom-element|
+  - pause()             |p5-dom-pause|
+  - loop()             |p5-dom-loop|
+  - noLoop()             |p5-dom-noLoop|
+  - autoplay()             |p5-dom-autoplay|
+  - volume()             |p5-dom-volume|
+  - volume()             |p5-dom-volume|
+  - speed()             |p5-dom-speed|
+  - speed()             |p5-dom-speed|
+  - time()             |p5-dom-time|
+  - to()             |p5-dom-to|
+  - duration()             |p5-dom-duration|
+  - onended()             |p5-dom-onended|
+  - disconnect()             |p5-dom-disconnect|
+  - showControls()             |p5-dom-showControls|
+  - hideControls()             |p5-dom-hideControls|
+  - MediaElement()             |p5-dom-MediaElement|
+  - clearCues()             |p5-dom-clearCues|
+  - constructor()             |p5-dom-constructor|
+  - string()             |p5-dom-string|
+  - removeElements()             |p5-dom-removeElements|
+  - changed()             |p5-dom-changed|
+  - createP()             |p5-dom-createP|
+  - createSpan()             |p5-dom-createSpan|
+  - string()             |p5-dom-string|
+  - string()             |p5-dom-string|
+  - size()             |p5-dom-size|
+  - size()             |p5-dom-size|
+  - checked()             |p5-dom-checked|
+  - name()             |p5-dom-name|
+  - name()             |p5-dom-name|
+  - option()             |p5-dom-option|
+  - option()             |p5-dom-option|
+  - option()             |p5-dom-option|
+  - value()             |p5-dom-value|
+  - size()             |p5-dom-size|
+  - size()             |p5-dom-size|
+  - createFileInput()             |p5-dom-createFileInput|
+  - addClass()             |p5-dom-addClass|
+  - removeClass()             |p5-dom-removeClass|
+  - hasClass()             |p5-dom-hasClass|
+  - toggleClass()             |p5-dom-toggleClass|
+  - child()             |p5-dom-child|
+  - child()             |p5-dom-child|
+  - center()             |p5-dom-center|
+  - html()             |p5-dom-html|
+  - html()             |p5-dom-html|
+  - to()             |p5-dom-to|
+  - to()             |p5-dom-to|
+  - style()             |p5-dom-style|
+  - style()             |p5-dom-style|
+  - attribute()             |p5-dom-attribute|
+  - attribute()             |p5-dom-attribute|
+  - removeAttribute()             |p5-dom-removeAttribute|
+  - value()             |p5-dom-value|
+  - value()             |p5-dom-value|
+  - show()             |p5-dom-show|
+  - hide()             |p5-dom-hide|
+  - size()             |p5-dom-size|
+  - size()             |p5-dom-size|
+  - remove()             |p5-dom-remove|
+
+2. Variables                                           |p5-dom-variables|
+  - elt     |p5-dom-elt|
+  - file     |p5-dom-file|
+  - type     |p5-dom-type|
+  - subtype     |p5-dom-subtype|
+  - name     |p5-dom-name|
+  - size     |p5-dom-size|
+  - data     |p5-dom-data|
+
+🌐 Dom module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 06:33:46~
+⏰ Last Updated: 2026-02-07 08:33:10~
 
 ==============================================================================
-📋 CONTENTS                                                    *p5-dom-contents*
+3. Functions                                           |p5-dom-functions|
 
-
-## Table of Contents
-
-### 🔧 Functions
-
-- constructor 🔧
-- element 🔧
-- pause 🔧
-- loop 🔧
-- noLoop 🔧
-- autoplay 🔧
-- volume 🔧
-- volume 🔧
-- speed 🔧
-- speed 🔧
-- time 🔧
-- to 🔧
-- duration 🔧
-- onended 🔧
-- disconnect 🔧
-- showControls 🔧
-- hideControls 🔧
-- MediaElement 🔧
-- clearCues 🔧
-- constructor 🔧
-- string 🔧
-- removeElements 🔧
-- changed 🔧
-- createP 🔧
-- createSpan 🔧
-- string 🔧
-- string 🔧
-- size 🔧
-- size 🔧
-- checked 🔧
-- name 🔧
-- name 🔧
-- option 🔧
-- option 🔧
-- option 🔧
-- value 🔧
-- size 🔧
-- size 🔧
-- createFileInput 🔧
-- addClass 🔧
-- removeClass 🔧
-- hasClass 🔧
-- toggleClass 🔧
-- child 🔧
-- child 🔧
-- center 🔧
-- html 🔧
-- html 🔧
-- to 🔧
-- to 🔧
-- style 🔧
-- style 🔧
-- attribute 🔧
-- attribute 🔧
-- removeAttribute 🔧
-- value 🔧
-- value 🔧
-- show 🔧
-- hide 🔧
-- size 🔧
-- size 🔧
-- remove 🔧
-
-### 📊 Variables
-
-- elt 📊
-- file 📊
-- type 📊
-- subtype 📊
-- name 📊
-- size 📊
-- data 📊
-
----
-
-## 🔧 Functions
-
-### 🔧 constructor
+`constructor()`                                          |p5-dom-constructor|
 
 *   Extends p5.Element to handle audio and video. In
   addition to the methods of p5.Element, it also
@@ -105,7 +98,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 element
+`element()`                                          |p5-dom-element|
 
 *   Stops an HTML5 media element (sets current time to
   zero).
@@ -115,7 +108,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 pause
+`pause()`                                          |p5-dom-pause|
 
 *   Pauses an HTML5 media element.
   @chainable
@@ -124,7 +117,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 loop
+`loop()`                                          |p5-dom-loop|
 
 *   Set 'loop' to true for an HTML5 media element, and
   starts playing.
@@ -134,7 +127,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 noLoop
+`noLoop()`                                          |p5-dom-noLoop|
 
 *   Set 'loop' to false for an HTML5 media element.
   Element will stop when it reaches the end.
@@ -144,7 +137,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 autoplay
+`autoplay()`                                          |p5-dom-autoplay|
 
 *   Set HTML5 media element to autoplay or not. If no
   argument is specified, by default it will
@@ -157,7 +150,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 volume
+`volume()`                                          |p5-dom-volume|
 
 *   Sets volume for this HTML5 media element. If no
   argument is given, returns the current volume.
@@ -167,7 +160,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 volume
+`volume()`                                          |p5-dom-volume|
 
 *   Sets volume for this HTML5 media element. If no
   argument is given, returns the current volume.
@@ -178,7 +171,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 speed
+`speed()`                                          |p5-dom-speed|
 
 *   If no arguments are given, returns the current
   playback speed of the element. The speed parameter
@@ -194,7 +187,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 speed
+`speed()`                                          |p5-dom-speed|
 
 *   If no arguments are given, returns the current
   playback speed of the element. The speed parameter
@@ -211,7 +204,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 time
+`time()`                                          |p5-dom-time|
 
 *   If no arguments are given, returns the current
   time of the element. If an argument is given the
@@ -222,7 +215,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 to
+`to()`                                          |p5-dom-to|
 
 *   If no arguments are given, returns the current
   time of the element. If an argument is given the
@@ -234,7 +227,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 duration
+`duration()`                                          |p5-dom-duration|
 
 *   Returns the duration of the HTML5 media element.
   - **Returns**: duration
@@ -243,7 +236,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 onended
+`onended()`                                          |p5-dom-onended|
 
 *   Schedule an event to be called when the audio or
   video element reaches the end. If the element is
@@ -258,7 +251,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 disconnect
+`disconnect()`                                          |p5-dom-disconnect|
 
 *   Disconnect all Web Audio routing, including to
   main output. This is useful if you want to
@@ -269,7 +262,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 showControls
+`showControls()`                                          |p5-dom-showControls|
 
 *   Show the default MediaElement controls, as
   determined by the web browser.
@@ -278,7 +271,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 hideControls
+`hideControls()`                                          |p5-dom-hideControls|
 
 *   Hide the default mediaElement controls.
 
@@ -286,7 +279,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 MediaElement
+`MediaElement()`                                          |p5-dom-MediaElement|
 
 *   Schedule events to trigger every time a
   MediaElement (audio/video) reaches a playback cue
@@ -314,7 +307,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 clearCues
+`clearCues()`                                          |p5-dom-clearCues|
 
 *   Remove all of the callbacks that had originally
   been scheduled via the addCue method.
@@ -324,7 +317,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 constructor
+`constructor()`                                          |p5-dom-constructor|
 
 *   Path to the media element source.
 
@@ -332,7 +325,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 string
+`string()`                                          |p5-dom-string|
 
 *   Searches the page for elements that match the
   given CSS selector string (can be an ID a class,
@@ -352,7 +345,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 removeElements
+`removeElements()`                                          |p5-dom-removeElements|
 
 *   Removes all elements created by p5, except any
   canvas / graphics elements created by createCanvas
@@ -363,7 +356,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 changed
+`changed()`                                          |p5-dom-changed|
 
 *   The .changed() function is called when the value
   of an element changes. This can be used to attach
@@ -378,7 +371,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 createP
+`createP()`                                          |p5-dom-createP|
 
 *   Creates a <p></p> element in the DOM with given
   inner HTML. Used for paragraph length text.
@@ -389,7 +382,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 createSpan
+`createSpan()`                                          |p5-dom-createSpan|
 
 *   Creates a <span></span> element in the DOM with
   given inner HTML.
@@ -400,7 +393,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 string
+`string()`                                          |p5-dom-string|
 
 *   Creates an <img> element in the DOM with given src
   and alternate text.
@@ -414,7 +407,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 string
+`string()`                                          |p5-dom-string|
 
 *   Creates an <img> element in the DOM with given src
   and alternate text.
@@ -436,7 +429,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 size
+`size()`                                          |p5-dom-size|
 
 *   Creates a slider <input></input> element in the
   DOM. Use .size() to set the display length of the
@@ -455,7 +448,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 size
+`size()`                                          |p5-dom-size|
 
 *   Creates a <button></button> element in the DOM.
   Use .size() to set the display size of the button.
@@ -468,7 +461,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 checked
+`checked()`                                          |p5-dom-checked|
 
 *   Creates a checkbox <input></input> element in the
   DOM. Calling .checked() on a checkbox returns a
@@ -482,7 +475,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 name
+`name()`                                          |p5-dom-name|
 
 *   Creates a dropdown menu <select></select> element
   in the DOM. It also assigns select-related methods
@@ -517,7 +510,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 name
+`name()`                                          |p5-dom-name|
 
 *   Creates a dropdown menu <select></select> element
   in the DOM. It also assigns select-related methods
@@ -550,7 +543,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 option
+`option()`                                          |p5-dom-option|
 
 *   Creates a radio button element in the DOM. It also
   helps existing radio buttons assign methods of
@@ -583,7 +576,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 option
+`option()`                                          |p5-dom-option|
 
 *   Creates a radio button element in the DOM. It also
   helps existing radio buttons assign methods of
@@ -613,7 +606,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 option
+`option()`                                          |p5-dom-option|
 
 *   Creates a radio button element in the DOM. It also
   helps existing radio buttons assign methods of
@@ -641,7 +634,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 value
+`value()`                                          |p5-dom-value|
 
 *   Creates a colorPicker element in the DOM for color
   input. The .value() method will return a hex
@@ -655,7 +648,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 size
+`size()`                                          |p5-dom-size|
 
 *   Creates an <input></input> element in the DOM for
   text input. Use .size() to set the display length
@@ -670,7 +663,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 size
+`size()`                                          |p5-dom-size|
 
 *   Creates an <input></input> element in the DOM for
   text input. Use .size() to set the display length
@@ -681,7 +674,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 createFileInput
+`createFileInput()`                                          |p5-dom-createFileInput|
 
 *   Creates an <input></input> element in the DOM of
   type 'file'. This allows users to select local
@@ -697,7 +690,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 addClass
+`addClass()`                                          |p5-dom-addClass|
 
 *   Adds specified class to the element.
   - **class**: name of class to add
@@ -707,7 +700,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 removeClass
+`removeClass()`                                          |p5-dom-removeClass|
 
 *   Removes specified class from the element.
   - **class**: name of class to remove
@@ -717,7 +710,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 hasClass
+`hasClass()`                                          |p5-dom-hasClass|
 
 *   Checks if specified class is already applied to
   element.
@@ -729,7 +722,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 toggleClass
+`toggleClass()`                                          |p5-dom-toggleClass|
 
 *   Toggles element class.
   - **c**: class name to toggle
@@ -739,7 +732,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 child
+`child()`                                          |p5-dom-child|
 
 *   Attaches the element as a child to the parent
   specified. Accepts either a string ID, DOM node,
@@ -751,7 +744,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 child
+`child()`                                          |p5-dom-child|
 
 *   Attaches the element as a child to the parent
   specified. Accepts either a string ID, DOM node,
@@ -765,7 +758,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 center
+`center()`                                          |p5-dom-center|
 
 *   Centers a p5.Element either vertically,
   horizontally, or both, relative to its parent or
@@ -780,7 +773,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 html
+`html()`                                          |p5-dom-html|
 
 *   If an argument is given, sets the inner HTML of
   the element, replacing any existing HTML. If true
@@ -794,7 +787,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 html
+`html()`                                          |p5-dom-html|
 
 *   If an argument is given, sets the inner HTML of
   the element, replacing any existing HTML. If true
@@ -811,7 +804,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 to
+`to()`                                          |p5-dom-to|
 
 *   Sets the position of the element. If no position
   type argument is given, the position will be
@@ -832,7 +825,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 to
+`to()`                                          |p5-dom-to|
 
 *   Sets the position of the element. If no position
   type argument is given, the position will be
@@ -858,7 +851,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 style
+`style()`                                          |p5-dom-style|
 
 *   Sets the given style (CSS) property (1st arg) of
   the element with the given value (2nd arg). If a
@@ -874,7 +867,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 style
+`style()`                                          |p5-dom-style|
 
 *   Sets the given style (CSS) property (1st arg) of
   the element with the given value (2nd arg). If a
@@ -891,7 +884,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 attribute
+`attribute()`                                          |p5-dom-attribute|
 
 *   Adds a new attribute or changes the value of an
   existing attribute on the specified element. If no
@@ -903,7 +896,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 attribute
+`attribute()`                                          |p5-dom-attribute|
 
 *   Adds a new attribute or changes the value of an
   existing attribute on the specified element. If no
@@ -917,7 +910,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 removeAttribute
+`removeAttribute()`                                          |p5-dom-removeAttribute|
 
 *   Removes an attribute on the specified element.
   - **attr**: attribute to remove
@@ -927,7 +920,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 value
+`value()`                                          |p5-dom-value|
 
 *   Either returns the value of the element if no
   arguments given, or sets the value of the element.
@@ -937,7 +930,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 value
+`value()`                                          |p5-dom-value|
 
 *   Either returns the value of the element if no
   arguments given, or sets the value of the element.
@@ -947,7 +940,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 show
+`show()`                                          |p5-dom-show|
 
 *   Shows the current element. Essentially, setting
   display:block for the style.
@@ -957,7 +950,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 hide
+`hide()`                                          |p5-dom-hide|
 
 *   Hides the current element. Essentially, setting
   display:none for the style.
@@ -967,7 +960,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 size
+`size()`                                          |p5-dom-size|
 
 *   Sets the width and height of the element. AUTO can
   be used to only adjust one dimension at a time. If
@@ -983,7 +976,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 size
+`size()`                                          |p5-dom-size|
 
 *   Sets the width and height of the element. AUTO can
   be used to only adjust one dimension at a time. If
@@ -1002,7 +995,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 🔧 remove
+`remove()`                                          |p5-dom-remove|
 
 *   Removes the element, stops all media streams, and
   deregisters all listeners.
@@ -1011,9 +1004,10 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-## 📊 Variables
+==============================================================================
+3. Variables                                           |p5-dom-variables|
 
-### 📊 elt
+`elt`                                          |p5-dom-elt|
 
 *   Extends p5.Element to handle audio and video. In
   addition to the methods of p5.Element, it also
@@ -1027,7 +1021,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 📊 file
+`file`                                          |p5-dom-file|
 
 *   Base class for a file. Used for Element.drop and
   createFileInput.
@@ -1037,7 +1031,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 📊 type
+`type`                                          |p5-dom-type|
 
 *   File type (image, text, etc.)
 
@@ -1045,7 +1039,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 📊 subtype
+`subtype`                                          |p5-dom-subtype|
 
 *   File subtype (usually the file extension jpg, png,
   xml, etc.)
@@ -1054,7 +1048,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 📊 name
+`name`                                          |p5-dom-name|
 
 *   File name
 
@@ -1062,7 +1056,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 📊 size
+`size`                                          |p5-dom-size|
 
 *   File size
 
@@ -1070,7 +1064,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-### 📊 data
+`data`                                          |p5-dom-data|
 
 *   URL string containing either image data, the text
   contents of the file or a parsed object if file is
@@ -1080,7 +1074,7 @@ p5-dom.txt    p5.js dom documentation    p5
 
 ---
 
-
-
 ==============================================================================
+Generated by p5.nvim documentation generator <https://github.com/prjctimg/p5.nvim>
+
 vim:tw=78:ts=8:ft=help:norl:

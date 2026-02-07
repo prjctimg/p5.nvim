@@ -1,79 +1,72 @@
-p5-events.txt    p5.js events documentation    p5
+*p5-events*                             p5.js events docs
 
 ==============================================================================
-🖱️ p5.js Events Module 🖱️    *p5-events*
+Table of Contents                      *p5-events-table-of-contents*
+
+1. Functions                                           |p5-events-functions|
+  - setMoveThreshold()             |p5-events-setMoveThreshold|
+  - setShakeThreshold()             |p5-events-setShakeThreshold|
+  - deviceMoved()             |p5-events-deviceMoved|
+  - deviceTurned()             |p5-events-deviceTurned|
+  - deviceShaken()             |p5-events-deviceShaken|
+  - keyPressed()             |p5-events-keyPressed|
+  - keyReleased()             |p5-events-keyReleased|
+  - keyTyped()             |p5-events-keyTyped|
+  - keyIsDown()             |p5-events-keyIsDown|
+  - mouseMoved()             |p5-events-mouseMoved|
+  - mouseDragged()             |p5-events-mouseDragged|
+  - mousePressed()             |p5-events-mousePressed|
+  - mouseReleased()             |p5-events-mouseReleased|
+  - mouseClicked()             |p5-events-mouseClicked|
+  - doubleClicked()             |p5-events-doubleClicked|
+  - mouseWheel()             |p5-events-mouseWheel|
+  - requestPointerLock()             |p5-events-requestPointerLock|
+  - exitPointerLock()             |p5-events-exitPointerLock|
+  - touchStarted()             |p5-events-touchStarted|
+  - touchMoved()             |p5-events-touchMoved|
+  - touchEnded()             |p5-events-touchEnded|
+
+2. Variables                                           |p5-events-variables|
+  - value     |p5-events-value|
+  - accelerationX     |p5-events-accelerationX|
+  - accelerationY     |p5-events-accelerationY|
+  - accelerationZ     |p5-events-accelerationZ|
+  - pAccelerationX     |p5-events-pAccelerationX|
+  - pAccelerationY     |p5-events-pAccelerationY|
+  - pAccelerationZ     |p5-events-pAccelerationZ|
+  - Note     |p5-events-Note|
+  - Note     |p5-events-Note|
+  - Note     |p5-events-Note|
+  - pRotationX     |p5-events-pRotationX|
+  - pRotationY     |p5-events-pRotationY|
+  - pRotationZ     |p5-events-pRotationZ|
+  - turnAxis     |p5-events-turnAxis|
+  - code     |p5-events-code|
+  - key     |p5-events-key|
+  - this     |p5-events-this|
+  - here     |p5-events-here|
+  - movedY     |p5-events-movedY|
+  - mouseX     |p5-events-mouseX|
+  - mouseY     |p5-events-mouseY|
+  - Note     |p5-events-Note|
+  - Note     |p5-events-Note|
+  - winMouseX     |p5-events-winMouseX|
+  - winMouseY     |p5-events-winMouseY|
+  - Note     |p5-events-Note|
+  - Note     |p5-events-Note|
+  - Warning     |p5-events-Warning|
+  - mouseIsPressed     |p5-events-mouseIsPressed|
+  - touches     |p5-events-touches|
+
+🖱️ Events module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-07 06:33:46~
+⏰ Last Updated: 2026-02-07 08:33:10~
 
 ==============================================================================
-📋 CONTENTS                                                    *p5-events-contents*
+3. Functions                                           |p5-events-functions|
 
-
-## Table of Contents
-
-### 🔧 Functions
-
-- setMoveThreshold 🔧
-- setShakeThreshold 🔧
-- deviceMoved 🔧
-- deviceTurned 🔧
-- deviceShaken 🔧
-- keyPressed 🔧
-- keyReleased 🔧
-- keyTyped 🔧
-- keyIsDown 🔧
-- mouseMoved 🔧
-- mouseDragged 🔧
-- mousePressed 🔧
-- mouseReleased 🔧
-- mouseClicked 🔧
-- doubleClicked 🔧
-- mouseWheel 🔧
-- requestPointerLock 🔧
-- exitPointerLock 🔧
-- touchStarted 🔧
-- touchMoved 🔧
-- touchEnded 🔧
-
-### 📊 Variables
-
-- value 📊
-- accelerationX 📊
-- accelerationY 📊
-- accelerationZ 📊
-- pAccelerationX 📊
-- pAccelerationY 📊
-- pAccelerationZ 📊
-- Note 📊
-- Note 📊
-- Note 📊
-- pRotationX 📊
-- pRotationY 📊
-- pRotationZ 📊
-- turnAxis 📊
-- code 📊
-- key 📊
-- this 📊
-- here 📊
-- movedY 📊
-- mouseX 📊
-- mouseY 📊
-- Note 📊
-- Note 📊
-- winMouseX 📊
-- winMouseY 📊
-- Note 📊
-- Note 📊
-- Warning 📊
-- mouseIsPressed 📊
-- touches 📊
-
----
-
-## 🔧 Functions
-
-### 🔧 setMoveThreshold
+`setMoveThreshold()`                                          |p5-events-setMoveThreshold|
 
 *   The setMoveThreshold() function is used to set the
   movement threshold for the deviceMoved() function.
@@ -84,7 +77,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 setShakeThreshold
+`setShakeThreshold()`                                          |p5-events-setShakeThreshold|
 
 *   The setShakeThreshold() function is used to set
   the movement threshold for the deviceShaken()
@@ -95,7 +88,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 deviceMoved
+`deviceMoved()`                                          |p5-events-deviceMoved|
 
 *   The deviceMoved() function is called when the
   device is moved by more than the threshold value
@@ -107,7 +100,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 deviceTurned
+`deviceTurned()`                                          |p5-events-deviceTurned|
 
 *   The deviceTurned() function is called when the
   device rotates by more than 90 degrees
@@ -121,7 +114,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 deviceShaken
+`deviceShaken()`                                          |p5-events-deviceShaken|
 
 *   The deviceShaken() function is called when the
   device total acceleration changes of accelerationX
@@ -134,7 +127,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 keyPressed
+`keyPressed()`                                          |p5-events-keyPressed|
 
 *   The keyPressed() function is called once every
   time a key is pressed. The keyCode for the key
@@ -167,7 +160,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 keyReleased
+`keyReleased()`                                          |p5-events-keyReleased|
 
 *   The keyReleased() function is called once every
   time a key is released. See key and keyCode for
@@ -182,7 +175,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 keyTyped
+`keyTyped()`                                          |p5-events-keyTyped|
 
 *   The keyTyped() function is called once every time
   a key is pressed, but action keys such as
@@ -208,7 +201,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 keyIsDown
+`keyIsDown()`                                          |p5-events-keyIsDown|
 
 *   The keyIsDown() function checks if the key is
   currently down, i.e. pressed. It can be used if
@@ -225,7 +218,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 mouseMoved
+`mouseMoved()`                                          |p5-events-mouseMoved|
 
 *   The mouseMoved() function is called every time the
   mouse moves and a mouse button is not pressed.
@@ -240,7 +233,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 mouseDragged
+`mouseDragged()`                                          |p5-events-mouseDragged|
 
 *   The mouseDragged() function is called once every
   time the mouse moves and a mouse button is
@@ -258,7 +251,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 mousePressed
+`mousePressed()`                                          |p5-events-mousePressed|
 
 *   The mousePressed() function is called once after
   every time a mouse button is pressed. The
@@ -278,7 +271,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 mouseReleased
+`mouseReleased()`                                          |p5-events-mouseReleased|
 
 *   The mouseReleased() function is called every time
   a mouse button is released. If no mouseReleased()
@@ -295,7 +288,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 mouseClicked
+`mouseClicked()`                                          |p5-events-mouseClicked|
 
 *   The mouseClicked() function is called once after a
   mouse button has been pressed and then released.
@@ -316,7 +309,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 doubleClicked
+`doubleClicked()`                                          |p5-events-doubleClicked|
 
 *   The doubleClicked() function is executed every
   time a event listener has detected a dblclick
@@ -334,7 +327,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 mouseWheel
+`mouseWheel()`                                          |p5-events-mouseWheel|
 
 *   The function mouseWheel() is executed every time a
   vertical mouse wheel event is detected either
@@ -360,7 +353,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 requestPointerLock
+`requestPointerLock()`                                          |p5-events-requestPointerLock|
 
 *   The function requestPointerLock() locks the
   pointer to its current position and makes it
@@ -377,7 +370,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 exitPointerLock
+`exitPointerLock()`                                          |p5-events-exitPointerLock|
 
 *   The function exitPointerLock() exits a previously
   triggered pointer Lock for example to make ui
@@ -387,7 +380,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 touchStarted
+`touchStarted()`                                          |p5-events-touchStarted|
 
 *   The touchStarted() function is called once after
   every time a touch is registered. If no
@@ -404,7 +397,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 touchMoved
+`touchMoved()`                                          |p5-events-touchMoved|
 
 *   The touchMoved() function is called every time a
   touch move is registered. If no touchMoved()
@@ -421,7 +414,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 🔧 touchEnded
+`touchEnded()`                                          |p5-events-touchEnded|
 
 *   The touchEnded() function is called every time a
   touch ends. If no touchEnded() function is
@@ -438,9 +431,10 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-## 📊 Variables
+==============================================================================
+3. Variables                                           |p5-events-variables|
 
-### 📊 value
+`value`                                          |p5-events-value|
 
 *   The setMoveThreshold() function is used to set the
   movement threshold for the deviceMoved() function.
@@ -451,7 +445,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 accelerationX
+`accelerationX`                                          |p5-events-accelerationX|
 
 *   The system variable accelerationX always contains
   the acceleration of the device along the x axis.
@@ -461,7 +455,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 accelerationY
+`accelerationY`                                          |p5-events-accelerationY|
 
 *   The system variable accelerationY always contains
   the acceleration of the device along the y axis.
@@ -471,7 +465,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 accelerationZ
+`accelerationZ`                                          |p5-events-accelerationZ|
 
 *   The system variable accelerationZ always contains
   the acceleration of the device along the z axis.
@@ -481,7 +475,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 pAccelerationX
+`pAccelerationX`                                          |p5-events-pAccelerationX|
 
 *   The system variable pAccelerationX always contains
   the acceleration of the device along the x axis in
@@ -492,7 +486,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 pAccelerationY
+`pAccelerationY`                                          |p5-events-pAccelerationY|
 
 *   The system variable pAccelerationY always contains
   the acceleration of the device along the y axis in
@@ -503,7 +497,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 pAccelerationZ
+`pAccelerationZ`                                          |p5-events-pAccelerationZ|
 
 *   The system variable pAccelerationZ always contains
   the acceleration of the device along the z axis in
@@ -514,7 +508,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 Note
+`Note`                                          |p5-events-Note|
 
 *   The system variable rotationX always contains the
   rotation of the device along the x axis. If the
@@ -529,7 +523,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 Note
+`Note`                                          |p5-events-Note|
 
 *   The system variable rotationY always contains the
   rotation of the device along the y axis. If the
@@ -544,7 +538,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 Note
+`Note`                                          |p5-events-Note|
 
 *   The system variable rotationZ always contains the
   rotation of the device along the z axis. If the
@@ -562,7 +556,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 pRotationX
+`pRotationX`                                          |p5-events-pRotationX|
 
 *   The system variable pRotationX always contains the
   rotation of the device along the x axis in the
@@ -577,7 +571,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 pRotationY
+`pRotationY`                                          |p5-events-pRotationY|
 
 *   The system variable pRotationY always contains the
   rotation of the device along the y axis in the
@@ -592,7 +586,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 pRotationZ
+`pRotationZ`                                          |p5-events-pRotationZ|
 
 *   The system variable pRotationZ always contains the
   rotation of the device along the z axis in the
@@ -607,7 +601,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 turnAxis
+`turnAxis`                                          |p5-events-turnAxis|
 
 *   When a device is rotated, the axis that triggers
   the deviceTurned() method is stored in the
@@ -618,7 +612,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 code
+`code`                                          |p5-events-code|
 
 *   The keyPressed() function is called once every
   time a key is pressed. The keyCode for the key
@@ -651,7 +645,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 key
+`key`                                          |p5-events-key|
 
 *   The system variable key always contains the value
   of the most recent key on the keyboard that was
@@ -663,7 +657,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 this
+`this`                                          |p5-events-this|
 
 *   The variable keyCode is used to detect special
   keys such as BACKSPACE, DELETE, ENTER, RETURN,
@@ -677,7 +671,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 here
+`here`                                          |p5-events-here|
 
 *   The mouseMoved() function is called every time the
   mouse moves and a mouse button is not pressed.
@@ -692,7 +686,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 movedY
+`movedY`                                          |p5-events-movedY|
 
 *   The variable movedY contains the vertical movement
   of the mouse since the last frame
@@ -701,7 +695,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 mouseX
+`mouseX`                                          |p5-events-mouseX|
 
 *   The system variable mouseX always contains the
   current horizontal position of the mouse, relative
@@ -715,7 +709,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 mouseY
+`mouseY`                                          |p5-events-mouseY|
 
 *   The system variable mouseY always contains the
   current vertical position of the mouse, relative
@@ -729,7 +723,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 Note
+`Note`                                          |p5-events-Note|
 
 *   The system variable pmouseX always contains the
   horizontal position of the mouse or finger in the
@@ -744,7 +738,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 Note
+`Note`                                          |p5-events-Note|
 
 *   The system variable pmouseY always contains the
   vertical position of the mouse or finger in the
@@ -759,7 +753,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 winMouseX
+`winMouseX`                                          |p5-events-winMouseX|
 
 *   The system variable winMouseX always contains the
   current horizontal position of the mouse, relative
@@ -769,7 +763,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 winMouseY
+`winMouseY`                                          |p5-events-winMouseY|
 
 *   The system variable winMouseY always contains the
   current vertical position of the mouse, relative
@@ -779,7 +773,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 Note
+`Note`                                          |p5-events-Note|
 
 *   The system variable pwinMouseX always contains the
   horizontal position of the mouse in the frame
@@ -792,7 +786,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 Note
+`Note`                                          |p5-events-Note|
 
 *   The system variable pwinMouseY always contains the
   vertical position of the mouse in the frame
@@ -805,7 +799,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 Warning
+`Warning`                                          |p5-events-Warning|
 
 *   p5 automatically tracks if the mouse button is
   pressed and which button is pressed. The value of
@@ -818,7 +812,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 mouseIsPressed
+`mouseIsPressed`                                          |p5-events-mouseIsPressed|
 
 *   The boolean system variable mouseIsPressed is true
   if the mouse is pressed and false if not.
@@ -827,7 +821,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-### 📊 touches
+`touches`                                          |p5-events-touches|
 
 *   The touchStarted() function is called once after
   every time a touch is registered. If no
@@ -844,7 +838,7 @@ p5-events.txt    p5.js events documentation    p5
 
 ---
 
-
-
 ==============================================================================
+Generated by p5.nvim documentation generator <https://github.com/prjctimg/p5.nvim>
+
 vim:tw=78:ts=8:ft=help:norl:
