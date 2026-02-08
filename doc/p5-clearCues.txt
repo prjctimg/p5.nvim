@@ -1,9 +1,0 @@
-clearCues()
-
-Remove all of the callbacks that had originally
-         *   been scheduled via the addCue method.
-
-Parameters:
-  id: ID of the cue, as returned by addCue
-
-Returns: void

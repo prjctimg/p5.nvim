@@ -1,9 +1,0 @@
-addClass()
-
-Adds specified class to the element.
-
-Parameters:
-  class: name of class to add
-         *   @chainable
-
-Returns: void

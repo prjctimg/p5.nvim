@@ -1,9 +1,0 @@
-fract()
-
-Calculates the fractional part of a number.
-
-Parameters:
-  num: Number whose fractional part needs to
-         *   be found out
-
-Returns: fractional part of x, i.e, {x}

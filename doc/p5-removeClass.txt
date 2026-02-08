@@ -1,9 +1,0 @@
-removeClass()
-
-Removes specified class from the element.
-
-Parameters:
-  class: name of class to remove
-         *   @chainable
-
-Returns: void
