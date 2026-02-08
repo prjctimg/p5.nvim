@@ -167,14 +167,9 @@ The deviceMoved() function is called when the
          */
         turnAxis: string;
     }
-}
 
 // Inlined from: ./src/events/keyboard.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The keyPressed() function is called once every

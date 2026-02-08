@@ -7,14 +7,9 @@ Sets the current mode of p5 to the given mode.
          */
         angleMode(): UNKNOWN_P5_CONSTANT;
     }
-}
 
 // Inlined from: ./src/typography/attributes.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Sets the current alignment for drawing text.

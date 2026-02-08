@@ -11,14 +11,9 @@ Creates a new p5.Vector (the datatype for storing
          */
         createVector(x?: number, y?: number, z?: number): Vector;
     }
-}
 
 // Inlined from: ./src/math/noise.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Returns the Perlin noise value at specified

@@ -132,14 +132,9 @@ textOutput() creates a screenreader accessible
          */
         gridOutput(display?: GRID_DISPLAY): void;
     }
-}
 
 // Inlined from: ./src/color/creating_reading.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Extracts the alpha (transparency) value from a
@@ -1184,14 +1179,9 @@ All drawing that follows erase() will subtract
          */
         noErase(): p5;
     }
-}
 
 // Inlined from: ./src/core/shape/2d_primitives.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Draws an arc to the canvas. Arcs are drawn along
@@ -2647,14 +2637,9 @@ Version of this p5.js.
         readonly FLOAT: FLOAT;
         readonly RGBA: RGBA;
     }
-}
 
 // Inlined from: ./src/core/environment.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The print() function writes to the console area of
@@ -2952,14 +2937,9 @@ Sets the pixel scaling for high pixel density
          */
         height: number;
     }
-}
 
 // Inlined from: ./src/core/rendering.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Creates a canvas element in the document and sets
@@ -3240,14 +3220,9 @@ The p5.js API provides a lot of functionality for
          */
         drawingContext: any;
     }
-}
 
 // Inlined from: ./src/core/structure.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Stops p5.js from continuously executing the code
@@ -3814,14 +3789,9 @@ Clears all local storage items set with
          */
         removeItem(key: string): void;
     }
-}
 
 // Inlined from: ./src/data/p5.TypedDict.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class TypedDict {
         /**
          *   Base class for all p5.Dictionary types.
@@ -5104,14 +5074,9 @@ Removes the element, stops all media streams, and
          */
         drop(callback: (...args: any[]) => any, fxn?: (...args: any[]) => any): Element;
     }
-}
 
 // Inlined from: ./src/events/acceleration.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The setMoveThreshold() function is used to set the
@@ -5303,14 +5268,9 @@ The deviceMoved() function is called when the
          */
         turnAxis: string;
     }
-}
 
 // Inlined from: ./src/events/keyboard.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The keyPressed() function is called once every
@@ -5425,14 +5385,9 @@ The boolean system variable keyIsPressed is true
          */
         keyCode: number;
     }
-}
 
 // Inlined from: ./src/events/mouse.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The mouseMoved() function is called every time the
@@ -5680,14 +5635,9 @@ The boolean system variable keyIsPressed is true
          */
         mouseIsPressed: boolean;
     }
-}
 
 // Inlined from: ./src/events/touch.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The touchStarted() function is called once after
@@ -5743,14 +5693,9 @@ The boolean system variable keyIsPressed is true
          */
         touches: object[];
     }
-}
 
 // Inlined from: ./src/image/image.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Creates a new p5.Image (the datatype for storing
@@ -5851,14 +5796,9 @@ Save the current canvas as an image. The browser
             callback?: (p1: any[]) => any
         ): void;
     }
-}
 
 // Inlined from: ./src/image/loading_displaying.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Loads an image from a path and creates a p5.Image
@@ -6569,14 +6509,9 @@ Updates the display window with the data in the
          */
         pixels: number[];
     }
-}
 
 // Inlined from: ./src/io/files.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class PrintWriter {
         /**
          *   Writes data to the PrintWriter stream
@@ -7437,14 +7372,9 @@ Creates a new p5.Vector (the datatype for storing
          */
         createVector(x?: number, y?: number, z?: number): Vector;
     }
-}
 
 // Inlined from: ./src/math/noise.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Returns the Perlin noise value at specified
@@ -7628,14 +7558,9 @@ Returns a random number fitting a Gaussian, or
          */
         randomGaussian(mean?: number, sd?: number): number;
     }
-}
 
 // Inlined from: ./src/math/trigonometry.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The inverse of cos(), returns the arc cosine of a
@@ -7793,14 +7718,9 @@ Sets the current mode of p5 to the given mode.
          */
         angleMode(): UNKNOWN_P5_CONSTANT;
     }
-}
 
 // Inlined from: ./src/typography/attributes.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Sets the current alignment for drawing text.
@@ -8898,14 +8818,9 @@ p5.js communicates with the clock on your
          */
         year(): number;
     }
-}
 
 // Inlined from: ./src/webgl/3d_primitives.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Draw a plane with given a width and height
@@ -9042,14 +8957,9 @@ p5.js communicates with the clock on your
          */
         torus(radius?: number, tubeRadius?: number, detailX?: number, detailY?: number): p5;
     }
-}
 
 // Inlined from: ./src/webgl/interaction.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Allows movement around a 3D sketch using a mouse
@@ -9257,14 +9167,9 @@ debugMode() helps visualize 3D space by adding a
          */
         noDebugMode(): void;
     }
-}
 
 // Inlined from: ./src/webgl/light.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Creates an ambient light with the given color.
@@ -10224,14 +10129,9 @@ Removes all lights present in a sketch. All
          */
         noLights(): p5;
     }
-}
 
 // Inlined from: ./src/webgl/loading.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Load a 3d model from an OBJ or STL file.
@@ -11076,14 +10976,9 @@ Sets the normal to use for subsequent vertices.
          */
         vertexNormal(x: number, y: number, z: number, v: Vector): p5;
     }
-}
 
 // Inlined from: ./src/webgl/p5.RendererGL.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Set attributes for the WebGL Drawing context. This
@@ -11535,14 +11430,9 @@ Adds given class to the element. If no class
         width: any;
         height: any;
     }
-}
 
 // Inlined from: ./src/core/p5.Graphics.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     // Work-around for p5.Graphics inheriting from both p5 and p5.Element
     class __Graphics__ extends Element {
         /**
@@ -11591,14 +11481,9 @@ Resets certain values such as those modified by
     }
     // Work-around for p5.Graphics inheriting from both p5 and p5.Element
     type Graphics = __Graphics__ & p5;
-}
 
 // Inlined from: ./src/image/p5.Image.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Image {
         /**
          *   Creates a new p5.Image. A p5.Image is a canvas
@@ -12036,14 +11921,9 @@ Image width.
          */
         pixels: number[];
     }
-}
 
 // Inlined from: ./src/io/p5.Table.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Table {
         /**
          *   Table objects store data with multiple rows and
@@ -12365,14 +12245,9 @@ Retrieves all table data and returns as an object.
          */
         rows: TableRow[];
     }
-}
 
 // Inlined from: ./src/io/p5.TableRow.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class TableRow {
         /**
          *   A TableRow object represents a single row of data
@@ -12659,14 +12534,9 @@ Serializes the element into a string. This
          */
         serialize(): string;
     }
-}
 
 // Inlined from: ./src/math/p5.Vector.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Vector {
         /**
          *   A class to describe a two or three-dimensional
@@ -13810,14 +13680,9 @@ The x component of the vector
          */
         z: number;
     }
-}
 
 // Inlined from: ./src/typography/p5.Font.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Font {
         /**
          *   Base class for font handling
@@ -13879,14 +13744,9 @@ Underlying opentype font implementation
          */
         font: any;
     }
-}
 
 // Inlined from: ./src/webgl/p5.Framebuffer.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Framebuffer {
         /**
          *   An object that one can draw to and then read as a
@@ -14097,14 +13957,9 @@ A Uint8ClampedArray containing the values for all
          */
         depth: any;
     }
-}
 
 // Inlined from: ./src/webgl/p5.Geometry.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Geometry {
         /**
          *   p5 Geometry class
@@ -14153,14 +14008,9 @@ A Uint8ClampedArray containing the values for all
          */
         normalize(): Geometry;
     }
-}
 
 // Inlined from: ./src/webgl/p5.Shader.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Shader {
         // TODO: Fix p5.Shader() errors in src/webgl/p5.Shader.js, line 11:
         //

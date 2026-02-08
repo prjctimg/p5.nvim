@@ -68,14 +68,9 @@ textOutput() creates a screenreader accessible
          */
         gridOutput(display?: GRID_DISPLAY): void;
     }
-}
 
 // Inlined from: ./src/color/creating_reading.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Extracts the alpha (transparency) value from a

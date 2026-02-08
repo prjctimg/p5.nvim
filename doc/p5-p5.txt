@@ -12,14 +12,9 @@ The p5.js API provides a lot of functionality for
          */
         drawingContext: any;
     }
-}
 
 // Inlined from: ./src/core/structure.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Stops p5.js from continuously executing the code

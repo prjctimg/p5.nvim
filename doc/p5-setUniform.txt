@@ -42,14 +42,9 @@ A Uint8ClampedArray containing the values for all
          */
         depth: any;
     }
-}
 
 // Inlined from: ./src/webgl/p5.Geometry.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Geometry {
         /**
          *   p5 Geometry class
@@ -98,14 +93,9 @@ A Uint8ClampedArray containing the values for all
          */
         normalize(): Geometry;
     }
-}
 
 // Inlined from: ./src/webgl/p5.Shader.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Shader {
         // TODO: Fix p5.Shader() errors in src/webgl/p5.Shader.js, line 11:
         //

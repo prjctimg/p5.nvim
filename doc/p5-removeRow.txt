@@ -39,14 +39,9 @@ Image width.
          */
         pixels: number[];
     }
-}
 
 // Inlined from: ./src/io/p5.Table.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Table {
         /**
          *   Table objects store data with multiple rows and

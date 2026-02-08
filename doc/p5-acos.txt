@@ -21,14 +21,9 @@ Returns a random number fitting a Gaussian, or
          */
         randomGaussian(mean?: number, sd?: number): number;
     }
-}
 
 // Inlined from: ./src/math/trigonometry.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The inverse of cos(), returns the arc cosine of a

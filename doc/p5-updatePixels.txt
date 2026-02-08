@@ -25,14 +25,9 @@ Resets certain values such as those modified by
     }
     // Work-around for p5.Graphics inheriting from both p5 and p5.Element
     type Graphics = __Graphics__ & p5;
-}
 
 // Inlined from: ./src/image/p5.Image.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Image {
         /**
          *   Creates a new p5.Image. A p5.Image is a canvas

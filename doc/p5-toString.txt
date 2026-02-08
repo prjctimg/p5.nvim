@@ -7,14 +7,9 @@ Serializes the element into a string. This
          */
         serialize(): string;
     }
-}
 
 // Inlined from: ./src/math/p5.Vector.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Vector {
         /**
          *   A class to describe a two or three-dimensional

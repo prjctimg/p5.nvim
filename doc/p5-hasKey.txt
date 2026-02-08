@@ -10,14 +10,9 @@ Clears all local storage items set with
          */
         removeItem(key: string): void;
     }
-}
 
 // Inlined from: ./src/data/p5.TypedDict.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class TypedDict {
         /**
          *   Base class for all p5.Dictionary types.

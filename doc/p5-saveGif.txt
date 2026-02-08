@@ -55,14 +55,9 @@ Parameters:
             callback?: (p1: any[]) => any
         ): void;
     }
-}
 
 // Inlined from: ./src/image/loading_displaying.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Loads an image from a path and creates a p5.Image

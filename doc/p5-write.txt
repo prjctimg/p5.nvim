@@ -62,14 +62,9 @@ Updates the display window with the data in the
          */
         pixels: number[];
     }
-}
 
 // Inlined from: ./src/io/files.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class PrintWriter {
         /**
          *   Writes data to the PrintWriter stream

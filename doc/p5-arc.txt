@@ -44,14 +44,9 @@ All drawing that follows erase() will subtract
          */
         noErase(): p5;
     }
-}
 
 // Inlined from: ./src/core/shape/2d_primitives.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Draws an arc to the canvas. Arcs are drawn along

@@ -29,14 +29,9 @@ Parameters:
          */
         drop(callback: (...args: any[]) => any, fxn?: (...args: any[]) => any): Element;
     }
-}
 
 // Inlined from: ./src/events/acceleration.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The setMoveThreshold() function is used to set the

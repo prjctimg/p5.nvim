@@ -14,14 +14,9 @@ The x component of the vector
          */
         z: number;
     }
-}
 
 // Inlined from: ./src/typography/p5.Font.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     class Font {
         /**
          *   Base class for font handling

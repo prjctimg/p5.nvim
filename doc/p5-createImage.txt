@@ -26,14 +26,9 @@ The boolean system variable keyIsPressed is true
          */
         keyCode: number;
     }
-}
 
 // Inlined from: ./src/events/mouse.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The mouseMoved() function is called every time the
@@ -281,14 +276,9 @@ The boolean system variable keyIsPressed is true
          */
         mouseIsPressed: boolean;
     }
-}
 
 // Inlined from: ./src/events/touch.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   The touchStarted() function is called once after
@@ -344,14 +334,9 @@ The boolean system variable keyIsPressed is true
          */
         touches: object[];
     }
-}
 
 // Inlined from: ./src/image/image.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Creates a new p5.Image (the datatype for storing

@@ -10,14 +10,9 @@ Removes all lights present in a sketch. All
          */
         noLights(): p5;
     }
-}
 
 // Inlined from: ./src/webgl/loading.d.ts
-// This file was auto-generated. Please do not edit it.
 
-
-
-// Module declaration removed {
     interface p5InstanceExtensions {
         /**
          *   Load a 3d model from an OBJ or STL file.
