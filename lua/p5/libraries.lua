@@ -25,10 +25,10 @@ local M = {
     {
       name = "p5.speech",
       description = "Speech synthesis and recognition for p5.js",
-      github_repo = "IDMNYU/p5.speech",
+      github_repo = "IDMNYU/p5.js-speech",
       github_release = "latest", 
       asset_pattern = "p5%.speech%.js$",
-      cdn_fallback = "https://cdn.jsdelivr.net/npm/p5.speech/lib/p5.speech.js"
+      cdn_fallback = "https://cdn.jsdelivr.net/gh/IDMNYU/p5.js-speech@0.0.3/lib/p5.speech.js"
     }
   }
 }
