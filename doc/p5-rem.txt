@@ -1,0 +1,10 @@
+rem()
+
+Gives the remainder of a vector when it is divided
+         *   by another vector. See examples for more context.
+
+Parameters:
+  value: The divisor vector
+         *   @chainable
+
+Returns: void

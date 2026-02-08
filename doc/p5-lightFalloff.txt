@@ -1,0 +1,37 @@
+lightFalloff()
+
+Places an ambient and directional light in the
+         *   scene. The lights are set to ambientLight(128,
+         *   128, 128) and directionalLight(128, 128, 128, 0,
+         *   0, -1). Note: lights need to be called (whether
+         *   directly or indirectly) within draw() to remain
+         *   persistent in a looping program. Placing them in
+         *   setup() will cause them to only have an effect the
+         *   first time through the loop.
+         *   @chainable
+         */
+        lights(): p5;
+
+        /**
+         *   Sets the falloff rate for pointLight() and
+         *   spotLight(). lightFalloff() affects only the
+         *   lights which are created after it in the code.
+         *
+         *   The constant, linear, an quadratic parameters are
+         *   used to calculate falloff as follows:
+         *
+         *   d = distance from light position to vertex
+         *   position
+         *
+         *   falloff = 1 / (CONSTANT + d * LINEAR + (d * d) *
+         *   QUADRATIC)
+
+Parameters:
+  constant: CONSTANT value for determining
+         *   falloff
+         *   @param linear LINEAR value for determining falloff
+         *   @param quadratic QUADRATIC value for determining
+         *   falloff
+         *   @chainable
+
+Returns: void

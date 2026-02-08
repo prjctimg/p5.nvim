@@ -1,0 +1,20 @@
+setHeading()
+
+Calculate the angle of rotation for this vector
+         *   (only 2D vectors). p5.Vectors created using
+         *   createVector() will take the current angleMode()
+         *   into consideration, and give the angle in radians
+         *   or degrees accordingly.
+         *   @return The angle of rotation
+         */
+        heading(): number;
+
+        /**
+         *   Rotate the vector to a specific angle (only 2D
+         *   vectors); magnitude remains the same.
+
+Parameters:
+  angle: The angle of rotation
+         *   @chainable
+
+Returns: void

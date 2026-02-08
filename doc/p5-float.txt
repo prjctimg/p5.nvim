@@ -1,0 +1,14 @@
+float()
+
+Converts a string to its floating point
+         *   representation. The contents of a string must
+         *   resemble a number, or NaN (not a number) will be
+         *   returned. For example, float("1234.56") evaluates
+         *   to 1234.56, but float("giraffe") will return NaN.
+         *   When an array of values is passed in, then an
+         *   array of floats of the same length is returned.
+
+Parameters:
+  str: float string to parse
+
+Returns: floating point representation of string

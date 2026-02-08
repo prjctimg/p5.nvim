@@ -1,0 +1,15 @@
+hex()
+
+Converts a number to a string in its equivalent
+         *   hexadecimal notation. If a second parameter is
+         *   passed, it is used to set the number of characters
+         *   to generate in the hexadecimal notation. When an
+         *   array is passed in, an array of strings in
+         *   hexadecimal notation of the same length is
+         *   returned.
+
+Parameters:
+  ns: array of values to parse
+
+Returns: hexadecimal string representation of
+         *   values

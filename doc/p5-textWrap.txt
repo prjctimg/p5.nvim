@@ -1,0 +1,43 @@
+textWrap()
+
+Returns the ascent of the current font at its
+         *   current size. The ascent represents the distance,
+         *   in pixels, of the tallest character above the
+         *   baseline.
+         */
+        textAscent(): number;
+
+        /**
+         *   Returns the descent of the current font at its
+         *   current size. The descent represents the distance,
+         *   in pixels, of the character with the longest
+         *   descender below the baseline.
+         */
+        textDescent(): number;
+
+        /**
+         *   Specifies how lines of text are wrapped within a
+         *   text box. This requires a max-width set on the
+         *   text area, specified in text() as parameter x2.
+         *   WORD wrap style only breaks lines at spaces. A
+         *   single string without spaces that exceeds the
+         *   boundaries of the canvas or text area is not
+         *   truncated, and will overflow the desired area,
+         *   disappearing at the canvas edge.
+         *
+         *   CHAR wrap style breaks lines wherever needed to
+         *   stay within the text box.
+         *
+         *   WORD is the default wrap style, and both styles
+         *   will still break lines at any line breaks (\n)
+         *   specified in the original text. The text area
+         *   max-height parameter (y2) also still applies to
+         *   wrapped text in both styles, lines of text that do
+         *   not fit within the text area will not be drawn to
+         *   the screen.
+
+Parameters:
+  wrapStyle: text wrapping style, either WORD
+         *   or CHAR
+
+Returns: wrapStyle

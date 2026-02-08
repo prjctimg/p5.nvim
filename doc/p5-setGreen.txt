@@ -1,0 +1,10 @@
+setGreen()
+
+Sets the green component of a color. The range
+         *   depends on the colorMode(). In the default RGB
+         *   mode it's between 0 and 255.
+
+Parameters:
+  green: the new green value.
+
+Returns: void

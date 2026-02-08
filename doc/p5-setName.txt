@@ -1,0 +1,31 @@
+setName()
+
+XML is a representation of an XML object, able to
+         *   parse XML code. Use loadXML() to load external XML
+         *   files and create XML objects.
+         *
+         */
+        constructor();
+
+        /**
+         *   Gets a copy of the element's parent. Returns the
+         *   parent as another p5.XML object.
+         *   @return element parent
+         */
+        getParent(): XML;
+
+        /**
+         *   Gets the element's full name, which is returned as
+         *   a String.
+         *   @return the name of the node
+         */
+        getName(): string;
+
+        /**
+         *   Sets the element's name, which is specified as a
+         *   String.
+
+Parameters:
+  the: new name of the node
+
+Returns: void

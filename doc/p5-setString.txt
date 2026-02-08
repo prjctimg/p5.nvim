@@ -1,0 +1,11 @@
+setString()
+
+Stores a String value in the TableRow's specified
+         *   column. The column may be specified by either its
+         *   ID or title.
+
+Parameters:
+  column: Column ID (Number) or Title (String)
+         *   @param value The value to be stored as a String
+
+Returns: void

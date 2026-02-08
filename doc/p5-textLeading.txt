@@ -1,0 +1,29 @@
+textLeading()
+
+Sets the current alignment for drawing text.
+         *   Accepts two arguments: horizAlign (LEFT, CENTER,
+         *   or RIGHT) and vertAlign (TOP, BOTTOM, CENTER, or
+         *   BASELINE). The horizAlign parameter is in
+         *   reference to the x value of the text() function,
+         *   while the vertAlign parameter is in reference to
+         *   the y value.
+         *
+         *   So if you write textAlign(LEFT), you are aligning
+         *   the left edge of your text to the x value you give
+         *   in text(). If you write textAlign(RIGHT, TOP), you
+         *   are aligning the right edge of your text to the x
+         *   value and the top edge of the text to the y value.
+         */
+        textAlign(): object;
+
+        /**
+         *   Sets/gets the spacing, in pixels, between lines of
+         *   text. This setting will be used in all subsequent
+         *   calls to the text() function.
+
+Parameters:
+  leading: the size in pixels for spacing
+         *   between lines
+         *   @chainable
+
+Returns: void

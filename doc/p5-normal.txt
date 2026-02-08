@@ -1,0 +1,15 @@
+normal()
+
+Sets the 3d vertex normal to use for subsequent
+         *   vertices drawn with vertex(). A normal is a vector
+         *   that is generally nearly perpendicular to a
+         *   shape's surface which controls how much light will
+         *   be reflected from that part of the surface.
+
+Parameters:
+  x: The x component of the vertex normal.
+         *   @param y The y component of the vertex normal.
+         *   @param z The z component of the vertex normal.
+         *   @chainable
+
+Returns: void

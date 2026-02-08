@@ -1,0 +1,25 @@
+saveStrings()
+
+Writes the contents of an Array or a JSON object
+         *   to a .json file. The file saving process and
+         *   location of the saved file will vary between web
+         *   browsers.
+         *   @param [optimize] If true, removes line breaks and
+         *   spaces from the output file to optimize filesize
+         *   (but not readability).
+         */
+        saveJSON(json: any[] | object, filename: string, optimize?: boolean): void;
+
+        /**
+         *   Writes an array of Strings to a text file, one
+         *   line per String. The file saving process and
+         *   location of the saved file will vary between web
+         *   browsers.
+
+Parameters:
+  list: string array to be written
+         *   @param filename filename for output
+         *   @param [extension] the filename's extension
+         *   @param [isCRLF] if true, change line-break to CRLF
+
+Returns: void

@@ -1,0 +1,11 @@
+brightness()
+
+Extracts the HSB brightness value from a p5.Color
+         *   object, array of color components, or CSS color
+         *   string.
+
+Parameters:
+  color: p5.Color object, array of color
+         *   components, or CSS color string.
+
+Returns: the brightness value.

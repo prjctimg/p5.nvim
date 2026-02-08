@@ -1,0 +1,21 @@
+point()
+
+Draws a point, a single coordinate in space. Its
+         *   default size is one pixel. The first two
+         *   parameters are the point's x- and y-coordinates,
+         *   respectively. To color a point, use the stroke()
+         *   function. To change its size, use the
+         *   strokeWeight() function. The version of point()
+         *   with three parameters allows the point to be drawn
+         *   in 3D space. Doing so requires adding the WEBGL
+         *   argument to createCanvas().
+         *
+         *   The version of point() with one parameter allows
+         *   the point's location to be set with a p5.Vector
+         *   object.
+
+Parameters:
+  coordinateVector: the coordinate vector.
+         *   @chainable
+
+Returns: void

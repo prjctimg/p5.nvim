@@ -1,0 +1,10 @@
+tilt()
+
+Tilting rotates the camera view up and down.
+
+Parameters:
+  angle: amount to rotate camera in current
+         *   angleMode units. Greater than 0 values rotate
+         *   counterclockwise (to the left).
+
+Returns: void

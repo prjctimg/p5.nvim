@@ -1,0 +1,22 @@
+findRow()
+
+Gets all rows from the table. Returns an array of
+         *   p5.TableRows.
+         *   @return Array of p5.TableRows
+         */
+        getRows(): TableRow[];
+
+        /**
+         *   Finds the first row in the Table that contains the
+         *   value provided, and returns a reference to that
+         *   row. Even if multiple rows are possible matches,
+         *   only the first matching row is returned. The
+         *   column to search may be specified by either its ID
+         *   or title.
+
+Parameters:
+  value: The value to match
+         *   @param column ID number or title of the column to
+         *   search
+
+Returns: void

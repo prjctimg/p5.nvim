@@ -1,0 +1,9 @@
+toggleClass()
+
+Toggles element class.
+
+Parameters:
+  c: class name to toggle
+         *   @chainable
+
+Returns: void

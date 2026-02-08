@@ -1,0 +1,10 @@
+shuffle()
+
+Randomizes the order of the elements of an array.
+         *   Implements  Fisher-Yates Shuffle Algorithm.
+
+Parameters:
+  array: Array to shuffle
+         *   @param [bool] modify passed array
+
+Returns: shuffled Array

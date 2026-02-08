@@ -1,4 +1,4 @@
-color()
+green()
 
 Creates a p5.Color object. By default, the
          *   parameters are interpreted as RGB values. Calling
@@ -24,9 +24,15 @@ Creates a p5.Color object. By default, the
          *   interprets them as RGBA, HSBA, or HSLA colors,
          *   depending on the current colorMode(). The last
          *   parameter sets the alpha (transparency) value.
+         */
+        color(color: Color): Color;
+
+        /**
+         *   Extracts the green value from a p5.Color object,
+         *   array of color components, or CSS color string.
 
 Parameters:
-  values: an array containing the red, green,
-         *   blue, and alpha components of the color.
+  color: p5.Color object, array of color
+         *   components, or CSS color string.
 
-Returns: void
+Returns: the green value.

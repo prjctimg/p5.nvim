@@ -1,0 +1,81 @@
+updatePixels()
+
+Resets certain values such as those modified by
+         *   functions in the Transform category and in the
+         *   Lights category that are not automatically reset
+         *   with graphics buffer objects. Calling this in
+         *   draw() will copy the behavior of the standard
+         *   canvas.
+         */
+        reset(): void;
+
+        /**
+         *   Removes a Graphics object from the page and frees
+         *   any resources associated with it.
+         */
+        remove(): void;
+
+        /**
+         *   Creates and returns a new p5.Framebuffer inside a
+         *   p5.Graphics WebGL context. This takes the same
+         *   parameters as the global createFramebuffer
+         *   function.
+         */
+        createFramebuffer(): void;
+    }
+    // Work-around for p5.Graphics inheriting from both p5 and p5.Element
+    type Graphics = __Graphics__ & p5;
+}
+
+// Inlined from: ./src/image/p5.Image.d.ts
+// This file was auto-generated. Please do not edit it.
+
+
+
+// Module declaration removed {
+    class Image {
+        /**
+         *   Creates a new p5.Image. A p5.Image is a canvas
+         *   backed representation of an image. p5 can display
+         *   .gif, .jpg and .png images. Images may be
+         *   displayed in 2D and 3D space. Before an image is
+         *   used, it must be loaded with the loadImage()
+         *   function. The p5.Image class contains fields for
+         *   the width and height of the image, as well as an
+         *   array called pixels[] that contains the values for
+         *   every pixel in the image.
+         *
+         *   The methods described below allow easy access to
+         *   the image's pixels and alpha channel and simplify
+         *   the process of compositing.
+         *
+         *   Before using the pixels[] array, be sure to use
+         *   the loadPixels() method on the image to make sure
+         *   that the pixel data is properly loaded.
+         *
+         */
+        constructor(width: number, height: number);
+
+        /**
+         *   Loads the pixels data for this image into the
+         *   [pixels] attribute.
+         */
+        loadPixels(): void;
+
+        /**
+         *   Updates the backing canvas for this image with the
+         *   contents of the [pixels] array. If this image is
+         *   an animated GIF then the pixels will be updated in
+         *   the frame that is currently displayed.
+
+Parameters:
+  x: x-offset of the target update area for
+         *   the underlying canvas
+         *   @param y y-offset of the target update area for
+         *   the underlying canvas
+         *   @param w width of the target update area for the
+         *   underlying canvas
+         *   @param h height of the target update area for the
+         *   underlying canvas
+
+Returns: void

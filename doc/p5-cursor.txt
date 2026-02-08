@@ -1,0 +1,23 @@
+cursor()
+
+Sets the cursor to a predefined symbol or an
+         *   image, or makes it visible if already hidden. If
+         *   you are trying to set an image as the cursor, the
+         *   recommended size is 16×16 or 32×32 pixels. The
+         *   values for parameters x and y must be less than
+         *   the dimensions of the image.
+
+Parameters:
+  type: Built-In: either ARROW, CROSS, HAND,
+         *   MOVE, TEXT and WAIT Native CSS properties: 'grab',
+         *   'progress', 'cell' etc. External: path for
+         *   cursor's images (Allowed File extensions: .cur,
+         *   .gif, .jpg, .jpeg, .png) For more information on
+         *   Native CSS cursors and url visit:
+         *   https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
+         *   @param [x] the horizontal active spot of the
+         *   cursor (must be less than 32)
+         *   @param [y] the vertical active spot of the cursor
+         *   (must be less than 32)
+
+Returns: void

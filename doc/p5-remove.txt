@@ -1,0 +1,15 @@
+remove()
+
+Removes all previously stored key-value pairs from
+         *   the Dictionary.
+         */
+        clear(): void;
+
+        /**
+         *   Removes the key-value pair stored at the given key
+         *   from the Dictionary.
+
+Parameters:
+  key: for the pair to remove
+
+Returns: void

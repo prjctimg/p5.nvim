@@ -1,0 +1,24 @@
+copy()
+
+Copies a region of pixels from one image to
+         *   another. If no srcImage is specified this is used
+         *   as the source. If the source and destination
+         *   regions aren't the same size, it will
+         *   automatically resize source pixels to fit the
+         *   specified target region.
+
+Parameters:
+  sx: X coordinate of the source's upper left
+         *   corner
+         *   @param sy Y coordinate of the source's upper left
+         *   corner
+         *   @param sw source image width
+         *   @param sh source image height
+         *   @param dx X coordinate of the destination's upper
+         *   left corner
+         *   @param dy Y coordinate of the destination's upper
+         *   left corner
+         *   @param dw destination image width
+         *   @param dh destination image height
+
+Returns: void

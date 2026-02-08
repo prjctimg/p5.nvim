@@ -1,0 +1,36 @@
+getChild()
+
+Checks whether or not the element has any
+         *   children, and returns the result as a boolean.
+         */
+        hasChildren(): boolean;
+
+        /**
+         *   Get the names of all of the element's children,
+         *   and returns the names as an array of Strings. This
+         *   is the same as looping through and calling
+         *   getName() on each child element individually.
+         *   @return names of the children of the element
+         */
+        listChildren(): string[];
+
+        /**
+         *   Returns all of the element's children as an array
+         *   of p5.XML objects. When the name parameter is
+         *   specified, then it will return all children that
+         *   match that name.
+         *   @param [name] element name
+         *   @return children of the element
+         */
+        getChildren(name?: string): XML[];
+
+        /**
+         *   Returns the first of the element's children that
+         *   matches the name parameter or the child of the
+         *   given index.It returns undefined if no matching
+         *   child is found.
+
+Parameters:
+  name: element name or index
+
+Returns: void

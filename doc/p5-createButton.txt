@@ -1,0 +1,11 @@
+createButton()
+
+Creates a <button></button> element in the DOM.
+         *   Use .size() to set the display size of the button.
+         *   Use .mousePressed() to specify behavior on press.
+
+Parameters:
+  label: label displayed on the button
+         *   @param [value] value of the button
+
+Returns: pointer to p5.Element holding created node

@@ -1,0 +1,24 @@
+setFrame()
+
+Starts an animated GIF over at the beginning
+         *   state.
+         */
+        reset(): void;
+
+        /**
+         *   Gets the index for the frame that is currently
+         *   visible in an animated GIF.
+         *   @return The index for the currently displaying
+         *   frame in animated GIF
+         */
+        getCurrentFrame(): number;
+
+        /**
+         *   Sets the index of the frame that is currently
+         *   visible in an animated GIF
+
+Parameters:
+  index: the index for the frame that should
+         *   be displayed
+
+Returns: void

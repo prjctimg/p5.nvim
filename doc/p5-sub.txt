@@ -1,0 +1,16 @@
+sub()
+
+Subtracts x, y, and z components from a vector,
+         *   subtracts one vector from another, or subtracts
+         *   two independent vectors. The version of the method
+         *   that subtracts two vectors is a static method and
+         *   returns a p5.Vector, the others act directly on
+         *   the vector. Additionally, you may provide
+         *   arguments to this method as an array. See the
+         *   examples for more context.
+
+Parameters:
+  value: the vector to subtract
+         *   @chainable
+
+Returns: void

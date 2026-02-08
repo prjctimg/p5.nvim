@@ -1,0 +1,14 @@
+strokeWeight()
+
+Sets the width of the stroke used for lines,
+         *   points, and the border around shapes. All widths
+         *   are set in units of pixels. Note that
+         *   strokeWeight() is affected by any transformation
+         *   or scaling that has been applied previously.
+
+Parameters:
+  weight: the weight of the stroke (in
+         *   pixels).
+         *   @chainable
+
+Returns: void

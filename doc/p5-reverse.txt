@@ -1,0 +1,9 @@
+reverse()
+
+Reverses the order of an array, maps to
+         *   Array.reverse()
+
+Parameters:
+  list: Array to reverse
+
+Returns: the reversed list

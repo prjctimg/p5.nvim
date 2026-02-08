@@ -1,0 +1,23 @@
+line()
+
+Draws a line, a straight path between two points.
+         *   Its default width is one pixel. The version of
+         *   line() with four parameters draws the line in 2D.
+         *   To color a line, use the stroke() function. To
+         *   change its width, use the strokeWeight() function.
+         *   A line can't be filled, so the fill() function
+         *   won't affect the color of a line. The version of
+         *   line() with six parameters allows the line to be
+         *   drawn in 3D space. Doing so requires adding the
+         *   WEBGL argument to createCanvas().
+
+Parameters:
+  x1: the x-coordinate of the first point.
+         *   @param y1 the y-coordinate of the first point.
+         *   @param z1 the z-coordinate of the first point.
+         *   @param x2 the x-coordinate of the second point.
+         *   @param y2 the y-coordinate of the second point.
+         *   @param z2 the z-coordinate of the second point.
+         *   @chainable
+
+Returns: void

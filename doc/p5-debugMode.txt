@@ -1,0 +1,31 @@
+debugMode()
+
+debugMode() helps visualize 3D space by adding a
+         *   grid to indicate where the ‘ground’ is in a sketch
+         *   and an axes icon which indicates the +X, +Y, and
+         *   +Z directions. This function can be called without
+         *   parameters to create a default grid and axes icon,
+         *   or it can be called according to the examples
+         *   above to customize the size and position of the
+         *   grid and/or axes icon. The grid is drawn using the
+         *   most recently set stroke color and weight. To
+         *   specify these parameters, add a call to stroke()
+         *   and strokeWeight() just before the end of the
+         *   draw() loop. By default, the grid will run through
+         *   the origin (0,0,0) of the sketch along the XZ
+         *   plane and the axes icon will be offset from the
+         *   origin. Both the grid and axes icon will be sized
+         *   according to the current canvas size. Note that
+         *   because the grid runs parallel to the default
+         *   camera view, it is often helpful to use debugMode
+         *   along with orbitControl to allow full view of the
+         *   grid.
+
+Parameters:
+  mode: either GRID or AXES
+         *   @param [axesSize] size of axes icon
+         *   @param [xOff] X axis offset from origin (0,0,0)
+         *   @param [yOff] Y axis offset from origin (0,0,0)
+         *   @param [zOff] Z axis offset from origin (0,0,0)
+
+Returns: void

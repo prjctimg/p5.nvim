@@ -1,0 +1,24 @@
+id()
+
+Attaches the element to the parent specified. A
+         *   way of setting the container for the element.
+         *   Accepts either a string ID, DOM node, or
+         *   p5.Element. If no arguments are given, parent node
+         *   is returned. For more ways to position the canvas,
+         *   see the  positioning the canvas wiki page.
+         */
+        parent(): Element;
+
+        /**
+         *   Sets the ID of the element. If no ID argument is
+         *   passed in, it instead returns the current ID of
+         *   the element. Note that only one element can have a
+         *   particular id in a page. The class() method can be
+         *   used to identify multiple elements with the same
+         *   class name.
+
+Parameters:
+  id: ID of the element
+         *   @chainable
+
+Returns: void

@@ -1,0 +1,12 @@
+round()
+
+Calculates the integer closest to the n parameter.
+         *   For example, round(133.8) returns the value 134.
+         *   Maps to Math.round().
+
+Parameters:
+  n: number to round
+         *   @param [decimals] number of decimal places to
+         *   round to, default is 0
+
+Returns: rounded number

@@ -1,0 +1,10 @@
+hasClass()
+
+Checks if specified class is already applied to
+         *   element.
+
+Parameters:
+  c: class name of class to check
+
+Returns: a boolean value if element has specified
+         *   class

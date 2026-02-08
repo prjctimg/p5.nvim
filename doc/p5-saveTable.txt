@@ -1,0 +1,17 @@
+saveTable()
+
+Writes the contents of a Table object to a file.
+         *   Defaults to a text file with
+         *   comma-separated-values ('csv') but can also use
+         *   tab separation ('tsv'), or generate an HTML table
+         *   ('html'). The file saving process and location of
+         *   the saved file will vary between web browsers.
+
+Parameters:
+  Table: the Table object to save to a file
+         *   @param filename the filename to which the Table
+         *   should be saved
+         *   @param [options] can be one of "tsv", "csv", or
+         *   "html"
+
+Returns: void

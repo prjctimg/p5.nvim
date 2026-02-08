@@ -1,0 +1,11 @@
+getColumn()
+
+Retrieves all values in the specified column, and
+         *   returns them as an array. The column may be
+         *   specified by either its ID or title.
+
+Parameters:
+  column: String or Number of the column to
+         *   return
+
+Returns: Array of column values

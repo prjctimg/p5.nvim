@@ -1,0 +1,17 @@
+shader()
+
+Sets the p5.Shader object to be used to render
+         *   subsequent shapes. Custom shaders can be created
+         *   using the createShader() and loadShader()
+         *   functions.
+         *
+         *   Use resetShader() to restore the default shaders.
+         *
+         *   Note, shaders can only be used in WEBGL mode.
+
+Parameters:
+  s: the p5.Shader object to use for rendering
+         *   shapes.
+         *   @chainable
+
+Returns: void

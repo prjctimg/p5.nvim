@@ -1,0 +1,31 @@
+createA()
+
+Creates an <img> element in the DOM with given src
+         *   and alternate text.
+
+Parameters:
+  src: src path or url for image
+         *   @param alt alternate text to be used if image does
+         *   not load. You can use also an empty string ("") if
+         *   that an image is not intended to be viewed.
+         *   @param crossOrigin crossOrigin property of the img
+         *   element; use either 'anonymous' or
+         *   'use-credentials' to retrieve the image with
+         *   cross-origin access (for later use with canvas. if
+         *   an empty string("") is passed, CORS is not used
+         *   @param [successCallback] callback to be called
+         *   once image data is loaded with the p5.Element as
+         *   argument
+
+Returns: pointer to p5.Element holding created node
+         */
+        createImg(src: string, alt: string, crossOrigin: string, successCallback?: (...args: any[]) => any): Element;
+
+        /**
+         *   Creates an <a></a> element in the DOM for
+         *   including a hyperlink.
+         *   @param href url of page to link to
+         *   @param html inner html of link element to display
+         *   @param [target] target where new link should open,
+         *   could be _blank, _self, _parent, _top.
+         *   @return pointer to p5.Element holding created node

@@ -1,0 +1,11 @@
+reflect()
+
+Reflect a vector about a normal to a line in 2D,
+         *   or about a normal to a plane in 3D.
+
+Parameters:
+  surfaceNormal: the p5.Vector to reflect
+         *   about.
+         *   @chainable
+
+Returns: void

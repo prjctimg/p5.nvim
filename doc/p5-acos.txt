@@ -1,0 +1,44 @@
+acos()
+
+Returns a random number fitting a Gaussian, or
+         *   normal, distribution. There is theoretically no
+         *   minimum or maximum value that randomGaussian()
+         *   might return. Rather, there is just a very low
+         *   probability that values far from the mean will be
+         *   returned; and a higher probability that numbers
+         *   near the mean will be returned. Takes either 0, 1
+         *   or 2 arguments. If no args, the mean is 0 and the
+         *   standard deviation is 1.
+         *
+         *   If one arg, that arg is the mean and the standard
+         *   deviation is 1.
+         *
+         *   If two args, the first arg is the mean and the
+         *   second is the standard deviation.
+         *   @param [mean] the mean
+         *   @param [sd] the standard deviation
+         *   @return the random number
+         */
+        randomGaussian(mean?: number, sd?: number): number;
+    }
+}
+
+// Inlined from: ./src/math/trigonometry.d.ts
+// This file was auto-generated. Please do not edit it.
+
+
+
+// Module declaration removed {
+    interface p5InstanceExtensions {
+        /**
+         *   The inverse of cos(), returns the arc cosine of a
+         *   value. This function expects the values in the
+         *   range of -1 to 1 and values are returned in the
+         *   range 0 to PI (3.1415927) if the angleMode() is
+         *   RADIANS or 0 to 180 if the angleMode() is DEGREES.
+
+Parameters:
+  value: the value whose arc cosine is to be
+         *   returned
+
+Returns: the arc cosine of the given value

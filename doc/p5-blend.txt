@@ -1,0 +1,33 @@
+blend()
+
+Copies a region of pixels from one image to
+         *   another, using a specified blend mode to do the
+         *   operation.
+
+Parameters:
+  sx: X coordinate of the source's upper left
+         *   corner
+         *   @param sy Y coordinate of the source's upper left
+         *   corner
+         *   @param sw source image width
+         *   @param sh source image height
+         *   @param dx X coordinate of the destination's upper
+         *   left corner
+         *   @param dy Y coordinate of the destination's upper
+         *   left corner
+         *   @param dw destination image width
+         *   @param dh destination image height
+         *   @param blendMode the blend mode. either BLEND,
+         *   DARKEST, LIGHTEST, DIFFERENCE, MULTIPLY,
+         *   EXCLUSION, SCREEN, REPLACE, OVERLAY, HARD_LIGHT,
+         *   SOFT_LIGHT, DODGE, BURN, ADD or NORMAL.
+         *
+         *   Available blend modes are: normal | multiply |
+         *   screen | overlay | darken | lighten | color-dodge
+         *   | color-burn | hard-light | soft-light |
+         *   difference | exclusion | hue | saturation | color
+         *   | luminosity
+         *
+         *   http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
+
+Returns: void

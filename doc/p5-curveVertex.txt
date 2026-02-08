@@ -1,0 +1,26 @@
+curveVertex()
+
+Specifies vertex coordinates for curves. This
+         *   function may only be used between beginShape() and
+         *   endShape() and only when there is no MODE
+         *   parameter specified to beginShape(). For WebGL
+         *   mode curveVertex() can be used in 2D as well as 3D
+         *   mode. 2D mode expects 2 parameters, while 3D mode
+         *   expects 3 parameters. The first and last points in
+         *   a series of curveVertex() lines will be used to
+         *   guide the beginning and end of the curve. A
+         *   minimum of four points is required to draw a tiny
+         *   curve between the second and third points. Adding
+         *   a fifth point with curveVertex() will draw the
+         *   curve between the second, third, and fourth
+         *   points. The curveVertex() function is an
+         *   implementation of Catmull-Rom splines.
+
+Parameters:
+  x: x-coordinate of the vertex
+         *   @param y y-coordinate of the vertex
+         *   @param [z] z-coordinate of the vertex (for WebGL
+         *   mode)
+         *   @chainable
+
+Returns: void

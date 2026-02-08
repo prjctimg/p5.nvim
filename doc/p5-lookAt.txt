@@ -1,0 +1,11 @@
+lookAt()
+
+Reorients the camera to look at a position in
+         *   world space.
+
+Parameters:
+  x: x position of a point in world space
+         *   @param y y position of a point in world space
+         *   @param z z position of a point in world space
+
+Returns: void

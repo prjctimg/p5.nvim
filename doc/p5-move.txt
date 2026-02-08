@@ -1,0 +1,22 @@
+move()
+
+Sets the camera's position and orientation.
+         *   Accepts the same parameters as the global
+         *   camera(). More information on this function can be
+         *   found there.
+         */
+        camera(): void;
+
+        /**
+         *   Move camera along its local axes while maintaining
+         *   current camera orientation.
+
+Parameters:
+  x: amount to move along camera's left-right
+         *   axis
+         *   @param y amount to move along camera's up-down
+         *   axis
+         *   @param z amount to move along camera's
+         *   forward-backward axis
+
+Returns: void

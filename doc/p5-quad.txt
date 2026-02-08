@@ -1,0 +1,35 @@
+quad()
+
+Draws a quad to the canvas. A quad is a
+         *   quadrilateral, a four-sided polygon. Some examples
+         *   of quads include rectangles, squares, rhombuses,
+         *   and trapezoids. The first pair of parameters
+         *   (x1,y1) sets the quad's first point. The following
+         *   pairs of parameters set the coordinates for its
+         *   next three points. Parameters should proceed
+         *   clockwise or counter-clockwise around the shape.
+         *   The version of quad() with twelve parameters
+         *   allows the quad to be drawn in 3D space. Doing so
+         *   requires adding the WEBGL argument to
+         *   createCanvas().
+
+Parameters:
+  x1: the x-coordinate of the first point.
+         *   @param y1 the y-coordinate of the first point.
+         *   @param z1 the z-coordinate of the first point.
+         *   @param x2 the x-coordinate of the second point.
+         *   @param y2 the y-coordinate of the second point.
+         *   @param z2 the z-coordinate of the second point.
+         *   @param x3 the x-coordinate of the third point.
+         *   @param y3 the y-coordinate of the third point.
+         *   @param z3 the z-coordinate of the third point.
+         *   @param x4 the x-coordinate of the fourth point.
+         *   @param y4 the y-coordinate of the fourth point.
+         *   @param z4 the z-coordinate of the fourth point.
+         *   @param [detailX] number of segments in the
+         *   x-direction.
+         *   @param [detailY] number of segments in the
+         *   y-direction.
+         *   @chainable
+
+Returns: void

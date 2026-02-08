@@ -1,0 +1,16 @@
+strokeJoin()
+
+Sets the style of the joints which connect line
+         *   segments. These joints are either mitered (MITER),
+         *   beveled (BEVEL), or rounded (ROUND). The default
+         *   joint is MITER in 2D mode and ROUND in WebGL mode.
+         *   The argument passed to strokeJoin() must be
+         *   written in ALL CAPS because the constants MITER,
+         *   BEVEL, and ROUND are defined this way. JavaScript
+         *   is a case-sensitive language.
+
+Parameters:
+  join: either MITER, BEVEL, or ROUND
+         *   @chainable
+
+Returns: void

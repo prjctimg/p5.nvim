@@ -1,0 +1,28 @@
+createImg()
+
+Creates a <p></p> element in the DOM with given
+         *   inner HTML. Used for paragraph length text.
+         *   @param [html] inner HTML for element created
+         *   @return pointer to p5.Element holding created node
+         */
+        createP(html?: string): Element;
+
+        /**
+         *   Creates a <span></span> element in the DOM with
+         *   given inner HTML.
+         *   @param [html] inner HTML for element created
+         *   @return pointer to p5.Element holding created node
+         */
+        createSpan(html?: string): Element;
+
+        /**
+         *   Creates an <img> element in the DOM with given src
+         *   and alternate text.
+
+Parameters:
+  src: src path or url for image
+         *   @param alt alternate text to be used if image does
+         *   not load. You can use also an empty string ("") if
+         *   that an image is not intended to be viewed.
+
+Returns: pointer to p5.Element holding created node

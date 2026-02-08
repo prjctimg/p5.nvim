@@ -1,0 +1,35 @@
+bezier()
+
+Draws a cubic Bezier curve on the screen. These
+         *   curves are defined by a series of anchor and
+         *   control points. The first two parameters specify
+         *   the first anchor point and the last two parameters
+         *   specify the other anchor point, which become the
+         *   first and last points on the curve. The middle
+         *   parameters specify the two control points which
+         *   define the shape of the curve. Approximately
+         *   speaking, control points "pull" the curve towards
+         *   them. Bezier curves were developed by French
+         *   automotive engineer Pierre Bezier, and are
+         *   commonly used in computer graphics to define
+         *   gently sloping curves. See also curve().
+
+Parameters:
+  x1: x-coordinate for the first anchor point
+         *   @param y1 y-coordinate for the first anchor point
+         *   @param z1 z-coordinate for the first anchor point
+         *   @param x2 x-coordinate for the first control point
+         *   @param y2 y-coordinate for the first control point
+         *   @param z2 z-coordinate for the first control point
+         *   @param x3 x-coordinate for the second control
+         *   point
+         *   @param y3 y-coordinate for the second control
+         *   point
+         *   @param z3 z-coordinate for the second control
+         *   point
+         *   @param x4 x-coordinate for the second anchor point
+         *   @param y4 y-coordinate for the second anchor point
+         *   @param z4 z-coordinate for the second anchor point
+         *   @chainable
+
+Returns: void

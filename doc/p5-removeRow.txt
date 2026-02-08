@@ -1,0 +1,81 @@
+removeRow()
+
+Image width.
+         */
+        width: number;
+
+        /**
+         *   Image height.
+         */
+        height: number;
+
+        /**
+         *   Array containing the values for all the pixels in
+         *   the display window. These values are numbers. This
+         *   array is the size (include an appropriate factor
+         *   for pixelDensity) of the display window x4,
+         *   representing the R, G, B, A values in order for
+         *   each pixel, moving from left to right across each
+         *   row, then down each column. Retina and other high
+         *   density displays may have more pixels (by a factor
+         *   of pixelDensity^2). For example, if the image is
+         *   100×100 pixels, there will be 40,000. With
+         *   pixelDensity = 2, there will be 160,000. The first
+         *   four values (indices 0-3) in the array will be the
+         *   R, G, B, A values of the pixel at (0, 0). The
+         *   second four values (indices 4-7) will contain the
+         *   R, G, B, A values of the pixel at (1, 0). More
+         *   generally, to set values for a pixel at (x, y):
+         *   let d = pixelDensity(); for (let i = 0; i < d;
+         *   i++) { for (let j = 0; j < d; j++) { // loop over
+         *   index = 4 * ((y * d + j) * width * d + (x * d +
+         *   i)); pixels[index] = r; pixels[index+1] = g;
+         *   pixels[index+2] = b; pixels[index+3] = a; } }
+         *
+         *   Before accessing this array, the data must loaded
+         *   with the loadPixels() function. After the array
+         *   data has been modified, the updatePixels()
+         *   function must be run to update the changes.
+         */
+        pixels: number[];
+    }
+}
+
+// Inlined from: ./src/io/p5.Table.d.ts
+// This file was auto-generated. Please do not edit it.
+
+
+
+// Module declaration removed {
+    class Table {
+        /**
+         *   Table objects store data with multiple rows and
+         *   columns, much like in a traditional spreadsheet.
+         *   Tables can be generated from scratch, dynamically,
+         *   or using data from an existing file.
+         *
+         *   @param [rows] An array of p5.TableRow objects
+         */
+        constructor(rows?: TableRow[]);
+
+        /**
+         *   Use addRow() to add a new row of data to a
+         *   p5.Table object. By default, an empty row is
+         *   created. Typically, you would store a reference to
+         *   the new row in a TableRow object (see newRow in
+         *   the example above), and then set individual values
+         *   using set(). If a p5.TableRow object is included
+         *   as a parameter, then that row is duplicated and
+         *   added to the table.
+         *   @param [row] row to be added to the table
+         *   @return the row that was added
+         */
+        addRow(row?: TableRow): TableRow;
+
+        /**
+         *   Removes a row from the table object.
+
+Parameters:
+  id: ID number of the row to remove
+
+Returns: void

@@ -1,0 +1,51 @@
+select()
+
+Underlying File object. All normal File methods
+         *   can be called on this.
+         */
+        file: any;
+
+        /**
+         *   File type (image, text, etc.)
+         */
+        type: any;
+
+        /**
+         *   File subtype (usually the file extension jpg, png,
+         *   xml, etc.)
+         */
+        subtype: any;
+
+        /**
+         *   File name
+         */
+        name: any;
+
+        /**
+         *   File size
+         */
+        size: any;
+
+        /**
+         *   URL string containing either image data, the text
+         *   contents of the file or a parsed object if file is
+         *   JSON and p5.XML if XML
+         */
+        data: any;
+    }
+    interface p5InstanceExtensions {
+        /**
+         *   Searches the page for the first element that
+         *   matches the given CSS selector string (can be an
+         *   ID, class, tag name or a combination) and returns
+         *   it as a p5.Element. The DOM node itself can be
+         *   accessed with .elt. Returns null if none found.
+         *   You can also specify a container to search within.
+
+Parameters:
+  selectors: CSS selector string of element to
+         *   search for
+         *   @param [container] CSS selector string,
+         *   p5.Element, or HTML element to search within
+
+Returns: p5.Element containing node found

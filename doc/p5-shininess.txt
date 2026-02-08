@@ -1,0 +1,11 @@
+shininess()
+
+Sets the amount of gloss ("shininess") of a
+         *   specularMaterial(). The default and minimum value
+         *   is 1.
+
+Parameters:
+  shine: degree of shininess
+         *   @chainable
+
+Returns: void

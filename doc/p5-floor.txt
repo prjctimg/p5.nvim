@@ -1,0 +1,10 @@
+floor()
+
+Calculates the closest int value that is less than
+         *   or equal to the value of the parameter. Maps to
+         *   Math.floor().
+
+Parameters:
+  n: number to round down
+
+Returns: rounded down number

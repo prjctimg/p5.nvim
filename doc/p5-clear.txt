@@ -1,0 +1,23 @@
+clear()
+
+Clears the pixels on the canvas. This function
+         *   makes every pixel 100% transparent. Calling
+         *   clear() doesn't clear objects created by createX()
+         *   functions such as createGraphics(), createVideo(),
+         *   and createImg(). These objects will remain
+         *   unchanged after calling clear() and can be
+         *   redrawn. In WebGL mode, this function can clear
+         *   the screen to a specific color. It interprets four
+         *   numeric parameters as normalized RGBA color
+         *   values. It also clears the depth buffer. If you
+         *   are not using the WebGL renderer, these parameters
+         *   will have no effect.
+
+Parameters:
+  r: normalized red value.
+         *   @param g normalized green value.
+         *   @param b normalized blue value.
+         *   @param a normalized alpha value.
+         *   @chainable
+
+Returns: void

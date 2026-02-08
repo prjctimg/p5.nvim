@@ -1,0 +1,28 @@
+texture()
+
+Restores the default shaders. Code that runs after
+         *   resetShader() will not be affected by the shader
+         *   previously set by shader()
+         *   @chainable
+         */
+        resetShader(): p5;
+
+        /**
+         *   Sets the texture that will be used to render
+         *   subsequent shapes. A texture is like a "skin" that
+         *   wraps around a 3D geometry. Currently supported
+         *   textures are images, video, and offscreen renders.
+         *
+         *   To texture a geometry created with beginShape(),
+         *   you will need to specify uv coordinates in
+         *   vertex().
+         *
+         *   Note, texture() can only be used in WEBGL mode.
+         *
+         *   You can view more materials in this example.
+
+Parameters:
+  tex: image to use as texture
+         *   @chainable
+
+Returns: void

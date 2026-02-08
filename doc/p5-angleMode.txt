@@ -1,0 +1,10 @@
+angleMode()
+
+Sets the current mode of p5 to the given mode.
+         *   Default mode is RADIANS. Calling angleMode() with
+         *   no arguments returns current anglemode.
+
+Parameters:
+  mode: either RADIANS or DEGREES
+
+Returns: void

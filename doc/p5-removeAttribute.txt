@@ -1,0 +1,9 @@
+removeAttribute()
+
+Removes an attribute on the specified element.
+
+Parameters:
+  attr: attribute to remove
+         *   @chainable
+
+Returns: void

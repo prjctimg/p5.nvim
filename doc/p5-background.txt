@@ -1,0 +1,40 @@
+background()
+
+Sets the color used for the background of the
+         *   canvas. By default, the background is transparent.
+         *   This function is typically used within draw() to
+         *   clear the display window at the beginning of each
+         *   frame. It can also be used inside setup() to set
+         *   the background on the first frame of animation.
+         *   The version of background() with one parameter
+         *   interprets the value one of four ways. If the
+         *   parameter is a number, it's interpreted as a
+         *   grayscale value. If the parameter is a string,
+         *   it's interpreted as a CSS color string. RGB, RGBA,
+         *   HSL, HSLA, hex, and named color strings are
+         *   supported. If the parameter is a p5.Color object,
+         *   it will be used as the background color. If the
+         *   parameter is a p5.Image object, it will be used as
+         *   the background image.
+         *
+         *   The version of background() with two parameters
+         *   interprets the first one as a grayscale value. The
+         *   second parameter sets the alpha (transparency)
+         *   value.
+         *
+         *   The version of background() with three parameters
+         *   interprets them as RGB, HSB, or HSL colors,
+         *   depending on the current colorMode(). By default,
+         *   colors are specified in RGB values. Calling
+         *   background(255, 204, 0) sets the background a
+         *   bright yellow color.
+
+Parameters:
+  image: image created with loadImage() or
+         *   createImage(), to set as background. (must be same
+         *   size as the sketch window).
+         *   @param [a] opacity of the background relative to
+         *   current color range (default is 0-255).
+         *   @chainable
+
+Returns: void

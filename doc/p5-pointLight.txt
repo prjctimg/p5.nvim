@@ -1,0 +1,24 @@
+pointLight()
+
+Creates a point light with the given color and
+         *   position. A point light emits light from a single
+         *   point in all directions. Because the light is
+         *   emitted from a specific point (position), it has a
+         *   different effect when it is positioned farther vs.
+         *   nearer an object.
+         *
+         *   A maximum of 5 point lights can be active at once.
+         *
+         *   Note: lights need to be called (whether directly
+         *   or indirectly) within draw() to remain persistent
+         *   in a looping program. Placing them in setup() will
+         *   cause them to only have an effect the first time
+         *   through the loop.
+
+Parameters:
+  color: color as a p5.Color, as an array, or
+         *   as a CSS string
+         *   @param position of light as a p5.Vector
+         *   @chainable
+
+Returns: void

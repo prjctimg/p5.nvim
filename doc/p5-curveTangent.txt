@@ -1,0 +1,15 @@
+curveTangent()
+
+Evaluates the tangent to the curve at position t
+         *   for points a, b, c, d. The parameter t varies
+         *   between 0 and 1, a and d are points on the curve,
+         *   and b and c are the control points.
+
+Parameters:
+  a: coordinate of first control point
+         *   @param b coordinate of first point on the curve
+         *   @param c coordinate of second point on the curve
+         *   @param d coordinate of second conrol point
+         *   @param t value between 0 and 1
+
+Returns: the tangent at position t

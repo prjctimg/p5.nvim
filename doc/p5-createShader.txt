@@ -1,0 +1,39 @@
+createShader()
+
+Creates a new p5.Shader object from the provided
+         *   vertex and fragment shader files. The shader files
+         *   are loaded asynchronously in the background, so
+         *   this method should be used in preload().
+         *
+         *   Note, shaders can only be used in WEBGL mode.
+
+Parameters:
+  vertFilename: path to file containing vertex
+         *   shader source code
+         *   @param fragFilename path to file containing
+         *   fragment shader source code
+         *   @param [callback] callback to be executed after
+         *   loadShader completes. On success, the p5.Shader
+         *   object is passed as the first argument.
+         *   @param [errorCallback] callback to be executed
+         *   when an error occurs inside loadShader. On error,
+         *   the error is passed as the first argument.
+
+Returns: a shader object created from the provided
+         *   vertex and fragment shader files.
+         */
+        loadShader(
+            vertFilename: string,
+            fragFilename: string,
+            callback?: (...args: any[]) => any,
+            errorCallback?: (...args: any[]) => any
+        ): Shader;
+
+        /**
+         *   Creates a new p5.Shader object from the provided
+         *   vertex and fragment shader code. Note, shaders can
+         *   only be used in WEBGL mode.
+         *   @param vertSrc source code for the vertex shader
+         *   @param fragSrc source code for the fragment shader
+         *   @return a shader object created from the provided
+         *   vertex and fragment shaders.

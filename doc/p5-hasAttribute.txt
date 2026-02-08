@@ -1,0 +1,23 @@
+hasAttribute()
+
+Counts the specified element's number of
+         *   attributes, returned as an Number.
+         */
+        getAttributeCount(): number;
+
+        /**
+         *   Gets all of the specified element's attributes,
+         *   and returns them as an array of Strings.
+         *   @return an array of strings containing the names
+         *   of attributes
+         */
+        listAttributes(): string[];
+
+        /**
+         *   Checks whether or not an element has the specified
+         *   attribute.
+
+Parameters:
+  the: attribute to be checked
+
+Returns: true if attribute found else false

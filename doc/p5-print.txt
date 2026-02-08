@@ -1,0 +1,10 @@
+print()
+
+Writes data to the PrintWriter stream, and adds a
+         *   new line at the end
+
+Parameters:
+  data: all data to be printed by the
+         *   PrintWriter
+
+Returns: void

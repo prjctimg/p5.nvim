@@ -1,0 +1,10 @@
+concat()
+
+Concatenates two arrays, maps to Array.concat().
+         *   Does not modify the input arrays.
+
+Parameters:
+  a: first Array to concatenate
+         *   @param b second Array to concatenate
+
+Returns: concatenated array

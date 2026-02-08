@@ -1,0 +1,14 @@
+saturation()
+
+Extracts the saturation value from a p5.Color
+         *   object, array of color components, or CSS color
+         *   string. Saturation is scaled differently in HSB
+         *   and HSL. By default, this function returns the HSL
+         *   saturation. If the colorMode() is set to HSB, it
+         *   returns the HSB saturation.
+
+Parameters:
+  color: p5.Color object, array of color
+         *   components, or CSS color string.
+
+Returns: the saturation value

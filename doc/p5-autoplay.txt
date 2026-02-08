@@ -1,0 +1,45 @@
+autoplay()
+
+Play an HTML5 media element.
+         *   @chainable
+         */
+        play(): MediaElement;
+
+        /**
+         *   Stops an HTML5 media element (sets current time to
+         *   zero).
+         *   @chainable
+         */
+        stop(): MediaElement;
+
+        /**
+         *   Pauses an HTML5 media element.
+         *   @chainable
+         */
+        pause(): MediaElement;
+
+        /**
+         *   Set 'loop' to true for an HTML5 media element, and
+         *   starts playing.
+         *   @chainable
+         */
+        loop(): MediaElement;
+
+        /**
+         *   Set 'loop' to false for an HTML5 media element.
+         *   Element will stop when it reaches the end.
+         *   @chainable
+         */
+        noLoop(): MediaElement;
+
+        /**
+         *   Set HTML5 media element to autoplay or not. If no
+         *   argument is specified, by default it will
+         *   autoplay.
+
+Parameters:
+  shouldAutoplay: whether the element should
+         *   autoplay
+         *   @chainable
+
+Returns: void

@@ -1,0 +1,17 @@
+splitTokens()
+
+The splitTokens() function splits a String at one
+         *   or many character delimiters or "tokens." The
+         *   delim parameter specifies the character or
+         *   characters to be used as a boundary. If no delim
+         *   characters are specified, any whitespace character
+         *   is used to split. Whitespace characters include
+         *   tab (\t), line feed (\n), carriage return (\r),
+         *   form feed (\f), and space.
+
+Parameters:
+  value: the String to be split
+         *   @param [delim] list of individual Strings that
+         *   will be used as separators
+
+Returns: Array of Strings

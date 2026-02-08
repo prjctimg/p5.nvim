@@ -1,0 +1,22 @@
+class()
+
+Sets the ID of the element. If no ID argument is
+         *   passed in, it instead returns the current ID of
+         *   the element. Note that only one element can have a
+         *   particular id in a page. The class() method can be
+         *   used to identify multiple elements with the same
+         *   class name.
+         *   @return the id of the element
+         */
+        id(): string;
+
+        /**
+         *   Adds given class to the element. If no class
+         *   argument is passed in, it instead returns a string
+         *   containing the current class(es) of the element.
+
+Parameters:
+  class: class to add
+         *   @chainable
+
+Returns: void

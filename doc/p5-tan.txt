@@ -1,0 +1,10 @@
+tan()
+
+Calculates the tangent of an angle. This function
+         *   takes into account the current angleMode. Values
+         *   are returned in the range of all real numbers.
+
+Parameters:
+  angle: the angle
+
+Returns: the tangent of the angle

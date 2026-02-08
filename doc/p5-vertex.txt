@@ -1,0 +1,18 @@
+vertex()
+
+All shapes are constructed by connecting a series
+         *   of vertices. vertex() is used to specify the
+         *   vertex coordinates for points, lines, triangles,
+         *   quads, and polygons. It is used exclusively within
+         *   the beginShape() and endShape() functions.
+
+Parameters:
+  x: x-coordinate of the vertex
+         *   @param y y-coordinate of the vertex
+         *   @param [z] z-coordinate of the vertex. Defaults to
+         *   0 if not specified.
+         *   @param [u] the vertex's texture u-coordinate
+         *   @param [v] the vertex's texture v-coordinate
+         *   @chainable
+
+Returns: void

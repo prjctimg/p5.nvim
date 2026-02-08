@@ -1,0 +1,13 @@
+int()
+
+Converts a boolean, string, or float to its
+         *   integer representation. When an array of values is
+         *   passed in, then an int array of the same length is
+         *   returned.
+
+Parameters:
+  ns: values to parse
+         *   @param [radix] the radix to convert to (default:
+         *   10)
+
+Returns: integer representation of values

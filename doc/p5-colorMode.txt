@@ -1,0 +1,35 @@
+colorMode()
+
+Changes the way p5.js interprets color data. By
+         *   default, the numeric parameters for fill(),
+         *   stroke(), background(), and color() are defined by
+         *   values between 0 and 255 using the RGB color
+         *   model. This is equivalent to calling
+         *   colorMode(RGB, 255). Pure red is color(255, 0, 0)
+         *   in this model. Calling colorMode(RGB, 100) sets
+         *   colors to be interpreted as RGB color values
+         *   between 0 and 100. Pure red is color(100, 0, 0) in
+         *   this model.
+         *
+         *   Calling colorMode(HSB) or colorMode(HSL) changes
+         *   to HSB or HSL system instead of RGB.
+         *
+         *   p5.Color objects remember the mode that they were
+         *   created in. Changing modes doesn't affect their
+         *   appearance.
+
+Parameters:
+  mode: either RGB, HSB or HSL, corresponding
+         *   to Red/Green/Blue and Hue/Saturation/Brightness
+         *   (or Lightness).
+         *   @param max1 range for the red or hue depending on
+         *   the current color mode.
+         *   @param max2 range for the green or saturation
+         *   depending on the current color mode.
+         *   @param max3 range for the blue or
+         *   brightness/lightness depending on the current
+         *   color mode.
+         *   @param [maxA] range for the alpha.
+         *   @chainable
+
+Returns: void

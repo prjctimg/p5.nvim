@@ -1,0 +1,12 @@
+sqrt()
+
+Calculates the square root of a number. The square
+         *   root of a number is always positive, even though
+         *   there may be a valid negative root. The square
+         *   root s of number a is such that s*s = a. It is the
+         *   opposite of squaring. Maps to Math.sqrt().
+
+Parameters:
+  n: non-negative number to square root
+
+Returns: square root of number

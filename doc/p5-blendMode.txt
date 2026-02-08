@@ -1,0 +1,99 @@
+blendMode()
+
+Creates and returns a new p5.Framebuffer, a
+         *   high-performance WebGL object that you can draw to
+         *   and then use as a texture. Options can include:
+         *
+         *   - format: The data format of the texture, either
+         *   UNSIGNED_BYTE, FLOAT, or HALF_FLOAT. The default
+         *   is UNSIGNED_BYTE.
+         *   - channels: What color channels to store, either
+         *   RGB or RGBA. The default is to match the channels
+         *   in the main canvas (with alpha unless disabled
+         *   with setAttributes.)
+         *   - depth: A boolean, whether or not to include a
+         *   depth buffer. Defaults to true.
+         *   - depthFormat: The data format for depth
+         *   information, either UNSIGNED_INT or FLOAT. The
+         *   default is FLOAT if available, or UNSIGNED_INT
+         *   otherwise.
+         *   - antialias: Boolean or Number, whether or not to
+         *   render with antialiased edges, and if so,
+         *   optionally the number of samples to use. Defaults
+         *   to whether or not the main canvas is antialiased,
+         *   using a default of 2 samples if so. Antialiasing
+         *   is only supported when WebGL 2 is available.
+         *   - width: The width of the texture. Defaults to
+         *   matching the main canvas.
+         *   - height: The height of the texture. Defaults to
+         *   matching the main canvas.
+         *   - density: The pixel density of the texture.
+         *   Defaults to the pixel density of the main canvas.
+         *   - textureFiltering: Either LINEAR (nearby pixels
+         *   will be interpolated when reading values from the
+         *   color texture) or NEAREST (no interpolation.)
+         *   Generally, use LINEAR when using the texture as an
+         *   image, and use NEAREST if reading the texture as
+         *   data. Defaults to LINEAR.
+         *
+         *   If width, height, or density are specified, then
+         *   the framebuffer will keep that size until manually
+         *   changed. Otherwise, it will be autosized, and it
+         *   will update to match the main canvas's size and
+         *   density when the main canvas changes.
+         *   @param [options] An optional object with
+         *   configuration
+         */
+        createFramebuffer(options?: object): void;
+
+        /**
+         *   Blends the pixels in the display window according
+         *   to the defined mode. There is a choice of the
+         *   following modes to blend the source pixels (A)
+         *   with the ones of pixels already in the display
+         *   window (B): - BLEND - linear interpolation of
+         *   colours: C = A*factor + B. This is the default
+         *   blending mode.
+         *   - ADD - sum of A and B
+         *   - DARKEST - only the darkest colour succeeds: C =
+         *   min(A*factor, B).
+         *   - LIGHTEST - only the lightest colour succeeds: C
+         *   = max(A*factor, B).
+         *   - DIFFERENCE - subtract colors from underlying
+         *   image. (2D)
+         *   - EXCLUSION - similar to DIFFERENCE, but less
+         *   extreme.
+         *   - MULTIPLY - multiply the colors, result will
+         *   always be darker.
+         *   - SCREEN - opposite multiply, uses inverse values
+         *   of the colors.
+         *   - REPLACE - the pixels entirely replace the others
+         *   and don't utilize alpha (transparency) values.
+         *   - REMOVE - removes pixels from B with the alpha
+         *   strength of A.
+         *   - OVERLAY - mix of MULTIPLY and SCREEN .
+         *   Multiplies dark values, and screens light values.
+         *   (2D)
+         *   - HARD_LIGHT - SCREEN when greater than 50% gray,
+         *   MULTIPLY when lower. (2D)
+         *   - SOFT_LIGHT - mix of DARKEST and LIGHTEST. Works
+         *   like OVERLAY, but not as harsh. (2D)
+         *   - DODGE - lightens light tones and increases
+         *   contrast, ignores darks. (2D)
+         *   - BURN - darker areas are applied, increasing
+         *   contrast, ignores lights. (2D)
+         *   - SUBTRACT - remainder of A and B (3D)
+         *
+         *   (2D) indicates that this blend mode only works in
+         *   the 2D renderer.
+         *
+         *   (3D) indicates that this blend mode only works in
+         *   the WEBGL renderer.
+
+Parameters:
+  mode: blend mode to set for canvas. either
+         *   BLEND, DARKEST, LIGHTEST, DIFFERENCE, MULTIPLY,
+         *   EXCLUSION, SCREEN, REPLACE, OVERLAY, HARD_LIGHT,
+         *   SOFT_LIGHT, DODGE, BURN, ADD, REMOVE or SUBTRACT
+
+Returns: void

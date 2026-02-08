@@ -1,0 +1,12 @@
+unchar()
+
+Converts a single-character string to its
+         *   corresponding integer representation. When an
+         *   array of single-character string values is passed
+         *   in, then an array of integers of the same length
+         *   is returned.
+
+Parameters:
+  ns: values to parse
+
+Returns: integer representation of values

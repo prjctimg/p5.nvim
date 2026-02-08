@@ -1,0 +1,17 @@
+norm()
+
+Normalizes a number from another range into a
+         *   value between 0 and 1. Identical to map(value,
+         *   low, high, 0, 1). Numbers outside of the range are
+         *   not clamped to 0 and 1, because out-of-range
+         *   values are often intentional and useful. (See the
+         *   example above.)
+
+Parameters:
+  value: incoming value to be normalized
+         *   @param start lower bound of the value's current
+         *   range
+         *   @param stop upper bound of the value's current
+         *   range
+
+Returns: normalized number

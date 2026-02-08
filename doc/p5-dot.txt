@@ -1,0 +1,12 @@
+dot()
+
+Calculates the dot product of two vectors. The
+         *   version of the method that computes the dot
+         *   product of two independent vectors is a static
+         *   method. See the examples for more context.
+
+Parameters:
+  value: value component of the vector or a
+         *   p5.Vector
+
+Returns: void

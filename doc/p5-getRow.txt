@@ -1,0 +1,10 @@
+getRow()
+
+Returns a reference to the specified p5.TableRow.
+         *   The reference can then be used to get and set
+         *   values of the selected row.
+
+Parameters:
+  rowID: ID number of the row to get
+
+Returns: p5.TableRow object

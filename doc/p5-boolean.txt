@@ -1,0 +1,15 @@
+boolean()
+
+Converts a number or string to its boolean
+         *   representation. For a number, any non-zero value
+         *   (positive or negative) evaluates to true, while
+         *   zero evaluates to false. For a string, the value
+         *   "true" evaluates to true, while any other value
+         *   evaluates to false. When an array of number or
+         *   string values is passed in, then a array of
+         *   booleans of the same length is returned.
+
+Parameters:
+  n: value to parse
+
+Returns: boolean representation of value

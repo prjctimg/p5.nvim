@@ -1,0 +1,16 @@
+getNum()
+
+Returns an attribute value of the element as an
+         *   Number. If the defaultValue parameter is specified
+         *   and the attribute doesn't exist, then defaultValue
+         *   is returned. If no defaultValue is specified and
+         *   the attribute doesn't exist, the value 0 is
+         *   returned.
+
+Parameters:
+  name: the non-null full name of the
+         *   attribute
+         *   @param [defaultValue] the default value of the
+         *   attribute
+
+Returns: void

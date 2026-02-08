@@ -1,0 +1,22 @@
+attribute()
+
+Adds a new attribute or changes the value of an
+         *   existing attribute on the specified element. If no
+         *   value is specified, returns the value of the given
+         *   attribute, or null if the attribute is not set.
+         *   @return value of attribute
+         */
+        attribute(): string;
+
+        /**
+         *   Adds a new attribute or changes the value of an
+         *   existing attribute on the specified element. If no
+         *   value is specified, returns the value of the given
+         *   attribute, or null if the attribute is not set.
+
+Parameters:
+  attr: attribute to set
+         *   @param value value to assign to attribute
+         *   @chainable
+
+Returns: void

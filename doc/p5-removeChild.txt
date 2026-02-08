@@ -1,0 +1,8 @@
+removeChild()
+
+Removes the element specified by name or index.
+
+Parameters:
+  name: element name or index
+
+Returns: void

@@ -1,0 +1,35 @@
+bezierVertex()
+
+Specifies vertex coordinates for Bezier curves.
+         *   Each call to bezierVertex() defines the position
+         *   of two control points and one anchor point of a
+         *   Bezier curve, adding a new segment to a line or
+         *   shape. For WebGL mode bezierVertex() can be used
+         *   in 2D as well as 3D mode. 2D mode expects 6
+         *   parameters, while 3D mode expects 9 parameters
+         *   (including z coordinates). The first time
+         *   bezierVertex() is used within a beginShape() call,
+         *   it must be prefaced with a call to vertex() to set
+         *   the first anchor point. This function must be used
+         *   between beginShape() and endShape() and only when
+         *   there is no MODE or POINTS parameter specified to
+         *   beginShape().
+
+Parameters:
+  x2: x-coordinate for the first control point
+         *   @param y2 y-coordinate for the first control point
+         *   @param z2 z-coordinate for the first control point
+         *   (for WebGL mode)
+         *   @param x3 x-coordinate for the second control
+         *   point
+         *   @param y3 y-coordinate for the second control
+         *   point
+         *   @param z3 z-coordinate for the second control
+         *   point (for WebGL mode)
+         *   @param x4 x-coordinate for the anchor point
+         *   @param y4 y-coordinate for the anchor point
+         *   @param z4 z-coordinate for the anchor point (for
+         *   WebGL mode)
+         *   @chainable
+
+Returns: void

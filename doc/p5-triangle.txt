@@ -1,0 +1,19 @@
+triangle()
+
+Draws a triangle to the canvas. A triangle is a
+         *   three-sided polygon. The first two parameters
+         *   specify the triangle's first point (x1,y1). The
+         *   middle two parameters specify its second point
+         *   (x2,y2). And the last two parameters specify its
+         *   third point (x3, y3).
+
+Parameters:
+  x1: x-coordinate of the first point.
+         *   @param y1 y-coordinate of the first point.
+         *   @param x2 x-coordinate of the second point.
+         *   @param y2 y-coordinate of the second point.
+         *   @param x3 x-coordinate of the third point.
+         *   @param y3 y-coordinate of the third point.
+         *   @chainable
+
+Returns: void
