@@ -2,9 +2,65 @@
 local M = {}
 local core = require("p5.core")
 
+-- Validate bundled assets before project creation
+M.validate_bundled_assets = function()
+  local plugin_assets = core.get_asset_dir()
+  local required_assets = {
+    "libs/p5.js",
+    "libs/p5.sound.js", 
+    "types/p5.d.ts"
+  }
+  
+  local missing = {}
+  for _, asset in ipairs(required_assets) do
+    local full_path = plugin_assets .. "/" .. asset
+    if vim.fn.filereadable(full_path) == 0 then
+      table.insert(missing, asset)
+    end
+  end
+  
+  if #missing > 0 then
+    core.notify("Missing required assets: " .. table.concat(missing, ", "), "error")
+    return false
+  end
+  
+  return true
+end
+
+-- Validate asset paths in generated config files
+M.validate_asset_paths = function(project_path)
+  local project_assets = project_path .. "/assets"
+  local required_paths = {
+    "libs/p5.js",
+    "libs/p5.sound.js",
+    "types/p5.d.ts"
+  }
+  
+  local missing = {}
+  for _, path in ipairs(required_paths) do
+    local full_path = project_assets .. "/" .. path
+    if vim.fn.filereadable(full_path) == 0 then
+      table.insert(missing, path)
+    end
+  end
+  
+  if #missing > 0 then
+    core.notify("Asset path validation failed - missing: " .. table.concat(missing, ", "), "warn")
+    return false
+  end
+  
+  return true
+end
+
 -- Create new p5.js project
 M.create_project = function(name)
   name = name or "p5-sketch"
+  
+  -- Validate bundled assets first
+  if not M.validate_bundled_assets() then
+    core.notify("Cannot create project - required assets are missing", "error")
+    return
+  end
   
   -- Check if directory already exists
   if vim.fn.isdirectory(name) ~= 0 then
@@ -30,6 +86,11 @@ M.create_files = function(project_path)
   -- Copy plugin assets to project first
   M.copy_assets_to_project(project_path)
   
+  -- Validate asset paths after copying
+  if not M.validate_asset_paths(project_path) then
+    core.notify("Warning: Some asset paths may not work correctly", "warn")
+  end
+  
   -- Create index.html
   local index_html = [[<!DOCTYPE html>
 <html lang="en">
@@ -37,7 +98,7 @@ M.create_files = function(project_path)
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>p5.js Sketch</title>
-  <script src="./assets/core/p5.js"></script>
+  <script src="./assets/libs/p5.js"></script>
 </head>
 <body>
   <main>
@@ -83,6 +144,35 @@ function draw() {
   
   vim.fn.writefile(vim.split(jsconfig, "\n"), project_path .. "/jsconfig.json")
   
+  -- Create tsconfig.json for TypeScript projects
+  local tsconfig = [[{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["DOM", "ES2022"],
+    "types": ["./assets/types/p5.d.ts"],
+    "strict": true,
+    "allowJs": true,
+    "checkJs": false,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ]
+}]]
+  
+  vim.fn.writefile(vim.split(tsconfig, "\n"), project_path .. "/tsconfig.json")
+  
   -- Create p5.json workspace configuration
   local p5_config = [[{
   "name": "]] .. vim.fn.fnamemodify(project_path, ":t") .. [[",
@@ -108,7 +198,7 @@ function draw() {
   vim.fn.mkdir(project_path .. "/assets/contrib", "p")
 end
 
--- Copy plugin assets to project with bundled types
+-- Copy plugin assets to project with bundled types and libraries
 M.copy_assets_to_project = function(project_path)
   local plugin_assets = core.get_asset_dir()
   local project_assets = project_path .. "/assets"
@@ -116,7 +206,6 @@ M.copy_assets_to_project = function(project_path)
   -- Create project assets directory
   vim.fn.mkdir(project_assets, "p")
   vim.fn.mkdir(project_assets .. "/types", "p")
-  vim.fn.mkdir(project_assets .. "/core", "p")
   vim.fn.mkdir(project_assets .. "/libs", "p")
   vim.fn.mkdir(project_assets .. "/contrib", "p")
   
@@ -141,18 +230,23 @@ M.copy_assets_to_project = function(project_path)
     end
   end
   
-  -- Copy unminified core files if they exist
-  local core_src = plugin_assets .. "/core"
-  local core_dest = project_assets .. "/core"
-  if vim.fn.isdirectory(core_src) == 1 then
-    local unminified_files = {"p5.js", "p5.sound.js"}
-    for _, file in ipairs(unminified_files) do
-      local src_file = core_src .. "/" .. file
-      local dest_file = core_dest .. "/" .. file
+  -- Copy bundled library files from assets/libs/
+  local libs_src = plugin_assets .. "/libs"
+  local libs_dest = project_assets .. "/libs"
+  if vim.fn.isdirectory(libs_src) == 1 then
+    local lib_files = {"p5.js", "p5.sound.js"}
+    for _, file in ipairs(lib_files) do
+      local src_file = libs_src .. "/" .. file
+      local dest_file = libs_dest .. "/" .. file
       if vim.fn.filereadable(src_file) == 1 then
         vim.fn.system("cp '" .. src_file .. "' '" .. dest_file .. "'")
+        core.notify_fallback("Copied " .. file .. " to project", "info")
+      else
+        core.notify_fallback("Warning: " .. file .. " not found in plugin assets", "warn")
       end
     end
+  else
+    core.notify_fallback("Plugin libs directory not found", "warn")
   end
 end
 

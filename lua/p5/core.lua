@@ -141,8 +141,124 @@ M.notify = function(msg, level)
   vim.notify("[p5.nvim] " .. msg, vim_level)
 end
 
--- Download file using curl or wget
-M.download_file = function(url, dest, callback)
+-- Get cache directory for host system
+M.get_cache_dir = function()
+  local cache_home = os.getenv("XDG_CACHE_HOME") or vim.fn.expand("~/.cache")
+  local cache_dir = cache_home .. "/p5.nvim"
+  vim.fn.mkdir(cache_dir, "p")
+  return cache_dir
+end
+
+-- Generate cache key for URL
+M.generate_cache_key = function(url)
+  return vim.fn.sha256(url):sub(1, 16)
+end
+
+-- Check if cached file is valid
+M.is_cache_valid = function(cache_file, checksum)
+  if vim.fn.filereadable(cache_file) == 0 then
+    return false
+  end
+  
+  -- Simple file existence check for now
+  -- TODO: Add checksum validation if needed
+  return true
+end
+
+-- Download file with progress tracking and caching
+M.download_file_with_progress = function(url, dest, callback, options)
+  options = options or {}
+  local use_cache = options.cache ~= false
+  local on_progress = options.on_progress
+  local cache_file = nil
+  
+  if use_cache then
+    local cache_dir = M.get_cache_dir()
+    local cache_key = M.generate_cache_key(url)
+    cache_file = cache_dir .. "/" .. cache_key
+    
+    -- Check if we have a valid cached version
+    if M.is_cache_valid(cache_file) then
+      vim.fn.system("cp '" .. cache_file .. "' '" .. dest .. "'")
+      if callback then callback(true) end
+      return true
+    end
+  end
+  
+  -- Get file size first for progress tracking
+  M.get_remote_file_size(url, function(total_size)
+    local cmd
+    if M.command_exists("curl") then
+      cmd = string.format("curl -L --progress-bar '%s' -o '%s'", url, dest)
+    elseif M.command_exists("wget") then
+      cmd = string.format("wget --progress=bar:force -O '%s' '%s'", dest, url)
+    else
+      M.notify("Neither curl nor wget found. Cannot download: " .. url, "error")
+      if callback then callback(false) end
+      return
+    end
+    
+    local job_id = vim.fn.jobstart(cmd, {
+      on_stdout = function(_, data)
+        -- Parse progress output if available
+        if on_progress and data and total_size then
+          -- Simple progress parsing (curl/wget progress output)
+          for _, line in ipairs(data) do
+            local percent = line:match("(%d+)%%")
+            if percent then
+              local downloaded = math.floor((tonumber(percent) / 100) * total_size)
+              on_progress(downloaded, total_size, url)
+            end
+          end
+        end
+      end,
+      on_stderr = function(_, data)
+        -- Parse progress from stderr (curl sends progress there)
+        if on_progress and data and total_size then
+          for _, line in ipairs(data) do
+            local percent = line:match("(%d+)%%")
+            if percent then
+              local downloaded = math.floor((tonumber(percent) / 100) * total_size)
+              on_progress(downloaded, total_size, url)
+            end
+          end
+        end
+      end,
+      on_exit = function(_, exit_code)
+        local success = exit_code == 0
+        
+        -- Cache the downloaded file if successful and caching enabled
+        if success and use_cache and cache_file then
+          vim.fn.system("cp '" .. dest .. "' '" .. cache_file .. "'")
+        end
+        
+        if callback then callback(success) end
+      end
+    })
+  end)
+  
+  return true
+end
+
+-- Download file with caching support (simplified version)
+M.download_file = function(url, dest, callback, options)
+  options = options or {}
+  local use_cache = options.cache ~= false
+  local cache_file = nil
+  
+  if use_cache then
+    local cache_dir = M.get_cache_dir()
+    local cache_key = M.generate_cache_key(url)
+    cache_file = cache_dir .. "/" .. cache_key
+    
+    -- Check if we have a valid cached version
+    if M.is_cache_valid(cache_file) then
+      vim.fn.system("cp '" .. cache_file .. "' '" .. dest .. "'")
+      if callback then callback(true) end
+      return true
+    end
+  end
+  
   local cmd
   if M.command_exists("curl") then
     cmd = string.format("curl -sL '%s' -o '%s'", url, dest)
@@ -150,20 +266,85 @@ M.download_file = function(url, dest, callback)
     cmd = string.format("wget -q -O '%s' '%s'", url, dest)
   else
     M.notify("Neither curl nor wget found. Cannot download: " .. url, "error")
-    if callback then callback(false)
+    if callback then callback(false) end
     return false
-  end
   end
   
   vim.fn.jobstart(cmd, {
     on_exit = function(_, exit_code)
-      if callback then
-        callback(exit_code == 0)
+      local success = exit_code == 0
+      
+      -- Cache the downloaded file if successful and caching enabled
+      if success and use_cache and cache_file then
+        vim.fn.system("cp '" .. dest .. "' '" .. cache_file .. "'")
       end
+      
+      if callback then callback(success) end
     end
   })
   
   return true
+end
+
+-- Get remote file size for progress tracking
+M.get_remote_file_size = function(url, callback)
+  local cmd
+  if M.command_exists("curl") then
+    cmd = string.format("curl -sI '%s' | grep -i content-length | cut -d' ' -f2 | tr -d '\\r'", url)
+  elseif M.command_exists("wget") then
+    cmd = string.format("wget --spider '%s' 2>&1 | grep -i length | cut -d' ' -f2", url)
+  else
+    if callback then callback(nil) end
+    return
+  end
+  
+  vim.fn.jobstart(cmd, {
+    on_stdout = function(_, data)
+      if data and #data > 0 and data[1] ~= "" then
+        local size = tonumber(data[1])
+        if callback then callback(size) end
+      else
+        if callback then callback(nil) end
+      end
+    end
+  })
+end
+
+-- GitHub API integration
+M.get_github_release_asset = function(repo, release, pattern, callback)
+  local api_url = string.format("https://api.github.com/repos/%s/releases/%s", repo, release)
+  
+  local cmd = string.format("curl -s '%s'", api_url)
+  vim.fn.jobstart(cmd, {
+    on_stdout = function(_, data)
+      if not data or #data == 0 then
+        if callback then callback(nil, "Failed to fetch release info") end
+        return
+      end
+      
+      local content = table.concat(data, "\n")
+      local ok, release_info = pcall(vim.fn.json_decode, content)
+      
+      if not ok or not release_info or not release_info.assets then
+        if callback then callback(nil, "Invalid release info") end
+        return
+      end
+      
+      -- Find matching asset
+      for _, asset in ipairs(release_info.assets) do
+        if asset.name:match(pattern) then
+          if callback then callback(asset.browser_download_url, nil) end
+          return
+        end
+      end
+      
+      if callback then callback(nil, "No matching asset found") end
+    end,
+    on_stderr = function(_, data)
+      local error_msg = data and table.concat(data, "\n") or "Unknown error"
+      if callback then callback(nil, error_msg) end
+    end
+  })
 end
 
 -- Get p5 version info

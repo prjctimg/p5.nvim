@@ -6,16 +6,29 @@ local M = {
     index_file = "index.html"
   },
   
+  -- Notification batching system
+  notification_batch = {
+    pending = {},
+    timer = nil,
+    delay = 1000 -- 1 second
+  },
+  
   contributor_libs = {
     {
       name = "ml5",
       description = "Machine Learning library for creative coding",
-      cdn = "https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"
+      github_repo = "ml5js/ml5-library",
+      github_release = "latest",
+      asset_pattern = "ml5%.min%.js$",
+      cdn_fallback = "https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"
     },
     {
       name = "p5.speech",
       description = "Speech synthesis and recognition for p5.js",
-      cdn = "https://cdn.jsdelivr.net/npm/p5.speech/lib/p5.speech.js"
+      github_repo = "IDMNYU/p5.speech",
+      github_release = "latest", 
+      asset_pattern = "p5%.speech%.js$",
+      cdn_fallback = "https://cdn.jsdelivr.net/npm/p5.speech/lib/p5.speech.js"
     }
   }
 }
@@ -200,18 +213,87 @@ M.install_libs = function(lib_names)
   end)
 end
 
--- Process libraries with unified callback
+-- Download library from GitHub releases with CDN fallback
+M.download_library = function(lib, dest, callback)
+  -- Try GitHub releases first
+  if lib.github_repo and lib.asset_pattern then
+    core.get_github_release_asset(lib.github_repo, lib.github_release or "latest", lib.asset_pattern, function(download_url, error)
+      if download_url then
+        core.download_file(download_url, dest, callback, { cache = true })
+      else
+        -- Fallback to CDN
+        if lib.cdn_fallback then
+          core.notify_fallback("GitHub release failed for " .. lib.name .. ", using CDN fallback", "warn")
+          core.download_file(lib.cdn_fallback, dest, callback, { cache = true })
+        else
+          core.notify_fallback("Failed to download " .. lib.name .. ": " .. (error or "No fallback available"), "error")
+          if callback then callback(false) end
+        end
+      end
+    end)
+  elseif lib.cdn_fallback then
+    -- Use CDN if no GitHub repo specified
+    core.download_file(lib.cdn_fallback, dest, callback, { cache = true })
+  else
+    core.notify_fallback("No download source for " .. lib.name, "error")
+    if callback then callback(false) end
+  end
+end
+
+-- Batch notification system
+M.batch_notify = function(message, level)
+  table.insert(M.notification_batch.pending, {message, level})
+  
+  -- Debounce notifications
+  if M.notification_batch.timer then
+    vim.fn.timer_stop(M.notification_batch.timer)
+  end
+  
+  M.notification_batch.timer = vim.fn.timer_start(M.notification_batch.delay, function()
+    M.flush_notifications()
+  end)
+end
+
+M.flush_notifications = function()
+  local messages = M.notification_batch.pending
+  if #messages > 0 then
+    local success_count = 0
+    local error_count = 0
+    
+    for _, msg in ipairs(messages) do
+      if msg[2] == "ok" then
+        success_count = success_count + 1
+      else
+        error_count = error_count + 1
+      end
+    end
+    
+    local summary = string.format("Completed %d operations (%d successful, %d failed)", 
+      #messages, success_count, error_count)
+    core.notify_fallback(summary, success_count > 0 and "info" or "error")
+    M.notification_batch.pending = {}
+  end
+end
+
+-- Process libraries with unified callback and batched notifications
 M.process_libraries = function(libraries, operation, on_complete)
   local completed = 0
   
   for _, lib in ipairs(libraries) do
-    core.download_file(lib.cdn, lib.name .. ".js", function(success)
+    local dest = vim.fn.getcwd() .. "/assets/libs/" .. lib.name .. ".js"
+    
+    M.download_library(lib, dest, function(success)
       completed = completed + 1
       local msg = (operation == "install" and "Installed " or "Updated ") .. lib.name
       local level = success and "ok" or "error"
-      core.notify_fallback(msg, level)
+      
+      -- Use batched notifications instead of immediate ones
+      M.batch_notify(msg, level)
       
       if completed == #libraries then
+        -- Flush remaining notifications
+        M.flush_notifications()
+        
         if on_complete then
           on_complete(completed)
         end
