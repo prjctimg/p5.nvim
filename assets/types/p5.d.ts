@@ -1,6 +1,6 @@
 // Generated p5.js Type Definitions
 // This file provides both global and p5 namespace support
-// Generated: 2026-02-08T08:26:37.817Z
+// Generated: 2026-02-08T08:54:52.663Z
 // Original source: @types/p5 package
 
 // ============================================================================
