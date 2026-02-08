@@ -31,6 +31,12 @@ M.config = {
 M.setup = function(opts)
   M.config = vim.tbl_deep_extend("force", M.config, opts or {})
 
+  -- Initialize websocket library first
+  local websocket_ok, websocket = pcall(require, "websocket")
+  if websocket_ok and websocket.setup then
+    websocket.setup({})
+  end
+
   -- Import modules
   local core = require("p5.core")
   local project = require("p5.project")

@@ -28,10 +28,11 @@ A Neovim plugin for creative coding with p5.js, providing live development serve
 - **System Tools**:
   - `curl` or `wget` (for library downloads)
   - `xdg-open` (Linux) or equivalent (for auto-opening browser)
+- **Required Dependencies**:
+  - `websocket.nvim` (for browser console integration)
 - **Optional Dependencies**:
   - `gh` CLI (for GitHub Gist integration)
   - `snacks.nvim` (for enhanced UI components)
-  - `websocket.nvim` (for console integration)
 
 ## Installation
 
@@ -42,6 +43,7 @@ A Neovim plugin for creative coding with p5.js, providing live development serve
   "prjctimg/p5.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
+    "samsze0/websocket.nvim", -- Required for browser console integration
     optional_dependencies = {
       "folke/snacks.nvim", -- For enhanced UI
       "nvim-neotest/nvim-nio", -- For async operations
@@ -62,6 +64,7 @@ use {
   "prjctimg/p5.nvim",
   requires = {
     "nvim-lua/plenary.nvim",
+    "samsze0/websocket.nvim", -- Required for browser console integration
     optional_dependencies = {
       "folke/snacks.nvim",
       "nvim-neotest/nvim-nio",

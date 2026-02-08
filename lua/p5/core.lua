@@ -68,9 +68,9 @@ M.require_snacks = function()
 end
 
 M.require_websocket = function()
-  local ok, lazy_module = pcall(require, "p5.lazy")
+  local ok, websocket = pcall(require, "websocket")
   if ok then
-    return lazy_module.require("websocket")
+    return websocket
   end
   return nil
 end
@@ -363,11 +363,17 @@ end
 
 -- WebSocket initialization
 M.init_websocket = function(error_msg)
-  local websocket = M.require_websocket()
-  if not websocket then
+  local ok, websocket = pcall(require, "websocket")
+  if not ok then
     M.notify(error_msg or "WebSocket library not available", "error")
     return false
   end
+  
+  -- Initialize websocket library if setup function exists
+  if websocket.setup then
+    websocket.setup()
+  end
+  
   return true
 end
 

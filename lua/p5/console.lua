@@ -147,11 +147,14 @@ end
 -- Start WebSocket server for browser logs
 M.start_websocket_server = function()
   local core = require("p5.core")
-  if not core.init_websocket("WebSocket library not available. Please ensure websocket.nvim is properly installed.") then
+  
+  -- Try to load websocket library
+  local ok, server_mod = pcall(require, "websocket.server")
+  if not ok then
+    core.notify("WebSocket library not available. Console integration disabled.", "warn")
     return false
   end
-
-  local server_mod = require("websocket.server")
+  
   local WebsocketServer = server_mod.WebsocketServer
   M.ws_server = WebsocketServer.new({
     host = "localhost",
