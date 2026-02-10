@@ -250,6 +250,80 @@ M.copy_assets_to_project = function(project_path)
   end
 end
 
+-- Check if current directory is a valid p5.js project
+M.is_p5_project = function()
+  local cwd = vim.fn.getcwd()
+  
+  -- Check for index.html
+  local index_file = cwd .. "/index.html"
+  if vim.fn.filereadable(index_file) == 0 then
+    return false, "No index.html found in current directory"
+  end
+  
+  -- Check if index.html contains p5.js reference
+  local index_content = table.concat(vim.fn.readfile(index_file), "\n")
+  if not (index_content:match("p5%.js") or index_content:match("p5%.min%.js")) then
+    return false, "index.html does not reference p5.js"
+  end
+  
+  -- Check for sketch.js (optional but common)
+  local sketch_file = cwd .. "/sketch.js"
+  local has_sketch = vim.fn.filereadable(sketch_file) == 1
+  
+  -- Check for project configuration (optional)
+  local config_file = cwd .. "/p5.json"
+  local has_config = vim.fn.filereadable(config_file) == 1
+  
+  return true, "Valid p5.js project detected", {
+    has_sketch = has_sketch,
+    has_config = has_config,
+    index_path = index_file
+  }
+end
+
+-- Create fallback HTML for non-project directories
+M.create_fallback_html = function()
+  local cwd = vim.fn.getcwd()
+  local fallback_html = [[<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>p5.js Test Sketch</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <main>
+  </main>
+  <script>
+    function setup() {
+      createCanvas(800, 600);
+      background(240);
+      textAlign(CENTER, CENTER);
+      text("p5.js is working!", width/2, height/2 - 20);
+      text("Open browser console to see integration", width/2, height/2 + 20);
+    }
+    
+    function draw() {
+      // Test console integration
+      if (frameCount % 60 === 0) {
+        console.log('Frame:', frameCount);
+        console.info('Animation running smoothly');
+      }
+    }
+  </script>
+</body>
+</html>]]
+  
+  local temp_file = cwd .. "/.p5-temp.html"
+  vim.fn.writefile(vim.split(fallback_html, "\n"), temp_file)
+  return temp_file
+end
+
 M.setup = function(config)
   M.config = config
 end

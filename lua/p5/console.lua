@@ -1,46 +1,110 @@
--- Browser console integration for p5.nvim
+-- Browser console integration for p5.nvim with terminal-based real-time streaming
 local M = {}
 local core = require("p5.core")
 
-M.console_buf = nil
 M.console_win = nil
-M.ws_server = nil
-M.logs = {}
+M.console_buf = nil
+M.console_job = nil
+M.server_port = nil
 
--- Create console buffer
-M.create_console_buffer = function()
-  if M.console_buf and vim.api.nvim_buf_is_valid(M.console_buf) then
-    return M.console_buf
+-- ANSI color codes for different log levels
+local ANSI_COLORS = {
+  reset = "\027[0m",
+  error = "\027[1;31m",    -- Bold red
+  warn = "\027[1;33m",     -- Bold yellow  
+  info = "\027[1;36m",     -- Bold cyan
+  log = "\027[0;37m",      -- White
+  timestamp = "\027[0;90m"  -- Dim gray
+}
+
+-- Create console terminal with real-time log streaming
+M.create_console_terminal = function()
+  if M.console_win and vim.api.nvim_win_is_valid(M.console_win) then
+    return M.console_win
   end
 
-  M.console_buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_name(M.console_buf, "p5-console")
-  vim.api.nvim_buf_set_option(M.console_buf, "filetype", "log")
-  vim.api.nvim_buf_set_option(M.console_buf, "modifiable", true)
+  -- Check if we have a server port and project
+  local server = require("p5.server")
+  if not (server.server_job and server.port) then
+    core.notify("Console requires a running server first", "warn")
+    return nil
+  end
+
+  M.server_port = server.port
   
-  -- Set buffer options
-  vim.api.nvim_buf_set_lines(M.console_buf, 0, -1, false, {
-    "p5.js Browser Console",
-    "====================",
-    ""
+  -- Create terminal command for real-time log streaming
+  local curl_cmd = string.format(
+    'curl -s -N "http://localhost:%d/api/console/poll" 2>/dev/null',
+    M.server_port
+  )
+
+  -- Create terminal buffer
+  M.console_buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_name(M.console_buf, "p5-console-terminal")
+  vim.api.nvim_buf_set_option(M.console_buf, "filetype", "log")
+  vim.api.nvim_buf_set_option(M.console_buf, "modifiable", false)
+
+  -- Start terminal with curl command
+  M.console_job = vim.fn.termopen(curl_cmd, {
+    on_stdout = function(_, data)
+      -- Terminal output is handled by the terminal itself
+    end,
+    on_stderr = function(_, data)
+      -- Handle curl errors gracefully
+      if data and #data > 0 then
+        for _, line in ipairs(data) do
+          if line:match("Connection refused") or line:match("curl:") then
+            -- Server not ready yet, this is expected
+          end
+        end
+      end
+    end,
+    on_exit = function(_, exit_code)
+      if exit_code ~= 0 then
+        -- Terminal exited unexpectedly
+        vim.schedule(function()
+          core.notify("Console connection lost", "warn")
+        end)
+      end
+      M.console_job = nil
+    end
   })
 
   return M.console_buf
 end
 
--- Show console window
+-- Show console terminal window
 M.show = function()
+  -- First check if we're in a p5 project and server is running
+  local project = require("p5.project")
+  local is_project = project.is_p5_project()
+  local server = require("p5.server")
+  
+  if not is_project then
+    core.notify("Console only works in p5.js projects", "warn")
+    return
+  end
+  
+  if not server.server_job then
+    core.notify("Start server first with :P5StartServer", "info")
+    return
+  end
+
   if M.console_win and vim.api.nvim_win_is_valid(M.console_win) then
     -- Window already visible, just focus it
     vim.api.nvim_set_current_win(M.console_win)
     return
   end
 
-  local buf = M.create_console_buffer()
+  local buf = M.create_console_terminal()
+  if not buf then
+    return
+  end
+
   local position = M.config.console.position or "below"
   local height = M.config.console.height or 10
 
-  -- Determine split command using lookup table
+  -- Determine split command
   local split_pattern = core.split_commands[position] or core.split_commands.below
   local split_cmd = split_pattern:format(height)
 
@@ -49,24 +113,40 @@ M.show = function()
   vim.api.nvim_win_set_buf(M.console_win, buf)
   
   -- Set window options
-  vim.api.nvim_win_set_option(M.console_win, "wrap", false)
+  vim.api.nvim_win_set_option(M.console_win, "wrap", true)
   vim.api.nvim_win_set_option(M.console_win, "number", false)
   vim.api.nvim_win_set_option(M.console_win, "relativenumber", false)
   vim.api.nvim_win_set_option(M.console_win, "signcolumn", "no")
 
-  -- Set up keymaps for console window
+  -- Set up keymaps for console window (in terminal mode)
+  vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "", {
+    callback = function()
+      vim.cmd("stopinsert")
+      M.hide()
+    end,
+    desc = "Hide p5 console",
+    noremap = true
+  })
+  
   vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
     callback = M.hide,
     desc = "Hide p5 console"
   })
-  vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", "", {
-    callback = M.hide,
-    desc = "Hide p5 console"
-  })
   vim.api.nvim_buf_set_keymap(buf, "n", "c", "", {
-    callback = M.clear,
+    callback = M.clear_terminal,
     desc = "Clear p5 console"
   })
+  vim.api.nvim_buf_set_keymap(buf, "n", "i", "", {
+    callback = function()
+      vim.cmd("startinsert")
+    end,
+    desc = "Enter terminal mode"
+  })
+
+  -- Enter terminal mode automatically
+  vim.cmd("startinsert")
+  
+  core.notify("Console connected to server on port " .. M.server_port, "info")
 end
 
 -- Hide console window
@@ -74,6 +154,13 @@ M.hide = function()
   if M.console_win and vim.api.nvim_win_is_valid(M.console_win) then
     vim.api.nvim_win_close(M.console_win, true)
     M.console_win = nil
+    M.console_buf = nil
+    
+    -- Stop terminal job if running
+    if M.console_job then
+      vim.fn.jobstop(M.console_job)
+      M.console_job = nil
+    end
   end
 end
 
@@ -86,18 +173,12 @@ M.toggle = function()
   end
 end
 
--- Clear console
-M.clear = function()
-  if not M.console_buf or not vim.api.nvim_buf_is_valid(M.console_buf) then
-    return
+-- Clear console terminal
+M.clear_terminal = function()
+  if M.console_buf and vim.api.nvim_buf_is_valid(M.console_buf) then
+    -- Send clear command to terminal
+    vim.api.nvim_chan_send(M.console_job, "\027[H\027[2J")
   end
-
-  vim.api.nvim_buf_set_lines(M.console_buf, 0, -1, false, {
-    "p5.js Browser Console",
-    "====================",
-    ""
-  })
-  M.logs = {}
 end
 
 -- Add log entry
@@ -144,15 +225,34 @@ M.add_log = function(level, message, source)
   end
 end
 
--- Start HTTP console polling for browser logs
+-- Start HTTP console polling for browser logs (legacy method - only for fallback)
 M.start_console_polling = function(server_port)
-  local core = require("p5.core")
+  -- Only allow polling if we're in a p5 project and server is running
+  local project = require("p5.project")
+  local is_project = project.is_p5_project()
+  local server = require("p5.server")
+  
+  if not is_project then
+    core.notify("Console polling only works in p5.js projects", "warn")
+    return false
+  end
+  
+  if not server.server_job then
+    core.notify("Console polling requires running server", "warn")
+    return false
+  end
+  
+  -- Check if terminal console is preferred
+  if M.config.console and M.config.console.terminal_mode ~= false then
+    -- Prefer terminal mode by default
+    return false
+  end
   
   -- Reset restart count on successful start
   M.restart_count = 0
   
   -- Use provided port or fall back to config
-  local port = server_port or M.config.server.port or 8000
+  local port = server_port or server.port or 8000
   local server_url = "http://localhost:" .. port
   
   M.polling_job = vim.fn.jobstart(string.format("curl -s '%s/api/console/poll'", server_url), {
@@ -216,6 +316,10 @@ M.stop_console_polling = function()
     vim.fn.jobstop(M.polling_job)
     M.polling_job = nil
     M.add_log("info", "Console polling stopped", "server")
+  end
+  if M.console_job then
+    vim.fn.jobstop(M.console_job)
+    M.console_job = nil
   end
   M.console_enabled = false
 end
@@ -298,7 +402,7 @@ end
 -- Setup console integration
 M.setup = function(config)
   M.config = config
-  M.console_enabled = true
+  M.console_enabled = false  -- Only enable when explicitly started
   
   -- Create highlight groups
   vim.api.nvim_set_hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
@@ -306,10 +410,7 @@ M.setup = function(config)
   vim.api.nvim_set_hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
   vim.api.nvim_set_hl(0, "P5ConsoleLog", { fg = "#6272a4" })
   
-  -- Start console polling if enabled
-  if config.console and config.console.enabled then
-    M.start_console_polling()
-  end
+  -- Do NOT start console polling automatically - only when server starts in a p5 project
 end
 
 return M
