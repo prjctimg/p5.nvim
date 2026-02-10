@@ -1,9 +1,10 @@
 -- Project creation and management for p5.nvim
-local M = {}
+local P = {}
+local notify = core.notify
 local core = require("p5.core")
 
 -- Validate bundled assets before project creation
-M.validate_bundled_assets = function()
+P.validate_bundled_assets = function()
   local plugin_assets = core.get_asset_dir()
   local required_assets = {
     "libs/p5.js",
@@ -20,7 +21,7 @@ M.validate_bundled_assets = function()
   end
   
   if #missing > 0 then
-    core.notify("Missing required assets: " .. table.concat(missing, ", "), "error")
+    notify("Missing required assets: " .. table.concat(missing, ", "), "error")
     return false
   end
   
@@ -28,7 +29,7 @@ M.validate_bundled_assets = function()
 end
 
 -- Validate asset paths in generated config files
-M.validate_asset_paths = function(project_path)
+P.validate_asset_paths = function(project_path)
   local project_assets = project_path .. "/assets"
   local required_paths = {
     "libs/p5.js",
@@ -45,7 +46,7 @@ M.validate_asset_paths = function(project_path)
   end
   
   if #missing > 0 then
-    core.notify("Asset path validation failed - missing: " .. table.concat(missing, ", "), "warn")
+    notify("Asset path validation failed - missing: " .. table.concat(missing, ", "), "warn")
     return false
   end
   
@@ -53,33 +54,33 @@ M.validate_asset_paths = function(project_path)
 end
 
 -- Create new p5.js project
-M.create_project = function(name)
+P.create_project = function(name)
   name = name or "p5-sketch"
   
   -- Validate bundled assets first
-  if not M.validate_bundled_assets() then
-    core.notify("Cannot create project - required assets are missing", "error")
+  if not P.validate_bundled_assets() then
+    notify("Cannot create project - required assets are missing", "error")
     return false
   end
   
   -- Check if directory already exists
   if vim.fn.isdirectory(name) ~= 0 then
-    core.notify("Directory '" .. name .. "' already exists", "error")
+    notify("Directory '" .. name .. "' already exists", "error")
     return false
   end
   
   -- Notify project creation start
-  core.notify("Creating p5.js project: " .. name .. "...", "info")
+  notify("Creating p5.js project: " .. name .. "...", "info")
   
   -- Create project directory
   vim.fn.mkdir(name, "p")
   local project_path = vim.fn.fnamemodify(name, ":p")
   
   -- Create project files
-  M.create_files(project_path)
+  P.create_files(project_path)
   
   -- Notify successful asset copying
-  core.notify("Assets copied successfully. Project created!", "ok")
+  notify("Assets copied successfully. Project created!", "ok")
   
   -- Change CWD to new project directory
   vim.cmd("cd " .. project_path)
@@ -87,18 +88,18 @@ M.create_project = function(name)
   -- Open sketch.js in editor
   vim.cmd("edit " .. project_path .. "/sketch.js")
   
-  core.notify("Changed directory to: " .. project_path, "info")
+  notify("Changed directory to: " .. project_path, "info")
   return project_path
 end
 
 -- Create project files
-M.create_files = function(project_path)
+P.create_files = function(project_path)
   -- Copy plugin assets to project first
-  M.copy_assets_to_project(project_path)
+  P.copy_assets_to_project(project_path)
   
   -- Validate asset paths after copying
-  if not M.validate_asset_paths(project_path) then
-    core.notify("Warning: Some asset paths may not work correctly", "warn")
+  if not P.validate_asset_paths(project_path) then
+    notify("Warning: Some asset paths may not work correctly", "warn")
   end
   
   -- Create index.html
@@ -209,7 +210,7 @@ function draw() {
 end
 
 -- Copy plugin assets to project with bundled types and libraries
-M.copy_assets_to_project = function(project_path)
+P.copy_assets_to_project = function(project_path)
   local plugin_assets = core.get_asset_dir()
   local project_assets = project_path .. "/assets"
   
@@ -261,7 +262,7 @@ M.copy_assets_to_project = function(project_path)
 end
 
 -- Check if current directory is a valid p5.js project
-M.is_p5_project = function()
+P.is_p5_project = function()
   local cwd = vim.fn.getcwd()
   
   -- Check for index.html
@@ -292,7 +293,7 @@ M.is_p5_project = function()
 end
 
 -- Create fallback HTML for non-project directories
-M.create_fallback_html = function()
+P.create_fallback_html = function()
   local cwd = vim.fn.getcwd()
   local fallback_html = [[<!DOCTYPE html>
 <html lang="en">
@@ -334,8 +335,8 @@ M.create_fallback_html = function()
   return temp_file
 end
 
-M.setup = function(config)
-  M.config = config
+P.setup = function(config)
+  P.config = config
 end
 
-return M
+return P

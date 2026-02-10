@@ -1,9 +1,10 @@
 -- Live server management
-local M = {}
+local S = {}
 local core = require("p5.core")
+local notify = core.notify
 
 -- Default configuration
-M.config = {
+S.config = {
   port = 8000,
   auto_start = false,
   preferred_order = {"python", "bun", "deno", "node"},
@@ -27,9 +28,9 @@ M.config = {
 }
 
 -- Detect available server options
-M.detect_server = function()
+S.detect_server = function()
   local config = core.read_workspace_config()
-  local preferred_order = config and config.server and config.server.preferred_order or M.config.server.preferred_order
+  local preferred_order = config and config.server and config.server.preferred_order or S.config.server.preferred_order
 
   for _, server in ipairs(preferred_order) do
     local server_config = core.server_configs[server]
@@ -41,7 +42,7 @@ M.detect_server = function()
       if vim.fn.filereadable(server_script) == 1 then
         return server
       else
-        core.notify("Server script not found: " .. server_script, "warn")
+        notify("Server script not found: " .. server_script, "warn")
       end
     end
   end
@@ -50,7 +51,7 @@ M.detect_server = function()
 end
 
 -- Validate server before starting
-M.validate_server = function(server_type, port)
+S.validate_server = function(server_type, port)
   local server_config = core.server_configs[server_type]
   if not server_config then
     return false, "Unknown server type: " .. tostring(server_type)
@@ -86,7 +87,7 @@ M.validate_server = function(server_type, port)
 end
 
 -- Find available port starting from the given port
-M.find_available_port = function(start_port)
+S.find_available_port = function(start_port)
   local max_attempts = 20
   local preferred_ports = {}
   
@@ -115,12 +116,12 @@ M.find_available_port = function(start_port)
     end
   end
   
-  core.notify("Warning: Could not find an available port, using " .. start_port .. " anyway", "warn")
+  notify("Warning: Could not find an available port, using " .. start_port .. " anyway", "warn")
   return start_port -- Fallback to original port if all are taken
 end
 
 -- Get server command
-M.get_server_command = function(server_type, port)
+S.get_server_command = function(server_type, port)
   local plugin_root = core.get_plugin_root()
   
   local server_config = core.server_configs[server_type]
@@ -140,60 +141,60 @@ M.get_server_command = function(server_type, port)
 end
 
 -- Start live server
-M.start_server = function(port)
+S.start_server = function(port)
   -- Check if we're in a p5.js project
   local project = require("p5.project")
   local is_project, project_msg, project_info = project.is_p5_project()
   
   if not is_project then
-    core.notify("Must be in a p5.js project to start server", "error")
-    core.notify("Use :P5CreateProject to create a new project first", "info")
+    notify("Must be in a p5.js project to start server", "error")
+    notify("Use :P5CreateProject to create a new project first", "info")
     return
   end
   
-  local server_type = M.detect_server()
+  local server_type = S.detect_server()
   if not server_type then
-    core.notify("No suitable server found (python3, bun, deno, or node)", "error")
-    core.notify("Please install one of the supported runtimes", "info")
+    notify("No suitable server found (python3, bun, deno, or node)", "error")
+    notify("Please install one of the supported runtimes", "info")
     return
   end
 
-  port = port or M.config.server.port or 8000
+  port = port or S.config.server.port or 8000
   
   -- Check if port is available and find alternative if needed
-  local actual_port = M.find_available_port(port)
+  local actual_port = S.find_available_port(port)
   if actual_port ~= port then
-    core.notify("Port " .. port .. " in use, using " .. actual_port .. " instead", "warn")
+    notify("Port " .. port .. " in use, using " .. actual_port .. " instead", "warn")
     port = actual_port
   end
   
   -- Validate server before starting
-  local valid, message = M.validate_server(server_type, port)
+  local valid, message = S.validate_server(server_type, port)
   if not valid then
-    core.notify("Server validation failed: " .. message, "error")
+    notify("Server validation failed: " .. message, "error")
     return
   end
   
-  M.port = port
-  M.server_type = server_type
-  core.notify("Starting " .. server_type .. " server on port " .. port, "info")
+  S.port = port
+  S.server_type = server_type
+  notify("Starting " .. server_type .. " server on port " .. port, "info")
 
-  local cmd = M.get_server_command(server_type, port)
+  local cmd = S.get_server_command(server_type, port)
   if not cmd then
-    core.notify("Failed to get server command for: " .. server_type, "error")
+    notify("Failed to get server command for: " .. server_type, "error")
     return
   end
 
   -- Console polling will be started after server is ready
-  M.server_start_time = os.time()
+  S.server_start_time = os.time()
 
-  M.server_job = vim.fn.jobstart(cmd, {
+  S.server_job = vim.fn.jobstart(cmd, {
     on_stdout = function(_, data)
       if data and #data > 0 and data[1] ~= "" then
         -- Process server output for ready signal
         for _, line in ipairs(data) do
           if line:match("Server running at") then
-            core.notify("Server confirmed ready", "ok")
+            notify("Server confirmed ready", "ok")
           end
         end
       end
@@ -204,13 +205,13 @@ M.start_server = function(port)
         
         -- Handle specific error cases
         if error_msg:match("Address already in use") then
-          core.notify("Port " .. port .. " is already in use. Try a different port.", "error")
+          notify("Port " .. port .. " is already in use. Try a different port.", "error")
         elseif error_msg:match("Permission denied") then
-          core.notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "error")
+          notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "error")
         elseif error_msg:match("EACCES") then
-          core.notify("Access denied. Check file permissions.", "error")
+          notify("Access denied. Check file permissions.", "error")
         else
-          core.notify("Server error: " .. error_msg, "error")
+          notify("Server error: " .. error_msg, "error")
         end
       end
     end,
@@ -220,7 +221,7 @@ M.start_server = function(port)
       console.stop_console_polling()
       
       if exit_code == 0 then
-        core.notify("Server stopped successfully", "info")
+        notify("Server stopped successfully", "info")
       else
         local reason = ""
         if event == "exit" then
@@ -231,84 +232,84 @@ M.start_server = function(port)
           reason = " (event: " .. (event or "unknown") .. ")"
         end
         
-        core.notify("Server stopped with code " .. exit_code .. reason, "warn")
+        notify("Server stopped with code " .. exit_code .. reason, "warn")
       end
       
-      M.server_job = nil
-      M.server_type = nil
+      S.server_job = nil
+      S.server_type = nil
     end
   })
 
-  if M.server_job > 0 then
+  if S.server_job > 0 then
     local url = "http://localhost:" .. port
-    core.notify("Server started (" .. server_type .. ") at " .. url, "ok")
-    core.notify("Console integration: :P5ToggleConsole", "info")
+    notify("Server started (" .. server_type .. ") at " .. url, "ok")
+    notify("Console integration: :P5ToggleConsole", "info")
     
     -- Start console polling AFTER server is confirmed ready
-    if M.config.console.enabled then
+    if S.config.console.enabled then
       vim.defer_fn(function()
-        M.start_console_after_ready()
+        S.start_console_after_ready()
       end, 2000) -- Wait 2 seconds for server to be ready
     end
     
     -- Auto-open browser
-    if M.config.server.auto_open_browser ~= false then
-      M.open_browser(url)
+    if S.config.server.auto_open_browser ~= false then
+      S.open_browser(url)
     end
     
     -- Show console if enabled
-    if M.config.console.auto_show then
+    if S.config.console.auto_show then
       vim.defer_fn(function()
         console.show()
       end, 2500) -- Show console after server is ready
     end
   else
-    core.notify("Failed to start server", "error")
+    notify("Failed to start server", "error")
   end
 end
 
 -- Stop live server
-M.stop_server = function()
-  if not M.server_job then
-    core.notify("No server running", "warn")
+S.stop_server = function()
+  if not S.server_job then
+    notify("No server running", "warn")
     return
   end
 
-  local stopped_port = M.port -- Store port for notification
-  local server_type = M.server_type -- Store server type for notification
+  local stopped_port = S.port -- Store port for notification
+  local server_type = S.server_type -- Store server type for notification
   
-  vim.fn.jobstop(M.server_job)
-  M.server_job = nil
-  M.server_type = nil
+  vim.fn.jobstop(S.server_job)
+  S.server_job = nil
+  S.server_type = nil
   
   -- Stop console polling
   local console = require("p5.console")
   console.stop_console_polling()
   
-  core.notify("Server stopped on port " .. stopped_port .. " (" .. server_type .. ")", "info")
+  notify("Server stopped on port " .. stopped_port .. " (" .. server_type .. ")", "info")
 end
 
 -- Start console polling after server is ready
-M.start_console_after_ready = function()
+S.start_console_after_ready = function()
   local console = require("p5.console")
   local core_ref = require("p5.core")
   
   -- Pass the actual server port to console module
-  local console_config = vim.deepcopy(M.config)
+  local console_config = vim.deepcopy(S.config)
   console_config.server = {
-    port = M.port,
+    port = S.port,
     auto_start = false
   }
   
-  local console_started = console.start_console_polling(M.port)
+  local console_started = console.start_console_polling(S.port)
   
   if console_started then
-    core_ref.notify("Console polling started on port " .. M.port, "ok")
+    core_ref.notify("Console polling started on port " .. S.port, "ok")
   end
 end
 
 -- Open browser with cross-platform support
-M.open_browser = function(url)
+S.open_browser = function(url)
   local open_cmd
   
   -- Detect OS and use appropriate command
@@ -330,51 +331,51 @@ M.open_browser = function(url)
   
   local result = vim.fn.system(open_cmd)
   if vim.v.shell_error ~= 0 then
-    core.notify("Failed to open browser: " .. vim.trim(result), "warn")
-    core.notify("Please open manually: " .. url, "info")
+    notify("Failed to open browser: " .. vim.trim(result), "warn")
+    notify("Please open manually: " .. url, "info")
   end
 end
 
 -- Start server with fallback HTML
-M.start_server_with_fallback = function(port)
+S.start_server_with_fallback = function(port)
   local project = require("p5.project")
   local fallback_file = project.create_fallback_html()
   
-  local server_type = M.detect_server()
+  local server_type = S.detect_server()
   if not server_type then
-    core.notify("No suitable server found (python3, bun, deno, or node)", "error")
+    notify("No suitable server found (python3, bun, deno, or node)", "error")
     return
   end
 
-  port = port or M.config.server.port or 8000
+  port = port or S.config.server.port or 8000
   
   -- Validate server before starting
-  local valid, message = M.validate_server(server_type, port)
+  local valid, message = S.validate_server(server_type, port)
   if not valid then
-    core.notify("Server validation failed: " .. message, "error")
+    notify("Server validation failed: " .. message, "error")
     return
   end
   
-  M.port = port
-  M.server_type = server_type
-  core.notify("Starting " .. server_type .. " server with fallback page on port " .. port, "info")
+  S.port = port
+  S.server_type = server_type
+  notify("Starting " .. server_type .. " server with fallback page on port " .. port, "info")
 
-  local cmd = M.get_server_command(server_type, port)
+  local cmd = S.get_server_command(server_type, port)
   if not cmd then
-    core.notify("Failed to get server command for: " .. server_type, "error")
+    notify("Failed to get server command for: " .. server_type, "error")
     return
   end
 
   -- Console polling will be started after server is ready
-  M.server_start_time = os.time()
+  S.server_start_time = os.time()
 
-  M.server_job = vim.fn.jobstart(cmd, {
+  S.server_job = vim.fn.jobstart(cmd, {
     on_stdout = function(_, data)
       if data and #data > 0 and data[1] ~= "" then
         -- Process server output for ready signal
         for _, line in ipairs(data) do
           if line:match("Server running at") then
-            core.notify("Server confirmed ready", "ok")
+            notify("Server confirmed ready", "ok")
           end
         end
       end
@@ -385,13 +386,13 @@ M.start_server_with_fallback = function(port)
         
         -- Handle specific error cases
         if error_msg:match("Address already in use") then
-          core.notify("Port " .. port .. " is already in use. Try a different port.", "error")
+          notify("Port " .. port .. " is already in use. Try a different port.", "error")
         elseif error_msg:match("Permission denied") then
-          core.notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "error")
+          notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "error")
         elseif error_msg:match("EACCES") then
-          core.notify("Access denied. Check file permissions.", "error")
+          notify("Access denied. Check file permissions.", "error")
         else
-          core.notify("Server error: " .. error_msg, "error")
+          notify("Server error: " .. error_msg, "error")
         end
       end
     end,
@@ -406,7 +407,7 @@ M.start_server_with_fallback = function(port)
       end
       
       if exit_code == 0 then
-        core.notify("Server stopped successfully", "info")
+        notify("Server stopped successfully", "info")
       else
         local reason = ""
         if event == "exit" then
@@ -417,45 +418,45 @@ M.start_server_with_fallback = function(port)
           reason = " (event: " .. (event or "unknown") .. ")"
         end
         
-        core.notify("Server stopped with code " .. exit_code .. reason, "warn")
+        notify("Server stopped with code " .. exit_code .. reason, "warn")
       end
       
-      M.server_job = nil
-      M.server_type = nil
+      S.server_job = nil
+      S.server_type = nil
     end
   })
 
-  if M.server_job > 0 then
+  if S.server_job > 0 then
     local url = "http://localhost:" .. port .. "/.p5-temp.html"
-    core.notify("Server started (" .. server_type .. ") at " .. url, "ok")
+    notify("Server started (" .. server_type .. ") at " .. url, "ok")
     
     -- Start console polling AFTER server is confirmed ready
-    if M.config.console.enabled then
+    if S.config.console.enabled then
       vim.defer_fn(function()
-        M.start_console_after_ready()
+        S.start_console_after_ready()
       end, 2000) -- Wait 2 seconds for server to be ready
     end
     
     -- Auto-open browser
-    if M.config.server.auto_open_browser ~= false then
-      M.open_browser(url)
+    if S.config.server.auto_open_browser ~= false then
+      S.open_browser(url)
     end
     
     -- Show console if enabled
-    if M.config.console.auto_show then
+    if S.config.console.auto_show then
       vim.defer_fn(function()
         local console = require("p5.console")
         console.show()
       end, 2500) -- Show console after server is ready
     end
   else
-    core.notify("Failed to start server", "error")
+    notify("Failed to start server", "error")
   end
 end
 
 -- Setup server module
-M.setup = function(config)
-  M.config = vim.tbl_deep_extend("force", M.config, config or {})
+S.setup = function(config)
+  S.config = vim.tbl_deep_extend("force", S.config, config or {})
 end
 
-return M
+return S

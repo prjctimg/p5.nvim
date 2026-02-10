@@ -4,8 +4,8 @@ A Neovim plugin for creative coding with p5.js, providing live development serve
 
 ## Features
 
-- 🚀 **Live Development Server** - Auto-reloading HTTP server with multiple runtime support
-- 📡 **Browser Console Integration** - HTTP-based console log streaming to a toggleable Neovim window
+ - 🚀 **Live Development Server** - Auto-reloading HTTP server with multiple runtime support and smart port management
+ - 📡 **Browser Console Integration** - Real-time console log streaming with ANSI color formatting and async communication
 - 📝 **TypeScript Support** - Bundled p5.js type definitions with jsconfig.json and tsconfig.json
 - 📦 **Library Management** - Install contributor libraries from GitHub releases with CDN fallback
 - 🏗️ **Project Templates** - One-command project creation with proper structure
@@ -16,6 +16,24 @@ A Neovim plugin for creative coding with p5.js, providing live development serve
 - 🎨 **Syntax Highlighting** - Console logs with level-based highlighting
 - 🔄 **Live Reload** - Automatic page refresh on file changes
 - 📋 **GitHub Gist Integration** - Create and share p5.js sketches
+
+## Recent Improvements
+
+### 🎉 Enhanced User Experience (v2.0+)
+
+- **Smart CWD Management**: Project creation automatically changes working directory
+- **Enhanced Notifications**: Dual notifications for project creation and detailed port information
+- **Console Redesign**: ANSI-formatted logs with colors (no more JSON dumps)
+- **Async Communication**: Server-Sent Events with debounced processing eliminates browser lag
+- **Port Intelligence**: Automatic port finding, conflict handling, and privileged port validation
+- **Performance Optimized**: Batched logging and streaming reduces browser overhead
+
+### 🔄 Workflow Improvements
+
+- `:P5CreateProject` now requires p5.js project context for `:P5StartServer`
+- Console shows colored, readable logs with timestamps and sources
+- Server automatically finds available ports when conflicts occur
+- Better error handling and user feedback throughout
 
 ## Requirements
 
@@ -109,10 +127,11 @@ require("p5").setup({
 
 | Command | Description |
 |---------|-------------|
-| `:P5NewProject [name]` | Create new p5.js project |
-| `:P5StartServer [port]` | Start development server |
+| `:P5CreateProject [name]` | Create new p5.js project (auto-changes directory) |
+| `:P5NewProject [name]` | Alias for :P5CreateProject |
+| `:P5StartServer [port]` | Start development server (requires p5.js project) |
 | `:P5StopServer` | Stop development server |
-| `:P5ToggleConsole` | Toggle browser console window |
+| `:P5ToggleConsole` | Toggle browser console window with formatted logs |
 | `:P5InstallLib [libs...]` | Install contributor libraries |
 | `:P5RemoveLib [libs...]` | Remove installed libraries |
 | `:P5UpdateLibs` | Update all installed libraries |
@@ -123,18 +142,36 @@ require("p5").setup({
 
 1. **Create a new project:**
    ```vim
-   :P5NewProject my-sketch
+   :P5CreateProject my-sketch
    ```
+
+   This will:
+   - Create a new p5.js project structure
+   - Automatically change to the project directory
+   - Show start and success notifications
+   - Open `sketch.js` for editing
 
 2. **Start the development server:**
    ```vim
    :P5StartServer
    ```
 
+   This will:
+   - Detect available server runtime (Python, Node.js, Deno, Bun)
+   - Find an available port (8000, 8001, etc. if occupied)
+   - Show port information and server status
+   - Auto-open browser (if configured)
+
 3. **Toggle the browser console (optional):**
    ```vim
    :P5ToggleConsole
    ```
+
+   This will:
+   - Show a terminal window with real-time console logs
+   - Display logs with color formatting (ERROR, WARN, INFO, LOG)
+   - Use async communication to avoid browser lag
+   - Show timestamps and source information
 
 4. **Start coding!** The server will auto-reload your browser when you save changes.
 
