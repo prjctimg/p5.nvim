@@ -6,5 +6,16 @@ if vim.fn.has('nvim-0.9.0') == 0 then
   return
 end
 
+-- User commands
+vim.api.nvim_create_user_command('P5CreateProject', function(opts)
+  local project = require("p5.project")
+  local name = opts.args and opts.args ~= "" and opts.args or "p5-sketch"
+  project.create_project(name)
+end, {
+  nargs = '?',
+  complete = 'file',
+  desc = 'Create a new p5.js project'
+})
+
 -- Load the plugin
 require('p5')

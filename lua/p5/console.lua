@@ -32,9 +32,9 @@ M.create_console_terminal = function()
 
   M.server_port = server.port
   
-  -- Create terminal command for real-time log streaming
+  -- Create terminal command for real-time log streaming (formatted)
   local curl_cmd = string.format(
-    'curl -s -N "http://localhost:%d/api/console/poll" 2>/dev/null',
+    'curl -s -N "http://localhost:%d/api/console/stream" 2>/dev/null',
     M.server_port
   )
 
@@ -339,6 +339,54 @@ M.get_injection_script = function()
           info: console.info
         };
         
+        // Debounce function to reduce browser load
+        function debounce(func, wait) {
+          let timeout;
+          return function executedFunction(...args) {
+            const later = () => {
+              clearTimeout(timeout);
+              func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+          };
+        }
+        
+        // Buffer for batching logs
+        let logBuffer = [];
+        let flushTimeout;
+        
+        function flushLogBuffer() {
+          if (logBuffer.length === 0) return;
+          
+          const logs = [...logBuffer];
+          logBuffer = [];
+          
+          // Send logs asynchronously
+          fetch('/api/console/log', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              type: 'console_batch',
+              logs: logs,
+              timestamp: new Date().toISOString()
+            })
+          }).catch(err => {
+            // If batch fails, try individual logs
+            logs.forEach(log => {
+              fetch('/api/console/log', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(log)
+              }).catch(() => {}); // Silently fail individual logs
+            });
+          });
+        }
+        
         function sendToConsole(level, args) {
           const message = args.map(arg => {
             if (typeof arg === 'object') {
@@ -351,50 +399,51 @@ M.get_injection_script = function()
             return String(arg);
           }).join(' ');
           
-          // Send via HTTP POST to server endpoint
-          fetch('/api/console/log', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              type: 'console',
-              level: level,
-              message: message,
-              source: 'javascript',
-              timestamp: new Date().toISOString()
-            })
-          }).catch(err => {
-            // Fallback to original console if fetch fails
-            originalConsole.log.apply(console, ['p5.nvim console error:', err]);
-          });
+          const logEntry = {
+            type: 'console',
+            level: level,
+            message: message,
+            source: 'javascript',
+            timestamp: new Date().toISOString()
+          };
+          
+          // Add to buffer
+          logBuffer.push(logEntry);
+          
+          // Flush buffer with debounce (100ms for better performance)
+          clearTimeout(flushTimeout);
+          flushTimeout = setTimeout(flushLogBuffer, 100);
         }
         
-        console.log = function(...args) {
+        // Debounced console methods to reduce frequency
+        console.log = debounce(function(...args) {
           originalConsole.log.apply(console, args);
           sendToConsole('log', args);
-        };
+        }, 50);
         
         console.error = function(...args) {
           originalConsole.error.apply(console, args);
-          sendToConsole('error', args);
+          sendToConsole('error', args); // No debounce for errors
         };
         
-        console.warn = function(...args) {
+        console.warn = debounce(function(...args) {
           originalConsole.warn.apply(console, args);
           sendToConsole('warn', args);
-        };
+        }, 100);
         
-        console.info = function(...args) {
+        console.info = debounce(function(...args) {
           originalConsole.info.apply(console, args);
           sendToConsole('info', args);
-        };
+        }, 150);
         
         // Handle uncaught errors
         window.onerror = function(msg, source, lineno, colno, error) {
           sendToConsole('error', [msg + ' at ' + source + ':' + lineno + ':' + colno]);
           return false;
         };
+        
+        // Flush buffer on page unload
+        window.addEventListener('beforeunload', flushLogBuffer);
       })();
     </script>]]
 end

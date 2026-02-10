@@ -68,15 +68,55 @@ M.validate_server = function(server_type, port)
     return false, "Server script not found: " .. server_script
   end
   
-  -- Check if port is available (basic check)
-  if port and port > 0 and port < 65536 then
-    local result = vim.fn.system("netstat -tuln 2>/dev/null | grep ':" .. port .. "'")
-    if vim.v.shell_error == 0 and result ~= "" then
-      return false, "Port " .. port .. " is already in use"
+  -- Validate port range
+  if not port or port <= 0 or port >= 65536 then
+    return false, "Invalid port number: " .. tostring(port)
+  end
+  
+  -- System port check (more robust)
+  if port < 1024 then
+    local result = vim.fn.system("id -u 2>/dev/null")
+    local user_id = vim.trim(result)
+    if user_id ~= "0" then
+      return false, "Port " .. port .. " requires root privileges (ports < 1024)"
     end
   end
   
   return true, "Server validation passed"
+end
+
+-- Find available port starting from the given port
+M.find_available_port = function(start_port)
+  local max_attempts = 20
+  local preferred_ports = {}
+  
+  -- Generate list of preferred ports to try
+  for i = 0, max_attempts - 1 do
+    table.insert(preferred_ports, start_port + i)
+  end
+  
+  -- Add some alternative ranges if preferred range is full
+  local alternative_ranges = {3000, 5000, 9000}
+  for _, base in ipairs(alternative_ranges) do
+    for i = 0, 9 do
+      table.insert(preferred_ports, base + i)
+    end
+  end
+  
+  for _, test_port in ipairs(preferred_ports) do
+    -- More robust port checking
+    local result = vim.fn.system(string.format("lsof -i:%d 2>/dev/null || netstat -tuln 2>/dev/null | grep ':%d'", test_port, test_port))
+    if vim.v.shell_error ~= 0 or result == "" then
+      -- Double check by trying to bind to the port briefly
+      local test_bind = vim.fn.system(string.format("timeout 1 bash -c 'echo > /dev/tcp/localhost/%d' 2>/dev/null", test_port))
+      if vim.v.shell_error ~= 0 then
+        return test_port
+      end
+    end
+  end
+  
+  core.notify("Warning: Could not find an available port, using " .. start_port .. " anyway", "warn")
+  return start_port -- Fallback to original port if all are taken
 end
 
 -- Get server command
@@ -106,29 +146,8 @@ M.start_server = function(port)
   local is_project, project_msg, project_info = project.is_p5_project()
   
   if not is_project then
-    -- Offer to create fallback or prompt for project creation
-    vim.ui.select({"Create fallback test page", "Create new p5.js project", "Cancel"}, {
-      prompt = project_msg .. ". What would you like to do?"
-    }, function(choice)
-      if choice == "Create fallback test page" then
-        M.start_server_with_fallback(port)
-      elseif choice == "Create new p5.js project" then
-        vim.ui.input({
-          prompt = "Project name: ",
-          default = "p5-sketch",
-        }, function(name)
-          if name and name ~= "" then
-            project.create_project(name)
-            -- After creating project, start server in the new directory
-            vim.defer_fn(function()
-              vim.cmd("cd " .. name)
-              M.start_server(port)
-            end, 1000)
-          end
-        end)
-      end
-      -- If Cancel or nil, do nothing
-    end)
+    core.notify("Must be in a p5.js project to start server", "error")
+    core.notify("Use :P5CreateProject to create a new project first", "info")
     return
   end
   
@@ -140,6 +159,13 @@ M.start_server = function(port)
   end
 
   port = port or M.config.server.port or 8000
+  
+  -- Check if port is available and find alternative if needed
+  local actual_port = M.find_available_port(port)
+  if actual_port ~= port then
+    core.notify("Port " .. port .. " in use, using " .. actual_port .. " instead", "warn")
+    port = actual_port
+  end
   
   -- Validate server before starting
   local valid, message = M.validate_server(server_type, port)
@@ -216,6 +242,7 @@ M.start_server = function(port)
   if M.server_job > 0 then
     local url = "http://localhost:" .. port
     core.notify("Server started (" .. server_type .. ") at " .. url, "ok")
+    core.notify("Console integration: :P5ToggleConsole", "info")
     
     -- Start console polling AFTER server is confirmed ready
     if M.config.console.enabled then
@@ -247,6 +274,9 @@ M.stop_server = function()
     return
   end
 
+  local stopped_port = M.port -- Store port for notification
+  local server_type = M.server_type -- Store server type for notification
+  
   vim.fn.jobstop(M.server_job)
   M.server_job = nil
   M.server_type = nil
@@ -255,7 +285,7 @@ M.stop_server = function()
   local console = require("p5.console")
   console.stop_console_polling()
   
-  core.notify("Server stopped", "info")
+  core.notify("Server stopped on port " .. stopped_port .. " (" .. server_type .. ")", "info")
 end
 
 -- Start console polling after server is ready

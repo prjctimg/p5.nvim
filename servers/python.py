@@ -21,6 +21,36 @@ last_reload_time = 0
 # Console log buffer for HTTP-based log streaming
 console_log_buffer = []
 
+# ANSI color codes for log formatting
+ANSI_COLORS = {
+    'reset': '\033[0m',
+    'error': '\033[1;31m',    # Bold red
+    'warn': '\033[1;33m',     # Bold yellow  
+    'info': '\033[1;36m',     # Bold cyan
+    'log': '\033[0;37m',      # White
+    'timestamp': '\033[0;90m'  # Dim gray
+}
+
+def format_log_entry(log_entry):
+    """Format a log entry with ANSI colors for better readability."""
+    level = log_entry.get('level', 'log').upper()
+    message = log_entry.get('message', '')
+    source = log_entry.get('source', 'browser')
+    
+    # Get timestamp in readable format
+    import time
+    timestamp = time.strftime('%H:%M:%S')
+    
+    # Get color for level
+    level_color = ANSI_COLORS.get(level.lower(), ANSI_COLORS['log'])
+    time_color = ANSI_COLORS['timestamp']
+    reset = ANSI_COLORS['reset']
+    
+    # Format: [TIME] LEVEL source: message
+    formatted = f"{time_color}[{timestamp}]{reset} {level_color}{level}{reset} {source}: {message}"
+    
+    return formatted
+
 class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
@@ -51,14 +81,20 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 content_length = int(self.headers['Content-Length'])
                 post_data = self.rfile.read(content_length)
-                log_entry = json.loads(post_data.decode('utf-8'))
+                log_data = json.loads(post_data.decode('utf-8'))
                 
-                # Add timestamp if not present
-                if 'timestamp' not in log_entry:
-                    log_entry['timestamp'] = time.time()
-                
-                # Store log entry for polling
-                console_log_buffer.append(log_entry)
+                # Handle both individual logs and batch logs
+                if log_data.get('type') == 'console_batch' and 'logs' in log_data:
+                    # Batch processing
+                    for log_entry in log_data['logs']:
+                        if 'timestamp' not in log_entry:
+                            log_entry['timestamp'] = time.time()
+                        console_log_buffer.append(log_entry)
+                else:
+                    # Individual log entry
+                    if 'timestamp' not in log_data:
+                        log_data['timestamp'] = time.time()
+                    console_log_buffer.append(log_data)
                 
                 # Send response
                 self.send_response(200)
@@ -76,8 +112,31 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
     
     def do_GET(self):
-        """Handle GET requests for console log polling."""
-        if self.path == '/api/console/poll':
+        """Handle GET requests for console log streaming."""
+        if self.path == '/api/console/stream':
+            """Server-Sent Events endpoint for real-time log streaming."""
+            try:
+                self.send_response(200)
+                self.send_header('Content-type', 'text/plain; charset=utf-8')
+                self.send_header('Cache-Control', 'no-cache')
+                self.send_header('Connection', 'keep-alive')
+                self.end_headers()
+                
+                # Stream any buffered logs first
+                logs = []
+                while console_log_buffer:
+                    logs.append(console_log_buffer.pop(0))
+                
+                for log_entry in logs:
+                    formatted = format_log_entry(log_entry)
+                    self.wfile.write((formatted + '\n').encode('utf-8'))
+                    self.wfile.flush()
+                
+            except Exception as e:
+                # If client disconnects, that's expected
+                pass
+                
+        elif self.path == '/api/console/poll':
             try:
                 # Get buffered logs and clear buffer
                 logs = []

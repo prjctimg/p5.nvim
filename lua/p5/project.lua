@@ -59,14 +59,17 @@ M.create_project = function(name)
   -- Validate bundled assets first
   if not M.validate_bundled_assets() then
     core.notify("Cannot create project - required assets are missing", "error")
-    return
+    return false
   end
   
   -- Check if directory already exists
   if vim.fn.isdirectory(name) ~= 0 then
     core.notify("Directory '" .. name .. "' already exists", "error")
-    return
+    return false
   end
+  
+  -- Notify project creation start
+  core.notify("Creating p5.js project: " .. name .. "...", "info")
   
   -- Create project directory
   vim.fn.mkdir(name, "p")
@@ -75,10 +78,17 @@ M.create_project = function(name)
   -- Create project files
   M.create_files(project_path)
   
+  -- Notify successful asset copying
+  core.notify("Assets copied successfully. Project created!", "ok")
+  
+  -- Change CWD to new project directory
+  vim.cmd("cd " .. project_path)
+  
   -- Open sketch.js in editor
   vim.cmd("edit " .. project_path .. "/sketch.js")
   
-  core.notify("Created p5.js project: " .. name, "info")
+  core.notify("Changed directory to: " .. project_path, "info")
+  return project_path
 end
 
 -- Create project files
