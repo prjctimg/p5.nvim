@@ -11,6 +11,9 @@ const DEBOUNCE_TIME = 300; // ms
 // Live reload tracking
 let lastReloadTime = 0;
 
+// Console log buffer for HTTP-based log streaming
+let consoleLogBuffer = [];
+
 const MIME_TYPES = {
   '.html': 'text/html',
   '.js': 'text/javascript',
@@ -33,16 +36,9 @@ function injectConsoleScript(htmlContent) {
   const consoleScript = `
   <script>
     (function() {
-      const ws = new WebSocket('ws://localhost:12001');
+      console.log('p5.nvim console integration enabled');
       
-      ws.onopen = function() {
-        console.log('Connected to p5.nvim console');
-      };
-      
-      ws.onclose = function() {
-        console.log('Disconnected from p5.nvim console');
-      };
-      
+      // Override console methods
       const originalConsole = {
         log: console.log,
         error: console.error,
@@ -62,13 +58,22 @@ function injectConsoleScript(htmlContent) {
           return String(arg);
         }).join(' ');
         
-        ws.send(JSON.stringify({
-          type: 'console',
-          level: level,
-          message: message,
-          source: 'javascript',
-          timestamp: new Date().toISOString()
-        }));
+        // Send via HTTP POST to server endpoint
+        fetch('/api/console/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'console',
+            level: level,
+            message: message,
+            source: 'javascript',
+            timestamp: new Date().toISOString()
+          })
+        }).catch(err => {
+          // Silently fail if server is unavailable
+        });
       }
       
       console.log = function(...args) {
@@ -91,14 +96,23 @@ function injectConsoleScript(htmlContent) {
         sendToConsole('info', args);
       };
       
+      // Handle uncaught errors
       window.onerror = function(msg, source, lineno, colno, error) {
-        ws.send(JSON.stringify({
-          type: 'console',
-          level: 'error',
-          message: msg + ' at ' + source + ':' + lineno + ':' + colno,
-          source: 'javascript',
-          timestamp: new Date().toISOString()
-        }));
+        fetch('/api/console/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'console',
+            level: 'error',
+            message: msg + ' at ' + source + ':' + lineno + ':' + colno,
+            source: 'javascript',
+            timestamp: new Date().toISOString()
+          })
+        }).catch(err => {
+          // Silently fail if server is unavailable
+        });
         return false;
       };
     })();
@@ -196,6 +210,42 @@ const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url);
   let pathname = parsedUrl.pathname;
 
+  // Handle console log POST requests
+  if (req.method === 'POST' && pathname === '/api/console/log') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+    req.on('end', () => {
+      try {
+        const logEntry = JSON.parse(body);
+        if (!logEntry.timestamp) {
+          logEntry.timestamp = new Date().toISOString();
+        }
+        consoleLogBuffer.push(logEntry);
+        
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: "received" }));
+      } catch (error) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: error.message }));
+      }
+    });
+    return;
+  }
+
+  // Handle console poll GET requests
+  if (req.method === 'GET' && pathname === '/api/console/poll') {
+    const logs = [];
+    while (consoleLogBuffer.length > 0) {
+      logs.push(consoleLogBuffer.shift());
+    }
+    
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(logs));
+    return;
+  }
+
   // Default to index.html
   if (pathname === '/') {
     pathname = '/index.html';
@@ -212,7 +262,7 @@ const server = http.createServer((req, res) => {
       return;
     }
 
-    // Inject WebSocket console script for HTML files
+    // Inject HTTP console script for HTML files
     let content = data;
     if (ext === '.html') {
       content = injectConsoleScript(data.toString());

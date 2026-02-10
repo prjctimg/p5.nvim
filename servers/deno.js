@@ -10,6 +10,9 @@ const DEBOUNCE_TIME = 300; // ms
 // Live reload tracking
 let lastReloadTime = 0;
 
+// Console log buffer for HTTP-based log streaming
+let consoleLogBuffer: any[] = [];
+
 const MIME_TYPES: Record<string, string> = {
   ".html": "text/html",
   ".js": "text/javascript",
@@ -32,16 +35,9 @@ function injectConsoleScript(htmlContent: string): string {
   const consoleScript = `
   <script>
     (function() {
-      const ws = new WebSocket('ws://localhost:12001');
+      console.log('p5.nvim console integration enabled');
       
-      ws.onopen = function() {
-        console.log('Connected to p5.nvim console');
-      };
-      
-      ws.onclose = function() {
-        console.log('Disconnected from p5.nvim console');
-      };
-      
+      // Override console methods
       const originalConsole = {
         log: console.log,
         error: console.error,
@@ -61,13 +57,22 @@ function injectConsoleScript(htmlContent: string): string {
           return String(arg);
         }).join(' ');
         
-        ws.send(JSON.stringify({
-          type: 'console',
-          level: level,
-          message: message,
-          source: 'javascript',
-          timestamp: new Date().toISOString()
-        }));
+        // Send via HTTP POST to server endpoint
+        fetch('/api/console/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'console',
+            level: level,
+            message: message,
+            source: 'javascript',
+            timestamp: new Date().toISOString()
+          })
+        }).catch(err => {
+          // Silently fail if server is unavailable
+        });
       }
       
       console.log = function(...args: any[]) {
@@ -90,14 +95,23 @@ function injectConsoleScript(htmlContent: string): string {
         sendToConsole('info', args);
       };
       
+      // Handle uncaught errors
       window.onerror = function(msg: string | Event, source: string, lineno: number, colno: number, error: Error) {
-        ws.send(JSON.stringify({
-          type: 'console',
-          level: 'error',
-          message: msg + ' at ' + source + ':' + lineno + ':' + colno,
-          source: 'javascript',
-          timestamp: new Date().toISOString()
-        }));
+        fetch('/api/console/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'console',
+            level: 'error',
+            message: msg + ' at ' + source + ':' + lineno + ':' + colno,
+            source: 'javascript',
+            timestamp: new Date().toISOString()
+          })
+        }).catch(err => {
+          // Silently fail if server is unavailable
+        });
         return false;
       };
     })();
@@ -193,6 +207,47 @@ async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
   let pathname = url.pathname;
 
+  // Handle console log POST requests
+  if (req.method === "POST" && pathname === "/api/console/log") {
+    try {
+      const body = await req.text();
+      const logEntry = JSON.parse(body);
+      if (!logEntry.timestamp) {
+        logEntry.timestamp = new Date().toISOString();
+      }
+      consoleLogBuffer.push(logEntry);
+      
+      return new Response(JSON.stringify({ status: "received" }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+  }
+
+  // Handle console poll GET requests
+  if (req.method === "GET" && pathname === "/api/console/poll") {
+    const logs: any[] = [];
+    while (consoleLogBuffer.length > 0) {
+      logs.push(consoleLogBuffer.shift());
+    }
+    
+    return new Response(JSON.stringify(logs), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
   if (pathname === "/") {
     pathname = "/index.html";
   }
@@ -210,7 +265,7 @@ async function handler(req: Request): Promise<Response> {
     const data = await readFile(filePath);
     let content = new TextDecoder().decode(data);
 
-    // Inject WebSocket console script for HTML files
+    // Inject HTTP console script for HTML files
     if (ext === ".html") {
       content = injectConsoleScript(content);
     }

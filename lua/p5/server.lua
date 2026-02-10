@@ -78,13 +78,13 @@ M.start_server = function(port)
     return
   end
 
-  -- Start WebSocket server for console integration
+  -- Start HTTP console polling for browser logs
   local console = require("p5.console")
   local core_ref = require("p5.core")
-  local ws_started = console.start_websocket_server()
+  local console_started = console.start_console_polling()
   
-  if ws_started then
-    core_ref.notify_fallback("Console WebSocket server started on port 12001", "ok")
+  if console_started then
+    core_ref.notify_fallback("Console polling started", "ok")
   end
 
   M.server_job = vim.fn.jobstart(cmd, {
@@ -107,8 +107,8 @@ M.start_server = function(port)
       M.server_job = nil
       M.server_type = nil
       
-      -- Stop WebSocket server when HTTP server stops
-      console.stop_websocket_server()
+      -- Stop console polling when HTTP server stops
+      console.stop_console_polling()
     end
   })
 
@@ -140,9 +140,9 @@ M.stop_server = function()
   M.server_job = nil
   M.server_type = nil
   
-  -- Stop WebSocket server
+  -- Stop console polling
   local console = require("p5.console")
-  console.stop_websocket_server()
+  console.stop_console_polling()
   
   core.notify("Server stopped", "info")
 end
