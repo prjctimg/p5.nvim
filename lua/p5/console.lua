@@ -145,11 +145,15 @@ M.add_log = function(level, message, source)
 end
 
 -- Start HTTP console polling for browser logs
-M.start_console_polling = function()
+M.start_console_polling = function(server_port)
   local core = require("p5.core")
   
-  -- Check if server is running
-  local server_url = "http://localhost:" .. (M.config.server.port or 8000)
+  -- Reset restart count on successful start
+  M.restart_count = 0
+  
+  -- Use provided port or fall back to config
+  local port = server_port or M.config.server.port or 8000
+  local server_url = "http://localhost:" .. port
   
   M.polling_job = vim.fn.jobstart(string.format("curl -s '%s/api/console/poll'", server_url), {
     on_stdout = function(_, data)
@@ -163,16 +167,41 @@ M.start_console_polling = function()
       end
     end,
     on_stderr = function(_, data)
-      -- Handle polling errors silently
+      -- Handle polling errors with better feedback
+      if data and #data > 0 and data[1] ~= "" then
+        local error_msg = table.concat(data, " ")
+        
+        -- Only show certain errors to avoid spam
+        if error_msg:match("Connection refused") then
+          -- Server might be starting up, this is expected
+        elseif error_msg:match("No route to host") or error_msg:match("Could not resolve host") then
+          local core = require("p5.core")
+          core.notify("Console polling: Server not reachable", "warn")
+        end
+      end
     end,
     on_exit = function(_, exit_code)
       if exit_code ~= 0 and M.console_enabled then
-        -- Restart polling if server is still expected to be running
-        vim.defer_fn(function()
-          if M.console_enabled then
-            M.start_console_polling()
-          end
-        end, 1000)
+        local core = require("p5.core")
+        
+        -- Implement exponential backoff for restarts
+        local current_time = os.time()
+        local last_restart = M.last_console_restart or 0
+        local restart_delay = math.min(5000, 1000 * (2 ^ M.restart_count)) -- Max 5 seconds
+        
+        -- Avoid too frequent restarts
+        if current_time - last_restart > 10 then
+          M.restart_count = (M.restart_count or 0) + 1
+          M.last_console_restart = current_time
+          
+          -- Restart polling if server is still expected to be running
+          vim.defer_fn(function()
+            if M.console_enabled then
+              core.notify("Restarting console polling (attempt " .. M.restart_count .. ")", "info")
+              M.start_console_polling(server_port)
+            end
+          end, restart_delay)
+        end
       end
     end
   })

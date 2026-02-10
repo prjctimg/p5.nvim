@@ -15,12 +15,12 @@ M.check_dependencies = function()
     vim.health.error("snacks.nvim: not found - required for notifications and UI")
   end
   
-  -- Check websocket.nvim
-  local websocket = core.require_websocket()
-  if websocket then
-    vim.health.ok("websocket.nvim: available")
+  -- Check chrome-remote.nvim
+  local chrome_remote = core.require_chrome_remote()
+  if chrome_remote then
+    vim.health.ok("chrome-remote.nvim: available")
   else
-    vim.health.error("websocket.nvim: not found - required for browser console")
+    vim.health.warn("chrome-remote.nvim: not found - optional for Chrome DevTools Protocol support")
   end
 end
 
