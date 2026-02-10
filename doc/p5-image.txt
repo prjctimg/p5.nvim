@@ -41,7 +41,7 @@ Table of Contents                      *p5-image-table-of-contents*
 🖼️ image module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-08 12:19:35Z~
+⏰ Last Updated: 2026-02-10 04:21:24Z~
 
 ==============================================================================
 2. Functions                                           |p5-image-functions|
