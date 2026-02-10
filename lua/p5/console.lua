@@ -144,58 +144,51 @@ M.add_log = function(level, message, source)
   end
 end
 
--- Start WebSocket server for browser logs
-M.start_websocket_server = function()
+-- Start HTTP console polling for browser logs
+M.start_console_polling = function()
   local core = require("p5.core")
   
-  -- Try to load websocket library
-  local ok, server_mod = pcall(require, "websocket.server")
-  if not ok then
-    core.notify("WebSocket library not available. Console integration disabled.", "warn")
-    return false
-  end
+  -- Check if server is running
+  local server_url = "http://localhost:" .. (M.config.server.port or 8000)
   
-  local WebsocketServer = server_mod.WebsocketServer
-  M.ws_server = WebsocketServer.new({
-    host = "localhost",
-    port = 12001,
-    on_message = function(self, client_id, message)
-      local ok, data = pcall(vim.fn.json_decode, message)
-      if not ok then
-        M.add_log("warn", "Invalid JSON message from browser", "ws:" .. client_id)
-        return
-      end
-
-      if data.type == "console" then
-        M.add_log(data.level or "log", data.message or "", data.source or "browser")
+  M.polling_job = vim.fn.jobstart(string.format("curl -s '%s/api/console/poll'", server_url), {
+    on_stdout = function(_, data)
+      for _, line in ipairs(data) do
+        if line and line ~= "" then
+          local ok, log_entry = pcall(vim.fn.json_decode, line)
+          if ok then
+            M.add_log(log_entry.level or "log", log_entry.message or "", log_entry.source or "browser")
+          end
+        end
       end
     end,
-    on_client_connect = function(self, client_id)
-      M.add_log("info", "Browser connected", "ws:" .. client_id)
+    on_stderr = function(_, data)
+      -- Handle polling errors silently
     end,
-    on_client_disconnect = function(self, client_id)
-      M.add_log("info", "Browser disconnected", "ws:" .. client_id)
-    end,
-    on_error = function(self, err)
-      M.add_log("error", "WebSocket error: " .. tostring(err), "server")
+    on_exit = function(_, exit_code)
+      if exit_code ~= 0 and M.console_enabled then
+        -- Restart polling if server is still expected to be running
+        vim.defer_fn(function()
+          if M.console_enabled then
+            M.start_console_polling()
+          end
+        end, 1000)
+      end
     end
   })
-
-  local started = M.ws_server:try_start()
-  if started then
-    M.add_log("info", "WebSocket server started on port 12001", "server")
-  end
-
-  return started
+  
+  M.add_log("info", "Console polling started", "server")
+  return true
 end
 
--- Stop WebSocket server
-M.stop_websocket_server = function()
-  if M.ws_server then
-    M.ws_server:try_stop()
-    M.ws_server = nil
-    M.add_log("info", "WebSocket server stopped", "server")
+-- Stop console polling
+M.stop_console_polling = function()
+  if M.polling_job then
+    vim.fn.jobstop(M.polling_job)
+    M.polling_job = nil
+    M.add_log("info", "Console polling stopped", "server")
   end
+  M.console_enabled = false
 end
 
 -- Generate JavaScript code to inject in HTML
@@ -203,15 +196,7 @@ M.get_injection_script = function()
   return [[
     <script>
       (function() {
-        const ws = new WebSocket('ws://localhost:12001');
-        
-        ws.onopen = function() {
-          console.log('Connected to p5.nvim console');
-        };
-        
-        ws.onclose = function() {
-          console.log('Disconnected from p5.nvim console');
-        };
+        console.log('p5.nvim console integration enabled');
         
         // Override console methods
         const originalConsole = {
@@ -233,13 +218,23 @@ M.get_injection_script = function()
             return String(arg);
           }).join(' ');
           
-          ws.send(JSON.stringify({
-            type: 'console',
-            level: level,
-            message: message,
-            source: 'javascript',
-            timestamp: new Date().toISOString()
-          }));
+          // Send via HTTP POST to server endpoint
+          fetch('/api/console/log', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              type: 'console',
+              level: level,
+              message: message,
+              source: 'javascript',
+              timestamp: new Date().toISOString()
+            })
+          }).catch(err => {
+            // Fallback to original console if fetch fails
+            originalConsole.log.apply(console, ['p5.nvim console error:', err]);
+          });
         }
         
         console.log = function(...args) {
@@ -264,13 +259,7 @@ M.get_injection_script = function()
         
         // Handle uncaught errors
         window.onerror = function(msg, source, lineno, colno, error) {
-          ws.send(JSON.stringify({
-            type: 'console',
-            level: 'error',
-            message: msg + ' at ' + source + ':' + lineno + ':' + colno,
-            source: 'javascript',
-            timestamp: new Date().toISOString()
-          }));
+          sendToConsole('error', [msg + ' at ' + source + ':' + lineno + ':' + colno]);
           return false;
         };
       })();
@@ -280,12 +269,18 @@ end
 -- Setup console integration
 M.setup = function(config)
   M.config = config
+  M.console_enabled = true
   
   -- Create highlight groups
   vim.api.nvim_set_hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
   vim.api.nvim_set_hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
   vim.api.nvim_set_hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
   vim.api.nvim_set_hl(0, "P5ConsoleLog", { fg = "#6272a4" })
+  
+  -- Start console polling if enabled
+  if config.console and config.console.enabled then
+    M.start_console_polling()
+  end
 end
 
 return M

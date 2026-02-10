@@ -5,7 +5,7 @@ A Neovim plugin for creative coding with p5.js, providing live development serve
 ## Features
 
 - 🚀 **Live Development Server** - Auto-reloading HTTP server with multiple runtime support
-- 📡 **Browser Console Integration** - Stream browser console logs to a toggleable Neovim window
+- 📡 **Browser Console Integration** - HTTP-based console log streaming to a toggleable Neovim window
 - 📝 **TypeScript Support** - Bundled p5.js type definitions with jsconfig.json and tsconfig.json
 - 📦 **Library Management** - Install contributor libraries from GitHub releases with CDN fallback
 - 🏗️ **Project Templates** - One-command project creation with proper structure
@@ -29,7 +29,7 @@ A Neovim plugin for creative coding with p5.js, providing live development serve
   - `curl` or `wget` (for library downloads)
   - `xdg-open` (Linux) or equivalent (for auto-opening browser)
 - **Required Dependencies**:
-  - `websocket.nvim` (for browser console integration)
+  - `chrome-remote.nvim` (for Chrome DevTools Protocol support)
 - **Optional Dependencies**:
   - `gh` CLI (for GitHub Gist integration)
   - `snacks.nvim` (for enhanced UI components)
@@ -43,7 +43,7 @@ A Neovim plugin for creative coding with p5.js, providing live development serve
   "prjctimg/p5.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "samsze0/websocket.nvim", -- Required for browser console integration
+    "akinsho/chrome-remote.nvim", -- Required for Chrome DevTools Protocol support
     optional_dependencies = {
       "folke/snacks.nvim", -- For enhanced UI
       "nvim-neotest/nvim-nio", -- For async operations
@@ -64,7 +64,7 @@ use {
   "prjctimg/p5.nvim",
   requires = {
     "nvim-lua/plenary.nvim",
-    "samsze0/websocket.nvim", -- Required for browser console integration
+    "akinsho/chrome-remote.nvim", -- Required for Chrome DevTools Protocol support
     optional_dependencies = {
       "folke/snacks.nvim",
       "nvim-neotest/nvim-nio",
@@ -199,8 +199,8 @@ The browser console integration streams all console output to a Neovim window:
 
 p5.nvim automatically detects and uses available server runtimes:
 
-1. **Python** (default) - Robust HTTP server with WebSocket support
-2. **Bun** - Fast JavaScript runtime with built-in WebSocket
+1. **Python** (default) - Robust HTTP server with console log streaming
+2. **Bun** - Fast JavaScript runtime with HTTP support
 3. **Deno** - Secure TypeScript runtime
 4. **Node.js** - Traditional Node.js server
 
@@ -254,9 +254,10 @@ Create and share p5.js sketches directly from Neovim:
 
 ### Console Not Working
 
-1. Ensure `websocket.nvim` is installed (optional dependency)
-2. Check that your browser allows WebSocket connections
-3. Verify the console WebSocket port (12001) isn't blocked
+1. Ensure `chrome-remote.nvim` is installed (required dependency)
+2. Check that your browser allows HTTP connections to the server
+3. Verify the server port (default 8000) isn't blocked
+4. Ensure curl is available for console polling
 
 ### Library Installation Fails
 
@@ -289,7 +290,7 @@ This will verify:
 - Server runtime availability
 - External tool access (curl, wget, gh)
 - Asset integrity and paths
-- WebSocket functionality
+- HTTP console polling functionality
 
 ## Contributing
 
@@ -303,5 +304,5 @@ MIT License - see the [LICENSE](LICENSE) file for details.
 
 - [p5.js](https://p5js.org/) - Creative coding library
 - [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) - Lua utilities
-- [websocket.nvim](https://github.com/nvim-neotest/nvim-nio) - WebSocket support
+- [chrome-remote.nvim](https://github.com/akinsho/chrome-remote.nvim) - Chrome DevTools Protocol support
 - [snacks.nvim](https://github.com/folke/snacks.nvim) - Enhanced UI components

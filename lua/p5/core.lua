@@ -67,10 +67,10 @@ M.require_snacks = function()
   return nil
 end
 
-M.require_websocket = function()
-  local ok, websocket = pcall(require, "websocket")
+M.require_chrome_remote = function()
+  local ok, chrome_remote = pcall(require, "chrome-remote")
   if ok then
-    return websocket
+    return chrome_remote
   end
   return nil
 end
@@ -361,17 +361,12 @@ M.get_p5_version = function()
   return nil
 end
 
--- WebSocket initialization
-M.init_websocket = function(error_msg)
-  local ok, websocket = pcall(require, "websocket")
+-- Chrome Remote initialization
+M.init_chrome_remote = function(error_msg)
+  local ok, chrome_remote = pcall(require, "chrome-remote")
   if not ok then
-    M.notify(error_msg or "WebSocket library not available", "error")
+    M.notify(error_msg or "Chrome Remote library not available", "error")
     return false
-  end
-  
-  -- Initialize websocket library if setup function exists
-  if websocket.setup then
-    websocket.setup()
   end
   
   return true

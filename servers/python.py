@@ -18,6 +18,9 @@ DEBOUNCE_TIME = 0.3  # seconds
 reload_clients = set()
 last_reload_time = 0
 
+# Console log buffer for HTTP-based log streaming
+console_log_buffer = []
+
 class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
@@ -30,7 +33,74 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         super().end_headers()
     
+    
+    
+    def translate_path(self, path):
+        path = unquote(path)
+        if path.startswith('/'):
+            path = path[1:]
+        return os.path.join(DIRECTORY, path)
+    
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.end_headers()
+    
+    def do_POST(self):
+        """Handle POST requests for console logs."""
+        if self.path == '/api/console/log':
+            try:
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length)
+                log_entry = json.loads(post_data.decode('utf-8'))
+                
+                # Add timestamp if not present
+                if 'timestamp' not in log_entry:
+                    log_entry['timestamp'] = time.time()
+                
+                # Store log entry for polling
+                console_log_buffer.append(log_entry)
+                
+                # Send response
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "received"}).encode('utf-8'))
+                
+            except Exception as e:
+                self.send_response(400)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+        else:
+            self.send_response(404)
+            self.end_headers()
+    
     def do_GET(self):
+        """Handle GET requests for console log polling."""
+        if self.path == '/api/console/poll':
+            try:
+                # Get buffered logs and clear buffer
+                logs = []
+                while console_log_buffer:
+                    logs.append(console_log_buffer.pop(0))
+                
+                # Send response
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps(logs).encode('utf-8'))
+                
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+        else:
+            # Handle regular GET requests
+            self.handle_regular_get()
+    
+    def handle_regular_get(self):
+        """Handle regular file GET requests."""
         # Handle root path
         if self.path == '/':
             self.path = '/index.html'
@@ -61,35 +131,15 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         # Fallback to normal file serving
         super().do_GET()
     
-    def translate_path(self, path):
-        path = unquote(path)
-        if path.startswith('/'):
-            path = path[1:]
-        return os.path.join(DIRECTORY, path)
-    
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.end_headers()
-    
     def log_message(self, format, *args):
         # Suppress default logging
         pass
     
     def inject_console_script(self, html_content):
-        """Inject WebSocket console script into HTML content."""
+        """Inject HTTP-based console script into HTML content."""
         console_script = '''
   <script>
     (function() {
-      const ws = new WebSocket('ws://localhost:12001');
-      
-      ws.onopen = function() {
-        console.log('Connected to p5.nvim console');
-      };
-      
-      ws.onclose = function() {
-        console.log('Disconnected from p5.nvim console');
-      };
-      
       const originalConsole = {
         log: console.log,
         error: console.error,
@@ -109,13 +159,22 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
           return String(arg);
         }).join(' ');
         
-        ws.send(JSON.stringify({
-          type: 'console',
-          level: level,
-          message: message,
-          source: 'javascript',
-          timestamp: new Date().toISOString()
-        }));
+        // Send via HTTP POST instead of WebSocket
+        fetch('/api/console/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'console',
+            level: level,
+            message: message,
+            source: 'javascript',
+            timestamp: new Date().toISOString()
+          })
+        }).catch(err => {
+          // Silently fail if server is unavailable
+        });
       }
       
       console.log = function(...args) {
@@ -139,13 +198,21 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
       };
       
       window.onerror = function(msg, source, lineno, colno, error) {
-        ws.send(JSON.stringify({
-          type: 'console',
-          level: 'error',
-          message: msg + ' at ' + source + ':' + lineno + ':' + colno,
-          source: 'javascript',
-          timestamp: new Date().toISOString()
-        }));
+        fetch('/api/console/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'console',
+            level: 'error',
+            message: msg + ' at ' + source + ':' + lineno + ':' + colno,
+            source: 'javascript',
+            timestamp: new Date().toISOString()
+          })
+        }).catch(err => {
+          // Silently fail if server is unavailable
+        });
         return false;
       };
     })();
