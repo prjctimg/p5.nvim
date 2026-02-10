@@ -1,7 +1,7 @@
 -- Project creation and management for p5.nvim
 local P = {}
-local notify = core.notify
 local core = require("p5.core")
+local notify = core.notify
 
 -- Validate bundled assets before project creation
 P.validate_bundled_assets = function()

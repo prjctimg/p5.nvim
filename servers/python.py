@@ -114,7 +114,7 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         """Handle GET requests for console log streaming."""
         if self.path == '/api/console/stream':
-            """Server-Sent Events endpoint for real-time log streaming."""
+            # Server-Sent Events endpoint for real-time log streaming
             try:
                 self.send_response(200)
                 self.send_header('Content-type', 'text/plain; charset=utf-8')
@@ -195,87 +195,128 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         pass
     
     def inject_console_script(self, html_content):
-        """Inject HTTP-based console script into HTML content."""
+        """Inject modern console script into HTML content."""
+        # This should match the script from lua/p5/console.lua
         console_script = '''
-  <script>
-    (function() {
-      const originalConsole = {
-        log: console.log,
-        error: console.error,
-        warn: console.warn,
-        info: console.info
-      };
-      
-      function sendToConsole(level, args) {
-        const message = args.map(arg => {
-          if (typeof arg === 'object') {
-            try {
-              return JSON.stringify(arg);
-            } catch (e) {
-              return String(arg);
-            }
-          }
-          return String(arg);
-        }).join(' ');
+    <script>
+      (function() {
+        console.log('p5.nvim console integration enabled');
         
-        // Send via HTTP POST instead of WebSocket
-        fetch('/api/console/log', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        // Override console methods
+        const originalConsole = {
+          log: console.log,
+          error: console.error,
+          warn: console.warn,
+          info: console.info
+        };
+        
+        // Debounce function to reduce browser load
+        function debounce(func, wait) {
+          let timeout;
+          return function executedFunction(...args) {
+            const later = () => {
+              clearTimeout(timeout);
+              func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+          };
+        }
+        
+        // Buffer for batching logs
+        let logBuffer = [];
+        let flushTimeout;
+        
+        function flushLogBuffer() {
+          if (logBuffer.length === 0) return;
+          
+          const logs = [...logBuffer];
+          logBuffer = [];
+          
+          // Send logs asynchronously
+          fetch('/api/console/log', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              type: 'console_batch',
+              logs: logs,
+              timestamp: new Date().toISOString()
+            })
+          }).catch(err => {
+            // If batch fails, try individual logs
+            logs.forEach(log => {
+              fetch('/api/console/log', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(log)
+              }).catch(() => {}); // Silently fail individual logs
+            });
+          });
+        }
+        
+        function sendToConsole(level, args) {
+          const message = args.map(arg => {
+            if (typeof arg === 'object') {
+              try {
+                return JSON.stringify(arg);
+              } catch (e) {
+                return String(arg);
+              }
+            }
+            return String(arg);
+          }).join(' ');
+          
+          const logEntry = {
             type: 'console',
             level: level,
             message: message,
             source: 'javascript',
             timestamp: new Date().toISOString()
-          })
-        }).catch(err => {
-          // Silently fail if server is unavailable
-        });
-      }
-      
-      console.log = function(...args) {
-        originalConsole.log.apply(console, args);
-        sendToConsole('log', args);
-      };
-      
-      console.error = function(...args) {
-        originalConsole.error.apply(console, args);
-        sendToConsole('error', args);
-      };
-      
-      console.warn = function(...args) {
-        originalConsole.warn.apply(console, args);
-        sendToConsole('warn', args);
-      };
-      
-      console.info = function(...args) {
-        originalConsole.info.apply(console, args);
-        sendToConsole('info', args);
-      };
-      
-      window.onerror = function(msg, source, lineno, colno, error) {
-        fetch('/api/console/log', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            type: 'console',
-            level: 'error',
-            message: msg + ' at ' + source + ':' + lineno + ':' + colno,
-            source: 'javascript',
-            timestamp: new Date().toISOString()
-          })
-        }).catch(err => {
-          // Silently fail if server is unavailable
-        });
-        return false;
-      };
-    })();
-  </script>'''
+          };
+          
+          // Add to buffer
+          logBuffer.push(logEntry);
+          
+          // Flush buffer with debounce (100ms for better performance)
+          clearTimeout(flushTimeout);
+          flushTimeout = setTimeout(flushLogBuffer, 100);
+        }
+        
+        // Debounced console methods to reduce frequency
+        console.log = debounce(function(...args) {
+          originalConsole.log.apply(console, args);
+          sendToConsole('log', args);
+        }, 50);
+        
+        console.error = function(...args) {
+          originalConsole.error.apply(console, args);
+          sendToConsole('error', args); // No debounce for errors
+        };
+        
+        console.warn = debounce(function(...args) {
+          originalConsole.warn.apply(console, args);
+          sendToConsole('warn', args);
+        }, 100);
+        
+        console.info = debounce(function(...args) {
+          originalConsole.info.apply(console, args);
+          sendToConsole('info', args);
+        }, 150);
+        
+        // Handle uncaught errors
+        window.onerror = function(msg, source, lineno, colno, error) {
+          sendToConsole('error', [msg + ' at ' + source + ':' + lineno + ':' + colno]);
+          return false;
+        };
+        
+        // Flush buffer on page unload
+        window.addEventListener('beforeunload', flushLogBuffer);
+      })();
+    </script>'''
         
         # Replace </body> with console script + </body>
         return re.sub(r'</body\s*>', console_script + '</body>', html_content, flags=re.IGNORECASE)
