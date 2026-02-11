@@ -323,10 +323,12 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     
     def inject_live_reload_script(self, html_content):
         """Inject live reload script into HTML content."""
-        live_reload_script = '''
-  <script>
+        # Get the actual WebSocket port (might be different from default)
+        actual_ws_port = globals().get('LIVE_RELOAD_PORT', 12002)
+        
+        live_reload_script = '''<script>
     (function() {
-      const ws = new WebSocket('ws://localhost:12002');
+      const ws = new WebSocket('ws://localhost:''' + str(actual_ws_port) + '''');
       
       ws.onopen = function() {
         console.log('Live reload connected');
@@ -368,12 +370,26 @@ def start_websocket_server():
     """Start simple WebSocket server for live reload."""
     import socket
     
+    # Try to find an available port for WebSocket
+    ws_port = LIVE_RELOAD_PORT
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server_socket.bind(('localhost', LIVE_RELOAD_PORT))
-    server_socket.listen(5)
     
-    print(f"Live reload WebSocket server running on ws://localhost:{LIVE_RELOAD_PORT}")
+    # Try binding to the default port first, then alternatives
+    for attempt in range(10):
+        try:
+            server_socket.bind(('localhost', ws_port))
+            server_socket.listen(5)
+            print(f"Live reload WebSocket server running on ws://localhost:{ws_port}")
+            break
+        except OSError as e:
+            if e.errno == 98:  # Address already in use
+                ws_port += 1
+                continue
+            else:
+                raise e
+    
+    return server_socket, ws_port
     
     def handle_client(client_socket, address):
         reload_clients.add(client_socket)
@@ -424,12 +440,12 @@ def start_file_watcher():
     print("Starting simple file watcher...")
     
     def watch_directory():
-        """Simple file watching using os.listdir polling."""
-        last_files = set()
+        """Improved file watching using modification time tracking."""
+        last_files = {}  # Store file paths with their modification times
         
         while True:
             try:
-                current_files = set()
+                current_files = {}
                 for root, dirs, files in os.walk(DIRECTORY):
                     # Skip ignored directories
                     dirs[:] = [d for d in dirs if not any(ignore in d for ignore in ['.git', 'node_modules', 'dist', 'build'])]
@@ -437,14 +453,19 @@ def start_file_watcher():
                     for file in files:
                         if any(file.endswith(ext) for ext in ['.js', '.css', '.html', '.json']):
                             file_path = os.path.join(root, file)
-                            current_files.add(file_path)
-                            
-                            # Check if file is new or modified
-                            if file_path not in last_files:
-                                trigger_reload(file_path)
+                            try:
+                                mod_time = os.path.getmtime(file_path)
+                                current_files[file_path] = mod_time
+                                
+                                # Check if file is new or modified
+                                if file_path not in last_files or last_files[file_path] != mod_time:
+                                    trigger_reload(file_path)
+                            except OSError:
+                                # File might be deleted or inaccessible
+                                continue
                 
                 last_files = current_files
-                time.sleep(1)  # Check every second
+                time.sleep(0.5)  # Check every 0.5 seconds for better responsiveness
                 
             except Exception as e:
                 print(f"File watcher error: {e}")
@@ -493,7 +514,9 @@ def run_server():
     # Start WebSocket server
     ws_server = None
     try:
-        ws_server = start_websocket_server()
+        ws_server, ws_port = start_websocket_server()
+        # Update LIVE_RELOAD_PORT for JavaScript injection
+        globals()['LIVE_RELOAD_PORT'] = ws_port
     except Exception as e:
         print(f"Failed to start WebSocket server: {e}")
     
