@@ -45,10 +45,26 @@ C.create_console_terminal = function()
   vim.api.nvim_buf_set_option(C.console_buf, "filetype", "log")
   vim.api.nvim_buf_set_option(C.console_buf, "modifiable", false)
 
+  -- Track connection state
+  local connection_confirmed = false
+  
   -- Start terminal with curl command
   C.console_job = vim.fn.termopen(curl_cmd, {
     on_stdout = function(_, data)
       -- Terminal output is handled by the terminal itself
+      -- Detect successful connection by looking for formatted logs
+      if data and #data > 0 and not connection_confirmed then
+        for _, line in ipairs(data) do
+          if line:match("\027%[%d") then
+            -- ANSI color codes indicate successful connection
+            connection_confirmed = true
+            vim.schedule(function()
+              notify("Console connected to browser successfully", "ok")
+            end)
+            break
+          end
+        end
+      end
     end,
     on_stderr = function(_, data)
       -- Handle curl errors gracefully
@@ -64,7 +80,11 @@ C.create_console_terminal = function()
       if exit_code ~= 0 then
         -- Terminal exited unexpectedly
         vim.schedule(function()
-          notify("Console connection lost", "warn")
+          if connection_confirmed then
+            notify("Console disconnected from browser", "info")
+          else
+            notify("Console connection failed", "warn")
+          end
         end)
       end
       C.console_job = nil
@@ -119,7 +139,7 @@ C.show = function()
   vim.api.nvim_win_set_option(C.console_win, "relativenumber", false)
   vim.api.nvim_win_set_option(C.console_win, "signcolumn", "no")
 
-  -- Set up keymaps for console window (in terminal mode)
+   -- Set up keymaps for console window
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "", {
     callback = function()
       vim.cmd("stopinsert")
@@ -143,7 +163,14 @@ C.show = function()
     end,
     desc = "Enter terminal mode"
   })
-
+  
+  -- Add toggle keymap like normal terminal buffers
+  vim.api.nvim_buf_set_keymap(buf, "t", "<C-/>", "", {
+    callback = C.toggle,
+    desc = "Toggle p5 console",
+    noremap = true
+  })
+  
   -- Enter terminal mode automatically
   vim.cmd("startinsert")
   
