@@ -74,7 +74,7 @@ Table of Contents                      *p5-math-table-of-contents*
 🔢 math module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-12 04:11:59Z~
+⏰ Last Updated: 2026-02-13 04:08:41Z~
 
 ==============================================================================
 2. Functions                                           |p5-math-functions|
