@@ -44,7 +44,7 @@ Table of Contents                      *p5-color-table-of-contents*
 🎨 color module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-15 04:10:11Z~
+⏰ Last Updated: 2026-02-16 04:11:06Z~
 
 ==============================================================================
 2. Functions                                           |p5-color-functions|
