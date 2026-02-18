@@ -18,7 +18,7 @@ Table of Contents                      *p5-typography-table-of-contents*
 📝 typography module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-17 04:06:56Z~
+⏰ Last Updated: 2026-02-18 04:08:46Z~
 
 ==============================================================================
 2. Functions                                           |p5-typography-functions|
