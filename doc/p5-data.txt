@@ -19,7 +19,7 @@ Table of Contents                      *p5-data-table-of-contents*
 📊 data module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-18 04:08:46Z~
+⏰ Last Updated: 2026-02-19 04:07:51Z~
 
 ==============================================================================
 2. Functions                                           |p5-data-functions|
