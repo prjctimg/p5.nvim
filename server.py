@@ -193,15 +193,15 @@ class FileWatcher:
         return any(str(path).endswith(ext) for ext in self.extensions)
     
     async def watch(self):
-        """Watch for file changes."""
+        """Watch for file changes with stability check."""
         self.running = True
         last_mtimes = {}
+        stable_paths = {}  # Track files that have become stable
         
         while self.running:
             try:
                 current_mtimes = {}
                 for root, dirs, files in os.walk(self.directory):
-                    # Filter excluded dirs
                     dirs[:] = [d for d in dirs if d not in self.exclude_dirs]
                     
                     for file in files:
@@ -215,13 +215,27 @@ class FileWatcher:
                 # Check for changes
                 for path, mtime in current_mtimes.items():
                     if path not in last_mtimes or last_mtimes[path] != mtime:
+                        # File changed - mark as unstable
+                        stable_paths[path] = None
+                        continue
+                    
+                    # File hasn't changed - check if it's now stable
+                    if path in stable_paths and stable_paths[path] is None:
                         now = datetime.now().timestamp()
+                        # Mark as stable
+                        stable_paths[path] = now
+                        # Only trigger if stable for debounce_ms
                         if now - self.last_trigger > self.debounce_ms:
                             self.last_trigger = now
                             yield path
                 
+                # Clean up paths that no longer exist
+                for path in list(stable_paths.keys()):
+                    if path not in current_mtimes:
+                        del stable_paths[path]
+                
                 last_mtimes = current_mtimes
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.3)
                 
             except Exception as e:
                 print(f"File watcher error: {e}")

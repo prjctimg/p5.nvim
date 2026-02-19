@@ -69,38 +69,37 @@ P.create_project = function(name)
     return false
   end
   
-  -- Notify project creation start
-  notify("Creating p5.js project: " .. name .. "...", "info")
-  
   -- Create project directory
   vim.fn.mkdir(name, "p")
   local project_path = vim.fn.fnamemodify(name, ":p")
   
-  -- Create project files
-  P.create_files(project_path)
-  
-  -- Notify successful asset copying
-  notify("Assets copied successfully. Project created!", "ok")
-  
-  -- Change CWD to new project directory
-  vim.cmd("cd " .. project_path)
-  
-  -- Open sketch.js in editor
-  vim.cmd("edit " .. project_path .. "/sketch.js")
-  
-  notify("Changed directory to: " .. project_path, "info")
-  return project_path
+  -- Create project files synchronously (fast)
+  P.create_files(project_path, function(err)
+    if err then
+      notify("Failed to create project: " .. err, "error")
+      return
+    end
+    
+    -- Only notify on final success
+    notify("Project created: " .. name, "ok")
+    
+    -- Change CWD to new project directory
+    vim.cmd("cd " .. project_path)
+    
+    -- Open sketch.js in editor
+    vim.cmd("edit " .. project_path .. "/sketch.js")
+  end)
 end
 
 -- Create project files
-P.create_files = function(project_path)
-  -- Copy plugin assets to project first
-  P.copy_assets_to_project(project_path)
-  
-  -- Validate asset paths after copying
-  if not P.validate_asset_paths(project_path) then
-    notify("Warning: Some asset paths may not work correctly", "warn")
-  end
+P.create_files = function(project_path, callback)
+  -- Copy plugin assets to project (async with callback)
+  P.copy_assets_to_project(project_path, function()
+    -- Validate asset paths after copying
+    if not P.validate_asset_paths(project_path) then
+      -- Don't spam - just continue
+    end
+  end)
   
   -- Create index.html
   local index_html = [[<!DOCTYPE html>
@@ -207,57 +206,67 @@ function draw() {
   vim.fn.mkdir(project_path .. "/assets/types", "p")
   vim.fn.mkdir(project_path .. "/assets/libs", "p")
   vim.fn.mkdir(project_path .. "/assets/contrib", "p")
+  
+  if callback then
+    vim.schedule(callback)
+  end
 end
 
 -- Copy plugin assets to project with bundled types and libraries
-P.copy_assets_to_project = function(project_path)
+P.copy_assets_to_project = function(project_path, callback)
   local plugin_assets = core.get_asset_dir()
   local project_assets = project_path .. "/assets"
   
-  -- Create project assets directory
+  -- Create project assets directory synchronously (fast operation)
   vim.fn.mkdir(project_assets, "p")
   vim.fn.mkdir(project_assets .. "/types", "p")
   vim.fn.mkdir(project_assets .. "/libs", "p")
   vim.fn.mkdir(project_assets .. "/contrib", "p")
   
-  -- Copy bundled p5.d.ts if it exists
-  local bundled_types_src = plugin_assets .. "/types/p5.d.ts"
-  local bundled_types_dest = project_assets .. "/types/p5.d.ts"
+  local pending_copies = 0
+  local copy_errors = {}
   
-  if vim.fn.filereadable(bundled_types_src) == 1 then
-    vim.fn.system({"cp", bundled_types_src, bundled_types_dest})
-    core.notify_fallback("Copied bundled p5.d.ts to project", "info")
-  else
-    core.notify_fallback("Bundled p5.d.ts not found - type support may be limited", "warn")
-  end
-  
-  -- Copy supporting type files if they exist
-  local support_files = {"constants.d.ts", "literals.d.ts"}
-  for _, file in ipairs(support_files) do
-    local src = plugin_assets .. "/types/" .. file
-    local dest = project_assets .. "/types/" .. file
+  local function try_copy(src, dest)
     if vim.fn.filereadable(src) == 1 then
-      vim.fn.system({"cp", src, dest})
-    end
-  end
-  
-  -- Copy bundled library files from assets/libs/
-  local libs_src = plugin_assets .. "/libs"
-  local libs_dest = project_assets .. "/libs"
-  if vim.fn.isdirectory(libs_src) == 1 then
-    local lib_files = {"p5.js", "p5.sound.js"}
-    for _, file in ipairs(lib_files) do
-      local src_file = libs_src .. "/" .. file
-      local dest_file = libs_dest .. "/" .. file
-      if vim.fn.filereadable(src_file) == 1 then
-        vim.fn.system({"cp", src_file, dest_file})
-        core.notify_fallback("Copied " .. file .. " to project", "info")
+      pending_copies = pending_copies + 1
+      local function on_copy(err)
+        pending_copies = pending_copies - 1
+        if err then
+          table.insert(copy_errors, dest .. ": " .. vim.inspect(err))
+        end
+        if pending_copies == 0 and callback then
+          vim.schedule(callback)
+        end
+      end
+      -- Use vim.loop for async copy if available (0.10+), fallback to sync
+      if vim.loop and vim.loop.fs_copyfile then
+        vim.loop.fs_copyfile(src, dest, on_copy)
       else
-        core.notify_fallback("Warning: " .. file .. " not found in plugin assets", "warn")
+        -- Fallback for older Neovim versions
+        vim.fn.system({"cp", src, dest})
+        vim.schedule(callback)
       end
     end
-  else
-    core.notify_fallback("Plugin libs directory not found", "warn")
+  end
+  
+  -- Copy bundled p5.d.ts
+  try_copy(plugin_assets .. "/types/p5.d.ts", project_assets .. "/types/p5.d.ts")
+  
+  -- Copy supporting type files
+  for _, file in ipairs({"constants.d.ts", "literals.d.ts"}) do
+    try_copy(plugin_assets .. "/types/" .. file, project_assets .. "/types/" .. file)
+  end
+  
+  -- Copy bundled library files
+  if vim.fn.isdirectory(plugin_assets .. "/libs") == 1 then
+    for _, file in ipairs({"p5.js", "p5.sound.js"}) do
+      try_copy(plugin_assets .. "/libs/" .. file, project_assets .. "/libs/" .. file)
+    end
+  end
+  
+  -- If no async copies were started, call callback immediately
+  if pending_copies == 0 and callback then
+    vim.schedule(callback)
   end
 end
 

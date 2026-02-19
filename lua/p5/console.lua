@@ -116,13 +116,41 @@ C.show = function()
     return
   end
 
+  local position = C.config.console.position or "below"
+  local height = C.config.console.height or 10
+  C.server_port = server.port
+
+  local curl_cmd = string.format(
+    'curl -s -N "http://localhost:%d/api/console/stream" 2>/dev/null',
+    C.server_port
+  )
+
+  -- Try snacks.terminal first for predictable behavior
+  local snacks = core.require_snacks()
+  if snacks and snacks.terminal then
+    local term = snacks.terminal(curl_cmd, {
+      title = "p5-console",
+      position = position,
+      size = height,
+    })
+    C.console_win = term.win
+    C.console_buf = term.buf
+    notify("Console connected to server on port " .. C.server_port, "info")
+    return
+  end
+
+  -- Fallback to manual terminal creation
   local buf = C.create_console_terminal()
   if not buf then
     return
   end
 
-  local position = C.config.console.position or "below"
-  local height = C.config.console.height or 10
+  local split_pattern = core.split_commands[position] or core.split_commands.below
+  local split_cmd = split_pattern:format(height)
+
+  vim.cmd(split_cmd)
+  C.console_win = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_buf(C.console_win, buf)
 
   local split_pattern = core.split_commands[position] or core.split_commands.below
   local split_cmd = split_pattern:format(height)
