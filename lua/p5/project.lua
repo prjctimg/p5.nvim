@@ -225,7 +225,7 @@ P.copy_assets_to_project = function(project_path)
   local bundled_types_dest = project_assets .. "/types/p5.d.ts"
   
   if vim.fn.filereadable(bundled_types_src) == 1 then
-    vim.fn.system("cp '" .. bundled_types_src .. "' '" .. bundled_types_dest .. "'")
+    vim.fn.system({"cp", bundled_types_src, bundled_types_dest})
     core.notify_fallback("Copied bundled p5.d.ts to project", "info")
   else
     core.notify_fallback("Bundled p5.d.ts not found - type support may be limited", "warn")
@@ -237,7 +237,7 @@ P.copy_assets_to_project = function(project_path)
     local src = plugin_assets .. "/types/" .. file
     local dest = project_assets .. "/types/" .. file
     if vim.fn.filereadable(src) == 1 then
-      vim.fn.system("cp '" .. src .. "' '" .. dest .. "'")
+      vim.fn.system({"cp", src, dest})
     end
   end
   
@@ -250,7 +250,7 @@ P.copy_assets_to_project = function(project_path)
       local src_file = libs_src .. "/" .. file
       local dest_file = libs_dest .. "/" .. file
       if vim.fn.filereadable(src_file) == 1 then
-        vim.fn.system("cp '" .. src_file .. "' '" .. dest_file .. "'")
+        vim.fn.system({"cp", src_file, dest_file})
         core.notify_fallback("Copied " .. file .. " to project", "info")
       else
         core.notify_fallback("Warning: " .. file .. " not found in plugin assets", "warn")

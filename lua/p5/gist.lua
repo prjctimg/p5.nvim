@@ -1,9 +1,9 @@
 -- GitHub Gist integration for p5.nvim
-local M = {}
+local G = {}
 local core = require("p5.core")
 
 -- Create gist from current project
-M.create_gist = function(description)
+G.create_gist = function(description)
   if not core.command_exists("gh") then
     core.notify("GitHub CLI (gh) not found. Install gh to use gist functionality", "error")
     return
@@ -35,8 +35,9 @@ M.create_gist = function(description)
   local gist_files = {}
 
   for _, file in ipairs(files_to_include) do
-    local temp_path = "/tmp/p5_gist_" .. file.name
-    vim.fn.system("cp '" .. project_path .. "/" .. file.path .. "' '" .. temp_path .. "'")
+    local temp_path = "/tmp/p5_gist_" .. vim.fn.fnamemodify(file.name, ":t")
+    local source_path = vim.fn.fnamemodify(project_path .. "/" .. file.path, ":p")
+    vim.fn.system({"cp", source_path, temp_path})
     
     table.insert(temp_files, temp_path)
     table.insert(gist_files, temp_path)
@@ -87,7 +88,7 @@ M.create_gist = function(description)
 end
 
 -- Update existing gist
-M.update_gist = function(gist_id)
+G.update_gist = function(gist_id)
   if not gist_id then
     core.notify("Gist ID required for update", "error")
     return
@@ -100,9 +101,8 @@ M.update_gist = function(gist_id)
 
   local project_path = vim.fn.getcwd()
   
-  -- Create temporary file for updated sketch
   local temp_sketch = "/tmp/p5_gist_update_sketch.js"
-  vim.fn.system("cp '" .. project_path .. "/sketch.js' '" .. temp_sketch .. "'")
+  vim.fn.system({"cp", project_path .. "/sketch.js", temp_sketch})
 
   -- Update gist with only sketch.js
   local cmd = {"gh", "gist", "edit", gist_id, temp_sketch}
@@ -127,7 +127,7 @@ M.update_gist = function(gist_id)
 end
 
 -- List gists
-M.list_gists = function()
+G.list_gists = function()
   if not core.command_exists("gh") then
     core.notify("GitHub CLI (gh) not found", "error")
     return
@@ -142,7 +142,7 @@ M.list_gists = function()
     local buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(result, "\n"))
     vim.api.nvim_buf_set_name(buf, "p5-gists")
-    vim.api.nvim_buf_set_option(buf, "filetype", "text")
+    vim.api.nvim_set_option_value("filetype", "text", { buf = buf })
 
     -- Show in new window
     vim.cmd("split")
@@ -156,7 +156,7 @@ M.list_gists = function()
         local gist_id = line:match("(%w+)")
         if gist_id then
           vim.cmd("bdelete")
-          M.open_gist(gist_id)
+          G.open_gist(gist_id)
         end
       end,
       desc = "Open p5 gist"
@@ -167,7 +167,7 @@ M.list_gists = function()
 end
 
 -- Open gist in browser
-M.open_gist = function(gist_id)
+G.open_gist = function(gist_id)
   if not gist_id then
     core.notify("Gist ID required", "error")
     return
@@ -183,7 +183,7 @@ M.open_gist = function(gist_id)
 end
 
 -- Clone gist as new p5 project
-M.clone_gist = function(gist_id)
+G.clone_gist = function(gist_id)
   if not gist_id then
     core.notify("Gist ID required", "error")
     return
@@ -260,7 +260,7 @@ M.clone_gist = function(gist_id)
 end
 
 -- Get current gist info from project
-M.get_project_gist = function()
+G.get_project_gist = function()
   local config = core.read_workspace_config()
   if not config or not config.gist or not config.gist.id then
     return nil
@@ -270,18 +270,18 @@ M.get_project_gist = function()
 end
 
 -- Update current project's gist
-M.update_current_gist = function()
-  local gist_info = M.get_project_gist()
+G.update_current_gist = function()
+  local gist_info = G.get_project_gist()
   if not gist_info then
     core.notify("No gist associated with current project", "warn")
     return
   end
 
-  M.update_gist(gist_info.id)
+  G.update_gist(gist_info.id)
 end
 
-M.setup = function(config)
-  M.config = config
+G.setup = function(config)
+  G.config = config
 end
 
-return M
+return G

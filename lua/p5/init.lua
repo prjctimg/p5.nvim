@@ -1,13 +1,13 @@
--- Main plugin entry point for p5.nvim
-local M = {}
+-- Iain plugin entry point for p5.nvim
+local I = {}
 
 -- Configuration defaults
-M.config = {
+I.config = {
   server = {
     port = 8000,
     auto_start = false,
     auto_open_browser = true,
-    preferred_order = {"python", "bun", "deno", "node"},
+    preferred_order = {"python"},
     ready_timeout = 5000,
     fallback_ports = {8001, 8002, 8003},
     live_reload = {
@@ -22,7 +22,9 @@ M.config = {
     enabled = true,
     auto_show = true,
     position = "below",
-    height = 10
+    height = 10,
+    buffer_size = 1000,
+    heartbeat = 15
   },
   libraries = {
     cdn_sources = {"jsdelivr", "cdnjs", "unpkg"},
@@ -31,8 +33,8 @@ M.config = {
 }
 
 -- Setup function
-M.setup = function(opts)
-  M.config = vim.tbl_deep_extend("force", M.config, opts or {})
+I.setup = function(opts)
+  I.config = vim.tbl_deep_extend("force", I.config, opts or {})
 
   -- Import modules
   local core = require("p5.core")
@@ -43,12 +45,12 @@ M.setup = function(opts)
   local gist = require("p5.gist")
 
   -- Initialize modules
-  core.setup(M.config)
-  project.setup(M.config)
-  server.setup(M.config)
-  libraries.setup(M.config)
-  console.setup(M.config)
-  gist.setup(M.config)
+  core.setup(I.config)
+  project.setup(I.config)
+  server.setup(I.config)
+  libraries.setup(I.config)
+  console.setup(I.config)
+  gist.setup(I.config)
 
   -- Create commands
   vim.api.nvim_create_user_command("P5NewProject", function(args)
@@ -100,4 +102,4 @@ M.setup = function(opts)
   end, { nargs = 0 })
 end
 
-return M
+return I

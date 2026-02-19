@@ -13,6 +13,7 @@ p5-demo/
 
 # Ignore cache directories
 .cache/
+__pycache__/
 
 # Ignore OS generated files
 .DS_Store
