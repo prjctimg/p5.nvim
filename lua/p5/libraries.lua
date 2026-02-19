@@ -1,6 +1,6 @@
 local core = require("p5.core")
 
-local M = {
+local L = {
   config = {
     libraries_dir = "assets/libs",
     index_file = "index.html"
@@ -16,7 +16,7 @@ local M = {
   contributor_libs = {
     {
       name = "ml5",
-      description = "Machine Learning library for creative coding",
+      description = "Lachine Learning library for creative coding",
       github_repo = "ml5js/ml5-library",
       github_release = "latest",
       asset_pattern = "ml5%.min%.js$",
@@ -25,16 +25,16 @@ local M = {
     {
       name = "p5.speech",
       description = "Speech synthesis and recognition for p5.js",
-      github_repo = "IDMNYU/p5.js-speech",
+      github_repo = "IDLNYU/p5.js-speech",
       github_release = "latest", 
       asset_pattern = "p5%.speech%.js$",
-      cdn_fallback = "https://cdn.jsdelivr.net/gh/IDMNYU/p5.js-speech@0.0.3/lib/p5.speech.js"
+      cdn_fallback = "https://cdn.jsdelivr.net/gh/IDLNYU/p5.js-speech@0.0.3/lib/p5.speech.js"
     }
   }
 }
 
 -- Load libraries from project
-M.load = function()
+L.load = function()
   local libs = {}
   local config = core.read_workspace_config()
   
@@ -58,7 +58,7 @@ M.load = function()
 end
 
 -- Add library to project
-M.add_library = function(lib_name, source)
+L.add_library = function(lib_name, source)
   local config = core.read_workspace_config()
   if not config then
     config = { libraries = {} }
@@ -78,12 +78,12 @@ M.add_library = function(lib_name, source)
   })
   
   core.write_workspace_config(config)
-  M.update_index_html()
+  L.update_index_html()
   core.notify("Added library: " .. lib_name, "success")
 end
 
 -- Remove library from project
-M.remove_library = function(lib_name)
+L.remove_library = function(lib_name)
   local config = core.read_workspace_config()
   if not config or not config.libraries then
     return
@@ -98,19 +98,19 @@ M.remove_library = function(lib_name)
   
   config.libraries = new_libs
   core.write_workspace_config(config)
-  M.update_index_html()
+  L.update_index_html()
   core.notify("Removed library: " .. lib_name, "success")
 end
 
 -- Update index.html with library includes
-M.update_index_html = function()
+L.update_index_html = function()
   local index_file = vim.fn.getcwd() .. "/index.html"
   if not vim.fn.filereadable(index_file) then
     return
   end
   
   local content = vim.fn.readfile(index_file)
-  local libs = M.load()
+  local libs = L.load()
   
   -- Generate script tags
   local script_tags = {}
@@ -141,9 +141,9 @@ M.update_index_html = function()
 end
 
 -- Get available libraries list for picker
-M.get_available_libs = function()
+L.get_available_libs = function()
   local libs = {}
-  for _, lib in ipairs(M.contributor_libs) do
+  for _, lib in ipairs(L.contributor_libs) do
     table.insert(libs, {
       name = lib.name,
       description = lib.description
@@ -153,17 +153,17 @@ M.get_available_libs = function()
 end
 
 -- Show library picker
-M.show_library_picker = function(callback)
+L.show_library_picker = function(callback)
   if core.require_snacks() then
     core.require_snacks().picker.pick({
       title = "Select Libraries",
-      items = M.get_available_libs(),
+      items = L.get_available_libs(),
       on_submit = function(selected)
         callback(selected)
       end
     })
   else
-    local libs = M.get_available_libs()
+    local libs = L.get_available_libs()
     vim.ui.select(libs, {
       prompt = "Select Libraries",
       format_item = function(item)
@@ -176,11 +176,11 @@ M.show_library_picker = function(callback)
 end
 
 -- Install contributor libraries from CDN
-M.install_libs = function(lib_names)
+L.install_libs = function(lib_names)
   -- Find library definitions
   local libs = {}
   for _, name in ipairs(lib_names) do
-    for _, lib in ipairs(M.contributor_libs) do
+    for _, lib in ipairs(L.contributor_libs) do
       if lib.name == name then
         table.insert(libs, lib)
         break
@@ -199,7 +199,7 @@ M.install_libs = function(lib_names)
   local libs_dir = vim.fn.getcwd() .. "/assets/libs"
   vim.fn.mkdir(libs_dir, "p")
   
-  M.process_libraries(libs, "install", function(completed)
+  L.process_libraries(libs, "install", function(completed)
     local message = "Library installation complete: " .. completed .. "/" .. #libs
     core.notify_fallback(message, "ok")
     
@@ -208,13 +208,13 @@ M.install_libs = function(lib_names)
     if config then
       config.libraries = vim.tbl_deep_extend("force", config.libraries or {}, libs)
       core.write_workspace_config(config)
-      M.update_index_html()
+      L.update_index_html()
     end
   end)
 end
 
 -- Download library from GitHub releases with CDN fallback
-M.download_library = function(lib, dest, callback)
+L.download_library = function(lib, dest, callback)
   -- Try GitHub releases first
   if lib.github_repo and lib.asset_pattern then
     core.get_github_release_asset(lib.github_repo, lib.github_release or "latest", lib.asset_pattern, function(download_url, error)
@@ -241,21 +241,21 @@ M.download_library = function(lib, dest, callback)
 end
 
 -- Batch notification system
-M.batch_notify = function(message, level)
-  table.insert(M.notification_batch.pending, {message, level})
+L.batch_notify = function(message, level)
+  table.insert(L.notification_batch.pending, {message, level})
   
   -- Debounce notifications
-  if M.notification_batch.timer then
-    vim.fn.timer_stop(M.notification_batch.timer)
+  if L.notification_batch.timer then
+    vim.fn.timer_stop(L.notification_batch.timer)
   end
   
-  M.notification_batch.timer = vim.fn.timer_start(M.notification_batch.delay, function()
-    M.flush_notifications()
+  L.notification_batch.timer = vim.fn.timer_start(L.notification_batch.delay, function()
+    L.flush_notifications()
   end)
 end
 
-M.flush_notifications = function()
-  local messages = M.notification_batch.pending
+L.flush_notifications = function()
+  local messages = L.notification_batch.pending
   if #messages > 0 then
     local success_count = 0
     local error_count = 0
@@ -271,28 +271,28 @@ M.flush_notifications = function()
     local summary = string.format("Completed %d operations (%d successful, %d failed)", 
       #messages, success_count, error_count)
     core.notify_fallback(summary, success_count > 0 and "info" or "error")
-    M.notification_batch.pending = {}
+    L.notification_batch.pending = {}
   end
 end
 
 -- Process libraries with unified callback and batched notifications
-M.process_libraries = function(libraries, operation, on_complete)
+L.process_libraries = function(libraries, operation, on_complete)
   local completed = 0
   
   for _, lib in ipairs(libraries) do
     local dest = vim.fn.getcwd() .. "/assets/libs/" .. lib.name .. ".js"
     
-    M.download_library(lib, dest, function(success)
+    L.download_library(lib, dest, function(success)
       completed = completed + 1
       local msg = (operation == "install" and "Installed " or "Updated ") .. lib.name
       local level = success and "ok" or "error"
       
       -- Use batched notifications instead of immediate ones
-      M.batch_notify(msg, level)
+      L.batch_notify(msg, level)
       
       if completed == #libraries then
         -- Flush remaining notifications
-        M.flush_notifications()
+        L.flush_notifications()
         
         if on_complete then
           on_complete(completed)
@@ -303,7 +303,7 @@ M.process_libraries = function(libraries, operation, on_complete)
 end
 
 -- Update all installed libraries
-M.update_libs = function()
+L.update_libs = function()
   local config = core.read_workspace_config()
   if not config or not config.libraries then
     core.notify_fallback("No libraries installed", "warn")
@@ -312,14 +312,14 @@ M.update_libs = function()
   
   core.notify_fallback("Checking for library updates...", "info")
   
-  M.process_libraries(config.libraries, "update", function()
+  L.process_libraries(config.libraries, "update", function()
     core.notify_fallback("Library update complete", "ok")
   end)
 end
 
 -- Setup libraries module
-M.setup = function(config)
-  M.config = vim.tbl_deep_extend("force", M.config, config or {})
+L.setup = function(config)
+  L.config = vim.tbl_deep_extend("force", L.config, config or {})
 end
 
-return M
+return L

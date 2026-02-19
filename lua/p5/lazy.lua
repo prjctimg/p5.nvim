@@ -1,8 +1,8 @@
 -- Dependency management module for p5.nvim
-local M = {}
+local L = {}
 
 -- Require a plugin with error handling
-M.require = function(plugin_name)
+L.require = function(plugin_name)
   local ok, plugin = pcall(require, plugin_name)
   if ok then
     return plugin
@@ -11,7 +11,7 @@ M.require = function(plugin_name)
 end
 
 -- Require an optional plugin with warning
-M.require_opt = function(plugin_name, warning_msg)
+L.require_opt = function(plugin_name, warning_msg)
   local ok, plugin = pcall(require, plugin_name)
   if not ok and warning_msg then
     if vim and vim.notify then
@@ -22,8 +22,8 @@ M.require_opt = function(plugin_name, warning_msg)
 end
 
 -- Setup function
-M.setup = function(config)
-  M.config = config
+L.setup = function(config)
+  L.config = config
 end
 
-return M
+return L

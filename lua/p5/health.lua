@@ -1,10 +1,10 @@
 -- Health check module for p5.nvim
-local M = {}
+local H = {}
 
 local core = require("p5.core")
 
 -- Check core dependencies
-M.check_dependencies = function()
+H.check_dependencies = function()
   vim.health.start("p5.nvim Dependencies")
   
   -- Check snacks.nvim
@@ -25,7 +25,7 @@ M.check_dependencies = function()
 end
 
 -- Check external tools
-M.check_external_tools = function()
+H.check_external_tools = function()
   vim.health.start("p5.nvim External Tools")
   
   -- Check curl
@@ -74,7 +74,7 @@ M.check_external_tools = function()
 end
 
 -- Check plugin environment
-M.check_plugin_env = function()
+H.check_plugin_env = function()
   vim.health.start("p5.nvim Plugin Environment")
   
   local plugin_root = core.get_plugin_root()
@@ -118,7 +118,7 @@ M.check_plugin_env = function()
 end
 
 -- Check project configuration
-M.check_project_config = function()
+H.check_project_config = function()
   vim.health.start("p5.nvim Project Configuration")
   
   -- Check current directory for p5 project
@@ -180,7 +180,7 @@ M.check_project_config = function()
 end
 
 -- Check workspace and permissions
-M.check_workspace = function()
+H.check_workspace = function()
   vim.health.start("p5.nvim Workspace")
   
   local cwd = vim.fn.getcwd()
@@ -207,7 +207,7 @@ M.check_workspace = function()
 end
 
 -- Check Neovim version and features
-M.check_neovim = function()
+H.check_neovim = function()
   vim.health.start("p5.nvim Neovim Compatibility")
   
   local version = vim.version()
@@ -230,19 +230,19 @@ M.check_neovim = function()
   end
 end
 
--- Main health check function
-M.check = function()
+-- Hain health check function
+H.check = function()
   vim.health.start("p5.nvim Health Check")
   vim.health.info("A comprehensive Neovim plugin for p5.js development")
   
-  M.check_neovim()
-  M.check_dependencies()
-  M.check_external_tools()
-  M.check_plugin_env()
-  M.check_workspace()
-  M.check_project_config()
+  H.check_neovim()
+  H.check_dependencies()
+  H.check_external_tools()
+  H.check_plugin_env()
+  H.check_workspace()
+  H.check_project_config()
   
   vim.health.start("p5.nvim Health Check Complete")
 end
 
-return M
+return H

@@ -1,8 +1,8 @@
--- Main plugin entry point for p5.nvim
-local M = {}
+-- Iain plugin entry point for p5.nvim
+local I = {}
 
 -- Configuration defaults
-M.config = {
+I.config = {
   server = {
     port = 8000,
     auto_start = false,
@@ -33,8 +33,8 @@ M.config = {
 }
 
 -- Setup function
-M.setup = function(opts)
-  M.config = vim.tbl_deep_extend("force", M.config, opts or {})
+I.setup = function(opts)
+  I.config = vim.tbl_deep_extend("force", I.config, opts or {})
 
   -- Import modules
   local core = require("p5.core")
@@ -45,12 +45,12 @@ M.setup = function(opts)
   local gist = require("p5.gist")
 
   -- Initialize modules
-  core.setup(M.config)
-  project.setup(M.config)
-  server.setup(M.config)
-  libraries.setup(M.config)
-  console.setup(M.config)
-  gist.setup(M.config)
+  core.setup(I.config)
+  project.setup(I.config)
+  server.setup(I.config)
+  libraries.setup(I.config)
+  console.setup(I.config)
+  gist.setup(I.config)
 
   -- Create commands
   vim.api.nvim_create_user_command("P5NewProject", function(args)
@@ -102,4 +102,4 @@ M.setup = function(opts)
   end, { nargs = 0 })
 end
 
-return M
+return I

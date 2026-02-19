@@ -32,8 +32,8 @@ C.create_console_terminal = function()
 
   C.console_buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_name(C.console_buf, "p5-console-terminal")
-  vim.api.nvim_buf_set_option(C.console_buf, "filetype", "log")
-  vim.api.nvim_buf_set_option(C.console_buf, "modifiable", false)
+  vim.api.nvim_set_option_value("filetype", "log", { buf = C.console_buf })
+  vim.api.nvim_set_option_value("modifiable", false, { buf = C.console_buf })
 
   local connection_confirmed = false
 
