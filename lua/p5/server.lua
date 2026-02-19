@@ -7,7 +7,7 @@ local notify = core.notify
 S.config = {
   port = 8000,
   auto_start = false,
-  preferred_order = {"python", "bun", "deno", "node"},
+  preferred_order = {"python"},
   live_reload = {
     enabled = true,
     port = 12002,
@@ -29,22 +29,18 @@ S.config = {
 
 -- Detect available server options
 S.detect_server = function()
-  local config = core.read_workspace_config()
-  local preferred_order = config and config.server and config.server.preferred_order or S.config.server.preferred_order
+  local server_config = core.server_configs.python
+  if core.command_exists(server_config.check) then
+    local plugin_root = core.get_plugin_root()
+    local server_script = plugin_root .. "/servers/" .. server_config.script
 
-  for _, server in ipairs(preferred_order) do
-    local server_config = core.server_configs[server]
-    if server_config and core.command_exists(server_config.check) then
-      -- Validate that server script exists
-      local plugin_root = core.get_plugin_root()
-      local server_script = plugin_root .. "/servers/" .. server_config.script
-      
-      if vim.fn.filereadable(server_script) == 1 then
-        return server
-      else
-        notify("Server script not found: " .. server_script, "warn")
-      end
+    if vim.fn.filereadable(server_script) == 1 then
+      return "python"
+    else
+      notify("Server script not found: " .. server_script, "warn")
     end
+  else
+    notify("Python3 not found. Please install Python to use the development server.", "error")
   end
 
   return nil

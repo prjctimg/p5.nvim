@@ -9,7 +9,7 @@ A Neovim plugin for creative coding with p5.js, providing live development serve
 - 📝 **TypeScript Support** - Bundled p5.js type definitions with jsconfig.json and tsconfig.json
 - 📦 **Library Management** - Install contributor libraries from GitHub releases with CDN fallback
 - 🏗️ **Project Templates** - One-command project creation with proper structure
-- 🔧 **Multi-Runtime Support** - Python, Node.js, Deno, and Bun server backends
+ - 🔧 **Python Async Server** - asyncio-based HTTP server with SSE streaming
 - 💾 **Smart Caching** - Host system caching for downloaded libraries
 - 📊 **Progress Tracking** - Real-time download progress with coroutines
 - 🔔 **Batched Notifications** - Non-intrusive feedback for multiple operations
@@ -38,13 +38,9 @@ A Neovim plugin for creative coding with p5.js, providing live development serve
 ## Requirements
 
 - **Neovim** >= 0.9.0
-- **Server Runtime** (any one):
-  - Python 3.x
-  - Node.js 
-  - Deno
-  - Bun
+- **Python** 3.7+ (for development server)
 - **System Tools**:
-  - `curl` or `wget` (for library downloads)
+  - `curl` (for console streaming)
   - `xdg-open` (Linux) or equivalent (for auto-opening browser)
 - **Required Dependencies**:
   - `chrome-remote.nvim` (for Chrome DevTools Protocol support)
@@ -101,7 +97,6 @@ require("p5").setup({
   server = {
     port = 8000,                    -- Default server port
     auto_start = false,             -- Auto-start server in p5 projects
-    preferred_order = {"python", "bun", "deno", "node"},
     live_reload = {
       enabled = true,               -- Enable live reload
       port = 12002,                 -- WebSocket port for live reload
@@ -111,14 +106,16 @@ require("p5").setup({
     }
   },
   console = {
-    enabled = true,                -- Enable browser console integration
-    auto_show = true,              -- Auto-show console when server starts
-    position = "below",            -- Window position: "below", "above", "left", "right"
-    height = 10                    -- Console window height (for horizontal splits)
+    enabled = true,                 -- Enable browser console integration
+    auto_show = true,               -- Auto-show console when server starts
+    position = "below",             -- Window position: "below", "above", "left", "right"
+    height = 10,                    -- Console window height (for horizontal splits)
+    buffer_size = 1000,             -- Ring buffer size for console logs
+    heartbeat = 15                 -- Heartbeat interval in seconds
   },
   libraries = {
     cdn_sources = {"jsdelivr", "cdnjs", "unpkg"},
-    auto_update = false            -- Auto-check for library updates
+    auto_update = false
   }
 })
 ```
@@ -157,7 +154,7 @@ require("p5").setup({
    ```
 
    This will:
-   - Detect available server runtime (Python, Node.js, Deno, Bun)
+   - Detect available Python runtime
    - Find an available port (8000, 8001, etc. if occupied)
    - Show port information and server status
    - Auto-open browser (if configured)
@@ -232,16 +229,16 @@ The browser console integration streams all console output to a Neovim window:
 - `q` or `<Esc>` - Hide console window
 - `c` - Clear console logs
 
-## Server Runtimes
+## Server Runtime
 
-p5.nvim automatically detects and uses available server runtimes:
+p5.nvim uses Python 3 with asyncio for the development server:
 
-1. **Python** (default) - Robust HTTP server with console log streaming
-2. **Bun** - Fast JavaScript runtime with HTTP support
-3. **Deno** - Secure TypeScript runtime
-4. **Node.js** - Traditional Node.js server
+- **Python** - Async HTTP server with SSE console streaming
+- Zero external dependencies (stdlib only)
+- Server-Sent Events (SSE) for real-time console log streaming
+- WebSocket-based live reload
 
-The plugin will try each runtime in the order specified in your configuration.
+The server requires Python 3.7+ for asyncio support.
 
 ## TypeScript Support
 
@@ -312,7 +309,7 @@ Create and share p5.js sketches directly from Neovim:
 
 1. Disable live reload for large projects
 2. Exclude large directories from file watching
-3. Use a faster runtime (Bun or Deno)
+3. Increase debounce_ms in live_reload config
 
 ## Health Check
 

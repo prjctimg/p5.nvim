@@ -7,21 +7,6 @@ M.server_configs = {
     check = "python3",
     script = "python.py",
     cmd = "python3"
-  },
-  bun = {
-    check = "bun",
-    script = "bun.js",
-    cmd = "bun"
-  },
-  deno = {
-    check = "deno",
-    script = "deno.js",
-    cmd = "deno"
-  },
-  node = {
-    check = "node",
-    script = "node.js", 
-    cmd = "node"
   }
 }
 

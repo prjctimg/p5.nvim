@@ -1,262 +1,507 @@
 #!/usr/bin/env python3
-import http.server
-import socketserver
-import sys
+"""
+p5.nvim asyncio-based live server with SSE console streaming.
+Replaces blocking http.server with asyncio for better performance.
+"""
+import asyncio
 import os
 import re
 import json
-import threading
-import time
-from urllib.parse import unquote
+import signal
+import sys
+import webbrowser
+from collections import deque
+from datetime import datetime
+from pathlib import Path
+from typing import Optional
 
-PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
-LIVE_RELOAD_PORT = 12002
-DIRECTORY = os.getcwd()
-DEBOUNCE_TIME = 0.3  # seconds
-
-# Live reload WebSocket clients
-reload_clients = set()
-last_reload_time = 0
-
-# Console log buffer for HTTP-based log streaming
-console_log_buffer = []
+# Configuration
+CONFIG = {
+    "port": int(sys.argv[1]) if len(sys.argv) > 1 else 8000,
+    "live_reload": {
+        "enabled": True,
+        "port": 12002,
+        "debounce_ms": 300,
+        "watch_extensions": [".js", ".css", ".html", ".json"],
+        "exclude_dirs": [".git", "node_modules", "dist", "build"],
+    },
+    "console": {
+        "buffer_size": 1000,
+        "heartbeat_interval": 15,
+    }
+}
 
 # ANSI color codes for log formatting
 ANSI_COLORS = {
     'reset': '\033[0m',
-    'error': '\033[1;31m',    # Bold red
-    'warn': '\033[1;33m',     # Bold yellow  
-    'info': '\033[1;36m',     # Bold cyan
-    'log': '\033[0;37m',      # White
-    'timestamp': '\033[0;90m'  # Dim gray
+    'error': '\033[1;31m',
+    'warn': '\033[1;33m',
+    'info': '\033[1;36m',
+    'log': '\033[0;37m',
+    'timestamp': '\033[0;90m',
+    'source': '\033[0;90m',
 }
 
-def format_log_entry(log_entry):
-    """Format a log entry with ANSI colors for better readability."""
-    level = log_entry.get('level', 'log').upper()
-    message = log_entry.get('message', '')
-    source = log_entry.get('source', 'browser')
+
+def format_log_entry(level: str, message: str, source: str = "browser") -> str:
+    """Format a log entry with ANSI colors for terminal display."""
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    level = level.upper()
     
-    # Get timestamp in readable format
-    import time
-    timestamp = time.strftime('%H:%M:%S')
-    
-    # Get color for level
     level_color = ANSI_COLORS.get(level.lower(), ANSI_COLORS['log'])
     time_color = ANSI_COLORS['timestamp']
+    source_color = ANSI_COLORS['source']
     reset = ANSI_COLORS['reset']
     
-    # Format: [TIME] LEVEL source: message
-    formatted = f"{time_color}[{timestamp}]{reset} {level_color}{level}{reset} {source}: {message}"
-    
-    return formatted
+    return (
+        f"{time_color}[{timestamp}]{reset} "
+        f"{level_color}{level:5}{reset} "
+        f"{source_color}[{source}]{reset}: {message}"
+    )
 
-class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=DIRECTORY, **kwargs)
-        self.last_reload_time = 0
+
+class ConsoleBuffer:
+    """Ring buffer for console logs with configurable size."""
     
-    def end_headers(self):
-        # Add CORS headers
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        super().end_headers()
+    def __init__(self, max_size: int = 1000):
+        self.buffer = deque(maxlen=max_size)
+        self.max_size = max_size
     
+    def append(self, entry: dict):
+        """Add entry to buffer."""
+        self.buffer.append(entry)
     
+    def get_all(self) -> list:
+        """Get all entries and clear buffer."""
+        entries = list(self.buffer)
+        self.buffer.clear()
+        return entries
     
-    def translate_path(self, path):
-        path = unquote(path)
-        if path.startswith('/'):
-            path = path[1:]
-        return os.path.join(DIRECTORY, path)
+    def __len__(self):
+        return len(self.buffer)
+
+
+class LiveReloadServer:
+    """WebSocket server for live reload using asyncio."""
     
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.end_headers()
+    def __init__(self, port: int, directory: str, file_watcher):
+        self.port = port
+        self.directory = directory
+        self.file_watcher = file_watcher
+        self.clients = set()
+        self.server: Optional[asyncio.Server] = None
     
-    def do_POST(self):
-        """Handle POST requests for console logs."""
-        if self.path == '/api/console/log':
+    async def handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """Handle WebSocket client connection."""
+        addr = writer.get_extra_info('peername')
+        self.clients.add(writer)
+        
+        try:
+            # Send welcome message
+            response = json.dumps({"type": "connected", "message": "Live reload connected"})
+            writer.write(response.encode())
+            await writer.drain()
+            
+            # Keep connection alive
+            while True:
+                data = await reader.read(1024)
+                if not data:
+                    break
+        except Exception:
+            pass
+        finally:
+            self.clients.discard(writer)
+            writer.close()
+            await writer.wait_closed()
+    
+    async def start(self):
+        """Start the WebSocket server."""
+        try:
+            self.server = await asyncio.start_server(
+                self.handle_client, 'localhost', self.port
+            )
+            print(f"Live reload WebSocket running on ws://localhost:{self.port}")
+        except OSError as e:
+            # Try alternate ports
+            for offset in range(1, 10):
+                try:
+                    alt_port = self.port + offset
+                    self.server = await asyncio.start_server(
+                        self.handle_client, 'localhost', alt_port
+                    )
+                    self.port = alt_port
+                    print(f"Live reload WebSocket running on ws://localhost:{self.port}")
+                    return
+                except OSError:
+                    continue
+            print(f"Warning: Could not start live reload server: {e}")
+    
+    async def broadcast(self, message: dict):
+        """Broadcast message to all connected clients."""
+        data = json.dumps(message).encode()
+        disconnected = set()
+        
+        for client in self.clients:
             try:
-                content_length = int(self.headers['Content-Length'])
-                post_data = self.rfile.read(content_length)
-                log_data = json.loads(post_data.decode('utf-8'))
-                
-                # Handle both individual logs and batch logs
-                if log_data.get('type') == 'console_batch' and 'logs' in log_data:
-                    # Batch processing
-                    for log_entry in log_data['logs']:
-                        if 'timestamp' not in log_entry:
-                            log_entry['timestamp'] = time.time()
-                        console_log_buffer.append(log_entry)
-                else:
-                    # Individual log entry
-                    if 'timestamp' not in log_data:
-                        log_data['timestamp'] = time.time()
-                    console_log_buffer.append(log_data)
-                
-                # Send response
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({"status": "received"}).encode('utf-8'))
-                
-            except Exception as e:
-                self.send_response(400)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
-        else:
-            self.send_response(404)
-            self.end_headers()
-    
-    def do_GET(self):
-        """Handle GET requests for console log streaming."""
-        if self.path == '/api/console/stream':
-            # Server-Sent Events endpoint for real-time log streaming
+                client.write(data)
+                await client.drain()
+            except Exception:
+                disconnected.add(client)
+        
+        for client in disconnected:
+            self.clients.discard(client)
             try:
-                self.send_response(200)
-                self.send_header('Content-type', 'text/plain; charset=utf-8')
-                self.send_header('Cache-Control', 'no-cache')
-                self.send_header('Connection', 'keep-alive')
-                self.end_headers()
-                
-                # Stream any buffered logs first
-                logs = []
-                while console_log_buffer:
-                    logs.append(console_log_buffer.pop(0))
-                
-                for log_entry in logs:
-                    formatted = format_log_entry(log_entry)
-                    self.wfile.write((formatted + '\n').encode('utf-8'))
-                    self.wfile.flush()
-                
-            except Exception as e:
-                # If client disconnects, that's expected
+                client.close()
+            except Exception:
                 pass
-                
-        elif self.path == '/api/console/poll':
+    
+    async def close(self):
+        """Close the server and all connections."""
+        for client in list(self.clients):
             try:
-                # Get buffered logs and clear buffer
-                logs = []
-                while console_log_buffer:
-                    logs.append(console_log_buffer.pop(0))
+                client.close()
+            except Exception:
+                pass
+        self.clients.clear()
+        if self.server:
+            self.server.close()
+            await self.server.wait_closed()
+
+
+class FileWatcher:
+    """Async file watcher using asyncio."""
+    
+    def __init__(self, directory: str, extensions: list, exclude_dirs: list, debounce_ms: int):
+        self.directory = directory
+        self.extensions = extensions
+        self.exclude_dirs = exclude_dirs
+        self.debounce_ms = debounce_ms / 1000
+        self.last_trigger = 0
+        self.running = False
+        self._task: Optional[asyncio.Task] = None
+    
+    def should_watch(self, path: str) -> bool:
+        """Check if file should be watched."""
+        path_obj = Path(path)
+        
+        # Check exclusion dirs
+        for part in path_obj.parts:
+            if part in self.exclude_dirs:
+                return False
+        
+        # Check extensions
+        return any(str(path).endswith(ext) for ext in self.extensions)
+    
+    async def watch(self):
+        """Watch for file changes."""
+        self.running = True
+        last_mtimes = {}
+        
+        while self.running:
+            try:
+                current_mtimes = {}
+                for root, dirs, files in os.walk(self.directory):
+                    # Filter excluded dirs
+                    dirs[:] = [d for d in dirs if d not in self.exclude_dirs]
+                    
+                    for file in files:
+                        path = os.path.join(root, file)
+                        if self.should_watch(path):
+                            try:
+                                current_mtimes[path] = os.path.getmtime(path)
+                            except OSError:
+                                continue
                 
-                # Send response
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps(logs).encode('utf-8'))
+                # Check for changes
+                for path, mtime in current_mtimes.items():
+                    if path not in last_mtimes or last_mtimes[path] != mtime:
+                        now = datetime.now().timestamp()
+                        if now - self.last_trigger > self.debounce_ms:
+                            self.last_trigger = now
+                            yield path
+                
+                last_mtimes = current_mtimes
+                await asyncio.sleep(0.5)
                 
             except Exception as e:
-                self.send_response(500)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
-        else:
-            # Handle regular GET requests
-            self.handle_regular_get()
+                print(f"File watcher error: {e}")
+                await asyncio.sleep(1)
     
-    def handle_regular_get(self):
-        """Handle regular file GET requests."""
-        # Handle root path
-        if self.path == '/':
-            self.path = '/index.html'
-        
-        # Translate path to file system
-        translated_path = self.translate_path(self.path)
-        
-        # Check if file exists and is HTML
-        if os.path.exists(translated_path) and translated_path.endswith('.html'):
+    def start(self, callback):
+        """Start the file watcher."""
+        self._task = asyncio.create_task(self._run_watcher(callback))
+    
+    async def _run_watcher(self, callback):
+        """Run the watcher loop."""
+        async for path in self.watch():
+            await callback(path)
+    
+    async def stop(self):
+        """Stop the file watcher."""
+        self.running = False
+        if self._task:
+            self._task.cancel()
             try:
-                with open(translated_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                
-                # Inject console and live reload scripts
-                modified_content = self.inject_scripts(content)
-                
-                # Send response with modified content
-                self.send_response(200)
-                self.send_header('Content-type', 'text/html')
-                self.send_header('Content-Length', str(len(modified_content.encode('utf-8'))))
-                self.end_headers()
-                self.wfile.write(modified_content.encode('utf-8'))
+                await self._task
+            except asyncio.CancelledError:
+                pass
+
+
+class HTTPServer:
+    """Async HTTP server with SSE console streaming."""
+    
+    def __init__(self, port: int, directory: str, console_buffer: ConsoleBuffer, live_reload_server: LiveReloadServer):
+        self.port = port
+        self.directory = directory
+        self.console_buffer = console_buffer
+        self.live_reload_server = live_reload_server
+        self.server: Optional[asyncio.Server] = None
+        self.running = True
+    
+    async def handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """Handle incoming HTTP client request."""
+        try:
+            # Read request line
+            request_line = await reader.readline()
+            if not request_line:
+                writer.close()
+                await writer.wait_closed()
                 return
-            except Exception as e:
-                # Fallback to normal file serving if injection fails
+            
+            request_line = request_line.decode().strip()
+            
+            # Parse request
+            parts = request_line.split()
+            if len(parts) < 2:
+                writer.close()
+                await writer.wait_closed()
+                return
+            
+            method = parts[0]
+            path = parts[1]
+            
+            # Read headers
+            headers = {}
+            while True:
+                line = await reader.readline()
+                if not line or line == b'\r\n':
+                    break
+                header = line.decode().strip()
+                if ':' in header:
+                    key, value = header.split(':', 1)
+                    headers[key.strip().lower()] = value.strip()
+            
+            # Route request
+            if method == 'POST' and path == '/api/console/log':
+                await self.handle_console_log(reader, writer, headers)
+            elif method == 'GET' and path == '/api/console/stream':
+                await self.handle_console_stream(reader, writer, headers)
+            elif method == 'GET' and path == '/api/health':
+                await self.handle_health(writer)
+            else:
+                await self.handle_static(method, path, reader, writer, headers)
+                
+        except Exception as e:
+            print(f"Error handling client: {e}")
+        finally:
+            try:
+                writer.close()
+                await writer.wait_closed()
+            except Exception:
                 pass
+    
+    async def handle_console_log(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        """Handle POST /api/console/log - receive logs from browser."""
+        content_length = int(headers.get('content-length', 0))
+        body = await reader.read(content_length)
         
-        # Fallback to normal file serving
-        super().do_GET()
+        try:
+            log_data = json.loads(body.decode('utf-8'))
+            
+            # Handle batch logs
+            if log_data.get('type') == 'console_batch' and 'logs' in log_data:
+                for entry in log_data['logs']:
+                    if 'timestamp' not in entry:
+                        entry['timestamp'] = datetime.now().isoformat()
+                    self.console_buffer.append(entry)
+            else:
+                # Individual log
+                if 'timestamp' not in log_data:
+                    log_data['timestamp'] = datetime.now().isoformat()
+                self.console_buffer.append(log_data)
+            
+            # Send response
+            writer.write(b'HTTP/1.1 200 OK\r\n')
+            writer.write(b'Content-Type: application/json\r\n')
+            writer.write(b'Access-Control-Allow-Origin: *\r\n')
+            writer.write(b'Connection: close\r\n')
+            writer.write(b'\r\n')
+            writer.write(json.dumps({"status": "received"}).encode())
+            await writer.drain()
+            
+        except Exception as e:
+            writer.write(b'HTTP/1.1 400 Bad Request\r\n')
+            writer.write(b'Content-Type: application/json\r\n')
+            writer.write(b'Access-Control-Allow-Origin: *\r\n')
+            writer.write(b'Connection: close\r\n')
+            writer.write(b'\r\n')
+            writer.write(json.dumps({"error": str(e)}).encode())
+            await writer.drain()
     
-    def log_message(self, format, *args):
-        # Suppress default logging
-        pass
+    async def handle_console_stream(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        """Handle GET /api/console/stream - SSE streaming endpoint."""
+        # Send SSE headers
+        writer.write(b'HTTP/1.1 200 OK\r\n')
+        writer.write(b'Content-Type: text/plain; charset=utf-8\r\n')
+        writer.write(b'Cache-Control: no-cache\r\n')
+        writer.write(b'Access-Control-Allow-Origin: *\r\n')
+        writer.write(b'Connection: keep-alive\r\n')
+        writer.write(b'X-Accel-Buffering: no\r\n')
+        writer.write(b'\r\n')
+        await writer.drain()
+        
+        heartbeat_interval = CONFIG['console']['heartbeat_interval']
+        heartbeat_count = 0
+        
+        try:
+            while self.running:
+                # Get buffered logs
+                logs = self.console_buffer.get_all()
+                
+                # Send buffered logs
+                for log_entry in logs:
+                    level = log_entry.get('level', 'log')
+                    message = log_entry.get('message', '')
+                    source = log_entry.get('source', 'browser')
+                    formatted = format_log_entry(level, message, source)
+                    writer.write(f"data: {formatted}\n\n".encode())
+                    await writer.drain()
+                
+                # Send heartbeat every N iterations
+                heartbeat_count += 1
+                if heartbeat_count >= heartbeat_interval:
+                    heartbeat_count = 0
+                    writer.write(b': heartbeat\n\n')
+                    await writer.drain()
+                
+                # Wait before next check
+                await asyncio.sleep(1)
+                
+        except (BrokenPipeError, ConnectionResetError, asyncio.CancelledError):
+            pass
+        finally:
+            try:
+                writer.close()
+                await writer.wait_closed()
+            except Exception:
+                pass
     
-    def inject_console_script(self, html_content):
-        """Inject modern console script into HTML content."""
-        # This should match the script from lua/p5/console.lua
+    async def handle_health(self, writer: asyncio.StreamWriter):
+        """Handle GET /api/health - health check endpoint."""
+        writer.write(b'HTTP/1.1 200 OK\r\n')
+        writer.write(b'Content-Type: application/json\r\n')
+        writer.write(b'Access-Control-Allow-Origin: *\r\n')
+        writer.write(b'Connection: close\r\n')
+        writer.write(b'\r\n')
+        writer.write(json.dumps({
+            "status": "ok",
+            "server": "p5.nvim asyncio",
+            "console_buffer_size": len(self.console_buffer),
+        }).encode())
+        await writer.drain()
+    
+    async def handle_static(self, method: str, path: str, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        """Handle static file serving."""
+        if method != 'GET':
+            writer.write(b'HTTP/1.1 405 Method Not Allowed\r\n')
+            writer.write(b'Connection: close\r\n')
+            writer.write(b'\r\n')
+            await writer.drain()
+            return
+        
+        # Handle root path
+        if path == '/':
+            path = '/index.html'
+        
+        # Prevent directory traversal
+        if '..' in path:
+            writer.write(b'HTTP/1.1 403 Forbidden\r\n')
+            writer.write(b'Connection: close\r\n')
+            writer.write(b'\r\n')
+            await writer.drain()
+            return
+        
+        # Build file path
+        file_path = os.path.join(self.directory, path.lstrip('/'))
+        
+        if not os.path.isfile(file_path):
+            writer.write(b'HTTP/1.1 404 Not Found\r\n')
+            writer.write(b'Content-Type: text/plain\r\n')
+            writer.write(b'Access-Control-Allow-Origin: *\r\n')
+            writer.write(b'Connection: close\r\n')
+            writer.write(b'\r\n')
+            writer.write(b'File not found')
+            await writer.drain()
+            return
+        
+        # Determine content type
+        ext = os.path.splitext(file_path)[1].lower()
+        mime_types = {
+            '.html': 'text/html',
+            '.js': 'text/javascript',
+            '.css': 'text/css',
+            '.json': 'application/json',
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.gif': 'image/gif',
+            '.svg': 'image/svg+xml',
+            '.woff': 'application/font-woff',
+            '.ttf': 'application/font-ttf',
+        }
+        content_type = mime_types.get(ext, 'application/octet-stream')
+        
+        # Read file
+        try:
+            with open(file_path, 'rb') as f:
+                content = f.read()
+            
+            # Inject scripts for HTML files
+            if ext == '.html':
+                content = self.inject_scripts(content)
+            
+            # Send response
+            writer.write(b'HTTP/1.1 200 OK\r\n')
+            writer.write(f'Content-Type: {content_type}\r\n'.encode())
+            writer.write(f'Content-Length: {len(content)}\r\n'.encode())
+            writer.write(b'Access-Control-Allow-Origin: *\r\n')
+            writer.write(b'Connection: close\r\n')
+            writer.write(b'\r\n')
+            writer.write(content)
+            await writer.drain()
+            
+        except Exception as e:
+            writer.write(b'HTTP/1.1 500 Internal Server Error\r\n')
+            writer.write(b'Connection: close\r\n')
+            writer.write(b'\r\n')
+            writer.write(str(e).encode())
+            await writer.drain()
+    
+    def inject_scripts(self, html_content: bytes) -> bytes:
+        """Inject console and live reload scripts into HTML."""
+        content = html_content.decode('utf-8', errors='ignore')
+        
+        # Console injection script
         console_script = '''
     <script>
       (function() {
         console.log('p5.nvim console integration enabled');
         
-        // Override console methods
         const originalConsole = {
           log: console.log,
           error: console.error,
           warn: console.warn,
           info: console.info
         };
-        
-        // Debounce function to reduce browser load
-        function debounce(func, wait) {
-          let timeout;
-          return function executedFunction(...args) {
-            const later = () => {
-              clearTimeout(timeout);
-              func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-          };
-        }
-        
-        // Buffer for batching logs
-        let logBuffer = [];
-        let flushTimeout;
-        
-        function flushLogBuffer() {
-          if (logBuffer.length === 0) return;
-          
-          const logs = [...logBuffer];
-          logBuffer = [];
-          
-          // Send logs asynchronously
-          fetch('/api/console/log', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              type: 'console_batch',
-              logs: logs,
-              timestamp: new Date().toISOString()
-            })
-          }).catch(err => {
-            // If batch fails, try individual logs
-            logs.forEach(log => {
-              fetch('/api/console/log', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(log)
-              }).catch(() => {}); // Silently fail individual logs
-            });
-          });
-        }
         
         function sendToConsole(level, args) {
           const message = args.map(arg => {
@@ -270,266 +515,185 @@ class P5HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             return String(arg);
           }).join(' ');
           
-          const logEntry = {
-            type: 'console',
-            level: level,
-            message: message,
-            source: 'javascript',
-            timestamp: new Date().toISOString()
-          };
-          
-          // Add to buffer
-          logBuffer.push(logEntry);
-          
-          // Flush buffer with debounce (100ms for better performance)
-          clearTimeout(flushTimeout);
-          flushTimeout = setTimeout(flushLogBuffer, 100);
+          fetch('/api/console/log', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'console',
+              level: level,
+              message: message,
+              source: 'javascript',
+              timestamp: new Date().toISOString()
+            })
+          }).catch(() => {});
         }
         
-        // Debounced console methods to reduce frequency
-        console.log = debounce(function(...args) {
+        console.log = function(...args) {
           originalConsole.log.apply(console, args);
           sendToConsole('log', args);
-        }, 50);
+        };
         
         console.error = function(...args) {
           originalConsole.error.apply(console, args);
-          sendToConsole('error', args); // No debounce for errors
+          sendToConsole('error', args);
         };
         
-        console.warn = debounce(function(...args) {
+        console.warn = function(...args) {
           originalConsole.warn.apply(console, args);
           sendToConsole('warn', args);
-        }, 100);
+        };
         
-        console.info = debounce(function(...args) {
+        console.info = function(...args) {
           originalConsole.info.apply(console, args);
           sendToConsole('info', args);
-        }, 150);
+        };
         
-        // Handle uncaught errors
         window.onerror = function(msg, source, lineno, colno, error) {
           sendToConsole('error', [msg + ' at ' + source + ':' + lineno + ':' + colno]);
           return false;
         };
-        
-        // Flush buffer on page unload
-        window.addEventListener('beforeunload', flushLogBuffer);
       })();
     </script>'''
         
-        # Replace </body> with console script + </body>
-        return re.sub(r'</body\s*>', console_script + '</body>', html_content, flags=re.IGNORECASE)
-    
-    def inject_live_reload_script(self, html_content):
-        """Inject live reload script into HTML content."""
-        # Get the actual WebSocket port (might be different from default)
-        actual_ws_port = globals().get('LIVE_RELOAD_PORT', 12002)
+        # Live reload script
+        live_reload_script = f'''
+    <script>
+      (function() {{
+        const ws = new WebSocket('ws://localhost:{self.live_reload_server.port}');
         
-        live_reload_script = '''<script>
-    (function() {
-      const ws = new WebSocket('ws://localhost:''' + str(actual_ws_port) + '''');
-      
-      ws.onopen = function() {
-        console.log('Live reload connected');
-      };
-      
-      ws.onclose = function() {
-        console.log('Live reload disconnected');
-        // Try to reconnect after 1 second
-        setTimeout(function() {
-          window.location.reload();
-        }, 1000);
-      };
-      
-      ws.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        if (data.type === 'reload') {
-          console.log('File changed, reloading page...');
-          window.location.reload();
-        } else if (data.type === 'connected') {
-          console.log(data.message);
-        }
-      };
-      
-      ws.onerror = function(error) {
-        console.log('Live reload error:', error);
-      };
-    })();
-  </script>'''
+        ws.onopen = function() {{
+          console.log('Live reload connected');
+        }};
         
-        # Insert live reload script after console script
-        return html_content.replace('</body>', live_reload_script + '</body>')
+        ws.onclose = function() {{
+          setTimeout(function() {{
+            window.location.reload();
+          }}, 1000);
+        }};
+        
+        ws.onmessage = function(event) {{
+          const data = JSON.parse(event.data);
+          if (data.type === 'reload') {{
+            window.location.reload();
+          }}
+        }};
+      }})();
+    </script>'''
+        
+        # Inject scripts before </body>
+        if '</body>' in content.lower():
+            content = re.sub(r'</body>', console_script + live_reload_script + '</body>', content, flags=re.IGNORECASE)
+        else:
+            content += console_script + live_reload_script
+        
+        return content.encode('utf-8')
     
-    def inject_scripts(self, html_content):
-        """Inject both console and live reload scripts."""
-        content = self.inject_console_script(html_content)
-        return self.inject_live_reload_script(content)
-
-def start_websocket_server():
-    """Start simple WebSocket server for live reload."""
-    import socket
-    
-    # Try to find an available port for WebSocket
-    ws_port = LIVE_RELOAD_PORT
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    
-    # Try binding to the default port first, then alternatives
-    for attempt in range(10):
+    async def start(self):
+        """Start the HTTP server."""
         try:
-            server_socket.bind(('localhost', ws_port))
-            server_socket.listen(5)
-            print(f"Live reload WebSocket server running on ws://localhost:{ws_port}")
-            break
+            self.server = await asyncio.start_server(
+                self.handle_client, 'localhost', self.port
+            )
+            print(f"Server running at http://localhost:{self.port}/")
         except OSError as e:
-            if e.errno == 98:  # Address already in use
-                ws_port += 1
-                continue
-            else:
-                raise e
-    
-    return server_socket, ws_port
-    
-    def handle_client(client_socket, address):
-        reload_clients.add(client_socket)
-        try:
-            # Send connected message
-            message = json.dumps({
-                'type': 'connected',
-                'message': 'Live reload connected'
-            })
-            client_socket.send(message.encode())
-            
-            # Keep connection alive
-            while True:
+            print(f"Error starting server on port {self.port}: {e}")
+            # Try alternate ports
+            for offset in range(1, 10):
                 try:
-                    data = client_socket.recv(1024)
-                    if not data:
-                        break
-                except:
-                    break
-        except:
-            pass
-        finally:
-            reload_clients.discard(client_socket)
-            client_socket.close()
+                    alt_port = self.port + offset
+                    self.server = await asyncio.start_server(
+                        self.handle_client, 'localhost', alt_port
+                    )
+                    self.port = alt_port
+                    print(f"Server running at http://localhost:{self.port}/")
+                    return
+                except OSError:
+                    continue
+            raise
     
-    def accept_connections():
-        while True:
-            try:
-                client_socket, address = server_socket.accept()
-                client_thread = threading.Thread(target=handle_client, args=(client_socket, address))
-                client_thread.daemon = True
-                client_thread.start()
-            except:
-                break
-    
-    # Start accepting connections in separate thread
-    accept_thread = threading.Thread(target=accept_connections)
-    accept_thread.daemon = True
-    accept_thread.start()
-    
-    return server_socket
+    async def close(self):
+        """Close the HTTP server."""
+        self.running = False
+        if self.server:
+            self.server.close()
+            await self.server.wait_closed()
 
-def start_file_watcher():
-    """Start simple file watcher for live reload."""
-    import os
-    import time
-    
-    print("Starting simple file watcher...")
-    
-    def watch_directory():
-        """Improved file watching using modification time tracking."""
-        last_files = {}  # Store file paths with their modification times
-        
-        while True:
-            try:
-                current_files = {}
-                for root, dirs, files in os.walk(DIRECTORY):
-                    # Skip ignored directories
-                    dirs[:] = [d for d in dirs if not any(ignore in d for ignore in ['.git', 'node_modules', 'dist', 'build'])]
-                    
-                    for file in files:
-                        if any(file.endswith(ext) for ext in ['.js', '.css', '.html', '.json']):
-                            file_path = os.path.join(root, file)
-                            try:
-                                mod_time = os.path.getmtime(file_path)
-                                current_files[file_path] = mod_time
-                                
-                                # Check if file is new or modified
-                                if file_path not in last_files or last_files[file_path] != mod_time:
-                                    trigger_reload(file_path)
-                            except OSError:
-                                # File might be deleted or inaccessible
-                                continue
-                
-                last_files = current_files
-                time.sleep(0.5)  # Check every 0.5 seconds for better responsiveness
-                
-            except Exception as e:
-                print(f"File watcher error: {e}")
-                time.sleep(1)
-    
-    def trigger_reload(file_path):
-        """Send reload signal to all connected clients."""
-        global last_reload_time
-        current_time = time.time()
-            
-        # Debounce (avoid multiple reloads for same save)
-        if current_time - last_reload_time < DEBOUNCE_TIME:
-            return
-            
-        last_reload_time = current_time
-        
-        if reload_clients:
-            message = json.dumps({
-                'type': 'reload',
-                'file': file_path,
-                'timestamp': current_time
-            })
-            
-            disconnected_clients = set()
-            for client in list(reload_clients):
-                try:
-                    client.send(message.encode())
-                except:
-                    disconnected_clients.add(client)
-            
-            # Remove disconnected clients
-            reload_clients.difference_update(disconnected_clients)
-            print(f"Reload triggered for: {file_path}")
-    
-    # Start file watcher in separate thread
-    watcher_thread = threading.Thread(target=watch_directory)
-    watcher_thread.daemon = True
-    watcher_thread.start()
-    
-    return watcher_thread
 
-def run_server():
+async def main():
+    """Main entry point."""
+    directory = os.getcwd()
+    
+    # Create components
+    console_buffer = ConsoleBuffer(max_size=CONFIG['console']['buffer_size'])
+    
+    lr_config = CONFIG['live_reload']
+    file_watcher = FileWatcher(
+        directory=directory,
+        extensions=lr_config['watch_extensions'],
+        exclude_dirs=lr_config['exclude_dirs'],
+        debounce_ms=lr_config['debounce_ms']
+    )
+    
+    live_reload_server = LiveReloadServer(
+        port=lr_config['port'],
+        directory=directory,
+        file_watcher=file_watcher
+    )
+    
+    http_server = HTTPServer(
+        port=CONFIG['port'],
+        directory=directory,
+        console_buffer=console_buffer,
+        live_reload_server=live_reload_server
+    )
+    
+    # Start servers
+    await live_reload_server.start()
+    await http_server.start()
+    
+    # Update live reload port in HTTP server if it changed
+    lr_config['port'] = live_reload_server.port
+    
     # Start file watcher
-    watcher = start_file_watcher()
+    async def on_file_change(path: str):
+        message = {
+            "type": "reload",
+            "file": path,
+            "timestamp": datetime.now().isoformat()
+        }
+        await live_reload_server.broadcast(message)
+        print(f"Reload triggered for: {path}")
     
-    # Start WebSocket server
-    ws_server = None
-    try:
-        ws_server, ws_port = start_websocket_server()
-        # Update LIVE_RELOAD_PORT for JavaScript injection
-        globals()['LIVE_RELOAD_PORT'] = ws_port
-    except Exception as e:
-        print(f"Failed to start WebSocket server: {e}")
+    file_watcher.start(on_file_change)
     
-    # Start HTTP server
-    try:
-        with socketserver.TCPServer(("", PORT), P5HTTPRequestHandler) as httpd:
-            print(f"Server running at http://localhost:{PORT}/")
-            httpd.serve_forever()
-    except KeyboardInterrupt:
-        print("\\nServer stopped")
-    finally:
-        if ws_server:
-            ws_server.close()
+    # Handle shutdown
+    shutdown_event = asyncio.Event()
+    
+    def signal_handler():
+        print("\nShutting down server...")
+        shutdown_event.set()
+    
+    loop = asyncio.get_event_loop()
+    for sig in (signal.SIGTERM, signal.SIGINT):
+        try:
+            loop.add_signal_handler(sig, signal_handler)
+        except NotImplementedError:
+            # Windows doesn't support add_signal_handler
+            pass
+    
+    # Wait for shutdown
+    await shutdown_event.wait()
+    
+    # Cleanup
+    print("Closing connections...")
+    await file_watcher.stop()
+    await live_reload_server.close()
+    await http_server.close()
+    print("Server stopped")
+
 
 if __name__ == "__main__":
-    run_server()
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\nServer stopped by user")

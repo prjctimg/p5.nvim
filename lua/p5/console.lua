@@ -1,4 +1,4 @@
--- Browser console integration for p5.nvim with terminal-based real-time streaming
+-- Browser console integration for p5.nvim with SSE streaming
 local C = {}
 local core = require("p5.core")
 local notify = core.notify
@@ -7,24 +7,15 @@ C.console_win = nil
 C.console_buf = nil
 C.console_job = nil
 C.server_port = nil
+C.reconnect_attempts = 0
+C.max_reconnect_attempts = 5
+C.reconnect_delay = 1000
 
--- ANSI color codes for different log levels
-local ANSI_COLORS = {
-  reset = "\027[0m",
-  error = "\027[1;31m",    -- Bold red
-  warn = "\027[1;33m",     -- Bold yellow  
-  info = "\027[1;36m",     -- Bold cyan
-  log = "\027[0;37m",      -- White
-  timestamp = "\027[0;90m"  -- Dim gray
-}
-
--- Create console terminal with real-time log streaming
 C.create_console_terminal = function()
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
     return C.console_win
   end
 
-  -- Check if we have a server port and project
   local server = require("p5.server")
   if not (server.server_job and server.port) then
     notify("Console requires a running server first", "warn")
@@ -32,34 +23,30 @@ C.create_console_terminal = function()
   end
 
   C.server_port = server.port
-  
-  -- Create terminal command for real-time log streaming (formatted)
+  C.reconnect_attempts = 0
+
   local curl_cmd = string.format(
     'curl -s -N "http://localhost:%d/api/console/stream" 2>/dev/null',
     C.server_port
   )
 
-  -- Create terminal buffer
   C.console_buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_name(C.console_buf, "p5-console-terminal")
   vim.api.nvim_buf_set_option(C.console_buf, "filetype", "log")
   vim.api.nvim_buf_set_option(C.console_buf, "modifiable", false)
 
-  -- Track connection state
   local connection_confirmed = false
-  
-  -- Start terminal with curl command
-  C.console_job = vim.fn.termopen(curl_cmd, {
+
+  C.console_job = vim.fn.jobstart(curl_cmd, {
+    term = true,
     on_stdout = function(_, data)
-      -- Terminal output is handled by the terminal itself
-      -- Detect successful connection by looking for formatted logs
       if data and #data > 0 and not connection_confirmed then
         for _, line in ipairs(data) do
           if line:match("\027%[%d") then
-            -- ANSI color codes indicate successful connection
             connection_confirmed = true
+            C.reconnect_attempts = 0
             vim.schedule(function()
-              notify("Console connected to browser successfully", "ok")
+              notify("Console connected to browser", "info")
             end)
             break
           end
@@ -67,23 +54,21 @@ C.create_console_terminal = function()
       end
     end,
     on_stderr = function(_, data)
-      -- Handle curl errors gracefully
       if data and #data > 0 then
         for _, line in ipairs(data) do
           if line:match("Connection refused") or line:match("curl:") then
-            -- Server not ready yet, this is expected
           end
         end
       end
     end,
     on_exit = function(_, exit_code)
-      if exit_code ~= 0 then
-        -- Terminal exited unexpectedly
+      if exit_code ~= 0 and C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
         vim.schedule(function()
           if connection_confirmed then
-            notify("Console disconnected from browser", "info")
+            notify("Console disconnected from browser", "warn")
+            C.attempt_reconnect()
           else
-            notify("Console connection failed", "warn")
+            notify("Console connection failed", "error")
           end
         end)
       end
@@ -94,25 +79,39 @@ C.create_console_terminal = function()
   return C.console_buf
 end
 
--- Show console terminal window
+C.attempt_reconnect = function()
+  if C.reconnect_attempts >= C.max_reconnect_attempts then
+    notify("Console reconnection failed: max attempts reached", "error")
+    return
+  end
+
+  local delay = C.reconnect_delay * (2 ^ C.reconnect_attempts)
+  C.reconnect_attempts = C.reconnect_attempts + 1
+
+  vim.defer_fn(function()
+    if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
+      notify(string.format("Reconnecting to console (attempt %d)...", C.reconnect_attempts), "info")
+      C.create_console_terminal()
+    end
+  end, delay)
+end
+
 C.show = function()
-  -- First check if we're in a p5 project and server is running
   local project = require("p5.project")
   local is_project = project.is_p5_project()
   local server = require("p5.server")
-  
+
   if not is_project then
     notify("Console only works in p5.js projects", "warn")
     return
   end
-  
+
   if not server.server_job then
     notify("Start server first with :P5StartServer", "info")
     return
   end
 
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
-    -- Window already visible, just focus it
     vim.api.nvim_set_current_win(C.console_win)
     return
   end
@@ -125,21 +124,18 @@ C.show = function()
   local position = C.config.console.position or "below"
   local height = C.config.console.height or 10
 
-  -- Determine split command
   local split_pattern = core.split_commands[position] or core.split_commands.below
   local split_cmd = split_pattern:format(height)
 
   vim.cmd(split_cmd)
   C.console_win = vim.api.nvim_get_current_win()
   vim.api.nvim_win_set_buf(C.console_win, buf)
-  
-  -- Set window options
+
   vim.api.nvim_win_set_option(C.console_win, "wrap", true)
   vim.api.nvim_win_set_option(C.console_win, "number", false)
   vim.api.nvim_win_set_option(C.console_win, "relativenumber", false)
   vim.api.nvim_win_set_option(C.console_win, "signcolumn", "no")
 
-   -- Set up keymaps for console window
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "", {
     callback = function()
       vim.cmd("stopinsert")
@@ -148,7 +144,7 @@ C.show = function()
     desc = "Hide p5 console",
     noremap = true
   })
-  
+
   vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
     callback = C.hide,
     desc = "Hide p5 console"
@@ -163,28 +159,24 @@ C.show = function()
     end,
     desc = "Enter terminal mode"
   })
-  
-  -- Add toggle keymap like normal terminal buffers
+
   vim.api.nvim_buf_set_keymap(buf, "t", "<C-/>", "", {
     callback = C.toggle,
     desc = "Toggle p5 console",
     noremap = true
   })
-  
-  -- Enter terminal mode automatically
+
   vim.cmd("startinsert")
-  
+
   notify("Console connected to server on port " .. C.server_port, "info")
 end
 
--- Hide console window
 C.hide = function()
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
     vim.api.nvim_win_close(C.console_win, true)
     C.console_win = nil
     C.console_buf = nil
-    
-    -- Stop terminal job if running
+
     if C.console_job then
       vim.fn.jobstop(C.console_job)
       C.console_job = nil
@@ -192,7 +184,6 @@ C.hide = function()
   end
 end
 
--- Toggle console
 C.toggle = function()
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
     C.hide()
@@ -201,220 +192,53 @@ C.toggle = function()
   end
 end
 
--- Clear console terminal
 C.clear_terminal = function()
-  if C.console_buf and vim.api.nvim_buf_is_valid(C.console_buf) then
-    -- Send clear command to terminal
+  if C.console_buf and vim.api.nvim_buf_is_valid(C.console_buf) and C.console_job then
     vim.api.nvim_chan_send(C.console_job, "\027[H\027[2J")
   end
 end
 
--- Add log entry
-C.add_log = function(level, message, source)
-  if not C.console_buf or not vim.api.nvim_buf_is_valid(C.console_buf) then
-    return
-  end
-
-  local timestamp = os.date("%H:%M:%S")
-  local level_str = string.upper(level)
-  local source_str = source and (" [" .. source .. "]") or ""
-  local log_entry = string.format("[%s] %s%s: %s", timestamp, level_str, source_str, message)
-
-  -- Add to logs array
-  table.insert(C.logs, {
-    timestamp = timestamp,
-    level = level,
-    message = message,
-    source = source
-  })
-
-  -- Add to buffer
-  local lines = vim.api.nvim_buf_get_lines(C.console_buf, 0, -1, false)
-  table.insert(lines, log_entry)
-  vim.api.nvim_buf_set_lines(C.console_buf, 0, -1, false, lines)
-
-  -- Auto-scroll to bottom
-  if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
-    vim.api.nvim_win_set_cursor(C.console_win, {#lines, 0})
-  end
-
-  -- Highlight based on level
-  local line_count = #lines
-  local ns_id = vim.api.nvim_create_namespace("p5_console")
-  
-  if level == "error" then
-    vim.api.nvim_buf_add_highlight(C.console_buf, ns_id, "Error", line_count - 1, 0, -1)
-  elseif level == "warn" then
-    vim.api.nvim_buf_add_highlight(C.console_buf, ns_id, "WarningMsg", line_count - 1, 0, -1)
-  elseif level == "info" then
-    vim.api.nvim_buf_add_highlight(C.console_buf, ns_id, "Normal", line_count - 1, 0, -1)
-  elseif level == "log" then
-    vim.api.nvim_buf_add_highlight(C.console_buf, ns_id, "Comment", line_count - 1, 0, -1)
-  end
-end
-
--- Start HTTP console polling for browser logs (legacy method - only for fallback)
-C.start_console_polling = function(server_port)
-  -- Only allow polling if we're in a p5 project and server is running
-  local project = require("p5.project")
-  local is_project = project.is_p5_project()
-  local server = require("p5.server")
-  
-  if not is_project then
-    notify("Console polling only works in p5.js projects", "warn")
-    return false
-  end
-  
-  if not server.server_job then
-    notify("Console polling requires running server", "warn")
-    return false
-  end
-  
-  -- Check if terminal console is preferred
-  if C.config.console and C.config.console.terminal_mode ~= false then
-    -- Prefer terminal mode by default
-    return false
-  end
-  
-  -- Reset restart count on successful start
-  C.restart_count = 0
-  
-  -- Use provided port or fall back to config
-  local port = server_port or server.port or 8000
-  local server_url = "http://localhost:" .. port
-  
-  C.polling_job = vim.fn.jobstart(string.format("curl -s '%s/api/console/poll'", server_url), {
-    on_stdout = function(_, data)
-      for _, line in ipairs(data) do
-        if line and line ~= "" then
-          local ok, log_entry = pcall(vim.fn.json_decode, line)
-          if ok then
-            C.add_log(log_entry.level or "log", log_entry.message or "", log_entry.source or "browser")
-          end
-        end
-      end
-    end,
-    on_stderr = function(_, data)
-      -- Handle polling errors with better feedback
-      if data and #data > 0 and data[1] ~= "" then
-        local error_msg = table.concat(data, " ")
-        
-        -- Only show certain errors to avoid spam
-        if error_msg:match("Connection refused") then
-          -- Server might be starting up, this is expected
-        elseif error_msg:match("No route to host") or error_msg:match("Could not resolve host") then
-          local core = require("p5.core")
-          notify("Console polling: Server not reachable", "warn")
-        end
-      end
-    end,
-    on_exit = function(_, exit_code)
-      if exit_code ~= 0 and C.console_enabled then
-        local core = require("p5.core")
-        
-        -- Implement exponential backoff for restarts
-        local current_time = os.time()
-        local last_restart = C.last_console_restart or 0
-        local restart_delay = math.min(5000, 1000 * (2 ^ C.restart_count)) -- Max 5 seconds
-        
-        -- Avoid too frequent restarts
-        if current_time - last_restart > 10 then
-          C.restart_count = (C.restart_count or 0) + 1
-          C.last_console_restart = current_time
-          
-          -- Restart polling if server is still expected to be running
-          vim.defer_fn(function()
-            if C.console_enabled then
-              notify("Restarting console polling (attempt " .. C.restart_count .. ")", "info")
-              C.start_console_polling(server_port)
-            end
-          end, restart_delay)
-        end
-      end
-    end
-  })
-  
-  C.add_log("info", "Console polling started", "server")
-  return true
-end
-
--- Stop console polling
-C.stop_console_polling = function()
-  if C.polling_job then
-    vim.fn.jobstop(C.polling_job)
-    C.polling_job = nil
-    C.add_log("info", "Console polling stopped", "server")
-  end
-  if C.console_job then
-    vim.fn.jobstop(C.console_job)
-    C.console_job = nil
-  end
-  C.console_enabled = false
-end
-
--- Generate JavaScript code to inject in HTML
 C.get_injection_script = function()
   return [[
     <script>
       (function() {
         console.log('p5.nvim console integration enabled');
-        
-        // Override console methods
+
         const originalConsole = {
           log: console.log,
           error: console.error,
           warn: console.warn,
           info: console.info
         };
-        
-        // Debounce function to reduce browser load
-        function debounce(func, wait) {
-          let timeout;
-          return function executedFunction(...args) {
-            const later = () => {
-              clearTimeout(timeout);
-              func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-          };
-        }
-        
-        // Buffer for batching logs
+
         let logBuffer = [];
         let flushTimeout;
-        
+
         function flushLogBuffer() {
           if (logBuffer.length === 0) return;
-          
+
           const logs = [...logBuffer];
           logBuffer = [];
-          
-          // Send logs asynchronously
+
           fetch('/api/console/log', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               type: 'console_batch',
               logs: logs,
               timestamp: new Date().toISOString()
             })
-          }).catch(err => {
-            // If batch fails, try individual logs
+          }).catch(() => {
             logs.forEach(log => {
               fetch('/api/console/log', {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(log)
-              }).catch(() => {}); // Silently fail individual logs
+              }).catch(() => {});
             });
           });
         }
-        
+
         function sendToConsole(level, args) {
           const message = args.map(arg => {
             if (typeof arg === 'object') {
@@ -426,7 +250,7 @@ C.get_injection_script = function()
             }
             return String(arg);
           }).join(' ');
-          
+
           const logEntry = {
             type: 'console',
             level: level,
@@ -434,60 +258,51 @@ C.get_injection_script = function()
             source: 'javascript',
             timestamp: new Date().toISOString()
           };
-          
-          // Add to buffer
+
           logBuffer.push(logEntry);
-          
-          // Flush buffer with debounce (100ms for better performance)
+
           clearTimeout(flushTimeout);
           flushTimeout = setTimeout(flushLogBuffer, 100);
         }
-        
-        // Debounced console methods to reduce frequency
-        console.log = debounce(function(...args) {
+
+        console.log = function(...args) {
           originalConsole.log.apply(console, args);
           sendToConsole('log', args);
-        }, 50);
-        
+        };
+
         console.error = function(...args) {
           originalConsole.error.apply(console, args);
-          sendToConsole('error', args); // No debounce for errors
+          sendToConsole('error', args);
         };
-        
-        console.warn = debounce(function(...args) {
+
+        console.warn = function(...args) {
           originalConsole.warn.apply(console, args);
           sendToConsole('warn', args);
-        }, 100);
-        
-        console.info = debounce(function(...args) {
+        };
+
+        console.info = function(...args) {
           originalConsole.info.apply(console, args);
           sendToConsole('info', args);
-        }, 150);
-        
-        // Handle uncaught errors
+        };
+
         window.onerror = function(msg, source, lineno, colno, error) {
           sendToConsole('error', [msg + ' at ' + source + ':' + lineno + ':' + colno]);
           return false;
         };
-        
-        // Flush buffer on page unload
+
         window.addEventListener('beforeunload', flushLogBuffer);
       })();
     </script>]]
 end
 
--- Setup console integration
 C.setup = function(config)
   C.config = config
-  C.console_enabled = false  -- Only enable when explicitly started
-  
-  -- Create highlight groups
+  C.console_enabled = false
+
   vim.api.nvim_set_hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
   vim.api.nvim_set_hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
   vim.api.nvim_set_hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
   vim.api.nvim_set_hl(0, "P5ConsoleLog", { fg = "#6272a4" })
-  
-  -- Do NOT start console polling automatically - only when server starts in a p5 project
 end
 
 return C
