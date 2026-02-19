@@ -193,10 +193,10 @@ class FileWatcher:
         return any(str(path).endswith(ext) for ext in self.extensions)
     
     async def watch(self):
-        """Watch for file changes with stability check."""
+        """Watch for file changes - only trigger on actual file saves."""
         self.running = True
         last_mtimes = {}
-        stable_paths = {}  # Track files that have become stable
+        pending_changes = {}  # Track files that have changed but not yet stable
         
         while self.running:
             try:
@@ -212,27 +212,42 @@ class FileWatcher:
                             except OSError:
                                 continue
                 
-                # Check for changes
+                now = datetime.now().timestamp()
+                
+                # Check for actual file changes (mtime differs from last known)
                 for path, mtime in current_mtimes.items():
-                    if path not in last_mtimes or last_mtimes[path] != mtime:
-                        # File changed - mark as unstable
-                        stable_paths[path] = None
+                    last_mtime = last_mtimes.get(path)
+                    
+                    if last_mtime is None:
+                        # First time seeing this file - skip
                         continue
                     
-                    # File hasn't changed - check if it's now stable
-                    if path in stable_paths and stable_paths[path] is None:
-                        now = datetime.now().timestamp()
-                        # Mark as stable
-                        stable_paths[path] = now
-                        # Only trigger if stable for debounce_ms
-                        if now - self.last_trigger > self.debounce_ms:
+                    if mtime != last_mtime:
+                        # File has changed - mark as pending
+                        if path not in pending_changes:
+                            pending_changes[path] = now
+                
+                # Check pending changes for stability
+                for path, change_time in list(pending_changes.items()):
+                    current_mtime = current_mtimes.get(path)
+                    last_mtime = last_mtimes.get(path)
+                    
+                    if current_mtime is None:
+                        # File was deleted
+                        del pending_changes[path]
+                        continue
+                    
+                    if current_mtime == last_mtime and (now - change_time) >= (self.debounce_ms / 1000):
+                        # File is stable (not changing) and has been stable long enough
+                        del pending_changes[path]
+                        if now - self.last_trigger > (self.debounce_ms / 1000):
                             self.last_trigger = now
                             yield path
                 
                 # Clean up paths that no longer exist
-                for path in list(stable_paths.keys()):
+                for path in list(pending_changes.keys()):
                     if path not in current_mtimes:
-                        del stable_paths[path]
+                        del pending_changes[path]
                 
                 last_mtimes = current_mtimes
                 await asyncio.sleep(0.3)
