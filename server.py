@@ -345,7 +345,7 @@ class HTTPServer:
             writer.write(b'Access-Control-Allow-Origin: *\r\n')
             writer.write(b'Connection: close\r\n')
             writer.write(b'\r\n')
-            writer.write(json.dumps({"error": str(e)}).encode())
+            writer.write(json.dumps({"error": "Invalid request"}).encode())
             await writer.drain()
     
     async def handle_console_stream(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
@@ -423,9 +423,18 @@ class HTTPServer:
         if path == '/':
             path = '/index.html'
         
-        # Prevent directory traversal
-        if '..' in path:
-            writer.write(b'HTTP/1.1 403 Forbidden\r\n')
+        # Prevent directory traversal - check resolved path stays within allowed directory
+        try:
+            resolved = Path(self.directory, path.lstrip('/')).resolve()
+            base_resolved = Path(self.directory).resolve()
+            if not resolved.is_relative_to(base_resolved):
+                writer.write(b'HTTP/1.1 403 Forbidden\r\n')
+                writer.write(b'Connection: close\r\n')
+                writer.write(b'\r\n')
+                await writer.drain()
+                return
+        except (ValueError, OSError):
+            writer.write(b'HTTP/1.1 400 Bad Request\r\n')
             writer.write(b'Connection: close\r\n')
             writer.write(b'\r\n')
             await writer.drain()
@@ -483,7 +492,7 @@ class HTTPServer:
             writer.write(b'HTTP/1.1 500 Internal Server Error\r\n')
             writer.write(b'Connection: close\r\n')
             writer.write(b'\r\n')
-            writer.write(str(e).encode())
+            writer.write(b'An error occurred while processing your request')
             await writer.drain()
     
     def inject_scripts(self, html_content: bytes) -> bytes:

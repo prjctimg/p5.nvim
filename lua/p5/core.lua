@@ -164,7 +164,7 @@ C.download_file_with_progress = function(url, dest, callback, options)
     
     -- Check if we have a valid cached version
     if C.is_cache_valid(cache_file) then
-      vim.fn.system("cp '" .. cache_file .. "' '" .. dest .. "'")
+      vim.fn.system({"cp", cache_file, dest})
       if callback then callback(true) end
       return true
     end
@@ -174,9 +174,9 @@ C.download_file_with_progress = function(url, dest, callback, options)
   C.get_remote_file_size(url, function(total_size)
     local cmd
     if C.command_exists("curl") then
-      cmd = string.format("curl -L --progress-bar '%s' -o '%s'", url, dest)
+      cmd = {"curl", "-L", "--progress-bar", url, "-o", dest}
     elseif C.command_exists("wget") then
-      cmd = string.format("wget --progress=bar:force -O '%s' '%s'", dest, url)
+      cmd = {"wget", "--progress=bar:force", "-O", dest, url}
     else
       C.notify("Neither curl nor wget found. Cannot download: " .. url, "error")
       if callback then callback(false) end
@@ -214,7 +214,7 @@ C.download_file_with_progress = function(url, dest, callback, options)
         
         -- Cache the downloaded file if successful and caching enabled
         if success and use_cache and cache_file then
-          vim.fn.system("cp '" .. dest .. "' '" .. cache_file .. "'")
+          vim.fn.system({"cp", dest, cache_file})
         end
         
         if callback then callback(success) end
@@ -238,7 +238,7 @@ C.download_file = function(url, dest, callback, options)
     
     -- Check if we have a valid cached version
     if C.is_cache_valid(cache_file) then
-      vim.fn.system("cp '" .. cache_file .. "' '" .. dest .. "'")
+      vim.fn.system({"cp", cache_file, dest})
       if callback then callback(true) end
       return true
     end
@@ -246,9 +246,9 @@ C.download_file = function(url, dest, callback, options)
   
   local cmd
   if C.command_exists("curl") then
-    cmd = string.format("curl -sL '%s' -o '%s'", url, dest)
+    cmd = {"curl", "-sL", url, "-o", dest}
   elseif C.command_exists("wget") then
-    cmd = string.format("wget -q -O '%s' '%s'", url, dest)
+    cmd = {"wget", "-q", "-O", dest, url}
   else
     C.notify("Neither curl nor wget found. Cannot download: " .. url, "error")
     if callback then callback(false) end
@@ -261,7 +261,7 @@ C.download_file = function(url, dest, callback, options)
       
       -- Cache the downloaded file if successful and caching enabled
       if success and use_cache and cache_file then
-        vim.fn.system("cp '" .. dest .. "' '" .. cache_file .. "'")
+        vim.fn.system({"cp", dest, cache_file})
       end
       
       if callback then callback(success) end

@@ -35,8 +35,9 @@ G.create_gist = function(description)
   local gist_files = {}
 
   for _, file in ipairs(files_to_include) do
-    local temp_path = "/tmp/p5_gist_" .. file.name
-    vim.fn.system("cp '" .. project_path .. "/" .. file.path .. "' '" .. temp_path .. "'")
+    local temp_path = "/tmp/p5_gist_" .. vim.fn.fnamemodify(file.name, ":t")
+    local source_path = vim.fn.fnamemodify(project_path .. "/" .. file.path, ":p")
+    vim.fn.system({"cp", source_path, temp_path})
     
     table.insert(temp_files, temp_path)
     table.insert(gist_files, temp_path)
@@ -100,9 +101,8 @@ G.update_gist = function(gist_id)
 
   local project_path = vim.fn.getcwd()
   
-  -- Create temporary file for updated sketch
   local temp_sketch = "/tmp/p5_gist_update_sketch.js"
-  vim.fn.system("cp '" .. project_path .. "/sketch.js' '" .. temp_sketch .. "'")
+  vim.fn.system({"cp", project_path .. "/sketch.js", temp_sketch})
 
   -- Update gist with only sketch.js
   local cmd = {"gh", "gist", "edit", gist_id, temp_sketch}

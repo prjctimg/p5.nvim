@@ -5,6 +5,7 @@
 - Create test cases for every refactor.
 - Clean up test files after you're done and before you commit the changes.
 - Commit the changes using conventional commit guidelines.
+- Sign off on all commits
 
 ## Coding Guidelines
 
