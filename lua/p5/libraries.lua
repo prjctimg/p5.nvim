@@ -105,7 +105,7 @@ end
 -- Update index.html with library includes
 L.update_index_html = function()
   local index_file = vim.fn.getcwd() .. "/index.html"
-  if not vim.fn.filereadable(index_file) then
+  if vim.fn.filereadable(index_file) == 0 then
     return
   end
   
