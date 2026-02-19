@@ -32,7 +32,7 @@ S.detect_server = function()
   local server_config = core.server_configs.python
   if core.command_exists(server_config.check) then
     local plugin_root = core.get_plugin_root()
-    local server_script = plugin_root .. "/servers/" .. server_config.script
+    local server_script = plugin_root .. "/server.py"
 
     if vim.fn.filereadable(server_script) == 1 then
       return "python"
@@ -60,7 +60,7 @@ S.validate_server = function(server_type, port)
   
   -- Check if server script exists
   local plugin_root = core.get_plugin_root()
-  local server_script = plugin_root .. "/servers/" .. server_config.script
+  local server_script = plugin_root .. "/server.py"
   if vim.fn.filereadable(server_script) == 0 then
     return false, "Server script not found: " .. server_script
   end
@@ -126,11 +126,7 @@ S.get_server_command = function(server_type, port)
   end
   
   if server_type == "python" then
-    return {"python3", plugin_root .. "/servers/" .. server_config.script, tostring(port)}
-  elseif server_type == "deno" then
-    return {"deno", "run", "--allow-net", plugin_root .. "/servers/" .. server_config.script, tostring(port)}
-  else
-    return {server_config.cmd, "run", plugin_root .. "/servers/" .. server_config.script, tostring(port)}
+    return {"python3", plugin_root .. "/server.py", tostring(port)}
   end
   
   return nil

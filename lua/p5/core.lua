@@ -367,102 +367,10 @@ M.setup_environment = function()
   local root = M.get_plugin_root()
   local asset_dir = M.get_asset_dir()
   
-  -- Create necessary directories
   vim.fn.mkdir(asset_dir .. "/core", "p")
   vim.fn.mkdir(asset_dir .. "/types", "p")
   vim.fn.mkdir(asset_dir .. "/contrib", "p")
-  
-  -- Create servers directory
-  vim.fn.mkdir(root .. "/servers", "p")
-  
-  -- Copy example configs
-  if vim.fn.filereadable(root .. "/servers/python.js.example") and vim.fn.filereadable(root .. "/scripts/python.py.example") then
-    vim.fn.system("cp " .. root .. "/scripts/python.py.example " .. root .. "/servers/python.py")
-  end
-  
-  -- Create user configs
-  vim.fn.writefile(vim.split([[
-{
-  "name": "p5.js Live Server",
-    "version": "1.0.0",
-    "default_port": 8000,
-    "auto_port_start": 8001,
-    "auto_port_end": 9000
-  }
-  ]], "\n"), root .. "/servers/config.default.json")
-  
-  vim.fn.writefile(vim.split([[
-{
-  "name": "p5.js Live Server (Python)",
-    "version": "1.0.0",
-    "default_port": 8000,
-    "auto_port_start": 8001,
-    "auto_port_end": 9000,
-    "service": "python"
-  }
-  ]], "\n"), root .. "/servers/config.python.json")
-  
-  -- Create editor configs
-  vim.fn.writefile(vim.split([[
-{
-  "name": "p5.js Live Server (Deno)",
-    "version": "1.0.0",
-    "default_port": 8000,
-    "auto_port_start": 8001,
-    "auto_port_end": 9000,
-    "service": "deno"
-  }
-  ]], "\n"), root .. "/servers/config.deno.json")
-  
-  vim.fn.writefile(vim.split([[
-{
-  "name": "p5.js Live Server (Node)",
-    "version": "1.0.0",
-    "default_port": 8000,
-    "auto_port_start": 8001,
-    "auto_port_end": 9000,
-    "service": "node"
-  }
-  ]], "\n"), root .. "/servers/config.node.json")
-  
-  vim.fn.writefile(vim.split([[
-{
-  "name": "p5.js Live Server (Bun)",
-    "version": "1.0.0",
-    "default_port": 8000,
-    "auto_port_start": 8001,
-    "auto_port_end": 9000,
-    "service": "bun"
-  }
-  ]], "\n"), root .. "/servers/config.bun.json")
-  
-  -- Create editor configs
-  vim.fn.writefile(root .. "/servers/config.deno.json", [[{
-  "name": "p5.js Live Server (Deno)",
-    "version": "1.0.0",
-    "default_port": 8000,
-    "auto_port_start": 8001,
-    "auto_port_end": 9000,
-    "service": "deno"
-  }]])
-  vim.fn.writefile(root .. "/servers/config.node.json", [[{
-  "name": "p5.js Live Server (Node)",
-    "version": "1.0.0",
-    "default_port": 8000,
-    "auto_port_start": 8001,
-    "auto_port_end": 9000,
-    "service": "node"
-  }]])
-  vim.fn.writefile(root .. "/servers/config.bun.json", [[{
-  "name": "p5.js Live Server (Bun)",
-    "version": "1.0.0",
-    "default_port": 8000,
-    "auto_port_start": 8001,
-    "auto_port_end": 9000,
-    "service": "bun"
-  }]])
-  
-  -- Update version.json with current p5.js version if available
+
   if M.assets_available() then
     local info = M.get_p5_version()
     if info and info.version ~= "unknown" then
@@ -476,7 +384,6 @@ M.setup_environment = function()
     end
   end
   
-  -- Show setup completion message
   if M.assets_available() then
     M.notify_fallback("P5 environment setup complete", "info")
   end
