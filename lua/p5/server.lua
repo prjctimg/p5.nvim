@@ -2,6 +2,8 @@
 local S = {}
 local core = require("p5.core")
 local notify = core.notify
+local console = require("p5.console")
+local project = require("p5.project")
 
 -- Default configuration
 S.config = {
@@ -135,7 +137,6 @@ end
 -- Start live server
 S.start_server = function(port)
   -- Check if we're in a p5.js project
-  local project = require("p5.project")
   local is_project, project_msg, project_info = project.is_p5_project()
   
   if not is_project then
@@ -209,7 +210,6 @@ S.start_server = function(port)
     end,
     on_exit = function(_, exit_code, event)
       -- Stop console polling when HTTP server stops
-      local console = require("p5.console")
       console.hide()
       
       if exit_code == 0 then
@@ -283,9 +283,6 @@ end
 
 -- Start console polling after server is ready
 S.start_console_after_ready = function()
-  local console = require("p5.console")
-  local core_ref = require("p5.core")
-  
   -- Pass the actual server port to console module
   local console_config = vim.deepcopy(S.config)
   console_config.server = {
@@ -296,7 +293,7 @@ S.start_console_after_ready = function()
   local console_started = console.start_console_polling(S.port)
   
   if console_started then
-    core_ref.notify("Console polling started on port " .. S.port, "ok")
+    notify("Console polling started on port " .. S.port, "ok")
   end
 end
 
@@ -330,7 +327,6 @@ end
 
 -- Start server with fallback HTML
 S.start_server_with_fallback = function(port)
-  local project = require("p5.project")
   local fallback_file = project.create_fallback_html()
   
   local server_type = S.detect_server()
@@ -390,7 +386,6 @@ S.start_server_with_fallback = function(port)
     end,
     on_exit = function(_, exit_code, event)
       -- Stop console polling when HTTP server stops
-      local console = require("p5.console")
       console.hide()
       
       -- Clean up fallback file

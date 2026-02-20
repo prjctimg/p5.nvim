@@ -2,6 +2,8 @@
 local C = {}
 local core = require("p5.core")
 local notify = core.notify
+local project = require("p5.project")
+local server = require("p5.server")
 
 C.console_win = nil
 C.console_buf = nil
@@ -97,9 +99,7 @@ C.attempt_reconnect = function()
 end
 
 C.show = function()
-  local project = require("p5.project")
   local is_project = project.is_p5_project()
-  local server = require("p5.server")
 
   if not is_project then
     notify("Console only works in p5.js projects", "warn")
