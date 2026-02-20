@@ -286,7 +286,7 @@ L.download_library = function(lib, dest, callback)
 
       local selected_asset = nil
       if lib.asset_pattern then
-        local pattern = lib.asset_pattern:gsub("%%", ".")
+        local pattern = lib.asset_pattern
         for _, asset in ipairs(assets) do
           if asset.name and asset.name:match(pattern) then
             selected_asset = asset
