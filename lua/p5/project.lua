@@ -241,9 +241,9 @@ P.copy_assets_to_project = function(project_path, callback)
           end)
         end
       end
-      -- Use vim.loop for async copy if available (0.10+), fallback to sync
-      if vim.loop and vim.loop.fs_copyfile then
-        vim.loop.fs_copyfile(src, dest, on_copy)
+      -- Use vim.uv for async copy if available (0.10+), fallback to sync
+      if vim.uv and vim.uv.fs_copyfile then
+        vim.uv.fs_copyfile(src, dest, on_copy)
       else
         -- Fallback for older Neovim versions
         local result = vim.fn.system({"cp", src, dest})
