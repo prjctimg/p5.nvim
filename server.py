@@ -14,6 +14,8 @@ from collections import deque
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+import websockets
+import websockets.exceptions
 
 # Configuration
 CONFIG = {
@@ -89,46 +91,29 @@ class LiveReloadServer:
         self.directory = directory
         self.file_watcher = file_watcher
         self.clients = set()
-        self.server: Optional[asyncio.Server] = None
+        self.server = None
     
-    async def handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+    async def handler(self, websocket):
         """Handle WebSocket client connection."""
-        addr = writer.get_extra_info('peername')
-        self.clients.add(writer)
-        
+        self.clients.add(websocket)
         try:
-            # Send welcome message
-            response = json.dumps({"type": "connected", "message": "Live reload connected"})
-            writer.write(response.encode())
-            await writer.drain()
-            
-            # Keep connection alive
-            while True:
-                data = await reader.read(1024)
-                if not data:
-                    break
-        except Exception:
+            await websocket.send(json.dumps({"type": "connected", "message": "Live reload connected"}))
+            await websocket.wait_closed()
+        except (websockets.exceptions.ConnectionClosedOK, websockets.exceptions.ConnectionClosedError):
             pass
         finally:
-            self.clients.discard(writer)
-            writer.close()
-            await writer.wait_closed()
+            self.clients.discard(websocket)
     
     async def start(self):
         """Start the WebSocket server."""
         try:
-            self.server = await asyncio.start_server(
-                self.handle_client, 'localhost', self.port
-            )
+            self.server = await websockets.serve(self.handler, 'localhost', self.port)
             print(f"Live reload WebSocket running on ws://localhost:{self.port}")
         except OSError as e:
-            # Try alternate ports
             for offset in range(1, 10):
                 try:
                     alt_port = self.port + offset
-                    self.server = await asyncio.start_server(
-                        self.handle_client, 'localhost', alt_port
-                    )
+                    self.server = await websockets.serve(self.handler, 'localhost', alt_port)
                     self.port = alt_port
                     print(f"Live reload WebSocket running on ws://localhost:{self.port}")
                     return
@@ -138,20 +123,22 @@ class LiveReloadServer:
     
     async def broadcast(self, message: dict):
         """Broadcast message to all connected clients."""
-        data = json.dumps(message).encode()
+        data = json.dumps(message)
+        
+        # Take a snapshot to avoid concurrent modification during iteration
+        clients_snapshot = set(self.clients)
         disconnected = set()
         
-        for client in self.clients:
+        for client in clients_snapshot:
             try:
-                client.write(data)
-                await client.drain()
+                await client.send(data)
             except Exception:
                 disconnected.add(client)
         
         for client in disconnected:
             self.clients.discard(client)
             try:
-                client.close()
+                await client.close()
             except Exception:
                 pass
     
@@ -159,7 +146,7 @@ class LiveReloadServer:
         """Close the server and all connections."""
         for client in list(self.clients):
             try:
-                client.close()
+                await client.close()
             except Exception:
                 pass
         self.clients.clear()
@@ -592,24 +579,41 @@ class HTTPServer:
         live_reload_script = f'''
     <script>
       (function() {{
-        const ws = new WebSocket('ws://localhost:{self.live_reload_server.port}');
+        let ws = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 10;
         
-        ws.onopen = function() {{
-          console.log('Live reload connected');
-        }};
+        function connect() {{
+          ws = new WebSocket('ws://localhost:{self.live_reload_server.port}');
+          
+          ws.onopen = function() {{
+            console.log('Live reload connected');
+            reconnectAttempts = 0;
+          }};
+          
+          ws.onclose = function() {{
+            // Only attempt reconnect, don't reload
+            if (reconnectAttempts < maxReconnectAttempts) {{
+              reconnectAttempts++;
+              setTimeout(connect, Math.min(1000 * reconnectAttempts, 5000));
+            }}
+          }};
+          
+          ws.onerror = function() {{
+            // Silently fail, onclose will handle reconnect
+          }};
+          
+          ws.onmessage = function(event) {{
+            try {{
+              const data = JSON.parse(event.data);
+              if (data.type === 'reload') {{
+                window.location.reload();
+              }}
+            }} catch (e) {{}}
+          }};
+        }}
         
-        ws.onclose = function() {{
-          setTimeout(function() {{
-            window.location.reload();
-          }}, 1000);
-        }};
-        
-        ws.onmessage = function(event) {{
-          const data = JSON.parse(event.data);
-          if (data.type === 'reload') {{
-            window.location.reload();
-          }}
-        }};
+        connect();
       }})();
     </script>'''
         
