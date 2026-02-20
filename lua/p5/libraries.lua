@@ -233,13 +233,97 @@ L.show_library_picker = function(callback)
   end
 end
 
--- Download library file
+-- Download library file from GitHub Releases or fallback to CDN
 L.download_library = function(lib, dest, callback)
-  if lib.cdn_fallback then
-    core.download_file(lib.cdn_fallback, dest, callback, { cache = true })
-  else
-    if callback then callback(false) end
+  local function done(success)
+    if callback then callback(success) end
   end
+
+  if not lib.github_repo then
+    if lib.cdn_fallback then
+      core.download_file(lib.cdn_fallback, dest, done, { cache = true })
+    else
+      done(false)
+    end
+    return
+  end
+
+  local api_url = string.format("https://api.github.com/repos/%s/releases/%s", lib.github_repo, lib.github_release or "latest")
+
+  local cmd = {"curl", "-s", "-L", "-w", "%{url_effective}", "-o", "/dev/null", api_url}
+  vim.fn.jobstart(cmd, {
+    on_stdout = function(_, data)
+      if not data or #data == 0 then
+        if lib.cdn_fallback then
+          core.download_file(lib.cdn_fallback, dest, done, { cache = true })
+        else
+          done(false)
+        end
+        return
+      end
+
+      local content = table.concat(data, "\n")
+      local ok, release_info = pcall(vim.fn.json_decode, content)
+
+      if not ok or not release_info then
+        if lib.cdn_fallback then
+          core.download_file(lib.cdn_fallback, dest, done, { cache = true })
+        else
+          done(false)
+        end
+        return
+      end
+
+      local assets = release_info.assets
+      if not assets or #assets == 0 then
+        if lib.cdn_fallback then
+          core.download_file(lib.cdn_fallback, dest, done, { cache = true })
+        else
+          done(false)
+        end
+        return
+      end
+
+      local selected_asset = nil
+      if lib.asset_pattern then
+        local pattern = lib.asset_pattern:gsub("%%", ".")
+        for _, asset in ipairs(assets) do
+          if asset.name and asset.name:match(pattern) then
+            selected_asset = asset
+            break
+          end
+        end
+      end
+
+      if not selected_asset then
+        selected_asset = assets[1]
+      end
+
+      local download_url = selected_asset.browser_download_url or selected_asset.url
+      if download_url then
+        core.download_file(download_url, dest, function(success)
+          if not success and lib.cdn_fallback then
+            core.download_file(lib.cdn_fallback, dest, done, { cache = true })
+          else
+            done(success)
+          end
+        end, { cache = true })
+      else
+        if lib.cdn_fallback then
+          core.download_file(lib.cdn_fallback, dest, done, { cache = true })
+        else
+          done(false)
+        end
+      end
+    end,
+    on_stderr = function()
+      if lib.cdn_fallback then
+        core.download_file(lib.cdn_fallback, dest, done, { cache = true })
+      else
+        done(false)
+      end
+    end
+  })
 end
 
 -- Download types for library
