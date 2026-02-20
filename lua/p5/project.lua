@@ -247,11 +247,13 @@ P.copy_assets_to_project = function(project_path, callback)
       else
         -- Fallback for older Neovim versions
         local result = vim.fn.system({"cp", src, dest})
-        if vim.v.shell_error ~= 0 then
-          on_copy(result)
-        else
-          on_copy(nil)
-        end
+        vim.schedule(function()
+          if vim.v.shell_error ~= 0 then
+            on_copy(result)
+          else
+            on_copy(nil)
+          end
+        end)
       end
     end
   end
