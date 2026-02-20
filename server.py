@@ -193,15 +193,15 @@ class FileWatcher:
         return any(str(path).endswith(ext) for ext in self.extensions)
     
     async def watch(self):
-        """Watch for file changes."""
+        """Watch for file changes - only trigger on actual file saves."""
         self.running = True
         last_mtimes = {}
+        pending_changes = {}  # Track files that have changed but not yet stable
         
         while self.running:
             try:
                 current_mtimes = {}
                 for root, dirs, files in os.walk(self.directory):
-                    # Filter excluded dirs
                     dirs[:] = [d for d in dirs if d not in self.exclude_dirs]
                     
                     for file in files:
@@ -212,16 +212,40 @@ class FileWatcher:
                             except OSError:
                                 continue
                 
-                # Check for changes
+                now = datetime.now().timestamp()
+                
+                # Check for actual file changes (mtime differs from last known)
                 for path, mtime in current_mtimes.items():
-                    if path not in last_mtimes or last_mtimes[path] != mtime:
-                        now = datetime.now().timestamp()
+                    last_mtime = last_mtimes.get(path)
+                    
+                    if last_mtime is None:
+                        # First time seeing this file - skip
+                        continue
+                    
+                    if mtime != last_mtime:
+                        # File has changed - mark as pending
+                        if path not in pending_changes:
+                            pending_changes[path] = now
+                
+                # Check pending changes for stability
+                for path, change_time in list(pending_changes.items()):
+                    current_mtime = current_mtimes.get(path)
+                    last_mtime = last_mtimes.get(path)
+                    
+                    if current_mtime is None:
+                        # File was deleted
+                        del pending_changes[path]
+                        continue
+                    
+                    if current_mtime == last_mtime and (now - change_time) >= self.debounce_ms:
+                        # File is stable (not changing) and has been stable long enough
+                        del pending_changes[path]
                         if now - self.last_trigger > self.debounce_ms:
                             self.last_trigger = now
                             yield path
                 
                 last_mtimes = current_mtimes
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.3)
                 
             except Exception as e:
                 print(f"File watcher error: {e}")
