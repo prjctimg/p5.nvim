@@ -3,37 +3,29 @@ local core = require("p5.core")
 local L = {
   config = {
     libraries_dir = "assets/libs",
+    types_dir = "assets/types",
     index_file = "index.html"
-  },
-  
-  -- Notification batching system
-  notification_batch = {
-    pending = {},
-    timer = nil,
-    delay = 1000 -- 1 second
-  },
-  
-  contributor_libs = {
-    {
-      name = "ml5",
-      description = "Lachine Learning library for creative coding",
-      github_repo = "ml5js/ml5-library",
-      github_release = "latest",
-      asset_pattern = "ml5%.min%.js$",
-      cdn_fallback = "https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"
-    },
-    {
-      name = "p5.speech",
-      description = "Speech synthesis and recognition for p5.js",
-      github_repo = "IDLNYU/p5.js-speech",
-      github_release = "latest", 
-      asset_pattern = "p5%.speech%.js$",
-      cdn_fallback = "https://cdn.jsdelivr.net/gh/IDLNYU/p5.js-speech@0.0.3/lib/p5.speech.js"
-    }
   }
 }
 
--- Load libraries from project
+-- Load libraries from JSON file
+L.load_libs_json = function()
+  local plugin_root = core.get_plugin_root()
+  local libs_file = plugin_root .. "/libs.json"
+  
+  if vim.fn.filereadable(libs_file) == 1 then
+    local content = vim.fn.readfile(libs_file)
+    local ok, data = pcall(vim.fn.json_decode, table.concat(content, "\n"))
+    if ok and data and data.libraries then
+      return data.libraries
+    end
+  end
+  return {}
+end
+
+L.contrib_libs = L.load_libs_json()
+
+-- Get installed libraries
 L.load = function()
   local libs = {}
   local config = core.read_workspace_config()
@@ -44,17 +36,67 @@ L.load = function()
     end
   end
   
-  -- Also scan library directory for any .js files
   local libs_dir = vim.fn.getcwd() .. "/assets/libs"
   if vim.fn.isdirectory(libs_dir) == 1 then
     local js_files = vim.fn.glob(libs_dir .. "/*.js", false, true)
     for _, file in ipairs(js_files) do
       local lib_name = vim.fn.fnamemodify(file, ":t:r")
-      table.insert(libs, lib_name)
+      if not vim.tbl_contains(libs, lib_name) then
+        table.insert(libs, lib_name)
+      end
     end
   end
   
   return libs
+end
+
+-- Check if library is installed
+L.is_installed = function(lib_name)
+  local libs = L.load()
+  return vim.tbl_contains(libs, lib_name)
+end
+
+-- Get library info from contrib libs
+L.get_library_info = function(lib_name)
+  for _, lib in ipairs(L.contrib_libs) do
+    if lib.name == lib_name then
+      return lib
+    end
+  end
+  return nil
+end
+
+-- Get latest version from GitHub
+L.get_latest_version = function(lib, callback)
+  if not lib.github_repo then
+    if callback then callback(nil) end
+    return
+  end
+  
+  local api_url = string.format("https://api.github.com/repos/%s/releases/%s", lib.github_repo, lib.github_release or "latest")
+  
+  local cmd = {"curl", "-s", api_url}
+  vim.fn.jobstart(cmd, {
+    on_stdout = function(_, data)
+      if not data or #data == 0 then
+        if callback then callback(nil) end
+        return
+      end
+      
+      local content = table.concat(data, "\n")
+      local ok, release_info = pcall(vim.fn.json_decode, content)
+      
+      if ok and release_info and release_info.tag_name then
+        local version = release_info.tag_name:gsub("^v", "")
+        if callback then callback(version) end
+      else
+        if callback then callback(nil) end
+      end
+    end,
+    on_stderr = function()
+      if callback then callback(nil) end
+    end
+  })
 end
 
 -- Add library to project
@@ -64,7 +106,6 @@ L.add_library = function(lib_name, source)
     config = { libraries = {} }
   end
   
-  -- Check if library already exists
   for _, lib in ipairs(config.libraries or {}) do
     if lib.name == lib_name then
       core.notify("Library '" .. lib_name .. "' already exists", "warn")
@@ -112,13 +153,11 @@ L.update_index_html = function()
   local content = vim.fn.readfile(index_file)
   local libs = L.load()
   
-  -- Generate script tags
   local script_tags = {}
   for _, lib in ipairs(libs) do
     table.insert(script_tags, '    <script src="assets/libs/' .. lib .. '.js"></script>')
   end
   
-  -- Find and replace library section
   local new_content = {}
   local in_lib_section = false
   
@@ -140,184 +179,194 @@ L.update_index_html = function()
   vim.fn.writefile(new_content, index_file)
 end
 
--- Get available libraries list for picker
+-- Get available libraries for picker
 L.get_available_libs = function()
-  local libs = {}
-  for _, lib in ipairs(L.contributor_libs) do
-    table.insert(libs, {
+  local installed = L.load()
+  local items = {}
+  
+  for _, lib in ipairs(L.contrib_libs) do
+    local is_installed = vim.tbl_contains(installed, lib.name)
+    local status = is_installed and "(installed)" or ""
+    table.insert(items, {
       name = lib.name,
-      description = lib.description
+      description = lib.description or "",
+      category = lib.category or "",
+      status = status,
+      installed = is_installed
     })
   end
-  return libs
+  
+  return items
 end
 
--- Show library picker
+-- Show library picker with multiselect
 L.show_library_picker = function(callback)
-  if core.require_snacks() then
-    core.require_snacks().picker.pick({
-      title = "Select Libraries",
-      items = L.get_available_libs(),
+  local items = L.get_available_libs()
+  local snacks = core.require_snacks()
+  
+  local format_item = function(item)
+    local status = item.status ~= "" and " " .. item.status or ""
+    return item.name .. " - " .. item.description .. status
+  end
+  
+  if snacks and snacks.picker then
+    snacks.picker.pick({
+      title = "Select Libraries (multi-select)",
+      items = items,
+      format = {
+        item = function(item)
+          return format_item(item)
+        end
+      },
+      multi_select = true,
       on_submit = function(selected)
         callback(selected)
       end
     })
   else
-    local libs = L.get_available_libs()
-    vim.ui.select(libs, {
-      prompt = "Select Libraries",
-      format_item = function(item)
-        return item.name .. " - " .. item.description
-      end
-    }, function(choice)
-      callback(choice)
+    vim.ui.select(items, {
+      prompt = "Select Libraries (use TAB to multi-select)",
+      format_item = format_item
+    }, function(selected)
+      callback(selected and {selected} or nil)
     end)
   end
 end
 
--- Install contributor libraries from CDN
-L.install_libs = function(lib_names)
-  -- Find library definitions
-  local libs = {}
-  for _, name in ipairs(lib_names) do
-    for _, lib in ipairs(L.contributor_libs) do
-      if lib.name == name then
-        table.insert(libs, lib)
-        break
-      end
-    end
-  end
-  
-  if #libs == 0 then
-    core.notify_fallback("No matching libraries found: " .. table.concat(lib_names, ", "), "warn")
-    return
-  end
-  
-  core.notify_fallback("Installing " .. #libs .. " libraries...", "info")
-  
-  -- Create libs directory
-  local libs_dir = vim.fn.getcwd() .. "/assets/libs"
-  vim.fn.mkdir(libs_dir, "p")
-  
-  L.process_libraries(libs, "install", function(completed)
-    local message = "Library installation complete: " .. completed .. "/" .. #libs
-    core.notify_fallback(message, "ok")
-    
-    -- Update project configuration
-    local config = core.read_workspace_config()
-    if config then
-      config.libraries = vim.tbl_deep_extend("force", config.libraries or {}, libs)
-      core.write_workspace_config(config)
-      L.update_index_html()
-    end
-  end)
-end
-
--- Download library from GitHub releases with CDN fallback
+-- Download library file
 L.download_library = function(lib, dest, callback)
-  -- Try GitHub releases first
-  if lib.github_repo and lib.asset_pattern then
-    core.get_github_release_asset(lib.github_repo, lib.github_release or "latest", lib.asset_pattern, function(download_url, error)
-      if download_url then
-        core.download_file(download_url, dest, callback, { cache = true })
-      else
-        -- Fallback to CDN
-        if lib.cdn_fallback then
-          core.notify_fallback("GitHub release failed for " .. lib.name .. ", using CDN fallback", "warn")
-          core.download_file(lib.cdn_fallback, dest, callback, { cache = true })
-        else
-          core.notify_fallback("Failed to download " .. lib.name .. ": " .. (error or "No fallback available"), "error")
-          if callback then callback(false) end
-        end
-      end
-    end)
-  elseif lib.cdn_fallback then
-    -- Use CDN if no GitHub repo specified
+  if lib.cdn_fallback then
     core.download_file(lib.cdn_fallback, dest, callback, { cache = true })
   else
-    core.notify_fallback("No download source for " .. lib.name, "error")
     if callback then callback(false) end
   end
 end
 
--- Batch notification system
-L.batch_notify = function(message, level)
-  table.insert(L.notification_batch.pending, {message, level})
+-- Download types for library
+L.download_types = function(lib_name, dest, callback)
+  local types_urls = {
+    ml5 = "https://unpkg.com/ml5@latest/dist/ml5.d.ts",
+    ["p5.speech"] = "https://unpkg.com/p5.js-speech@latest/lib/p5.speech.d.ts",
+  }
   
-  -- Debounce notifications
-  if L.notification_batch.timer then
-    vim.fn.timer_stop(L.notification_batch.timer)
+  local types_url = types_urls[lib_name]
+  if types_url then
+    core.download_file(types_url, dest, callback, { cache = true })
+  else
+    if callback then callback(true) end
   end
-  
-  L.notification_batch.timer = vim.fn.timer_start(L.notification_batch.delay, function()
-    L.flush_notifications()
-  end)
 end
 
-L.flush_notifications = function()
-  local messages = L.notification_batch.pending
-  if #messages > 0 then
-    local success_count = 0
-    local error_count = 0
-    
-    for _, msg in ipairs(messages) do
-      if msg[2] == "ok" then
-        success_count = success_count + 1
-      else
-        error_count = error_count + 1
-      end
+-- Install libraries with version check
+L.install_libs = function(lib_names)
+  if not lib_names or #lib_names == 0 then
+    core.notify("No libraries selected", "warn")
+    return
+  end
+  
+  local libs_dir = vim.fn.getcwd() .. "/assets/libs"
+  vim.fn.mkdir(libs_dir, "p")
+  
+  local types_dir = vim.fn.getcwd() .. "/assets/types"
+  vim.fn.mkdir(types_dir, "p")
+  
+  local to_install = {}
+  
+  for _, name in ipairs(lib_names) do
+    local lib = L.get_library_info(name)
+    if lib then
+      table.insert(to_install, lib)
     end
-    
-    local summary = string.format("Completed %d operations (%d successful, %d failed)", 
-      #messages, success_count, error_count)
-    core.notify_fallback(summary, success_count > 0 and "info" or "error")
-    L.notification_batch.pending = {}
   end
-end
-
--- Process libraries with unified callback and batched notifications
-L.process_libraries = function(libraries, operation, on_complete)
+  
+  if #to_install == 0 then
+    core.notify("No matching libraries found", "warn")
+    return
+  end
+  
+  local pending = #to_install
   local completed = 0
   
-  for _, lib in ipairs(libraries) do
-    local dest = vim.fn.getcwd() .. "/assets/libs/" .. lib.name .. ".js"
+  local function check_done()
+    completed = completed + 1
+    if completed >= pending then
+      core.notify("Library installation complete", "ok")
+      L.update_index_html()
+    end
+  end
+  
+  for _, lib in ipairs(to_install) do
+    local dest = libs_dir .. "/" .. lib.name .. ".js"
+    local types_dest = types_dir .. "/" .. lib.name .. ".d.ts"
     
     L.download_library(lib, dest, function(success)
-      completed = completed + 1
-      local msg = (operation == "install" and "Installed " or "Updated ") .. lib.name
-      local level = success and "ok" or "error"
-      
-      -- Use batched notifications instead of immediate ones
-      L.batch_notify(msg, level)
-      
-      if completed == #libraries then
-        -- Flush remaining notifications
-        L.flush_notifications()
-        
-        if on_complete then
-          on_complete(completed)
-        end
+      if success then
+        L.download_types(lib.name, types_dest, function()
+          check_done()
+        end)
+      else
+        core.notify("Failed to download " .. lib.name, "error")
+        check_done()
       end
     end)
   end
 end
 
--- Update all installed libraries
-L.update_libs = function()
-  local config = core.read_workspace_config()
-  if not config or not config.libraries then
-    core.notify_fallback("No libraries installed", "warn")
+-- Prompt for library installation with version check
+L.prompt_install = function(selected)
+  if not selected or #selected == 0 then
     return
   end
   
-  core.notify_fallback("Checking for library updates...", "info")
+  local to_install = {}
+  local to_update = {}
   
-  L.process_libraries(config.libraries, "update", function()
-    core.notify_fallback("Library update complete", "ok")
+  for _, item in ipairs(selected) do
+    local lib_name = type(item) == "table" and item.name or item
+    local lib = L.get_library_info(lib_name)
+    
+    if lib then
+      if L.is_installed(lib_name) then
+        table.insert(to_update, lib)
+      else
+        table.insert(to_install, lib_name)
+      end
+    end
+  end
+  
+  if #to_install > 0 then
+    L.install_libs(to_install)
+  end
+  
+  if #to_update > 0 then
+    local names = {}
+    for _, lib in ipairs(to_update) do
+      table.insert(names, lib.name)
+    end
+    core.notify("Update available for: " .. table.concat(names, ", "), "info")
+    L.install_libs(names)
+  end
+end
+
+-- Show picker and install
+L.show_and_install = function()
+  L.show_library_picker(function(selected)
+    L.prompt_install(selected)
   end)
 end
 
--- Setup libraries module
+-- Update all installed libraries
+L.update_libs = function()
+  local installed = L.load()
+  if #installed == 0 then
+    core.notify("No libraries installed", "warn")
+    return
+  end
+  
+  core.notify("Updating " .. #installed .. " libraries...", "info")
+  L.install_libs(installed)
+end
+
 L.setup = function(config)
   L.config = vim.tbl_deep_extend("force", L.config, config or {})
 end
