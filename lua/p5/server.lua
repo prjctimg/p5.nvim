@@ -210,7 +210,7 @@ S.start_server = function(port)
     on_exit = function(_, exit_code, event)
       -- Stop console polling when HTTP server stops
       local console = require("p5.console")
-      console.stop_console_polling()
+      console.hide()
       
       if exit_code == 0 then
         notify("Server stopped successfully", "info")
@@ -391,7 +391,7 @@ S.start_server_with_fallback = function(port)
     on_exit = function(_, exit_code, event)
       -- Stop console polling when HTTP server stops
       local console = require("p5.console")
-      console.stop_console_polling()
+      console.hide()
       
       -- Clean up fallback file
       if vim.fn.filereadable(fallback_file) == 1 then
