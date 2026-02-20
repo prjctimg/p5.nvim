@@ -15,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 import websockets
+import websockets.exceptions
 
 # Configuration
 CONFIG = {
@@ -97,9 +98,8 @@ class LiveReloadServer:
         self.clients.add(websocket)
         try:
             await websocket.send(json.dumps({"type": "connected", "message": "Live reload connected"}))
-            async for msg in websocket:
-                pass
-        except Exception:
+            await websocket.wait_closed()
+        except (websockets.exceptions.ConnectionClosedOK, websockets.exceptions.ConnectionClosedError):
             pass
         finally:
             self.clients.discard(websocket)
