@@ -124,9 +124,12 @@ class LiveReloadServer:
     async def broadcast(self, message: dict):
         """Broadcast message to all connected clients."""
         data = json.dumps(message)
+        
+        # Take a snapshot to avoid concurrent modification during iteration
+        clients_snapshot = set(self.clients)
         disconnected = set()
         
-        for client in self.clients:
+        for client in clients_snapshot:
             try:
                 await client.send(data)
             except Exception:
