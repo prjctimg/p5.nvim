@@ -84,10 +84,10 @@ P.create_project = function(name)
     notify("Project created: " .. name, "ok")
     
     -- Change CWD to new project directory
-    vim.cmd("cd " .. project_path)
+    vim.api.nvim_set_current_dir(project_path)
     
     -- Open sketch.js in editor
-    vim.cmd("edit " .. project_path .. "/sketch.js")
+    vim.cmd({ cmd = "edit", args = { project_path .. "/sketch.js" } })
   end)
 end
 
