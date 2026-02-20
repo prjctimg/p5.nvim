@@ -237,17 +237,12 @@ class FileWatcher:
                         del pending_changes[path]
                         continue
                     
-                    if current_mtime == last_mtime and (now - change_time) >= (self.debounce_ms / 1000):
+                    if current_mtime == last_mtime and (now - change_time) >= self.debounce_ms:
                         # File is stable (not changing) and has been stable long enough
                         del pending_changes[path]
-                        if now - self.last_trigger > (self.debounce_ms / 1000):
+                        if now - self.last_trigger > self.debounce_ms:
                             self.last_trigger = now
                             yield path
-                
-                # Clean up paths that no longer exist
-                for path in list(pending_changes.keys()):
-                    if path not in current_mtimes:
-                        del pending_changes[path]
                 
                 last_mtimes = current_mtimes
                 await asyncio.sleep(0.3)

@@ -94,10 +94,15 @@ end
 -- Create project files
 P.create_files = function(project_path, callback)
   -- Copy plugin assets to project (async with callback)
-  P.copy_assets_to_project(project_path, function()
+  P.copy_assets_to_project(project_path, function(err)
     -- Validate asset paths after copying
     if not P.validate_asset_paths(project_path) then
       -- Don't spam - just continue
+    end
+    if callback then
+      vim.schedule(function()
+        callback(err)
+      end)
     end
   end)
   
@@ -235,7 +240,9 @@ P.copy_assets_to_project = function(project_path, callback)
           table.insert(copy_errors, dest .. ": " .. vim.inspect(err))
         end
         if pending_copies == 0 and callback then
-          vim.schedule(callback)
+          vim.schedule(function()
+            callback(#copy_errors > 0 and table.concat(copy_errors, ", ") or nil)
+          end)
         end
       end
       -- Use vim.loop for async copy if available (0.10+), fallback to sync
@@ -243,8 +250,12 @@ P.copy_assets_to_project = function(project_path, callback)
         vim.loop.fs_copyfile(src, dest, on_copy)
       else
         -- Fallback for older Neovim versions
-        vim.fn.system({"cp", src, dest})
-        vim.schedule(callback)
+        local result = vim.fn.system({"cp", src, dest})
+        if vim.v.shell_error ~= 0 then
+          on_copy(result)
+        else
+          on_copy(nil)
+        end
       end
     end
   end
@@ -266,7 +277,9 @@ P.copy_assets_to_project = function(project_path, callback)
   
   -- If no async copies were started, call callback immediately
   if pending_copies == 0 and callback then
-    vim.schedule(callback)
+    vim.schedule(function()
+      callback(#copy_errors > 0 and table.concat(copy_errors, ", ") or nil)
+    end)
   end
 end
 
