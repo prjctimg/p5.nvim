@@ -92,17 +92,63 @@ class LiveReloadServer:
         self.server: Optional[asyncio.Server] = None
     
     async def handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-        """Handle WebSocket client connection."""
+        """Handle WebSocket client connection with proper handshake."""
         addr = writer.get_extra_info('peername')
-        self.clients.add(writer)
         
         try:
-            # Send welcome message
-            response = json.dumps({"type": "connected", "message": "Live reload connected"})
+            # Read HTTP request for WebSocket handshake
+            request = b""
+            while b"\r\n\r\n" not in request:
+                chunk = await reader.read(1024)
+                if not chunk:
+                    return
+                request += chunk
+            
+            request_str = request.decode('utf-8', errors='ignore')
+            
+            # Check for WebSocket upgrade request
+            if "Upgrade: websocket" not in request_str and "Sec-WebSocket-Key" not in request_str:
+                # Not a WebSocket request, close gracefully
+                writer.write(b"HTTP/1.1 400 Bad Request\r\n\r\n")
+                await writer.drain()
+                return
+            
+            # Extract WebSocket key
+            import hashlib
+            import base64
+            import secrets
+            
+            for line in request_str.split('\r\n'):
+                if line.lower().startswith('sec-websocket-key:'):
+                    key = line.split(':', 1)[1].strip()
+                    break
+            else:
+                key = None
+            
+            if not key:
+                writer.write(b"HTTP/1.1 400 Bad Request\r\n\r\n")
+                await writer.drain()
+                return
+            
+            # Generate accept key
+            magic = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+            accept = base64.b64encode(hashlib.sha1((key + magic).encode()).digest()).decode()
+            
+            # Send WebSocket upgrade response
+            response = (
+                "HTTP/1.1 101 Switching Protocols\r\n"
+                "Upgrade: websocket\r\n"
+                "Connection: Upgrade\r\n"
+                f"Sec-WebSocket-Accept: {accept}\r\n"
+                "\r\n"
+            )
             writer.write(response.encode())
             await writer.drain()
             
-            # Keep connection alive
+            # Add to clients after successful handshake
+            self.clients.add(writer)
+            
+            # Keep connection alive and handle messages
             while True:
                 data = await reader.read(1024)
                 if not data:
@@ -111,8 +157,11 @@ class LiveReloadServer:
             pass
         finally:
             self.clients.discard(writer)
-            writer.close()
-            await writer.wait_closed()
+            try:
+                writer.close()
+                await writer.wait_closed()
+            except Exception:
+                pass
     
     async def start(self):
         """Start the WebSocket server."""
@@ -592,24 +641,41 @@ class HTTPServer:
         live_reload_script = f'''
     <script>
       (function() {{
-        const ws = new WebSocket('ws://localhost:{self.live_reload_server.port}');
+        let ws = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 10;
         
-        ws.onopen = function() {{
-          console.log('Live reload connected');
-        }};
+        function connect() {{
+          ws = new WebSocket('ws://localhost:{self.live_reload_server.port}');
+          
+          ws.onopen = function() {{
+            console.log('Live reload connected');
+            reconnectAttempts = 0;
+          }};
+          
+          ws.onclose = function() {{
+            // Only attempt reconnect, don't reload
+            if (reconnectAttempts < maxReconnectAttempts) {{
+              reconnectAttempts++;
+              setTimeout(connect, Math.min(1000 * reconnectAttempts, 5000));
+            }}
+          }};
+          
+          ws.onerror = function() {{
+            // Silently fail, onclose will handle reconnect
+          }};
+          
+          ws.onmessage = function(event) {{
+            try {{
+              const data = JSON.parse(event.data);
+              if (data.type === 'reload') {{
+                window.location.reload();
+              }}
+            }} catch (e) {{}}
+          }};
+        }}
         
-        ws.onclose = function() {{
-          setTimeout(function() {{
-            window.location.reload();
-          }}, 1000);
-        }};
-        
-        ws.onmessage = function(event) {{
-          const data = JSON.parse(event.data);
-          if (data.type === 'reload') {{
-            window.location.reload();
-          }}
-        }};
+        connect();
       }})();
     </script>'''
         

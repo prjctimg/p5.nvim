@@ -274,9 +274,9 @@ S.stop_server = function()
   S.server_job = nil
   S.server_type = nil
   
-  -- Stop console polling
+  -- Stop console
   local console = require("p5.console")
-  console.stop_console_polling()
+  console.hide()
   
   notify("Server stopped on port " .. stopped_port .. " (" .. server_type .. ")", "info")
 end
