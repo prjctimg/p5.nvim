@@ -211,10 +211,6 @@ function draw() {
   vim.fn.mkdir(project_path .. "/assets/types", "p")
   vim.fn.mkdir(project_path .. "/assets/libs", "p")
   vim.fn.mkdir(project_path .. "/assets/contrib", "p")
-  
-  if callback then
-    vim.schedule(callback)
-  end
 end
 
 -- Copy plugin assets to project with bundled types and libraries
