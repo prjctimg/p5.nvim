@@ -14,6 +14,7 @@ from collections import deque
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+import websockets
 
 # Configuration
 CONFIG = {
@@ -89,95 +90,30 @@ class LiveReloadServer:
         self.directory = directory
         self.file_watcher = file_watcher
         self.clients = set()
-        self.server: Optional[asyncio.Server] = None
+        self.server = None
     
-    async def handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-        """Handle WebSocket client connection with proper handshake."""
-        addr = writer.get_extra_info('peername')
-        
+    async def handler(self, websocket):
+        """Handle WebSocket client connection."""
+        self.clients.add(websocket)
         try:
-            # Read HTTP request for WebSocket handshake
-            request = b""
-            while b"\r\n\r\n" not in request:
-                chunk = await reader.read(1024)
-                if not chunk:
-                    return
-                request += chunk
-            
-            request_str = request.decode('utf-8', errors='ignore')
-            
-            # Check for WebSocket upgrade request
-            if "Upgrade: websocket" not in request_str and "Sec-WebSocket-Key" not in request_str:
-                # Not a WebSocket request, close gracefully
-                writer.write(b"HTTP/1.1 400 Bad Request\r\n\r\n")
-                await writer.drain()
-                return
-            
-            # Extract WebSocket key
-            import hashlib
-            import base64
-            import secrets
-            
-            for line in request_str.split('\r\n'):
-                if line.lower().startswith('sec-websocket-key:'):
-                    key = line.split(':', 1)[1].strip()
-                    break
-            else:
-                key = None
-            
-            if not key:
-                writer.write(b"HTTP/1.1 400 Bad Request\r\n\r\n")
-                await writer.drain()
-                return
-            
-            # Generate accept key
-            magic = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
-            accept = base64.b64encode(hashlib.sha1((key + magic).encode()).digest()).decode()
-            
-            # Send WebSocket upgrade response
-            response = (
-                "HTTP/1.1 101 Switching Protocols\r\n"
-                "Upgrade: websocket\r\n"
-                "Connection: Upgrade\r\n"
-                f"Sec-WebSocket-Accept: {accept}\r\n"
-                "\r\n"
-            )
-            writer.write(response.encode())
-            await writer.drain()
-            
-            # Add to clients after successful handshake
-            self.clients.add(writer)
-            
-            # Keep connection alive and handle messages
-            while True:
-                data = await reader.read(1024)
-                if not data:
-                    break
+            await websocket.send(json.dumps({"type": "connected", "message": "Live reload connected"}))
+            async for msg in websocket:
+                pass
         except Exception:
             pass
         finally:
-            self.clients.discard(writer)
-            try:
-                writer.close()
-                await writer.wait_closed()
-            except Exception:
-                pass
+            self.clients.discard(websocket)
     
     async def start(self):
         """Start the WebSocket server."""
         try:
-            self.server = await asyncio.start_server(
-                self.handle_client, 'localhost', self.port
-            )
+            self.server = await websockets.serve(self.handler, 'localhost', self.port)
             print(f"Live reload WebSocket running on ws://localhost:{self.port}")
         except OSError as e:
-            # Try alternate ports
             for offset in range(1, 10):
                 try:
                     alt_port = self.port + offset
-                    self.server = await asyncio.start_server(
-                        self.handle_client, 'localhost', alt_port
-                    )
+                    self.server = await websockets.serve(self.handler, 'localhost', alt_port)
                     self.port = alt_port
                     print(f"Live reload WebSocket running on ws://localhost:{self.port}")
                     return
@@ -187,20 +123,19 @@ class LiveReloadServer:
     
     async def broadcast(self, message: dict):
         """Broadcast message to all connected clients."""
-        data = json.dumps(message).encode()
+        data = json.dumps(message)
         disconnected = set()
         
         for client in self.clients:
             try:
-                client.write(data)
-                await client.drain()
+                await client.send(data)
             except Exception:
                 disconnected.add(client)
         
         for client in disconnected:
             self.clients.discard(client)
             try:
-                client.close()
+                await client.close()
             except Exception:
                 pass
     
@@ -208,7 +143,7 @@ class LiveReloadServer:
         """Close the server and all connections."""
         for client in list(self.clients):
             try:
-                client.close()
+                await client.close()
             except Exception:
                 pass
         self.clients.clear()
