@@ -2,6 +2,8 @@
 local S = {}
 local core = require("p5.core")
 local notify = core.notify
+local console = require("p5.console")
+local project = require("p5.project")
 
 -- Default configuration
 S.config = {
