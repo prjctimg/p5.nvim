@@ -249,11 +249,7 @@ L.show_uninstall_picker = function()
     snacks.picker.pick({
       title = "Select Libraries to Remove",
       items = installed,
-      format = {
-        item = function(item)
-          return format_item(item)
-        end
-      },
+      format = function(item) return format_item(item) end,
       multi_select = true,
       on_submit = function(selected)
         if selected and #selected > 0 then
@@ -384,11 +380,7 @@ L.show_library_picker = function(callback)
     snacks.picker.pick({
       title = "Select Libraries (multi-select)",
       items = items,
-      format = {
-        item = function(item)
-          return format_item(item)
-        end
-      },
+      format = function(item) return format_item(item) end,
       multi_select = true,
       on_submit = function(selected)
         callback(selected)

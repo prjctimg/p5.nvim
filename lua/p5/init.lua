@@ -93,12 +93,10 @@ I.setup = function(opts)
           "Toggle console",
           "Open docs",
         },
-        format = {
-          item = function(item) return item end
-        },
+        format = function(item) return item end,
         on_submit = function(selected)
           if selected then
-            run_action(selected[1])
+            run_action(selected)
           end
         end
       })
