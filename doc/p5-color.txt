@@ -1,0 +1,521 @@
+*p5-color*                                         p5.js color docs
+
+==============================================================================
+Table of Contents                           *p5-color-table-of-contents*
+
+1. Functions                                                |p5-color-functions|
+  - alpha()              |p5-color-alpha|
+  - blue()              |p5-color-blue|
+  - brightness()              |p5-color-brightness|
+  - color()              |p5-color-color|
+  - green()              |p5-color-green|
+  - hue()              |p5-color-hue|
+  - lerpColor()              |p5-color-lerpColor|
+  - lightness()              |p5-color-lightness|
+  - red()              |p5-color-red|
+  - saturation()              |p5-color-saturation|
+  - background()              |p5-color-background|
+  - clear()              |p5-color-clear|
+  - colorMode()              |p5-color-colorMode|
+  - fill()              |p5-color-fill|
+  - noFill()              |p5-color-noFill|
+  - noStroke()              |p5-color-noStroke|
+  - stroke()              |p5-color-stroke|
+  - erase()              |p5-color-erase|
+  - noErase()              |p5-color-noErase|
+  - toString()              |p5-color-toString|
+  - setRed()              |p5-color-setRed|
+  - setGreen()              |p5-color-setGreen|
+  - setBlue()              |p5-color-setBlue|
+  - setAlpha()              |p5-color-setAlpha|
+
+🎨 Color module for p5.js
+
+📦 p5.js Version: 1.7.7~
+⏰ Last Updated: 2026-02-21 17:05:22Z~
+
+==============================================================================
+2. Functions                                                |p5-color-functions|
+
+
+`alpha()`                                            |p5-color-alpha|
+
+Extracts the alpha (transparency) value from a p5.Color object, array of color
+components, or CSS color string.
+
+#### Parameters:
+
+    color  p5.Color object, array of color components, or CSS color string.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`blue()`                                            |p5-color-blue|
+
+Extracts the blue value from a p5.Color object, array of color components, or
+CSS color string.
+
+#### Parameters:
+
+    color  p5.Color object, array of color components, or CSS color string.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`brightness()`                                            |p5-color-brightness|
+
+Extracts the HSB brightness value from a p5.Color object, array of color
+components, or CSS color string.
+
+#### Parameters:
+
+    color  p5.Color object, array of color components, or CSS color string.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`color()`                                            |p5-color-color|
+
+Creates a p5.Color object. By default, the parameters are interpreted as RGB
+values. Calling color(255, 204, 0) will return a bright yellow color. The way
+these parameters are interpreted may be changed with the colorMode() function.
+The version of color() with one parameter interprets the value one of two
+ways. If the parameter is a number, it's interpreted as a grayscale value. If
+the parameter is a string, it's interpreted as a CSS color string. The version
+of color() with two parameters interprets the first one as a grayscale value.
+The second parameter sets the alpha (transparency) value. The version of
+color() with three parameters interprets them as RGB, HSB, or HSL colors,
+depending on the current colorMode(). The version of color() with four
+parameters interprets them as RGBA, HSBA, or HSLA colors, depending on the
+current colorMode(). The last parameter sets the alpha (transparency) value.
+
+#### Parameters:
+
+    gray  number specifying value between white and black.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`green()`                                            |p5-color-green|
+
+Extracts the green value from a p5.Color object, array of color components, or
+CSS color string.
+
+#### Parameters:
+
+    color  p5.Color object, array of color components, or CSS color string.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`hue()`                                            |p5-color-hue|
+
+Extracts the hue value from a p5.Color object, array of color components, or
+CSS color string. Hue exists in both HSB and HSL. It describes a color's
+position on the color wheel. By default, this function returns the
+HSL-normalized hue. If the colorMode() is set to HSB, it returns the
+HSB-normalized hue.
+
+#### Parameters:
+
+    color  p5.Color object, array of color components, or CSS color string.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`lerpColor()`                                            |p5-color-lerpColor|
+
+Blends two colors to find a third color between them. The amt parameter
+specifies the amount to interpolate between the two values. 0 is equal to the
+first color, 0.1 is very near the first color, 0.5 is halfway between the two
+colors, and so on. Negative numbers are set to 0. Numbers greater than 1 are
+set to 1. This differs from the behavior of lerp. It's necessary because
+numbers outside of the interval [0, 1] will produce strange and unexpected
+colors. The way that colors are interpolated depends on the current
+colorMode().
+
+#### Parameters:
+
+    c1  interpolate from this color.
+    c2  interpolate to this color.
+    amt  number between 0 and 1.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`lightness()`                                            |p5-color-lightness|
+
+Extracts the HSL lightness value from a p5.Color object, array of color
+components, or CSS color string.
+
+#### Parameters:
+
+    color  p5.Color object, array of color components, or CSS color string.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`red()`                                            |p5-color-red|
+
+Extracts the red value from a p5.Color object, array of color components, or
+CSS color string.
+
+#### Parameters:
+
+    color  p5.Color object, array of color components, or CSS color string.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`saturation()`                                            |p5-color-saturation|
+
+Extracts the saturation value from a p5.Color object, array of color
+components, or CSS color string. Saturation is scaled differently in HSB and
+HSL. By default, this function returns the HSL saturation. If the colorMode()
+is set to HSB, it returns the HSB saturation.
+
+#### Parameters:
+
+    color  p5.Color object, array of color components, or CSS color string.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: creating_reading*
+
+---
+
+
+`background()`                                            |p5-color-background|
+
+Sets the color used for the background of the canvas. By default, the
+background is transparent. This function is typically used within draw() to
+clear the display window at the beginning of each frame. It can also be used
+inside setup() to set the background on the first frame of animation. The
+version of background() with one parameter interprets the value one of four
+ways. If the parameter is a number, it's interpreted as a grayscale value. If
+the parameter is a string, it's interpreted as a CSS color string. RGB, RGBA,
+HSL, HSLA, hex, and named color strings are supported. If the parameter is a
+p5.Color object, it will be used as the background color. If the parameter is
+a p5.Image object, it will be used as the background image. The version of
+background() with two parameters interprets the first one as a grayscale
+value. The second parameter sets the alpha (transparency) value. The version
+of background() with three parameters interprets them as RGB, HSB, or HSL
+colors, depending on the current colorMode(). By default, colors are specified
+in RGB values. Calling background(255, 204, 0) sets the background a bright
+yellow color.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: setting*
+
+---
+
+
+`clear()`                                            |p5-color-clear|
+
+Clears the pixels on the canvas. This function makes every pixel 100%
+transparent. Calling clear() doesn't clear objects created by createX()
+functions such as createGraphics(), createVideo(), and createImg(). These
+objects will remain unchanged after calling clear() and can be redrawn. In
+WebGL mode, this function can clear the screen to a specific color. It
+interprets four numeric parameters as normalized RGBA color values. It also
+clears the depth buffer. If you are not using the WebGL renderer, these
+parameters will have no effect.
+
+#### Parameters:
+
+    r  normalized red value.
+    g  normalized green value.
+    b  normalized blue value.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: setting*
+
+---
+
+
+`colorMode()`                                            |p5-color-colorMode|
+
+Changes the way p5.js interprets color data. By default, the numeric
+parameters for fill(), stroke(), background(), and color() are defined by
+values between 0 and 255 using the RGB color model. This is equivalent to
+calling colorMode(RGB, 255). Pure red is color(255, 0, 0) in this model.
+Calling colorMode(RGB, 100) sets colors to be interpreted as RGB color values
+between 0 and 100. Pure red is color(100, 0, 0) in this model. Calling
+colorMode(HSB) or colorMode(HSL) changes to HSB or HSL system instead of RGB.
+p5.Color objects remember the mode that they were created in. Changing modes
+doesn't affect their appearance.
+
+#### Parameters:
+
+    mode  either RGB, HSB or HSL, corresponding to Red/Green/Blue and Hue/Saturation/Brightness (or Lightness).
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: setting*
+
+---
+
+
+`fill()`                                            |p5-color-fill|
+
+Sets the color used to fill shapes. Calling fill(255, 165, 0) or
+fill('orange') means all shapes drawn after the fill command will be filled
+with the color orange. The version of fill() with one parameter interprets the
+value one of three ways. If the parameter is a number, it's interpreted as a
+grayscale value. If the parameter is a string, it's interpreted as a CSS color
+string. A p5.Color object can also be provided to set the fill color. The
+version of fill() with three parameters interprets them as RGB, HSB, or HSL
+colors, depending on the current colorMode(). The default color space is RGB,
+with each value in the range from 0 to 255.
+
+#### Parameters:
+
+    v1  red value if color mode is RGB or hue value if color mode is HSB.
+    v2  green value if color mode is RGB or saturation value if color mode is HSB.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: setting*
+
+---
+
+
+`noFill()`                                            |p5-color-noFill|
+
+Disables setting the interior color of shapes. This is the same as making the
+fill completely transparent. If both noStroke() and noFill() are called,
+nothing will be drawn to the screen. @chainable
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: setting*
+
+---
+
+
+`noStroke()`                                            |p5-color-noStroke|
+
+Disables drawing the stroke (outline). If both noStroke() and noFill() are
+called, nothing will be drawn to the screen. @chainable
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: setting*
+
+---
+
+
+`stroke()`                                            |p5-color-stroke|
+
+Sets the color used to draw lines and borders around shapes. Calling
+stroke(255, 165, 0) or stroke('orange') means all shapes drawn after the
+stroke() command will be filled with the color orange. The way these
+parameters are interpreted may be changed with the colorMode() function. The
+version of stroke() with one parameter interprets the value one of three ways.
+If the parameter is a number, it's interpreted as a grayscale value. If the
+parameter is a string, it's interpreted as a CSS color string. A p5.Color
+object can also be provided to set the stroke color. The version of stroke()
+with two parameters interprets the first one as a grayscale value. The second
+parameter sets the alpha (transparency) value. The version of stroke() with
+three parameters interprets them as RGB, HSB, or HSL colors, depending on the
+current colorMode(). The version of stroke() with four parameters interprets
+them as RGBA, HSBA, or HSLA colors, depending on the current colorMode(). The
+last parameter sets the alpha (transparency) value.
+
+#### Parameters:
+
+    v1  red value if color mode is RGB or hue value if color mode is HSB.
+    v2  green value if color mode is RGB or saturation value if color mode is HSB.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: setting*
+
+---
+
+
+`erase()`                                            |p5-color-erase|
+
+All drawing that follows erase() will subtract from the canvas, revealing the
+web page underneath. The erased areas will become transparent, allowing the
+content behind the canvas to show through. The fill(), stroke(), and
+blendMode() have no effect once erase() is called. The erase() function has
+two optional parameters. The first parameter sets the strength of erasing by
+the shape's interior. A value of 0 means that no erasing will occur. A value
+of 255 means that the shape's interior will fully erase the content
+underneath. The default value is 255 (full strength). The second parameter
+sets the strength of erasing by the shape's edge. A value of 0 means that no
+erasing will occur. A value of 255 means that the shape's edge will fully
+erase the content underneath. The default value is 255 (full strength). To
+cancel the erasing effect, use the noErase() function. erase() has no effect
+on drawing done with the image() and background() functions.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: setting*
+
+---
+
+
+`noErase()`                                            |p5-color-noErase|
+
+Ends erasing that was started with erase(). The fill(), stroke(), and
+blendMode() settings will return to what they were prior to calling erase().
+@chainable
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: setting*
+
+---
+
+
+`toString()`                                            |p5-color-toString|
+
+Returns the color formatted as a string. Doing so can be useful for debugging,
+or for using p5.js with other libraries.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: p5.Color*
+
+---
+
+
+`setRed()`                                            |p5-color-setRed|
+
+Sets the red component of a color. The range depends on the colorMode(). In
+the default RGB mode it's between 0 and 255.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: p5.Color*
+
+---
+
+
+`setGreen()`                                            |p5-color-setGreen|
+
+Sets the green component of a color. The range depends on the colorMode(). In
+the default RGB mode it's between 0 and 255.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: p5.Color*
+
+---
+
+
+`setBlue()`                                            |p5-color-setBlue|
+
+Sets the blue component of a color. The range depends on the colorMode(). In
+the default RGB mode it's between 0 and 255.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: p5.Color*
+
+---
+
+
+`setAlpha()`                                            |p5-color-setAlpha|
+
+Sets the alpha (transparency) value of a color. The range depends on the
+colorMode(). In the default RGB mode it's between 0 and 255.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: p5.Color*
+
+---
+
+==============================================================================
+Generated by p5.nvim documentation generator <https://github.com/prjctimg/p5.nvim>
+
+vim:tw=78:ts=8:ft=help:norl:
