@@ -120,12 +120,25 @@ C.show = function()
   local height = C.config.console.height or 10
   C.server_port = server.port
 
-  local curl_cmd = string.format(
-    'curl -s -N "http://localhost:%d/api/console/stream" 2>/dev/null',
-    C.server_port
-  )
+  -- Use snacks.terminal if available
+  local snacks = core.require_snacks()
+  if snacks and snacks.terminal then
+    local url = string.format("http://localhost:%d/api/console/stream", C.server_port)
+    local term = snacks.terminal({"curl", "-s", "-N", url}, {
+      win = {
+        title = "p5-console",
+        position = position == "below" and "bottom" or position,
+        size = height,
+      },
+      auto_close = false,
+    })
+    C.console_win = term.win
+    C.console_buf = term.buf
+    notify("Console connected to server on port " .. C.server_port, "info")
+    return
+  end
 
-  -- Use manual terminal creation (snacks.terminal has API issues)
+  -- Fallback to manual terminal creation
   local buf = C.create_console_terminal()
   if not buf then
     return
@@ -310,6 +323,24 @@ C.setup = function(config)
   vim.api.nvim_set_hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
   vim.api.nvim_set_hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
   vim.api.nvim_set_hl(0, "P5ConsoleLog", { fg = "#6272a4" })
+
+  -- Register toggle with snacks.toggle if available
+  local snacks = core.require_snacks()
+  if snacks and snacks.toggle then
+    snacks.toggle.new({
+      name = "p5console",
+      get = function()
+        return C.console_win and vim.api.nvim_win_is_valid(C.console_win) or false
+      end,
+      set = function(state)
+        if state then
+          C.show()
+        else
+          C.hide()
+        end
+      end,
+    })
+  end
 end
 
 return C
