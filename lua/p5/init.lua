@@ -78,8 +78,16 @@ I.setup = function(opts)
   end, { nargs = 0 })
 
   vim.api.nvim_create_user_command("P5InstallLib", function(args)
-    require("p5.libraries").install_libs(args.fargs)
+    if #args.fargs == 0 then
+      require("p5.libraries").show_and_install()
+    else
+      require("p5.libraries").install_libs(args.fargs)
+    end
   end, { nargs = "*" })
+
+  vim.api.nvim_create_user_command("P5LibraryManager", function()
+    require("p5.libraries").show_and_install()
+  end, { nargs = 0 })
 
   vim.api.nvim_create_user_command("P5RemoveLib", function(args)
     require("p5.libraries").remove_libs(args.fargs)
