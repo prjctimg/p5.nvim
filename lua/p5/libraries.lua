@@ -36,7 +36,7 @@ L.load = function()
     end
   end
   
-  local libs_dir = vim.fn.getcwd() .. "/assets/libs"
+  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
   if vim.fn.isdirectory(libs_dir) == 1 then
     local js_files = vim.fn.glob(libs_dir .. "/*.js", false, true)
     for _, file in ipairs(js_files) do
@@ -348,10 +348,10 @@ L.install_libs = function(lib_names)
     return
   end
   
-  local libs_dir = vim.fn.getcwd() .. "/assets/libs"
+  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
   vim.fn.mkdir(libs_dir, "p")
   
-  local types_dir = vim.fn.getcwd() .. "/assets/types"
+  local types_dir = vim.fn.getcwd() .. "/" .. L.config.types_dir
   vim.fn.mkdir(types_dir, "p")
   
   local to_install = {}
