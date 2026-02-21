@@ -157,39 +157,12 @@ I.setup = function(opts)
     require("p5.server").stop_server()
   end, { nargs = 0 })
 
-  -- Legacy commands (deprecated - will be removed in future)
-  vim.api.nvim_create_user_command("P5NewProject", function(args)
-    if not args.fargs[1] then
-      vim.ui.input({
-        prompt = "Project name: ",
-        default = "p5-sketch",
-        completion = "dir",
-      }, function(input)
-        if input and input ~= "" then
-          require("p5.project").create_project(input)
-        end
-      end)
-    else
-      require("p5.project").create_project(args.fargs[1])
-    end
-  end, { nargs = "?" })
-
-  vim.api.nvim_create_user_command("P5StartServer", function(args)
-    require("p5.server").start_server(tonumber(args.fargs[1]))
-  end, { nargs = "?" })
-
-  vim.api.nvim_create_user_command("P5StopServer", function()
-    require("p5.server").stop_server()
-  end, { nargs = 0 })
-
-  vim.api.nvim_create_user_command("P5ToggleConsole", function()
-    require("p5.console").toggle()
-  end, { nargs = 0 })
-
+  -- P5 create-gist
   vim.api.nvim_create_user_command("P5CreateGist", function(args)
     require("p5.gist").create_gist(args.fargs[1])
   end, { nargs = "?" })
 
+  -- P5 setup
   vim.api.nvim_create_user_command("P5Setup", function()
     require("p5.core").setup_environment()
   end, { nargs = 0 })
