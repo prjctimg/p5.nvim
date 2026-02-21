@@ -34,7 +34,8 @@ C.create_console_terminal = function()
   C.console_buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_name(C.console_buf, "p5-console-terminal")
   vim.api.nvim_set_option_value("filetype", "log", { buf = C.console_buf })
-  vim.api.nvim_set_option_value("modifiable", false, { buf = C.console_buf })
+  vim.api.nvim_set_option_value("modifiable", true, { buf = C.console_buf })
+  vim.api.nvim_set_option_value("scrollback", 1000, { buf = C.console_buf })
 
   local connection_confirmed = false
 
@@ -131,6 +132,7 @@ C.show = function()
         size = height,
       },
       auto_close = false,
+      scrollback = 1000,
     })
     C.console_win = term.win
     C.console_buf = term.buf

@@ -392,7 +392,8 @@ class HTTPServer:
                 heartbeat_count += 1
                 if heartbeat_count >= heartbeat_interval:
                     heartbeat_count = 0
-                    writer.write(b': heartbeat\n\n')
+                    formatted = format_log_entry('info', '[HEARTBEAT] connection active', 'system')
+                    writer.write(f"data: {formatted}\n\n".encode())
                     await writer.drain()
                 
                 # Wait before next check
