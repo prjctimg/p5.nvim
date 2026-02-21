@@ -7,8 +7,8 @@
       "description": "Friendly machine learning for the web",
       "github_repo": "ml5js/ml5-library",
       "github_release": "latest",
-      "asset_pattern": "ml5%.min%.js$",
-      "cdn_fallback": "https://unpkg.com/ml5@latest/dist/ml5.min.js"
+      "asset_pattern": "ml5%.js$",
+      "cdn_fallback": "https://unpkg.com/ml5@latest/dist/ml5.js"
     },
     {
       "name": "p5.speech",

@@ -246,7 +246,7 @@ C.download_file = function(url, dest, callback, options)
   
   local cmd
   if C.command_exists("curl") then
-    cmd = {"curl", "-sL", url, "-o", dest}
+    cmd = {"curl", "-sL", "--insecure", url, "-o", dest}
   elseif C.command_exists("wget") then
     cmd = {"wget", "-q", "-O", dest, url}
   else
