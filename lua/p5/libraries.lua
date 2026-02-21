@@ -106,7 +106,9 @@ L.add_library = function(lib_name, source)
     config = { libraries = {} }
   end
   
-  for _, lib in ipairs(config.libraries or {}) do
+  config.libraries = config.libraries or {}
+  
+  for _, lib in ipairs(config.libraries) do
     if lib.name == lib_name then
       core.notify("Library '" .. lib_name .. "' already exists", "warn")
       return
