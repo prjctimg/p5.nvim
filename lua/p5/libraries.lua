@@ -429,7 +429,7 @@ L.prompt_install = function(selected)
     for _, lib in ipairs(to_update) do
       table.insert(names, lib.name)
     end
-    core.notify("Update available for: " .. table.concat(names, ", "), "info")
+    core.notify("Reinstalling: " .. table.concat(names, ", "), "info")
     L.install_libs(names)
   end
 end
