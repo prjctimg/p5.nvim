@@ -125,23 +125,7 @@ C.show = function()
     C.server_port
   )
 
-  -- Try snacks.terminal first for predictable behavior
-  local snacks = core.require_snacks()
-  if snacks and snacks.terminal then
-    local term = snacks.terminal(curl_cmd, {
-      win = {
-        title = "p5-console",
-        position = position,
-        size = height,
-      },
-    })
-    C.console_win = term.win
-    C.console_buf = term.buf
-    notify("Console connected to server on port " .. C.server_port, "info")
-    return
-  end
-
-  -- Fallback to manual terminal creation
+  -- Use manual terminal creation (snacks.terminal has API issues)
   local buf = C.create_console_terminal()
   if not buf then
     return
