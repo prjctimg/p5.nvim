@@ -381,41 +381,38 @@ class HTTPServer:
         writer.write(b'\r\n')
         await writer.drain()
         
-        heartbeat_interval = CONFIG['console']['heartbeat_interval']
+        # Exponential backoff: 15s → 30s → 60s → 120s → max 300s
+        base_interval = 15
+        current_interval = base_interval
+        max_interval = 300
         heartbeat_count = 0
-        last_log_time = asyncio.get_event_loop().time()
         
         try:
             while self.running:
                 # Get buffered logs
                 logs = self.console_buffer.get_all()
                 
-                # Send buffered logs
-                for log_entry in logs:
-                    level = log_entry.get('level', 'log')
-                    message = log_entry.get('message', '')
-                    source = log_entry.get('source', 'browser')
-                    formatted = format_log_entry(level, message, source)
-                    writer.write(f"data: {formatted}\n\n".encode())
-                    await writer.drain()
-                    last_log_time = asyncio.get_event_loop().time()
-                
-                # Only send heartbeat as SSE comment if no activity for a while
-                heartbeat_count += 1
-                current_time = asyncio.get_event_loop().time()
-                time_since_last_log = current_time - last_log_time
-                
-                if heartbeat_count >= heartbeat_interval:
+                # Send buffered logs and reset exponential backoff
+                if logs:
+                    current_interval = base_interval  # Reset to 15s
                     heartbeat_count = 0
-                    # Only send heartbeat as log if no logs for 10+ seconds
-                    if time_since_last_log >= 10:
-                        formatted = format_log_entry('info', '[HEARTBEAT] connection active', 'system')
+                    
+                    for log_entry in logs:
+                        level = log_entry.get('level', 'log')
+                        message = log_entry.get('message', '')
+                        source = log_entry.get('source', 'browser')
+                        formatted = format_log_entry(level, message, source)
                         writer.write(f"data: {formatted}\n\n".encode())
                         await writer.drain()
-                    else:
-                        # Send keepalive as SSE comment (silent)
-                        writer.write(b': heartbeat\n\n')
-                        await writer.drain()
+                
+                # Send silent keepalive (SSE comment) to prevent connection timeout
+                heartbeat_count += 1
+                if heartbeat_count >= current_interval:
+                    heartbeat_count = 0
+                    writer.write(b': heartbeat\n\n')
+                    await writer.drain()
+                    # Exponential backoff
+                    current_interval = min(current_interval * 2, max_interval)
                 
                 # Wait before next check
                 await asyncio.sleep(1)

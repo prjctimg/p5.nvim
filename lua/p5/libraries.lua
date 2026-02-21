@@ -145,6 +145,175 @@ L.remove_library = function(lib_name)
   core.notify("Removed library: " .. lib_name, "success")
 end
 
+-- Get list of installed libraries from project
+L.get_installed_libs = function()
+  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
+  local installed = {}
+  
+  if vim.fn.isdirectory(libs_dir) == 1 then
+    local js_files = vim.fn.glob(libs_dir .. "/*.js", false, true)
+    for _, file in ipairs(js_files) do
+      local lib_name = vim.fn.fnamemodify(file, ":t:r")
+      if lib_name ~= "p5" and lib_name ~= "p5.sound" then
+        table.insert(installed, {
+          name = lib_name,
+          file = file
+        })
+      end
+    end
+  end
+  
+  return installed
+end
+
+-- Uninstall libraries (remove files and update config)
+L.uninstall_libs = function(lib_names)
+  if not lib_names or #lib_names == 0 then
+    core.notify("No libraries specified", "warn")
+    return
+  end
+  
+  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
+  local types_dir = vim.fn.getcwd() .. "/" .. L.config.types_dir
+  
+  local config = core.read_workspace_config() or { libraries = {} }
+  config.libraries = config.libraries or {}
+  
+  local removed = {}
+  local failed = {}
+  
+  for _, name in ipairs(lib_names) do
+    local js_file = libs_dir .. "/" .. name .. ".js"
+    local dts_file = types_dir .. "/" .. name .. ".d.ts"
+    
+    local success = true
+    
+    -- Remove JS file
+    if vim.fn.filereadable(js_file) == 1 then
+      if vim.fn.delete(js_file) ~= 0 then
+        success = false
+        table.insert(failed, name)
+      end
+    end
+    
+    -- Remove TypeScript definitions
+    if vim.fn.filereadable(dts_file) == 1 then
+      vim.fn.delete(dts_file)
+    end
+    
+    -- Remove from config
+    local new_libs = {}
+    for _, lib in ipairs(config.libraries) do
+      if lib.name ~= name then
+        table.insert(new_libs, lib)
+      end
+    end
+    config.libraries = new_libs
+    
+    if success then
+      table.insert(removed, name)
+    end
+  end
+  
+  -- Save updated config
+  core.write_workspace_config(config)
+  
+  if #removed > 0 then
+    core.notify("Removed: " .. table.concat(removed, ", "), "success")
+  end
+  
+  if #failed > 0 then
+    core.notify("Failed to remove: " .. table.concat(failed, ", "), "error")
+  end
+  
+  -- Update index.html
+  L.update_index_html()
+end
+
+-- Show uninstall picker with multiselect
+L.show_uninstall_picker = function()
+  local installed = L.get_installed_libs()
+  
+  if #installed == 0 then
+    core.notify("No contrib libraries installed", "warn")
+    return
+  end
+  
+  local snacks = core.require_snacks()
+  
+  local format_item = function(item)
+    return item.name
+  end
+  
+  if snacks and snacks.picker then
+    snacks.picker.pick({
+      title = "Select Libraries to Remove",
+      items = installed,
+      format = {
+        item = function(item)
+          return format_item(item)
+        end
+      },
+      multi_select = true,
+      on_submit = function(selected)
+        if selected and #selected > 0 then
+          local names = {}
+          for _, item in ipairs(selected) do
+            table.insert(names, item.name)
+          end
+          L.uninstall_libs(names)
+        end
+      end
+    })
+  else
+    local selected_items = {}
+    local current_index = 1
+    local filtered_items = installed
+    
+    local function next_selection()
+      if current_index > #filtered_items then
+        if #selected_items > 0 then
+          local names = {}
+          for _, item in ipairs(selected_items) do
+            table.insert(names, item.name)
+          end
+          L.uninstall_libs(names)
+        else
+          core.notify("No libraries selected", "info")
+        end
+        return
+      end
+      
+      local item = filtered_items[current_index]
+      vim.ui.select({ "Yes", "No", "All", "None" }, {
+        prompt = string.format("[%d/%d] Remove '%s'? (Yes/No/All/None)", 
+          current_index, #filtered_items, item.name),
+      }, function(choice)
+        if choice == "Yes" then
+          table.insert(selected_items, item)
+        elseif choice == "All" then
+          for i = current_index, #filtered_items do
+            table.insert(selected_items, filtered_items[i])
+          end
+          local names = {}
+          for _, itm in ipairs(selected_items) do
+            table.insert(names, itm.name)
+          end
+          L.uninstall_libs(names)
+          return
+        elseif choice == "None" then
+          core.notify("No libraries selected", "info")
+          return
+        end
+        current_index = current_index + 1
+        vim.schedule(next_selection)
+      end)
+    end
+    
+    next_selection()
+  end
+end
+
 -- Update index.html with library includes
 L.update_index_html = function()
   local index_file = vim.fn.getcwd() .. "/index.html"
