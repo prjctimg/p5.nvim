@@ -136,6 +136,9 @@ end
 
 -- Start live server
 S.start_server = function(port)
+  local console = require("p5.console")
+  local project = require("p5.project")
+  
   -- Check if we're in a p5.js project
   local is_project, project_msg, project_info = project.is_p5_project()
   
@@ -283,6 +286,8 @@ end
 
 -- Start console polling after server is ready
 S.start_console_after_ready = function()
+  local console = require("p5.console")
+  
   -- Pass the actual server port to console module
   local console_config = vim.deepcopy(S.config)
   console_config.server = {
