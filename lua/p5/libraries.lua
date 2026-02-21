@@ -226,12 +226,43 @@ L.show_library_picker = function(callback)
       end
     })
   else
-    vim.ui.select(items, {
-      prompt = "Select Libraries (use TAB to multi-select)",
-      format_item = format_item
-    }, function(selected)
-      callback(selected and {selected} or nil)
-    end)
+    local selected_items = {}
+    local current_index = 1
+    local filtered_items = items
+    
+    local function next_selection()
+      if current_index > #filtered_items then
+        if #selected_items > 0 then
+          callback(selected_items)
+        else
+          callback(nil)
+        end
+        return
+      end
+      
+      local item = filtered_items[current_index]
+      vim.ui.select({ "Yes", "No", "All", "None" }, {
+        prompt = string.format("[%d/%d] Add '%s'? (Yes/No/All/None)", 
+          current_index, #filtered_items, item.name),
+      }, function(choice)
+        if choice == "Yes" then
+          table.insert(selected_items, item)
+        elseif choice == "All" then
+          for i = current_index, #filtered_items do
+            table.insert(selected_items, filtered_items[i])
+          end
+          callback(selected_items)
+          return
+        elseif choice == "None" then
+          callback({})
+          return
+        end
+        current_index = current_index + 1
+        vim.schedule(next_selection)
+      end)
+    end
+    
+    next_selection()
   end
 end
 

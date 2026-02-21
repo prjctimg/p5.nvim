@@ -3,7 +3,6 @@ local C = {}
 local core = require("p5.core")
 local notify = core.notify
 local project = require("p5.project")
-local server = require("p5.server")
 
 C.console_win = nil
 C.console_buf = nil
@@ -99,6 +98,7 @@ C.attempt_reconnect = function()
 end
 
 C.show = function()
+  local server = require("p5.server")
   local is_project = project.is_p5_project()
 
   if not is_project then
