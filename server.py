@@ -553,7 +553,7 @@ class HTTPServer:
               type: 'console',
               level: level,
               message: message,
-              source: 'javascript',
+              source: 'browser',
               timestamp: new Date().toISOString()
             })
           }).catch(() => {});
