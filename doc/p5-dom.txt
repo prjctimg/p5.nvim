@@ -1,1110 +1,856 @@
-*p5-dom*                             p5.js dom docs
+*p5-dom*                                         p5.js dom docs
 
 ==============================================================================
-Table of Contents                      *p5-dom-table-of-contents*
+Table of Contents                           *p5-dom-table-of-contents*
 
-1. Functions                                           |p5-dom-functions|
-  - constructor()             |p5-dom-constructor|
-    - autoplay()             |p5-dom-autoplay|
-    - volume()             |p5-dom-volume|
-    - speed()             |p5-dom-speed|
-    - time()             |p5-dom-time|
-    - connect()             |p5-dom-connect|
-    - removeCue()             |p5-dom-removeCue|
-    - clearCues()             |p5-dom-clearCues|
-    - constructor()             |p5-dom-constructor|
-    - select()             |p5-dom-select|
-    - selectAll()             |p5-dom-selectAll|
-    - createDiv()             |p5-dom-createDiv|
-    - createImg()             |p5-dom-createImg|
-    - createA()             |p5-dom-createA|
-    - createSlider()             |p5-dom-createSlider|
-    - createButton()             |p5-dom-createButton|
-    - createSelect()             |p5-dom-createSelect|
-    - createRadio()             |p5-dom-createRadio|
-    - createRadio()             |p5-dom-createRadio|
-    - createInput()             |p5-dom-createInput|
-    - createElement()             |p5-dom-createElement|
-    - addClass()             |p5-dom-addClass|
-    - removeClass()             |p5-dom-removeClass|
-    - hasClass()             |p5-dom-hasClass|
-    - toggleClass()             |p5-dom-toggleClass|
-    - style()             |p5-dom-style|
-    - style()             |p5-dom-style|
-    - attribute()             |p5-dom-attribute|
-    - removeAttribute()             |p5-dom-removeAttribute|
-    - size()             |p5-dom-size|
+1. Functions                                                |p5-dom-functions|
+  - constructor()              |p5-dom-constructor|
+  - play()              |p5-dom-play|
+  - stop()              |p5-dom-stop|
+  - pause()              |p5-dom-pause|
+  - loop()              |p5-dom-loop|
+  - noLoop()              |p5-dom-noLoop|
+  - autoplay()              |p5-dom-autoplay|
+  - volume()              |p5-dom-volume|
+  - speed()              |p5-dom-speed|
+  - time()              |p5-dom-time|
+  - duration()              |p5-dom-duration|
+  - connect()              |p5-dom-connect|
+  - disconnect()              |p5-dom-disconnect|
+  - showControls()              |p5-dom-showControls|
+  - hideControls()              |p5-dom-hideControls|
+  - removeCue()              |p5-dom-removeCue|
+  - clearCues()              |p5-dom-clearCues|
+  - select()              |p5-dom-select|
+  - selectAll()              |p5-dom-selectAll|
+  - removeElements()              |p5-dom-removeElements|
+  - createDiv()              |p5-dom-createDiv|
+  - createP()              |p5-dom-createP|
+  - createSpan()              |p5-dom-createSpan|
+  - createImg()              |p5-dom-createImg|
+  - createA()              |p5-dom-createA|
+  - createSlider()              |p5-dom-createSlider|
+  - createButton()              |p5-dom-createButton|
+  - createCheckbox()              |p5-dom-createCheckbox|
+  - createSelect()              |p5-dom-createSelect|
+  - createRadio()              |p5-dom-createRadio|
+  - createColorPicker()              |p5-dom-createColorPicker|
+  - createInput()              |p5-dom-createInput|
+  - createElement()              |p5-dom-createElement|
+  - addClass()              |p5-dom-addClass|
+  - removeClass()              |p5-dom-removeClass|
+  - hasClass()              |p5-dom-hasClass|
+  - toggleClass()              |p5-dom-toggleClass|
+  - child()              |p5-dom-child|
+  - center()              |p5-dom-center|
+  - html()              |p5-dom-html|
+  - position()              |p5-dom-position|
+  - style()              |p5-dom-style|
+  - attribute()              |p5-dom-attribute|
+  - removeAttribute()              |p5-dom-removeAttribute|
+  - value()              |p5-dom-value|
+  - show()              |p5-dom-show|
+  - hide()              |p5-dom-hide|
+  - size()              |p5-dom-size|
+  - remove()              |p5-dom-remove|
 
-🌐 dom module for p5.js
+🌐 Dom module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-21 03:55:39Z~
+⏰ Last Updated: 2026-02-21 07:29:26Z~
 
 ==============================================================================
-2. Functions                                           |p5-dom-functions|
+2. Functions                                                |p5-dom-functions|
 
 
-`constructor()`                                          |p5-dom-constructor|
+`constructor()`                                            |p5-dom-constructor|
 
-*   Extends p5.Element to handle audio and video. In
-         *   addition to the methods of p5.Element, it also
-         *   contains methods for controlling media. It is not
-         *   called directly, but p5.MediaElements are created
-         *   by calling createVideo, createAudio, and
-         *   createCapture.
-         *
-  - **elt**: DOM node that is wrapped
+Extends p5.Element to handle audio and video. In addition to the methods of
+p5.Element, it also contains methods for controlling media. It is not called
+directly, but p5.MediaElements are created by calling createVideo,
+createAudio, and createCapture.
 
-  - **Returns**: void
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`autoplay()`                                          |p5-dom-autoplay|
 
-*   Play an HTML5 media element.
-         *   @chainable
-         */
-        play(): MediaElement;
+`play()`                                            |p5-dom-play|
 
-        /**
-         *   Stops an HTML5 media element (sets current time to
-         *   zero).
-         *   @chainable
-         */
-        stop(): MediaElement;
+Play an HTML5 media element. @chainable
 
-        /**
-         *   Pauses an HTML5 media element.
-         *   @chainable
-         */
-        pause(): MediaElement;
+#### Returns:
 
-        /**
-         *   Set 'loop' to true for an HTML5 media element, and
-         *   starts playing.
-         *   @chainable
-         */
-        loop(): MediaElement;
-
-        /**
-         *   Set 'loop' to false for an HTML5 media element.
-         *   Element will stop when it reaches the end.
-         *   @chainable
-         */
-        noLoop(): MediaElement;
-
-        /**
-         *   Set HTML5 media element to autoplay or not. If no
-         *   argument is specified, by default it will
-         *   autoplay.
-  - **shouldAutoplay**: whether the element should
-         *   autoplay
-         *   @chainable
-
-  - **Returns**: void
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`volume()`                                          |p5-dom-volume|
 
-*   Sets volume for this HTML5 media element. If no
-         *   argument is given, returns the current volume.
-         *   @return current volume
-         */
-        volume(): number;
+`stop()`                                            |p5-dom-stop|
 
-        /**
-         *   Sets volume for this HTML5 media element. If no
-         *   argument is given, returns the current volume.
-  - **val**: volume between 0.0 and 1.0
-         *   @chainable
+Stops an HTML5 media element (sets current time to zero). @chainable
 
-  - **Returns**: void
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`speed()`                                          |p5-dom-speed|
 
-*   If no arguments are given, returns the current
-         *   playback speed of the element. The speed parameter
-         *   sets the speed where 2.0 will play the element
-         *   twice as fast, 0.5 will play at half the speed,
-         *   and -1 will play the element in normal speed in
-         *   reverse.(Note that not all browsers support
-         *   backward playback and even if they do, playback
-         *   might not be smooth.)
-         *   @return current playback speed of the element
-         */
-        speed(): number;
+`pause()`                                            |p5-dom-pause|
 
-        /**
-         *   If no arguments are given, returns the current
-         *   playback speed of the element. The speed parameter
-         *   sets the speed where 2.0 will play the element
-         *   twice as fast, 0.5 will play at half the speed,
-         *   and -1 will play the element in normal speed in
-         *   reverse.(Note that not all browsers support
-         *   backward playback and even if they do, playback
-         *   might not be smooth.)
-  - **speed**: speed multiplier for element playback
-         *   @chainable
+Pauses an HTML5 media element. @chainable
 
-  - **Returns**: void
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`time()`                                          |p5-dom-time|
 
-*   If no arguments are given, returns the current
-         *   time of the element. If an argument is given the
-         *   current time of the element is set to it.
-         *   @return current time (in seconds)
-         */
-        time(): number;
+`loop()`                                            |p5-dom-loop|
 
-        /**
-         *   If no arguments are given, returns the current
-         *   time of the element. If an argument is given the
-         *   current time of the element is set to it.
-  - **time**: time to jump to (in seconds)
-         *   @chainable
+Set 'loop' to true for an HTML5 media element, and starts playing. @chainable
 
-  - **Returns**: void
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`connect()`                                          |p5-dom-connect|
 
-*   Returns the duration of the HTML5 media element.
-         *   @return duration
-         */
-        duration(): number;
+`noLoop()`                                            |p5-dom-noLoop|
 
-        /**
-         *   Schedule an event to be called when the audio or
-         *   video element reaches the end. If the element is
-         *   looping, this will not be called. The element is
-         *   passed in as the argument to the onended callback.
-  - **callback**: function to call when the
-         *   soundfile has ended. The media element will be
-         *   passed in as the argument to the callback.
-         *   @chainable
-         */
-        onended(callback: (...args: any[]) => any): MediaElement;
+Set 'loop' to false for an HTML5 media element. Element will stop when it
+reaches the end. @chainable
 
-        /**
-         *   Send the audio output of this element to a
-         *   specified audioNode or p5.sound object. If no
-         *   element is provided, connects to p5's main output.
-         *   That connection is established when this method is
-         *   first called. All connections are removed by the
-         *   .disconnect() method. This method is meant to be
-         *   used with the p5.sound.js addon library.
-         *   @param audioNode AudioNode from the Web Audio API,
-         *   or an object from the p5.sound library
+#### Returns:
 
-  - **Returns**: void
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`removeCue()`                                          |p5-dom-removeCue|
 
-*   Disconnect all Web Audio routing, including to
-         *   main output. This is useful if you want to
-         *   re-route the output through audio effects, for
-         *   example.
-         */
-        disconnect(): void;
+`autoplay()`                                            |p5-dom-autoplay|
 
-        /**
-         *   Show the default MediaElement controls, as
-         *   determined by the web browser.
-         */
-        showControls(): void;
+Set HTML5 media element to autoplay or not. If no argument is specified, by
+default it will autoplay.
 
-        /**
-         *   Hide the default mediaElement controls.
-         */
-        hideControls(): void;
+#### Returns:
 
-        /**
-         *   Schedule events to trigger every time a
-         *   MediaElement (audio/video) reaches a playback cue
-         *   point. Accepts a callback function, a time (in
-         *   seconds) at which to trigger the callback, and an
-         *   optional parameter for the callback.
-         *
-         *   Time will be passed as the first parameter to the
-         *   callback function, and param will be the second
-         *   parameter.
-  - **time**: Time in seconds, relative to this
-         *   media element's playback. For example, to trigger
-         *   an event every time playback reaches two seconds,
-         *   pass in the number 2. This will be passed as the
-         *   first parameter to the callback function.
-         *   @param callback Name of a function that will be
-         *   called at the given time. The callback will
-         *   receive time and (optionally) param as its two
-         *   parameters.
-         *   @param [value] An object to be passed as the
-         *   second parameter to the callback function.
-
-  - **Returns**: id ID of this cue, useful for
-         *   removeCue(id)
-         */
-        addCue(time: number, callback: (...args: any[]) => any, value?: object): number;
-
-        /**
-         *   Remove a callback based on its ID. The ID is
-         *   returned by the addCue method.
-         *   @param id ID of the cue, as returned by addCue
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`clearCues()`                                          |p5-dom-clearCues|
 
-*   Remove all of the callbacks that had originally
-         *   been scheduled via the addCue method.
-  - **id**: ID of the cue, as returned by addCue
+`volume()`                                            |p5-dom-volume|
 
-  - **Returns**: void
+Sets volume for this HTML5 media element. If no argument is given, returns the
+current volume.
 
-📂 *Sub-module: dom*
+#### Returns:
 
----
-
-`constructor()`                                          |p5-dom-constructor|
-
-*   Path to the media element source.
-         */
-        src: any;
-    }
-    class File {
-        /**
-         *   Base class for a file. Used for Element.drop and
-         *   createFileInput.
-         *
-  - **file**: File that is wrapped
-
-  - **Returns**: void
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`select()`                                          |p5-dom-select|
 
-*   Underlying File object. All normal File methods
-         *   can be called on this.
-         */
-        file: any;
+`speed()`                                            |p5-dom-speed|
 
-        /**
-         *   File type (image, text, etc.)
-         */
-        type: any;
+If no arguments are given, returns the current playback speed of the element.
+The speed parameter sets the speed where 2.0 will play the element twice as
+fast, 0.5 will play at half the speed, and -1 will play the element in normal
+speed in reverse.(Note that not all browsers support backward playback and
+even if they do, playback might not be smooth.)
 
-        /**
-         *   File subtype (usually the file extension jpg, png,
-         *   xml, etc.)
-         */
-        subtype: any;
+#### Returns:
 
-        /**
-         *   File name
-         */
-        name: any;
-
-        /**
-         *   File size
-         */
-        size: any;
-
-        /**
-         *   URL string containing either image data, the text
-         *   contents of the file or a parsed object if file is
-         *   JSON and p5.XML if XML
-         */
-        data: any;
-    }
-    interface p5InstanceExtensions {
-        /**
-         *   Searches the page for the first element that
-         *   matches the given CSS selector string (can be an
-         *   ID, class, tag name or a combination) and returns
-         *   it as a p5.Element. The DOM node itself can be
-         *   accessed with .elt. Returns null if none found.
-         *   You can also specify a container to search within.
-  - **selectors**: CSS selector string of element to
-         *   search for
-         *   @param [container] CSS selector string,
-         *   p5.Element, or HTML element to search within
-
-  - **Returns**: p5.Element containing node found
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`selectAll()`                                          |p5-dom-selectAll|
 
-*   Searches the page for elements that match the
-         *   given CSS selector string (can be an ID a class,
-         *   tag name or a combination) and returns them as
-         *   p5.Elements in an array. The DOM node itself can
-         *   be accessed with .elt. Returns an empty array if
-         *   none found. You can also specify a container to
-         *   search within.
-  - **selectors**: CSS selector string of elements
-         *   to search for
-         *   @param [container] CSS selector string, p5.Element
-         *   , or HTML element to search within
+`time()`                                            |p5-dom-time|
 
-  - **Returns**: Array of p5.Elements containing nodes
-         *   found
+If no arguments are given, returns the current time of the element. If an
+argument is given the current time of the element is set to it.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`createDiv()`                                          |p5-dom-createDiv|
 
-*   Removes all elements created by p5, except any
-         *   canvas / graphics elements created by createCanvas
-         *   or createGraphics. Event handlers are removed, and
-         *   element is removed from the DOM.
-         */
-        removeElements(): void;
+`duration()`                                            |p5-dom-duration|
 
-        /**
-         *   The .changed() function is called when the value
-         *   of an element changes. This can be used to attach
-         *   an element specific event listener.
-  - **fxn**: function to be fired when the value of
-         *   an element changes. if false is passed instead,
-         *   the previously firing function will no longer
-         *   fire.
-         *   @chainable
-         */
-        changed(fxn: ((...args: any[]) => any) | boolean): p5;
+Returns the duration of the HTML5 media element.
 
-        /**
-         *   The .input() function is called when any user
-         *   input is detected with an element. The input event
-         *   is often used to detect keystrokes in a input
-         *   element, or changes on a slider element. This can
-         *   be used to attach an element specific event
-         *   listener.
-         *   @param fxn function to be fired when any user
-         *   input is detected within the element. if false is
-         *   passed instead, the previously firing function
-         *   will no longer fire.
-         *   @chainable
-         */
-        input(fxn: ((...args: any[]) => any) | boolean): p5;
+#### Returns:
 
-        /**
-         *   Creates a <div></div> element in the DOM with
-         *   given inner HTML.
-         *   @param [html] inner HTML for element created
-
-  - **Returns**: pointer to p5.Element holding created node
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`createImg()`                                          |p5-dom-createImg|
 
-*   Creates a <p></p> element in the DOM with given
-         *   inner HTML. Used for paragraph length text.
-         *   @param [html] inner HTML for element created
-         *   @return pointer to p5.Element holding created node
-         */
-        createP(html?: string): Element;
+`connect()`                                            |p5-dom-connect|
 
-        /**
-         *   Creates a <span></span> element in the DOM with
-         *   given inner HTML.
-         *   @param [html] inner HTML for element created
-         *   @return pointer to p5.Element holding created node
-         */
-        createSpan(html?: string): Element;
+Schedule an event to be called when the audio or video element reaches the
+end. If the element is looping, this will not be called. The element is passed
+in as the argument to the onended callback.
 
-        /**
-         *   Creates an <img> element in the DOM with given src
-         *   and alternate text.
-  - **src**: src path or url for image
-         *   @param alt alternate text to be used if image does
-         *   not load. You can use also an empty string ("") if
-         *   that an image is not intended to be viewed.
+#### Parameters:
 
-  - **Returns**: pointer to p5.Element holding created node
+    callback  function to call when the soundfile has ended. The media element will be passed in as the argument to the callback. @chainable
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`createA()`                                          |p5-dom-createA|
 
-*   Creates an <img> element in the DOM with given src
-         *   and alternate text.
-  - **src**: src path or url for image
-         *   @param alt alternate text to be used if image does
-         *   not load. You can use also an empty string ("") if
-         *   that an image is not intended to be viewed.
-         *   @param crossOrigin crossOrigin property of the img
-         *   element; use either 'anonymous' or
-         *   'use-credentials' to retrieve the image with
-         *   cross-origin access (for later use with canvas. if
-         *   an empty string("") is passed, CORS is not used
-         *   @param [successCallback] callback to be called
-         *   once image data is loaded with the p5.Element as
-         *   argument
+`disconnect()`                                            |p5-dom-disconnect|
 
-  - **Returns**: pointer to p5.Element holding created node
-         */
-        createImg(src: string, alt: string, crossOrigin: string, successCallback?: (...args: any[]) => any): Element;
+Disconnect all Web Audio routing, including to main output. This is useful if
+you want to re-route the output through audio effects, for example.
 
-        /**
-         *   Creates an <a></a> element in the DOM for
-         *   including a hyperlink.
-         *   @param href url of page to link to
-         *   @param html inner html of link element to display
-         *   @param [target] target where new link should open,
-         *   could be _blank, _self, _parent, _top.
-         *   @return pointer to p5.Element holding created node
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`createSlider()`                                          |p5-dom-createSlider|
 
-*   Creates a slider <input></input> element in the
-         *   DOM. Use .size() to set the display length of the
-         *   slider.
-  - **min**: minimum value of the slider
-         *   @param max maximum value of the slider
-         *   @param [value] default value of the slider
-         *   @param [step] step size for each tick of the
-         *   slider (if step is set to 0, the slider will move
-         *   continuously from the minimum to the maximum
-         *   value)
+`showControls()`                                            |p5-dom-showControls|
 
-  - **Returns**: pointer to p5.Element holding the created
-         *   node
+Show the default MediaElement controls, as determined by the web browser.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`createButton()`                                          |p5-dom-createButton|
 
-*   Creates a <button></button> element in the DOM.
-         *   Use .size() to set the display size of the button.
-         *   Use .mousePressed() to specify behavior on press.
-  - **label**: label displayed on the button
-         *   @param [value] value of the button
+`hideControls()`                                            |p5-dom-hideControls|
 
-  - **Returns**: pointer to p5.Element holding created node
+Hide the default mediaElement controls.
 
-📂 *Sub-module: dom*
+#### Returns:
 
----
-
-`createSelect()`                                          |p5-dom-createSelect|
-
-*   Creates a checkbox <input></input> element in the
-         *   DOM. Calling .checked() on a checkbox returns a
-         *   boolean indicating whether it is checked or not.
-         *   @param [label] label displayed after checkbox
-         *   @param [value] value of the checkbox; checked is
-         *   true, unchecked is false
-         *   @return pointer to p5.Element holding created node
-         */
-        createCheckbox(label?: string, value?: boolean): Element;
-
-        /**
-         *   Creates a dropdown menu <select></select> element
-         *   in the DOM. It also assigns select-related methods
-         *   to p5.Element when selecting an existing select
-         *   box. Options in the menu are unique by name (the
-         *   display text). - .option(name, [value]) can be
-         *   used to add an option with name (the display text)
-         *   and value to the select element. If an option with
-         *   name already exists within the select element,
-         *   this method will change its value to value.
-         *   - .value() will return the currently selected
-         *   option.
-         *   - .selected() will return the current dropdown
-         *   element which is an instance of p5.Element.
-         *   - .selected(value) can be used to make given
-         *   option selected by default when the page first
-         *   loads.
-         *   - .disable() marks the whole dropdown element as
-         *   disabled.
-         *   - .disable(value) marks a given option as
-         *   disabled.
-         *   - .enable() marks the whole dropdown element as
-         *   enabled if whole dropdown element is disabled
-         *   intially.
-         *   - .enable(value) marks a given option as enable if
-         *   the initial option is disabled.
-         *   @param [multiple] true if dropdown should support
-         *   multiple selections
-         *   @return pointer to p5.Element holding created node
-         */
-        createSelect(multiple?: boolean): Element;
-
-        /**
-         *   Creates a dropdown menu <select></select> element
-         *   in the DOM. It also assigns select-related methods
-         *   to p5.Element when selecting an existing select
-         *   box. Options in the menu are unique by name (the
-         *   display text). - .option(name, [value]) can be
-         *   used to add an option with name (the display text)
-         *   and value to the select element. If an option with
-         *   name already exists within the select element,
-         *   this method will change its value to value.
-         *   - .value() will return the currently selected
-         *   option.
-         *   - .selected() will return the current dropdown
-         *   element which is an instance of p5.Element.
-         *   - .selected(value) can be used to make given
-         *   option selected by default when the page first
-         *   loads.
-         *   - .disable() marks the whole dropdown element as
-         *   disabled.
-         *   - .disable(value) marks a given option as
-         *   disabled.
-         *   - .enable() marks the whole dropdown element as
-         *   enabled if whole dropdown element is disabled
-         *   intially.
-         *   - .enable(value) marks a given option as enable if
-         *   the initial option is disabled.
-  - **existing**: DOM select element
-
-  - **Returns**: void
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`createRadio()`                                          |p5-dom-createRadio|
 
-*   Creates a radio button element in the DOM. It also
-         *   helps existing radio buttons assign methods of
-         *   p5.Element. - .option(value, [label]) can be used
-         *   to create a new option for the element. If an
-         *   option with a value already exists, it will be
-         *   returned. It is recommended to use string values
-         *   as input for value. Optionally, a label can be
-         *   provided as second argument for the option.
-         *   - .remove(value) can be used to remove an option
-         *   for the element. String values recommended as
-         *   input for value.
-         *   - .value() method will return the currently
-         *   selected value.
-         *   - .selected() method will return the currently
-         *   selected input element.
-         *   - .selected(value) method will select the option
-         *   and return it. String values recommended as input
-         *   for value.
-         *   - .disable(Boolean) method will enable/disable the
-         *   whole radio button element.
-  - **containerElement**: A container HTML Element,
-         *   either a div or span, inside which all existing
-         *   radio inputs will be considered as options.
-         *   @param [name] A name parameter for each Input
-         *   Element.
+`removeCue()`                                            |p5-dom-removeCue|
 
-  - **Returns**: pointer to p5.Element holding created node
+Schedule events to trigger every time a MediaElement (audio/video) reaches a
+playback cue point. Accepts a callback function, a time (in seconds) at which
+to trigger the callback, and an optional parameter for the callback. Time will
+be passed as the first parameter to the callback function, and param will be
+the second parameter.
+
+#### Parameters:
+
+    time  Time in seconds, relative to this media element's playback. For example, to trigger an event every time playback reaches two seconds, pass in the number 2. This will be passed as the first parameter to the callback function.
+    callback  Name of a function that will be called at the given time. The callback will receive time and (optionally) param as its two parameters.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`createRadio()`                                          |p5-dom-createRadio|
 
-*   Creates a radio button element in the DOM. It also
-         *   helps existing radio buttons assign methods of
-         *   p5.Element. - .option(value, [label]) can be used
-         *   to create a new option for the element. If an
-         *   option with a value already exists, it will be
-         *   returned. It is recommended to use string values
-         *   as input for value. Optionally, a label can be
-         *   provided as second argument for the option.
-         *   - .remove(value) can be used to remove an option
-         *   for the element. String values recommended as
-         *   input for value.
-         *   - .value() method will return the currently
-         *   selected value.
-         *   - .selected() method will return the currently
-         *   selected input element.
-         *   - .selected(value) method will select the option
-         *   and return it. String values recommended as input
-         *   for value.
-         *   - .disable(Boolean) method will enable/disable the
-         *   whole radio button element.
-  - **name**: A name parameter for each Input
-         *   Element.
+`clearCues()`                                            |p5-dom-clearCues|
 
-  - **Returns**: pointer to p5.Element holding created node
+Remove all of the callbacks that had originally been scheduled via the addCue
+method.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`createInput()`                                          |p5-dom-createInput|
 
-*   Creates a radio button element in the DOM. It also
-         *   helps existing radio buttons assign methods of
-         *   p5.Element. - .option(value, [label]) can be used
-         *   to create a new option for the element. If an
-         *   option with a value already exists, it will be
-         *   returned. It is recommended to use string values
-         *   as input for value. Optionally, a label can be
-         *   provided as second argument for the option.
-         *   - .remove(value) can be used to remove an option
-         *   for the element. String values recommended as
-         *   input for value.
-         *   - .value() method will return the currently
-         *   selected value.
-         *   - .selected() method will return the currently
-         *   selected input element.
-         *   - .selected(value) method will select the option
-         *   and return it. String values recommended as input
-         *   for value.
-         *   - .disable(Boolean) method will enable/disable the
-         *   whole radio button element.
-         *   @return pointer to p5.Element holding created node
-         */
-        createRadio(): Element;
+`select()`                                            |p5-dom-select|
 
-        /**
-         *   Creates a colorPicker element in the DOM for color
-         *   input. The .value() method will return a hex
-         *   string (#rrggbb) of the color. The .color() method
-         *   will return a p5.Color object with the current
-         *   chosen color.
-         *   @param [value] default color of element
-         *   @return pointer to p5.Element holding created node
-         */
-        createColorPicker(value?: string | Color): Element;
+Underlying File object. All normal File methods can be called on this. / file:
+any; /** File type (image, text, etc.) / type: any; /** File subtype (usually
+the file extension jpg, png, xml, etc.) / subtype: any; /** File name / name:
+any; /** File size / size: any; /** URL string containing either image data,
+the text contents of the file or a parsed object if file is JSON and p5.XML if
+XML / data: any; } interface p5InstanceExtensions { /** Searches the page for
+the first element that matches the given CSS selector string (can be an ID,
+class, tag name or a combination) and returns it as a p5.Element. The DOM node
+itself can be accessed with .elt. Returns null if none found. You can also
+specify a container to search within.
 
-        /**
-         *   Creates an <input></input> element in the DOM for
-         *   text input. Use .size() to set the display length
-         *   of the box.
-  - **value**: default value of the input box
-         *   @param [type] type of text, ie text, password etc.
-         *   Defaults to text. Needs a value to be specified
-         *   first.
+#### Parameters:
 
-  - **Returns**: pointer to p5.Element holding created node
+    selectors  CSS selector string of element to search for
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`createElement()`                                          |p5-dom-createElement|
 
-*   Creates an <input></input> element in the DOM for
-         *   text input. Use .size() to set the display length
-         *   of the box.
-         *   @param [value] default value of the input box
-         */
-        createInput(value?: string): Element;
+`selectAll()`                                            |p5-dom-selectAll|
 
-        /**
-         *   Creates an <input></input> element in the DOM of
-         *   type 'file'. This allows users to select local
-         *   files for use in a sketch.
-  - **callback**: callback function for when a file
-         *   is loaded
-         *   @param [multiple] optional, to allow multiple
-         *   files to be selected
+Searches the page for elements that match the given CSS selector string (can
+be an ID a class, tag name or a combination) and returns them as p5.Elements
+in an array. The DOM node itself can be accessed with .elt. Returns an empty
+array if none found. You can also specify a container to search within.
 
-  - **Returns**: pointer to p5.Element holding created DOM
-         *   element
-         */
-        createFileInput(callback: (...args: any[]) => any, multiple?: boolean): Element;
+#### Parameters:
 
-        /**
-         *   Creates an HTML5 <video> element in the DOM for
-         *   simple playback of audio/video. Shown by default,
-         *   can be hidden with .hide() and drawn into canvas
-         *   using image(). The first parameter can be either a
-         *   single string path to a video file, or an array of
-         *   string paths to different formats of the same
-         *   video. This is useful for ensuring that your video
-         *   can play across different browsers, as each
-         *   supports different formats. See this page for
-         *   further information about supported formats.
-         *   @param src path to a video file, or array of paths
-         *   for supporting different browsers
-         *   @param [callback] callback function to be called
-         *   upon 'canplaythrough' event fire, that is, when
-         *   the browser can play the media, and estimates that
-         *   enough data has been loaded to play the media up
-         *   to its end without having to stop for further
-         *   buffering of content
-         *   @return pointer to video p5.MediaElement
-         */
-        createVideo(src: string | string[], callback?: (...args: any[]) => any): MediaElement;
+    selectors  CSS selector string of elements to search for
 
-        /**
-         *   Creates a hidden HTML5 <audio> element in the DOM
-         *   for simple audio playback. The first parameter can
-         *   be either a single string path to a audio file, or
-         *   an array of string paths to different formats of
-         *   the same audio. This is useful for ensuring that
-         *   your audio can play across different browsers, as
-         *   each supports different formats. See this page for
-         *   further information about supported formats.
-         *   @param [src] path to an audio file, or array of
-         *   paths for supporting different browsers
-         *   @param [callback] callback function to be called
-         *   upon 'canplaythrough' event fire, that is, when
-         *   the browser can play the media, and estimates that
-         *   enough data has been loaded to play the media up
-         *   to its end without having to stop for further
-         *   buffering of content
-         *   @return pointer to audio p5.MediaElement
-         */
-        createAudio(src?: string | string[], callback?: (...args: any[]) => any): MediaElement;
+#### Returns:
 
-        /**
-         *   Creates a new HTML5 <video> element that contains
-         *   the audio/video feed from a webcam. The element is
-         *   separate from the canvas and is displayed by
-         *   default. The element can be hidden using .hide().
-         *   The feed can be drawn onto the canvas using
-         *   image(). The loadedmetadata property can be used
-         *   to detect when the element has fully loaded (see
-         *   second example). More specific properties of the
-         *   feed can be passing in a Constraints object. See
-         *   the  W3C spec for possible properties. Note that
-         *   not all of these are supported by all browsers.
-         *
-         *   Security note: A new browser security
-         *   specification requires that getUserMedia, which is
-         *   behind createCapture(), only works when you're
-         *   running the code locally, or on HTTPS. Learn more
-         *   here and here.
-         *   @param type type of capture, either VIDEO or AUDIO
-         *   if none specified, default both, or a Constraints
-         *   object
-         *   @param [callback] function to be called once
-         *   stream has loaded
-         *   @return capture video p5.Element
-         */
-        createCapture(type: string | TYPE | object, callback?: (...args: any[]) => any): Element;
-
-        /**
-         *   Creates element with given tag in the DOM with
-         *   given content.
-         *   @param tag tag for the new element
-         *   @param [content] html content to be inserted into
-         *   the element
-         *   @return pointer to p5.Element holding created node
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`addClass()`                                          |p5-dom-addClass|
 
-*   Adds specified class to the element.
-  - **class**: name of class to add
-         *   @chainable
+`removeElements()`                                            |p5-dom-removeElements|
 
-  - **Returns**: void
+Removes all elements created by p5, except any canvas / graphics elements
+created by createCanvas or createGraphics. Event handlers are removed, and
+element is removed from the DOM.
 
-📂 *Sub-module: dom*
+#### Returns:
 
----
-
-`removeClass()`                                          |p5-dom-removeClass|
-
-*   Removes specified class from the element.
-  - **class**: name of class to remove
-         *   @chainable
-
-  - **Returns**: void
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`hasClass()`                                          |p5-dom-hasClass|
 
-*   Checks if specified class is already applied to
-         *   element.
-  - **c**: class name of class to check
+`createDiv()`                                            |p5-dom-createDiv|
 
-  - **Returns**: a boolean value if element has specified
-         *   class
+The .changed() function is called when the value of an element changes. This
+can be used to attach an element specific event listener.
 
-📂 *Sub-module: dom*
+#### Parameters:
 
----
+    fxn  function to be fired when the value of an element changes. if false is passed instead, the previously firing function will no longer fire. @chainable
+    fxn  function to be fired when any user input is detected within the element. if false is passed instead, the previously firing function will no longer fire. @chainable
 
-`toggleClass()`                                          |p5-dom-toggleClass|
+#### Returns:
 
-*   Toggles element class.
-  - **c**: class name to toggle
-         *   @chainable
-
-  - **Returns**: void
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`style()`                                          |p5-dom-style|
 
-*   Attaches the element as a child to the parent
-         *   specified. Accepts either a string ID, DOM node,
-         *   or p5.Element. If no argument is specified, an
-         *   array of children DOM nodes is returned.
-         *   @return an array of child nodes
-         */
-        child(): Node[];
+`createP()`                                            |p5-dom-createP|
 
-        /**
-         *   Attaches the element as a child to the parent
-         *   specified. Accepts either a string ID, DOM node,
-         *   or p5.Element. If no argument is specified, an
-         *   array of children DOM nodes is returned.
-         *   @param [child] the ID, DOM node, or p5.Element to
-         *   add to the current element
-         *   @chainable
-         */
-        child(child?: string | Element): Element;
+Creates a <p></p> element in the DOM with given inner HTML. Used for paragraph
+length text.
 
-        /**
-         *   Centers a p5.Element either vertically,
-         *   horizontally, or both, relative to its parent or
-         *   according to the body if the p5.Element has no
-         *   parent. If no argument is passed the p5.Element is
-         *   aligned both vertically and horizontally.
-         *   @param [align] passing 'vertical', 'horizontal'
-         *   aligns element accordingly
-         *   @chainable
-         */
-        center(align?: string): Element;
+#### Returns:
 
-        /**
-         *   If an argument is given, sets the inner HTML of
-         *   the element, replacing any existing HTML. If true
-         *   is included as a second argument, HTML is appended
-         *   instead of replacing existing HTML. If no
-         *   arguments are given, returns the inner HTML of the
-         *   element.
-         *   @return the inner HTML of the element
-         */
-        html(): string;
-
-        /**
-         *   If an argument is given, sets the inner HTML of
-         *   the element, replacing any existing HTML. If true
-         *   is included as a second argument, HTML is appended
-         *   instead of replacing existing HTML. If no
-         *   arguments are given, returns the inner HTML of the
-         *   element.
-         *   @param [html] the HTML to be placed inside the
-         *   element
-         *   @param [append] whether to append HTML to existing
-         *   @chainable
-         */
-        html(html?: string, append?: boolean): Element;
-
-        /**
-         *   Sets the position of the element. If no position
-         *   type argument is given, the position will be
-         *   relative to (0, 0) of the window. Essentially,
-         *   this sets position:absolute and left and top
-         *   properties of style. If an optional third argument
-         *   specifying position type is given, the x and
-         *   y-coordinates will be interpreted based on the
-         *   positioning scheme. If no arguments given, the
-         *   function returns the x and y position of the
-         *   element. found documentation on how to be more
-         *   specific with object type
-         *   https://stackoverflow.com/questions/14714314/how-do-i-comment-object-literals-in-yuidoc
-         *   @return object of form { x: 0, y: 0 } containing
-         *   the position of the element in an object
-         */
-        position(): object;
-
-        /**
-         *   Sets the position of the element. If no position
-         *   type argument is given, the position will be
-         *   relative to (0, 0) of the window. Essentially,
-         *   this sets position:absolute and left and top
-         *   properties of style. If an optional third argument
-         *   specifying position type is given, the x and
-         *   y-coordinates will be interpreted based on the
-         *   positioning scheme. If no arguments given, the
-         *   function returns the x and y position of the
-         *   element. found documentation on how to be more
-         *   specific with object type
-         *   https://stackoverflow.com/questions/14714314/how-do-i-comment-object-literals-in-yuidoc
-         *   @param [x] x-position relative to upper left of
-         *   window (optional)
-         *   @param [y] y-position relative to upper left of
-         *   window (optional)
-         *   @param [positionType] it can be static, fixed,
-         *   relative, sticky, initial or inherit (optional)
-         *   @chainable
-         */
-        position(x?: number, y?: number, positionType?: string): Element;
-
-        /**
-         *   Sets the given style (CSS) property (1st arg) of
-         *   the element with the given value (2nd arg). If a
-         *   single argument is given, .style() returns the
-         *   value of the given property; however, if a single
-         *   argument is given in CSS syntax
-         *   ('text-align:center'), .style() sets the CSS
-         *   appropriately.
-  - **property**: property to be set
-
-  - **Returns**: value of property
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`style()`                                          |p5-dom-style|
 
-*   Sets the given style (CSS) property (1st arg) of
-         *   the element with the given value (2nd arg). If a
-         *   single argument is given, .style() returns the
-         *   value of the given property; however, if a single
-         *   argument is given in CSS syntax
-         *   ('text-align:center'), .style() sets the CSS
-         *   appropriately.
-  - **property**: property to be set
-         *   @param value value to assign to property
-         *   @chainable
+`createSpan()`                                            |p5-dom-createSpan|
 
-  - **Returns**: void
+Creates a <span></span> element in the DOM with given inner HTML.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`attribute()`                                          |p5-dom-attribute|
 
-*   Adds a new attribute or changes the value of an
-         *   existing attribute on the specified element. If no
-         *   value is specified, returns the value of the given
-         *   attribute, or null if the attribute is not set.
-         *   @return value of attribute
-         */
-        attribute(): string;
+`createImg()`                                            |p5-dom-createImg|
 
-        /**
-         *   Adds a new attribute or changes the value of an
-         *   existing attribute on the specified element. If no
-         *   value is specified, returns the value of the given
-         *   attribute, or null if the attribute is not set.
-  - **attr**: attribute to set
-         *   @param value value to assign to attribute
-         *   @chainable
+Creates an <img> element in the DOM with given src and alternate text.
 
-  - **Returns**: void
+#### Parameters:
+
+    src  src path or url for image
+    alt  alternate text to be used if image does not load. You can use also an empty string ("") if that an image is not intended to be viewed.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 
 ---
 
-`removeAttribute()`                                          |p5-dom-removeAttribute|
 
-*   Removes an attribute on the specified element.
-  - **attr**: attribute to remove
-         *   @chainable
+`createA()`                                            |p5-dom-createA|
 
-  - **Returns**: void
+Creates an <img> element in the DOM with given src and alternate text.
+
+#### Parameters:
+
+    src  src path or url for image
+    alt  alternate text to be used if image does not load. You can use also an empty string ("") if that an image is not intended to be viewed.
+    crossOrigin  crossOrigin property of the img element; use either 'anonymous' or 'use-credentials' to retrieve the image with cross-origin access (for later use with canvas. if an empty string("") is passed, CORS is not used
+    href  url of page to link to
+    html  inner html of link element to display
+
+#### Returns:
+
+    pointer to p5.Element holding created node
 
 📂 *Sub-module: dom*
 
 ---
 
-`size()`                                          |p5-dom-size|
 
-*   Either returns the value of the element if no
-         *   arguments given, or sets the value of the element.
-         *   @return value of the element
-         */
-        value(): string | number;
+`createSlider()`                                            |p5-dom-createSlider|
 
-        /**
-         *   Either returns the value of the element if no
-         *   arguments given, or sets the value of the element.
-         *   @chainable
-         */
-        value(value: string | number): Element;
+Creates a slider <input></input> element in the DOM. Use .size() to set the
+display length of the slider.
 
-        /**
-         *   Shows the current element. Essentially, setting
-         *   display:block for the style.
-         *   @chainable
-         */
-        show(): Element;
+#### Parameters:
 
-        /**
-         *   Hides the current element. Essentially, setting
-         *   display:none for the style.
-         *   @chainable
-         */
-        hide(): Element;
+    min  minimum value of the slider
+    max  maximum value of the slider
 
-        /**
-         *   Sets the width and height of the element. AUTO can
-         *   be used to only adjust one dimension at a time. If
-         *   no arguments are given, it returns the width and
-         *   height of the element in an Object. In the case of
-         *   elements that need to be loaded, such as images,
-         *   it is recommended to call the function after the
-         *   element has finished loading.
-         *   @return the width and height of the element in an
-         *   object
-         */
-        size(): object;
+#### Returns:
 
-        /**
-         *   Sets the width and height of the element. AUTO can
-         *   be used to only adjust one dimension at a time. If
-         *   no arguments are given, it returns the width and
-         *   height of the element in an Object. In the case of
-         *   elements that need to be loaded, such as images,
-         *   it is recommended to call the function after the
-         *   element has finished loading.
-  - **w**: width of the element, either AUTO, or a
-         *   number
-         *   @param [h] height of the element, either AUTO, or
-         *   a number
-         *   @chainable
+    void
 
-  - **Returns**: void
+📂 *Sub-module: dom*
+
+---
+
+
+`createButton()`                                            |p5-dom-createButton|
+
+Creates a <button></button> element in the DOM. Use .size() to set the display
+size of the button. Use .mousePressed() to specify behavior on press.
+
+#### Parameters:
+
+    label  label displayed on the button
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`createCheckbox()`                                            |p5-dom-createCheckbox|
+
+Creates a checkbox <input></input> element in the DOM. Calling .checked() on a
+checkbox returns a boolean indicating whether it is checked or not.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`createSelect()`                                            |p5-dom-createSelect|
+
+Creates a dropdown menu <select></select> element in the DOM. It also assigns
+select-related methods to p5.Element when selecting an existing select box.
+Options in the menu are unique by name (the display text). - .option(name,
+[value]) can be used to add an option with name (the display text) and value
+to the select element. If an option with name already exists within the select
+element, this method will change its value to value. - .value() will return
+the currently selected option. - .selected() will return the current dropdown
+element which is an instance of p5.Element. - .selected(value) can be used to
+make given option selected by default when the page first loads. - .disable()
+marks the whole dropdown element as disabled. - .disable(value) marks a given
+option as disabled. - .enable() marks the whole dropdown element as enabled if
+whole dropdown element is disabled intially. - .enable(value) marks a given
+option as enable if the initial option is disabled.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`createRadio()`                                            |p5-dom-createRadio|
+
+Creates a radio button element in the DOM. It also helps existing radio
+buttons assign methods of p5.Element. - .option(value, [label]) can be used to
+create a new option for the element. If an option with a value already exists,
+it will be returned. It is recommended to use string values as input for
+value. Optionally, a label can be provided as second argument for the option.
+- .remove(value) can be used to remove an option for the element. String
+values recommended as input for value. - .value() method will return the
+currently selected value. - .selected() method will return the currently
+selected input element. - .selected(value) method will select the option and
+return it. String values recommended as input for value. - .disable(Boolean)
+method will enable/disable the whole radio button element.
+
+#### Parameters:
+
+    containerElement  A container HTML Element, either a div or span, inside which all existing radio inputs will be considered as options.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`createColorPicker()`                                            |p5-dom-createColorPicker|
+
+Creates a colorPicker element in the DOM for color input. The .value() method
+will return a hex string (#rrggbb) of the color. The .color() method will
+return a p5.Color object with the current chosen color.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`createInput()`                                            |p5-dom-createInput|
+
+Creates an <input></input> element in the DOM for text input. Use .size() to
+set the display length of the box.
+
+#### Parameters:
+
+    value  default value of the input box
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`createElement()`                                            |p5-dom-createElement|
+
+Creates an <input></input> element in the DOM of type 'file'. This allows
+users to select local files for use in a sketch.
+
+#### Parameters:
+
+    callback  callback function for when a file is loaded
+    src  path to a video file, or array of paths for supporting different browsers
+    type  type of capture, either VIDEO or AUDIO if none specified, default both, or a Constraints object
+    tag  tag for the new element
+
+#### Returns:
+
+    pointer to video p5.MediaElement
+
+📂 *Sub-module: dom*
+
+---
+
+
+`addClass()`                                            |p5-dom-addClass|
+
+Adds specified class to the element.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`removeClass()`                                            |p5-dom-removeClass|
+
+Removes specified class from the element.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`hasClass()`                                            |p5-dom-hasClass|
+
+Checks if specified class is already applied to element.
+
+#### Parameters:
+
+    c  class name of class to check
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`toggleClass()`                                            |p5-dom-toggleClass|
+
+Toggles element class.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`child()`                                            |p5-dom-child|
+
+Attaches the element as a child to the parent specified. Accepts either a
+string ID, DOM node, or p5.Element. If no argument is specified, an array of
+children DOM nodes is returned.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`center()`                                            |p5-dom-center|
+
+Centers a p5.Element either vertically, horizontally, or both, relative to its
+parent or according to the body if the p5.Element has no parent. If no
+argument is passed the p5.Element is aligned both vertically and horizontally.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`html()`                                            |p5-dom-html|
+
+If an argument is given, sets the inner HTML of the element, replacing any
+existing HTML. If true is included as a second argument, HTML is appended
+instead of replacing existing HTML. If no arguments are given, returns the
+inner HTML of the element.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`position()`                                            |p5-dom-position|
+
+Sets the position of the element. If no position type argument is given, the
+position will be relative to (0, 0) of the window. Essentially, this sets
+position:absolute and left and top properties of style. If an optional third
+argument specifying position type is given, the x and y-coordinates will be
+interpreted based on the positioning scheme. If no arguments given, the
+function returns the x and y position of the element. found documentation on
+how to be more specific with object type
+https://stackoverflow.com/questions/14714314/how-do-i-comment-object-literals-in-yuidoc
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`style()`                                            |p5-dom-style|
+
+Sets the given style (CSS) property (1st arg) of the element with the given
+value (2nd arg). If a single argument is given, .style() returns the value of
+the given property; however, if a single argument is given in CSS syntax
+('text-align:center'), .style() sets the CSS appropriately.
+
+#### Parameters:
+
+    property  property to be set
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`attribute()`                                            |p5-dom-attribute|
+
+Adds a new attribute or changes the value of an existing attribute on the
+specified element. If no value is specified, returns the value of the given
+attribute, or null if the attribute is not set.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`removeAttribute()`                                            |p5-dom-removeAttribute|
+
+Removes an attribute on the specified element.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`value()`                                            |p5-dom-value|
+
+Either returns the value of the element if no arguments given, or sets the
+value of the element.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`show()`                                            |p5-dom-show|
+
+Shows the current element. Essentially, setting display:block for the style.
+@chainable
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`hide()`                                            |p5-dom-hide|
+
+Hides the current element. Essentially, setting display:none for the style.
+@chainable
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`size()`                                            |p5-dom-size|
+
+Sets the width and height of the element. AUTO can be used to only adjust one
+dimension at a time. If no arguments are given, it returns the width and
+height of the element in an Object. In the case of elements that need to be
+loaded, such as images, it is recommended to call the function after the
+element has finished loading.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: dom*
+
+---
+
+
+`remove()`                                            |p5-dom-remove|
+
+Removes the element, stops all media streams, and deregisters all listeners.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: dom*
 

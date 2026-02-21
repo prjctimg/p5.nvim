@@ -1,132 +1,408 @@
-*p5-events*                             p5.js events docs
+*p5-events*                                         p5.js events docs
 
 ==============================================================================
-Table of Contents                      *p5-events-table-of-contents*
+Table of Contents                           *p5-events-table-of-contents*
 
-1. Functions                                           |p5-events-functions|
-  - setMoveThreshold()             |p5-events-setMoveThreshold|
-    - setShakeThreshold()             |p5-events-setShakeThreshold|
-    - keyIsDown()             |p5-events-keyIsDown|
+1. Functions                                                |p5-events-functions|
+  - setMoveThreshold()              |p5-events-setMoveThreshold|
+  - setShakeThreshold()              |p5-events-setShakeThreshold|
+  - deviceMoved()              |p5-events-deviceMoved|
+  - deviceTurned()              |p5-events-deviceTurned|
+  - deviceShaken()              |p5-events-deviceShaken|
+  - keyPressed()              |p5-events-keyPressed|
+  - keyReleased()              |p5-events-keyReleased|
+  - keyTyped()              |p5-events-keyTyped|
+  - keyIsDown()              |p5-events-keyIsDown|
+  - mouseMoved()              |p5-events-mouseMoved|
+  - mouseDragged()              |p5-events-mouseDragged|
+  - mousePressed()              |p5-events-mousePressed|
+  - mouseReleased()              |p5-events-mouseReleased|
+  - mouseClicked()              |p5-events-mouseClicked|
+  - doubleClicked()              |p5-events-doubleClicked|
+  - mouseWheel()              |p5-events-mouseWheel|
+  - requestPointerLock()              |p5-events-requestPointerLock|
+  - exitPointerLock()              |p5-events-exitPointerLock|
+  - touchStarted()              |p5-events-touchStarted|
+  - touchMoved()              |p5-events-touchMoved|
+  - touchEnded()              |p5-events-touchEnded|
 
-🖱️ events module for p5.js
+🖱️ Events module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-02-21 03:55:39Z~
+⏰ Last Updated: 2026-02-21 07:29:26Z~
 
 ==============================================================================
-2. Functions                                           |p5-events-functions|
+2. Functions                                                |p5-events-functions|
 
 
-`setMoveThreshold()`                                          |p5-events-setMoveThreshold|
+`setMoveThreshold()`                                            |p5-events-setMoveThreshold|
 
-*   The setMoveThreshold() function is used to set the
-         *   movement threshold for the deviceMoved() function.
-         *   The default threshold is set to 0.5.
-  - **value**: The threshold value
+The setMoveThreshold() function is used to set the movement threshold for the
+deviceMoved() function. The default threshold is set to 0.5.
 
-  - **Returns**: void
+#### Returns:
 
-📂 *Sub-module: acceleration*
-
----
-
-`setShakeThreshold()`                                          |p5-events-setShakeThreshold|
-
-*   The setShakeThreshold() function is used to set
-         *   the movement threshold for the deviceShaken()
-         *   function. The default threshold is set to 30.
-  - **value**: The threshold value
-
-  - **Returns**: void
+    void
 
 📂 *Sub-module: acceleration*
 
 ---
 
-`keyIsDown()`                                          |p5-events-keyIsDown|
 
-*   The keyPressed() function is called once every
-         *   time a key is pressed. The keyCode for the key
-         *   that was pressed is stored in the keyCode
-         *   variable. For non-ASCII keys, use the keyCode
-         *   variable. You can check if the keyCode equals
-         *   BACKSPACE, DELETE, ENTER, RETURN, TAB, ESCAPE,
-         *   SHIFT, CONTROL, OPTION, ALT, UP_ARROW, DOWN_ARROW,
-         *   LEFT_ARROW, RIGHT_ARROW.
-         *
-         *   For ASCII keys, the key that was pressed is stored
-         *   in the key variable. However, it does not
-         *   distinguish between uppercase and lowercase. For
-         *   this reason, it is recommended to use keyTyped()
-         *   to read the key variable, in which the case of the
-         *   variable will be distinguished.
-         *
-         *   Because of how operating systems handle key
-         *   repeats, holding down a key may cause multiple
-         *   calls to keyTyped() (and keyReleased() as well).
-         *   The rate of repeat is set by the operating system
-         *   and how each computer is configured.
-         *
-         *
-         *   Browsers may have different default behaviors
-         *   attached to various key events. To prevent any
-         *   default behavior for this event, add "return
-         *   false" to the end of the method.
-         *   @param [event] optional KeyboardEvent callback
-         *   argument.
-         */
-        keyPressed(event?: object): void;
+`setShakeThreshold()`                                            |p5-events-setShakeThreshold|
 
-        /**
-         *   The keyReleased() function is called once every
-         *   time a key is released. See key and keyCode for
-         *   more information. Browsers may have different
-         *   default behaviors attached to various key events.
-         *   To prevent any default behavior for this event,
-         *   add "return false" to the end of the function.
-         *   @param [event] optional KeyboardEvent callback
-         *   argument.
-         */
-        keyReleased(event?: object): void;
+The setShakeThreshold() function is used to set the movement threshold for the
+deviceShaken() function. The default threshold is set to 30.
 
-        /**
-         *   The keyTyped() function is called once every time
-         *   a key is pressed, but action keys such as
-         *   Backspace, Delete, Ctrl, Shift, and Alt are
-         *   ignored. If you are trying to detect a keyCode for
-         *   one of these keys, use the keyPressed() function
-         *   instead. The most recent key typed will be stored
-         *   in the key variable. Because of how operating
-         *   systems handle key repeats, holding down a key
-         *   will cause multiple calls to keyTyped() (and
-         *   keyReleased() as well). The rate of repeat is set
-         *   by the operating system and how each computer is
-         *   configured.
-         *
-         *
-         *   Browsers may have different default behaviors
-         *   attached to various key events. To prevent any
-         *   default behavior for this event, add "return
-         *   false" to the end of the function.
-         *   @param [event] optional KeyboardEvent callback
-         *   argument.
-         */
-        keyTyped(event?: object): void;
+#### Returns:
 
-        /**
-         *   The keyIsDown() function checks if the key is
-         *   currently down, i.e. pressed. It can be used if
-         *   you have an object that moves, and you want
-         *   several keys to be able to affect its behaviour
-         *   simultaneously, such as moving a sprite
-         *   diagonally. You can put in any number representing
-         *   the keyCode of the key, or use any of the variable
-         *   keyCode names listed here.
-  - **code**: The key to check for.
+    void
 
-  - **Returns**: whether key is down or not
+📂 *Sub-module: acceleration*
+
+---
+
+
+`deviceMoved()`                                            |p5-events-deviceMoved|
+
+The deviceMoved() function is called when the device is moved by more than the
+threshold value along X, Y or Z axis. The default threshold is set to 0.5. The
+threshold value can be changed using setMoveThreshold().
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: acceleration*
+
+---
+
+
+`deviceTurned()`                                            |p5-events-deviceTurned|
+
+The deviceTurned() function is called when the device rotates by more than 90
+degrees continuously. The axis that triggers the deviceTurned() method is
+stored in the turnAxis variable. The deviceTurned() method can be locked to
+trigger on any axis: X, Y or Z by comparing the turnAxis variable to 'X', 'Y'
+or 'Z'.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: acceleration*
+
+---
+
+
+`deviceShaken()`                                            |p5-events-deviceShaken|
+
+The deviceShaken() function is called when the device total acceleration
+changes of accelerationX and accelerationY values is more than the threshold
+value. The default threshold is set to 30. The threshold value can be changed
+using setShakeThreshold().
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: acceleration*
+
+---
+
+
+`keyPressed()`                                            |p5-events-keyPressed|
+
+The keyPressed() function is called once every time a key is pressed. The
+keyCode for the key that was pressed is stored in the keyCode variable. For
+non-ASCII keys, use the keyCode variable. You can check if the keyCode equals
+BACKSPACE, DELETE, ENTER, RETURN, TAB, ESCAPE, SHIFT, CONTROL, OPTION, ALT,
+UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW. For ASCII keys, the key that
+was pressed is stored in the key variable. However, it does not distinguish
+between uppercase and lowercase. For this reason, it is recommended to use
+keyTyped() to read the key variable, in which the case of the variable will be
+distinguished. Because of how operating systems handle key repeats, holding
+down a key may cause multiple calls to keyTyped() (and keyReleased() as well).
+The rate of repeat is set by the operating system and how each computer is
+configured. Browsers may have different default behaviors attached to various
+key events. To prevent any default behavior for this event, add "return false"
+to the end of the method.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: keyboard*
+
+---
+
+
+`keyReleased()`                                            |p5-events-keyReleased|
+
+The keyReleased() function is called once every time a key is released. See
+key and keyCode for more information. Browsers may have different default
+behaviors attached to various key events. To prevent any default behavior for
+this event, add "return false" to the end of the function.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: keyboard*
+
+---
+
+
+`keyTyped()`                                            |p5-events-keyTyped|
+
+The keyTyped() function is called once every time a key is pressed, but action
+keys such as Backspace, Delete, Ctrl, Shift, and Alt are ignored. If you are
+trying to detect a keyCode for one of these keys, use the keyPressed()
+function instead. The most recent key typed will be stored in the key
+variable. Because of how operating systems handle key repeats, holding down a
+key will cause multiple calls to keyTyped() (and keyReleased() as well). The
+rate of repeat is set by the operating system and how each computer is
+configured. Browsers may have different default behaviors attached to various
+key events. To prevent any default behavior for this event, add "return false"
+to the end of the function.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: keyboard*
+
+---
+
+
+`keyIsDown()`                                            |p5-events-keyIsDown|
+
+The keyIsDown() function checks if the key is currently down, i.e. pressed. It
+can be used if you have an object that moves, and you want several keys to be
+able to affect its behaviour simultaneously, such as moving a sprite
+diagonally. You can put in any number representing the keyCode of the key, or
+use any of the variable keyCode names listed here.
+
+#### Parameters:
+
+    code  The key to check for.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: keyboard*
+
+---
+
+
+`mouseMoved()`                                            |p5-events-mouseMoved|
+
+The mouseMoved() function is called every time the mouse moves and a mouse
+button is not pressed. Browsers may have different default behaviors attached
+to various mouse events. To prevent any default behavior for this event, add
+"return false" to the end of the method.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: mouse*
+
+---
+
+
+`mouseDragged()`                                            |p5-events-mouseDragged|
+
+The mouseDragged() function is called once every time the mouse moves and a
+mouse button is pressed. If no mouseDragged() function is defined, the
+touchMoved() function will be called instead if it is defined. Browsers may
+have different default behaviors attached to various mouse events. To prevent
+any default behavior for this event, add "return false" to the end of the
+function.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: mouse*
+
+---
+
+
+`mousePressed()`                                            |p5-events-mousePressed|
+
+The mousePressed() function is called once after every time a mouse button is
+pressed. The mouseButton variable (see the related reference entry) can be
+used to determine which button has been pressed. If no mousePressed() function
+is defined, the touchStarted() function will be called instead if it is
+defined. Browsers may have different default behaviors attached to various
+mouse events. To prevent any default behavior for this event, add "return
+false" to the end of the function.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: mouse*
+
+---
+
+
+`mouseReleased()`                                            |p5-events-mouseReleased|
+
+The mouseReleased() function is called every time a mouse button is released.
+If no mouseReleased() function is defined, the touchEnded() function will be
+called instead if it is defined. Browsers may have different default behaviors
+attached to various mouse events. To prevent any default behavior for this
+event, add "return false" to the end of the function.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: mouse*
+
+---
+
+
+`mouseClicked()`                                            |p5-events-mouseClicked|
+
+The mouseClicked() function is called once after a mouse button has been
+pressed and then released. Browsers handle clicks differently, so this
+function is only guaranteed to be run when the left mouse button is clicked.
+To handle other mouse buttons being pressed or released, see mousePressed() or
+mouseReleased(). Browsers may have different default behaviors attached to
+various mouse events. To prevent any default behavior for this event, add
+"return false" to the end of the function.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: mouse*
+
+---
+
+
+`doubleClicked()`                                            |p5-events-doubleClicked|
+
+The doubleClicked() function is executed every time a event listener has
+detected a dblclick event which is a part of the DOM L3 specification. The
+doubleClicked event is fired when a pointing device button (usually a mouse's
+primary button) is clicked twice on a single element. For more info on the
+dblclick event refer to mozilla's documentation here:
+https://developer.mozilla.org/en-US/docs/Web/Events/dblclick
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: mouse*
+
+---
+
+
+`mouseWheel()`                                            |p5-events-mouseWheel|
+
+The function mouseWheel() is executed every time a vertical mouse wheel event
+is detected either triggered by an actual mouse wheel or by a touchpad. The
+event.delta property returns the amount the mouse wheel have scrolled. The
+values can be positive or negative depending on the scroll direction (on macOS
+with "natural" scrolling enabled, the signs are inverted). Browsers may have
+different default behaviors attached to various mouse events. To prevent any
+default behavior for this event, add "return false" to the end of the method.
+Due to the current support of the "wheel" event on Safari, the function may
+only work as expected if "return false" is included while using Safari.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: mouse*
+
+---
+
+
+`requestPointerLock()`                                            |p5-events-requestPointerLock|
+
+The function requestPointerLock() locks the pointer to its current position
+and makes it invisible. Use movedX and movedY to get the difference the mouse
+was moved since the last call of draw. Note that not all browsers support this
+feature. This enables you to create experiences that aren't limited by the
+mouse moving out of the screen even if it is repeatedly moved into one
+direction. For example, a first person perspective experience.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: mouse*
+
+---
+
+
+`exitPointerLock()`                                            |p5-events-exitPointerLock|
+
+The function exitPointerLock() exits a previously triggered pointer Lock for
+example to make ui elements usable etc
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: mouse*
+
+---
+
+
+`touchStarted()`                                            |p5-events-touchStarted|
+
+The touchStarted() function is called once after every time a touch is
+registered. If no touchStarted() function is defined, the mousePressed()
+function will be called instead if it is defined. Browsers may have different
+default behaviors attached to various touch events. To prevent any default
+behavior for this event, add "return false" to the end of the method.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: touch*
+
+---
+
+
+`touchMoved()`                                            |p5-events-touchMoved|
+
+The touchMoved() function is called every time a touch move is registered. If
+no touchMoved() function is defined, the mouseDragged() function will be
+called instead if it is defined. Browsers may have different default behaviors
+attached to various touch events. To prevent any default behavior for this
+event, add "return false" to the end of the method.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: touch*
+
+---
+
+
+`touchEnded()`                                            |p5-events-touchEnded|
+
+The touchEnded() function is called every time a touch ends. If no
+touchEnded() function is defined, the mouseReleased() function will be called
+instead if it is defined. Browsers may have different default behaviors
+attached to various touch events. To prevent any default behavior for this
+event, add "return false" to the end of the method.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: touch*
 
 ---
 
