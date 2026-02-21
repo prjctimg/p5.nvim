@@ -44,12 +44,21 @@ ANSI_COLORS = {
     'source': '\033[0;90m',
 }
 
+EMOJI_MAP = {
+    'ERROR': '❌',
+    'WARN': '⚠️ ',
+    'INFO': 'ℹ️ ',
+    'LOG': '📝',
+    'HEARTBEAT': '💓',
+}
+
 
 def format_log_entry(level: str, message: str, source: str = "browser") -> str:
-    """Format a log entry with ANSI colors for terminal display."""
+    """Format a log entry with ANSI colors and emojis for terminal display."""
     timestamp = datetime.now().strftime("%H:%M:%S")
     level = level.upper()
     
+    emoji = EMOJI_MAP.get(level, '📝')
     level_color = ANSI_COLORS.get(level.lower(), ANSI_COLORS['log'])
     time_color = ANSI_COLORS['timestamp']
     source_color = ANSI_COLORS['source']
@@ -57,6 +66,7 @@ def format_log_entry(level: str, message: str, source: str = "browser") -> str:
     
     return (
         f"{time_color}[{timestamp}]{reset} "
+        f"{emoji} "
         f"{level_color}{level:5}{reset} "
         f"{source_color}[{source}]{reset}: {message}"
     )
