@@ -383,6 +383,7 @@ class HTTPServer:
         
         heartbeat_interval = CONFIG['console']['heartbeat_interval']
         heartbeat_count = 0
+        last_log_time = asyncio.get_event_loop().time()
         
         try:
             while self.running:
@@ -397,14 +398,24 @@ class HTTPServer:
                     formatted = format_log_entry(level, message, source)
                     writer.write(f"data: {formatted}\n\n".encode())
                     await writer.drain()
+                    last_log_time = asyncio.get_event_loop().time()
                 
-                # Send heartbeat every N iterations
+                # Only send heartbeat as SSE comment if no activity for a while
                 heartbeat_count += 1
+                current_time = asyncio.get_event_loop().time()
+                time_since_last_log = current_time - last_log_time
+                
                 if heartbeat_count >= heartbeat_interval:
                     heartbeat_count = 0
-                    formatted = format_log_entry('info', '[HEARTBEAT] connection active', 'system')
-                    writer.write(f"data: {formatted}\n\n".encode())
-                    await writer.drain()
+                    # Only send heartbeat as log if no logs for 10+ seconds
+                    if time_since_last_log >= 10:
+                        formatted = format_log_entry('info', '[HEARTBEAT] connection active', 'system')
+                        writer.write(f"data: {formatted}\n\n".encode())
+                        await writer.drain()
+                    else:
+                        # Send keepalive as SSE comment (silent)
+                        writer.write(b': heartbeat\n\n')
+                        await writer.drain()
                 
                 # Wait before next check
                 await asyncio.sleep(1)

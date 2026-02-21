@@ -11,6 +11,9 @@ C.server_port = nil
 C.reconnect_attempts = 0
 C.max_reconnect_attempts = 5
 C.reconnect_delay = 1000
+C.clear_timer = nil
+C.last_error_time = 0
+C.auto_clear_interval = 30000  -- 30 seconds
 
 C.create_console_terminal = function()
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
@@ -42,15 +45,24 @@ C.create_console_terminal = function()
   C.console_job = vim.fn.jobstart(curl_cmd, {
     term = true,
     on_stdout = function(_, data)
-      if data and #data > 0 and not connection_confirmed then
+      if data and #data > 0 then
+        -- Check for errors in the logs
         for _, line in ipairs(data) do
-          if line:match("\027%[%d") then
-            connection_confirmed = true
-            C.reconnect_attempts = 0
-            vim.schedule(function()
-              notify("Console connected to browser", "info")
-            end)
-            break
+          if line:match("error") or line:match("Error") or line:match("❌") then
+            C.mark_error()
+          end
+        end
+        
+        if not connection_confirmed then
+          for _, line in ipairs(data) do
+            if line:match("\027%[%d") then
+              connection_confirmed = true
+              C.reconnect_attempts = 0
+              vim.schedule(function()
+                notify("Console connected to browser", "info")
+              end)
+              break
+            end
           end
         end
       end
@@ -136,6 +148,7 @@ C.show = function()
     })
     C.console_win = term.win
     C.console_buf = term.buf
+    C.start_auto_clear()
     notify("Console connected to server on port " .. C.server_port, "info")
     return
   end
@@ -190,6 +203,7 @@ C.show = function()
 
   vim.cmd("startinsert")
 
+  C.start_auto_clear()
   notify("Console connected to server on port " .. C.server_port, "info")
 end
 
@@ -203,6 +217,8 @@ C.hide = function()
       vim.fn.jobstop(C.console_job)
       C.console_job = nil
     end
+    
+    C.stop_auto_clear()
   end
 end
 
@@ -343,6 +359,42 @@ C.setup = function(config)
       end,
     })
   end
+  
+  C.start_auto_clear()
+end
+
+C.start_auto_clear = function()
+  if C.clear_timer then
+    C.clear_timer:close()
+  end
+  
+  local timer = vim.uv.new_timer()
+  C.clear_timer = timer
+  
+  timer:start(C.auto_clear_interval, C.auto_clear_interval, vim.schedule_wrap(function()
+    if not C.console_buf or not vim.api.nvim_buf_is_valid(C.console_buf) then
+      return
+    end
+    
+    local current_time = os.time()
+    if current_time - C.last_error_time > 30 then
+      local line_count = vim.api.nvim_buf_line_count(C.console_buf)
+      if line_count > 100 then
+        vim.api.nvim_buf_set_lines(C.console_buf, 0, line_count - 50, false, {})
+      end
+    end
+  end))
+end
+
+C.stop_auto_clear = function()
+  if C.clear_timer then
+    C.clear_timer:close()
+    C.clear_timer = nil
+  end
+end
+
+C.mark_error = function()
+  C.last_error_time = os.time()
 end
 
 return C
