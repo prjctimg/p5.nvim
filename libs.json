@@ -29,15 +29,6 @@
       "cdn_fallback": "https://unpkg.com/p5.js-sound@latest/dist/p5.sound.js"
     },
     {
-      "name": "p5.play",
-      "category": "Physics",
-      "description": "Game engine using p5.js for graphics and Box2D for physics",
-      "github_repo": "quinton-ashley/p5play",
-      "github_release": "latest",
-      "asset_pattern": "p5play%.js$",
-      "cdn_fallback": "https://unpkg.com/p5play@latest/lib/p5.play.js"
-    },
-    {
       "name": "p5.xr",
       "category": "3D",
       "description": "VR and AR sketches with p5.js",
