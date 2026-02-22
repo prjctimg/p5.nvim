@@ -1,7 +1,6 @@
--- Iain plugin entry point for p5.nvim
+-- p5.nvim entry point
 local I = {}
 
--- Configuration defaults
 I.config = {
   server = {
     port = 8000,
@@ -32,11 +31,9 @@ I.config = {
   }
 }
 
--- Setup function
 I.setup = function(opts)
   I.config = vim.tbl_deep_extend("force", I.config, opts or {})
 
-  -- Import modules
   local core = require("p5.core")
   local project = require("p5.project")
   local server = require("p5.server")
@@ -44,7 +41,6 @@ I.setup = function(opts)
   local console = require("p5.console")
   local gist = require("p5.gist")
 
-  -- Initialize modules
   core.setup(I.config)
   project.setup(I.config)
   server.setup(I.config)
@@ -52,35 +48,32 @@ I.setup = function(opts)
   console.setup(I.config)
   gist.setup(I.config)
 
-  -- Main P5 command with subcommands
-  vim.api.nvim_create_user_command("P5", function(args)
-    local core = require("p5.core")
-    local snacks = core.require_snacks()
-    
-    local function run_action(choice)
-      if choice == "Create new project" then
-        vim.ui.input({
-          prompt = "Project name: ",
-          default = "p5-sketch",
-          completion = "dir",
-        }, function(input)
-          if input and input ~= "" then
-            require("p5.project").create_project(input)
-          end
-        end)
-      elseif choice == "Install library" then
-        require("p5.libraries").show_and_install()
-      elseif choice == "Start server" then
-        require("p5.server").start_server()
-      elseif choice == "Stop server" then
-        require("p5.server").stop_server()
-      elseif choice == "Toggle console" then
-        require("p5.console").toggle()
-      elseif choice == "Open docs" then
-        vim.cmd("echom 'p5.js docs: https://p5js.org/reference/'")
-        vim.fn.jobstart({"xdg-open", "https://p5js.org/reference/"}, { detach = true })
-      end
+  local function run_action(choice)
+    if choice == "Create new project" then
+      vim.ui.input({
+        prompt = "Project name: ",
+        default = "p5-sketch",
+        completion = "dir",
+      }, function(input)
+        if input and input ~= "" then
+          require("p5.project").create_project(input)
+        end
+      end)
+    elseif choice == "Install library" then
+      require("p5.libraries").show_and_install()
+    elseif choice == "Start server" then
+      require("p5.server").start_server()
+    elseif choice == "Stop server" then
+      require("p5.server").stop_server()
+    elseif choice == "Toggle console" then
+      require("p5.console").toggle()
+    elseif choice == "Open docs" then
+      vim.cmd("help p5-nvim")
     end
+  end
+
+  local function show_main_picker()
+    local snacks = core.require_snacks()
     
     if snacks and snacks.picker then
       snacks.picker.pick({
@@ -95,9 +88,7 @@ I.setup = function(opts)
         },
         format = function(item) return item end,
         on_submit = function(selected)
-          if selected then
-            run_action(selected)
-          end
+          if selected then run_action(selected) end
         end
       })
     else
@@ -108,62 +99,88 @@ I.setup = function(opts)
         "Stop server",
         "Toggle console",
         "Open docs",
-      }, {
-        prompt = "p5.nvim:",
-      }, function(choice)
-        if choice then
-          run_action(choice)
-        end
+      }, { prompt = "p5.nvim:" }, function(choice)
+        if choice then run_action(choice) end
       end)
     end
-  end, { nargs = 0 })
+  end
 
-  -- P5 install - Install library
-  vim.api.nvim_create_user_command("P5Install", function(args)
-    if #args.fargs == 0 then
-      require("p5.libraries").show_and_install()
-    else
-      require("p5.libraries").install_libs(args.fargs)
+  local function complete_p5(arg_lead, cmd_lead, cursor_pos)
+    local args = vim.split(cmd_lead, "%s+")
+    local partial = args[#args] or ""
+
+    if #args == 1 then
+      return {"install", "uninstall", "server", "console", "docs", "gist"}
     end
-  end, { nargs = "*" })
 
-  -- P5 contrib-lib - Alias for install with picker
-  vim.api.nvim_create_user_command("P5ContribLib", function(args)
-    if #args.fargs > 0 and args.fargs[1] == "remove" then
-      require("p5.libraries").show_uninstall_picker()
-    else
-      require("p5.libraries").show_and_install()
+    if args[2] == "install" then
+      local libs = require("p5.libraries").get_available_libs()
+      local names = vim.tbl_map(function(l) return l.name end, libs)
+      if partial == "" then return names end
+      return vim.fn.matchfuzzy(names, partial) or names
     end
-  end, { nargs = "*" })
 
-  -- P5 uninstall - Show installed libs for uninstall
-  vim.api.nvim_create_user_command("P5Uninstall", function(args)
-    if #args.fargs == 0 then
-      require("p5.libraries").show_uninstall_picker()
-    else
-      require("p5.libraries").uninstall_libs(args.fargs)
+    if args[2] == "uninstall" then
+      local installed = require("p5.libraries").get_installed_libs()
+      local names = vim.tbl_map(function(l) return l.name end, installed)
+      if partial == "" then return names end
+      return vim.fn.matchfuzzy(names, partial) or names
     end
-  end, { nargs = "*" })
 
-  -- P5 server start
-  vim.api.nvim_create_user_command("P5ServerStart", function(args)
-    require("p5.server").start_server(tonumber(args.fargs[1]))
-  end, { nargs = "?" })
+    if args[2] == "server" and #args == 2 then
+      return {"start", "stop"}
+    end
 
-  -- P5 server stop
-  vim.api.nvim_create_user_command("P5ServerStop", function()
-    require("p5.server").stop_server()
-  end, { nargs = 0 })
+    return {}
+  end
 
-  -- P5 create-gist
-  vim.api.nvim_create_user_command("P5CreateGist", function(args)
-    require("p5.gist").create_gist(args.fargs[1])
-  end, { nargs = "?" })
+  vim.api.nvim_create_user_command("P5", function(args)
+    local fargs = args.fargs
+    
+    if #fargs == 0 then
+      show_main_picker()
+      return
+    end
 
-  -- P5 setup
-  vim.api.nvim_create_user_command("P5Setup", function()
-    require("p5.core").setup_environment()
-  end, { nargs = 0 })
+    local subcmd = fargs[1]
+    local subarg = fargs[2]
+
+    if subcmd == "install" then
+      if not subarg then
+        require("p5.libraries").show_and_install()
+      else
+        local libs = {}
+        for i = 2, #fargs do table.insert(libs, fargs[i]) end
+        require("p5.libraries").install_libs(libs)
+      end
+    elseif subcmd == "uninstall" then
+      if not subarg then
+        require("p5.libraries").show_uninstall_picker()
+      else
+        local libs = {}
+        for i = 2, #fargs do table.insert(libs, fargs[i]) end
+        require("p5.libraries").uninstall_libs(libs)
+      end
+    elseif subcmd == "server" then
+      if subarg == "start" then
+        require("p5.server").start_server(tonumber(fargs[3]))
+      elseif subarg == "stop" then
+        require("p5.server").stop_server()
+      else
+        require("p5.server").start_server()
+      end
+    elseif subcmd == "console" then
+      require("p5.console").toggle()
+    elseif subcmd == "docs" then
+      vim.cmd("help p5-nvim")
+    elseif subcmd == "gist" then
+      local desc = table.concat(vim.list_slice(fargs, 2), " ")
+      require("p5.gist").create_gist(desc)
+    end
+  end, {
+    nargs = "*",
+    complete = complete_p5
+  })
 end
 
 return I

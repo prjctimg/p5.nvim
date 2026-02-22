@@ -4,18 +4,18 @@ A Neovim plugin for creative coding with p5.js.
 
 ## Features
 
-- Live development server with auto-reload
-- Browser console integration with ANSI color formatting
-- Library management (50+ p5.js contributor libraries)
-- Project templates with TypeScript support
-- GitHub Gist integration
+- **p5 reference as manpages** - Built-in help for p5.js functions
+- **Live server** - Auto-reload preview in browser
+- **Package management** - Install 50+ contributor libraries
+- **Template sketchspace** - Core p5.js + sound addon
+- **GitHub Gist** - Share sketches (synced to workspace)
+- **Console** - View browser logs in Neovim
 
 ## Requirements
 
 - Neovim >= 0.9.0
 - Python 3.7+ (for development server)
 - curl (for console streaming)
-- `chrome-remote.nvim` dependency
 
 ## Installation
 
@@ -25,7 +25,6 @@ A Neovim plugin for creative coding with p5.js.
   "prjctimg/p5.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "akinsho/chrome-remote.nvim",
   },
   config = function()
     require("p5").setup({})
@@ -36,23 +35,28 @@ A Neovim plugin for creative coding with p5.js.
 ## Quick Start
 
 ```vim
-:P5CreateProject my-sketch
-:P5StartServer
-:P5ToggleConsole
+:P5 install
+:P5 server start
 ```
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `:P5CreateProject [name]` | Create new p5.js project |
-| `:P5StartServer [port]` | Start development server |
-| `:P5StopServer` | Stop development server |
-| `:P5ToggleConsole` | Toggle browser console |
-| `:P5InstallLib <libs...>` | Install libraries |
-| `:P5RemoveLib <libs...>` | Remove libraries |
-| `:P5UpdateLibs` | Update all libraries |
-| `:P5CreateGist` | Create GitHub Gist |
+| `:P5` | Main picker with all options |
+| `:P5 install [libs...]` | Install libraries (picker or direct) |
+| `:P5 uninstall [libs...]` | Uninstall libraries |
+| `:P5 server start [port]` | Start live server |
+| `:P5 server stop` | Stop server |
+| `:P5 console` | Toggle browser console |
+| `:P5 docs` | Open p5.nvim help |
+| `:P5 gist [desc]` | Create GitHub Gist |
+
+### Autocomplete
+
+Tab completion works for:
+- Subcommands: install, uninstall, server, console, docs, gist
+- Library names when installing/uninstalling
 
 ## Configuration
 
@@ -61,6 +65,7 @@ require("p5").setup({
   server = {
     port = 8000,
     auto_start = false,
+    auto_open_browser = true,
   },
   console = {
     enabled = true,
@@ -69,6 +74,21 @@ require("p5").setup({
   }
 })
 ```
+
+## Library Management
+
+Install contributor libraries with autocomplete:
+
+```vim
+:P5 install ml5
+:P5 install ml5 p5.speech
+:P5 uninstall ml5
+```
+
+The plugin automatically:
+- Checks for conflicting installations
+- Updates index.html with library links
+- Removes broken links
 
 ## License
 

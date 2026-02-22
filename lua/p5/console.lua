@@ -7,6 +7,7 @@ local project = require("p5.project")
 C.console_win = nil
 C.console_buf = nil
 C.console_job = nil
+C.console_term = nil  -- Store snacks.terminal reference
 C.server_port = nil
 C.reconnect_attempts = 0
 C.max_reconnect_attempts = 5
@@ -136,6 +137,12 @@ C.show = function()
   -- Use snacks.terminal if available
   local snacks = core.require_snacks()
   if snacks and snacks.terminal then
+    -- Check if we have an existing terminal
+    if C.console_term and C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
+      vim.api.nvim_set_current_win(C.console_win)
+      return
+    end
+    
     local url = string.format("http://localhost:%d/api/console/stream", C.server_port)
     local term = snacks.terminal({"curl", "-s", "-N", url}, {
       win = {
@@ -145,7 +152,9 @@ C.show = function()
       },
       auto_close = false,
       scrollback = 1000,
+      enter = false,  -- Don't focus on show
     })
+    C.console_term = term
     C.console_win = term.win
     C.console_buf = term.buf
     C.start_auto_clear()
@@ -211,14 +220,7 @@ C.hide = function()
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
     vim.api.nvim_win_close(C.console_win, true)
     C.console_win = nil
-    C.console_buf = nil
-
-    if C.console_job then
-      vim.fn.jobstop(C.console_job)
-      C.console_job = nil
-    end
-    
-    C.stop_auto_clear()
+    -- Don't destroy buffer or job - keep terminal alive for persistent toggle
   end
 end
 

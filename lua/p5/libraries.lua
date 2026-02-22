@@ -166,6 +166,122 @@ L.get_installed_libs = function()
   return installed
 end
 
+-- Check for conflicts before installing
+L.check_conflicts = function(lib_name)
+  local result = { has_config = false, has_html = false, has_file = false }
+  local config = core.read_workspace_config()
+  
+  if config and config.libraries then
+    for _, lib in ipairs(config.libraries) do
+      if lib.name == lib_name then
+        result.has_config = true
+        break
+      end
+    end
+  end
+  
+  local index_file = vim.fn.getcwd() .. "/" .. L.config.index_file
+  if vim.fn.filereadable(index_file) == 1 then
+    local content = vim.fn.readfile(index_file)
+    for _, line in ipairs(content) do
+      if line:match('src="assets/libs/' .. lib_name .. '%.js"') or
+         line:match("src='assets/libs/" .. lib_name .. "%.js'") then
+        result.has_html = true
+        break
+      end
+    end
+  end
+  
+  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
+  local js_file = libs_dir .. "/" .. lib_name .. ".js"
+  if vim.fn.filereadable(js_file) == 1 then
+    result.has_file = true
+  end
+  
+  return result
+end
+
+-- Validate and clean broken links in index.html
+L.validate_libs = function()
+  local index_file = vim.fn.getcwd() .. "/" .. L.config.index_file
+  if vim.fn.filereadable(index_file) == 0 then
+    return { cleaned = 0 }
+  end
+  
+  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
+  local content = vim.fn.readfile(index_file)
+  local new_content = {}
+  local cleaned = 0
+  
+  local in_lib_section = false
+  for _, line in ipairs(content) do
+    if line:match("<!--%s*LIBRARIES%s*-->") then
+      in_lib_section = true
+      table.insert(new_content, line)
+    elseif line:match("<!--%s*END LIBRARIES%s*-->") then
+      in_lib_section = false
+      table.insert(new_content, line)
+    elseif in_lib_section and line:match("<script") then
+      local lib_name = line:match('src="assets/libs/(%w+)%.js"') or
+                       line:match("src='assets/libs/(%w+)%.js'")
+      if lib_name then
+        local js_file = libs_dir .. "/" .. lib_name .. ".js"
+        if vim.fn.filereadable(js_file) == 1 then
+          table.insert(new_content, line)
+        else
+          cleaned = cleaned + 1
+        end
+      else
+        table.insert(new_content, line)
+      end
+    else
+      table.insert(new_content, line)
+    end
+  end
+  
+  if cleaned > 0 then
+    vim.fn.writefile(new_content, index_file)
+    core.notify("Cleaned " .. cleaned .. " broken library link(s)", "info")
+  end
+  
+  return { cleaned = cleaned }
+end
+
+-- Show conflict resolution picker
+L.show_conflict_picker = function(lib_name, callback)
+  local snacks = core.require_snacks()
+  local options = {"Replace existing", "Skip", "Cancel"}
+  
+  if snacks and snacks.picker then
+    snacks.picker.pick({
+      title = "Library '" .. lib_name .. "' already exists",
+      items = options,
+      format = function(item) return item end,
+      on_submit = function(selected)
+        if selected == "Replace existing" then
+          callback("replace")
+        elseif selected == "Skip" then
+          callback("skip")
+        else
+          callback("cancel")
+        end
+      end
+    })
+  else
+    vim.ui.select(options, {
+      prompt = "Library '" .. lib_name .. "' already exists:",
+    }, function(choice)
+      if choice == "Replace existing" then
+        callback("replace")
+      elseif choice == "Skip" then
+        callback("skip")
+      else
+        callback("cancel")
+      end
+    end)
+  end
+end
+
 -- Uninstall libraries (remove files and update config)
 L.uninstall_libs = function(lib_names)
   if not lib_names or #lib_names == 0 then
@@ -320,27 +436,61 @@ L.update_index_html = function()
   local content = vim.fn.readfile(index_file)
   local libs = L.load()
   
+  -- Get existing links to avoid duplicates
+  local existing_links = {}
+  for _, line in ipairs(content) do
+    local lib_name = line:match('src="assets/libs/(%w+)%.js"') or
+                     line:match("src='assets/libs/(%w+)%.js'")
+    if lib_name then
+      existing_links[lib_name] = true
+    end
+  end
+  
   local script_tags = {}
   for _, lib in ipairs(libs) do
-    table.insert(script_tags, '    <script src="assets/libs/' .. lib .. '.js"></script>')
+    if not existing_links[lib] then
+      table.insert(script_tags, '    <script src="assets/libs/' .. lib .. '.js"></script>')
+    end
+  end
+  
+  if #script_tags == 0 then
+    return
   end
   
   local new_content = {}
   local in_lib_section = false
+  local lib_section_found = false
   
   for _, line in ipairs(content) do
-    if line:match("<!-- LIBRARIES -->") then
+    if line:match("<!--%s*LIBRARIES%s*-->") then
       in_lib_section = true
+      lib_section_found = true
       table.insert(new_content, line)
       for _, tag in ipairs(script_tags) do
         table.insert(new_content, tag)
       end
-    elseif line:match("<!-- END LIBRARIES -->") then
+    elseif line:match("<!--%s*END LIBRARIES%s*-->") then
       in_lib_section = false
       table.insert(new_content, line)
     elseif not in_lib_section then
       table.insert(new_content, line)
     end
+  end
+  
+  -- If no library section found, add after <body>
+  if not lib_section_found then
+    local new_content2 = {}
+    for i, line in ipairs(new_content) do
+      table.insert(new_content2, line)
+      if line:match("<body") or line:match("<head") then
+        table.insert(new_content2, "<!-- LIBRARIES -->")
+        for _, tag in ipairs(script_tags) do
+          table.insert(new_content2, tag)
+        end
+        table.insert(new_content2, "<!-- END LIBRARIES -->")
+      end
+    end
+    new_content = new_content2
   end
   
   vim.fn.writefile(new_content, index_file)
@@ -536,11 +686,14 @@ L.download_types = function(lib_name, dest, callback)
 end
 
 -- Install libraries with version check
-L.install_libs = function(lib_names)
+L.install_libs = function(lib_names, skip_confirm)
   if not lib_names or #lib_names == 0 then
     core.notify("No libraries selected", "warn")
     return
   end
+  
+  -- Validate and clean broken links first
+  L.validate_libs()
   
   local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
   vim.fn.mkdir(libs_dir, "p")
@@ -549,18 +702,50 @@ L.install_libs = function(lib_names)
   vim.fn.mkdir(types_dir, "p")
   
   local to_install = {}
+  local conflicts = {}
   
   for _, name in ipairs(lib_names) do
     local lib = L.get_library_info(name)
     if lib then
-      table.insert(to_install, lib)
+      local conflict = L.check_conflicts(name)
+      if conflict.has_config or conflict.has_html or conflict.has_file then
+        table.insert(conflicts, { name = name, lib = lib, conflict = conflict })
+      else
+        table.insert(to_install, lib)
+      end
     end
   end
   
-  if #to_install == 0 then
-    core.notify("No matching libraries found", "warn")
+  if #conflicts > 0 and not skip_confirm then
+    local first_conflict = conflicts[1]
+    L.show_conflict_picker(first_conflict.name, function(action)
+      if action == "cancel" then
+        core.notify("Installation cancelled", "info")
+        return
+      elseif action == "skip" then
+        table.insert(to_install, first_conflict.lib)
+      else
+        table.insert(to_install, first_conflict.lib)
+      end
+      for i = 2, #conflicts do
+        table.insert(to_install, conflicts[i].lib)
+      end
+      L.do_install(to_install)
+    end)
     return
   end
+  
+  L.do_install(to_install)
+end
+
+L.do_install = function(to_install)
+  if #to_install == 0 then
+    core.notify("No libraries to install", "info")
+    return
+  end
+  
+  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
+  local types_dir = vim.fn.getcwd() .. "/" .. L.config.types_dir
   
   local pending = #to_install
   local completed = 0
