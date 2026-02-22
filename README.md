@@ -35,9 +35,9 @@ A Neovim plugin for creative coding with p5.js.
 ## Quick Start
 
 ```vim
-:P5CreateProject my-sketch
-:P5StartServer
-:P5ToggleConsole
+:P5Create my-sketch
+:P5Server
+:P5Console
 ```
 
 ## Commands
@@ -45,24 +45,22 @@ A Neovim plugin for creative coding with p5.js.
 | Command | Description |
 |---------|-------------|
 | `:P5` | Main picker with all options |
-| `:P5CreateProject [name]` | Create new p5.js project |
-| `:P5InstallLib [libs...]` | Install libraries (picker or direct) |
-| `:P5RemoveLib [libs...]` | Remove libraries (picker or direct) |
-| `:P5UpdateLibs` | Update all installed libraries |
-| `:P5StartServer [port]` | Start development server |
-| `:P5StopServer` | Stop development server |
-| `:P5ToggleConsole` | Toggle browser console |
-| `:P5CreateGist [desc]` | Create GitHub Gist |
+| `:P5Create [name]` | Create new p5.js project |
+| `:P5Install [libs...]` | Install libraries (picker or direct) |
+| `:P5Uninstall [libs...]` | Remove libraries (picker or direct) |
+| `:P5Update` | Update all installed libraries |
+| `:P5Server [port]` | Start/stop development server (toggle) |
+| `:P5Console` | Toggle browser console |
+| `:P5Gist [desc]` | Create GitHub Gist |
 | `:P5Setup` | Setup environment |
 
 ## Library Management
 
-Install contributor libraries with autocomplete:
+Install contributor libraries:
 
 ```vim
-:P5InstallLib ml5
-:P5InstallLib ml5 p5.speech
-:P5RemoveLib ml5
+:P5Install ml5
+:P5Uninstall ml5
 ```
 
 The plugin automatically:
