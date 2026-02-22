@@ -48,18 +48,41 @@ I.setup = function(opts)
   console.setup(I.config)
   gist.setup(I.config)
 
-  local snacks = core.require_snacks()
-
-  local function notify(msg, level)
-    vim.schedule(function()
-      core.notify(msg, level or "info")
+  -- P5 (main picker)
+  vim.api.nvim_create_user_command("P5", function()
+    local options = {
+      "Create new project",
+      "Install library",
+      "Uninstall library",
+      "Start server",
+      "Stop server",
+      "Toggle console",
+      "Open docs",
+    }
+    vim.ui.select(options, { prompt = "p5.nvim:" }, function(choice)
+      if choice == "Create new project" then
+        vim.cmd("P5CreateProject")
+      elseif choice == "Install library" then
+        vim.cmd("P5InstallLib")
+      elseif choice == "Uninstall library" then
+        vim.cmd("P5RemoveLib")
+      elseif choice == "Start server" then
+        vim.cmd("P5StartServer")
+      elseif choice == "Stop server" then
+        vim.cmd("P5StopServer")
+      elseif choice == "Toggle console" then
+        vim.cmd("P5ToggleConsole")
+      elseif choice == "Open docs" then
+        vim.cmd("help p5-nvim")
+      end
     end)
-  end
+  end, { nargs = 0 })
 
-  local function create_project()
-    if not snacks then
+  -- P5 create-project
+  vim.api.nvim_create_user_command("P5CreateProject", function(args)
+    if not args.fargs[1] then
       vim.ui.input({
-        prompt = "Create new project: ",
+        prompt = "Project name: ",
         default = "p5-sketch",
         completion = "dir",
       }, function(input)
@@ -67,269 +90,58 @@ I.setup = function(opts)
           require("p5.project").create_project(input)
         end
       end)
-      return
+    else
+      require("p5.project").create_project(args.fargs[1])
     end
+  end, { nargs = "?" })
 
-    snacks.input({
-      prompt = "Create new project",
-      placeholder = "Enter project name",
-      on_confirm = function(name)
-        if not name or name == "" then
-          notify("Project creation cancelled", "warn")
-          return
-        end
-        require("p5.project").create_project(name)
-      end,
-    })
-  end
-
-  local function open_libs_picker(action)
-    local title = (action == "install") and "Install contributor libraries" or "Uninstall contributor libraries"
-    local libs = (action == "install") and require("p5.libraries").get_available_libs() or require("p5.libraries").get_installed_libs()
-
-    if not snacks then
-      vim.ui.select(libs, { prompt = title }, function(selected)
-        if not selected then return end
-        if action == "install" then
-          require("p5.libraries").install_libs({selected.name})
-        else
-          require("p5.libraries").uninstall_libs({selected.name})
-        end
-      end)
-      return
+  -- P5 install-lib
+  vim.api.nvim_create_user_command("P5InstallLib", function(args)
+    if #args.fargs == 0 then
+      require("p5.libraries").show_and_install()
+    else
+      require("p5.libraries").install_libs(args.fargs)
     end
+  end, { nargs = "*" })
 
-    local items = vim.tbl_map(function(lib)
-      local detail = lib.description or ""
-      local status = lib.status or ""
-      if status ~= "" then
-        detail = detail .. " " .. status
-      end
-      return {
-        label = lib.name,
-        detail = detail,
-        value = lib.name,
-      }
-    end, libs)
+  -- P5 remove-lib
+  vim.api.nvim_create_user_command("P5RemoveLib", function(args)
+    if #args.fargs == 0 then
+      require("p5.libraries").show_uninstall_picker()
+    else
+      require("p5.libraries").uninstall_libs(args.fargs)
+    end
+  end, { nargs = "*" })
 
-    snacks.picker({
-      prompt = title,
-      items = items,
-      multi = true,
-      on_confirm = function(selected)
-        if not selected or vim.tbl_isempty(selected) then
-          notify("No libraries selected", "warn")
-          return
-        end
+  -- P5 update-libs
+  vim.api.nvim_create_user_command("P5UpdateLibs", function()
+    require("p5.libraries").update_libs()
+  end, { nargs = 0 })
 
-        local names = {}
-        for _, item in ipairs(selected) do
-          table.insert(names, item.value or item.label)
-        end
+  -- P5 start-server
+  vim.api.nvim_create_user_command("P5StartServer", function(args)
+    require("p5.server").start_server(tonumber(args.fargs[1]))
+  end, { nargs = "?" })
 
-        if action == "install" then
-          require("p5.libraries").install_libs(names)
-        else
-          require("p5.libraries").uninstall_libs(names)
-        end
-      end,
-    })
-  end
-
-  local function start_server()
-    require("p5.server").start_server()
-  end
-
-  local function stop_server()
+  -- P5 stop-server
+  vim.api.nvim_create_user_command("P5StopServer", function()
     require("p5.server").stop_server()
-  end
+  end, { nargs = 0 })
 
-  local function toggle_console()
+  -- P5 toggle-console
+  vim.api.nvim_create_user_command("P5ToggleConsole", function()
     require("p5.console").toggle()
-  end
+  end, { nargs = 0 })
 
-  local function show_docs()
-    vim.cmd("help p5-nvim")
-  end
+  -- P5 create-gist
+  vim.api.nvim_create_user_command("P5CreateGist", function(args)
+    require("p5.gist").create_gist(args.fargs[1])
+  end, { nargs = "?" })
 
-  local function create_gist()
-    if not snacks then
-      vim.ui.input({
-        prompt = "Create Gist (description): ",
-      }, function(desc)
-        if desc then
-          require("p5.gist").create_gist(desc)
-        end
-      end)
-      return
-    end
-
-    snacks.input({
-      prompt = "Create Gist",
-      placeholder = "Enter description (optional)",
-      on_confirm = function(desc)
-        require("p5.gist").create_gist(desc or "")
-      end,
-    })
-  end
-
-  local function open_main_picker()
-    local options = {
-      { label = "Create a new project", action = "create" },
-      { label = "Install contributor libraries", action = "install_libs" },
-      { label = "Uninstall contributor libraries", action = "uninstall_libs" },
-      { label = "Create a Gist for the sketchspace", action = "create_gist" },
-      { label = "Start live server", action = "start_server" },
-      { label = "Stop live server", action = "stop_server" },
-      { label = "Show docs", action = "show_docs" },
-      { label = "Toggle console", action = "toggle_console" },
-    }
-
-    if not snacks then
-      vim.ui.select(options, { prompt = "p5.nvim:" }, function(choice)
-        if not choice then return end
-        local action = choice.action
-        if action == "create" then
-          create_project()
-        elseif action == "install_libs" then
-          open_libs_picker("install")
-        elseif action == "uninstall_libs" then
-          open_libs_picker("uninstall")
-        elseif action == "create_gist" then
-          create_gist()
-        elseif action == "start_server" then
-          start_server()
-        elseif action == "stop_server" then
-          stop_server()
-        elseif action == "show_docs" then
-          show_docs()
-        elseif action == "toggle_console" then
-          toggle_console()
-        end
-      end)
-      return
-    end
-
-    local items = vim.tbl_map(function(opt)
-      return { label = opt.label, value = opt.action }
-    end, options)
-
-    snacks.picker({
-      prompt = "p5.nvim",
-      items = items,
-      multi = false,
-      on_confirm = function(item)
-        local action = item.value
-        if action == "create" then
-          create_project()
-        elseif action == "install_libs" then
-          open_libs_picker("install")
-        elseif action == "uninstall_libs" then
-          open_libs_picker("uninstall")
-        elseif action == "create_gist" then
-          create_gist()
-        elseif action == "start_server" then
-          start_server()
-        elseif action == "stop_server" then
-          stop_server()
-        elseif action == "show_docs" then
-          show_docs()
-        elseif action == "toggle_console" then
-          toggle_console()
-        else
-          notify("Unknown action: " .. tostring(action), "error")
-        end
-      end,
-    })
-  end
-
-  local function complete_p5(arg_lead, cmd_lead, cursor_pos)
-    local args = vim.split(cmd_lead, "%s+")
-    local partial = args[#args] or ""
-
-    if #args == 1 then
-      return {"create", "install", "uninstall", "server", "console", "docs", "gist"}
-    end
-
-    if args[2] == "create" then
-      return {}
-    end
-
-    if args[2] == "install" then
-      local libs = require("p5.libraries").get_available_libs()
-      local names = vim.tbl_map(function(l) return l.name end, libs)
-      if partial == "" then return names end
-      return vim.fn.matchfuzzy(names, partial) or names
-    end
-
-    if args[2] == "uninstall" then
-      local installed = require("p5.libraries").get_installed_libs()
-      local names = vim.tbl_map(function(l) return l.name end, installed)
-      if partial == "" then return names end
-      return vim.fn.matchfuzzy(names, partial) or names
-    end
-
-    if args[2] == "server" and #args == 2 then
-      return{"start", "stop"}
-    end
-
-    return {}
-  end
-
-  vim.api.nvim_create_user_command("P5", function(args)
-    local fargs = args.fargs
-
-    if #fargs == 0 then
-      open_main_picker()
-      return
-    end
-
-    local subcmd = fargs[1]
-    local subarg = fargs[2]
-
-    if subcmd == "create" then
-      local name = subarg or fargs[3]
-      if name then
-        require("p5.project").create_project(name)
-      else
-        create_project()
-      end
-    elseif subcmd == "install" then
-      if not subarg then
-        open_libs_picker("install")
-      else
-        local libs = {}
-        for i = 2, #fargs do table.insert(libs, fargs[i]) end
-        require("p5.libraries").install_libs(libs)
-      end
-    elseif subcmd == "uninstall" then
-      if not subarg then
-        open_libs_picker("uninstall")
-      else
-        local libs = {}
-        for i = 2, #fargs do table.insert(libs, fargs[i]) end
-        require("p5.libraries").uninstall_libs(libs)
-      end
-    elseif subcmd == "server" then
-      if subarg == "start" then
-        require("p5.server").start_server(tonumber(fargs[3]))
-      elseif subarg == "stop" then
-        require("p5.server").stop_server()
-      else
-        require("p5.server").start_server()
-      end
-    elseif subcmd == "console" then
-      require("p5.console").toggle()
-    elseif subcmd == "docs" then
-      vim.cmd("help p5-nvim")
-    elseif subcmd == "gist" then
-      local desc = table.concat(vim.list_slice(fargs, 2), " ")
-      require("p5.gist").create_gist(desc)
-    end
-  end, {
-    nargs = "*",
-    complete = complete_p5
-  })
+  -- P5 setup
+  vim.api.nvim_create_user_command("P5Setup", function()
+    require("p5.core").setup_environment()
+  end, { nargs = 0 })
 end
 
 return I
