@@ -732,10 +732,15 @@ L.do_install = function(to_install)
   
   local pending = #to_install
   local completed = 0
+  local installed_names = {}
   
   local function check_done()
     completed = completed + 1
     if completed >= pending then
+      -- Add each installed library to config
+      for _, name in ipairs(installed_names) do
+        L.add_library(name)
+      end
       core.notify("Library installation complete", "ok")
       L.update_index_html()
     end
@@ -747,7 +752,9 @@ L.do_install = function(to_install)
     
     L.download_library(lib, dest, function(success)
       if success then
+        table.insert(installed_names, lib.name)
         L.download_types(lib.name, types_dest, function()
+          core.notify("Installed: " .. lib.name, "ok")
           check_done()
         end)
       else

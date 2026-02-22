@@ -111,7 +111,10 @@ C.attempt_reconnect = function()
   end, delay)
 end
 
-C.show = function()
+C.show = function(opts)
+  opts = opts or {}
+  local enter = opts.enter ~= false
+  
   local server = require("p5.server")
   local is_project = project.is_p5_project()
 
@@ -126,7 +129,9 @@ C.show = function()
   end
 
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
-    vim.api.nvim_set_current_win(C.console_win)
+    if enter then
+      vim.api.nvim_set_current_win(C.console_win)
+    end
     return
   end
 
@@ -139,7 +144,9 @@ C.show = function()
   if snacks and snacks.terminal then
     -- Check if we have an existing terminal
     if C.console_term and C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
-      vim.api.nvim_set_current_win(C.console_win)
+      if enter then
+        vim.api.nvim_set_current_win(C.console_win)
+      end
       return
     end
 
@@ -152,7 +159,7 @@ C.show = function()
       },
       auto_close = false,
       scrollback = 1000,
-      enter = false,
+      enter = enter,
     })
     C.console_term = term
     C.console_win = term.win

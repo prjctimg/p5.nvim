@@ -50,12 +50,13 @@ I.setup = function(opts)
 
   -- P5 (main picker)
   vim.api.nvim_create_user_command("P5", function()
+    local srv = require("p5.server")
+    local server_status = srv.server_job and "Stop server" or "Start server"
     local options = {
       "Create new project",
       "Install library",
       "Uninstall library",
-      "Start server",
-      "Stop server",
+      server_status,
       "Toggle console",
       "Open docs",
     }
@@ -66,9 +67,7 @@ I.setup = function(opts)
         vim.cmd("P5Install")
       elseif choice == "Uninstall library" then
         vim.cmd("P5Uninstall")
-      elseif choice == "Start server" then
-        vim.cmd("P5Server")
-      elseif choice == "Stop server" then
+      elseif choice == "Start server" or choice == "Stop server" then
         vim.cmd("P5Server")
       elseif choice == "Toggle console" then
         vim.cmd("P5Console")
@@ -99,12 +98,19 @@ I.setup = function(opts)
   vim.api.nvim_create_user_command("P5Install", function(args)
     if #args.fargs == 0 then
       local libs = require("p5.libraries").get_available_libs()
-      vim.ui.select(libs, { 
-        prompt = "Select library to install:",
-        format_item = function(item)
-          return item.name .. (item.description and " - " .. item.description or "")
+      -- Map to string for display
+      local items = {}
+      for _, lib in ipairs(libs) do
+        local display = lib.name
+        if lib.description and lib.description ~= "" then
+          display = display .. " - " .. lib.description
         end
-      }, function(selected)
+        if lib.status and lib.status ~= "" then
+          display = display .. " " .. lib.status
+        end
+        table.insert(items, { display = display, name = lib.name })
+      end
+      vim.ui.select(items, { prompt = "Select library to install:" }, function(selected)
         if selected then
           require("p5.libraries").install_libs({selected.name})
         end
@@ -118,12 +124,12 @@ I.setup = function(opts)
   vim.api.nvim_create_user_command("P5Uninstall", function(args)
     if #args.fargs == 0 then
       local installed = require("p5.libraries").get_installed_libs()
-      vim.ui.select(installed, { 
-        prompt = "Select library to uninstall:",
-        format_item = function(item)
-          return item.name
-        end
-      }, function(selected)
+      -- Map to string for display
+      local items = {}
+      for _, lib in ipairs(installed) do
+        table.insert(items, { display = lib.name, name = lib.name })
+      end
+      vim.ui.select(items, { prompt = "Select library to uninstall:" }, function(selected)
         if selected then
           require("p5.libraries").uninstall_libs({selected.name})
         end

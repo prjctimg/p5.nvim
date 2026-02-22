@@ -255,7 +255,7 @@ S.start_server = function(port)
     -- Show console if enabled
     if S.config.console.auto_show then
       vim.defer_fn(function()
-        console.show()
+        console.show({ enter = false })
       end, 2500) -- Show console after server is ready
     end
   else
@@ -438,7 +438,7 @@ S.start_server_with_fallback = function(port)
     if S.config.console.auto_show then
       vim.defer_fn(function()
         local console = require("p5.console")
-        console.show()
+        console.show({ enter = false })
       end, 2500) -- Show console after server is ready
     end
   else
