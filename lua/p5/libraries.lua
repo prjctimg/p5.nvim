@@ -251,23 +251,8 @@ end
 L.show_conflict_picker = function(lib_name, callback)
   local snacks = core.require_snacks()
   local options = {"Replace existing", "Skip", "Cancel"}
-  
-  if snacks and snacks.picker then
-    snacks.picker.pick({
-      title = "Library '" .. lib_name .. "' already exists",
-      items = options,
-      format = function(item) return item end,
-      on_submit = function(selected)
-        if selected == "Replace existing" then
-          callback("replace")
-        elseif selected == "Skip" then
-          callback("skip")
-        else
-          callback("cancel")
-        end
-      end
-    })
-  else
+
+  if not snacks then
     vim.ui.select(options, {
       prompt = "Library '" .. lib_name .. "' already exists:",
     }, function(choice)
@@ -279,7 +264,28 @@ L.show_conflict_picker = function(lib_name, callback)
         callback("cancel")
       end
     end)
+    return
   end
+
+  local items = vim.tbl_map(function(opt)
+    return { label = opt, value = opt }
+  end, options)
+
+  snacks.picker({
+    prompt = "Library '" .. lib_name .. "' already exists",
+    items = items,
+    multi = false,
+    on_confirm = function(item)
+      local choice = item.value
+      if choice == "Replace existing" then
+        callback("replace")
+      elseif choice == "Skip" then
+        callback("skip")
+      else
+        callback("cancel")
+      end
+    end
+  })
 end
 
 -- Uninstall libraries (remove files and update config)
@@ -349,81 +355,46 @@ end
 -- Show uninstall picker with multiselect
 L.show_uninstall_picker = function()
   local installed = L.get_installed_libs()
-  
+  local snacks = core.require_snacks()
+
   if #installed == 0 then
     core.notify("No contrib libraries installed", "warn")
     return
   end
-  
-  local snacks = core.require_snacks()
-  
-  local format_item = function(item)
-    return item.name
-  end
-  
-  if snacks and snacks.picker then
-    snacks.picker.pick({
-      title = "Select Libraries to Remove",
-      items = installed,
-      format = function(item) return format_item(item) end,
-      multi_select = true,
-      on_submit = function(selected)
-        if selected and #selected > 0 then
-          local names = {}
-          for _, item in ipairs(selected) do
-            table.insert(names, item.name)
-          end
-          L.uninstall_libs(names)
-        end
+
+  if not snacks then
+    vim.ui.select(installed, { prompt = "Select library to uninstall:" }, function(selected)
+      if selected then
+        L.uninstall_libs({selected.name})
       end
-    })
-  else
-    local selected_items = {}
-    local current_index = 1
-    local filtered_items = installed
-    
-    local function next_selection()
-      if current_index > #filtered_items then
-        if #selected_items > 0 then
-          local names = {}
-          for _, item in ipairs(selected_items) do
-            table.insert(names, item.name)
-          end
-          L.uninstall_libs(names)
-        else
-          core.notify("No libraries selected", "info")
-        end
+    end)
+    return
+  end
+
+  local items = vim.tbl_map(function(lib)
+    return {
+      label = lib.name,
+      detail = lib.file,
+      value = lib.name,
+    }
+  end, installed)
+
+  snacks.picker({
+    prompt = "Uninstall contributor libraries",
+    items = items,
+    multi = true,
+    on_confirm = function(selected)
+      if not selected or vim.tbl_isempty(selected) then
+        core.notify("No libraries selected", "info")
         return
       end
-      
-      local item = filtered_items[current_index]
-      vim.ui.select({ "Yes", "No", "All", "None" }, {
-        prompt = string.format("[%d/%d] Remove '%s'? (Yes/No/All/None)", 
-          current_index, #filtered_items, item.name),
-      }, function(choice)
-        if choice == "Yes" then
-          table.insert(selected_items, item)
-        elseif choice == "All" then
-          for i = current_index, #filtered_items do
-            table.insert(selected_items, filtered_items[i])
-          end
-          local names = {}
-          for _, itm in ipairs(selected_items) do
-            table.insert(names, itm.name)
-          end
-          L.uninstall_libs(names)
-          return
-        elseif choice == "None" then
-          core.notify("No libraries selected", "info")
-          return
-        end
-        current_index = current_index + 1
-        vim.schedule(next_selection)
-      end)
+      local names = {}
+      for _, item in ipairs(selected) do
+        table.insert(names, item.value or item.label)
+      end
+      L.uninstall_libs(names)
     end
-    
-    next_selection()
-  end
+  })
 end
 
 -- Update index.html with library includes
@@ -520,61 +491,53 @@ end
 L.show_library_picker = function(callback)
   local items = L.get_available_libs()
   local snacks = core.require_snacks()
-  
-  local format_item = function(item)
-    local status = item.status ~= "" and " " .. item.status or ""
-    return item.name .. " - " .. item.description .. status
-  end
-  
-  if snacks and snacks.picker then
-    snacks.picker.pick({
-      title = "Select Libraries (multi-select)",
-      items = items,
-      format = function(item) return format_item(item) end,
-      multi_select = true,
-      on_submit = function(selected)
-        callback(selected)
+
+  if not snacks then
+    vim.ui.select(items, { prompt = "Select library to install:" }, function(selected)
+      if selected then
+        callback({selected})
+      else
+        callback(nil)
       end
-    })
-  else
-    local selected_items = {}
-    local current_index = 1
-    local filtered_items = items
-    
-    local function next_selection()
-      if current_index > #filtered_items then
-        if #selected_items > 0 then
-          callback(selected_items)
-        else
-          callback(nil)
-        end
+    end)
+    return
+  end
+
+  local picker_items = vim.tbl_map(function(lib)
+    local detail = lib.description or ""
+    local status = lib.status or ""
+    if status ~= "" then
+      detail = detail .. " " .. status
+    end
+    return {
+      label = lib.name,
+      detail = detail,
+      value = lib.name,
+    }
+  end, items)
+
+  snacks.picker({
+    prompt = "Install contributor libraries",
+    items = picker_items,
+    multi = true,
+    on_confirm = function(selected)
+      if not selected or vim.tbl_isempty(selected) then
+        callback(nil)
         return
       end
-      
-      local item = filtered_items[current_index]
-      vim.ui.select({ "Yes", "No", "All", "None" }, {
-        prompt = string.format("[%d/%d] Add '%s'? (Yes/No/All/None)", 
-          current_index, #filtered_items, item.name),
-      }, function(choice)
-        if choice == "Yes" then
-          table.insert(selected_items, item)
-        elseif choice == "All" then
-          for i = current_index, #filtered_items do
-            table.insert(selected_items, filtered_items[i])
+      local result = {}
+      for _, item in ipairs(selected) do
+        local lib_name = item.value or item.label
+        for _, lib in ipairs(items) do
+          if lib.name == lib_name then
+            table.insert(result, lib)
+            break
           end
-          callback(selected_items)
-          return
-        elseif choice == "None" then
-          callback({})
-          return
         end
-        current_index = current_index + 1
-        vim.schedule(next_selection)
-      end)
+      end
+      callback(result)
     end
-    
-    next_selection()
-  end
+  })
 end
 
 -- Download library file from GitHub Releases or fallback to CDN

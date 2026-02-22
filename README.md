@@ -25,6 +25,7 @@ A Neovim plugin for creative coding with p5.js.
   "prjctimg/p5.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
+    "L3MON4D3/snacks.nvim",
   },
   config = function()
     require("p5").setup({})

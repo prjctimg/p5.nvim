@@ -12,7 +12,15 @@ H.check_dependencies = function()
   if snacks then
     vim.health.ok("snacks.nvim: available")
   else
-    vim.health.error("snacks.nvim: not found - required for notifications and UI")
+    vim.health.error("snacks.nvim: not found - required for UI components")
+  end
+  
+  -- Check plenary.nvim
+  local plenary_ok, _ = pcall(require, "plenary")
+  if plenary_ok then
+    vim.health.ok("plenary.nvim: available")
+  else
+    vim.health.error("plenary.nvim: not found - required for async operations")
   end
   
   -- Check chrome-remote.nvim

@@ -142,7 +142,7 @@ C.show = function()
       vim.api.nvim_set_current_win(C.console_win)
       return
     end
-    
+
     local url = string.format("http://localhost:%d/api/console/stream", C.server_port)
     local term = snacks.terminal({"curl", "-s", "-N", url}, {
       win = {
@@ -152,7 +152,7 @@ C.show = function()
       },
       auto_close = false,
       scrollback = 1000,
-      enter = false,  -- Don't focus on show
+      enter = false,
     })
     C.console_term = term
     C.console_win = term.win
@@ -180,15 +180,6 @@ C.show = function()
   vim.api.nvim_set_option_value("relativenumber", false, { scope = "local", win = C.console_win })
   vim.api.nvim_set_option_value("signcolumn", "no", { scope = "local", win = C.console_win })
 
-  vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "", {
-    callback = function()
-      vim.cmd("stopinsert")
-      C.hide()
-    end,
-    desc = "Hide p5 console",
-    noremap = true
-  })
-
   vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
     callback = C.hide,
     desc = "Hide p5 console"
@@ -204,12 +195,6 @@ C.show = function()
     desc = "Enter terminal mode"
   })
 
-  vim.api.nvim_buf_set_keymap(buf, "t", "<C-/>", "", {
-    callback = C.toggle,
-    desc = "Toggle p5 console",
-    noremap = true
-  })
-
   vim.cmd("startinsert")
 
   C.start_auto_clear()
@@ -220,7 +205,6 @@ C.hide = function()
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
     vim.api.nvim_win_close(C.console_win, true)
     C.console_win = nil
-    -- Don't destroy buffer or job - keep terminal alive for persistent toggle
   end
 end
 
@@ -361,7 +345,7 @@ C.setup = function(config)
       end,
     })
   end
-  
+
   C.start_auto_clear()
 end
 
