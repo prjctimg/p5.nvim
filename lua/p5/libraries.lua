@@ -117,7 +117,6 @@ L.add_library = function(lib_name, source)
   table.insert(config.libraries, lib_name)
   
   core.write_workspace_config(config)
-  L.update_index_html()
 end
 
 -- Remove library from project
@@ -137,7 +136,6 @@ L.remove_library = function(lib_name)
   
   config.libraries = new_libs
   core.write_workspace_config(config)
-  L.update_index_html()
 end
 
 -- Get list of installed libraries from project
@@ -316,6 +314,9 @@ L.uninstall_libs = function(lib_names)
   -- Save updated config
   core.write_workspace_config(config)
   
+  -- Update index.html once after all libraries are removed
+  L.update_index_html()
+  
   if #removed > 0 then
     core.notify("🎉 Removed: " .. table.concat(removed, ", "), "info")
   end
@@ -323,9 +324,6 @@ L.uninstall_libs = function(lib_names)
   if #failed > 0 then
     core.notify("Failed to remove: " .. table.concat(failed, ", "), "error")
   end
-  
-  -- Update index.html
-  L.update_index_html()
 end
 
 -- Show uninstall picker with multiselect
@@ -373,7 +371,7 @@ L.show_uninstall_picker = function()
   })
 end
 
--- Update index.html with library includes
+-- Update index.html with library includes using regex
 L.update_index_html = function()
   local index_file = vim.fn.getcwd() .. "/index.html"
   if vim.fn.filereadable(index_file) == 0 then
@@ -382,53 +380,31 @@ L.update_index_html = function()
   
   local libs = L.load()
   local content = vim.fn.readfile(index_file)
+  local html = table.concat(content, "\n")
   
-  -- Generate all script tags fresh from libraries
+  -- Generate new script tags
   local script_tags = {}
   for _, lib in ipairs(libs) do
     table.insert(script_tags, '  <script src="assets/libs/' .. lib .. '.js"></script>')
   end
+  local new_section = "  <!-- P5 SCRIPTS -->\n" .. table.concat(script_tags, "\n") .. "\n  <!-- END P5 SCRIPTS -->"
   
-  local new_content = {}
-  local in_p5_section = false
-  local p5_section_found = false
+  -- Use regex to match and replace the entire P5 SCRIPTS section
+  local pattern = "<!--%s*P5 SCRIPTS%s*-->.-<!--%s*END P5 SCRIPTS%s*-->"
+  local found_start, found_end = html:find(pattern)
   
-  for _, line in ipairs(content) do
-    if line:match("<!--%s*P5 SCRIPTS%s*-->") then
-      in_p5_section = true
-      p5_section_found = true
-      table.insert(new_content, line)
-      -- Add all new script tags
-      for _, tag in ipairs(script_tags) do
-        table.insert(new_content, tag)
-      end
-    elseif line:match("<!--%s*END P5 SCRIPTS%s*-->") then
-      in_p5_section = false
-      table.insert(new_content, line)
-    elseif not in_p5_section then
-      -- Only add lines outside P5 SCRIPTS section
-      table.insert(new_content, line)
+  if found_start then
+    -- Replace existing section
+    html = html:sub(1, found_start - 1) .. new_section .. html:sub(found_end + 1)
+  else
+    -- Add after <body> tag if section doesn't exist
+    local body_pos = html:find("<body[^>]*>")
+    if body_pos then
+      html = html:sub(1, body_pos) .. "\n" .. new_section .. html:sub(body_pos + 1)
     end
-    -- Skip all lines inside P5 SCRIPTS section (they'll be replaced)
   end
   
-  -- If no P5 SCRIPTS section found, add after <body>
-  if not p5_section_found then
-    local new_content2 = {}
-    for _, line in ipairs(new_content) do
-      table.insert(new_content2, line)
-      if line:match("<body") then
-        table.insert(new_content2, "  <!-- P5 SCRIPTS -->")
-        for _, tag in ipairs(script_tags) do
-          table.insert(new_content2, tag)
-        end
-        table.insert(new_content2, "  <!-- END P5 SCRIPTS -->")
-      end
-    end
-    new_content = new_content2
-  end
-  
-  vim.fn.writefile(new_content, index_file)
+  vim.fn.writefile(vim.split(html, "\n"), index_file)
 end
 
 -- Get available libraries for picker
