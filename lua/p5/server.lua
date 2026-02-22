@@ -173,7 +173,6 @@ S.start_server = function(port)
   
   S.port = port
   S.server_type = server_type
-  notify("Starting " .. server_type .. " server on port " .. port, "info")
 
   local cmd = S.get_server_command(server_type, port)
   if not cmd then
@@ -187,10 +186,9 @@ S.start_server = function(port)
   S.server_job = vim.fn.jobstart(cmd, {
     on_stdout = function(_, data)
       if data and #data > 0 and data[1] ~= "" then
-        -- Process server output for ready signal
         for _, line in ipairs(data) do
           if line:match("Server running at") then
-            notify("Server confirmed ready", "ok")
+            -- Server ready, notification handled below
           end
         end
       end
@@ -206,8 +204,6 @@ S.start_server = function(port)
           notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "error")
         elseif error_msg:match("EACCES") then
           notify("Access denied. Check file permissions.", "error")
-        else
-          notify("Server error: " .. error_msg, "error")
         end
       end
     end,
@@ -238,7 +234,6 @@ S.start_server = function(port)
   if S.server_job > 0 then
     local url = "http://localhost:" .. port
     notify("🎉 Server started (" .. server_type .. ") at " .. url, "ok")
-    notify("Console integration: :P5ToggleConsole", "info")
     
     -- Start console polling AFTER server is confirmed ready
     if S.config.console.enabled then
@@ -258,8 +253,6 @@ S.start_server = function(port)
         console.show({ enter = false })
       end, 2500) -- Show console after server is ready
     end
-  else
-    notify("Failed to start server", "error")
   end
 end
 
@@ -281,7 +274,7 @@ S.stop_server = function()
   local console = require("p5.console")
   console.hide()
   
-  notify("Server stopped on port " .. stopped_port .. " (" .. server_type .. ")", "info")
+  notify("🛑 Server stopped on port " .. stopped_port .. " (" .. server_type .. ")", "info")
 end
 
 -- Start console polling after server is ready

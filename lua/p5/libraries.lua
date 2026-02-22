@@ -118,7 +118,6 @@ L.add_library = function(lib_name, source)
   
   core.write_workspace_config(config)
   L.update_index_html()
-  core.notify("Added library: " .. lib_name, "success")
 end
 
 -- Remove library from project
@@ -139,7 +138,6 @@ L.remove_library = function(lib_name)
   config.libraries = new_libs
   core.write_workspace_config(config)
   L.update_index_html()
-  core.notify("Removed library: " .. lib_name, "success")
 end
 
 -- Get list of installed libraries from project
@@ -303,7 +301,8 @@ L.uninstall_libs = function(lib_names)
     -- Remove from config
     local new_libs = {}
     for _, lib in ipairs(config.libraries) do
-      if lib.name ~= name then
+      local lib_name_str = type(lib) == "table" and lib.name or lib
+      if lib_name_str ~= name then
         table.insert(new_libs, lib)
       end
     end
@@ -318,7 +317,7 @@ L.uninstall_libs = function(lib_names)
   core.write_workspace_config(config)
   
   if #removed > 0 then
-    core.notify("Removed: " .. table.concat(removed, ", "), "success")
+    core.notify("🎉 Removed: " .. table.concat(removed, ", "), "info")
   end
   
   if #failed > 0 then
@@ -399,7 +398,7 @@ L.update_index_html = function()
       in_p5_section = true
       p5_section_found = true
       table.insert(new_content, line)
-      -- Add all script tags
+      -- Add all new script tags
       for _, tag in ipairs(script_tags) do
         table.insert(new_content, tag)
       end
@@ -407,8 +406,10 @@ L.update_index_html = function()
       in_p5_section = false
       table.insert(new_content, line)
     elseif not in_p5_section then
+      -- Only add lines outside P5 SCRIPTS section
       table.insert(new_content, line)
     end
+    -- Skip all lines inside P5 SCRIPTS section (they'll be replaced)
   end
   
   -- If no P5 SCRIPTS section found, add after <body>
@@ -665,7 +666,7 @@ L.do_install = function(to_install)
       -- Show single notification
       if #installed_names > 0 then
         local msg = "🎉 Installed: " .. table.concat(installed_names, ", ")
-        core.notify(msg, "ok")
+        core.notify(msg, "info")
       end
       if #failed_names > 0 then
         core.notify("Failed: " .. table.concat(failed_names, ", "), "error")
