@@ -189,22 +189,11 @@ function draw() {
   
   vim.fn.writefile(vim.split(tsconfig, "\n"), project_path .. "/tsconfig.json")
   
-  -- Create p5.json workspace configuration
+  -- Create simplified p5.json (version + libraries for easy sharing)
   local p5_config = [[{
-  "name": "]] .. vim.fn.fnamemodify(project_path, ":t") .. [[",
   "version": "1.0.0",
-  "p5js_version": "latest",
-  "libraries": [],
-  "server": {
-    "type": "python",
-    "port": 8000
-  },
-  "console": {
-    "enabled": true,
-    "position": "below",
-    "height": 10
-  }
-}]]
+  "libraries": []
+  }]]
   
   vim.fn.writefile(vim.split(p5_config, "\n"), project_path .. "/p5.json")
   

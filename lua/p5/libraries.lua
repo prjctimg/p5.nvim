@@ -30,12 +30,17 @@ L.load = function()
   local libs = {}
   local config = core.read_workspace_config()
   
+  -- Handle both string array and object array formats
   if config and config.libraries then
     for _, lib in ipairs(config.libraries) do
-      table.insert(libs, lib.name)
+      local lib_name = type(lib) == "table" and lib.name or lib
+      if lib_name and not vim.tbl_contains(libs, lib_name) then
+        table.insert(libs, lib_name)
+      end
     end
   end
   
+  -- Also check libs directory for any additional files
   local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
   if vim.fn.isdirectory(libs_dir) == 1 then
     local js_files = vim.fn.glob(libs_dir .. "/*.js", false, true)
@@ -103,22 +108,21 @@ end
 L.add_library = function(lib_name, source)
   local config = core.read_workspace_config()
   if not config then
-    config = { libraries = {} }
+    config = { version = "1.0.0", libraries = {} }
   end
   
   config.libraries = config.libraries or {}
   
+  -- Check if already exists (handle both string and object formats)
   for _, lib in ipairs(config.libraries) do
-    if lib.name == lib_name then
+    local existing_name = type(lib) == "table" and lib.name or lib
+    if existing_name == lib_name then
       core.notify("Library '" .. lib_name .. "' already exists", "warn")
       return
     end
   end
   
-  table.insert(config.libraries, {
-    name = lib_name,
-    source = source or "manual"
-  })
+  table.insert(config.libraries, lib_name)
   
   core.write_workspace_config(config)
   L.update_index_html()
@@ -134,7 +138,8 @@ L.remove_library = function(lib_name)
   
   local new_libs = {}
   for _, lib in ipairs(config.libraries) do
-    if lib.name ~= lib_name then
+    local lib_name_str = type(lib) == "table" and lib.name or lib
+    if lib_name_str ~= lib_name then
       table.insert(new_libs, lib)
     end
   end
@@ -407,16 +412,24 @@ L.update_index_html = function()
   local content = vim.fn.readfile(index_file)
   local libs = L.load()
   
-  -- Get existing links to avoid duplicates
+  -- Get existing links within P5 SCRIPTS section
   local existing_links = {}
+  local in_p5_section = false
   for _, line in ipairs(content) do
-    local lib_name = line:match('src="assets/libs/(%w+)%.js"') or
-                     line:match("src='assets/libs/(%w+)%.js'")
-    if lib_name then
-      existing_links[lib_name] = true
+    if line:match("<!--%s*P5 SCRIPTS%s*-->") then
+      in_p5_section = true
+    elseif line:match("<!--%s*END P5 SCRIPTS%s*-->") then
+      in_p5_section = false
+    elseif in_p5_section and line:match("<script") then
+      local lib_name = line:match('src="assets/libs/(%w+)%.js"') or
+                       line:match("src='assets/libs/(%w+)%.js'")
+      if lib_name then
+        existing_links[lib_name] = true
+      end
     end
   end
   
+  -- Generate script tags for libraries that need to be added
   local script_tags = {}
   for _, lib in ipairs(libs) do
     if not existing_links[lib] then
@@ -424,23 +437,30 @@ L.update_index_html = function()
     end
   end
   
-  if #script_tags == 0 then
-    return
+  -- If no script tags to add or remove, exit early
+  local has_p5_section = false
+  for _, line in ipairs(content) do
+    if line:match("<!--%s*P5 SCRIPTS%s*-->") then
+      has_p5_section = true
+      break
+    end
   end
   
+  -- Rebuild content with P5 SCRIPTS section
   local new_content = {}
   local in_lib_section = false
   local lib_section_found = false
   
   for _, line in ipairs(content) do
-    if line:match("<!--%s*LIBRARIES%s*-->") then
+    if line:match("<!--%s*P5 SCRIPTS%s*-->") then
       in_lib_section = true
       lib_section_found = true
       table.insert(new_content, line)
+      -- Add new script tags
       for _, tag in ipairs(script_tags) do
         table.insert(new_content, tag)
       end
-    elseif line:match("<!--%s*END LIBRARIES%s*-->") then
+    elseif line:match("<!--%s*END P5 SCRIPTS%s*-->") then
       in_lib_section = false
       table.insert(new_content, line)
     elseif not in_lib_section then
@@ -448,17 +468,17 @@ L.update_index_html = function()
     end
   end
   
-  -- If no library section found, add after <body>
+  -- If no P5 SCRIPTS section found, add after <body>
   if not lib_section_found then
     local new_content2 = {}
     for i, line in ipairs(new_content) do
       table.insert(new_content2, line)
       if line:match("<body") or line:match("<head") then
-        table.insert(new_content2, "<!-- LIBRARIES -->")
+        table.insert(new_content2, "  <!-- P5 SCRIPTS -->")
         for _, tag in ipairs(script_tags) do
           table.insert(new_content2, tag)
         end
-        table.insert(new_content2, "<!-- END LIBRARIES -->")
+        table.insert(new_content2, "  <!-- END P5 SCRIPTS -->")
       end
     end
     new_content = new_content2
