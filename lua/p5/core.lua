@@ -283,9 +283,9 @@ C.download_file = function(url, dest, callback, options)
   
   local cmd
   if C.command_exists("curl") then
-    cmd = {"curl", "-sL", "--insecure", url, "-o", dest}
+    cmd = {"curl", "-sL", "--max-time", "30", "--insecure", url, "-o", dest}
   elseif C.command_exists("wget") then
-    cmd = {"wget", "-q", "-O", dest, url}
+    cmd = {"wget", "-q", "-T", "30", "-O", dest, url}
   else
     C.notify("Neither curl nor wget found. Cannot download: " .. url, "error")
     if callback then callback(false) end
