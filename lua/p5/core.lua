@@ -107,11 +107,48 @@ C.read_workspace_config = function()
   return nil
 end
 
--- Write workspace configuration
+-- Write workspace configuration with formatting
 C.write_workspace_config = function(config)
   local config_file = vim.fn.getcwd() .. "/p5.json"
   local content = vim.fn.json_encode(config)
-  vim.fn.writefile(vim.split(content, "\n"), config_file)
+  -- Format JSON with 2-space indentation
+  local formatted = {}
+  local indent = 0
+  local in_string = false
+  local i = 1
+  while i <= #content do
+    local c = content:sub(i, i)
+    if c == '"' and (i == 1 or content:sub(i-1, i-1) ~= '\\') then
+      in_string = not in_string
+    end
+    if not in_string then
+      if c == '{' or c == '[' then
+        table.insert(formatted, c)
+        indent = indent + 2
+        table.insert(formatted, '\n' .. string.rep(' ', indent))
+        i = i + 1
+      elseif c == '}' or c == ']' then
+        indent = indent - 2
+        table.insert(formatted, '\n' .. string.rep(' ', indent))
+        table.insert(formatted, c)
+        i = i + 1
+      elseif c == ',' then
+        table.insert(formatted, ',\n' .. string.rep(' ', indent))
+        i = i + 1
+      elseif c == ':' then
+        table.insert(formatted, ': ')
+        i = i + 1
+      else
+        table.insert(formatted, c)
+        i = i + 1
+      end
+    else
+      table.insert(formatted, c)
+      i = i + 1
+    end
+  end
+  local pretty = table.concat(formatted)
+  vim.fn.writefile(vim.split(pretty, "\n"), config_file)
 end
 
 -- Show notification
@@ -332,18 +369,17 @@ C.get_github_release_asset = function(repo, release, pattern, callback)
   })
 end
 
--- Get p5 version info
+-- Get p5 version from bundled library
 C.get_p5_version = function()
-  local version_file = C.get_asset_dir() .. "/version.json"
-  if vim.fn.filereadable(version_file) == 1 then
-    local content = vim.fn.readfile(version_file)
-    local info = vim.fn.json_decode(table.concat(content, "\n"))
-    return {
-      version = info.p5js_version or "unknown",
-      semver = info.p5js_semver or "unknown"
-    }
+  local p5_file = C.get_asset_dir() .. "/libs/p5.js"
+  if vim.fn.filereadable(p5_file) == 1 then
+    local lines = vim.fn.readfile(p5_file)
+    if lines and #lines > 0 then
+      local version = lines[1]:match("p5%.js v([%d%.]+)")
+      return version or "unknown"
+    end
   end
-  return nil
+  return "unknown"
 end
 
 -- Chrome Remote initialization

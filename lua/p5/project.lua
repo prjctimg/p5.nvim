@@ -189,9 +189,12 @@ function draw() {
   
   vim.fn.writefile(vim.split(tsconfig, "\n"), project_path .. "/tsconfig.json")
   
+  -- Get p5.js version from bundled library
+  local p5_version = core.get_p5_version()
+  
   -- Create simplified p5.json (version + libraries for easy sharing)
   local p5_config = [[{
-  "version": "1.0.0",
+  "version": "]] .. p5_version .. [[",
   "libraries": ["p5", "p5.sound"]
   }]]
   

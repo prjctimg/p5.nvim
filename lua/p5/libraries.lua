@@ -100,7 +100,8 @@ end
 L.add_library = function(lib_name, source)
   local config = core.read_workspace_config()
   if not config then
-    config = { version = "1.0.0", libraries = {} }
+    local p5_version = core.get_p5_version()
+    config = { version = p5_version, libraries = {} }
   end
   
   config.libraries = config.libraries or {}
@@ -486,26 +487,41 @@ L.download_library = function(lib, dest, callback)
     if callback then callback(success) end
   end
 
+  -- Try CDN first (most reliable for most libraries)
+  if lib.cdn_fallback then
+    core.download_file(lib.cdn_fallback, dest, function(success)
+      if success then
+        done(true)
+      else
+        -- Fallback to GitHub if CDN fails
+        L.download_from_github(lib, dest, done)
+      end
+    end, { cache = true })
+    return
+  end
+
+  -- No CDN, try GitHub
+  L.download_from_github(lib, dest, done)
+end
+
+-- Download from GitHub API
+L.download_from_github = function(lib, dest, callback)
+  local function done(success)
+    if callback then callback(success) end
+  end
+
   if not lib.github_repo then
-    if lib.cdn_fallback then
-      core.download_file(lib.cdn_fallback, dest, done, { cache = true })
-    else
-      done(false)
-    end
+    done(false)
     return
   end
 
   local api_url = string.format("https://api.github.com/repos/%s/releases/%s", lib.github_repo, lib.github_release or "latest")
 
-  local cmd = {"curl", "-s", "-L", "-w", "%{url_effective}", "-o", "/dev/null", api_url}
+  local cmd = {"curl", "-s", "-L", api_url}
   vim.fn.jobstart(cmd, {
     on_stdout = function(_, data)
       if not data or #data == 0 then
-        if lib.cdn_fallback then
-          core.download_file(lib.cdn_fallback, dest, done, { cache = true })
-        else
-          done(false)
-        end
+        done(false)
         return
       end
 
@@ -513,18 +529,19 @@ L.download_library = function(lib, dest, callback)
       local ok, release_info = pcall(vim.fn.json_decode, content)
 
       if not ok or not release_info then
-        if lib.cdn_fallback then
-          core.download_file(lib.cdn_fallback, dest, done, { cache = true })
-        else
-          done(false)
-        end
+        done(false)
         return
       end
 
       local assets = release_info.assets
       if not assets or #assets == 0 then
+        -- No assets, try to use tag_name to construct npm URL
+        local tag = release_info.tag_name or "latest"
         if lib.cdn_fallback then
-          core.download_file(lib.cdn_fallback, dest, done, { cache = true })
+          -- Try to extract version from tag and construct CDN URL
+          local version = tag:match("^v?(.+)$")
+          localcdn = lib.cdn_fallback:gsub("@latest", "@" .. version)
+          core.download_file(localcdn, dest, done, { cache = false })
         else
           done(false)
         end
@@ -548,27 +565,13 @@ L.download_library = function(lib, dest, callback)
 
       local download_url = selected_asset.browser_download_url or selected_asset.url
       if download_url then
-        core.download_file(download_url, dest, function(success)
-          if not success and lib.cdn_fallback then
-            core.download_file(lib.cdn_fallback, dest, done, { cache = true })
-          else
-            done(success)
-          end
-        end, { cache = true })
-      else
-        if lib.cdn_fallback then
-          core.download_file(lib.cdn_fallback, dest, done, { cache = true })
-        else
-          done(false)
-        end
-      end
-    end,
-    on_stderr = function()
-      if lib.cdn_fallback then
-        core.download_file(lib.cdn_fallback, dest, done, { cache = true })
+        core.download_file(download_url, dest, done, { cache = true })
       else
         done(false)
       end
+    end,
+    on_stderr = function()
+      done(false)
     end
   })
 end
