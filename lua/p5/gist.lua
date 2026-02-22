@@ -72,7 +72,7 @@ G.create_gist = function(description)
     -- Extract gist URL from result
     local url = result:match("https://gist%.github%.com/%S+")
     if url then
-      core.notify("Gist created: " .. url, "ok")
+      core.notify("🎉 Gist created: " .. url, "ok")
       
       -- Copy URL to clipboard
       vim.fn.setreg("+", url)
@@ -80,7 +80,7 @@ G.create_gist = function(description)
       -- Open in browser
       vim.fn.system({ "xdg-open", url })
     else
-      core.notify("Gist created (could not extract URL)", "ok")
+      core.notify("🎉 Gist created (could not extract URL)", "ok")
     end
   else
     core.notify("Failed to create gist: " .. result, "error")
@@ -113,7 +113,7 @@ G.update_gist = function(gist_id)
   vim.fn.delete(temp_sketch)
 
   if exit_code == 0 then
-    core.notify("Gist updated successfully", "ok")
+    core.notify("🎉 Gist updated successfully", "ok")
     
     -- Extract URL
     local url = result:match("https://gist%.github%.com/%S+")
@@ -225,26 +225,14 @@ G.clone_gist = function(gist_id)
   if exit_code == 0 then
     -- Create p5.json if not exists
     if vim.fn.filereadable(project_path .. "/p5.json") == 0 then
-      local p5_config = string.format([[
-{
-  "name": "%s",
-  "version": "1.0.0", 
-  "p5js_version": "latest",
-  "libraries": [],
-  "server": {
-    "type": "python",
-    "port": 8000
-  },
-  "console": {
-    "enabled": true,
-    "position": "below",
-    "height": 10
-  },
+      local p5_config = string.format([[{
+  "version": "1.0.0",
+  "libraries": ["p5", "p5.sound"],
   "gist": {
     "id": "%s",
     "cloned_at": "%s"
   }
-}]], project_name, gist_id, os.date("%Y-%m-%d"))
+}]], gist_id, os.date("%Y-%m-%d"))
       
       vim.fn.writefile(vim.split(p5_config, "\n"), project_path .. "/p5.json")
     end

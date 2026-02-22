@@ -30,23 +30,15 @@ L.load = function()
   local libs = {}
   local config = core.read_workspace_config()
   
+  -- Always include core modules
+  table.insert(libs, "p5")
+  table.insert(libs, "p5.sound")
+  
   -- Handle both string array and object array formats
   if config and config.libraries then
     for _, lib in ipairs(config.libraries) do
       local lib_name = type(lib) == "table" and lib.name or lib
       if lib_name and not vim.tbl_contains(libs, lib_name) then
-        table.insert(libs, lib_name)
-      end
-    end
-  end
-  
-  -- Also check libs directory for any additional files
-  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
-  if vim.fn.isdirectory(libs_dir) == 1 then
-    local js_files = vim.fn.glob(libs_dir .. "/*.js", false, true)
-    for _, file in ipairs(js_files) do
-      local lib_name = vim.fn.fnamemodify(file, ":t:r")
-      if not vim.tbl_contains(libs, lib_name) then
         table.insert(libs, lib_name)
       end
     end
@@ -254,43 +246,23 @@ end
 
 -- Show conflict resolution picker
 L.show_conflict_picker = function(lib_name, callback)
-  local snacks = core.require_snacks()
   local options = {"Replace existing", "Skip", "Cancel"}
 
-  if not snacks then
-    vim.ui.select(options, {
-      prompt = "Library '" .. lib_name .. "' already exists:",
-    }, function(choice)
-      if choice == "Replace existing" then
-        callback("replace")
-      elseif choice == "Skip" then
-        callback("skip")
-      else
-        callback("cancel")
-      end
-    end)
-    return
-  end
-
-  local items = vim.tbl_map(function(opt)
-    return { label = opt, value = opt }
-  end, options)
-
-  snacks.picker({
-    prompt = "Library '" .. lib_name .. "' already exists",
-    items = items,
-    multi = false,
-    on_confirm = function(item)
-      local choice = item.value
-      if choice == "Replace existing" then
-        callback("replace")
-      elseif choice == "Skip" then
-        callback("skip")
-      else
-        callback("cancel")
-      end
+  vim.ui.select(options, {
+    prompt = "Library '" .. lib_name .. "' already exists:",
+  }, function(choice)
+    if not choice then
+      callback("cancel")
+      return
     end
-  })
+    if choice == "Replace existing" then
+      callback("replace")
+    elseif choice == "Skip" then
+      callback("skip")
+    else
+      callback("cancel")
+    end
+  end)
 end
 
 -- Uninstall libraries (remove files and update config)
@@ -685,37 +657,12 @@ L.install_libs = function(lib_names, skip_confirm)
   vim.fn.mkdir(types_dir, "p")
   
   local to_install = {}
-  local conflicts = {}
   
   for _, name in ipairs(lib_names) do
     local lib = L.get_library_info(name)
     if lib then
-      local conflict = L.check_conflicts(name)
-      if conflict.has_config or conflict.has_html or conflict.has_file then
-        table.insert(conflicts, { name = name, lib = lib, conflict = conflict })
-      else
-        table.insert(to_install, lib)
-      end
+      table.insert(to_install, lib)
     end
-  end
-  
-  if #conflicts > 0 and not skip_confirm then
-    local first_conflict = conflicts[1]
-    L.show_conflict_picker(first_conflict.name, function(action)
-      if action == "cancel" then
-        core.notify("Installation cancelled", "info")
-        return
-      elseif action == "skip" then
-        table.insert(to_install, first_conflict.lib)
-      else
-        table.insert(to_install, first_conflict.lib)
-      end
-      for i = 2, #conflicts do
-        table.insert(to_install, conflicts[i].lib)
-      end
-      L.do_install(to_install)
-    end)
-    return
   end
   
   L.do_install(to_install)
@@ -741,7 +688,7 @@ L.do_install = function(to_install)
       for _, name in ipairs(installed_names) do
         L.add_library(name)
       end
-      core.notify("Library installation complete", "ok")
+      core.notify("🎉 Library installation complete", "ok")
       L.update_index_html()
     end
   end
@@ -754,7 +701,7 @@ L.do_install = function(to_install)
       if success then
         table.insert(installed_names, lib.name)
         L.download_types(lib.name, types_dest, function()
-          core.notify("Installed: " .. lib.name, "ok")
+          core.notify("🎉 Installed: " .. lib.name, "ok")
           check_done()
         end)
       else

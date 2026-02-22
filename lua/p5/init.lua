@@ -51,7 +51,10 @@ I.setup = function(opts)
   -- P5 (main picker)
   vim.api.nvim_create_user_command("P5", function()
     local srv = require("p5.server")
+    local core = require("p5.core")
+    local config = core.read_workspace_config()
     local server_status = srv.server_job and "Stop server" or "Start server"
+    
     local options = {
       "Create new project",
       "Install library",
@@ -60,6 +63,12 @@ I.setup = function(opts)
       "Toggle console",
       "Open docs",
     }
+    
+    -- Add Update Gist if a gist is associated with this project
+    if config and config.gist and config.gist.id then
+      table.insert(options, 6, "Update Gist")
+    end
+    
     vim.ui.select(options, { prompt = "p5.nvim:" }, function(choice)
       if choice == "Create new project" then
         vim.cmd("P5Create")
@@ -71,6 +80,8 @@ I.setup = function(opts)
         vim.cmd("P5Server")
       elseif choice == "Toggle console" then
         vim.cmd("P5Console")
+      elseif choice == "Update Gist" then
+        vim.cmd("P5GistUpdate")
       elseif choice == "Open docs" then
         vim.cmd("help p5-nvim")
       end
@@ -98,8 +109,9 @@ I.setup = function(opts)
   vim.api.nvim_create_user_command("P5Install", function(args)
     if #args.fargs == 0 then
       local libs = require("p5.libraries").get_available_libs()
-      -- Map to string for display
+      -- Map to simple strings for vim.ui.select
       local items = {}
+      local lib_map = {}
       for _, lib in ipairs(libs) do
         local display = lib.name
         if lib.description and lib.description ~= "" then
@@ -108,11 +120,13 @@ I.setup = function(opts)
         if lib.status and lib.status ~= "" then
           display = display .. " " .. lib.status
         end
-        table.insert(items, { display = display, name = lib.name })
+        table.insert(items, display)
+        lib_map[display] = lib.name
       end
       vim.ui.select(items, { prompt = "Select library to install:" }, function(selected)
         if selected then
-          require("p5.libraries").install_libs({selected.name})
+          local lib_name = lib_map[selected] or selected
+          require("p5.libraries").install_libs({lib_name})
         end
       end)
     else
@@ -124,14 +138,17 @@ I.setup = function(opts)
   vim.api.nvim_create_user_command("P5Uninstall", function(args)
     if #args.fargs == 0 then
       local installed = require("p5.libraries").get_installed_libs()
-      -- Map to string for display
+      -- Map to simple strings for vim.ui.select
       local items = {}
+      local lib_map = {}
       for _, lib in ipairs(installed) do
-        table.insert(items, { display = lib.name, name = lib.name })
+        table.insert(items, lib.name)
+        lib_map[lib.name] = lib.name
       end
       vim.ui.select(items, { prompt = "Select library to uninstall:" }, function(selected)
         if selected then
-          require("p5.libraries").uninstall_libs({selected.name})
+          local lib_name = lib_map[selected] or selected
+          require("p5.libraries").uninstall_libs({lib_name})
         end
       end)
     else
@@ -163,6 +180,11 @@ I.setup = function(opts)
   vim.api.nvim_create_user_command("P5Gist", function(args)
     require("p5.gist").create_gist(args.fargs[1])
   end, { nargs = "?" })
+
+  -- P5 gist-update
+  vim.api.nvim_create_user_command("P5GistUpdate", function()
+    require("p5.gist").update_current_gist()
+  end, { nargs = 0 })
 
   -- P5 setup
   vim.api.nvim_create_user_command("P5Setup", function()

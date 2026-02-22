@@ -81,7 +81,7 @@ P.create_project = function(name)
     end
     
     -- Only notify on final success
-    notify("Project created: " .. name, "ok")
+    notify("🎉 Project created: " .. name, "ok")
     
     -- Change CWD to new project directory
     vim.api.nvim_set_current_dir(project_path)
@@ -192,7 +192,7 @@ function draw() {
   -- Create simplified p5.json (version + libraries for easy sharing)
   local p5_config = [[{
   "version": "1.0.0",
-  "libraries": []
+  "libraries": ["p5", "p5.sound"]
   }]]
   
   vim.fn.writefile(vim.split(p5_config, "\n"), project_path .. "/p5.json")

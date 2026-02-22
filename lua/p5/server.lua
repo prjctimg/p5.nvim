@@ -216,7 +216,7 @@ S.start_server = function(port)
       console.hide()
       
       if exit_code == 0 then
-        notify("Server stopped successfully", "info")
+        notify("🛑 Server stopped", "info")
       else
         local reason = ""
         if event == "exit" then
@@ -237,7 +237,7 @@ S.start_server = function(port)
 
   if S.server_job > 0 then
     local url = "http://localhost:" .. port
-    notify("Server started (" .. server_type .. ") at " .. url, "ok")
+    notify("🎉 Server started (" .. server_type .. ") at " .. url, "ok")
     notify("Console integration: :P5ToggleConsole", "info")
     
     -- Start console polling AFTER server is confirmed ready
@@ -399,7 +399,7 @@ S.start_server_with_fallback = function(port)
       end
       
       if exit_code == 0 then
-        notify("Server stopped successfully", "info")
+        notify("🛑 Server stopped", "info")
       else
         local reason = ""
         if event == "exit" then
@@ -420,7 +420,7 @@ S.start_server_with_fallback = function(port)
 
   if S.server_job > 0 then
     local url = "http://localhost:" .. port .. "/.p5-temp.html"
-    notify("Server started (" .. server_type .. ") at " .. url, "ok")
+    notify("🎉 Server started (" .. server_type .. ") at " .. url, "ok")
     
     -- Start console polling AFTER server is confirmed ready
     if S.config.console.enabled then
