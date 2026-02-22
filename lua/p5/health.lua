@@ -170,13 +170,7 @@ H.check_project_config = function()
   if core.validate_dir(assets_dir, "assets/", false) then
     vim.health.ok("assets/: directory exists")
     
-    -- Check for subdirectories
-    local contrib_dir = assets_dir .. "/contrib"
-    if core.validate_dir(contrib_dir, "contrib/", false) then
-      local js_files = vim.fn.glob(contrib_dir .. "/*.js", false, true)
-      vim.health.ok("contrib/: " .. #js_files .. " library files")
-    end
-    
+    -- Check for libs directory
     local libs_dir = assets_dir .. "/libs"
     if core.validate_dir(libs_dir, "libs/", false) then
       local js_files = vim.fn.glob(libs_dir .. "/*.js", false, true)

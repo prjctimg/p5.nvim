@@ -381,71 +381,42 @@ L.update_index_html = function()
     return
   end
   
-  local content = vim.fn.readfile(index_file)
   local libs = L.load()
+  local content = vim.fn.readfile(index_file)
   
-  -- Get existing links within P5 SCRIPTS section
-  local existing_links = {}
+  -- Generate all script tags fresh from libraries
+  local script_tags = {}
+  for _, lib in ipairs(libs) do
+    table.insert(script_tags, '  <script src="assets/libs/' .. lib .. '.js"></script>')
+  end
+  
+  local new_content = {}
   local in_p5_section = false
+  local p5_section_found = false
+  
   for _, line in ipairs(content) do
     if line:match("<!--%s*P5 SCRIPTS%s*-->") then
       in_p5_section = true
-    elseif line:match("<!--%s*END P5 SCRIPTS%s*-->") then
-      in_p5_section = false
-    elseif in_p5_section and line:match("<script") then
-      local lib_name = line:match('src="assets/libs/(%w+)%.js"') or
-                       line:match("src='assets/libs/(%w+)%.js'")
-      if lib_name then
-        existing_links[lib_name] = true
-      end
-    end
-  end
-  
-  -- Generate script tags for libraries that need to be added
-  local script_tags = {}
-  for _, lib in ipairs(libs) do
-    if not existing_links[lib] then
-      table.insert(script_tags, '    <script src="assets/libs/' .. lib .. '.js"></script>')
-    end
-  end
-  
-  -- If no script tags to add or remove, exit early
-  local has_p5_section = false
-  for _, line in ipairs(content) do
-    if line:match("<!--%s*P5 SCRIPTS%s*-->") then
-      has_p5_section = true
-      break
-    end
-  end
-  
-  -- Rebuild content with P5 SCRIPTS section
-  local new_content = {}
-  local in_lib_section = false
-  local lib_section_found = false
-  
-  for _, line in ipairs(content) do
-    if line:match("<!--%s*P5 SCRIPTS%s*-->") then
-      in_lib_section = true
-      lib_section_found = true
+      p5_section_found = true
       table.insert(new_content, line)
-      -- Add new script tags
+      -- Add all script tags
       for _, tag in ipairs(script_tags) do
         table.insert(new_content, tag)
       end
     elseif line:match("<!--%s*END P5 SCRIPTS%s*-->") then
-      in_lib_section = false
+      in_p5_section = false
       table.insert(new_content, line)
-    elseif not in_lib_section then
+    elseif not in_p5_section then
       table.insert(new_content, line)
     end
   end
   
   -- If no P5 SCRIPTS section found, add after <body>
-  if not lib_section_found then
+  if not p5_section_found then
     local new_content2 = {}
-    for i, line in ipairs(new_content) do
+    for _, line in ipairs(new_content) do
       table.insert(new_content2, line)
-      if line:match("<body") or line:match("<head") then
+      if line:match("<body") then
         table.insert(new_content2, "  <!-- P5 SCRIPTS -->")
         for _, tag in ipairs(script_tags) do
           table.insert(new_content2, tag)
@@ -680,6 +651,7 @@ L.do_install = function(to_install)
   local pending = #to_install
   local completed = 0
   local installed_names = {}
+  local failed_names = {}
   
   local function check_done()
     completed = completed + 1
@@ -688,8 +660,16 @@ L.do_install = function(to_install)
       for _, name in ipairs(installed_names) do
         L.add_library(name)
       end
-      core.notify("🎉 Library installation complete", "ok")
       L.update_index_html()
+      
+      -- Show single notification
+      if #installed_names > 0 then
+        local msg = "🎉 Installed: " .. table.concat(installed_names, ", ")
+        core.notify(msg, "ok")
+      end
+      if #failed_names > 0 then
+        core.notify("Failed: " .. table.concat(failed_names, ", "), "error")
+      end
     end
   end
   
@@ -701,11 +681,10 @@ L.do_install = function(to_install)
       if success then
         table.insert(installed_names, lib.name)
         L.download_types(lib.name, types_dest, function()
-          core.notify("🎉 Installed: " .. lib.name, "ok")
           check_done()
         end)
       else
-        core.notify("Failed to download " .. lib.name, "error")
+        table.insert(failed_names, lib.name)
         check_done()
       end
     end)

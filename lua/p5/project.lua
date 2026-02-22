@@ -200,7 +200,6 @@ function draw() {
   -- Create assets directory
   vim.fn.mkdir(project_path .. "/assets/types", "p")
   vim.fn.mkdir(project_path .. "/assets/libs", "p")
-  vim.fn.mkdir(project_path .. "/assets/contrib", "p")
 end
 
 -- Copy plugin assets to project with bundled types and libraries
@@ -212,7 +211,6 @@ P.copy_assets_to_project = function(project_path, callback)
   vim.fn.mkdir(project_assets, "p")
   vim.fn.mkdir(project_assets .. "/types", "p")
   vim.fn.mkdir(project_assets .. "/libs", "p")
-  vim.fn.mkdir(project_assets .. "/contrib", "p")
   
   local pending_copies = 0
   local copy_errors = {}
@@ -262,6 +260,9 @@ P.copy_assets_to_project = function(project_path, callback)
       try_copy(plugin_assets .. "/libs/" .. file, project_assets .. "/libs/" .. file)
     end
   end
+  
+  -- Copy favicon
+  try_copy(plugin_assets .. "/favicon.ico", project_assets .. "/favicon.ico")
   
   -- If no async copies were started, call callback immediately
   if pending_copies == 0 and callback then

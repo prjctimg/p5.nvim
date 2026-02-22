@@ -123,7 +123,7 @@ C.notify = function(msg, level)
     vim_level = vim.log.levels.WARN
   end
   
-  vim.notify("[p5.nvim] " .. msg, vim_level)
+  vim.notify(msg, vim_level, { title = "p5.nvim" })
 end
 
 -- Get cache directory for host system
@@ -369,7 +369,6 @@ C.setup_environment = function()
   
   vim.fn.mkdir(asset_dir .. "/core", "p")
   vim.fn.mkdir(asset_dir .. "/types", "p")
-  vim.fn.mkdir(asset_dir .. "/contrib", "p")
 
   if C.assets_available() then
     local info = C.get_p5_version()
