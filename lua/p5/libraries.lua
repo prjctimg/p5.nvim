@@ -481,27 +481,66 @@ L.show_library_picker = function(callback)
   })
 end
 
+-- Validate downloaded file contains actual JavaScript code
+L.validate_download = function(dest)
+  if vim.fn.filereadable(dest) == 0 then
+    return false
+  end
+  
+  local size = vim.fn.getfsize(dest)
+  if size < 100 then
+    return false
+  end
+  
+  local handle = io.open(dest, "r")
+  if not handle then
+    return false
+  end
+  
+  local first_bytes = handle:read(100)
+  handle:close()
+  
+  local error_patterns = {
+    "Not found",
+    "Internal Server Error",
+    "Package not found",
+    "404",
+    "Error",
+    "<!DOCTYPE html>",
+    "<html>"
+  }
+  
+  for _, pattern in ipairs(error_patterns) do
+    if first_bytes:match(pattern) then
+      return false
+    end
+  end
+  
+  return true
+end
+
 -- Download library file from GitHub Releases or fallback to CDN
 L.download_library = function(lib, dest, callback)
   local function done(success)
     if callback then callback(success) end
   end
 
-  -- Try CDN first (most reliable for most libraries)
-  if lib.cdn_fallback then
-    core.download_file(lib.cdn_fallback, dest, function(success)
-      if success then
-        done(true)
-      else
-        -- Fallback to GitHub if CDN fails
-        L.download_from_github(lib, dest, done)
-      end
-    end, { cache = true })
-    return
+  local function try_cdn()
+    if lib.cdn_fallback then
+      core.download_file(lib.cdn_fallback, dest, function(dl_success)
+        if dl_success and L.validate_download(dest) then
+          done(true)
+        else
+          -- CDN failed or invalid, try GitHub
+          L.download_from_github(lib, dest, done)
+        end
+      end, { cache = true })
+      return
+    end
+    L.download_from_github(lib, dest, done)
   end
 
-  -- No CDN, try GitHub
-  L.download_from_github(lib, dest, done)
+  try_cdn()
 end
 
 -- Download from GitHub API
@@ -541,7 +580,13 @@ L.download_from_github = function(lib, dest, callback)
           -- Try to extract version from tag and construct CDN URL
           local version = tag:match("^v?(.+)$")
           localcdn = lib.cdn_fallback:gsub("@latest", "@" .. version)
-          core.download_file(localcdn, dest, done, { cache = false })
+          core.download_file(localcdn, dest, function(dl_success)
+            if dl_success and L.validate_download(dest) then
+              done(true)
+            else
+              done(false)
+            end
+          end, { cache = false })
         else
           done(false)
         end
@@ -565,7 +610,13 @@ L.download_from_github = function(lib, dest, callback)
 
       local download_url = selected_asset.browser_download_url or selected_asset.url
       if download_url then
-        core.download_file(download_url, dest, done, { cache = true })
+        core.download_file(download_url, dest, function(dl_success)
+          if dl_success and L.validate_download(dest) then
+            done(true)
+          else
+            done(false)
+          end
+        end, { cache = true })
       else
         done(false)
       end
@@ -654,13 +705,15 @@ L.do_install = function(to_install)
   end
   
   for _, lib in ipairs(to_install) do
-    local dest = libs_dir .. "/" .. lib.name .. ".js"
-    local types_dest = types_dir .. "/" .. lib.name .. ".d.ts"
+    -- Handle library names that already end with .js
+    local lib_name = lib.name:gsub("%.js$", "")
+    local dest = libs_dir .. "/" .. lib_name .. ".js"
+    local types_dest = types_dir .. "/" .. lib_name .. ".d.ts"
     
     L.download_library(lib, dest, function(success)
       if success then
-        table.insert(installed_names, lib.name)
-        L.download_types(lib.name, types_dest, function()
+        table.insert(installed_names, lib_name)
+        L.download_types(lib_name, types_dest, function()
           check_done()
         end)
       else
