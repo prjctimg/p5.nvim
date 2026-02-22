@@ -113,6 +113,7 @@ P.create_files = function(project_path, callback)
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>p5.js Sketch</title>
+  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
   <script src="./assets/libs/p5.js"></script>
 </head>
 <body>
