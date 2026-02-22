@@ -398,10 +398,22 @@ L.update_index_html = function()
     -- Replace existing section
     html = html:sub(1, found_start - 1) .. new_section .. html:sub(found_end + 1)
   else
-    -- Add after <body> tag if section doesn't exist
-    local body_pos = html:find("<body[^>]*>")
+    -- Add at the start of <body> content (after <body> tag)
+    -- Use plain string match for <body> tag
+    local body_tag = "<body>"
+    local body_pos = html:find(body_tag, 1, true)
+    if not body_pos then
+      body_tag = "<body "
+      body_pos = html:find(body_tag, 1, true)
+    end
     if body_pos then
-      html = html:sub(1, body_pos) .. "\n" .. new_section .. html:sub(body_pos + 1)
+      -- Find the end of the body opening tag
+      local tag_end = body_pos
+      while tag_end <= #html and html:sub(tag_end, tag_end) ~= ">" do
+        tag_end = tag_end + 1
+      end
+      -- Insert after the body opening tag
+      html = html:sub(1, tag_end) .. "\n" .. new_section .. html:sub(tag_end + 1)
     end
   end
   
