@@ -264,6 +264,7 @@ end
 
 -- Download file with caching support (simplified version)
 C.download_file = function(url, dest, callback, options)
+  print("download_file: url =", url)
   options = options or {}
   local use_cache = options.cache ~= false
   local cache_file = nil
@@ -272,9 +273,11 @@ C.download_file = function(url, dest, callback, options)
     local cache_dir = C.get_cache_dir()
     local cache_key = C.generate_cache_key(url)
     cache_file = cache_dir .. "/" .. cache_key
+    print("download_file: cache_file =", cache_file)
     
     -- Check if we have a valid cached version
     if C.is_cache_valid(cache_file) then
+      print("download_file: cache valid, copying")
       vim.fn.system({"cp", cache_file, dest})
       if callback then callback(true) end
       return true
@@ -294,6 +297,7 @@ C.download_file = function(url, dest, callback, options)
   
   vim.fn.jobstart(cmd, {
     on_exit = function(_, exit_code)
+      print("download_file: exit_code =", exit_code)
       local success = exit_code == 0
       
       -- Cache the downloaded file if successful and caching enabled
