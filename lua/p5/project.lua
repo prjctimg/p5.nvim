@@ -2,6 +2,7 @@
 local P = {}
 local core = require("p5.core")
 local notify = core.notify
+local libraries = require("p5.libraries")
 
 -- Validate bundled assets before project creation
 P.validate_bundled_assets = function()
@@ -115,6 +116,7 @@ P.create_files = function(project_path, callback)
   <title>p5.js Sketch</title>
   <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
   <script src="./assets/libs/p5.js"></script>
+  <script src="assets/libs/libs.js"></script>
 </head>
 <body>
   <main>
@@ -199,10 +201,13 @@ function draw() {
   }]]
   
   vim.fn.writefile(vim.split(p5_config, "\n"), project_path .. "/p5.json")
-  
+
   -- Create assets directory
   vim.fn.mkdir(project_path .. "/assets/types", "p")
   vim.fn.mkdir(project_path .. "/assets/libs", "p")
+
+  -- Generate initial libs.js (empty since no contrib libs installed yet)
+  libraries.generate_libs_js(project_path)
 end
 
 -- Copy plugin assets to project with bundled types and libraries

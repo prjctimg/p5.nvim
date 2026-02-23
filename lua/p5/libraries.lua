@@ -314,9 +314,8 @@ L.uninstall_libs = function(lib_names)
   
   -- Save updated config
   core.write_workspace_config(config)
-  
-  -- Update index.html once after all libraries are removed
-  L.update_index_html()
+
+  -- Note: libs.js reads from p5.json at runtime, no need to regenerate
   
   if #removed > 0 then
     core.notify("🎉 Removed: " .. table.concat(removed, ", "), "info")
@@ -372,7 +371,67 @@ L.show_uninstall_picker = function()
   })
 end
 
--- Update index.html with library includes using regex
+-- Generate static libs.js that reads from p5.json at runtime
+L.generate_libs_js = function(project_path)
+  local cwd = project_path or vim.fn.getcwd()
+  local libs_dir = cwd .. "/" .. L.config.libraries_dir
+  local libs_js = libs_dir .. "/libs.js"
+
+  local js_content = [[
+// Auto-generated - reads libraries from p5.json at runtime
+(function() {
+  function loadLibs() {
+    // Fetch p5.json to get list of libraries
+    fetch('p5.json')
+      .then(function(response) { return response.json(); })
+      .then(function(config) {
+        var libs = config.libraries || [];
+        return loadLibsSequential(libs, 0);
+      })
+      .catch(function(err) {
+        console.warn('Could not load p5.json:', err);
+      });
+  }
+
+  function loadLibsSequential(libs, index) {
+    if (index >= libs.length) return Promise.resolve();
+
+    var lib = libs[index];
+    // Skip core libs (p5 and p5.sound are bundled)
+    if (lib === 'p5' || lib === 'p5.sound') {
+      return loadLibsSequential(libs, index + 1);
+    }
+
+    return new Promise(function(resolve) {
+      var script = document.createElement('script');
+      script.src = 'assets/libs/' + lib + '.js';
+      script.onload = function() { 
+        console.log('Loaded: ' + lib);
+        resolve(); 
+      };
+      script.onerror = function() { 
+        console.warn('Failed to load: ' + lib); 
+        resolve(); 
+      };
+      document.head.appendChild(script);
+    }).then(function() {
+      return loadLibsSequential(libs, index + 1);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadLibs);
+  } else {
+    loadLibs();
+  }
+})();
+]]
+
+  vim.fn.writefile(vim.split(js_content, "\n"), libs_js)
+end
+
+-- Deprecated: Use generate_libs_js() instead
+-- Kept for backward compatibility with old projects
 L.update_index_html = function()
   local index_file = vim.fn.getcwd() .. "/index.html"
   if vim.fn.filereadable(index_file) == 0 then
@@ -616,7 +675,7 @@ L.do_install = function(to_install)
       for _, name in ipairs(installed_names) do
         L.add_library(name)
       end
-      L.update_index_html()
+      -- Note: libs.js reads from p5.json at runtime
       
       -- Show single notification
       if #installed_names > 0 then
