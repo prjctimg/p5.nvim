@@ -5,7 +5,7 @@ A Neovim plugin for creative coding with p5.js.
 ## Features
 
 - **Live server** - Auto-reload preview in browser
-- **Package management** - Install 50+ contributor libraries
+- **Package management** - Install 28+ contributor libraries
 - **Template project** - Core p5.js + sound addon
 - **GitHub Gist** - Share sketches (synced to workspace)
 - **Console** - View browser logs in Neovim
@@ -64,9 +64,29 @@ Install contributor libraries:
 ```
 
 The plugin automatically:
-- Checks for conflicting installations
+- Downloads libraries from CDN
 - Updates index.html with library links
-- Removes broken links
+- Validates downloads to ensure correctness
+
+### Available Libraries
+
+| Category | Libraries |
+|----------|-----------|
+| **AI/ML** | ml5 |
+| **Sound** | Tone, XSound, p5.spatial, p5.speech, rita |
+| **Physics/Game** | p5play, planck, matter, p5.play |
+| **UI** | dat.gui, p5.gui, canvasGUI, p5.touchgui, fez-ui |
+| **Data Viz** | d3, p5d3, p5.chart, p5.js-plot |
+| **3D/Camera** | p5.easycam, p5.anaglyph |
+| **Drawing** | p5.bezier, p5.brush |
+| **Animation** | p5.Fresco, ripl |
+| **Core Alternative** | q5 |
+
+#### Install Multiple Libraries
+
+```vim
+:P5Install ml5 rita p5play
+```
 
 ## License
 
