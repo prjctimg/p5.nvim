@@ -74,13 +74,12 @@ The plugin automatically:
 |----------|-----------|
 | **AI/ML** | ml5 |
 | **Sound** | Tone, XSound, p5.spatial, p5.speech, rita |
-| **Physics/Game** | p5play, planck, matter, p5.play |
-| **UI** | dat.gui, p5.gui, canvasGUI, p5.touchgui, fez-ui |
-| **Data Viz** | d3, p5d3, p5.chart, p5.js-plot |
+| **Physics/Game** | p5play, planck, matter |
+| **UI** | dat.gui, p5.gui, p5.touchgui |
+| **Data Viz** | d3 |
 | **3D/Camera** | p5.easycam, p5.anaglyph |
-| **Drawing** | p5.bezier, p5.brush |
-| **Animation** | p5.Fresco, ripl |
-| **Core Alternative** | q5 |
+| **Drawing** | p5.bezier |
+| **Image Processing** | p5.FIP |
 
 #### Install Multiple Libraries
 
