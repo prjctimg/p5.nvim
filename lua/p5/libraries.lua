@@ -531,112 +531,24 @@ L.validate_download = function(dest)
   return true
 end
 
--- Download library file from GitHub Releases or fallback to CDN
+-- Download library file from hardcoded CDN URL
 L.download_library = function(lib, dest, callback)
   local function done(success)
     if callback then callback(success) end
   end
 
-  local function try_cdn()
-    if lib.cdn_fallback then
-      core.download_file(lib.cdn_fallback, dest, function(dl_success)
-        if dl_success and L.validate_download(dest) then
-          done(true)
-        else
-          -- CDN failed or invalid, try GitHub
-          L.download_from_github(lib, dest, done)
-        end
-      end, { cache = true })
-      return
-    end
-    L.download_from_github(lib, dest, done)
-  end
-
-  try_cdn()
-end
-
--- Download from GitHub API
-L.download_from_github = function(lib, dest, callback)
-  local function done(success)
-    if callback then callback(success) end
-  end
-
-  if not lib.github_repo then
+  if not lib.cdn_url then
     done(false)
     return
   end
 
-  local api_url = string.format("https://api.github.com/repos/%s/releases/%s", lib.github_repo, lib.github_release or "latest")
-
-  local cmd = {"curl", "-s", "-L", api_url}
-  vim.fn.jobstart(cmd, {
-    on_stdout = function(_, data)
-      if not data or #data == 0 then
-        done(false)
-        return
-      end
-
-      local content = table.concat(data, "\n")
-      local ok, release_info = pcall(vim.fn.json_decode, content)
-
-      if not ok or not release_info then
-        done(false)
-        return
-      end
-
-      local assets = release_info.assets
-      if not assets or #assets == 0 then
-        -- No assets, try to use tag_name to construct npm URL
-        local tag = release_info.tag_name or "latest"
-        if lib.cdn_fallback then
-          -- Try to extract version from tag and construct CDN URL
-          local version = tag:match("^v?(.+)$")
-          localcdn = lib.cdn_fallback:gsub("@latest", "@" .. version)
-          core.download_file(localcdn, dest, function(dl_success)
-            if dl_success and L.validate_download(dest) then
-              done(true)
-            else
-              done(false)
-            end
-          end, { cache = false })
-        else
-          done(false)
-        end
-        return
-      end
-
-      local selected_asset = nil
-      if lib.asset_pattern then
-        local pattern = lib.asset_pattern
-        for _, asset in ipairs(assets) do
-          if asset.name and asset.name:match(pattern) then
-            selected_asset = asset
-            break
-          end
-        end
-      end
-
-      if not selected_asset then
-        selected_asset = assets[1]
-      end
-
-      local download_url = selected_asset.browser_download_url or selected_asset.url
-      if download_url then
-        core.download_file(download_url, dest, function(dl_success)
-          if dl_success and L.validate_download(dest) then
-            done(true)
-          else
-            done(false)
-          end
-        end, { cache = true })
-      else
-        done(false)
-      end
-    end,
-    on_stderr = function()
+  core.download_file(lib.cdn_url, dest, function(dl_success)
+    if dl_success and L.validate_download(dest) then
+      done(true)
+    else
       done(false)
     end
-  })
+  end, { cache = true })
 end
 
 -- Download types for library

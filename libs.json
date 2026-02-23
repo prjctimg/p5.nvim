@@ -1,40 +1,173 @@
 {
-  "last_updated": "2026-02-22",
+  "last_updated": "2026-02-23",
   "libraries": [
     {
       "name": "ml5",
-      "category": "AI, ML, and CV",
-      "description": "Friendly machine learning for the web",
-      "github_repo": "ml5js/ml5-library",
-      "cdn_fallback": "https://unpkg.com/ml5@latest/dist/ml5.js"
+      "category": "AI/ML",
+      "description": "Friendly machine learning library for the web, built on TensorFlow.js",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/ml5@1.3.1/dist/ml5.min.js"
+    },
+    {
+      "name": "p5play",
+      "category": "Physics/Game Engine",
+      "description": "JavaScript game engine using p5.js for graphics and Box2D (Planck) for physics",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5play@3.35.0/p5play.min.js"
+    },
+    {
+      "name": "planck",
+      "category": "Physics Engine",
+      "description": "JavaScript rewrite of Box2D physics engine for cross-platform HTML5 games",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/planck@1.4.3/dist/planck.min.js"
+    },
+    {
+      "name": "matter",
+      "category": "Physics Engine",
+      "description": "2D rigid body physics engine for the web with rendering and constraints",
+      "cdn_url": "https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js"
+    },
+    {
+      "name": "dat.gui",
+      "category": "UI",
+      "description": "Lightweight controller library for changing variables interactively",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.min.js"
+    },
+    {
+      "name": "p5.gui",
+      "category": "UI",
+      "description": "Generates graphical user interface for p5.js variables automatically",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/bitcraftlab/p5.gui@master/libraries/p5.gui.js"
+    },
+    {
+      "name": "p5.easycam",
+      "category": "3D/Camera",
+      "description": "Easy 3D camera control in WEBGL mode for p5.js",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.easycam@1.2.3/p5.easycam.min.js"
+    },
+    {
+      "name": "p5.FIP",
+      "category": "Image Processing",
+      "description": "Real-time image processing/post-processing library with 44 effects",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/prontopablo/p5.FIP@main/p5.fip.min.js"
+    },
+    {
+      "name": "d3",
+      "category": "Data Visualization",
+      "description": "JavaScript library for producing dynamic, interactive data visualizations",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
+    },
+    {
+      "name": "p5d3",
+      "category": "Data Visualization",
+      "description": "Bridge library for using D3.js utilities within p5.js",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/sepans/p5d3@master/p5d3.js"
+    },
+    {
+      "name": "Tone",
+      "category": "Sound",
+      "description": "Web Audio framework for creating interactive music and synthesizers",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/tone@15.1.22/build/Tone.js"
+    },
+    {
+      "name": "XSound",
+      "category": "Sound",
+      "description": "Powerful audio features library with synthesis, streaming, MIDI and visualization",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/xsound@4.2.3/build/xsound.min.js"
+    },
+    {
+      "name": "p5.spatial",
+      "category": "Sound",
+      "description": "Extends p5.sound with multichannel audio output support",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/ogbabydiesal/p5.spatial.js@main/p5.spatial.js"
     },
     {
       "name": "p5.speech",
       "category": "Language",
-      "description": "Speech synthesis and recognition",
-      "github_repo": "IDLNYU/p5.js-speech",
-      "cdn_fallback": "https://unpkg.com/p5.speech@latest/lib/p5.speech.js"
+      "description": "Web Audio speech synthesis and recognition for p5.js",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/IDMNYU/p5.js-speech@0.0.3/lib/p5.speech.js"
     },
     {
-      "name": "rita.js",
+      "name": "rita",
       "category": "Language",
-      "description": "Natural language and generative writing tools",
-      "github_repo": "dhowe/rita.js",
-      "cdn_fallback": "https://unpkg.com/rita@latest/rita.js"
+      "description": "Natural language and generative writing tools library",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/rita@3/dist/rita.min.js"
     },
     {
       "name": "p5.party",
       "category": "Networking",
-      "description": "Multiplayer game prototyping",
-      "github_repo": "justinbakse/p5.party",
-      "cdn_fallback": "https://unpkg.com/p5.party@latest/p5.party.js"
+      "description": "Library for creating online multi-user sketches with p5.js",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.party@0.14.0/dist/p5.party.js"
     },
     {
-      "name": "lygia",
-      "category": "Shaders",
-      "description": "Reusable shader functions library",
-      "github_repo": "patriciogonzalezvivo/lygia",
-      "cdn_fallback": "https://unpkg.com/lygia@latest/lygia.js"
+      "name": "p5.touchgui",
+      "category": "UI",
+      "description": "Multi-touch and mouse GUI library for p5.js with mobile support",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/L05/p5.touchgui@master/p5.touchgui.js"
+    },
+    {
+      "name": "canvasGUI",
+      "category": "UI",
+      "description": "Canvas-based GUI library for p5.js with buttons, sliders and UI elements",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/quarks/canvasGUI@master/canvasGUI.js"
+    },
+    {
+      "name": "fez-ui",
+      "category": "UI",
+      "description": "UI engine for p5.js providing various user interface components",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/zturtledog/fez-ui@main/fez-ui.js"
+    },
+    {
+      "name": "p5.anaglyph",
+      "category": "3D",
+      "description": "Library for creating 3D stereoscopic scenes with red/cyan glasses",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/jdeboi/p5.anaglyph@master/p5.anaglyph.js"
+    },
+    {
+      "name": "p5.bezier",
+      "category": "Drawing",
+      "description": "Extended Bézier curve drawing with more than four control points",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/PeilingJaing/p5.bezier@master/p5.bezier.js"
+    },
+    {
+      "name": "p5.brush",
+      "category": "Drawing",
+      "description": "Custom brushes, natural fill effects and intuitive drawing tools",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.brush@1.1.3/p5.brush.min.js"
+    },
+    {
+      "name": "q5",
+      "category": "Core Alternative",
+      "description": "Smaller and faster sequel to p5.js with the same API",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/q5@1.9.48/lib/q5.min.js"
+    },
+    {
+      "name": "p5.chart",
+      "category": "Data Visualization",
+      "description": "Interactive and mobile-responsive data visualization library for p5.js",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/schuttelaar/p5.chart@main/p5.chart.js"
+    },
+    {
+      "name": "p5.js-plot",
+      "category": "Data Visualization",
+      "description": "Plotting library for p5.js for creating charts and graphs",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/IDMNYU/p5.js-plot@master/p5.plot.js"
+    },
+    {
+      "name": "p5.Fresco",
+      "category": "Animation",
+      "description": "Procedural art generation with 2D shapes, particle systems, noises and physics",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/NielsPichon/p5.Fresco@main/fresco.js"
+    },
+    {
+      "name": "ripl",
+      "category": "Animation",
+      "description": "Library for creating particle animations and simulations in p5.js",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/haptic-data/ripl@master/dist/ripl.js"
+    },
+    {
+      "name": "p5.play",
+      "category": "Game Engine",
+      "description": "Code.org's p5.js library for creating games with sprites and animations",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/code-dot-org/p5.play@main/lib/p5.play.js"
     }
   ]
 }
