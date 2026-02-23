@@ -496,17 +496,22 @@ end
 
 -- Validate downloaded file contains actual JavaScript code
 L.validate_download = function(dest)
+  print("validate_download: checking", dest)
   if vim.fn.filereadable(dest) == 0 then
+    print("validate_download: file not readable")
     return false
   end
   
   local size = vim.fn.getfsize(dest)
+  print("validate_download: size =", size)
   if size < 100 then
+    print("validate_download: file too small")
     return false
   end
   
   local handle = io.open(dest, "r")
   if not handle then
+    print("validate_download: cannot open")
     return false
   end
   
@@ -525,10 +530,12 @@ L.validate_download = function(dest)
   
   for _, pattern in ipairs(error_patterns) do
     if first_bytes:match(pattern) then
+      print("validate_download: found error pattern:", pattern)
       return false
     end
   end
   
+  print("validate_download: OK, first bytes:", first_bytes:sub(1, 50))
   return true
 end
 
