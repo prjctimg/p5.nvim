@@ -5,7 +5,7 @@ A Neovim plugin for creative coding with p5.js.
 ## Features
 
 - **Live server** - Auto-reload preview in browser
-- **Package management** - Install 28+ contributor libraries
+- **Package management** - Install 22 contributor libraries
 - **Template project** - Core p5.js + sound addon
 - **GitHub Gist** - Share sketches (synced to workspace)
 - **Console** - View browser logs in Neovim
