@@ -1,4 +1,4 @@
-/*! p5.js v2.2.1 February 11, 2026 */
+/*! p5.js v2.2.2 February 22, 2026 */
 var p5 = (function () {
   'use strict';
 
@@ -15,7 +15,7 @@ var p5 = (function () {
    * @property {String} VERSION
    * @final
    */
-  const VERSION = '2.2.1';
+  const VERSION = '2.2.2';
 
   // GRAPHICS RENDERER
   /**
@@ -12614,11 +12614,11 @@ var p5 = (function () {
      * values. 0 is equal to the first color, 0.1 is very near the first color,
      * 0.5 is halfway between the two colors, and so on. Negative numbers are set
      * to 0. Numbers greater than 1 are set to 1. This differs from the behavior of
-     * <a href="#/lerp">lerp</a>. It's necessary because numbers outside of the
+     * <a href="#/p5/lerp">lerp</a>. It's necessary because numbers outside of the
      * interval [0, 1] will produce strange and unexpected colors.
      *
      * The way that colors are interpolated depends on the current
-     * <a href="#/colorMode">colorMode()</a>.
+     * <a href="#/p5/colorMode">colorMode()</a>.
      *
      * @method lerpColor
      * @param  {p5.Color} c1  interpolate from this color.
@@ -61240,6 +61240,40 @@ var p5 = (function () {
      * }
      * ```
      *
+     * We can use the `noise()` function built into strands to generate a color for each pixel.  (Again no need here for underlying content for the filter to operate on.)  Again we'll animate by passing in an announced uniform variable  `time` with `setUniform()`, each frame.
+     *
+     * ```js example
+     * let myFilter;
+     *
+     * function setup() {
+     *   createCanvas(100, 100, WEBGL);
+     *   myFilter = buildFilterShader(noiseShaderCallback);
+     *   describe('Evolving animated cloud-like noise in cyan and magenta');
+     * }
+     *
+     * function noiseShaderCallback() {
+     *   let time = uniformFloat();
+     *   filterColor.begin();
+     *   let coord = filterColor.texCoord;
+     *
+     *   //generate a value roughly between 0 and 1
+     *   let noiseVal = noise(coord.x, coord.y, time / 2000);
+     *
+     *   let result = mix(
+     *     [1, 0, 1, 1], // Magenta
+     *     [0, 1, 1, 1], // Cyan
+     *     noiseVal
+     *   );
+     *   filterColor.set(result);
+     *   filterColor.end();
+     * }
+     *
+     * function draw() {
+     *   myFilter.setUniform("time", millis());
+     *   filter(myFilter);
+     * }
+     * ```
+     *
      * Like the `modify()` method on shaders,
      * advanced users can also fill in `filterColor` using <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders" target="_blank">GLSL</a>
      * instead of JavaScript.
@@ -61254,15 +61288,17 @@ var p5 = (function () {
      * @beta
      * @submodule p5.strands
      * @param {Function} callback A function building a p5.strands shader.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The material shader
      */
     /**
      * @method buildFilterShader
      * @param {Object} hooks An object specifying p5.strands hooks in GLSL.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The material shader
      */
-    fn.buildFilterShader = function (callback) {
-      return this.baseFilterShader().modify(callback);
+    fn.buildFilterShader = function (callback, scope) {
+      return this.baseFilterShader().modify(callback, scope);
     };
 
     /**
@@ -62082,15 +62118,17 @@ var p5 = (function () {
      * @submodule p5.strands
      * @beta
      * @param {Function} callback A function building a p5.strands shader.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The material shader.
      */
     /**
      * @method buildMaterialShader
      * @param {Object} hooks An object specifying p5.strands hooks in GLSL.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The material shader.
      */
-    fn.buildMaterialShader = function (cb) {
-      return this.baseMaterialShader().modify(cb);
+    fn.buildMaterialShader = function (cb, scope) {
+      return this.baseMaterialShader().modify(cb, scope);
     };
 
     /**
@@ -62189,7 +62227,7 @@ var p5 = (function () {
     /**
      * Returns the base shader used for filters.
      *
-     * Calling <a href="#/p5/buildMaterialShader">`buildFilterShader(shaderFunction)`</a>
+     * Calling <a href="#/p5/buildFilterShader">`buildFilterShader(shaderFunction)`</a>
      * is equivalent to calling `baseFilterShader().modify(shaderFunction)`.
      *
      * Read <a href="#/p5/buildFilterShader">the `buildFilterShader` reference</a> or
@@ -62298,15 +62336,17 @@ var p5 = (function () {
      * @submodule p5.strands
      * @beta
      * @param {Function} callback A function building a p5.strands shader.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The normal shader.
      */
     /**
      * @method buildNormalShader
      * @param {Object} hooks An object specifying p5.strands hooks in GLSL.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The normal shader.
      */
-    fn.buildNormalShader = function (cb) {
-      return this.baseNormalShader().modify(cb);
+    fn.buildNormalShader = function (cb, scope) {
+      return this.baseNormalShader().modify(cb, scope);
     };
 
     /**
@@ -62462,15 +62502,17 @@ var p5 = (function () {
      * @submodule p5.strands
      * @beta
      * @param {Function} callback A function building a p5.strands shader.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The color shader.
      */
     /**
      * @method buildColorShader
      * @param {Object} hooks An object specifying p5.strands hooks in GLSL.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The color shader.
      */
-    fn.buildColorShader = function (cb) {
-      return this.baseColorShader().modify(cb);
+    fn.buildColorShader = function (cb, scope) {
+      return this.baseColorShader().modify(cb, scope);
     };
 
     /**
@@ -62717,15 +62759,17 @@ var p5 = (function () {
      * @submodule p5.strands
      * @beta
      * @param {Function} callback A function building a p5.strands shader.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The stroke shader.
      */
     /**
      * @method buildStrokeShader
      * @param {Object} hooks An object specifying p5.strands hooks in GLSL.
+     * @param {Object} [scope] An optional scope object passed to .modify().
      * @returns {p5.Shader} The stroke shader.
      */
-    fn.buildStrokeShader = function (cb) {
-      return this.baseStrokeShader().modify(cb);
+    fn.buildStrokeShader = function (cb, scope) {
+      return this.baseStrokeShader().modify(cb, scope);
     };
 
     /**
@@ -69204,7 +69248,7 @@ var p5 = (function () {
       const baseType = orig?.baseType ?? BaseType.FLOAT;
 
       let newValueID;
-      if (value instanceof StrandsNode) {
+      if (value?.isStrandsNode) {
         newValueID = value.id;
       } else {
         const newVal = primitiveConstructorNode(
@@ -69259,7 +69303,7 @@ var p5 = (function () {
       const baseType = orig?.baseType ?? BaseType.FLOAT;
 
       let newValueID;
-      if (value instanceof StrandsNode) {
+      if (value?.isStrandsNode) {
         newValueID = value.id;
       } else {
         const newVal = primitiveConstructorNode(
@@ -69489,7 +69533,7 @@ var p5 = (function () {
     const { dag, cfg } = strandsContext;
     let dependsOn;
     let node;
-    if (nodeOrValue instanceof StrandsNode) {
+    if (nodeOrValue?.isStrandsNode) {
       node = nodeOrValue;
     } else {
       const { id, dimension } = primitiveConstructorNode(strandsContext, { baseType: BaseType.FLOAT, dimension: null }, nodeOrValue);
@@ -69689,6 +69733,20 @@ var p5 = (function () {
 
   function primitiveConstructorNode(strandsContext, typeInfo, dependsOn) {
     const cfg = strandsContext.cfg;
+    dependsOn = (Array.isArray(dependsOn) ? dependsOn : [dependsOn])
+      .flat(Infinity)
+      .map(a => {
+        if (
+          a.isStrandsNode &&
+          a.typeInfo().baseType === BaseType.INT &&
+          // TODO: handle ivec inputs instead of just int scalars
+          a.typeInfo().dimension === 1
+        ) {
+          return castToFloat(strandsContext, a);
+        } else {
+          return a;
+        }
+      });
     const { mappedDependencies, inferredTypeInfo } = mapPrimitiveDepsToIDs(strandsContext, typeInfo, dependsOn);
 
     const finalType = {
@@ -69702,6 +69760,24 @@ var p5 = (function () {
     }
 
     return { id, dimension: finalType.dimension, components: mappedDependencies };
+  }
+
+  function castToFloat(strandsContext, dep) {
+    const { id, dimension } = functionCallNode(
+      strandsContext,
+      strandsContext.backend.getTypeName('float', dep.typeInfo().dimension),
+      [dep],
+      {
+        overloads: [{
+          params: [dep.typeInfo()],
+          returnType: {
+            ...dep.typeInfo(),
+            baseType: BaseType.FLOAT,
+          },
+        }],
+      }
+    );
+    return createStrandsNode(id, dimension, strandsContext);
   }
 
   function structConstructorNode(strandsContext, structTypeInfo, rawUserArgs) {
@@ -69923,7 +69999,7 @@ var p5 = (function () {
         // This may not be the most efficient way, as we swizzle each component individually,
         // so that .xyz becomes .x, .y, .z
         let scalars = [];
-        if (value instanceof StrandsNode) {
+        if (value?.isStrandsNode) {
           if (value.dimension === 1) {
             scalars = Array(chars.length).fill(value);
           } else if (value.dimension === chars.length) {
@@ -96589,7 +96665,7 @@ var p5 = (function () {
 
       try {
         const ast = parse(code, {
-          ecmaVersion: 2021,
+          ecmaVersion: 'latest',
           sourceType: 'module',
           locations: true  // This helps us get the line number.
         });
@@ -110022,12 +110098,10 @@ var p5 = (function () {
                 const vertString = tokens[vertexTokens[tokenInd]];
                 let vertParts = vertString.split('/');
 
-                // TODO: Faces can technically use negative numbers to refer to the
-                // previous nth vertex. I haven't seen this used in practice, but
-                // it might be good to implement this in the future.
-
                 for (let i = 0; i < vertParts.length; i++) {
-                  vertParts[i] = parseInt(vertParts[i]) - 1;
+                  let index = parseInt(vertParts[i]);
+                  if (index > 0) index -= 1; // OBJ uses 1-based indexing
+                  vertParts[i] = index;
                 }
 
                 if (!usedVerts[vertString]) {
@@ -110036,11 +110110,11 @@ var p5 = (function () {
 
                 if (usedVerts[vertString][currentMaterial] === undefined) {
                   const vertIndex = model.vertices.length;
-                  model.vertices.push(loadedVerts.v[vertParts[0]].copy());
-                  model.uvs.push(loadedVerts.vt[vertParts[1]] ?
-                    loadedVerts.vt[vertParts[1]].slice() : [0, 0]);
-                  model.vertexNormals.push(loadedVerts.vn[vertParts[2]] ?
-                    loadedVerts.vn[vertParts[2]].copy() : new Vector());
+                  model.vertices.push(loadedVerts.v.at(vertParts[0]).copy());
+                  model.uvs.push(loadedVerts.vt.at(vertParts[1]) ?
+                    loadedVerts.vt.at(vertParts[1]).slice() : [0, 0]);
+                  model.vertexNormals.push(loadedVerts.vn.at(vertParts[2]) ?
+                    loadedVerts.vn.at(vertParts[2]).copy() : new Vector());
 
                   usedVerts[vertString][currentMaterial] = vertIndex;
                   face.push(vertIndex);
@@ -120920,7 +120994,7 @@ var p5 = (function () {
 
       if (!p5.Font.hasGlyphData(this.states.textFont)) {
         console.log(
-          'WEBGL: only Opentype (.otf) and Truetype (.ttf) fonts with glyph data are supported'
+          'WEBGL: only Opentype (.otf) and Truetype (.ttf) fonts with glyph data are supported. Make sure to set the font using textFont() before drawing text.'
         );
         return;
       }
@@ -132152,7 +132226,7 @@ var p5 = (function () {
       let initialVar = this.initialCb();
 
       // Convert to StrandsNode if it's not already one
-      if (!(initialVar instanceof StrandsNode)) {
+      if (!(initialVar?.isStrandsNode)) {
         const { id, dimension } = primitiveConstructorNode(this.strandsContext, { baseType: BaseType.FLOAT, dimension: 1 }, initialVar);
         initialVar = createStrandsNode(id, dimension, this.strandsContext);
       }
@@ -132311,32 +132385,45 @@ var p5 = (function () {
     return strandsContext._builtinGlobals
   }
 
-  function getBuiltinGlobalNode(strandsContext, name) {
-    const spec = BUILTIN_GLOBAL_SPECS[name];
-    if (!spec) return null
-    
+  function getOrCreateUniformNode(strandsContext, uniformName, typeInfo, defaultValueFn) {
     const cache = _getBuiltinGlobalsCache(strandsContext);
-    const uniformName = `_p5_global_${name}`;
+
     const cached = cache.nodes.get(uniformName);
-    if (cached) return cached
+    if (cached) return cached;
 
     if (!cache.uniformsAdded.has(uniformName)) {
       cache.uniformsAdded.add(uniformName);
       strandsContext.uniforms.push({
         name: uniformName,
-        typeInfo: spec.typeInfo,
-        defaultValue: () => {
-          const p5Instance = strandsContext.renderer?._pInst || strandsContext.p5?.instance;
-          return p5Instance ? spec.get(p5Instance) : undefined
-        },
+        typeInfo,
+        defaultValue: defaultValueFn,
       });
     }
 
-    const { id, dimension } = variableNode(strandsContext, spec.typeInfo, uniformName);
+    const { id, dimension } = variableNode(strandsContext, typeInfo, uniformName);
     const node = createStrandsNode(id, dimension, strandsContext);
-    node._originalBuiltinName = name;
     cache.nodes.set(uniformName, node);
-    return node
+    return node;
+  }
+
+  function getBuiltinGlobalNode(strandsContext, name) {
+    const spec = BUILTIN_GLOBAL_SPECS[name];
+    if (!spec) return null;
+
+    const uniformName = `_p5_global_${name}`;
+    const instance = strandsContext.renderer?._pInst || strandsContext.p5?.instance;
+
+    const node = getOrCreateUniformNode(
+      strandsContext,
+      uniformName,
+      spec.typeInfo,
+      () => {
+        return instance ? spec.get(instance) : undefined;
+      }
+    );
+
+    node._originalBuiltinName = name;
+    return node;
   }
 
   function installBuiltinGlobalAccessors(strandsContext) {
@@ -132412,7 +132499,7 @@ var p5 = (function () {
       }
 
       // Convert value to a StrandsNode if it isn't already
-      const valueNode = value instanceof StrandsNode ? value : p5.strandsNode(value);
+      const valueNode = value?.isStrandsNode ? value : p5.strandsNode(value);
 
       // Create a new CFG block for the early return
       const earlyReturnBlockID = createBasicBlock(cfg, BlockType.DEFAULT);
@@ -132499,6 +132586,7 @@ var p5 = (function () {
     // Add noise function with backend-agnostic implementation
     const originalNoise = fn.noise;
     const originalNoiseDetail = fn.noiseDetail;
+    const originalMillis = fn.millis;
 
     strandsContext._noiseOctaves = null;
     strandsContext._noiseAmpFalloff = null;
@@ -132559,6 +132647,21 @@ var p5 = (function () {
         }]
       });
       return createStrandsNode(id, dimension, strandsContext);
+    };
+
+    fn.millis = function (...args) {
+      if (!strandsContext.active) {
+        return originalMillis.apply(this, args);
+      }
+      const instance = strandsContext.renderer?._pInst || strandsContext.p5?.instance;
+      return getOrCreateUniformNode(
+        strandsContext,
+        '_p5_global_millis',
+        DataType.float1,
+        () => {
+          return instance ? instance.millis() : undefined;
+        }
+      );
     };
 
     // Next is type constructors and uniform functions.
@@ -132627,12 +132730,17 @@ var p5 = (function () {
       fn[typeInfo.fnName] = function(...args) {
         if (strandsContext.active) {
           if (args.length === 1 && args[0].dimension && args[0].dimension === typeInfo.dimension) {
-            const { id, dimension } = functionCallNode(strandsContext, typeInfo.fnName, args, {
-              overloads: [{
-                params: [args[0].typeInfo()],
-                returnType: typeInfo,
-              }]
-            });
+            const { id, dimension } = functionCallNode(
+              strandsContext,
+              strandsContext.backend.getTypeName(typeInfo.baseType, typeInfo.dimension),
+              args,
+              {
+                overloads: [{
+                  params: [args[0].typeInfo()],
+                  returnType: typeInfo,
+                }]
+              }
+            );
             return createStrandsNode(id, dimension, strandsContext);
           } else {
             // For vector types with a single argument, repeat it for each component
@@ -132689,7 +132797,7 @@ var p5 = (function () {
               const oldDependsOn = dag.dependsOn[structNode.id];
               const newDependsOn = [...oldDependsOn];
               let newValueID;
-              if (val instanceof StrandsNode) {
+              if (val?.isStrandsNode) {
                 newValueID = val.id;
               }
               else {
@@ -132721,7 +132829,7 @@ var p5 = (function () {
     return args;
   }
   function enforceReturnTypeMatch(strandsContext, expectedType, returned, hookName) {
-    if (!(returned instanceof StrandsNode)) {
+    if (!(returned?.isStrandsNode)) {
       // try {
         const result = primitiveConstructorNode(strandsContext, expectedType, returned);
         return result.id;
@@ -132743,7 +132851,12 @@ var p5 = (function () {
     };
     if (receivedType.dimension !== expectedType.dimension) {
       if (receivedType.dimension !== 1) {
-        userError('type error', `You have returned a vector with ${receivedType.dimension} components in ${hookName} when a ${expectedType.baseType + expectedType.dimension} was expected!`);
+        const receivedTypeDisplay = receivedType.baseType + (receivedType.dimension > 1 ? receivedType.dimension : '');
+        const expectedTypeDisplay = expectedType.baseType + expectedType.dimension;
+        userError('type error',
+          `You have returned a ${receivedTypeDisplay} in ${hookName} when a ${expectedTypeDisplay} was expected!\n\n` +
+          `Make sure your hook returns the correct type.`
+        );
       }
       else {
         const result = primitiveConstructorNode(strandsContext, expectedType, returned);
@@ -132830,10 +132943,27 @@ var p5 = (function () {
         const handleRetVal = (retNode) => {
           if(isStructType(expectedReturnType)) {
             const expectedStructType = structType(expectedReturnType);
-            if (retNode instanceof StrandsNode) {
+            if (retNode?.isStrandsNode) {
               const returnedNode = getNodeDataFromID(strandsContext.dag, retNode.id);
               if (returnedNode.baseType !== expectedStructType.typeName) {
-                userError("type error", `You have returned a ${retNode.baseType} from ${hookType.name} when a ${expectedStructType.typeName} was expected.`);
+                const receivedTypeName = returnedNode.baseType || 'undefined';
+                const receivedDim = dag.dimensions[retNode.id];
+                const receivedTypeDisplay = receivedDim > 1 ?
+                  `${receivedTypeName}${receivedDim}` : receivedTypeName;
+
+                const expectedProps = expectedStructType.properties
+                  .map(p => p.name).join(', ');
+                userError('type error',
+                  `You have returned a ${receivedTypeDisplay} from ${hookType.name} when a ${expectedStructType.typeName} was expected.\n\n` +
+                  `The ${expectedStructType.typeName} struct has these properties: { ${expectedProps} }\n\n` +
+                  `Instead of returning a different type, you should modify and return the ${expectedStructType.typeName} struct that was passed to your hook.\n\n` +
+                  `For example:\n` +
+                  `${hookType.name}((inputs) => {\n` +
+                  `  // Modify properties of inputs\n` +
+                  `  inputs.someProperty = ...;\n` +
+                  `  return inputs; // Return the modified struct\n` +
+                  `})`
+                );
               }
               const newDeps = returnedNode.dependsOn.slice();
               for (let i = 0; i < expectedStructType.properties.length; i++) {
@@ -132852,10 +132982,14 @@ var p5 = (function () {
                 const propName = expectedProp.name;
                 const receivedValue = retNode[propName];
                 if (receivedValue === undefined) {
-                  userError('type error', `You've returned an incomplete struct from ${hookType.name}.\n` +
-                    `Expected: { ${expectedReturnType.properties.map(p => p.name).join(', ')} }\n` +
-                    `Received: { ${Object.keys(retNode).join(', ')} }\n` +
-                    `All of the properties are required!`);
+                  const expectedProps = expectedReturnType.properties.map(p => p.name).join(', ');
+                  const receivedProps = Object.keys(retNode).join(', ');
+                  userError('type error',
+                    `You've returned an incomplete ${expectedStructType.typeName} struct from ${hookType.name}.\n\n` +
+                    `Expected properties: { ${expectedProps} }\n` +
+                    `Received properties: { ${receivedProps} }\n\n` +
+                    `All properties are required! Make sure to include all properties in the returned struct.`
+                  );
                 }
                 const expectedTypeInfo = expectedProp.dataType;
                 const returnedPropID = enforceReturnTypeMatch(strandsContext, expectedTypeInfo, receivedValue, hookType.name);
