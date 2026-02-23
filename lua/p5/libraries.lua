@@ -535,14 +535,18 @@ end
 -- Download library file from hardcoded CDN URL
 L.download_library = function(lib, dest, callback)
   local function done(success)
+    print("download_library done:", lib.name, success)
     if callback then callback(success) end
   end
 
   if not lib.cdn_url then
+    print("download_library: no cdn_url for", lib.name)
     done(false)
     return
   end
 
+  print("download_library: downloading", lib.cdn_url, "to", dest)
+  
   core.download_file(lib.cdn_url, dest, function(dl_success)
     if dl_success and L.validate_download(dest) then
       done(true)
