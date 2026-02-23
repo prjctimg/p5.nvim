@@ -390,31 +390,32 @@ L.update_index_html = function()
   end
   local new_section = "  <!-- P5 SCRIPTS -->\n" .. table.concat(script_tags, "\n") .. "\n  <!-- END P5 SCRIPTS -->"
   
-  -- Use regex to match and replace the entire P5 SCRIPTS section
+  -- Remove ALL existing P5 SCRIPTS sections first
   local pattern = "<!--%s*P5 SCRIPTS%s*-->.-<!--%s*END P5 SCRIPTS%s*-->"
-  local found_start, found_end = html:find(pattern)
+  while true do
+    local found_start, found_end = html:find(pattern)
+    if not found_start then
+      break
+    end
+    -- Remove the entire section
+    html = html:sub(1, found_start - 1) .. html:sub(found_end + 1)
+  end
   
-  if found_start then
-    -- Replace existing section
-    html = html:sub(1, found_start - 1) .. new_section .. html:sub(found_end + 1)
-  else
-    -- Add at the start of <body> content (after <body> tag)
-    -- Use plain string match for <body> tag
-    local body_tag = "<body>"
-    local body_pos = html:find(body_tag, 1, true)
-    if not body_pos then
-      body_tag = "<body "
-      body_pos = html:find(body_tag, 1, true)
+  -- Add new section after <body> tag
+  local body_tag = "<body>"
+  local body_pos = html:find(body_tag, 1, true)
+  if not body_pos then
+    body_tag = "<body "
+    body_pos = html:find(body_tag, 1, true)
+  end
+  if body_pos then
+    -- Find the end of the body opening tag
+    local tag_end = body_pos
+    while tag_end <= #html and html:sub(tag_end, tag_end) ~= ">" do
+      tag_end = tag_end + 1
     end
-    if body_pos then
-      -- Find the end of the body opening tag
-      local tag_end = body_pos
-      while tag_end <= #html and html:sub(tag_end, tag_end) ~= ">" do
-        tag_end = tag_end + 1
-      end
-      -- Insert after the body opening tag
-      html = html:sub(1, tag_end) .. "\n" .. new_section .. html:sub(tag_end + 1)
-    end
+    -- Insert after the body opening tag
+    html = html:sub(1, tag_end) .. "\n" .. new_section .. html:sub(tag_end + 1)
   end
   
   vim.fn.writefile(vim.split(html, "\n"), index_file)
