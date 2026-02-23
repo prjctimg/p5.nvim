@@ -109,5 +109,29 @@
       "description": "Extended Bézier curve drawing with more than four control points",
       "cdn_url": "https://cdn.jsdelivr.net/gh/peilingjiang/p5.bezier@master/lib/p5.bezier.min.js"
     },
+    {
+      "name": "p5.brush",
+      "category": "Drawing",
+      "description": "Custom brushes, natural fill effects and intuitive drawing tools",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.brush@1.1/dist/p5.brush.js"
+    },
+    {
+      "name": "q5",
+      "category": "Core Alternative",
+      "description": "Smaller and faster sequel to p5.js with the same API",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/q5@3.0.5/q5.min.js"
+    },
+    {
+      "name": "fez-ui",
+      "category": "UI",
+      "description": "UI engine for p5.js providing various user interface components",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/zturtledog/fez-ui/i-am-ui-new.js"
+    },
+    {
+      "name": "p5.play",
+      "category": "Game Engine",
+      "description": "Code.org's p5.js library for creating games with sprites and animations",
+      "cdn_url": "https://cdn.jsdelivr.net/gh/code-dot-org/p5.play@master/lib/p5.play.js"
+    }
   ]
 }
