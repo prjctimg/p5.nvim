@@ -165,7 +165,7 @@ end
 
 -- Get cache directory for host system
 C.get_cache_dir = function()
-  local cache_home = os.getenv("XDG_CACHE_HOCE") or vim.fn.expand("~/.cache")
+  local cache_home = os.getenv("XDG_CACHE_HOME") or vim.fn.expand("~/.cache")
   local cache_dir = cache_home .. "/p5.nvim"
   vim.fn.mkdir(cache_dir, "p")
   return cache_dir
