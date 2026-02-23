@@ -47,19 +47,13 @@
       "name": "p5.FIP",
       "category": "Image Processing",
       "description": "Real-time image processing/post-processing library with 44 effects",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/prontopablo/p5.FIP@main/p5.fip.min.js"
+      "cdn_url": "https://cdn.jsdelivr.net/gh/prontopablo/p5.FIP@main/p5.FIP.js"
     },
     {
       "name": "d3",
       "category": "Data Visualization",
       "description": "JavaScript library for producing dynamic, interactive data visualizations",
       "cdn_url": "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
-    },
-    {
-      "name": "p5d3",
-      "category": "Data Visualization",
-      "description": "Bridge library for using D3.js utilities within p5.js",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/sepans/p5d3@master/p5d3.js"
     },
     {
       "name": "Tone",
@@ -77,7 +71,7 @@
       "name": "p5.spatial",
       "category": "Sound",
       "description": "Extends p5.sound with multichannel audio output support",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/ogbabydiesal/p5.spatial.js@main/p5.spatial.js"
+      "cdn_url": "https://cdn.jsdelivr.net/gh/ogbabydiesal/p5.spatial.js@main/dist/p5.spatial.js"
     },
     {
       "name": "p5.speech",
@@ -101,73 +95,19 @@
       "name": "p5.touchgui",
       "category": "UI",
       "description": "Multi-touch and mouse GUI library for p5.js with mobile support",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/L05/p5.touchgui@master/p5.touchgui.js"
-    },
-    {
-      "name": "canvasGUI",
-      "category": "UI",
-      "description": "Canvas-based GUI library for p5.js with buttons, sliders and UI elements",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/quarks/canvasGUI@master/canvasGUI.js"
-    },
-    {
-      "name": "fez-ui",
-      "category": "UI",
-      "description": "UI engine for p5.js providing various user interface components",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/zturtledog/fez-ui@main/fez-ui.js"
+      "cdn_url": "https://cdn.jsdelivr.net/gh/L05/p5.touchgui@master/lib/p5.touchgui.js"
     },
     {
       "name": "p5.anaglyph",
       "category": "3D",
       "description": "Library for creating 3D stereoscopic scenes with red/cyan glasses",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/jdeboi/p5.anaglyph@master/p5.anaglyph.js"
+      "cdn_url": "https://cdn.jsdelivr.net/gh/jdeboi/p5.anaglyph@master/dist/p5.anaglyph.min.js"
     },
     {
       "name": "p5.bezier",
       "category": "Drawing",
       "description": "Extended Bézier curve drawing with more than four control points",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/PeilingJaing/p5.bezier@master/p5.bezier.js"
+      "cdn_url": "https://cdn.jsdelivr.net/gh/peilingjiang/p5.bezier@master/lib/p5.bezier.min.js"
     },
-    {
-      "name": "p5.brush",
-      "category": "Drawing",
-      "description": "Custom brushes, natural fill effects and intuitive drawing tools",
-      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.brush@1.1.3/p5.brush.min.js"
-    },
-    {
-      "name": "q5",
-      "category": "Core Alternative",
-      "description": "Smaller and faster sequel to p5.js with the same API",
-      "cdn_url": "https://cdn.jsdelivr.net/npm/q5@1.9.48/lib/q5.min.js"
-    },
-    {
-      "name": "p5.chart",
-      "category": "Data Visualization",
-      "description": "Interactive and mobile-responsive data visualization library for p5.js",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/schuttelaar/p5.chart@main/p5.chart.js"
-    },
-    {
-      "name": "p5.js-plot",
-      "category": "Data Visualization",
-      "description": "Plotting library for p5.js for creating charts and graphs",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/IDMNYU/p5.js-plot@master/p5.plot.js"
-    },
-    {
-      "name": "p5.Fresco",
-      "category": "Animation",
-      "description": "Procedural art generation with 2D shapes, particle systems, noises and physics",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/NielsPichon/p5.Fresco@main/fresco.js"
-    },
-    {
-      "name": "ripl",
-      "category": "Animation",
-      "description": "Library for creating particle animations and simulations in p5.js",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/haptic-data/ripl@master/dist/ripl.js"
-    },
-    {
-      "name": "p5.play",
-      "category": "Game Engine",
-      "description": "Code.org's p5.js library for creating games with sprites and animations",
-      "cdn_url": "https://cdn.jsdelivr.net/gh/code-dot-org/p5.play@main/lib/p5.play.js"
-    }
   ]
 }
