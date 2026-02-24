@@ -139,14 +139,23 @@ S.start_server = function(port)
   local console = require("p5.console")
   local project = require("p5.project")
   
-  -- Check if we're in a p5.js project
-  local is_project, project_msg, project_info = project.is_p5_project()
+  -- Get directory from currently focused buffer, fallback to cwd
+  local buffer_dir = vim.fn.expand('%:p:h')
+  if buffer_dir == '' or vim.fn.isdirectory(buffer_dir) == 0 then
+    buffer_dir = vim.fn.getcwd()
+  end
+  
+  -- Check if buffer's directory is a valid p5.js project
+  local is_project, project_msg, project_info = project.is_p5_project(buffer_dir)
   
   if not is_project then
-    notify("Must be in a p5.js project to start server", "error")
+    notify("Not a p5.js project: " .. project_msg, "error")
     notify("Use :P5CreateProject to create a new project first", "info")
     return
   end
+  
+  -- Change to project directory for server
+  vim.api.nvim_set_current_dir(buffer_dir)
   
   local server_type = S.detect_server()
   if not server_type then
@@ -288,7 +297,7 @@ S.start_console_after_ready = function()
     auto_start = false
   }
   
-  local console_started = console.start_console_polling(S.port)
+  local console_started = console.create_console_terminal()
   
   if console_started then
     notify("Console polling started on port " .. S.port, "ok")

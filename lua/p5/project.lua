@@ -281,13 +281,13 @@ P.copy_assets_to_project = function(project_path, callback)
 end
 
 -- Check if current directory is a valid p5.js project
-P.is_p5_project = function()
-  local cwd = vim.fn.getcwd()
+P.is_p5_project = function(dir)
+  local cwd = dir or vim.fn.getcwd()
   
   -- Check for index.html
   local index_file = cwd .. "/index.html"
   if vim.fn.filereadable(index_file) == 0 then
-    return false, "No index.html found in current directory"
+    return false, "No index.html found in " .. cwd
   end
   
   -- Check if index.html contains p5.js reference
@@ -307,7 +307,8 @@ P.is_p5_project = function()
   return true, "Valid p5.js project detected", {
     has_sketch = has_sketch,
     has_config = has_config,
-    index_path = index_file
+    index_path = index_file,
+    project_root = cwd
   }
 end
 
