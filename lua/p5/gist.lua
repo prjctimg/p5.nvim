@@ -2,6 +2,31 @@
 local G = {}
 local core = require("p5.core")
 
+-- Get files to include in gist from p5.json config
+G.get_includes = function(proj_dir, config)
+  local includes = config.includes or {"sketch.js"}
+  
+  -- Filter out assets/ directory with warning
+  local filtered = {}
+  local has_assets = false
+  for _, file in ipairs(includes) do
+    if file:match("^assets/") or file:match("^assets$") then
+      has_assets = true
+    else
+      table.insert(filtered, file)
+    end
+  end
+  
+  if has_assets then
+    core.notify("Note: assets/ directory excluded from gist (not needed for sketchspace)", "warn")
+  end
+  
+  -- Always include p5.json
+  table.insert(filtered, "p5.json")
+  
+  return filtered
+end
+
 -- Create gist from current project
 G.create_gist = function(description)
   if not core.command_exists("gh") then
@@ -12,33 +37,42 @@ G.create_gist = function(description)
   -- Find project root and config
   local project_dir, config = core.find_project_root()
   if not config then
-    core.notify("Not in a p5.js project", "error")
+    core.notify("Not in a sketchspace (p5.json required)", "error")
     return
   end
 
-  local files_to_include = {
-    {path = "sketch.js", name = "sketch.js"},
-    {path = "index.html", name = "index.html"},
-    {path = "p5.json", name = "p5.json"}
-  }
-
-  -- Check if all required files exist in the project directory
-  for _, file in ipairs(files_to_include) do
-    if vim.fn.filereadable(project_dir .. "/" .. file.path) == 0 then
-      core.notify("Required file not found: " .. file.path, "error")
-      return
+  -- Get files to include from config
+  local files_to_include_names = G.get_includes(project_dir, config)
+  
+  -- Check if all required files exist
+  local missing_files = {}
+  for _, file_name in ipairs(files_to_include_names) do
+    if vim.fn.filereadable(project_dir .. "/" .. file_name) == 0 then
+      table.insert(missing_files, file_name)
     end
+  end
+  
+  if #missing_files > 0 then
+    core.notify("Missing files: " .. table.concat(missing_files, ", "), "error")
+    return
   end
 
   -- Prompt for description if not provided
-  local function proceed_with_gist(desc)
+  local function proceed_with_gist(desc, proj_dir, proj_config)
     -- Create temporary files for gist
     local temp_files = {}
     local gist_files = {}
 
-    for _, file in ipairs(files_to_include) do
-      local temp_path = "/tmp/" .. file.name
-      local source_path = vim.fn.fnamemodify(project_dir .. "/" .. file.path, ":p")
+    -- Copy files to include
+    for _, file_name in ipairs(files_to_include_names) do
+      local temp_path = "/tmp/" .. file_name
+      local source_path = vim.fn.fnamemodify(proj_dir .. "/" .. file_name, ":p")
+      
+      -- Ensure temp directory exists
+      vim.fn.mkdir("/tmp", "p")
+      local temp_dir = vim.fn.fnamemodify(temp_path, ":h")
+      vim.fn.mkdir(temp_dir, "p")
+      
       vim.fn.system({"cp", source_path, temp_path})
       
       table.insert(temp_files, temp_path)
@@ -53,13 +87,13 @@ G.create_gist = function(description)
       table.insert(cmd, desc)
     else
       table.insert(cmd, "--desc")
-      table.insert(cmd, "p5.js sketch from " .. (config.name or "project"))
+      table.insert(cmd, "p5.js sketch from " .. (proj_config.name or "sketchspace"))
     end
 
     table.insert(cmd, "--public")
-    for i, file in ipairs(files_to_include) do
+    for i, file_name in ipairs(files_to_include_names) do
       table.insert(cmd, "--filename")
-      table.insert(cmd, file.name)
+      table.insert(cmd, file_name)
       table.insert(cmd, gist_files[i])
     end
 
@@ -74,20 +108,14 @@ G.create_gist = function(description)
 
     -- Extract gist URL and ID from result
     local url = result:match("https://gist%.github%.com/%S+")
-    local gist_id = url and url:match("/([a-fA-F0-9]+)$")
     
     if url then
-      -- Store gist URL in p5.json BEFORE any other operations
-      config.gist = url
-      core.write_workspace_config(config, project_dir)
-      core.notify("Gist URL saved to p5.json", "ok")
-      core.notify("🎉 Gist created: " .. url, "ok")
-      
-      -- Copy URL to clipboard
-      vim.fn.setreg("+", url)
-      
-      -- Open in browser
-      vim.fn.system({ "xdg-open", url })
+      -- Store gist URL in p5.json
+      proj_config.gist = url
+      local json_content = vim.fn.json_encode(proj_config)
+      local target_path = proj_dir .. "/p5.json"
+      vim.fn.writefile(vim.split(json_content, "\n"), target_path)
+      core.notify("Gist created: " .. url, "ok")
     else
       core.notify("Failed to extract gist URL: " .. result, "error")
     end
@@ -95,16 +123,16 @@ G.create_gist = function(description)
 
   -- If description provided, proceed directly
   if description and description ~= "" then
-    proceed_with_gist(description)
+    proceed_with_gist(description, project_dir, config)
   else
     -- Prompt for description
     vim.ui.input({
       prompt = "Gist description: ",
-      default = "p5.js sketch from " .. (config.name or "project"),
+      default = "p5.js sketch from " .. (config.name or "sketchspace"),
       completion = "file",
     }, function(input)
       if input and input ~= "" then
-        proceed_with_gist(input)
+        proceed_with_gist(input, project_dir, config)
       else
         core.notify("Gist creation cancelled", "info")
       end
@@ -117,42 +145,51 @@ G.update_gist = function(gist_id)
   -- Find project root and config
   local project_dir, config = core.find_project_root()
   if not config then
-    core.notify("Not in a p5.js project", "error")
+    core.notify("Not in a sketchspace", "error")
     return
   end
 
   -- Get gist_id from config if not provided
   if not gist_id then
-    if config.gist and config.gist.id then
-      gist_id = config.gist.id
-    else
-      core.notify("No gist associated with this project. Run :P5Gist to create one.", "error")
+    if config.gist then
+      if type(config.gist) == "table" then
+        gist_id = config.gist.id
+      else
+        -- Extract ID from URL string
+        gist_id = config.gist:match("/([a-fA-F0-9]+)$")
+      end
+    end
+    
+    if not gist_id then
+      core.notify("No gist associated with this sketchspace. Run :P5Gist to create one.", "error")
       return
     end
   end
 
-  local temp_sketch = "/tmp/p5_gist_update_sketch.js"
-  vim.fn.system({"cp", project_dir .. "/sketch.js", temp_sketch})
-
-  -- Update gist with only sketch.js
-  local cmd = {"gh", "gist", "edit", gist_id, "--filename", "sketch.js", temp_sketch}
-  local result = vim.fn.system(cmd)
-  local exit_code = vim.v.shell_error
-
-  -- Clean up
-  vim.fn.delete(temp_sketch)
-
-  if exit_code == 0 then
-    core.notify("🎉 Gist updated successfully", "ok")
-    
-    -- Extract URL
-    local url = result:match("https://gist%.github%.com/%S+")
+  -- Get files to update
+  local files_to_update = G.get_includes(project_dir, config)
+  
+  -- Update each file in the gist
+  for _, file_name in ipairs(files_to_update) do
+    if file_name ~= "p5.json" then  -- Don't update p5.json in gist
+      local temp_file = "/tmp/p5_gist_" .. vim.fn.fnamemodify(file_name, ":t")
+      vim.fn.system({"cp", project_dir .. "/" .. file_name, temp_file})
+      
+      local cmd = {"gh", "gist", "edit", gist_id, "--filename", file_name, temp_file}
+      vim.fn.system(cmd)
+      
+      vim.fn.delete(temp_file)
+    end
+  end
+  
+  core.notify("Gist updated successfully", "ok")
+  
+  -- Open in browser
+  if config.gist then
+    local url = type(config.gist) == "string" and config.gist or config.gist.url
     if url then
-      -- Open in browser
       vim.fn.system({ "xdg-open", url })
     end
-  else
-    core.notify("Failed to update gist: " .. result, "error")
   end
 end
 
@@ -255,21 +292,22 @@ G.clone_gist = function(gist_id)
   if exit_code == 0 then
     -- Create p5.json if not exists
     if vim.fn.filereadable(project_path .. "/p5.json") == 0 then
-      local p5_config = string.format([[{
-  "version": "1.0.0",
-  "libraries": ["p5", "p5.sound"],
-  "gist": {
-    "id": "%s",
-    "cloned_at": "%s"
-  }
-}]], gist_id, os.date("%Y-%m-%d"))
+      local p5_config = {
+        version = "1.9.0",
+        libs = {},
+        includes = {"sketch.js"},
+        gist = {
+          id = gist_id,
+          cloned_at = os.date("%Y-%m-%d")
+        }
+      }
       
-      vim.fn.writefile(vim.split(p5_config, "\n"), project_path .. "/p5.json")
+      vim.fn.writefile(vim.split(vim.fn.json_encode(p5_config), "\n"), project_path .. "/p5.json")
     end
 
     -- Open project
     vim.cmd("edit " .. project_path .. "/sketch.js")
-    core.notify("Cloned gist as p5 project: " .. project_name, "ok")
+    core.notify("Cloned gist as sketchspace: " .. project_name, "ok")
   else
     -- Clean up failed clone
     vim.fn.delete(project_path, "rf")
@@ -313,7 +351,7 @@ end
 G.update_current_gist = function()
   local gist_info = G.get_project_gist()
   if not gist_info or not gist_info.id then
-    core.notify("No gist associated with current project", "warn")
+    core.notify("No gist associated with current sketchspace", "warn")
     return
   end
 

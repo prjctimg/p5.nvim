@@ -144,6 +144,12 @@ C.find_nearest_p5_config = function()
   return nil
 end
 
+-- Read workspace configuration (alias for find_project_root's config)
+C.read_workspace_config = function()
+  local _, config = C.find_project_root()
+  return config
+end
+
 -- Write workspace configuration with formatting
 C.write_workspace_config = function(config, project_dir)
   local dir = project_dir or vim.fn.getcwd()
@@ -203,7 +209,7 @@ end
 
 -- Get cache directory for host system
 C.get_cache_dir = function()
-  local cache_home = os.getenv("XDG_CACHE_HOCE") or vim.fn.expand("~/.cache")
+  local cache_home = os.getenv("XDG_CACHE_HOME") or vim.fn.expand("~/.cache")
   local cache_dir = cache_home .. "/p5.nvim"
   vim.fn.mkdir(cache_dir, "p")
   return cache_dir

@@ -25,19 +25,18 @@ end
 
 L.contrib_libs = L.load_libs_json()
 
--- Get installed libraries
+-- Get installed libraries (core + contrib)
 L.load = function()
   local libs = {}
   local config = core.read_workspace_config()
   
-  -- Always include core modules
+  -- Always include core modules (not stored in p5.json libs)
   table.insert(libs, "p5")
   table.insert(libs, "p5.sound")
   
-  -- Handle both string array and object array formats
-  if config and config.libraries then
-    for _, lib in ipairs(config.libraries) do
-      local lib_name = type(lib) == "table" and lib.name or lib
+  -- Handle libs as object with {name: version} format
+  if config and config.libs and type(config.libs) == "table" then
+    for lib_name, version in pairs(config.libs) do
       if lib_name and not vim.tbl_contains(libs, lib_name) then
         table.insert(libs, lib_name)
       end
@@ -45,6 +44,18 @@ L.load = function()
   end
   
   return libs
+end
+
+-- Get libs as an object {name: version}
+L.get_libs = function()
+  local config = core.read_workspace_config()
+  return config and config.libs or {}
+end
+
+-- Get includes array from config
+L.get_includes = function()
+  local config = core.read_workspace_config()
+  return config and config.includes or {"sketch.js"}
 end
 
 -- Check if library is installed
@@ -97,25 +108,23 @@ L.get_latest_version = function(lib, callback)
 end
 
 -- Add library to project
-L.add_library = function(lib_name, source)
+L.add_library = function(lib_name, version)
   local config = core.read_workspace_config()
   if not config then
     local p5_version = core.get_p5_version()
-    config = { version = p5_version, libraries = {} }
+    config = { version = p5_version, libs = {}, includes = {"sketch.js"} }
   end
   
-  config.libraries = config.libraries or {}
+  config.libs = config.libs or {}
   
-  -- Check if already exists (handle both string and object formats)
-  for _, lib in ipairs(config.libraries) do
-    local existing_name = type(lib) == "table" and lib.name or lib
-    if existing_name == lib_name then
-      core.notify("Library '" .. lib_name .. "' already exists", "warn")
-      return
-    end
+  -- Check if already exists
+  if config.libs[lib_name] then
+    core.notify("Library '" .. lib_name .. "' already exists (version: " .. config.libs[lib_name] .. ")", "warn")
+    return
   end
   
-  table.insert(config.libraries, lib_name)
+  -- Add library with version
+  config.libs[lib_name] = version or "latest"
   
   core.write_workspace_config(config)
 end
@@ -123,19 +132,14 @@ end
 -- Remove library from project
 L.remove_library = function(lib_name)
   local config = core.read_workspace_config()
-  if not config or not config.libraries then
+  if not config or not config.libs then
     return
   end
   
-  local new_libs = {}
-  for _, lib in ipairs(config.libraries) do
-    local lib_name_str = type(lib) == "table" and lib.name or lib
-    if lib_name_str ~= lib_name then
-      table.insert(new_libs, lib)
-    end
+  if config.libs[lib_name] then
+    config.libs[lib_name] = nil
   end
   
-  config.libraries = new_libs
   core.write_workspace_config(config)
 end
 
@@ -162,28 +166,11 @@ end
 
 -- Check for conflicts before installing
 L.check_conflicts = function(lib_name)
-  local result = { has_config = false, has_html = false, has_file = false }
+  local result = { has_config = false, has_file = false }
   local config = core.read_workspace_config()
   
-  if config and config.libraries then
-    for _, lib in ipairs(config.libraries) do
-      if lib.name == lib_name then
-        result.has_config = true
-        break
-      end
-    end
-  end
-  
-  local index_file = vim.fn.getcwd() .. "/" .. L.config.index_file
-  if vim.fn.filereadable(index_file) == 1 then
-    local content = vim.fn.readfile(index_file)
-    for _, line in ipairs(content) do
-      if line:match('src="assets/libs/' .. lib_name .. '%.js"') or
-         line:match("src='assets/libs/" .. lib_name .. "%.js'") then
-        result.has_html = true
-        break
-      end
-    end
+  if config and config.libs and config.libs[lib_name] then
+    result.has_config = true
   end
   
   local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
@@ -272,8 +259,8 @@ L.uninstall_libs = function(lib_names)
   local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
   local types_dir = vim.fn.getcwd() .. "/" .. L.config.types_dir
   
-  local config = core.read_workspace_config() or { libraries = {} }
-  config.libraries = config.libraries or {}
+  local config = core.read_workspace_config() or { libs = {}, includes = {"sketch.js"} }
+  config.libs = config.libs or {}
   
   local removed = {}
   local failed = {}
@@ -298,14 +285,12 @@ L.uninstall_libs = function(lib_names)
     end
     
     -- Remove from config
-    local new_libs = {}
-    for _, lib in ipairs(config.libraries) do
-      local lib_name_str = type(lib) == "table" and lib.name or lib
-      if lib_name_str ~= name then
-        table.insert(new_libs, lib)
-      end
+    if config.libs[name] then
+      config.libs[name] = nil
+    else
+      success = false
+      table.insert(failed, name)
     end
-    config.libraries = new_libs
     
     if success then
       table.insert(removed, name)
@@ -314,11 +299,9 @@ L.uninstall_libs = function(lib_names)
   
   -- Save updated config
   core.write_workspace_config(config)
-
-  -- Note: libs.js reads from p5.json at runtime, no need to regenerate
   
   if #removed > 0 then
-    core.notify("🎉 Removed: " .. table.concat(removed, ", "), "info")
+    core.notify("Removed: " .. table.concat(removed, ", "), "info")
   end
   
   if #failed > 0 then
@@ -385,7 +368,9 @@ L.generate_libs_js = function(project_path)
     fetch('p5.json')
       .then(function(response) { return response.json(); })
       .then(function(config) {
-        var libs = config.libraries || [];
+        var libsObj = config.libs || {};
+        // Convert object {name: version} to array of names
+        var libs = Object.keys(libsObj);
         return loadLibsSequential(libs, 0);
       })
       .catch(function(err) {

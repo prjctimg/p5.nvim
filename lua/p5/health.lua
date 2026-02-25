@@ -143,8 +143,10 @@ H.check_project_config = function()
     if ok and config then
       vim.health.ok("p5.json: valid format")
       
-      if config.libraries and type(config.libraries) == "table" then
-        vim.health.ok("Libraries: " .. #config.libraries .. " configured")
+      if config.libs and type(config.libs) == "table" then
+        local count = 0
+        for _ in pairs(config.libs) do count = count + 1 end
+        vim.health.ok("Libraries: " .. count .. " configured")
       end
       
       if config.server then
@@ -232,7 +234,7 @@ H.check_neovim = function()
   end
 end
 
--- Hain health check function
+-- Main health check function
 H.check = function()
   vim.health.start("p5.nvim Health Check")
   vim.health.info("A comprehensive Neovim plugin for p5.js development")

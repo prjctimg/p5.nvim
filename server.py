@@ -473,12 +473,29 @@ class HTTPServer:
         # Build file path
         file_path = os.path.join(self.directory, path.lstrip('/'))
         
+        # Generate index.html on-the-fly if it doesn't exist
+        if path == '/index.html' and not os.path.isfile(file_path):
+            content = self.generate_index_html()
+            content = self.inject_scripts(content.encode('utf-8'))
+            writer.write(b'HTTP/1.1 200 OK\r\n')
+            writer.write(b'Content-Type: text/html\r\n')
+            writer.write(f'Content-Length: {len(content)}\r\n'.encode())
+            writer.write(b'Access-Control-Allow-Origin: *\r\n')
+            writer.write(b'Connection: close\r\n')
+            writer.write(b'\r\n')
+            writer.write(content)
+            await writer.drain()
+            return
+        
         if not os.path.isfile(file_path):
             writer.write(b'HTTP/1.1 404 Not Found\r\n')
             writer.write(b'Content-Type: text/plain\r\n')
             writer.write(b'Access-Control-Allow-Origin: *\r\n')
             writer.write(b'Connection: close\r\n')
             writer.write(b'\r\n')
+            writer.write(b'File not found')
+            await writer.drain()
+            return
             writer.write(b'File not found')
             await writer.drain()
             return
@@ -524,6 +541,50 @@ class HTTPServer:
             writer.write(b'\r\n')
             writer.write(b'An error occurred while processing your request')
             await writer.drain()
+    
+    def generate_index_html(self) -> str:
+        """Generate index.html on-the-fly based on p5.json libs."""
+        import json
+        
+        p5_json_path = os.path.join(self.directory, 'p5.json')
+        config = {}
+        if os.path.isfile(p5_json_path):
+            try:
+                with open(p5_json_path, 'r') as f:
+                    config = json.load(f)
+            except:
+                pass
+        
+        libs = config.get('libs', {})
+        version = config.get('version', '1.9.0')
+        
+        # Build script tags for core and contrib libs
+        scripts = []
+        scripts.append(f'  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/{version}/p5.min.js"></script>')
+        scripts.append(f'  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/{version}/addons/p5.sound.min.js"></script>')
+        
+        for lib_name in libs.keys():
+            lib_version = libs[lib_name]
+            scripts.append(f'  <script src="assets/libs/{lib_name}.js"></script>')
+        
+        scripts.append('  <script src="assets/libs/libs.js"></script>')
+        
+        html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>p5.js Sketch</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+{chr(10).join(scripts)}
+</head>
+<body>
+  <main>
+  </main>
+  <script src="sketch.js"></script>
+</body>
+</html>'''
+        return html
     
     def inject_scripts(self, html_content: bytes) -> bytes:
         """Inject console and live reload scripts into HTML."""
