@@ -66,7 +66,6 @@ I.setup = function(opts)
   -- P5 (main picker)
   vim.api.nvim_create_user_command("P5", function()
     local srv = require("p5.server")
-    local is_proj = in_sketchspace()
     local server_status = srv.server_job and "Stop server" or "Start server"
     
     local options = {

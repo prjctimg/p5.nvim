@@ -496,9 +496,6 @@ class HTTPServer:
             writer.write(b'File not found')
             await writer.drain()
             return
-            writer.write(b'File not found')
-            await writer.drain()
-            return
         
         # Determine content type
         ext = os.path.splitext(file_path)[1].lower()
