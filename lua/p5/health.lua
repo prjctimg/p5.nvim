@@ -92,36 +92,12 @@ H.check_plugin_env = function()
     vim.health.error("Plugin root: not found at " .. plugin_root)
   end
   
-  -- Check asset directory
+  -- Check asset directory (for types)
   local asset_dir = core.get_asset_dir()
   if core.validate_dir(asset_dir, "Asset directory", false) then
     vim.health.ok("Asset directory: " .. asset_dir)
   else
-    vim.health.error("Asset directory: not found at " .. asset_dir)
-  end
-  
-  -- Check template directory
-  local template_dir = core.get_template_dir()
-  if core.validate_dir(template_dir, "Template directory", false) then
-    vim.health.ok("Template directory: " .. template_dir)
-  else
-    vim.health.warn("Template directory: not found at " .. template_dir)
-  end
-  
-  -- Check core assets
-  local core_dir = asset_dir .. "/core"
-  if core.validate_dir(core_dir, "Core assets", false) then
-    vim.health.ok("Core assets: available")
-    
-    -- Check for essential files
-    local p5_js = core_dir .. "/p5.js"
-    if core.validate_file(p5_js, "p5.js", false) then
-      vim.health.ok("p5.js: available")
-    else
-      vim.health.warn("p5.js: not found - will be downloaded on demand")
-    end
-  else
-    vim.health.warn("Core assets: directory not found")
+    vim.health.warn("Asset directory: not found - optional, for IDE types only")
   end
 end
 
@@ -156,18 +132,10 @@ H.check_project_config = function()
       vim.health.error("p5.json: invalid format")
     end
   else
-    vim.health.info("p5.json: not found - not in a p5.js project")
+    vim.health.info("p5.json: not found - not in a sketchspace")
   end
   
-  -- Check for index.html
-  local index_file = cwd .. "/index.html"
-  if core.validate_file(index_file, "index.html", false) then
-    vim.health.ok("index.html: found")
-  else
-    vim.health.info("index.html: not found - run :P5ProjectCreate to create a new project")
-  end
-  
-  -- Check for assets directory
+  -- Check for assets directory (optional - created by P5Setup)
   local assets_dir = cwd .. "/assets"
   if core.validate_dir(assets_dir, "assets/", false) then
     vim.health.ok("assets/: directory exists")
@@ -179,7 +147,7 @@ H.check_project_config = function()
       vim.health.ok("libs/: " .. #js_files .. " library files")
     end
   else
-    vim.health.info("assets/: not found - run :P5ProjectCreate to create project structure")
+    vim.health.info("assets/: not found - run :P5Setup to create")
   end
 end
 
