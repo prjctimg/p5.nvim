@@ -9,14 +9,13 @@ G.create_gist = function(description)
     return
   end
 
-  local config = core.find_nearest_p5_config()
+  -- Find project root and config
+  local project_dir, config = core.find_project_root()
   if not config then
     core.notify("Not in a p5.js project", "error")
     return
   end
 
-  -- Get the directory containing the p5.json file
-  local project_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. "/p5.json", ":h")
   local files_to_include = {
     {path = "sketch.js", name = "sketch.js"},
     {path = "index.html", name = "index.html"},
@@ -90,15 +89,13 @@ end
 
 -- Update existing gist
 G.update_gist = function(gist_id)
-  local config = core.find_nearest_p5_config()
+  -- Find project root and config
+  local project_dir, config = core.find_project_root()
   if not config then
     core.notify("Not in a p5.js project", "error")
     return
   end
 
-  -- Get the directory containing the p5.json file
-  local project_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. "/p5.json", ":h")
-  
   local temp_sketch = "/tmp/p5_gist_update_sketch.js"
   vim.fn.system({"cp", project_dir .. "/sketch.js", temp_sketch})
 

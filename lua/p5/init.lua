@@ -52,7 +52,7 @@ I.setup = function(opts)
   vim.api.nvim_create_user_command("P5", function()
     local srv = require("p5.server")
     local core = require("p5.core")
-    local config = core.find_nearest_p5_config()
+    local _, config = core.find_project_root()
     local server_status = srv.server_job and "Stop server" or "Start server"
     
     local options = {
