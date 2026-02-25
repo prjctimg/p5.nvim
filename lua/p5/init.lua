@@ -100,7 +100,8 @@ I.setup = function(opts)
   end, { nargs = 0 })
 
   vim.api.nvim_create_user_command("P5Create", function(opts)
-    local name = opts.args and #opts.args > 0 and opts.args[1] or nil
+    local fargs = opts.fargs or {}
+    local name = #fargs > 0 and fargs[1] or nil
     if not name then
       vim.ui.input({
         prompt = "Sketchspace name: ",
@@ -119,7 +120,8 @@ I.setup = function(opts)
   vim.api.nvim_create_user_command("P5Install", function(opts)
     if not require_sketchspace("Install") then return end
     
-    local lib_names = opts.args and #opts.args > 0 and opts.args or nil
+    local fargs = opts.fargs or {}
+    local lib_names = #fargs > 0 and fargs or nil
     if not lib_names then
       local libs = libraries.get_available_libs()
       if not libs or #libs == 0 then
@@ -153,7 +155,8 @@ I.setup = function(opts)
   vim.api.nvim_create_user_command("P5Uninstall", function(opts)
     if not require_sketchspace("Uninstall") then return end
     
-    local lib_names = opts.args and #opts.args > 0 and opts.args or nil
+    local fargs = opts.fargs or {}
+    local lib_names = #fargs > 0 and fargs or nil
     if not lib_names then
       local installed = libraries.get_installed_libs()
       if #installed == 0 then
@@ -190,7 +193,8 @@ I.setup = function(opts)
   end, { nargs = 0 })
 
   vim.api.nvim_create_user_command("P5Sync", function(opts)
-    local target = opts.args and opts.args[1] or nil
+    local fargs = opts.fargs or {}
+    local target = #fargs > 0 and fargs[1] or nil
     
     if not target then
       vim.ui.select({"Gist", "Libraries"}, { prompt = "What to sync:" }, function(choice)
@@ -219,10 +223,8 @@ I.setup = function(opts)
     if server.server_job then
       server.stop_server()
     else
-      local port = nil
-      if opts.args and opts.args[1] then
-        port = tonumber(opts.args[1])
-      end
+      local fargs = opts.fargs or {}
+      local port = #fargs > 0 and tonumber(fargs[1]) or nil
       server.start_server(port)
     end
   end, { nargs = "?" })
@@ -233,7 +235,8 @@ I.setup = function(opts)
 
   vim.api.nvim_create_user_command("P5Gist", function(opts)
     if not require_sketchspace("Gist") then return end
-    local desc = opts.args and opts.args[1] or nil
+    local fargs = opts.fargs or {}
+    local desc = #fargs > 0 and fargs[1] or nil
     gist.create_gist(desc)
   end, { nargs = "?" })
 
