@@ -5,11 +5,11 @@ A Neovim plugin for creative coding with p5.js.
 ## Features
 
 - **Live server** - Auto-reload preview in browser
-- **Package management** - Install 22 contributor libraries
-- **Template project** - Core p5.js + sound addon
-- **GitHub Gist** - Share sketches (synced to workspace)
+- **Package management** - Install contributor libraries
+- **Sketchspace** - Minimal project structure (p5.json + sketch.js)
+- **GitHub Gist** - Share sketches (synced to sketchspace)
 - **Console** - View browser logs in Neovim
-- **p5 docs** - Built-in help for p5.js functions
+- **p5 docs** - Built-in help via snacks.picker
 
 ## Requirements
 
@@ -45,14 +45,42 @@ A Neovim plugin for creative coding with p5.js.
 | Command | Description |
 |---------|-------------|
 | `:P5` | Main picker with all options |
-| `:P5Create [name]` | Create new p5.js project |
-| `:P5Install [libs...]` | Install libraries (picker or direct) |
-| `:P5Uninstall [libs...]` | Remove libraries (picker or direct) |
-| `:P5Update` | Update all installed libraries |
+| `:P5Create [name]` | Create new sketchspace |
+| `:P5Setup` | Setup assets in current sketchspace |
+| `:P5Install [libs...]` | Install libraries (picker or direct, requires sketchspace) |
+| `:P5Uninstall [libs...]` | Remove libraries (picker or direct, requires sketchspace) |
+| `:P5Sync [gist|libs]` | Sync gist or libraries |
 | `:P5Server [port]` | Start/stop development server (toggle) |
 | `:P5Console` | Toggle browser console |
-| `:P5Gist [desc]` | Create GitHub Gist |
-| `:P5Setup` | Setup environment |
+| `:P5Docs` | Open p5.js docs via snacks.picker |
+| `:P5Gist [desc]` | Create GitHub Gist (requires sketchspace) |
+
+## Sketchspace Structure
+
+A sketchspace is a directory containing:
+
+```
+my-sketch/
+├── p5.json       # Configuration (version, libs, includes)
+├── sketch.js     # Your p5.js code
+└── assets/       # Library files (auto-managed)
+```
+
+### p5.json Format
+
+```json
+{
+  "version": "1.9.0",
+  "libs": {
+    "ml5": "1.0.0"
+  },
+  "includes": ["sketch.js"]
+}
+```
+
+- `version`: p5.js version to use
+- `libs`: Object with library names as keys and versions as values
+- `includes`: Files to include in Gist (default: `["sketch.js"]`)
 
 ## Library Management
 
@@ -61,12 +89,14 @@ Install contributor libraries:
 ```vim
 :P5Install ml5
 :P5Uninstall ml5
+:P5Sync libs
 ```
 
-The plugin automatically:
-- Downloads libraries from CDN
-- Updates index.html with library links
-- Validates downloads to ensure correctness
+### Install Multiple Libraries
+
+```vim
+:P5Install ml5 rita p5play
+```
 
 ### Available Libraries
 
@@ -82,11 +112,16 @@ The plugin automatically:
 | **Image Processing** | p5.FIP |
 | **Core Alternative** | q5 |
 
-#### Install Multiple Libraries
+## Gist Integration
+
+Create a Gist from your sketchspace:
 
 ```vim
-:P5Install ml5 rita p5play
+:P5Gist "My awesome sketch"
+:P5Sync gist  "Update existing gist"
 ```
+
+The Gist will include files specified in `p5.json` `includes` array. Assets directory is automatically excluded.
 
 ## License
 

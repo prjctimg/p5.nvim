@@ -114,8 +114,8 @@ P.create_files = function(project_path, callback)
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>p5.js Sketch</title>
-  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
-  <script src="./assets/libs/p5.js"></script>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <script src="assets/libs/p5.js"></script>
   <script src="assets/libs/libs.js"></script>
 </head>
 <body>
@@ -194,13 +194,14 @@ function draw() {
   -- Get p5.js version from bundled library
   local p5_version = core.get_p5_version()
   
-  -- Create simplified p5.json (version + libraries for easy sharing)
-  local p5_config = [[{
-  "version": "]] .. p5_version .. [[",
-  "libraries": ["p5", "p5.sound"]
-  }]]
+  -- Create p5.json with new structure (libs object, includes array)
+  local p5_config = {
+    version = p5_version,
+    libs = {},
+    includes = {"sketch.js"}
+  }
   
-  vim.fn.writefile(vim.split(p5_config, "\n"), project_path .. "/p5.json")
+  vim.fn.writefile(vim.split(vim.fn.json_encode(p5_config), "\n"), project_path .. "/p5.json")
 
   -- Create assets directory
   vim.fn.mkdir(project_path .. "/assets/types", "p")
@@ -280,34 +281,34 @@ P.copy_assets_to_project = function(project_path, callback)
   end
 end
 
--- Check if current directory is a valid p5.js project
+-- Check if current directory is a valid p5.js sketchspace
 P.is_p5_project = function(dir)
   local cwd = dir or vim.fn.getcwd()
   
-  -- Check for index.html
-  local index_file = cwd .. "/index.html"
-  if vim.fn.filereadable(index_file) == 0 then
-    return false, "No index.html found in " .. cwd
+  -- Check for p5.json (required for sketchspace)
+  local config_file = cwd .. "/p5.json"
+  if vim.fn.filereadable(config_file) == 0 then
+    return false, "No p5.json found in " .. cwd
   end
   
-  -- Check if index.html contains p5.js reference
-  local index_content = table.concat(vim.fn.readfile(index_file), "\n")
-  if not (index_content:match("p5%.js") or index_content:match("p5%.min%.js")) then
-    return false, "index.html does not reference p5.js"
+  -- Validate p5.json is valid JSON
+  local ok, config = pcall(vim.fn.json_decode, table.concat(vim.fn.readfile(config_file), "\n"))
+  if not ok or type(config) ~= "table" then
+    return false, "Invalid p5.json format"
   end
   
-  -- Check for sketch.js (optional but common)
+  -- Check for sketch.js (optional but expected)
   local sketch_file = cwd .. "/sketch.js"
   local has_sketch = vim.fn.filereadable(sketch_file) == 1
   
-  -- Check for project configuration (optional)
-  local config_file = cwd .. "/p5.json"
-  local has_config = vim.fn.filereadable(config_file) == 1
+  -- Get includes from config (defaults to sketch.js)
+  local includes = config.includes or {"sketch.js"}
   
-  return true, "Valid p5.js project detected", {
+  return true, "Valid p5.js sketchspace detected", {
     has_sketch = has_sketch,
-    has_config = has_config,
-    index_path = index_file,
+    has_index = vim.fn.filereadable(cwd .. "/index.html") == 1,
+    config = config,
+    includes = includes,
     project_root = cwd
   }
 end
