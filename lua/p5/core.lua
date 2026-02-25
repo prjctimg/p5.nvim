@@ -145,8 +145,9 @@ C.find_nearest_p5_config = function()
 end
 
 -- Write workspace configuration with formatting
-C.write_workspace_config = function(config)
-  local config_file = vim.fn.getcwd() .. "/p5.json"
+C.write_workspace_config = function(config, project_dir)
+  local dir = project_dir or vim.fn.getcwd()
+  local config_file = dir .. "/p5.json"
   local content = vim.fn.json_encode(config)
   -- Format JSON with 2-space indentation
   local formatted = {}
