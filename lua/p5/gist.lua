@@ -15,16 +15,17 @@ G.create_gist = function(description)
     return
   end
 
-  local project_path = vim.fn.getcwd()
+  -- Get the directory containing the p5.json file
+  local project_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. "/p5.json", ":h")
   local files_to_include = {
     {path = "sketch.js", name = "sketch.js"},
     {path = "index.html", name = "index.html"},
     {path = "p5.json", name = "p5.json"}
   }
 
-  -- Check if all required files exist
+  -- Check if all required files exist in the project directory
   for _, file in ipairs(files_to_include) do
-    if vim.fn.filereadable(project_path .. "/" .. file.path) == 0 then
+    if vim.fn.filereadable(project_dir .. "/" .. file.path) == 0 then
       core.notify("Required file not found: " .. file.path, "error")
       return
     end
@@ -36,7 +37,7 @@ G.create_gist = function(description)
 
   for _, file in ipairs(files_to_include) do
     local temp_path = "/tmp/p5_gist_" .. vim.fn.fnamemodify(file.name, ":t")
-    local source_path = vim.fn.fnamemodify(project_path .. "/" .. file.path, ":p")
+    local source_path = vim.fn.fnamemodify(project_dir .. "/" .. file.path, ":p")
     vim.fn.system({"cp", source_path, temp_path})
     
     table.insert(temp_files, temp_path)
@@ -95,10 +96,11 @@ G.update_gist = function(gist_id)
     return
   end
 
-  local project_path = vim.fn.getcwd()
+  -- Get the directory containing the p5.json file
+  local project_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. "/p5.json", ":h")
   
   local temp_sketch = "/tmp/p5_gist_update_sketch.js"
-  vim.fn.system({"cp", project_path .. "/sketch.js", temp_sketch})
+  vim.fn.system({"cp", project_dir .. "/sketch.js", temp_sketch})
 
   -- Update gist with only sketch.js
   local cmd = {"gh", "gist", "edit", gist_id, temp_sketch}
