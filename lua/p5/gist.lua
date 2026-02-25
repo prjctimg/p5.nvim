@@ -6,11 +6,38 @@ local core = require("p5.core")
 G.get_includes = function(proj_dir, config)
   local includes = config.includes or {"sketch.js"}
   
-  -- Filter out assets/ directory with warning
+  -- Filter out assets/ directory with warning and validate paths
   local filtered = {}
   local has_assets = false
   for _, file in ipairs(includes) do
-    if file:match("^assets/") or file:match("^assets$") then
+    -- Validate path for security (prevent path traversal)
+    local is_unsafe = false
+    
+    -- Check for path traversal patterns
+    if file:match("%.%.") then
+      core.notify("Skipping unsafe path (parent dir reference): " .. file, "error")
+      is_unsafe = true
+    -- Check for absolute paths
+    elseif file:match("^/") then
+      core.notify("Skipping absolute path: " .. file, "error")
+      is_unsafe = true
+    -- Check for home directory expansion
+    elseif file:match("^~") then
+      core.notify("Skipping home dir path: " .. file, "error")
+      is_unsafe = true
+    -- Check for Windows drive letters
+    elseif file:match("^[A-Za-z]:") then
+      core.notify("Skipping drive letter path: " .. file, "error")
+      is_unsafe = true
+    -- Check for NUL bytes
+    elseif file:match("%z") then
+      core.notify("Skipping path with null byte: " .. file, "error")
+      is_unsafe = true
+    end
+    
+    if is_unsafe then
+      -- Skip this entry
+    elseif file:match("^assets/") or file:match("^assets$") then
       has_assets = true
     else
       table.insert(filtered, file)
@@ -59,24 +86,24 @@ G.create_gist = function(description)
 
   -- Prompt for description if not provided
   local function proceed_with_gist(desc, proj_dir, proj_config)
-    -- Create temporary files for gist
+    -- Create temporary files for gist using platform-safe temp directory
     local temp_files = {}
     local gist_files = {}
-
+    
+    -- Get platform-safe temp directory
+    local temp_base = vim.fn.stdpath("cache") or (vim.loop.os_tmpdir() or "/tmp")
+    local gist_temp_dir = temp_base .. "/p5_gist"
+    vim.fn.mkdir(gist_temp_dir, "p")
+    
     -- Copy files to include
     for _, file_name in ipairs(files_to_include_names) do
-      local temp_path = "/tmp/" .. file_name
+      local unique_name = gist_temp_dir .. "/" .. os.time() .. "_" .. vim.fn.getpid() .. "_" .. file_name
       local source_path = vim.fn.fnamemodify(proj_dir .. "/" .. file_name, ":p")
       
-      -- Ensure temp directory exists
-      vim.fn.mkdir("/tmp", "p")
-      local temp_dir = vim.fn.fnamemodify(temp_path, ":h")
-      vim.fn.mkdir(temp_dir, "p")
+      vim.fn.system({"cp", source_path, unique_name})
       
-      vim.fn.system({"cp", source_path, temp_path})
-      
-      table.insert(temp_files, temp_path)
-      table.insert(gist_files, temp_path)
+      table.insert(temp_files, unique_name)
+      table.insert(gist_files, unique_name)
     end
 
     -- Build gh command
@@ -167,17 +194,39 @@ G.update_gist = function(gist_id)
   -- Get files to update
   local files_to_update = G.get_includes(project_dir, config)
   
+  -- Get platform-safe temp directory
+  local temp_base = vim.fn.stdpath("cache") or (vim.loop.os_tmpdir() or "/tmp")
+  local gist_temp_dir = temp_base .. "/p5_gist_update"
+  vim.fn.mkdir(gist_temp_dir, "p")
+  
   -- Update each file in the gist
+  local update_errors = {}
   for _, file_name in ipairs(files_to_update) do
     if file_name ~= "p5.json" then  -- Don't update p5.json in gist
-      local temp_file = "/tmp/p5_gist_" .. vim.fn.fnamemodify(file_name, ":t")
-      vim.fn.system({"cp", project_dir .. "/" .. file_name, temp_file})
+      local temp_file = gist_temp_dir .. "/" .. os.time() .. "_" .. vim.fn.getpid() .. "_" .. vim.fn.fnamemodify(file_name, ":t")
+      local source_path = project_dir .. "/" .. file_name
       
-      local cmd = {"gh", "gist", "edit", gist_id, "--filename", file_name, temp_file}
-      vim.fn.system(cmd)
-      
-      vim.fn.delete(temp_file)
+      -- Copy to temp
+      vim.fn.system({"cp", source_path, temp_file})
+      if vim.v.shell_error ~= 0 then
+        table.insert(update_errors, "Failed to copy: " .. file_name)
+      else
+        -- Edit gist file
+        local cmd = {"gh", "gist", "edit", gist_id, "--filename", file_name, temp_file}
+        vim.fn.system(cmd)
+        if vim.v.shell_error ~= 0 then
+          table.insert(update_errors, "Failed to update: " .. file_name)
+        end
+        
+        -- Cleanup temp file
+        vim.fn.delete(temp_file)
+      end
     end
+  end
+  
+  if #update_errors > 0 then
+    core.notify("Gist update partially failed: " .. table.concat(update_errors, ", "), "error")
+    return
   end
   
   core.notify("Gist updated successfully", "ok")
