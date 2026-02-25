@@ -182,11 +182,21 @@ G.update_gist = function(gist_id)
   
   core.notify("Gist updated successfully", "ok")
   
-  -- Open in browser
+  -- Open in browser (cross-platform)
   if config.gist then
     local url = type(config.gist) == "string" and config.gist or config.gist.url
     if url then
-      vim.fn.system({ "xdg-open", url })
+      if vim.ui and vim.ui.open then
+        vim.ui.open(url)
+      else
+        local open_cmd = "xdg-open"
+        if vim.fn.has("mac") == 1 then
+          open_cmd = "open"
+        elseif vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
+          open_cmd = "start"
+        end
+        vim.fn.system({ open_cmd, url })
+      end
     end
   end
 end
