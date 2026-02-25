@@ -91,10 +91,8 @@ G.create_gist = function(description)
     end
 
     table.insert(cmd, "--public")
-    for i, file_name in ipairs(files_to_include_names) do
-      table.insert(cmd, "--filename")
-      table.insert(cmd, file_name)
-      table.insert(cmd, gist_files[i])
+    for _, file_path in ipairs(gist_files) do
+      table.insert(cmd, file_path)
     end
 
     -- Execute gh command
