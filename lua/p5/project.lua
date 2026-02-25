@@ -297,6 +297,33 @@ P.is_p5_project = function(dir)
     return false, "Invalid p5.json format"
   end
   
+  -- Validate config.includes is nil or array of strings
+  if config.includes ~= nil then
+    if type(config.includes) ~= "table" then
+      return false, "p5.json: 'includes' must be an array"
+    end
+    for _, item in ipairs(config.includes) do
+      if type(item) ~= "string" then
+        return false, "p5.json: 'includes' must contain only strings"
+      end
+    end
+  end
+  
+  -- Validate config.libs is nil or object with string values
+  if config.libs ~= nil then
+    if type(config.libs) ~= "table" then
+      return false, "p5.json: 'libs' must be an object"
+    end
+    for key, value in pairs(config.libs) do
+      if type(key) ~= "string" then
+        return false, "p5.json: 'libs' keys must be strings"
+      end
+      if type(value) ~= "string" then
+        return false, "p5.json: 'libs' values must be strings (versions)"
+      end
+    end
+  end
+  
   -- Check for sketch.js (optional but expected)
   local sketch_file = cwd .. "/sketch.js"
   local has_sketch = vim.fn.filereadable(sketch_file) == 1

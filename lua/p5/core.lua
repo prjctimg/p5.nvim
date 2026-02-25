@@ -306,7 +306,7 @@ C.download_file_with_progress = function(url, dest, callback, options)
   return true
 end
 
--- Download file with caching support (simplified version)
+-- Download file with caching support (async version)
 C.download_file = function(url, dest, callback, options)
   options = options or {}
   local use_cache = options.cache ~= false
@@ -325,28 +325,42 @@ C.download_file = function(url, dest, callback, options)
     end
   end
   
-  -- Use vim.fn.system for synchronous download (more reliable)
+  -- Use vim.fn.jobstart for non-blocking download
   local cmd
   if C.command_exists("curl") then
-    cmd = string.format("curl -sL --max-time 30 --insecure '%s' -o '%s'", url, dest)
+    cmd = {"curl", "-sL", "--max-time", "30", url, "-o", dest}
   elseif C.command_exists("wget") then
-    cmd = string.format("wget -q -T 30 -O '%s' '%s'", dest, url)
+    cmd = {"wget", "-q", "-T", "30", "-O", dest, url}
   else
     C.notify("Neither curl nor wget found. Cannot download: " .. url, "error")
     if callback then callback(false) end
     return false
   end
   
-  local result = vim.fn.system(cmd)
-  local success = vim.v.shell_error == 0
+  local job_id = vim.fn.jobstart(cmd, {
+    on_exit = function(_, exit_code)
+      local success = exit_code == 0
+      
+      -- Cache the downloaded file if successful and caching enabled
+      if success and use_cache and cache_file then
+        local content = vim.fn.readfile(dest)
+        if content then
+          vim.fn.writefile(content, cache_file)
+        end
+      end
+      
+      if callback then callback(success) end
+    end
+  })
   
-  -- Cache the downloaded file if successful and caching enabled
-  if success and use_cache and cache_file then
-    vim.fn.system({"cp", dest, cache_file})
+  -- Check if jobstart failed
+  if not job_id or job_id == 0 or job_id < 0 then
+    C.notify("Failed to start download job for: " .. url, "error")
+    if callback then callback(false) end
+    return false
   end
   
-  if callback then callback(success) end
-  return success
+  return true
 end
 
 -- Get remote file size for progress tracking
