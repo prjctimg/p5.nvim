@@ -9,7 +9,7 @@ G.create_gist = function(description)
     return
   end
 
-  local config = core.read_workspace_config()
+  local config = core.find_nearest_p5_config()
   if not config then
     core.notify("Not in a p5.js project", "error")
     return
@@ -89,13 +89,9 @@ end
 
 -- Update existing gist
 G.update_gist = function(gist_id)
-  if not gist_id then
-    core.notify("Gist ID required for update", "error")
-    return
-  end
-
-  if not core.command_exists("gh") then
-    core.notify("GitHub CLI (gh) not found", "error")
+  local config = core.find_nearest_p5_config()
+  if not config then
+    core.notify("Not in a p5.js project", "error")
     return
   end
 

@@ -98,6 +98,29 @@ C.assets_available = function()
 end
 
 -- Read workspace configuration
+C.find_nearest_p5_config = function()
+  local current_dir = vim.fn.getcwd()
+  local search_dir = current_dir
+  
+  while #search_dir > 1 do
+    local config_file = search_dir .. "/p5.json"
+    if vim.fn.filereadable(config_file) == 1 then
+      local content = vim.fn.readfile(config_file)
+      return vim.fn.json_decode(table.concat(content, "\n"))
+    end
+    
+    -- Move up one directory level
+    local parent_dir = vim.fn.fnamemodify(search_dir, ":h")
+    if parent_dir == search_dir then
+      break
+    end
+    search_dir = parent_dir
+  end
+  
+  return nil
+end
+
+-- Keep original function for backward compatibility
 C.read_workspace_config = function()
   local config_file = vim.fn.getcwd() .. "/p5.json"
   if vim.fn.filereadable(config_file) == 1 then

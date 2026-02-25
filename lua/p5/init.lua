@@ -52,7 +52,7 @@ I.setup = function(opts)
   vim.api.nvim_create_user_command("P5", function()
     local srv = require("p5.server")
     local core = require("p5.core")
-    local config = core.read_workspace_config()
+    local config = core.find_nearest_p5_config()
     local server_status = srv.server_job and "Stop server" or "Start server"
     
     local options = {
@@ -62,12 +62,8 @@ I.setup = function(opts)
       server_status,
       "Toggle console",
       "Open docs",
+      "Create/update Gist",
     }
-    
-    -- Add Update Gist if a gist is associated with this project
-    if config and config.gist and config.gist.id then
-      table.insert(options, 6, "Update Gist")
-    end
     
     vim.ui.select(options, { prompt = "p5.nvim:" }, function(choice)
       if choice == "Create new project" then
@@ -80,10 +76,10 @@ I.setup = function(opts)
         vim.cmd("P5Server")
       elseif choice == "Toggle console" then
         vim.cmd("P5Console")
-      elseif choice == "Update Gist" then
-        vim.cmd("P5GistUpdate")
       elseif choice == "Open docs" then
         vim.cmd("help p5-nvim")
+      elseif choice == "Create/update Gist" then
+        vim.cmd("P5Gist")
       end
     end)
   end, { nargs = 0 })
