@@ -49,7 +49,7 @@ A Neovim plugin for creative coding with p5.js.
 | `:P5Setup` | Setup assets in current sketchspace |
 | `:P5Install [libs...]` | Install libraries (picker or direct, requires sketchspace) |
 | `:P5Uninstall [libs...]` | Remove libraries (picker or direct, requires sketchspace) |
-| `:P5Sync [gist|libs]` | Sync gist or libraries |
+| `:P5Sync [gist\|libs]` | Sync gist or libraries |
 | `:P5Server [port]` | Start/stop development server (toggle) |
 | `:P5Console` | Toggle browser console |
 | `:P5Docs` | Open p5.js docs via snacks.picker |

@@ -328,7 +328,7 @@ C.download_file = function(url, dest, callback, options)
   -- Use vim.fn.jobstart for non-blocking download
   local cmd
   if C.command_exists("curl") then
-    cmd = {"curl", "-sL", "--max-time", "30", "--insecure", url, "-o", dest}
+    cmd = {"curl", "-sL", "--max-time", "30", url, "-o", dest}
   elseif C.command_exists("wget") then
     cmd = {"wget", "-q", "-T", "30", "-O", dest, url}
   else
@@ -337,18 +337,28 @@ C.download_file = function(url, dest, callback, options)
     return false
   end
   
-  vim.fn.jobstart(cmd, {
+  local job_id = vim.fn.jobstart(cmd, {
     on_exit = function(_, exit_code)
       local success = exit_code == 0
       
       -- Cache the downloaded file if successful and caching enabled
       if success and use_cache and cache_file then
-        vim.fn.system({"cp", dest, cache_file})
+        local content = vim.fn.readfile(dest)
+        if content then
+          vim.fn.writefile(content, cache_file)
+        end
       end
       
       if callback then callback(success) end
     end
   })
+  
+  -- Check if jobstart failed
+  if not job_id or job_id == 0 or job_id < 0 then
+    C.notify("Failed to start download job for: " .. url, "error")
+    if callback then callback(false) end
+    return false
+  end
   
   return true
 end

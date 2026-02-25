@@ -10,37 +10,42 @@ G.get_includes = function(proj_dir, config)
   local filtered = {}
   local has_assets = false
   for _, file in ipairs(includes) do
-    -- Validate path for security (prevent path traversal)
-    local is_unsafe = false
-    
-    -- Check for path traversal patterns
-    if file:match("%.%.") then
-      core.notify("Skipping unsafe path (parent dir reference): " .. file, "error")
-      is_unsafe = true
-    -- Check for absolute paths
-    elseif file:match("^/") then
-      core.notify("Skipping absolute path: " .. file, "error")
-      is_unsafe = true
-    -- Check for home directory expansion
-    elseif file:match("^~") then
-      core.notify("Skipping home dir path: " .. file, "error")
-      is_unsafe = true
-    -- Check for Windows drive letters
-    elseif file:match("^[A-Za-z]:") then
-      core.notify("Skipping drive letter path: " .. file, "error")
-      is_unsafe = true
-    -- Check for NUL bytes
-    elseif file:match("%z") then
-      core.notify("Skipping path with null byte: " .. file, "error")
-      is_unsafe = true
-    end
-    
-    if is_unsafe then
-      -- Skip this entry
-    elseif file:match("^assets/") or file:match("^assets$") then
-      has_assets = true
+    -- Ensure file is a string
+    if type(file) ~= "string" then
+      core.notify("Skipping non-string include: " .. tostring(file), "error")
     else
-      table.insert(filtered, file)
+      -- Validate path for security (prevent path traversal)
+      local is_unsafe = false
+      
+      -- Check for path traversal patterns
+      if file:match("%.%.") then
+        core.notify("Skipping unsafe path (parent dir reference): " .. file, "error")
+        is_unsafe = true
+      -- Check for absolute paths
+      elseif file:match("^/") then
+        core.notify("Skipping absolute path: " .. file, "error")
+        is_unsafe = true
+      -- Check for home directory expansion
+      elseif file:match("^~") then
+        core.notify("Skipping home dir path: " .. file, "error")
+        is_unsafe = true
+      -- Check for Windows drive letters
+      elseif file:match("^[A-Za-z]:") then
+        core.notify("Skipping drive letter path: " .. file, "error")
+        is_unsafe = true
+      -- Check for NUL bytes
+      elseif file:match("%z") then
+        core.notify("Skipping path with null byte: " .. file, "error")
+        is_unsafe = true
+      end
+      
+      if is_unsafe then
+        -- Skip this entry
+      elseif file:match("^assets/") or file:match("^assets$") then
+        has_assets = true
+      else
+        table.insert(filtered, file)
+      end
     end
   end
   
@@ -91,19 +96,28 @@ G.create_gist = function(description)
     local gist_files = {}
     
     -- Get platform-safe temp directory
-    local temp_base = vim.fn.stdpath("cache") or (vim.loop.os_tmpdir() or "/tmp")
+    local temp_base = vim.fn.stdpath("cache") or (vim.uv.os_tmpdir() or "/tmp")
     local gist_temp_dir = temp_base .. "/p5_gist"
     vim.fn.mkdir(gist_temp_dir, "p")
     
-    -- Copy files to include
+    -- Copy files to include into unique subdirectory
+    local unique_dir = gist_temp_dir .. "/" .. os.time() .. "_" .. vim.fn.getpid()
+    vim.fn.mkdir(unique_dir, "p")
+    
     for _, file_name in ipairs(files_to_include_names) do
-      local unique_name = gist_temp_dir .. "/" .. os.time() .. "_" .. vim.fn.getpid() .. "_" .. file_name
+      local target_path = unique_dir .. "/" .. file_name
       local source_path = vim.fn.fnamemodify(proj_dir .. "/" .. file_name, ":p")
       
-      vim.fn.system({"cp", source_path, unique_name})
+      vim.fn.system({"cp", source_path, target_path})
+      if vim.v.shell_error ~= 0 then
+        core.notify("Failed to copy file: " .. file_name, "error")
+        -- Clean up and return
+        vim.fn.delete(unique_dir, "rf")
+        return
+      end
       
-      table.insert(temp_files, unique_name)
-      table.insert(gist_files, unique_name)
+      table.insert(temp_files, target_path)
+      table.insert(gist_files, target_path)
     end
 
     -- Build gh command
@@ -127,10 +141,13 @@ G.create_gist = function(description)
     local exit_code = vim.v.shell_error
 
     -- Clean up temporary files
-    for _, temp_file in ipairs(temp_files) do
-      vim.fn.delete(temp_file)
+    vim.fn.delete(unique_dir, "rf")
+    
+    if exit_code ~= 0 then
+      core.notify("Failed to create gist: " .. result, "error")
+      return
     end
-
+    
     -- Extract gist URL and ID from result
     local url = result:match("https://gist%.github%.com/%S+")
     
@@ -195,7 +212,7 @@ G.update_gist = function(gist_id)
   local files_to_update = G.get_includes(project_dir, config)
   
   -- Get platform-safe temp directory
-  local temp_base = vim.fn.stdpath("cache") or (vim.loop.os_tmpdir() or "/tmp")
+  local temp_base = vim.fn.stdpath("cache") or (vim.uv.os_tmpdir() or "/tmp")
   local gist_temp_dir = temp_base .. "/p5_gist_update"
   vim.fn.mkdir(gist_temp_dir, "p")
   
@@ -238,13 +255,15 @@ G.update_gist = function(gist_id)
       if vim.ui and vim.ui.open then
         vim.ui.open(url)
       else
-        local open_cmd = "xdg-open"
+        local open_cmd
         if vim.fn.has("mac") == 1 then
-          open_cmd = "open"
+          open_cmd = {"open", url}
         elseif vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
-          open_cmd = "start"
+          open_cmd = {"cmd", "/c", "start", "", url}
+        else
+          open_cmd = {"xdg-open", url}
         end
-        vim.fn.system({ open_cmd, url })
+        vim.fn.system(open_cmd)
       end
     end
   end
