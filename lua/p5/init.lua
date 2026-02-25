@@ -104,8 +104,9 @@ I.setup = function(opts)
   end, { nargs = 0 })
 
   -- P5 create [name]
-  vim.api.nvim_create_user_command("P5Create", function(args)
-    if not args.fargs[1] then
+  vim.api.nvim_create_user_command("P5Create", function(opts)
+    local name = opts.args and #opts.args > 0 and opts.args[1] or nil
+    if not name then
       vim.ui.input({
         prompt = "Sketchspace name: ",
         default = "p5-sketch",
@@ -116,16 +117,21 @@ I.setup = function(opts)
         end
       end)
     else
-      require("p5.project").create_project(args.fargs[1])
+      require("p5.project").create_project(name)
     end
   end, { nargs = "?" })
 
   -- P5 install [libs...]
-  vim.api.nvim_create_user_command("P5Install", function(args)
+  vim.api.nvim_create_user_command("P5Install", function(opts)
     if not require_sketchspace("Install") then return end
     
-    if #args.fargs == 0 then
+    local lib_names = opts.args and #opts.args > 0 and opts.args or nil
+    if not lib_names then
       local libs = require("p5.libraries").get_available_libs()
+      if not libs or #libs == 0 then
+        core.notify("No libraries available", "warn")
+        return
+      end
       local items = {}
       local lib_map = {}
       for _, lib in ipairs(libs) do
@@ -146,15 +152,16 @@ I.setup = function(opts)
         end
       end)
     else
-      require("p5.libraries").install_libs(args.fargs)
+      require("p5.libraries").install_libs(lib_names)
     end
   end, { nargs = "*" })
 
   -- P5 uninstall [libs...]
-  vim.api.nvim_create_user_command("P5Uninstall", function(args)
+  vim.api.nvim_create_user_command("P5Uninstall", function(opts)
     if not require_sketchspace("Uninstall") then return end
     
-    if #args.fargs == 0 then
+    local lib_names = opts.args and #opts.args > 0 and opts.args or nil
+    if not lib_names then
       local installed = require("p5.libraries").get_installed_libs()
       if #installed == 0 then
         core.notify("No contrib libraries installed", "warn")
@@ -173,7 +180,7 @@ I.setup = function(opts)
         end
       end)
     else
-      require("p5.libraries").uninstall_libs(args.fargs)
+      require("p5.libraries").uninstall_libs(lib_names)
     end
   end, { nargs = "*" })
 
@@ -182,9 +189,7 @@ I.setup = function(opts)
     local snacks = core.require_snacks()
     if snacks and snacks.picker then
       snacks.picker({
-        source = {
-          name = "Help",
-        },
+        source = "help",
         search = "p5",
       })
     else
@@ -193,8 +198,8 @@ I.setup = function(opts)
   end, { nargs = 0 })
 
   -- P5 sync [gist|libs]
-  vim.api.nvim_create_user_command("P5Sync", function(args)
-    local target = args.fargs[1]
+  vim.api.nvim_create_user_command("P5Sync", function(opts)
+    local target = opts.args and opts.args[1] or nil
     
     if not target then
       vim.ui.select({"Gist", "Libraries"}, { prompt = "What to sync:" }, function(choice)
@@ -221,12 +226,16 @@ I.setup = function(opts)
   end, { nargs = 0 })
 
   -- P5 server [port]
-  vim.api.nvim_create_user_command("P5Server", function(args)
+  vim.api.nvim_create_user_command("P5Server", function(opts)
     local srv = require("p5.server")
     if srv.server_job then
       srv.stop_server()
     else
-      srv.start_server(tonumber(args.fargs[1]))
+      local port = nil
+      if opts.args and opts.args[1] then
+        port = tonumber(opts.args[1])
+      end
+      srv.start_server(port)
     end
   end, { nargs = "?" })
 
@@ -236,9 +245,10 @@ I.setup = function(opts)
   end, { nargs = 0 })
 
   -- P5 gist [description]
-  vim.api.nvim_create_user_command("P5Gist", function(args)
+  vim.api.nvim_create_user_command("P5Gist", function(opts)
     if not require_sketchspace("Gist") then return end
-    require("p5.gist").create_gist(args.fargs[1])
+    local desc = opts.args and opts.args[1] or nil
+    require("p5.gist").create_gist(desc)
   end, { nargs = "?" })
 
   -- P5 gist-update (legacy, use P5Sync gist instead)
