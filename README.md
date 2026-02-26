@@ -35,25 +35,33 @@ A Neovim plugin for creative coding with p5.js.
 ## Quick Start
 
 ```vim
-:P5Create my-sketch
-:P5Server
-:P5Console
+:P5 create my-sketch
+:P5 server
+:P5 console
+```
+
+Or use the interactive picker:
+
+```vim
+:P5
+:P5 menu
 ```
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `:P5` | Main picker with all options |
-| `:P5Create [name]` | Create new sketchspace |
-| `:P5Setup` | Setup assets in current sketchspace |
-| `:P5Install [libs...]` | Install libraries (picker or direct, requires sketchspace) |
-| `:P5Uninstall [libs...]` | Remove libraries (picker or direct, requires sketchspace) |
-| `:P5Sync [gist\|libs]` | Sync gist or libraries |
-| `:P5Server [port]` | Start/stop development server (toggle) |
-| `:P5Console` | Toggle browser console |
-| `:P5Docs` | Open p5.js docs via snacks.picker |
-| `:P5Gist [desc]` | Create GitHub Gist (requires sketchspace) |
+| `:P5` or `:P5 menu` | Interactive picker with all options |
+| `:P5 create [name]` | Create new sketchspace |
+| `:P5 setup` | Setup assets in current sketchspace |
+| `:P5 install [libs...]` | Install libraries (picker or direct, requires sketchspace) |
+| `:P5 uninstall [libs...]` | Remove libraries (picker or direct, requires sketchspace) |
+| `:P5 sync [gist|libs]` | Sync gist or libraries |
+| `:P5 server [port]` | Start/stop development server (toggle) |
+| `:P5 console` | Toggle browser console |
+| `:P5 docs` | Open p5.js docs via snacks.picker |
+| `:P5 gist [desc]` | Create GitHub Gist (requires sketchspace) |
+| `:P5 update` | Update installed libraries |
 
 ## Sketchspace Structure
 
@@ -87,15 +95,15 @@ my-sketch/
 Install contributor libraries:
 
 ```vim
-:P5Install ml5
-:P5Uninstall ml5
-:P5Sync libs
+:P5 install ml5
+:P5 uninstall ml5
+:P5 sync libs
 ```
 
 ### Install Multiple Libraries
 
 ```vim
-:P5Install ml5 rita p5play
+:P5 install ml5 rita p5play
 ```
 
 ### Available Libraries
@@ -117,8 +125,8 @@ Install contributor libraries:
 Create a Gist from your sketchspace:
 
 ```vim
-:P5Gist "My awesome sketch"
-:P5Sync gist  "Update existing gist"
+:P5 gist "My awesome sketch"
+:P5 sync gist  "Update existing gist"
 ```
 
 The Gist will include files specified in `p5.json` `includes` array. Assets directory is automatically excluded.
