@@ -1,0 +1,364 @@
+p5.nvim 🎨
+
+------------------------------------------------------------------------
+
+  Better editor support for p5.js sketchspaces Neovim.
+
+------------------------------------------------------------------------
+
+[Neovim] [Lua]
+
+Features ✨
+
+-   Live Server 🚀 - Auto-reload preview in browser
+-   Package Management 📦 - Install contributor libraries
+-   Sketchspace 📁 - Minimal project structure
+-   GitHub Gist 🔗 - Share sketches (synced to sketchspace)
+-   Console 📺 - View browser logs in Neovim
+-   p5.js Docs 📖 - Built-in reference via snacks.picker
+
+Requirements 📋
+
+-   Neovim >= 0.9.0
+-   Python 3.7+ (for development server)
+-   curl (for console streaming)
+
+Installation 💾
+
+    -- lazy.nvim
+    {
+      "prjctimg/p5.nvim",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+      },
+      config = function()
+        require("p5").setup({})
+      end
+    }
+
+Quick Start 🚀
+
+    :P5 create my-sketch
+    :P5 server
+    :P5 console
+
+Or use the interactive picker:
+
+    :P5
+    :P5 menu
+
+Commands 📖
+
+🎨 :P5 create [name]
+
+Create a new sketchspace.
+
+    :P5 create my-sketch
+    :P5 create
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+⚙️ :P5 setup
+
+Setup assets in current sketchspace.
+
+Downloads files from gist (if configured), creates default sketch.js if
+missing, copies assets, generates libs.js, and installs configured
+libraries.
+
+    :P5 setup
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+📥 :P5 install [libs…]
+
+Install contributor libraries. Use picker or specify directly.
+
+    :P5 install ml5
+    :P5 install ml5 rita p5play
+    :P5 install
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+🗑️ :P5 uninstall [libs…]
+
+Remove installed libraries.
+
+    :P5 uninstall ml5
+    :P5 uninstall
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+🚀 :P5 server [port]
+
+Start/stop the development server (toggle). Opens browser automatically
+and enables live reload.
+
+    :P5 server
+    :P5 server 8080
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+📺 :P5 console
+
+Toggle browser console to view console.log, errors, and warnings in
+Neovim.
+
+    :P5 console
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+🔄 :P5 sync [gist|libs]
+
+Sync gist or libraries.
+
+    :P5 sync gist
+    :P5 sync libs
+    :P5 sync
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+📤 :P5 update
+
+Update all installed libraries to latest versions.
+
+    :P5 update
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+🔗 :P5 gist [desc]
+
+Create a GitHub Gist from your sketchspace.
+
+    :P5 gist "My awesome sketch"
+    :P5 gist
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+📖 :P5 docs
+
+Open p5.js documentation via snacks.picker.
+
+    :P5 docs
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+🎯 :P5 (menu)
+
+Interactive picker with all available options.
+
+    :P5
+    :P5 menu
+
+[asciicast]
+
+------------------------------------------------------------------------
+
+Configuration ⚡
+
+    require("p5").setup({
+      -- Server settings
+      server = {
+        port = 8000,                    -- Server port
+        auto_start = false,             -- Auto start server when opening sketch.js
+        auto_open_browser = true,      -- Open browser automatically
+        ready_timeout = 5000,           -- Server ready timeout (ms)
+        fallback_ports = {8001, 8002, 8003},  -- Ports to try if default is busy
+
+        -- Live reload settings
+        live_reload = {
+          enabled = true,               -- Enable live reload
+          port = 12002,                -- Live reload port
+          debounce_ms = 300,           -- Debounce delay
+          watch_extensions = {".js", ".css", ".html", ".json"},  -- Files to watch
+          exclude_dirs = {".git", "node_modules", "dist", "build"}  -- Exclude directories
+        }
+      },
+
+      -- Console settings
+      console = {
+        position = "below",             -- Window position: below, above, left, right
+        height = 10,                    -- Window height (lines)
+      },
+
+      -- Library settings
+      libraries = {
+        auto_update = false            -- Auto update libraries on setup
+      }
+    })
+
+Auto Commands 🔌
+
+Auto-start server when opening a sketch.js file:
+
+    -- Auto-start server when opening sketch.js
+    vim.api.nvim_create_autocmd({ "BufEnter" }, {
+      pattern = "sketch.js",
+      callback = function()
+        vim.cmd("P5 server")
+      end
+    })
+
+    -- Auto-open console when server starts
+    vim.api.nvim_create_autocmd({ "User", "P5ServerStarted" }, {
+      callback = function()
+        vim.cmd("P5 console")
+      end
+    })
+
+Keyboard Shortcuts ⌨️
+
+Recommended keybindings using <leader>p prefix:
+
+    -- General
+    vim.keymap.set("n", "<leader>p5", ":P5 menu<CR>", { desc = "Open p5.nvim menu" })
+
+    -- Project
+    vim.keymap.set("n", "<leader>pc", ":P5 create ", { desc = "Create project" })
+    vim.keymap.set("n", "<leader>ps", ":P5 setup<CR>", { desc = "Setup project" })
+
+    -- Server
+    vim.keymap.set("n", "<leader>pss", ":P5 server<CR>", { desc = "Toggle server" })
+    vim.keymap.set("n", "<leader>pso", ":P5 console<CR>", { desc = "Toggle console" })
+
+    -- Libraries
+    vim.keymap.set("n", "<leader>pi", ":P5 install ", { desc = "Install library" })
+    vim.keymap.set("n", "<leader>pu", ":P5 uninstall ", { desc = "Uninstall library" })
+    vim.keymap.set("n", "<leader>pU", ":P5 update<CR>", { desc = "Update libraries" })
+
+    -- Gist
+    vim.keymap.set("n", "<leader>pg", ":P5 gist ", { desc = "Create gist" })
+    vim.keymap.set("n", "<leader>pgg", ":P5 sync gist<CR>", { desc = "Sync gist" })
+
+    -- Docs
+    vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
+
+Troubleshooting 🔧
+
+🚀 Server Won’t Start
+
+Symptoms: Running :P5 server shows an error or nothing happens.
+
+Solutions:
+
+1.  Ensure Python 3 is installed:
+
+        python3 --version
+
+2.  Check if the port is already in use:
+
+        lsof -i :8000
+
+3.  Try a different port:
+
+        :P5 server 8080
+
+4.  Check Neovim notifications for specific error messages
+
+------------------------------------------------------------------------
+
+📥 Downloads Not Working
+
+Library installation fails or downloads timeout.
+
+Solutions:
+
+1.  Ensure curl is installed:
+
+        curl --version
+
+2.  Check internet connection:
+
+        curl -I https://cdnjs.cloudflare.com
+
+3.  Verify firewall isn’t blocking localhost connections
+
+4.  Check that you’re in a valid sketchspace (has p5.json)
+
+------------------------------------------------------------------------
+
+🔗 Gist Upload/Sync Fails
+
+:P5 gist or :P5 sync gist shows an error.
+
+Solutions:
+
+1.  Ensure GitHub CLI is installed:
+
+        gh --version
+
+2.  Authenticate with GitHub:
+
+        gh auth login
+
+3.  Verify gist URL in p5.json is valid:
+
+        :edit p5.json
+
+4.  For sync failures, the gist may have been deleted - run :P5 gist to
+    create a new one
+
+------------------------------------------------------------------------
+
+📦 Library Install/Uninstall Fails
+
+:P5 install or :P5 uninstall shows an error.
+
+Solutions:
+
+1.  Verify you’re in a sketchspace (has p5.json):
+
+        ls p5.json
+
+2.  Check assets/libs directory is writable:
+
+        ls -la assets/libs
+
+3.  Run setup first to initialize:
+
+        :P5 setup
+
+------------------------------------------------------------------------
+
+p5.json Format
+
+    {
+      "version": "1.9.0",
+      "libs": {
+        "ml5": "latest"
+      },
+      "includes": ["sketch.js"],
+      "gist": "https://gist.github.com/..."
+    }
+
+-   version: p5.js version to use
+-   libs: Object with library names as keys and versions as values
+-   includes: Files to include in Gist (default: ["sketch.js"])
+-   gist: URL of associated GitHub Gist (optional)
+
+------------------------------------------------------------------------
+
+License 📜
+
+(c) 2026, Dean, Tarisai. This is free software, released under the
+    GPL-3.0 license.
