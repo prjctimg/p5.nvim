@@ -46,24 +46,6 @@ L.load = function()
   return libs
 end
 
--- Get libs as an object {name: version}
-L.get_libs = function()
-  local config = core.read_workspace_config()
-  return config and config.libs or {}
-end
-
--- Get includes array from config
-L.get_includes = function()
-  local config = core.read_workspace_config()
-  return config and config.includes or {"sketch.js"}
-end
-
--- Check if library is installed
-L.is_installed = function(lib_name)
-  local libs = L.load()
-  return vim.tbl_contains(libs, lib_name)
-end
-
 -- Get library info from contrib libs
 L.get_library_info = function(lib_name)
   for _, lib in ipairs(L.contrib_libs) do
@@ -72,39 +54,6 @@ L.get_library_info = function(lib_name)
     end
   end
   return nil
-end
-
--- Get latest version from GitHub
-L.get_latest_version = function(lib, callback)
-  if not lib.github_repo then
-    if callback then callback(nil) end
-    return
-  end
-  
-  local api_url = string.format("https://api.github.com/repos/%s/releases/%s", lib.github_repo, lib.github_release or "latest")
-  
-  local cmd = {"curl", "-s", api_url}
-  vim.fn.jobstart(cmd, {
-    on_stdout = function(_, data)
-      if not data or #data == 0 then
-        if callback then callback(nil) end
-        return
-      end
-      
-      local content = table.concat(data, "\n")
-      local ok, release_info = pcall(vim.fn.json_decode, content)
-      
-      if ok and release_info and release_info.tag_name then
-        local version = release_info.tag_name:gsub("^v", "")
-        if callback then callback(version) end
-      else
-        if callback then callback(nil) end
-      end
-    end,
-    on_stderr = function()
-      if callback then callback(nil) end
-    end
-  })
 end
 
 -- Add library to project
@@ -129,20 +78,6 @@ L.add_library = function(lib_name, version)
   core.write_workspace_config(config)
 end
 
--- Remove library from project
-L.remove_library = function(lib_name)
-  local config = core.read_workspace_config()
-  if not config or not config.libs then
-    return
-  end
-  
-  if config.libs[lib_name] then
-    config.libs[lib_name] = nil
-  end
-  
-  core.write_workspace_config(config)
-end
-
 -- Get list of installed libraries from project
 L.get_installed_libs = function()
   local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
@@ -162,24 +97,6 @@ L.get_installed_libs = function()
   end
   
   return installed
-end
-
--- Check for conflicts before installing
-L.check_conflicts = function(lib_name)
-  local result = { has_config = false, has_file = false }
-  local config = core.read_workspace_config()
-  
-  if config and config.libs and config.libs[lib_name] then
-    result.has_config = true
-  end
-  
-  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
-  local js_file = libs_dir .. "/" .. lib_name .. ".js"
-  if vim.fn.filereadable(js_file) == 1 then
-    result.has_file = true
-  end
-  
-  return result
 end
 
 -- Validate and clean broken links in index.html
@@ -226,27 +143,6 @@ L.validate_libs = function()
   end
   
   return { cleaned = cleaned }
-end
-
--- Show conflict resolution picker
-L.show_conflict_picker = function(lib_name, callback)
-  local options = {"Replace existing", "Skip", "Cancel"}
-
-  vim.ui.select(options, {
-    prompt = "Library '" .. lib_name .. "' already exists:",
-  }, function(choice)
-    if not choice then
-      callback("cancel")
-      return
-    end
-    if choice == "Replace existing" then
-      callback("replace")
-    elseif choice == "Skip" then
-      callback("skip")
-    else
-      callback("cancel")
-    end
-  end)
 end
 
 -- Uninstall libraries (remove files and update config)
@@ -307,51 +203,6 @@ L.uninstall_libs = function(lib_names)
   if #failed > 0 then
     core.notify("Failed to remove: " .. table.concat(failed, ", "), "error")
   end
-end
-
--- Show uninstall picker with multiselect
-L.show_uninstall_picker = function()
-  local installed = L.get_installed_libs()
-  local snacks = core.require_snacks()
-
-  if #installed == 0 then
-    core.notify("No contrib libraries installed", "warn")
-    return
-  end
-
-  if not snacks then
-    vim.ui.select(installed, { prompt = "Select library to uninstall:" }, function(selected)
-      if selected then
-        L.uninstall_libs({selected.name})
-      end
-    end)
-    return
-  end
-
-  local items = vim.tbl_map(function(lib)
-    return {
-      label = lib.name,
-      detail = lib.file,
-      value = lib.name,
-    }
-  end, installed)
-
-  snacks.picker({
-    prompt = "Uninstall contributor libraries",
-    items = items,
-    multi = true,
-    on_confirm = function(selected)
-      if not selected or vim.tbl_isempty(selected) then
-        core.notify("No libraries selected", "info")
-        return
-      end
-      local names = {}
-      for _, item in ipairs(selected) do
-        table.insert(names, item.value or item.label)
-      end
-      L.uninstall_libs(names)
-    end
-  })
 end
 
 -- Generate static libs.js that reads from p5.json at runtime
@@ -415,55 +266,6 @@ L.generate_libs_js = function(project_path)
   vim.fn.writefile(vim.split(js_content, "\n"), libs_js)
 end
 
--- Deprecated: Use generate_libs_js() instead
--- Kept for backward compatibility with old projects
-L.update_index_html = function()
-  local index_file = vim.fn.getcwd() .. "/index.html"
-  if vim.fn.filereadable(index_file) == 0 then
-    return
-  end
-  
-  local libs = L.load()
-  local content = vim.fn.readfile(index_file)
-  local html = table.concat(content, "\n")
-  
-  -- Generate new script tags
-  local script_tags = {}
-  for _, lib in ipairs(libs) do
-    table.insert(script_tags, '  <script src="assets/libs/' .. lib .. '.js"></script>')
-  end
-  local new_section = "  <!-- P5 SCRIPTS -->\n" .. table.concat(script_tags, "\n") .. "\n  <!-- END P5 SCRIPTS -->"
-  
-  -- Remove ALL existing P5 SCRIPTS sections first
-  local pattern = "<!--%s*P5 SCRIPTS%s*-->.-<!--%s*END P5 SCRIPTS%s*-->"
-  while true do
-    local found_start, found_end = html:find(pattern)
-    if not found_start then
-      break
-    end
-    -- Remove the entire section
-    html = html:sub(1, found_start - 1) .. html:sub(found_end + 1)
-  end
-  
-  -- Add new section after <body> tag
-  local body_tag = "<body>"
-  local body_pos = html:find(body_tag, 1, true)
-  if not body_pos then
-    body_tag = "<body "
-    body_pos = html:find(body_tag, 1, true)
-  end
-  if body_pos then
-    -- Find the end of the body opening tag
-    local tag_end = body_pos
-    while tag_end <= #html and html:sub(tag_end, tag_end) ~= ">" do
-      tag_end = tag_end + 1
-    end
-    -- Insert after the body opening tag
-    html = html:sub(1, tag_end) .. "\n" .. new_section .. html:sub(tag_end + 1)
-  end
-  
-  vim.fn.writefile(vim.split(html, "\n"), index_file)
-end
 
 -- Get available libraries for picker
 L.get_available_libs = function()
@@ -483,59 +285,6 @@ L.get_available_libs = function()
   end
   
   return items
-end
-
--- Show library picker with multiselect
-L.show_library_picker = function(callback)
-  local items = L.get_available_libs()
-  local snacks = core.require_snacks()
-
-  if not snacks then
-    vim.ui.select(items, { prompt = "Select library to install:" }, function(selected)
-      if selected then
-        callback({selected})
-      else
-        callback(nil)
-      end
-    end)
-    return
-  end
-
-  local picker_items = vim.tbl_map(function(lib)
-    local detail = lib.description or ""
-    local status = lib.status or ""
-    if status ~= "" then
-      detail = detail .. " " .. status
-    end
-    return {
-      label = lib.name,
-      detail = detail,
-      value = lib.name,
-    }
-  end, items)
-
-  snacks.picker({
-    prompt = "Install contributor libraries",
-    items = picker_items,
-    multi = true,
-    on_confirm = function(selected)
-      if not selected or vim.tbl_isempty(selected) then
-        callback(nil)
-        return
-      end
-      local result = {}
-      for _, item in ipairs(selected) do
-        local lib_name = item.value or item.label
-        for _, lib in ipairs(items) do
-          if lib.name == lib_name then
-            table.insert(result, lib)
-            break
-          end
-        end
-      end
-      callback(result)
-    end
-  })
 end
 
 -- Validate downloaded file contains actual JavaScript code
@@ -691,49 +440,6 @@ L.do_install = function(to_install)
       end
     end)
   end
-end
-
--- Prompt for library installation with version check
-L.prompt_install = function(selected)
-  if not selected or #selected == 0 then
-    return
-  end
-  
-  local to_install = {}
-  local to_update = {}
-  
-  for _, item in ipairs(selected) do
-    local lib_name = type(item) == "table" and item.name or item
-    local lib = L.get_library_info(lib_name)
-    
-    if lib then
-      if L.is_installed(lib_name) then
-        table.insert(to_update, lib)
-      else
-        table.insert(to_install, lib_name)
-      end
-    end
-  end
-  
-  if #to_install > 0 then
-    L.install_libs(to_install)
-  end
-  
-  if #to_update > 0 then
-    local names = {}
-    for _, lib in ipairs(to_update) do
-      table.insert(names, lib.name)
-    end
-    core.notify("Reinstalling: " .. table.concat(names, ", "), "info")
-    L.install_libs(names)
-  end
-end
-
--- Show picker and install
-L.show_and_install = function()
-  L.show_library_picker(function(selected)
-    L.prompt_install(selected)
-  end)
 end
 
 -- Update all installed libraries
