@@ -1,6 +1,10 @@
 # p5.nvim 🎨
 
-A Neovim plugin for creative coding with p5.js.
+---
+
+> Better editor support for p5.js sketchspaces Neovim.
+
+---
 
 [![Neovim](https://img.shields.io/badge/Neovim-0.9%2B-blue.svg)](https://neovim.io)
 [![Lua](https://img.shields.io/badge/Lua-5.1%2B-blue.svg)](https://lua.org)
@@ -9,10 +13,10 @@ A Neovim plugin for creative coding with p5.js.
 
 - **Live Server** 🚀 - Auto-reload preview in browser
 - **Package Management** 📦 - Install contributor libraries
-- **Sketchspace** 📁 - Minimal project structure (p5.json + sketch.js)
+- **Sketchspace** 📁 - Minimal project structure
 - **GitHub Gist** 🔗 - Share sketches (synced to sketchspace)
 - **Console** 📺 - View browser logs in Neovim
-- **p5 Docs** 📖 - Built-in help via snacks.picker
+- **p5.js Docs** 📖 - Built-in reference via snacks.picker
 
 ## Requirements 📋
 
@@ -54,7 +58,7 @@ Or use the interactive picker:
 
 ### 🎨 :P5 create [name]
 
-Create a new sketchspace project.
+Create a new sketchspace.
 
 ```vim
 :P5 create my-sketch
@@ -67,7 +71,9 @@ Create a new sketchspace project.
 
 ### ⚙️ :P5 setup
 
-Setup assets in current sketchspace. Downloads files from gist (if configured), creates default sketch.js if missing, copies assets, generates libs.js, and installs configured libraries.
+Setup assets in current sketchspace.
+
+Downloads files from gist (if configured), creates default sketch.js if missing, copies assets, generates libs.js, and installs configured libraries.
 
 ```vim
 :P5 setup
@@ -285,17 +291,21 @@ vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
 **Symptoms:** Running `:P5 server` shows an error or nothing happens.
 
 **Solutions:**
+
 1. Ensure Python 3 is installed:
+
    ```bash
    python3 --version
    ```
 
 2. Check if the port is already in use:
+
    ```bash
    lsof -i :8000
    ```
 
 3. Try a different port:
+
    ```vim
    :P5 server 8080
    ```
@@ -306,15 +316,18 @@ vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
 
 ### 📥 Downloads Not Working
 
-**Symptoms:** Library installation fails or downloads timeout.
+Library installation fails or downloads timeout.
 
 **Solutions:**
+
 1. Ensure curl is installed:
+
    ```bash
    curl --version
    ```
 
 2. Check internet connection:
+
    ```bash
    curl -I https://cdnjs.cloudflare.com
    ```
@@ -327,20 +340,24 @@ vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
 
 ### 🔗 Gist Upload/Sync Fails
 
-**Symptoms:** `:P5 gist` or `:P5 sync gist` shows an error.
+`:P5 gist` or `:P5 sync gist` shows an error.
 
 **Solutions:**
+
 1. Ensure GitHub CLI is installed:
+
    ```bash
    gh --version
    ```
 
 2. Authenticate with GitHub:
+
    ```bash
    gh auth login
    ```
 
 3. Verify gist URL in p5.json is valid:
+
    ```vim
    :edit p5.json
    ```
@@ -351,46 +368,29 @@ vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
 
 ### 📦 Library Install/Uninstall Fails
 
-**Symptoms:** `:P5 install` or `:P5 uninstall` shows an error.
+`:P5 install` or `:P5 uninstall` shows an error.
 
 **Solutions:**
+
 1. Verify you're in a sketchspace (has p5.json):
+
    ```bash
    ls p5.json
    ```
 
 2. Check assets/libs directory is writable:
+
    ```bash
    ls -la assets/libs
    ```
 
 3. Run setup first to initialize:
+
    ```vim
    :P5 setup
    ```
 
-4. Check Neovim notifications for specific error messages
-
-5. Try manually installing:
-   ```bash
-   cd assets/libs
-   curl -O <library-url>
-   ```
-
 ---
-
-## Sketchspace Structure 📂
-
-A sketchspace is a directory containing:
-
-```
-my-sketch/
-├── p5.json       # Configuration (version, libs, includes)
-├── sketch.js     # Your p5.js code
-└── assets/      # Library files (auto-managed)
-    ├── libs/    # Contributor libraries
-    └── types/   # TypeScript definitions
-```
 
 ### p5.json Format
 
@@ -414,4 +414,5 @@ my-sketch/
 
 ## License 📜
 
-MIT
+(c) 2026, Dean, Tarisai.
+This is free software, released under the GPL-3.0 license.

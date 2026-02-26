@@ -211,8 +211,7 @@ function draw() {
   handlers.docs = function()
     local snacks = core.require_snacks()
     if snacks and snacks.picker then
-      snacks.picker({
-        source = "help",
+      snacks.picker.help({
         search = "p5",
       })
     else
