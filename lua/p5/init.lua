@@ -209,14 +209,7 @@ function draw() {
   end
 
   handlers.docs = function()
-    local snacks = core.require_snacks()
-    if snacks and snacks.picker then
-      snacks.picker.help({
-        search = "p5",
-      })
-    else
-      vim.cmd("help p5-nvim")
-    end
+    vim.cmd("help p5.nvim")
   end
 
   handlers.sync = function(args)
