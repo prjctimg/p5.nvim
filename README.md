@@ -65,7 +65,7 @@ Create a new sketchspace.
 :P5 create
 ```
 
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+<a href="https://asciinema.org/a/795753" target="_blank"><img src="https://asciinema.org/a/795753.svg" /></a>
 
 ---
 
@@ -93,8 +93,7 @@ Install contributor libraries. Use picker or specify directly.
 :P5 install
 ```
 
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
-
+<a href="https://asciinema.org/a/795787" target="_blank"><img src="https://asciinema.org/a/795787.svg" /></a>
 ---
 
 ### 🗑️ :P5 uninstall [libs...]
@@ -170,7 +169,7 @@ Create a GitHub Gist from your sketchspace.
 :P5 gist
 ```
 
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+<a href="https://asciinema.org/a/799472" target="_blank"><img src="https://asciinema.org/a/799472.svg" /></a>
 
 ---
 
@@ -182,7 +181,7 @@ Open p5.js documentation via snacks.picker.
 :P5 docs
 ```
 
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+<a href="https://asciinema.org/a/799478" target="_blank"><img src="https://asciinema.org/a/799478.svg" /></a>
 
 ---
 
