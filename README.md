@@ -65,7 +65,7 @@ Create a new sketchspace.
 :P5 create
 ```
 
-<a href="https://asciinema.org/a/795753" target="_blank"><img src="https://asciinema.org/a/795753.svg" /></a>
+[![asciicast](https://asciinema.org/a/795753.svg)](https://asciinema.org/a/795753)
 
 ---
 
