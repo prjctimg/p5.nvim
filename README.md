@@ -169,7 +169,7 @@ Create a GitHub Gist from your sketchspace.
 :P5 gist
 ```
 
-<a href="https://asciinema.org/a/799472" target="_blank"><img src="https://asciinema.org/a/799472.svg" /></a>
+[![asciicast](https://asciinema.org/a/799472.svg)](https://asciinema.org/a/799472)
 
 ---
 
