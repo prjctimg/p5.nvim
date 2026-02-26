@@ -66,19 +66,6 @@ H.check_external_tools = function()
     vim.health.warn("Node.js: not found - optional for live server")
   end
   
-  -- Check Bun
-  if core.command_exists("bun") then
-    vim.health.ok("Bun: available")
-  else
-    vim.health.warn("Bun: not found - optional for live server")
-  end
-  
-  -- Check Deno
-  if core.command_exists("deno") then
-    vim.health.ok("Deno: available")
-  else
-    vim.health.warn("Deno: not found - optional for live server")
-  end
 end
 
 -- Check plugin environment
