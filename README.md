@@ -1,23 +1,26 @@
-# p5.nvim
+# p5.nvim 🎨
 
 A Neovim plugin for creative coding with p5.js.
 
-## Features
+[![Neovim](https://img.shields.io/badge/Neovim-0.9%2B-blue.svg)](https://neovim.io)
+[![Lua](https://img.shields.io/badge/Lua-5.1%2B-blue.svg)](https://lua.org)
 
-- **Live server** - Auto-reload preview in browser
-- **Package management** - Install contributor libraries
-- **Sketchspace** - Minimal project structure (p5.json + sketch.js)
-- **GitHub Gist** - Share sketches (synced to sketchspace)
-- **Console** - View browser logs in Neovim
-- **p5 docs** - Built-in help via snacks.picker
+## Features ✨
 
-## Requirements
+- **Live Server** 🚀 - Auto-reload preview in browser
+- **Package Management** 📦 - Install contributor libraries
+- **Sketchspace** 📁 - Minimal project structure (p5.json + sketch.js)
+- **GitHub Gist** 🔗 - Share sketches (synced to sketchspace)
+- **Console** 📺 - View browser logs in Neovim
+- **p5 Docs** 📖 - Built-in help via snacks.picker
+
+## Requirements 📋
 
 - Neovim >= 0.9.0
 - Python 3.7+ (for development server)
 - curl (for console streaming)
 
-## Installation
+## Installation 💾
 
 ```lua
 -- lazy.nvim
@@ -32,7 +35,7 @@ A Neovim plugin for creative coding with p5.js.
 }
 ```
 
-## Quick Start
+## Quick Start 🚀
 
 ```vim
 :P5 create my-sketch
@@ -47,23 +50,336 @@ Or use the interactive picker:
 :P5 menu
 ```
 
-## Commands
+## Commands 📖
 
-| Command | Description |
-|---------|-------------|
-| `:P5` or `:P5 menu` | Interactive picker with all options |
-| `:P5 create [name]` | Create new sketchspace |
-| `:P5 setup` | Setup assets in current sketchspace |
-| `:P5 install [libs...]` | Install libraries (picker or direct, requires sketchspace) |
-| `:P5 uninstall [libs...]` | Remove libraries (picker or direct, requires sketchspace) |
-| `:P5 sync [gist|libs]` | Sync gist or libraries |
-| `:P5 server [port]` | Start/stop development server (toggle) |
-| `:P5 console` | Toggle browser console |
-| `:P5 docs` | Open p5.js docs via snacks.picker |
-| `:P5 gist [desc]` | Create GitHub Gist (requires sketchspace) |
-| `:P5 update` | Update installed libraries |
+### 🎨 :P5 create [name]
 
-## Sketchspace Structure
+Create a new sketchspace project.
+
+```vim
+:P5 create my-sketch
+:P5 create
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### ⚙️ :P5 setup
+
+Setup assets in current sketchspace. Downloads files from gist (if configured), creates default sketch.js if missing, copies assets, generates libs.js, and installs configured libraries.
+
+```vim
+:P5 setup
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### 📥 :P5 install [libs...]
+
+Install contributor libraries. Use picker or specify directly.
+
+```vim
+:P5 install ml5
+:P5 install ml5 rita p5play
+:P5 install
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### 🗑️ :P5 uninstall [libs...]
+
+Remove installed libraries.
+
+```vim
+:P5 uninstall ml5
+:P5 uninstall
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### 🚀 :P5 server [port]
+
+Start/stop the development server (toggle). Opens browser automatically and enables live reload.
+
+```vim
+:P5 server
+:P5 server 8080
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### 📺 :P5 console
+
+Toggle browser console to view console.log, errors, and warnings in Neovim.
+
+```vim
+:P5 console
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### 🔄 :P5 sync [gist|libs]
+
+Sync gist or libraries.
+
+```vim
+:P5 sync gist
+:P5 sync libs
+:P5 sync
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### 📤 :P5 update
+
+Update all installed libraries to latest versions.
+
+```vim
+:P5 update
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### 🔗 :P5 gist [desc]
+
+Create a GitHub Gist from your sketchspace.
+
+```vim
+:P5 gist "My awesome sketch"
+:P5 gist
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### 📖 :P5 docs
+
+Open p5.js documentation via snacks.picker.
+
+```vim
+:P5 docs
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+### 🎯 :P5 (menu)
+
+Interactive picker with all available options.
+
+```vim
+:P5
+:P5 menu
+```
+
+[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+
+---
+
+## Configuration ⚡
+
+```lua
+require("p5").setup({
+  -- Server settings
+  server = {
+    port = 8000,                    -- Server port
+    auto_start = false,             -- Auto start server when opening sketch.js
+    auto_open_browser = true,      -- Open browser automatically
+    ready_timeout = 5000,           -- Server ready timeout (ms)
+    fallback_ports = {8001, 8002, 8003},  -- Ports to try if default is busy
+
+    -- Live reload settings
+    live_reload = {
+      enabled = true,               -- Enable live reload
+      port = 12002,                -- Live reload port
+      debounce_ms = 300,           -- Debounce delay
+      watch_extensions = {".js", ".css", ".html", ".json"},  -- Files to watch
+      exclude_dirs = {".git", "node_modules", "dist", "build"}  -- Exclude directories
+    }
+  },
+
+  -- Console settings
+  console = {
+    position = "below",             -- Window position: below, above, left, right
+    height = 10,                    -- Window height (lines)
+  },
+
+  -- Library settings
+  libraries = {
+    auto_update = false            -- Auto update libraries on setup
+  }
+})
+```
+
+## Auto Commands 🔌
+
+Auto-start server when opening a sketch.js file:
+
+```lua
+-- Auto-start server when opening sketch.js
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  pattern = "sketch.js",
+  callback = function()
+    vim.cmd("P5 server")
+  end
+})
+
+-- Auto-open console when server starts
+vim.api.nvim_create_autocmd({ "User", "P5ServerStarted" }, {
+  callback = function()
+    vim.cmd("P5 console")
+  end
+})
+```
+
+## Keyboard Shortcuts ⌨️
+
+Recommended keybindings using `<leader>p` prefix:
+
+```lua
+-- General
+vim.keymap.set("n", "<leader>p5", ":P5 menu<CR>", { desc = "Open p5.nvim menu" })
+
+-- Project
+vim.keymap.set("n", "<leader>pc", ":P5 create ", { desc = "Create project" })
+vim.keymap.set("n", "<leader>ps", ":P5 setup<CR>", { desc = "Setup project" })
+
+-- Server
+vim.keymap.set("n", "<leader>pss", ":P5 server<CR>", { desc = "Toggle server" })
+vim.keymap.set("n", "<leader>pso", ":P5 console<CR>", { desc = "Toggle console" })
+
+-- Libraries
+vim.keymap.set("n", "<leader>pi", ":P5 install ", { desc = "Install library" })
+vim.keymap.set("n", "<leader>pu", ":P5 uninstall ", { desc = "Uninstall library" })
+vim.keymap.set("n", "<leader>pU", ":P5 update<CR>", { desc = "Update libraries" })
+
+-- Gist
+vim.keymap.set("n", "<leader>pg", ":P5 gist ", { desc = "Create gist" })
+vim.keymap.set("n", "<leader>pgg", ":P5 sync gist<CR>", { desc = "Sync gist" })
+
+-- Docs
+vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
+```
+
+## Troubleshooting 🔧
+
+### 🚀 Server Won't Start
+
+**Symptoms:** Running `:P5 server` shows an error or nothing happens.
+
+**Solutions:**
+1. Ensure Python 3 is installed:
+   ```bash
+   python3 --version
+   ```
+
+2. Check if the port is already in use:
+   ```bash
+   lsof -i :8000
+   ```
+
+3. Try a different port:
+   ```vim
+   :P5 server 8080
+   ```
+
+4. Check Neovim notifications for specific error messages
+
+---
+
+### 📥 Downloads Not Working
+
+**Symptoms:** Library installation fails or downloads timeout.
+
+**Solutions:**
+1. Ensure curl is installed:
+   ```bash
+   curl --version
+   ```
+
+2. Check internet connection:
+   ```bash
+   curl -I https://cdnjs.cloudflare.com
+   ```
+
+3. Verify firewall isn't blocking localhost connections
+
+4. Check that you're in a valid sketchspace (has p5.json)
+
+---
+
+### 🔗 Gist Upload/Sync Fails
+
+**Symptoms:** `:P5 gist` or `:P5 sync gist` shows an error.
+
+**Solutions:**
+1. Ensure GitHub CLI is installed:
+   ```bash
+   gh --version
+   ```
+
+2. Authenticate with GitHub:
+   ```bash
+   gh auth login
+   ```
+
+3. Verify gist URL in p5.json is valid:
+   ```vim
+   :edit p5.json
+   ```
+
+4. For sync failures, the gist may have been deleted - run `:P5 gist` to create a new one
+
+---
+
+### 📦 Library Install/Uninstall Fails
+
+**Symptoms:** `:P5 install` or `:P5 uninstall` shows an error.
+
+**Solutions:**
+1. Verify you're in a sketchspace (has p5.json):
+   ```bash
+   ls p5.json
+   ```
+
+2. Check assets/libs directory is writable:
+   ```bash
+   ls -la assets/libs
+   ```
+
+3. Run setup first to initialize:
+   ```vim
+   :P5 setup
+   ```
+
+4. Check Neovim notifications for specific error messages
+
+5. Try manually installing:
+   ```bash
+   cd assets/libs
+   curl -O <library-url>
+   ```
+
+---
+
+## Sketchspace Structure 📂
 
 A sketchspace is a directory containing:
 
@@ -71,7 +387,9 @@ A sketchspace is a directory containing:
 my-sketch/
 ├── p5.json       # Configuration (version, libs, includes)
 ├── sketch.js     # Your p5.js code
-└── assets/       # Library files (auto-managed)
+└── assets/      # Library files (auto-managed)
+    ├── libs/    # Contributor libraries
+    └── types/   # TypeScript definitions
 ```
 
 ### p5.json Format
@@ -80,57 +398,20 @@ my-sketch/
 {
   "version": "1.9.0",
   "libs": {
-    "ml5": "1.0.0"
+    "ml5": "latest"
   },
-  "includes": ["sketch.js"]
+  "includes": ["sketch.js"],
+  "gist": "https://gist.github.com/..."
 }
 ```
 
 - `version`: p5.js version to use
 - `libs`: Object with library names as keys and versions as values
 - `includes`: Files to include in Gist (default: `["sketch.js"]`)
+- `gist`: URL of associated GitHub Gist (optional)
 
-## Library Management
+---
 
-Install contributor libraries:
-
-```vim
-:P5 install ml5
-:P5 uninstall ml5
-:P5 sync libs
-```
-
-### Install Multiple Libraries
-
-```vim
-:P5 install ml5 rita p5play
-```
-
-### Available Libraries
-
-| Category | Libraries |
-|----------|-----------|
-| **AI/ML** | ml5 |
-| **Sound** | Tone, XSound, p5.spatial, p5.speech, rita |
-| **Physics/Game** | p5play, planck, matter, p5.play |
-| **UI** | dat.gui, p5.gui, p5.touchgui, fez-ui |
-| **Data Viz** | d3 |
-| **3D/Camera** | p5.easycam, p5.anaglyph |
-| **Drawing** | p5.bezier, p5.brush |
-| **Image Processing** | p5.FIP |
-| **Core Alternative** | q5 |
-
-## Gist Integration
-
-Create a Gist from your sketchspace:
-
-```vim
-:P5 gist "My awesome sketch"
-:P5 sync gist  "Update existing gist"
-```
-
-The Gist will include files specified in `p5.json` `includes` array. Assets directory is automatically excluded.
-
-## License
+## License 📜
 
 MIT
