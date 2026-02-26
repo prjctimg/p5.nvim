@@ -80,7 +80,38 @@ I.setup = function(opts)
     if not require_sketchspace("Setup") then return end
 
     local cwd = vim.fn.getcwd()
+    local config = core.read_workspace_config()
 
+    -- Step 1: Handle gist download if gistUrl exists
+    if config and config.gist then
+      local gist_info = gist.get_project_gist()
+      if gist_info and gist_info.id then
+        local ok, err = gist.download_gist(gist_info.id, cwd)
+        if not ok then
+          core.notify("Gist download failed: " .. err .. ". Removing invalid gist URL.", "warn")
+          config.gist = nil
+          core.write_workspace_config(config)
+        end
+      end
+    end
+
+    -- Step 2: Create default sketch.js if not exists
+    local sketch_file = cwd .. "/sketch.js"
+    if vim.fn.filereadable(sketch_file) == 0 then
+      local sketch_js = [[function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(220);
+  circle(mouseX, mouseY, 50);
+}
+]]
+      vim.fn.writefile(vim.split(sketch_js, "\n"), sketch_file)
+      core.notify("Created default sketch.js", "info")
+    end
+
+    -- Step 3: Copy assets, generate libs.js, install libs
     project.copy_assets_to_project(cwd, function(err)
       if err then
         core.notify("Failed to copy assets: " .. err, "error")

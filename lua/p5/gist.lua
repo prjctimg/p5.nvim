@@ -434,6 +434,66 @@ G.update_current_gist = function()
   G.update_gist(gist_info.id)
 end
 
+-- Download gist files to current project
+G.download_gist = function(gist_id, project_dir)
+  project_dir = project_dir or vim.fn.getcwd()
+
+  if not gist_id then
+    return false, "No gist ID provided"
+  end
+
+  if not core.command_exists("gh") then
+    return false, "GitHub CLI (gh) not found"
+  end
+
+  -- Get gist files in JSON format
+  local cmd = {"gh", "gist", "view", gist_id, "--json", "files"}
+  local result = vim.fn.system(cmd)
+  local exit_code = vim.v.shell_error
+
+  if exit_code ~= 0 then
+    return false, "Gist not found or no longer exists: " .. result
+  end
+
+  -- Parse JSON response
+  local ok, gist_data = pcall(vim.fn.json_decode, result)
+  if not ok or not gist_data.files then
+    return false, "Failed to parse gist data"
+  end
+
+  local files = gist_data.files
+  local downloaded = {}
+  local skipped = {}
+
+  for filename, filedata in pairs(files) do
+    local target_path = project_dir .. "/" .. filename
+
+    -- Check if file exists and prompt for overwrite
+    if vim.fn.filereadable(target_path) == 1 then
+      table.insert(skipped, filename)
+    else
+      -- Write file content
+      local content = filedata.content or ""
+      vim.fn.writefile(vim.split(content, "\n"), target_path)
+      table.insert(downloaded, filename)
+    end
+  end
+
+  local msg = {}
+  if #downloaded > 0 then
+    table.insert(msg, "Downloaded: " .. table.concat(downloaded, ", "))
+  end
+  if #skipped > 0 then
+    table.insert(msg, "Skipped (exists): " .. table.concat(skipped, ", "))
+  end
+
+  if #msg > 0 then
+    core.notify(table.concat(msg, " | "), "info")
+  end
+
+  return true, nil
+end
+
 G.setup = function(config)
   G.config = config
 end
