@@ -61,47 +61,10 @@ I.setup = function(opts)
     return true
   end
 
-  vim.api.nvim_create_user_command("P5", function()
-    local server_status = server.server_job and "Stop server" or "Start server"
-    
-    local options = {
-      "Create new sketchspace",
-      "Setup sketchspace",
-      "Install library",
-      "Uninstall library",
-      server_status,
-      "Toggle console",
-      "Open docs",
-      "Sync",
-      "Create/update Gist",
-    }
-    
-    vim.ui.select(options, { prompt = "p5.nvim:" }, function(choice)
-      if choice == "Create new sketchspace" then
-        vim.cmd("P5Create")
-      elseif choice == "Setup sketchspace" then
-        vim.cmd("P5Setup")
-      elseif choice == "Install library" then
-        vim.cmd("P5Install")
-      elseif choice == "Uninstall library" then
-        vim.cmd("P5Uninstall")
-      elseif choice == "Start server" or choice == "Stop server" then
-        vim.cmd("P5Server")
-      elseif choice == "Toggle console" then
-        vim.cmd("P5Console")
-      elseif choice == "Open docs" then
-        vim.cmd("P5Docs")
-      elseif choice == "Sync" then
-        vim.cmd("P5Sync")
-      elseif choice == "Create/update Gist" then
-        vim.cmd("P5Gist")
-      end
-    end)
-  end, { nargs = 0 })
+  local handlers = {}
 
-  vim.api.nvim_create_user_command("P5Create", function(opts)
-    local fargs = opts.fargs or {}
-    local name = #fargs > 0 and fargs[1] or nil
+  handlers.create = function(args)
+    local name = args[1]
     if not name then
       vim.ui.input({
         prompt = "Sketchspace name: ",
@@ -115,13 +78,39 @@ I.setup = function(opts)
     else
       project.create_project(name)
     end
-  end, { nargs = "?" })
+  end
 
-  vim.api.nvim_create_user_command("P5Install", function(opts)
+  handlers.setup = function()
+    if not require_sketchspace("Setup") then return end
+
+    local cwd = vim.fn.getcwd()
+
+    project.copy_assets_to_project(cwd, function(err)
+      if err then
+        core.notify("Failed to copy assets: " .. err, "error")
+        return
+      end
+
+      core.notify("Assets copied successfully", "info")
+
+      libraries.generate_libs_js(cwd)
+
+      local config = core.read_workspace_config()
+      if config and config.libs then
+        local lib_names = vim.tbl_keys(config.libs)
+        if #lib_names > 0 then
+          libraries.install_libs(lib_names)
+        end
+      end
+
+      core.notify("Sketchspace setup complete", "ok")
+    end)
+  end
+
+  handlers.install = function(args)
     if not require_sketchspace("Install") then return end
-    
-    local fargs = opts.fargs or {}
-    local lib_names = #fargs > 0 and fargs or nil
+
+    local lib_names = #args > 0 and args or nil
     if not lib_names then
       local libs = libraries.get_available_libs()
       if not libs or #libs == 0 then
@@ -150,13 +139,12 @@ I.setup = function(opts)
     else
       libraries.install_libs(lib_names)
     end
-  end, { nargs = "*" })
+  end
 
-  vim.api.nvim_create_user_command("P5Uninstall", function(opts)
+  handlers.uninstall = function(args)
     if not require_sketchspace("Uninstall") then return end
-    
-    local fargs = opts.fargs or {}
-    local lib_names = #fargs > 0 and fargs or nil
+
+    local lib_names = #args > 0 and args or nil
     if not lib_names then
       local installed = libraries.get_installed_libs()
       if #installed == 0 then
@@ -178,9 +166,22 @@ I.setup = function(opts)
     else
       libraries.uninstall_libs(lib_names)
     end
-  end, { nargs = "*" })
+  end
 
-  vim.api.nvim_create_user_command("P5Docs", function()
+  handlers.server = function(args)
+    if server.server_job then
+      server.stop_server()
+    else
+      local port = #args > 0 and tonumber(args[1]) or nil
+      server.start_server(port)
+    end
+  end
+
+  handlers.console = function()
+    console.toggle()
+  end
+
+  handlers.docs = function()
     local snacks = core.require_snacks()
     if snacks and snacks.picker then
       snacks.picker({
@@ -190,12 +191,11 @@ I.setup = function(opts)
     else
       vim.cmd("help p5-nvim")
     end
-  end, { nargs = 0 })
+  end
 
-  vim.api.nvim_create_user_command("P5Sync", function(opts)
-    local fargs = opts.fargs or {}
-    local target = #fargs > 0 and fargs[1] or nil
-    
+  handlers.sync = function(args)
+    local target = args[1]
+
     if not target then
       vim.ui.select({"Gist", "Libraries"}, { prompt = "What to sync:" }, function(choice)
         if choice == "Gist" then
@@ -213,63 +213,112 @@ I.setup = function(opts)
     else
       core.notify("Unknown sync target: " .. target .. ". Use 'gist' or 'libs'", "warn")
     end
-  end, { nargs = "?" })
+  end
 
-  vim.api.nvim_create_user_command("P5Update", function()
+  handlers.update = function()
     libraries.update_libs()
-  end, { nargs = 0 })
+  end
 
-  vim.api.nvim_create_user_command("P5Server", function(opts)
-    if server.server_job then
-      server.stop_server()
-    else
-      local fargs = opts.fargs or {}
-      local port = #fargs > 0 and tonumber(fargs[1]) or nil
-      server.start_server(port)
-    end
-  end, { nargs = "?" })
-
-  vim.api.nvim_create_user_command("P5Console", function()
-    console.toggle()
-  end, { nargs = 0 })
-
-  vim.api.nvim_create_user_command("P5Gist", function(opts)
+  handlers.gist = function(args)
     if not require_sketchspace("Gist") then return end
-    local fargs = opts.fargs or {}
-    local desc = #fargs > 0 and fargs[1] or nil
+    local desc = args[1]
     gist.create_gist(desc)
-  end, { nargs = "?" })
+  end
 
-  vim.api.nvim_create_user_command("P5GistUpdate", function()
+  handlers.gistupdate = function()
     gist.update_current_gist()
-  end, { nargs = 0 })
+  end
 
-  vim.api.nvim_create_user_command("P5Setup", function()
-    if not require_sketchspace("Setup") then return end
-    
-    local cwd = vim.fn.getcwd()
-    
-    project.copy_assets_to_project(cwd, function(err)
-      if err then
-        core.notify("Failed to copy assets: " .. err, "error")
-        return
+  handlers.menu = function()
+    local server_status = server.server_job and "Stop server" or "Start server"
+
+    local options = {
+      "Create new sketchspace",
+      "Setup sketchspace",
+      "Install library",
+      "Uninstall library",
+      server_status,
+      "Toggle console",
+      "Open docs",
+      "Sync",
+      "Create/update Gist",
+    }
+
+    vim.ui.select(options, { prompt = "p5.nvim:" }, function(choice)
+      if choice == "Create new sketchspace" then
+        handlers.create({})
+      elseif choice == "Setup sketchspace" then
+        handlers.setup()
+      elseif choice == "Install library" then
+        handlers.install({})
+      elseif choice == "Uninstall library" then
+        handlers.uninstall({})
+      elseif choice == "Start server" or choice == "Stop server" then
+        handlers.server({})
+      elseif choice == "Toggle console" then
+        handlers.console()
+      elseif choice == "Open docs" then
+        handlers.docs()
+      elseif choice == "Sync" then
+        handlers.sync({})
+      elseif choice == "Create/update Gist" then
+        handlers.gist({})
       end
-      
-      core.notify("Assets copied successfully", "info")
-      
-      libraries.generate_libs_js(cwd)
-      
-      local config = core.read_workspace_config()
-      if config and config.libs then
-        local lib_names = vim.tbl_keys(config.libs)
-        if #lib_names > 0 then
-          libraries.install_libs(lib_names)
-        end
-      end
-      
-      core.notify("Sketchspace setup complete", "ok")
     end)
-  end, { nargs = 0 })
+  end
+
+  local subcommands = vim.tbl_keys(handlers)
+
+  local function get_completion(line)
+    local args = vim.split(line, "%s+")
+    local cmd_pos = 1
+    while args[cmd_pos] and args[cmd_pos] ~= "P5" do
+      cmd_pos = cmd_pos + 1
+    end
+    local subcmd_pos = cmd_pos + 1
+
+    if #args <= subcmd_pos then
+      return subcommands
+    end
+
+    local subcmd = args[subcmd_pos]
+    if subcmd == "install" or subcmd == "uninstall" then
+      local libs = libraries.get_available_libs()
+      return vim.tbl_map(function(l) return l.name end, libs or {})
+    elseif subcmd == "server" then
+      return {"8000", "8001", "8002", "8003"}
+    elseif subcmd == "sync" then
+      return {"gist", "libs", "libraries"}
+    end
+
+    return {}
+  end
+
+  vim.api.nvim_create_user_command("P5", function(cmd)
+    local args = {}
+    for match in vim.gsplit(vim.trim(cmd.args), "%s+") do
+      if match and match ~= "" then
+        table.insert(args, match)
+      end
+    end
+    local subcmd = #args > 0 and args[1] or "menu"
+
+    table.remove(args, 1)
+
+    local handler = handlers[subcmd]
+    if handler then
+      handler(args)
+    else
+      core.notify("Unknown P5 command: " .. subcmd .. ". Use :P5 menu for interactive selection", "warn")
+    end
+  end, {
+    nargs = "*",
+    bar = true,
+    desc = "p5.nvim commands",
+    complete = function(_, line)
+      return get_completion(line)
+    end,
+  })
 end
 
 return I
