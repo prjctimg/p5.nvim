@@ -18,12 +18,8 @@ I.config = {
     }
   },
   console = {
-    enabled = true,
-    auto_show = true,
     position = "below",
     height = 10,
-    buffer_size = 1000,
-    heartbeat = 15
   },
   libraries = {
     cdn_sources = {"jsdelivr", "cdnjs", "unpkg"},

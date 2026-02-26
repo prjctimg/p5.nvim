@@ -68,14 +68,6 @@ C.create_console_terminal = function()
         end
       end
     end,
-    on_stderr = function(_, data)
-      if data and #data > 0 then
-        for _, line in ipairs(data) do
-          if line:match("Connection refused") or line:match("curl:") then
-          end
-        end
-      end
-    end,
     on_exit = function(_, exit_code)
       if exit_code ~= 0 and C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
         vim.schedule(function()
@@ -124,7 +116,7 @@ C.show = function(opts)
   end
 
   if not server.server_job then
-    notify("Start server first with :P5StartServer", "info")
+    notify("Start server first with :P5 server", "info")
     return
   end
 
@@ -229,106 +221,8 @@ C.clear_terminal = function()
   end
 end
 
-C.get_injection_script = function()
-  return [[
-    <script>
-      (function() {
-        console.log('p5.nvim console integration enabled');
-
-        const originalConsole = {
-          log: console.log,
-          error: console.error,
-          warn: console.warn,
-          info: console.info
-        };
-
-        let logBuffer = [];
-        let flushTimeout;
-
-        function flushLogBuffer() {
-          if (logBuffer.length === 0) return;
-
-          const logs = [...logBuffer];
-          logBuffer = [];
-
-          fetch('/api/console/log', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              type: 'console_batch',
-              logs: logs,
-              timestamp: new Date().toISOString()
-            })
-          }).catch(() => {
-            logs.forEach(log => {
-              fetch('/api/console/log', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(log)
-              }).catch(() => {});
-            });
-          });
-        }
-
-        function sendToConsole(level, args) {
-          const message = args.map(arg => {
-            if (typeof arg === 'object') {
-              try {
-                return JSON.stringify(arg);
-              } catch (e) {
-                return String(arg);
-              }
-            }
-            return String(arg);
-          }).join(' ');
-
-          const logEntry = {
-            type: 'console',
-            level: level,
-            message: message,
-            source: 'javascript',
-            timestamp: new Date().toISOString()
-          };
-
-          logBuffer.push(logEntry);
-
-          clearTimeout(flushTimeout);
-          flushTimeout = setTimeout(flushLogBuffer, 100);
-        }
-
-        console.log = function(...args) {
-          originalConsole.log.apply(console, args);
-          sendToConsole('log', args);
-        };
-
-        console.error = function(...args) {
-          originalConsole.error.apply(console, args);
-          sendToConsole('error', args);
-        };
-
-        console.warn = function(...args) {
-          originalConsole.warn.apply(console, args);
-          sendToConsole('warn', args);
-        };
-
-        console.info = function(...args) {
-          originalConsole.info.apply(console, args);
-          sendToConsole('info', args);
-        };
-
-        window.onerror = function(msg, source, lineno, colno, error) {
-          sendToConsole('error', [msg + ' at ' + source + ':' + lineno + ':' + colno]);
-          return false;
-        };
-
-        window.addEventListener('beforeunload', flushLogBuffer);
-      })();
-    </script>]]
-end
-
 C.setup = function(config)
   C.config = config
-  C.console_enabled = false
 
   vim.api.nvim_set_hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
   vim.api.nvim_set_hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
@@ -377,13 +271,6 @@ C.start_auto_clear = function()
       end
     end
   end))
-end
-
-C.stop_auto_clear = function()
-  if C.clear_timer then
-    C.clear_timer:close()
-    C.clear_timer = nil
-  end
 end
 
 C.mark_error = function()
