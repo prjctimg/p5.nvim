@@ -9,6 +9,15 @@ C.split_commands = {
   right = "belowright vsplit"
 }
 
+-- Server configurations for runtime environments
+C.server_configs = {
+  python = {
+    check = "python3",
+    script = "server.py",
+    cmd = "python3"
+  }
+}
+
 -- Check if command exists
 C.command_exists = function(cmd)
   return vim.fn.executable(cmd) ~= 0
