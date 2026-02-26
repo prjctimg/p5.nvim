@@ -199,8 +199,10 @@ I.setup = function(opts)
     if not target then
       vim.ui.select({"Gist", "Libraries"}, { prompt = "What to sync:" }, function(choice)
         if choice == "Gist" then
+          if not require_sketchspace("Sync gist") then return end
           gist.update_current_gist()
         elseif choice == "Libraries" then
+          if not require_sketchspace("Sync libraries") then return end
           libraries.update_libs()
         end
       end)
