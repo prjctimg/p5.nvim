@@ -105,7 +105,7 @@ Remove installed libraries.
 :P5 uninstall
 ```
 
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+[![asciicast](https://asciinema.org/a/795789.svg)](https://asciinema.org/a/795789)
 
 ---
 
