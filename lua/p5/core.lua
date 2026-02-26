@@ -1,15 +1,6 @@
 -- Core utilities and functions for p5.nvim
 local C = {}
 
--- Server configurations for different runtime environments
-C.server_configs = {
-  python = {
-    check = "python3",
-    script = "python.py",
-    cmd = "python3"
-  }
-}
-
 -- Split commands for window positioning
 C.split_commands = {
   below = "belowright split",
@@ -31,16 +22,6 @@ end
 -- Get asset directory
 C.get_asset_dir = function()
   return C.get_plugin_root() .. "/assets"
-end
-
--- Get template directory
-C.get_template_dir = function()
-  return C.get_plugin_root() .. "/templates"
-end
-
--- Get project root directory (deprecated, kept for compatibility)
-C.get_project_root = function()
-  return vim.fn.getcwd()
 end
 
 -- Lazy dependency management
@@ -89,14 +70,6 @@ C.validate_dir = function(path, name, required)
   return false
 end
 
--- Check if p5 assets are available
-C.assets_available = function()
-  local version_file = C.get_asset_dir() .. "/version.json"
-  local has_p5 = vim.fn.filereadable(C.get_asset_dir() .. "/core/p5.js")
-  local has_types = vim.fn.filereadable(C.get_asset_dir() .. "/types/p5.d.ts")
-  return has_p5 and has_types
-end
-
 -- Read workspace configuration
 C.find_project_root = function()
   local current_dir = vim.fn.getcwd()
@@ -119,29 +92,6 @@ C.find_project_root = function()
   end
   
   return nil, nil
-end
-
--- Keep original function for backward compatibility
-C.find_nearest_p5_config = function()
-  local current_dir = vim.fn.getcwd()
-  local search_dir = current_dir
-  
-  while #search_dir > 1 do
-    local config_file = search_dir .. "/p5.json"
-    if vim.fn.filereadable(config_file) == 1 then
-      local content = vim.fn.readfile(config_file)
-      return vim.fn.json_decode(table.concat(content, "\n"))
-    end
-    
-    -- Move up one directory level
-    local parent_dir = vim.fn.fnamemodify(search_dir, ":h")
-    if parent_dir == search_dir then
-      break
-    end
-    search_dir = parent_dir
-  end
-  
-  return nil
 end
 
 -- Read workspace configuration (alias for find_project_root's config)
@@ -231,81 +181,6 @@ C.is_cache_valid = function(cache_file, checksum)
   return true
 end
 
--- Download file with progress tracking and caching
-C.download_file_with_progress = function(url, dest, callback, options)
-  options = options or {}
-  local use_cache = options.cache ~= false
-  local on_progress = options.on_progress
-  local cache_file = nil
-  
-  if use_cache then
-    local cache_dir = C.get_cache_dir()
-    local cache_key = C.generate_cache_key(url)
-    cache_file = cache_dir .. "/" .. cache_key
-    
-    -- Check if we have a valid cached version
-    if C.is_cache_valid(cache_file) then
-      vim.fn.system({"cp", cache_file, dest})
-      if callback then callback(true) end
-      return true
-    end
-  end
-  
-  -- Get file size first for progress tracking
-  C.get_remote_file_size(url, function(total_size)
-    local cmd
-    if C.command_exists("curl") then
-      cmd = {"curl", "-L", "--progress-bar", url, "-o", dest}
-    elseif C.command_exists("wget") then
-      cmd = {"wget", "--progress=bar:force", "-O", dest, url}
-    else
-      C.notify("Neither curl nor wget found. Cannot download: " .. url, "error")
-      if callback then callback(false) end
-      return
-    end
-    
-    local job_id = vim.fn.jobstart(cmd, {
-      on_stdout = function(_, data)
-        -- Parse progress output if available
-        if on_progress and data and total_size then
-          -- Simple progress parsing (curl/wget progress output)
-          for _, line in ipairs(data) do
-            local percent = line:match("(%d+)%%")
-            if percent then
-              local downloaded = math.floor((tonumber(percent) / 100) * total_size)
-              on_progress(downloaded, total_size, url)
-            end
-          end
-        end
-      end,
-      on_stderr = function(_, data)
-        -- Parse progress from stderr (curl sends progress there)
-        if on_progress and data and total_size then
-          for _, line in ipairs(data) do
-            local percent = line:match("(%d+)%%")
-            if percent then
-              local downloaded = math.floor((tonumber(percent) / 100) * total_size)
-              on_progress(downloaded, total_size, url)
-            end
-          end
-        end
-      end,
-      on_exit = function(_, exit_code)
-        local success = exit_code == 0
-        
-        -- Cache the downloaded file if successful and caching enabled
-        if success and use_cache and cache_file then
-          vim.fn.system({"cp", dest, cache_file})
-        end
-        
-        if callback then callback(success) end
-      end
-    })
-  end)
-  
-  return true
-end
-
 -- Download file with caching support (async version)
 C.download_file = function(url, dest, callback, options)
   options = options or {}
@@ -363,67 +238,6 @@ C.download_file = function(url, dest, callback, options)
   return true
 end
 
--- Get remote file size for progress tracking
-C.get_remote_file_size = function(url, callback)
-  local cmd
-  if C.command_exists("curl") then
-    cmd = string.format("curl -sI '%s' | grep -i content-length | cut -d' ' -f2 | tr -d '\\r'", url)
-  elseif C.command_exists("wget") then
-    cmd = string.format("wget --spider '%s' 2>&1 | grep -i length | cut -d' ' -f2", url)
-  else
-    if callback then callback(nil) end
-    return
-  end
-  
-  vim.fn.jobstart(cmd, {
-    on_stdout = function(_, data)
-      if data and #data > 0 and data[1] ~= "" then
-        local size = tonumber(data[1])
-        if callback then callback(size) end
-      else
-        if callback then callback(nil) end
-      end
-    end
-  })
-end
-
--- GitHub API integration
-C.get_github_release_asset = function(repo, release, pattern, callback)
-  local api_url = string.format("https://api.github.com/repos/%s/releases/%s", repo, release)
-  
-  local cmd = string.format("curl -s '%s'", api_url)
-  vim.fn.jobstart(cmd, {
-    on_stdout = function(_, data)
-      if not data or #data == 0 then
-        if callback then callback(nil, "Failed to fetch release info") end
-        return
-      end
-      
-      local content = table.concat(data, "\n")
-      local ok, release_info = pcall(vim.fn.json_decode, content)
-      
-      if not ok or not release_info or not release_info.assets then
-        if callback then callback(nil, "Invalid release info") end
-        return
-      end
-      
-      -- Find matching asset
-      for _, asset in ipairs(release_info.assets) do
-        if asset.name:match(pattern) then
-          if callback then callback(asset.browser_download_url, nil) end
-          return
-        end
-      end
-      
-      if callback then callback(nil, "No matching asset found") end
-    end,
-    on_stderr = function(_, data)
-      local error_msg = data and table.concat(data, "\n") or "Unknown error"
-      if callback then callback(nil, error_msg) end
-    end
-  })
-end
-
 -- Get p5 version from bundled library
 C.get_p5_version = function()
   local p5_file = C.get_asset_dir() .. "/libs/p5.js"
@@ -437,46 +251,9 @@ C.get_p5_version = function()
   return "unknown"
 end
 
--- Chrome Remote initialization
-C.init_chrome_remote = function(error_msg)
-  local ok, chrome_remote = pcall(require, "chrome-remote")
-  if not ok then
-    C.notify(error_msg or "Chrome Remote library not available", "error")
-    return false
-  end
-  
-  return true
-end
-
 -- Setup function
 C.setup = function(config)
   C.config = config
-end
-
--- Setup environment
-C.setup_environment = function()
-  local root = C.get_plugin_root()
-  local asset_dir = C.get_asset_dir()
-  
-  vim.fn.mkdir(asset_dir .. "/core", "p")
-  vim.fn.mkdir(asset_dir .. "/types", "p")
-
-  if C.assets_available() then
-    local info = C.get_p5_version()
-    if info and info.version ~= "unknown" then
-      local updated_at = vim.fn.strftime("%Y-%m-%dT%H:%C:%S")
-      local version_json = {
-        p5js = info.version,
-        p5js_semver = info.semver,
-        updated_at = updated_at
-      }
-      vim.fn.writefile(vim.split(vim.fn.json_encode(version_json), "\n"), C.get_asset_dir() .. "/version.json")
-    end
-  end
-  
-  if C.assets_available() then
-    C.notify_fallback("P5 environment setup complete", "info")
-  end
 end
 
 return C
