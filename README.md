@@ -118,7 +118,8 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 :P5 server 8080
 ```
 
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+[![asciicast](https://asciinema.org/a/801610.svg)](https://asciinema.org/a/801610)
+
 
 ---
 
@@ -130,7 +131,7 @@ Toggle browser console to view console.log, errors, and warnings in Neovim.
 :P5 console
 ```
 
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
+[![asciicast](https://asciinema.org/a/801611.svg)](https://asciinema.org/a/801611)
 
 ---
 
