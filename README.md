@@ -118,8 +118,8 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 :P5 server 8080
 ```
 
-[![asciicast](https://asciinema.org/a/801610.svg)](https://asciinema.org/a/801610)
 
+[![asciicast](https://asciinema.org/a/801610.svg)](https://asciinema.org/a/801610)
 
 ---
 
