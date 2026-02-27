@@ -8,6 +8,8 @@
 
 [![Neovim](https://img.shields.io/badge/Neovim-0.9%2B-blue.svg)](https://neovim.io)
 [![Lua](https://img.shields.io/badge/Lua-5.1%2B-blue.svg)](https://lua.org)
+[![Release](https://img.shields.io/github/v/release/prjctimg/p5.nvim)](https://github.com/prjctimg/p5.nvim/releases/latest)
+[![Devlog](https://img.shields.io/badge/Devlog-dvlg.prjctimg.me/p5.nvim-blue)](https://dvlg.prjctimg.me/p5.nvim)
 
 ## Features ✨
 
