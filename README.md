@@ -144,8 +144,8 @@ Sync gist or libraries.
 :P5 sync libs
 :P5 sync
 ```
+[![asciicast](https://asciinema.org/a/801610.svg)](https://asciinema.org/a/801610)
 
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
 
 ---
 
