@@ -473,8 +473,13 @@ class HTTPServer:
         # Build file path
         file_path = os.path.join(self.directory, path.lstrip('/'))
         
+        # Debug: log index.html request
+        if path == '/index.html':
+            print(f"[DEBUG] index.html request: file_path={file_path}, exists={os.path.isfile(file_path)}")
+        
         # Generate index.html on-the-fly if it doesn't exist
         if path == '/index.html' and not os.path.isfile(file_path):
+            print("[DEBUG] Generating index.html on-the-fly...")
             content = self.generate_index_html()
             content = self.inject_scripts(content.encode('utf-8'))
             writer.write(b'HTTP/1.1 200 OK\r\n')
@@ -554,6 +559,21 @@ class HTTPServer:
         
         libs = config.get('libs', {})
         version = config.get('version', '1.9.0')
+        
+        # Auto-create sketch.js if missing
+        sketch_js_path = os.path.join(self.directory, 'sketch.js')
+        if not os.path.isfile(sketch_js_path):
+            default_sketch = '''function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(220);
+  circle(mouseX, mouseY, 50);
+}'''
+            with open(sketch_js_path, 'w') as f:
+                f.write(default_sketch)
+            print(f"Created default sketch.js")
         
         # Build script tags for core and contrib libs
         scripts = []
