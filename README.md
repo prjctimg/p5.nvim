@@ -2,35 +2,17 @@
 
 <!--toc:start-->
 
-- [p5.nvim 🎨](#p5nvim-🎨)
-  - [Features ✨](#features)
-  - [Requirements 📋](#requirements-📋)
-  - [Installation 💾](#installation-💾)
-  - [Quick Start 🚀](#quick-start-🚀)
-  - [Commands 📖](#commands-📖)
-    - [🎨 :P5 create [name]](#🎨-p5-create-name)
-    - [⚙️ :P5 setup](#️-p5-setup)
-    - [📥 :P5 install [libs...]](#📥-p5-install-libs)
-  - [<a href="https://asciinema.org/a/795787" target="_blank"><img src="https://asciinema.org/a/795787.svg" /></a>](#a-hrefhttpsasciinemaorga795787-targetblankimg-srchttpsasciinemaorga795787svg-a)
-    - [🗑️ :P5 uninstall [libs...]](#🗑️-p5-uninstall-libs)
-    - [🚀 :P5 server [port]](#🚀-p5-server-port)
-    - [📺 :P5 console](#📺-p5-console)
-    - [🔄 :P5 sync [gist|libs]](#🔄-p5-sync-gistlibs)
-    - [📤 :P5 update](#📤-p5-update)
-    - [🔗 :P5 gist [desc]](#🔗-p5-gist-desc)
-    - [📖 :P5 docs](#📖-p5-docs)
-    - [🎯 :P5 (menu)](#🎯-p5-menu)
-  - [Configuration ⚡](#configuration)
-  - [Auto Commands 🔌](#auto-commands-🔌)
-  - [Keyboard Shortcuts ⌨️](#keyboard-shortcuts-️)
-  - [Troubleshooting 🔧](#troubleshooting-🔧)
-    - [🚀 Server Won't Start](#🚀-server-wont-start)
-    - [📥 Downloads Not Working](#📥-downloads-not-working)
-    - [🔗 Gist Upload/Sync Fails](#🔗-gist-uploadsync-fails)
-    - [📦 Library Install/Uninstall Fails](#📦-library-installuninstall-fails)
-    - [p5.json Format](#p5json-format)
-  - [License 📜](#license-📜)
-  <!--toc:end-->
+- [Features ✨](#features)
+- [Requirements 📋](#requirements)
+- [Installation 💾](#installation)
+- [Quick Start 🚀](#quick-start)
+- [Commands 📖](#commands)
+- [Configuration ⚡](#configuration)
+- [Auto Commands 🔌](#auto-commands)
+- [Keyboard Shortcuts ⌨️](#keyboard-shortcuts)
+- [Troubleshooting 🔧](#troubleshooting)
+- [License 📜](#license)
+<!--toc:end-->
 
 ---
 
@@ -87,7 +69,7 @@ Or use the interactive picker:
 
 ## Commands 📖
 
-### 🎨 :P5 create [name]
+### :P5 create [name]
 
 Create a new sketchspace.
 
@@ -100,7 +82,7 @@ Create a new sketchspace.
 
 ---
 
-### ⚙️ :P5 setup
+### :P5 setup
 
 Setup assets in current sketchspace.
 
@@ -114,7 +96,7 @@ Downloads files from gist (if configured), creates default sketch.js if missing,
 
 ---
 
-### 📥 :P5 install [libs...]
+### :P5 install [libs...]
 
 Install contributor libraries. Use picker or specify directly.
 
@@ -124,9 +106,7 @@ Install contributor libraries. Use picker or specify directly.
 :P5 install
 ```
 
-## <a href="https://asciinema.org/a/795787" target="_blank"><img src="https://asciinema.org/a/795787.svg" /></a>
-
-### 🗑️ :P5 uninstall [libs...]
+### :P5 uninstall [libs...]
 
 Remove installed libraries.
 
@@ -139,7 +119,7 @@ Remove installed libraries.
 
 ---
 
-### 🚀 :P5 server [port]
+### :P5 server [port]
 
 Start/stop the development server (toggle). Opens browser automatically and enables live reload.
 
@@ -152,7 +132,7 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 
 ---
 
-### 📺 :P5 console
+### :P5 console
 
 Toggle browser console to view console.log, errors, and warnings in Neovim.
 
@@ -164,7 +144,7 @@ Toggle browser console to view console.log, errors, and warnings in Neovim.
 
 ---
 
-### 🔄 :P5 sync [gist|libs]
+### :P5 sync [gist|libs]
 
 Sync gist or libraries.
 
@@ -178,7 +158,7 @@ Sync gist or libraries.
 
 ---
 
-### 📤 :P5 update
+### :P5 update
 
 Update all installed libraries to latest versions.
 
@@ -190,7 +170,7 @@ Update all installed libraries to latest versions.
 
 ---
 
-### 🔗 :P5 gist [desc]
+### :P5 gist [desc]
 
 Create a GitHub Gist from your sketchspace.
 
@@ -203,7 +183,7 @@ Create a GitHub Gist from your sketchspace.
 
 ---
 
-### 📖 :P5 docs
+### :P5 docs
 
 Open p5.js documentation via snacks.picker.
 
@@ -215,7 +195,7 @@ Open p5.js documentation via snacks.picker.
 
 ---
 
-### 🎯 :P5 (menu)
+### :P5 (menu)
 
 Interactive picker with all available options.
 
@@ -315,7 +295,7 @@ vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
 
 ## Troubleshooting 🔧
 
-### 🚀 Server Won't Start
+### Server Won't Start
 
 **Symptoms:** Running `:P5 server` shows an error or nothing happens.
 
@@ -343,7 +323,7 @@ vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
 
 ---
 
-### 📥 Downloads Not Working
+### Downloads Not Working
 
 Library installation fails or downloads timeout.
 
@@ -367,7 +347,7 @@ Library installation fails or downloads timeout.
 
 ---
 
-### 🔗 Gist Upload/Sync Fails
+### Gist Upload/Sync Fails
 
 `:P5 gist` or `:P5 sync gist` shows an error.
 
@@ -395,7 +375,7 @@ Library installation fails or downloads timeout.
 
 ---
 
-### 📦 Library Install/Uninstall Fails
+### Library Install/Uninstall Fails
 
 `:P5 install` or `:P5 uninstall` shows an error.
 
