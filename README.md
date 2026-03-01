@@ -1,15 +1,44 @@
 # p5.nvim 🎨
 
+<!--toc:start-->
+
+- [p5.nvim 🎨](#p5nvim-🎨)
+  - [Features ✨](#features)
+  - [Requirements 📋](#requirements-📋)
+  - [Installation 💾](#installation-💾)
+  - [Quick Start 🚀](#quick-start-🚀)
+  - [Commands 📖](#commands-📖)
+    - [🎨 :P5 create [name]](#🎨-p5-create-name)
+    - [⚙️ :P5 setup](#️-p5-setup)
+    - [📥 :P5 install [libs...]](#📥-p5-install-libs)
+  - [<a href="https://asciinema.org/a/795787" target="_blank"><img src="https://asciinema.org/a/795787.svg" /></a>](#a-hrefhttpsasciinemaorga795787-targetblankimg-srchttpsasciinemaorga795787svg-a)
+    - [🗑️ :P5 uninstall [libs...]](#🗑️-p5-uninstall-libs)
+    - [🚀 :P5 server [port]](#🚀-p5-server-port)
+    - [📺 :P5 console](#📺-p5-console)
+    - [🔄 :P5 sync [gist|libs]](#🔄-p5-sync-gistlibs)
+    - [📤 :P5 update](#📤-p5-update)
+    - [🔗 :P5 gist [desc]](#🔗-p5-gist-desc)
+    - [📖 :P5 docs](#📖-p5-docs)
+    - [🎯 :P5 (menu)](#🎯-p5-menu)
+  - [Configuration ⚡](#configuration)
+  - [Auto Commands 🔌](#auto-commands-🔌)
+  - [Keyboard Shortcuts ⌨️](#keyboard-shortcuts-️)
+  - [Troubleshooting 🔧](#troubleshooting-🔧)
+    - [🚀 Server Won't Start](#🚀-server-wont-start)
+    - [📥 Downloads Not Working](#📥-downloads-not-working)
+    - [🔗 Gist Upload/Sync Fails](#🔗-gist-uploadsync-fails)
+    - [📦 Library Install/Uninstall Fails](#📦-library-installuninstall-fails)
+    - [p5.json Format](#p5json-format)
+  - [License 📜](#license-📜)
+  <!--toc:end-->
+
 ---
 
 > Better editor support for p5.js sketchspaces in Neovim.
 
 ---
 
-[![Neovim](https://img.shields.io/badge/Neovim-0.9%2B-blue.svg)](https://neovim.io)
-[![Lua](https://img.shields.io/badge/Lua-5.1%2B-blue.svg)](https://lua.org)
 [![Release](https://img.shields.io/github/v/release/prjctimg/p5.nvim)](https://github.com/prjctimg/p5.nvim/releases/latest)
-[![Devlog](https://img.shields.io/badge/Devlog-dvlg.prjctimg.me/p5.nvim-blue)](https://dvlg.prjctimg.me/p5.nvim)
 
 ## Features ✨
 
@@ -95,8 +124,7 @@ Install contributor libraries. Use picker or specify directly.
 :P5 install
 ```
 
-<a href="https://asciinema.org/a/795787" target="_blank"><img src="https://asciinema.org/a/795787.svg" /></a>
----
+## <a href="https://asciinema.org/a/795787" target="_blank"><img src="https://asciinema.org/a/795787.svg" /></a>
 
 ### 🗑️ :P5 uninstall [libs...]
 
@@ -122,7 +150,6 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 
 <a href="https://asciinema.org/a/801610" target="_blank"><img src="https://asciinema.org/a/801610.svg" /></a>
 
-
 ---
 
 ### 📺 :P5 console
@@ -146,8 +173,8 @@ Sync gist or libraries.
 :P5 sync libs
 :P5 sync
 ```
-[![asciicast](https://asciinema.org/a/801610.svg)](https://asciinema.org/a/801610)
 
+[![asciicast](https://asciinema.org/a/801610.svg)](https://asciinema.org/a/801610)
 
 ---
 
@@ -414,7 +441,9 @@ Library installation fails or downloads timeout.
 
 ---
 
-## License 📜
+You can also find the project's devlog [here](https://dvlg.prjctimg.me/devlogs/p5.nvim)
 
-(c) 2026, Dean, Tarisai.
-This is free software, released under the GPL-3.0 license.
+> ## License 📜
+
+> (c) 2026, [Dean Tarisai](https://prjctimg.me)
+> This is free software, released under the GPL-3.0 license.
