@@ -2,7 +2,7 @@
 
 ---
 
-> Better editor support for p5.js sketchspaces Neovim.
+> Better editor support for p5.js sketchspaces in Neovim.
 
 ---
 
@@ -408,8 +408,8 @@ Library installation fails or downloads timeout.
 ```
 
 - `version`: p5.js version to use
-- `libs`: Object with library names as keys and versions as values
-- `includes`: Files to include in Gist (default: `["sketch.js"]`)
+- `libs`: Object with library names as keys and their versions as values
+- `includes`: Files to include in the Gist (default: `["sketch.js"]`)
 - `gist`: URL of associated GitHub Gist (optional)
 
 ---
