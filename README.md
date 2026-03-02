@@ -62,11 +62,6 @@
 
 Or use the interactive picker:
 
-```vim
-:P5
-:P5 menu
-```
-
 ## Commands 📖
 
 ### :P5 create [name]
@@ -195,19 +190,6 @@ Open p5.js documentation via snacks.picker.
 
 ---
 
-### :P5 (menu)
-
-Interactive picker with all available options.
-
-```vim
-:P5
-:P5 menu
-```
-
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
-
----
-
 ## Configuration ⚡
 
 ```lua
@@ -270,7 +252,7 @@ Recommended keybindings using `<leader>p` prefix:
 
 ```lua
 -- General
-vim.keymap.set("n", "<leader>p5", ":P5 menu<CR>", { desc = "Open p5.nvim menu" })
+vim.keymap.set("n", "<leader>p5", ":P5<CR>", { desc = "Open p5.nvim picker" })
 
 -- Project
 vim.keymap.set("n", "<leader>pc", ":P5 create ", { desc = "Create project" })

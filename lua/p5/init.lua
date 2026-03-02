@@ -330,7 +330,7 @@ function draw() {
     if handler then
       handler(args)
     else
-      core.notify("Unknown P5 command: " .. subcmd .. ". Use :P5 menu for interactive selection", "warn")
+      core.notify("Unknown P5 command: " .. subcmd .. ". Run :P5 for interactive picker", "warn")
     end
   end, {
     nargs = "*",
