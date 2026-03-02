@@ -152,6 +152,16 @@ C.show = function(opts)
       auto_close = false,
       scrollback = 1000,
       enter = enter,
+      keys = {
+        q = "hide",
+        ["<C-c>"] = "hide",
+        j = "scroll_down",
+        k = "scroll_up",
+        G = "scroll_to_bottom",
+        gg = "scroll_to_top",
+        ["<C-d>"] = "page_down",
+        ["<C-u>"] = "page_up",
+      },
     })
     C.console_term = term
     C.console_win = term.win
@@ -192,6 +202,20 @@ C.show = function(opts)
       vim.cmd("startinsert")
     end,
     desc = "Enter terminal mode"
+  })
+
+  -- Navigation keymaps
+  vim.api.nvim_buf_set_keymap(buf, "n", "j", "gj", { noremap = true, silent = true })
+  vim.api.nvim_buf_set_keymap(buf, "n", "k", "gk", { noremap = true, silent = true })
+  vim.api.nvim_buf_set_keymap(buf, "n", "<Down>", "gj", { noremap = true, silent = true })
+  vim.api.nvim_buf_set_keymap(buf, "n", "<Up>", "gk", { noremap = true, silent = true })
+  vim.api.nvim_buf_set_keymap(buf, "n", "G", "G", { noremap = true, silent = true, desc = "Scroll to bottom" })
+  vim.api.nvim_buf_set_keymap(buf, "n", "gg", "gg", { noremap = true, silent = true, desc = "Scroll to top" })
+  vim.api.nvim_buf_set_keymap(buf, "n", "<C-d>", "<C-d>zT", { noremap = true, silent = true, desc = "Page down" })
+  vim.api.nvim_buf_set_keymap(buf, "n", "<C-u>", "<C-u>zb", { noremap = true, silent = true, desc = "Page up" })
+  vim.api.nvim_buf_set_keymap(buf, "n", "<C-c>", "", {
+    callback = C.hide,
+    desc = "Hide console"
   })
 
   vim.cmd("startinsert")
