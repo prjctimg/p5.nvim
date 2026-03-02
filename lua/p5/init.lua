@@ -96,7 +96,8 @@ I.setup = function(opts)
     end
 
     -- Step 2: Create default sketch.js if not exists
-    local sketch_file = cwd .. "/sketch.js"
+    local cwd_normalized = vim.fs.normalize(cwd)
+    local sketch_file = cwd_normalized .. "/sketch.js"
     if vim.fn.filereadable(sketch_file) == 0 then
       local sketch_js = [[function setup() {
   createCanvas(400, 400);

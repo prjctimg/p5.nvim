@@ -436,7 +436,7 @@ end
 
 -- Download gist files to current project
 G.download_gist = function(gist_id, project_dir)
-  project_dir = project_dir or vim.fn.getcwd()
+  project_dir = vim.fs.normalize(project_dir or vim.fn.getcwd())
 
   if not gist_id then
     return false, "No gist ID provided"

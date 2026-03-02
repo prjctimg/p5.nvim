@@ -283,7 +283,7 @@ end
 
 -- Check if current directory is a valid p5.js sketchspace
 P.is_p5_project = function(dir)
-  local cwd = dir or vim.fn.getcwd()
+  local cwd = vim.fs.normalize(dir or vim.fn.getcwd())
   
   -- Check for p5.json (required for sketchspace)
   local config_file = cwd .. "/p5.json"

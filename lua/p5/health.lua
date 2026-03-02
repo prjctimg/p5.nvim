@@ -93,7 +93,7 @@ H.check_project_config = function()
   vim.health.start("p5.nvim Project Configuration")
   
   -- Check current directory for p5 project
-  local cwd = vim.fn.getcwd()
+  local cwd = vim.fs.normalize(vim.fn.getcwd())
   vim.health.info("Current directory: " .. cwd)
   
   -- Check for p5.json
