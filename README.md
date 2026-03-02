@@ -153,18 +153,6 @@ Sync gist or libraries.
 
 ---
 
-### :P5 update
-
-Update all installed libraries to latest versions.
-
-```vim
-:P5 update
-```
-
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
-
----
-
 ### :P5 gist [desc]
 
 Create a GitHub Gist from your sketchspace.
@@ -265,7 +253,7 @@ vim.keymap.set("n", "<leader>pso", ":P5 console<CR>", { desc = "Toggle console" 
 -- Libraries
 vim.keymap.set("n", "<leader>pi", ":P5 install ", { desc = "Install library" })
 vim.keymap.set("n", "<leader>pu", ":P5 uninstall ", { desc = "Uninstall library" })
-vim.keymap.set("n", "<leader>pU", ":P5 update<CR>", { desc = "Update libraries" })
+vim.keymap.set("n", "<leader>pU", ":P5 sync libs<CR>", { desc = "Update libraries" })
 
 -- Gist
 vim.keymap.set("n", "<leader>pg", ":P5 gist ", { desc = "Create gist" })

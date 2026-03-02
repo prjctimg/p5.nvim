@@ -236,18 +236,10 @@ function draw() {
     end
   end
 
-  handlers.update = function()
-    libraries.update_libs()
-  end
-
   handlers.gist = function(args)
     if not require_sketchspace("Gist") then return end
     local desc = args[1]
     gist.create_gist(desc)
-  end
-
-  handlers.gistupdate = function()
-    gist.update_current_gist()
   end
 
   handlers.menu = function()
