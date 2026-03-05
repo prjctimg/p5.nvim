@@ -257,12 +257,7 @@ P.copy_assets_to_project = function(project_path, callback)
   
   -- Copy bundled p5.d.ts
   try_copy(plugin_assets .. "/types/p5.d.ts", project_assets .. "/types/p5.d.ts")
-  
-  -- Copy supporting type files
-  for _, file in ipairs({"constants.d.ts", "literals.d.ts"}) do
-    try_copy(plugin_assets .. "/types/" .. file, project_assets .. "/types/" .. file)
-  end
-  
+
   -- Copy bundled library files
   if vim.fn.isdirectory(plugin_assets .. "/libs") == 1 then
     for _, file in ipairs({"p5.js", "p5.sound.js"}) do
