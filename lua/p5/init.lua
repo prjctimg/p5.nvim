@@ -201,7 +201,7 @@ function draw() {
       server.stop_server()
     else
       local port = #args > 0 and tonumber(args[1]) or nil
-      server.start_server(port)
+      server.start_server_with_fallback(port)
     end
   end
 
