@@ -32,8 +32,8 @@ S.config = {
 -- Detect available server options
 S.detect = function()
 	local server_config = core.server_configs.python
-	if core.is_cmd(server_config.check) then
-		local plugin_root = core.plugin_root()
+	if core.command_exists(server_config.check) then
+		local plugin_root = core.get_plugin_root()
 		local server_script = plugin_root .. "/server.py"
 
 		if vim.fn.filereadable(server_script) == 1 then
@@ -56,12 +56,12 @@ S.validate_server = function(server_type, port)
 	end
 
 	-- Check if runtime is available
-	if not core.is_cmd(server_config.check) then
+	if not core.command_exists(server_config.check) then
 		return false, server_config.cmd .. " is not available"
 	end
 
 	-- Check if server script exists
-	local plugin_root = core.plugin_root()
+	local plugin_root = core.get_plugin_root()
 	local server_script = plugin_root .. "/server.py"
 	if vim.fn.filereadable(server_script) == 0 then
 		return false, "Server script not found: " .. server_script
@@ -121,7 +121,7 @@ end
 
 -- Get server command
 S.get_cmd = function(server_type, port)
-	local plugin_root = core.plugin_root()
+	local plugin_root = core.get_plugin_root()
 
 	local server_cfg = core.server_configs[server_type]
 	if not server_cfg then
@@ -286,7 +286,7 @@ S.start_console_after_ready = function()
 		auto_start = false,
 	}
 
-	local console_started = console.create()
+	local console_started = console.create_console_terminal()
 
 	if console_started then
 		notify("Console polling started on port " .. S.port, "ok")
