@@ -127,21 +127,26 @@ C.show = function(opts)
     return
   end
 
-  local position = C.config.console.position or "below"
-  local height = C.config.console.height or 10
+  local position = (C.config and C.config.console and C.config.console.position) or "below"
+  local viewport_height = vim.o.lines
+  local height = math.floor(viewport_height * 0.3)
   C.server_port = server.port
+
+  -- Check if we already have a valid console window
+  if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
+    if enter then
+      vim.api.nvim_set_current_win(C.console_win)
+    end
+    return
+  end
+
+  -- Reset state since window was closed externally
+  C.console_win = nil
+  C.console_buf = nil
 
   -- Use snacks.terminal if available
   local snacks = core.require_snacks()
   if snacks and snacks.terminal then
-    -- Check if we have an existing terminal
-    if C.console_term and C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
-      if enter then
-        vim.api.nvim_set_current_win(C.console_win)
-      end
-      return
-    end
-
     local url = string.format("http://localhost:%d/api/console/stream", C.server_port)
     local term = snacks.terminal({"curl", "-s", "-N", url}, {
       win = {
@@ -189,34 +194,21 @@ C.show = function(opts)
   vim.api.nvim_set_option_value("relativenumber", false, { scope = "local", win = C.console_win })
   vim.api.nvim_set_option_value("signcolumn", "no", { scope = "local", win = C.console_win })
 
-  vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
-    callback = C.hide,
-    desc = "Hide p5 console"
-  })
-  vim.api.nvim_buf_set_keymap(buf, "n", "c", "", {
-    callback = C.clear_terminal,
-    desc = "Clear p5 console"
-  })
-  vim.api.nvim_buf_set_keymap(buf, "n", "i", "", {
-    callback = function()
-      vim.cmd("startinsert")
-    end,
-    desc = "Enter terminal mode"
-  })
+  vim.keymap.set("n", "q", C.hide, { buffer = buf, desc = "Hide p5 console" })
+  vim.keymap.set("n", "c", C.clear_terminal, { buffer = buf, desc = "Clear p5 console" })
+  vim.keymap.set("n", "i", function()
+    vim.cmd("startinsert")
+  end, { buffer = buf, desc = "Enter terminal mode" })
 
-  -- Navigation keymaps
-  vim.api.nvim_buf_set_keymap(buf, "n", "j", "gj", { noremap = true, silent = true })
-  vim.api.nvim_buf_set_keymap(buf, "n", "k", "gk", { noremap = true, silent = true })
-  vim.api.nvim_buf_set_keymap(buf, "n", "<Down>", "gj", { noremap = true, silent = true })
-  vim.api.nvim_buf_set_keymap(buf, "n", "<Up>", "gk", { noremap = true, silent = true })
-  vim.api.nvim_buf_set_keymap(buf, "n", "G", "G", { noremap = true, silent = true, desc = "Scroll to bottom" })
-  vim.api.nvim_buf_set_keymap(buf, "n", "gg", "gg", { noremap = true, silent = true, desc = "Scroll to top" })
-  vim.api.nvim_buf_set_keymap(buf, "n", "<C-d>", "<C-d>zT", { noremap = true, silent = true, desc = "Page down" })
-  vim.api.nvim_buf_set_keymap(buf, "n", "<C-u>", "<C-u>zb", { noremap = true, silent = true, desc = "Page up" })
-  vim.api.nvim_buf_set_keymap(buf, "n", "<C-c>", "", {
-    callback = C.hide,
-    desc = "Hide console"
-  })
+  vim.keymap.set("n", "j", "gj", { buffer = buf, noremap = true, silent = true })
+  vim.keymap.set("n", "k", "gk", { buffer = buf, noremap = true, silent = true })
+  vim.keymap.set("n", "<Down>", "gj", { buffer = buf, noremap = true, silent = true })
+  vim.keymap.set("n", "<Up>", "gk", { buffer = buf, noremap = true, silent = true })
+  vim.keymap.set("n", "G", "G", { buffer = buf, noremap = true, silent = true, desc = "Scroll to bottom" })
+  vim.keymap.set("n", "gg", "gg", { buffer = buf, noremap = true, silent = true, desc = "Scroll to top" })
+  vim.keymap.set("n", "<C-d>", "<C-d>zT", { buffer = buf, noremap = true, silent = true, desc = "Page down" })
+  vim.keymap.set("n", "<C-u>", "<C-u>zb", { buffer = buf, noremap = true, silent = true, desc = "Page up" })
+  vim.keymap.set("n", "<C-c>", C.hide, { buffer = buf, desc = "Hide console" })
 
   vim.cmd("startinsert")
 

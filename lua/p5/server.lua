@@ -286,11 +286,9 @@ S.start_console_after_ready = function()
 		auto_start = false,
 	}
 
-	local console_started = console.create_console_terminal()
+	console.show({ enter = false })
 
-	if console_started then
-		notify("Console polling started on port " .. S.port, "ok")
-	end
+	notify("Console polling started on port " .. S.port, "ok")
 end
 
 -- Open browser with cross-platform support
