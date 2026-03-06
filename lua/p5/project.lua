@@ -335,49 +335,6 @@ P.is_p5_project = function(dir)
   }
 end
 
--- Create fallback HTML for non-project directories
-P.create_fallback_html = function()
-  local cwd = vim.fn.getcwd()
-  local fallback_html = [[<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>p5.js Test Sketch</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-  <style>
-    body { margin: 0; overflow: hidden; }
-    canvas { display: block; }
-  </style>
-</head>
-<body>
-  <main>
-  </main>
-  <script>
-    function setup() {
-      createCanvas(800, 600);
-      background(240);
-      textAlign(CENTER, CENTER);
-      text("p5.js is working!", width/2, height/2 - 20);
-      text("Open browser console to see integration", width/2, height/2 + 20);
-    }
-    
-    function draw() {
-      // Test console integration
-      if (frameCount % 60 === 0) {
-        console.log('Frame:', frameCount);
-        console.info('Animation running smoothly');
-      }
-    }
-  </script>
-</body>
-</html>]]
-  
-  local temp_file = cwd .. "/.p5-temp.html"
-  vim.fn.writefile(vim.split(fallback_html, "\n"), temp_file)
-  return temp_file
-end
-
 P.setup = function(config)
   P.config = config
 end

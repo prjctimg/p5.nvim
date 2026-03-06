@@ -44,6 +44,15 @@ I.setup = function(opts)
   console.setup(I.config)
   gist.setup(I.config)
 
+  vim.api.nvim_create_autocmd("DirChanged", {
+    callback = function(args)
+      local dir = vim.fn.getcwd()
+      if vim.fn.filereadable(dir .. "/p5.json") == 1 then
+        core.add_recent_sketchspace(dir)
+      end
+    end
+  })
+
   local function in_sketchspace()
     local is_proj = project.is_p5_project()
     return is_proj
@@ -201,7 +210,7 @@ function draw() {
       server.stop_server()
     else
       local port = #args > 0 and tonumber(args[1]) or nil
-      server.start_server_with_fallback(port)
+      server.start(port)
     end
   end
 

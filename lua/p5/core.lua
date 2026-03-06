@@ -260,6 +260,31 @@ C.get_p5_version = function()
   return "unknown"
 end
 
+C.get_recent_sketchspaces = function()
+  local cache_file = C.get_cache_dir() .. "/recent_sketchspaces.json"
+  if vim.fn.filereadable(cache_file) == 0 then
+    return {}
+  end
+  local ok, data = pcall(vim.fn.json_decode, table.concat(vim.fn.readfile(cache_file), "\n"))
+  return ok and data or {}
+end
+
+C.add_recent_sketchspace = function(path)
+  local recent = C.get_recent_sketchspaces()
+  for i, v in ipairs(recent) do
+    if v == path then
+      table.remove(recent, i)
+      break
+    end
+  end
+  table.insert(recent, 1, path)
+  while #recent > 10 do
+    table.remove(recent)
+  end
+  local cache_file = C.get_cache_dir() .. "/recent_sketchspaces.json"
+  vim.fn.writefile(vim.split(vim.fn.json_encode(recent), "\n"), cache_file)
+end
+
 -- Setup function
 C.setup = function(config)
   C.config = config

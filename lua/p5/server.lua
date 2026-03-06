@@ -150,7 +150,28 @@ S.start = function(port)
 	local is_project, _, _ = project.is_p5_project(buffer_dir)
 
 	if not is_project then
-		vim.cmd("P5 list")
+		local core = require("p5.core")
+		vim.ui.select(
+			{ "Create new sketchspace", "Open recent sketchspace" },
+			{ prompt = "Not in a valid p5.js sketchspace. What would you like to do?" },
+			function(choice)
+				if choice == "Create new sketchspace" then
+					vim.cmd("P5 create")
+				elseif choice == "Open recent sketchspace" then
+					local recent = core.get_recent_sketchspaces()
+					if #recent == 0 then
+						notify("No recent sketchspaces found", "warn")
+						return
+					end
+					vim.ui.select(recent, { prompt = "Select a sketchspace:" }, function(selected)
+						if selected then
+							vim.api.nvim_set_current_dir(selected)
+							S.start(port)
+						end
+					end)
+				end
+			end
+		)
 		return
 	end
 
@@ -316,109 +337,6 @@ S.open_browser = function(url)
 	if vim.v.shell_error ~= 0 then
 		notify("Failed to open browser: " .. vim.trim(result), "warn")
 		notify("Please open manually: " .. url, "info")
-	end
-end
-
--- Start server with fallback HTML
-S.start_server_with_fallback = function(port)
-	local fallback_file = project.create_fallback_html()
-
-	local server_type = S.detect()
-	if not server_type then
-		notify("No suitable server found (python3, bun, deno, or node)", "error")
-		return
-	end
-
-	port = port or S.config.server.port or 8000
-
-	-- Validate server before starting
-	local valid, message = S.validate_server(server_type, port)
-	if not valid then
-		notify("Server validation failed: " .. message, "error")
-		return
-	end
-
-	S.port = port
-	S.type = server_type
-	notify("Starting " .. server_type .. " server with fallback page on port " .. port, "info")
-
-	local cmd = S.get_cmd(server_type, port)
-	if not cmd then
-		notify("Failed to get server command for: " .. server_type, "error")
-		return
-	end
-
-	S.server_job = vim.fn.jobstart(cmd, {
-		on_stderr = function(_, data)
-			if data and #data > 0 and data[1] ~= "" then
-				local error_msg = table.concat(data, " ")
-
-				-- Handle specific error cases
-				if error_msg:match("Address already in use") then
-					notify("Port " .. port .. " is already in use. Try a different port.", "error")
-				elseif error_msg:match("Permission denied") then
-					notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "error")
-				elseif error_msg:match("EACCES") then
-					notify("Access denied. Check file permissions.", "error")
-				else
-					notify("Server error: " .. error_msg, "error")
-				end
-			end
-		end,
-		on_exit = function(_, exit_code, event)
-			-- Stop console polling when HTTP server stops
-			console.hide()
-
-			-- Clean up fallback file
-			if vim.fn.filereadable(fallback_file) == 1 then
-				vim.fn.delete(fallback_file)
-			end
-
-			if exit_code == 0 then
-				notify("🛑 Server stopped", "info")
-			else
-				local reason = ""
-				if event == "exit" then
-					reason = " (exited normally)"
-				elseif event == "term" then
-					reason = " (terminated)"
-				else
-					reason = " (event: " .. (event or "unknown") .. ")"
-				end
-
-				notify("Server stopped with code " .. exit_code .. reason, "warn")
-			end
-
-			S.server_job = nil
-			S.type = nil
-		end,
-	})
-
-	if S.server_job > 0 then
-		local url = "http://localhost:" .. port .. "/.p5-temp.html"
-		notify("🎉 Server started (" .. server_type .. ") at " .. url, "ok")
-
-		-- Start console polling AFTER server is confirmed ready
-		if S.config.console.enabled then
-			vim.defer_fn(function()
-				S.start_console_after_ready()
-			end, 2000) -- Wait 2 seconds for server to be ready
-		end
-
-		-- Auto-open browser
-		if S.config.server.auto_open_browser ~= false then
-			S.open_browser(url)
-		end
-
-		-- Show console if enabled
-		if S.config.console.auto_show then
-			vim.defer_fn(function()
-				local console = require("p5.console")
-				console.show({ enter = false })
-			end, 2500) -- Show console after server is ready
-		end
-	else
-		notify("Failed to start server", "error")
 	end
 end
 
