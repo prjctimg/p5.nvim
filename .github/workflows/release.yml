@@ -21,7 +21,7 @@ jobs:
           for release in $releases; do
             echo "Deleting release: $release"
             gh release delete "$release" --yes
-          fi
+          done
 
       - name: Delete old tags
         env:
