@@ -67,6 +67,14 @@ S.validate_server = function(server_type, port)
 		return false, "Server script not found: " .. server_script
 	end
 
+	-- Check Python dependencies
+	if server_type == "python" then
+		local result = vim.fn.system("python3 -c 'import websockets' 2>/dev/null")
+		if vim.v.shell_error ~= 0 then
+			return false, "websockets module not found. Install with: pip install websockets"
+		end
+	end
+
 	-- Validate port range
 	if not port or port <= 0 or port >= 65536 then
 		return false, "Invalid port number: " .. tostring(port)
