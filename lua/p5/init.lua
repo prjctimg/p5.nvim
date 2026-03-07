@@ -273,15 +273,7 @@ function draw() {
       if choice == "Create new sketchspace" then
         handlers.create({})
       elseif choice == "Open recent sketchspace" then
-        if #recent == 0 then
-          core.notify("No recent sketchspaces found", "warn")
-          return
-        end
-        vim.ui.select(recent, { prompt = "Select a sketchspace:" }, function(selected)
-          if selected then
-            vim.api.nvim_set_current_dir(selected)
-          end
-        end)
+        handlers.list()
       elseif choice == "Setup sketchspace" then
         handlers.setup()
       elseif choice == "Install library" then
@@ -298,6 +290,19 @@ function draw() {
         handlers.sync({})
       elseif choice == "Create/update Gist" then
         handlers.gist({})
+      end
+    end)
+  end
+
+  handlers.list = function()
+    local recent = core.cleanup_recent_sketchspaces()
+    if #recent == 0 then
+      core.notify("No recent sketchspaces found", "warn")
+      return
+    end
+    vim.ui.select(recent, { prompt = "Select a sketchspace:" }, function(selected)
+      if selected then
+        vim.api.nvim_set_current_dir(selected)
       end
     end)
   end

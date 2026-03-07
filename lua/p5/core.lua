@@ -285,6 +285,19 @@ C.add_recent_sketchspace = function(path)
   vim.fn.writefile(vim.split(vim.fn.json_encode(recent), "\n"), cache_file)
 end
 
+C.cleanup_recent_sketchspaces = function()
+  local recent = C.get_recent_sketchspaces()
+  local cleaned = {}
+  for _, v in ipairs(recent) do
+    if vim.fn.isdirectory(v) == 1 and vim.fn.filereadable(v .. "/p5.json") == 1 then
+      table.insert(cleaned, v)
+    end
+  end
+  local cache_file = C.get_cache_dir() .. "/recent_sketchspaces.json"
+  vim.fn.writefile(vim.split(vim.fn.json_encode(cleaned), "\n"), cache_file)
+  return cleaned
+end
+
 -- Setup function
 C.setup = function(config)
   C.config = config
