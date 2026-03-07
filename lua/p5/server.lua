@@ -261,9 +261,11 @@ S.start = function(port)
 			end, 2000) -- Wait 2 seconds for server to be ready
 		end
 
-		-- Auto-open browser
+		-- Auto-open browser (delayed to allow server to be ready)
 		if S.config.server.auto_open_browser ~= false then
-			S.open_browser(url)
+			vim.defer_fn(function()
+				S.open_browser(url)
+			end, 2000)
 		end
 
 		-- Show console if enabled
