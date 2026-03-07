@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delete old releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get all releases except the latest
+          releases=$(gh release list --json tagName -q '.[:-1] | .[].tagName')
+          for release in $releases; do
+            echo "Deleting release: $release"
+            gh release delete "$release" --yes
+          fi
+
+      - name: Delete old tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get all tags except the current one
+          current_tag=${GITHUB_REF#refs/tags/}
+          all_tags=$(git tag -l)
+          for tag in $all_tags; do
+            if [ "$tag" != "$current_tag" ]; then
+              echo "Deleting tag: $tag"
+              git push origin --delete "$tag" 2>/dev/null || true
+            fi
+          done
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
