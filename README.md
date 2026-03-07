@@ -35,9 +35,22 @@
 ## Installation 💾
 
 ```lua
--- lazy.nvim
+-- lazy.nvim (installs latest release)
 {
   "prjctimg/p5.nvim",
+  version = "*",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+  },
+  config = function()
+    require("p5").setup({})
+  end
+}
+
+-- lazy.nvim (development - latest commit on main)
+{
+  "prjctimg/p5.nvim",
+  branch = "main",
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
