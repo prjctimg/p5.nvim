@@ -30,6 +30,7 @@
 
 - Neovim >= 0.9.0
 - Python 3.7+ (for development server)
+- [websockets](https://pypi.org/project/websockets/) Python package (`python3-websockets` on Debian/Ubuntu, or `pip install websockets`)
 - curl (for console streaming)
 
 ## Installation 💾
@@ -38,7 +39,7 @@
 -- lazy.nvim (installs latest release)
 {
   "prjctimg/p5.nvim",
-  version = "v0.3.1",
+  version = "v0.3.3",
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
