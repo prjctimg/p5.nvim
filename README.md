@@ -38,7 +38,7 @@
 -- lazy.nvim (installs latest release)
 {
   "prjctimg/p5.nvim",
-  version = "*",
+  version = "v0.3.0",
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
