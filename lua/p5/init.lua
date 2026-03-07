@@ -254,9 +254,11 @@ function draw() {
 
   handlers.menu = function()
     local server_status = server.server_job and "Stop server" or "Start server"
+    local recent = core.get_recent_sketchspaces()
 
     local options = {
       "Create new sketchspace",
+      "Open recent sketchspace",
       "Setup sketchspace",
       "Install library",
       "Uninstall library",
@@ -270,6 +272,16 @@ function draw() {
     vim.ui.select(options, { prompt = "p5.nvim:" }, function(choice)
       if choice == "Create new sketchspace" then
         handlers.create({})
+      elseif choice == "Open recent sketchspace" then
+        if #recent == 0 then
+          core.notify("No recent sketchspaces found", "warn")
+          return
+        end
+        vim.ui.select(recent, { prompt = "Select a sketchspace:" }, function(selected)
+          if selected then
+            vim.api.nvim_set_current_dir(selected)
+          end
+        end)
       elseif choice == "Setup sketchspace" then
         handlers.setup()
       elseif choice == "Install library" then
