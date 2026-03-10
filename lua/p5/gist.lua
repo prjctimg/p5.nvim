@@ -114,6 +114,11 @@ G.create_gist = function(description)
       local target_path = unique_dir .. "/" .. file_name
       local source_path = vim.fn.fnamemodify(proj_dir .. "/" .. file_name, ":p")
 
+      local parent_dir = vim.fn.fnamemodify(target_path, ":h")
+      if parent_dir ~= unique_dir then
+        vim.fn.mkdir(parent_dir, "p")
+      end
+
       vim.fn.system({"cp", source_path, target_path})
       if vim.v.shell_error ~= 0 then
         core.notify("Failed to copy file: " .. file_name, "error")
