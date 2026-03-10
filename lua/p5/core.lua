@@ -166,7 +166,7 @@ end
 
 -- Write workspace configuration with formatting
 C.write_workspace_config = function(config, project_dir)
-  local dir = project_dir or fn.getcwd()
+  local dir = project_dir or C.find_project_root() or fn.getcwd()
   local config_file = dir .. "/p5.json"
   C.write_json_file(config_file, config)
 end
@@ -215,8 +215,10 @@ C.download_file = function(url, dest, callback, options)
 
     if C.is_cache_valid(cache_file) then
       fn.system({"cp", cache_file, dest})
-      if callback then callback(true) end
-      return true
+      if vim.v.shell_error == 0 then
+        if callback then callback(true) end
+        return true
+      end
     end
   end
 

@@ -2,7 +2,6 @@
 local C = {}
 local core = require("p5.core")
 local project = require("p5.project")
-local server = require("p5.server")
 local notify = core.notify
 
 C.console_win = nil
@@ -18,18 +17,12 @@ C.last_error_time = 0
 C.auto_clear_interval = 30000  -- 30 seconds
 
 C.create_console_terminal = function()
+  local server = require("p5.server")
+
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
     return C.console_win
   end
 
-  if not (server.server_job and server.port) then
-    notify("Console requires a running server first", "warn")
-    return nil
-  end
-
-  C.server_port = server.port
-  C.reconnect_attempts = 0
-  local server = require("p5.server")
   if not (server.server_job and server.port) then
     notify("Console requires a running server first", "warn")
     return nil
@@ -112,6 +105,7 @@ C.attempt_reconnect = function()
 end
 
 C.show = function(opts)
+  local server = require("p5.server")
   opts = opts or {}
   local enter = opts.enter ~= false
 
