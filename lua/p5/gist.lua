@@ -160,6 +160,14 @@ G.create_gist = function(description)
     if url then
       proj_config.gist = url
       core.write_workspace_config(proj_config, proj_dir)
+
+      local gist_id = url:match("/([a-fA-F0-9]+)$")
+      if gist_id then
+        local p5_json_path = proj_dir .. "/p5.json"
+        local edit_cmd = {"gh", "gist", "edit", gist_id, "--filename", "p5.json", p5_json_path}
+        vim.fn.system(edit_cmd)
+      end
+
       core.notify("Gist created: " .. url, "ok")
     else
       core.notify("Failed to extract gist URL: " .. result, "error")

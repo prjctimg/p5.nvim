@@ -214,10 +214,12 @@ C.download_file = function(url, dest, callback, options)
     cache_file = cache_dir .. "/" .. cache_key
 
     if C.is_cache_valid(cache_file) then
-      fn.system({"cp", cache_file, dest})
-      if vim.v.shell_error == 0 then
+      local ok, err = vim.uv.fs_copyfile(cache_file, dest)
+      if ok then
         if callback then callback(true) end
         return true
+      else
+        C.notify("Cache copy failed: " .. tostring(err), "warn")
       end
     end
   end
