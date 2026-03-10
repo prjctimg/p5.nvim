@@ -10,6 +10,7 @@ L.require = function(plugin_name)
   return nil
 end
 
+
 -- Require an optional plugin with warning
 L.require_opt = function(plugin_name, warning_msg)
   local ok, plugin = pcall(require, plugin_name)

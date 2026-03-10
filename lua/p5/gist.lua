@@ -2,6 +2,20 @@
 local G = {}
 local core = require("p5.core")
 
+local gh_available = nil
+
+local function check_gh()
+  if gh_available == nil then
+    gh_available = core.command_exists("gh")
+  end
+  return gh_available
+end
+
+local function get_gist_temp_dir()
+  local temp_base = vim.fn.stdpath("cache") or (vim.uv.os_tmpdir() or "/tmp")
+  return temp_base .. "/p5_gist"
+end
+
 -- Get files to include in gist from p5.json config
 G.get_includes = function(proj_dir, config)
   local includes = config.includes or {"sketch.js"}
@@ -61,68 +75,58 @@ end
 
 -- Create gist from current project
 G.create_gist = function(description)
-  if not core.command_exists("gh") then
+  if not check_gh() then
     core.notify("GitHub CLI (gh) not found. Install gh to use gist functionality", "error")
     return
   end
 
-  -- Find project root and config
   local project_dir, config = core.find_project_root()
   if not config then
     core.notify("Not in a sketchspace (p5.json required)", "error")
     return
   end
 
-  -- Get files to include from config
   local files_to_include_names = G.get_includes(project_dir, config)
-  
-  -- Check if all required files exist
+
   local missing_files = {}
   for _, file_name in ipairs(files_to_include_names) do
-    if vim.fn.filereadable(project_dir .. "/" .. file_name) == 0 then
+    if not core.file_exists(project_dir .. "/" .. file_name) then
       table.insert(missing_files, file_name)
     end
   end
-  
+
   if #missing_files > 0 then
     core.notify("Missing files: " .. table.concat(missing_files, ", "), "error")
     return
   end
 
-  -- Prompt for description if not provided
   local function proceed_with_gist(desc, proj_dir, proj_config)
-    -- Create temporary files for gist using platform-safe temp directory
     local temp_files = {}
     local gist_files = {}
-    
-    -- Get platform-safe temp directory
-    local temp_base = vim.fn.stdpath("cache") or (vim.uv.os_tmpdir() or "/tmp")
-    local gist_temp_dir = temp_base .. "/p5_gist"
+
+    local gist_temp_dir = get_gist_temp_dir()
     vim.fn.mkdir(gist_temp_dir, "p")
-    
-    -- Copy files to include into unique subdirectory
+
     local unique_dir = gist_temp_dir .. "/" .. os.time() .. "_" .. vim.fn.getpid()
     vim.fn.mkdir(unique_dir, "p")
-    
+
     for _, file_name in ipairs(files_to_include_names) do
       local target_path = unique_dir .. "/" .. file_name
       local source_path = vim.fn.fnamemodify(proj_dir .. "/" .. file_name, ":p")
-      
+
       vim.fn.system({"cp", source_path, target_path})
       if vim.v.shell_error ~= 0 then
         core.notify("Failed to copy file: " .. file_name, "error")
-        -- Clean up and return
         vim.fn.delete(unique_dir, "rf")
         return
       end
-      
+
       table.insert(temp_files, target_path)
       table.insert(gist_files, target_path)
     end
 
-    -- Build gh command
     local cmd = {"gh", "gist", "create"}
-    
+
     if desc and desc ~= "" then
       table.insert(cmd, "--desc")
       table.insert(cmd, desc)
@@ -136,27 +140,21 @@ G.create_gist = function(description)
       table.insert(cmd, file_path)
     end
 
-    -- Execute gh command
     local result = vim.fn.system(cmd)
     local exit_code = vim.v.shell_error
 
-    -- Clean up temporary files
     vim.fn.delete(unique_dir, "rf")
-    
+
     if exit_code ~= 0 then
       core.notify("Failed to create gist: " .. result, "error")
       return
     end
-    
-    -- Extract gist URL and ID from result
+
     local url = result:match("https://gist%.github%.com/%S+")
-    
+
     if url then
-      -- Store gist URL in p5.json
       proj_config.gist = url
-      local json_content = vim.fn.json_encode(proj_config)
-      local target_path = proj_dir .. "/p5.json"
-      vim.fn.writefile(vim.split(json_content, "\n"), target_path)
+      core.write_workspace_config(proj_config, proj_dir)
       core.notify("Gist created: " .. url, "ok")
     else
       core.notify("Failed to extract gist URL: " .. result, "error")
@@ -184,71 +182,61 @@ end
 
 -- Update existing gist
 G.update_gist = function(gist_id)
-  -- Find project root and config
   local project_dir, config = core.find_project_root()
   if not config then
     core.notify("Not in a sketchspace", "error")
     return
   end
 
-  -- Get gist_id from config if not provided
   if not gist_id then
     if config.gist then
       if type(config.gist) == "table" then
         gist_id = config.gist.id
       else
-        -- Extract ID from URL string
         gist_id = config.gist:match("/([a-fA-F0-9]+)$")
       end
     end
-    
+
     if not gist_id then
       core.notify("No gist associated with this sketchspace. Run :P5Gist to create one.", "error")
       return
     end
   end
 
-  -- Get files to update
   local files_to_update = G.get_includes(project_dir, config)
-  
-  -- Get platform-safe temp directory
+
   local temp_base = vim.fn.stdpath("cache") or (vim.uv.os_tmpdir() or "/tmp")
   local gist_temp_dir = temp_base .. "/p5_gist_update"
   vim.fn.mkdir(gist_temp_dir, "p")
-  
-  -- Update each file in the gist
+
   local update_errors = {}
   for _, file_name in ipairs(files_to_update) do
-    if file_name ~= "p5.json" then  -- Don't update p5.json in gist
+    if file_name ~= "p5.json" then
       local temp_file = gist_temp_dir .. "/" .. os.time() .. "_" .. vim.fn.getpid() .. "_" .. vim.fn.fnamemodify(file_name, ":t")
       local source_path = project_dir .. "/" .. file_name
-      
-      -- Copy to temp
+
       vim.fn.system({"cp", source_path, temp_file})
       if vim.v.shell_error ~= 0 then
         table.insert(update_errors, "Failed to copy: " .. file_name)
       else
-        -- Edit gist file
         local cmd = {"gh", "gist", "edit", gist_id, "--filename", file_name, temp_file}
         vim.fn.system(cmd)
         if vim.v.shell_error ~= 0 then
           table.insert(update_errors, "Failed to update: " .. file_name)
         end
-        
-        -- Cleanup temp file
+
         vim.fn.delete(temp_file)
       end
     end
   end
-  
+
   if #update_errors > 0 then
     core.notify("Gist update partially failed: " .. table.concat(update_errors, ", "), "error")
     return
   end
-  
+
   core.notify("Gist updated successfully", "ok")
-  
-  -- Open in browser (cross-platform)
+
   if config.gist then
     local url = type(config.gist) == "string" and config.gist or config.gist.url
     if url then
@@ -271,7 +259,7 @@ end
 
 -- List gists
 G.list_gists = function()
-  if not core.command_exists("gh") then
+  if not check_gh() then
     core.notify("GitHub CLI (gh) not found", "error")
     return
   end
@@ -332,7 +320,7 @@ G.clone_gist = function(gist_id)
     return
   end
 
-  if not core.command_exists("gh") then
+  if not check_gh() then
     core.notify("GitHub CLI (gh) not found", "error")
     return
   end
@@ -442,7 +430,7 @@ G.download_gist = function(gist_id, project_dir)
     return false, "No gist ID provided"
   end
 
-  if not core.command_exists("gh") then
+  if not check_gh() then
     return false, "GitHub CLI (gh) not found"
   end
 
@@ -468,11 +456,9 @@ G.download_gist = function(gist_id, project_dir)
   for filename, filedata in pairs(files) do
     local target_path = project_dir .. "/" .. filename
 
-    -- Check if file exists and prompt for overwrite
-    if vim.fn.filereadable(target_path) == 1 then
+    if core.file_exists(target_path) then
       table.insert(skipped, filename)
     else
-      -- Write file content
       local content = filedata.content or ""
       vim.fn.writefile(vim.split(content, "\n"), target_path)
       table.insert(downloaded, filename)
