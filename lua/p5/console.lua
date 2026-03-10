@@ -1,8 +1,9 @@
 -- Browser console integration for p5.nvim with SSE streaming
 local C = {}
 local core = require("p5.core")
-local notify = core.notify
 local project = require("p5.project")
+local server = require("p5.server")
+local notify = core.notify
 
 C.console_win = nil
 C.console_buf = nil
@@ -21,6 +22,13 @@ C.create_console_terminal = function()
     return C.console_win
   end
 
+  if not (server.server_job and server.port) then
+    notify("Console requires a running server first", "warn")
+    return nil
+  end
+
+  C.server_port = server.port
+  C.reconnect_attempts = 0
   local server = require("p5.server")
   if not (server.server_job and server.port) then
     notify("Console requires a running server first", "warn")
@@ -106,11 +114,8 @@ end
 C.show = function(opts)
   opts = opts or {}
   local enter = opts.enter ~= false
-  
-  local server = require("p5.server")
-  local is_project = project.is_p5_project()
 
-  if not is_project then
+  if not project.is_p5_project() then
     notify("Console only works in p5.js projects", "warn")
     return
   end
@@ -132,7 +137,6 @@ C.show = function(opts)
   local height = math.floor(viewport_height * 0.3)
   C.server_port = server.port
 
-  -- Check if we already have a valid console window
   if C.console_win and vim.api.nvim_win_is_valid(C.console_win) then
     if enter then
       vim.api.nvim_set_current_win(C.console_win)

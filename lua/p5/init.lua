@@ -1,6 +1,13 @@
 -- p5.nvim entry point
 local I = {}
 
+local core = require("p5.core")
+local project = require("p5.project")
+local server = require("p5.server")
+local libraries = require("p5.libraries")
+local console = require("p5.console")
+local gist = require("p5.gist")
+
 I.config = {
   server = {
     port = 8000,
@@ -30,13 +37,6 @@ I.config = {
 I.setup = function(opts)
   I.config = vim.tbl_deep_extend("force", I.config, opts or {})
 
-  local core = require("p5.core")
-  local project = require("p5.project")
-  local server = require("p5.server")
-  local libraries = require("p5.libraries")
-  local console = require("p5.console")
-  local gist = require("p5.gist")
-
   core.setup(I.config)
   project.setup(I.config)
   server.setup(I.config)
@@ -47,19 +47,14 @@ I.setup = function(opts)
   vim.api.nvim_create_autocmd("DirChanged", {
     callback = function(args)
       local dir = vim.fn.getcwd()
-      if vim.fn.filereadable(dir .. "/p5.json") == 1 then
+      if core.file_exists(dir .. "/p5.json") then
         core.add_recent_sketchspace(dir)
       end
     end
   })
 
-  local function in_sketchspace()
-    local is_proj = project.is_p5_project()
-    return is_proj
-  end
-
   local function require_sketchspace(action)
-    if not in_sketchspace() then
+    if not project.is_p5_project() then
       core.notify(action .. " requires a sketchspace (p5.json)", "error")
       return false
     end
@@ -88,10 +83,9 @@ I.setup = function(opts)
   handlers.setup = function()
     if not require_sketchspace("Setup") then return end
 
-    local cwd = vim.fn.getcwd()
+    local cwd = vim.fs.normalize(vim.fn.getcwd())
     local config = core.read_workspace_config()
 
-    -- Step 1: Handle gist download if gistUrl exists
     if config and config.gist then
       local gist_info = gist.get_project_gist()
       if gist_info and gist_info.id then
@@ -104,10 +98,8 @@ I.setup = function(opts)
       end
     end
 
-    -- Step 2: Create default sketch.js if not exists
-    local cwd_normalized = vim.fs.normalize(cwd)
-    local sketch_file = cwd_normalized .. "/sketch.js"
-    if vim.fn.filereadable(sketch_file) == 0 then
+    local sketch_file = cwd .. "/sketch.js"
+    if not core.file_exists(sketch_file) then
       local sketch_js = [[function setup() {
   createCanvas(400, 400);
 }
@@ -121,7 +113,6 @@ function draw() {
       core.notify("Created default sketch.js", "info")
     end
 
-    -- Step 3: Copy assets, generate libs.js, install libs
     project.copy_assets_to_project(cwd, function(err)
       if err then
         core.notify("Failed to copy assets: " .. err, "error")
@@ -132,9 +123,9 @@ function draw() {
 
       libraries.generate_libs_js(cwd)
 
-      local config = core.read_workspace_config()
-      if config and config.libs then
-        local lib_names = vim.tbl_keys(config.libs)
+      local updated_config = core.read_workspace_config()
+      if updated_config and updated_config.libs then
+        local lib_names = vim.tbl_keys(updated_config.libs)
         if #lib_names > 0 then
           libraries.install_libs(lib_names)
         end
@@ -169,8 +160,7 @@ function draw() {
       end
       vim.ui.select(items, { prompt = "Select library to install:" }, function(selected)
         if selected then
-          local lib_name = lib_map[selected] or selected
-          libraries.install_libs({lib_name})
+          libraries.install_libs({lib_map[selected] or selected})
         end
       end)
     else
@@ -196,8 +186,7 @@ function draw() {
       end
       vim.ui.select(items, { prompt = "Select library to uninstall:" }, function(selected)
         if selected then
-          local lib_name = lib_map[selected] or selected
-          libraries.uninstall_libs({lib_name})
+          libraries.uninstall_libs({lib_map[selected] or selected})
         end
       end)
     else
@@ -254,9 +243,8 @@ function draw() {
 
   handlers.menu = function()
     local server_status = server.server_job and "Stop server" or "Start server"
-    local recent = core.get_recent_sketchspaces()
 
-    local options = {
+    local menu_options = {
       "Create new sketchspace",
       "Open recent sketchspace",
       "Setup sketchspace",
@@ -269,27 +257,23 @@ function draw() {
       "Create/update Gist",
     }
 
-    vim.ui.select(options, { prompt = "p5.nvim:" }, function(choice)
-      if choice == "Create new sketchspace" then
-        handlers.create({})
-      elseif choice == "Open recent sketchspace" then
-        handlers.list()
-      elseif choice == "Setup sketchspace" then
-        handlers.setup()
-      elseif choice == "Install library" then
-        handlers.install({})
-      elseif choice == "Uninstall library" then
-        handlers.uninstall({})
-      elseif choice == "Start server" or choice == "Stop server" then
-        handlers.server({})
-      elseif choice == "Toggle console" then
-        handlers.console()
-      elseif choice == "Open docs" then
-        handlers.docs()
-      elseif choice == "Sync" then
-        handlers.sync({})
-      elseif choice == "Create/update Gist" then
-        handlers.gist({})
+    local menu_dispatch = {
+      ["Create new sketchspace"] = function() handlers.create({}) end,
+      ["Open recent sketchspace"] = function() handlers.list() end,
+      ["Setup sketchspace"] = function() handlers.setup() end,
+      ["Install library"] = function() handlers.install({}) end,
+      ["Uninstall library"] = function() handlers.uninstall({}) end,
+      ["Start server"] = function() handlers.server({}) end,
+      ["Stop server"] = function() handlers.server({}) end,
+      ["Toggle console"] = function() handlers.console() end,
+      ["Open docs"] = function() handlers.docs() end,
+      ["Sync"] = function() handlers.sync({}) end,
+      ["Create/update Gist"] = function() handlers.gist({}) end,
+    }
+
+    vim.ui.select(menu_options, { prompt = "p5.nvim:" }, function(choice)
+      if choice and menu_dispatch[choice] then
+        menu_dispatch[choice]()
       end
     end)
   end

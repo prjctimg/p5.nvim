@@ -1,56 +1,50 @@
 -- Project creation and management for p5.nvim
 local P = {}
 local core = require("p5.core")
-local notify = core.notify
 local libraries = require("p5.libraries")
+local notify = core.notify
+
+local required_assets = {
+  "libs/p5.js",
+  "libs/p5.sound.js",
+  "types/p5.d.ts"
+}
 
 -- Validate bundled assets before project creation
 P.validate_bundled_assets = function()
   local plugin_assets = core.get_asset_dir()
-  local required_assets = {
-    "libs/p5.js",
-    "libs/p5.sound.js", 
-    "types/p5.d.ts"
-  }
-  
   local missing = {}
+
   for _, asset in ipairs(required_assets) do
-    local full_path = plugin_assets .. "/" .. asset
-    if vim.fn.filereadable(full_path) == 0 then
+    if not core.file_exists(plugin_assets .. "/" .. asset) then
       table.insert(missing, asset)
     end
   end
-  
+
   if #missing > 0 then
     notify("Missing required assets: " .. table.concat(missing, ", "), "error")
     return false
   end
-  
+
   return true
 end
 
 -- Validate asset paths in generated config files
 P.validate_asset_paths = function(project_path)
   local project_assets = project_path .. "/assets"
-  local required_paths = {
-    "libs/p5.js",
-    "libs/p5.sound.js",
-    "types/p5.d.ts"
-  }
-  
   local missing = {}
-  for _, path in ipairs(required_paths) do
-    local full_path = project_assets .. "/" .. path
-    if vim.fn.filereadable(full_path) == 0 then
+
+  for _, path in ipairs(required_assets) do
+    if not core.file_exists(project_assets .. "/" .. path) then
       table.insert(missing, path)
     end
   end
-  
+
   if #missing > 0 then
     notify("Asset path validation failed - missing: " .. table.concat(missing, ", "), "warn")
     return false
   end
-  
+
   return true
 end
 
@@ -215,17 +209,16 @@ end
 P.copy_assets_to_project = function(project_path, callback)
   local plugin_assets = core.get_asset_dir()
   local project_assets = project_path .. "/assets"
-  
-  -- Create project assets directory synchronously (fast operation)
+
   vim.fn.mkdir(project_assets, "p")
   vim.fn.mkdir(project_assets .. "/types", "p")
   vim.fn.mkdir(project_assets .. "/libs", "p")
-  
+
   local pending_copies = 0
   local copy_errors = {}
-  
+
   local function try_copy(src, dest)
-    if vim.fn.filereadable(src) == 1 then
+    if core.file_exists(src) then
       pending_copies = pending_copies + 1
       local function on_copy(err)
         pending_copies = pending_copies - 1
@@ -238,11 +231,9 @@ P.copy_assets_to_project = function(project_path, callback)
           end)
         end
       end
-      -- Use vim.uv for async copy if available (0.10+), fallback to sync
       if vim.uv and vim.uv.fs_copyfile then
         vim.uv.fs_copyfile(src, dest, on_copy)
       else
-        -- Fallback for older Neovim versions
         local result = vim.fn.system({"cp", src, dest})
         vim.schedule(function()
           if vim.v.shell_error ~= 0 then
@@ -254,21 +245,17 @@ P.copy_assets_to_project = function(project_path, callback)
       end
     end
   end
-  
-  -- Copy bundled p5.d.ts
+
   try_copy(plugin_assets .. "/types/p5.d.ts", project_assets .. "/types/p5.d.ts")
 
-  -- Copy bundled library files
-  if vim.fn.isdirectory(plugin_assets .. "/libs") == 1 then
+  if core.dir_exists(plugin_assets .. "/libs") then
     for _, file in ipairs({"p5.js", "p5.sound.js"}) do
       try_copy(plugin_assets .. "/libs/" .. file, project_assets .. "/libs/" .. file)
     end
   end
-  
-  -- Copy favicon
+
   try_copy(plugin_assets .. "/favicon.ico", project_assets .. "/favicon.ico")
-  
-  -- If no async copies were started, call callback immediately
+
   if pending_copies == 0 and callback then
     vim.schedule(function()
       callback(#copy_errors > 0 and table.concat(copy_errors, ", ") or nil)
@@ -279,20 +266,17 @@ end
 -- Check if current directory is a valid p5.js sketchspace
 P.is_p5_project = function(dir)
   local cwd = vim.fs.normalize(dir or vim.fn.getcwd())
-  
-  -- Check for p5.json (required for sketchspace)
+
   local config_file = cwd .. "/p5.json"
-  if vim.fn.filereadable(config_file) == 0 then
+  if not core.file_exists(config_file) then
     return false, "No p5.json found in " .. cwd
   end
-  
-  -- Validate p5.json is valid JSON
-  local ok, config = pcall(vim.fn.json_decode, table.concat(vim.fn.readfile(config_file), "\n"))
-  if not ok or type(config) ~= "table" then
+
+  local config, err = core.read_json_file(config_file)
+  if err or type(config) ~= "table" then
     return false, "Invalid p5.json format"
   end
-  
-  -- Validate config.includes is nil or array of strings
+
   if config.includes ~= nil then
     if type(config.includes) ~= "table" then
       return false, "p5.json: 'includes' must be an array"
@@ -303,8 +287,7 @@ P.is_p5_project = function(dir)
       end
     end
   end
-  
-  -- Validate config.libs is nil or object with string values
+
   if config.libs ~= nil then
     if type(config.libs) ~= "table" then
       return false, "p5.json: 'libs' must be an object"
@@ -318,17 +301,15 @@ P.is_p5_project = function(dir)
       end
     end
   end
-  
-  -- Check for sketch.js (optional but expected)
+
   local sketch_file = cwd .. "/sketch.js"
-  local has_sketch = vim.fn.filereadable(sketch_file) == 1
-  
-  -- Get includes from config (defaults to sketch.js)
+  local has_sketch = core.file_exists(sketch_file)
+
   local includes = config.includes or {"sketch.js"}
-  
+
   return true, "Valid p5.js sketchspace detected", {
     has_sketch = has_sketch,
-    has_index = vim.fn.filereadable(cwd .. "/index.html") == 1,
+    has_index = core.file_exists(cwd .. "/index.html"),
     config = config,
     includes = includes,
     project_root = cwd

@@ -8,17 +8,30 @@ local L = {
   }
 }
 
+local function get_cwd()
+  return vim.fn.getcwd()
+end
+
+local function libs_dir()
+  return get_cwd() .. "/" .. L.config.libraries_dir
+end
+
+local function types_dir()
+  return get_cwd() .. "/" .. L.config.types_dir
+end
+
+local function index_file()
+  return get_cwd() .. "/" .. L.config.index_file
+end
+
 -- Load libraries from JSON file
 L.load_libs_json = function()
   local plugin_root = core.get_plugin_root()
   local libs_file = plugin_root .. "/libs.json"
-  
-  if vim.fn.filereadable(libs_file) == 1 then
-    local content = vim.fn.readfile(libs_file)
-    local ok, data = pcall(vim.fn.json_decode, table.concat(content, "\n"))
-    if ok and data and data.libraries then
-      return data.libraries
-    end
+
+  local data, err = core.read_json_file(libs_file)
+  if data and data.libraries then
+    return data.libraries
   end
   return {}
 end
@@ -80,11 +93,10 @@ end
 
 -- Get list of installed libraries from project
 L.get_installed_libs = function()
-  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
   local installed = {}
-  
-  if vim.fn.isdirectory(libs_dir) == 1 then
-    local js_files = vim.fn.glob(libs_dir .. "/*.js", false, true)
+
+  if core.dir_exists(libs_dir()) then
+    local js_files = vim.fn.glob(libs_dir() .. "/*.js", false, true)
     for _, file in ipairs(js_files) do
       local lib_name = vim.fn.fnamemodify(file, ":t:r")
       if lib_name ~= "p5" and lib_name ~= "p5.sound" then
@@ -95,22 +107,21 @@ L.get_installed_libs = function()
       end
     end
   end
-  
+
   return installed
 end
 
 -- Validate and clean broken links in index.html
 L.validate_libs = function()
-  local index_file = vim.fn.getcwd() .. "/" .. L.config.index_file
-  if vim.fn.filereadable(index_file) == 0 then
+  local idx_file = index_file()
+  if not core.file_exists(idx_file) then
     return { cleaned = 0 }
   end
-  
-  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
-  local content = vim.fn.readfile(index_file)
+
+  local content = vim.fn.readfile(idx_file)
   local new_content = {}
   local cleaned = 0
-  
+
   local in_lib_section = false
   for _, line in ipairs(content) do
     if line:match("<!--%s*LIBRARIES%s*-->") then
@@ -123,8 +134,8 @@ L.validate_libs = function()
       local lib_name = line:match('src="assets/libs/(%w+)%.js"') or
                        line:match("src='assets/libs/(%w+)%.js'")
       if lib_name then
-        local js_file = libs_dir .. "/" .. lib_name .. ".js"
-        if vim.fn.filereadable(js_file) == 1 then
+        local js_file = libs_dir() .. "/" .. lib_name .. ".js"
+        if core.file_exists(js_file) then
           table.insert(new_content, line)
         else
           cleaned = cleaned + 1
@@ -136,12 +147,12 @@ L.validate_libs = function()
       table.insert(new_content, line)
     end
   end
-  
+
   if cleaned > 0 then
-    vim.fn.writefile(new_content, index_file)
+    vim.fn.writefile(new_content, idx_file)
     core.notify("Cleaned " .. cleaned .. " broken library link(s)", "info")
   end
-  
+
   return { cleaned = cleaned }
 end
 
@@ -151,55 +162,48 @@ L.uninstall_libs = function(lib_names)
     core.notify("No libraries specified", "warn")
     return
   end
-  
-  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
-  local types_dir = vim.fn.getcwd() .. "/" .. L.config.types_dir
-  
+
   local config = core.read_workspace_config() or { libs = {}, includes = {"sketch.js"} }
   config.libs = config.libs or {}
-  
+
   local removed = {}
   local failed = {}
-  
+
   for _, name in ipairs(lib_names) do
-    local js_file = libs_dir .. "/" .. name .. ".js"
-    local dts_file = types_dir .. "/" .. name .. ".d.ts"
-    
+    local js_file = libs_dir() .. "/" .. name .. ".js"
+    local dts_file = types_dir() .. "/" .. name .. ".d.ts"
+
     local success = true
-    
-    -- Remove JS file
-    if vim.fn.filereadable(js_file) == 1 then
+
+    if core.file_exists(js_file) then
       if vim.fn.delete(js_file) ~= 0 then
         success = false
         table.insert(failed, name)
       end
     end
-    
-    -- Remove TypeScript definitions
-    if vim.fn.filereadable(dts_file) == 1 then
+
+    if core.file_exists(dts_file) then
       vim.fn.delete(dts_file)
     end
-    
-    -- Remove from config
+
     if config.libs[name] then
       config.libs[name] = nil
     else
       success = false
       table.insert(failed, name)
     end
-    
+
     if success then
       table.insert(removed, name)
     end
   end
-  
-  -- Save updated config
+
   core.write_workspace_config(config)
-  
+
   if #removed > 0 then
     core.notify("Removed: " .. table.concat(removed, ", "), "info")
   end
-  
+
   if #failed > 0 then
     core.notify("Failed to remove: " .. table.concat(failed, ", "), "error")
   end
@@ -208,8 +212,8 @@ end
 -- Generate static libs.js that reads from p5.json at runtime
 L.generate_libs_js = function(project_path)
   local cwd = project_path or vim.fn.getcwd()
-  local libs_dir = cwd .. "/" .. L.config.libraries_dir
-  local libs_js = libs_dir .. "/libs.js"
+  local l_dir = cwd .. "/" .. L.config.libraries_dir
+  local libs_js = l_dir .. "/libs.js"
 
   local js_content = [[
 // Auto-generated - reads libraries from p5.json at runtime
@@ -289,23 +293,23 @@ end
 
 -- Validate downloaded file contains actual JavaScript code
 L.validate_download = function(dest)
-  if vim.fn.filereadable(dest) == 0 then
+  if not core.file_exists(dest) then
     return false
   end
-  
+
   local size = vim.fn.getfsize(dest)
   if size < 100 then
     return false
   end
-  
+
   local handle = io.open(dest, "r")
   if not handle then
     return false
   end
-  
+
   local first_bytes = handle:read(100)
   handle:close()
-  
+
   local error_patterns = {
     "Not found",
     "Internal Server Error",
@@ -315,13 +319,13 @@ L.validate_download = function(dest)
     "<!DOCTYPE html>",
     "<html>"
   }
-  
+
   for _, pattern in ipairs(error_patterns) do
     if first_bytes:match(pattern) then
       return false
     end
   end
-  
+
   return true
 end
 
@@ -366,25 +370,21 @@ L.install_libs = function(lib_names, skip_confirm)
     core.notify("No libraries selected", "warn")
     return
   end
-  
-  -- Validate and clean broken links first
+
   L.validate_libs()
-  
-  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
-  vim.fn.mkdir(libs_dir, "p")
-  
-  local types_dir = vim.fn.getcwd() .. "/" .. L.config.types_dir
-  vim.fn.mkdir(types_dir, "p")
-  
+
+  vim.fn.mkdir(libs_dir(), "p")
+  vim.fn.mkdir(types_dir(), "p")
+
   local to_install = {}
-  
+
   for _, name in ipairs(lib_names) do
     local lib = L.get_library_info(name)
     if lib then
       table.insert(to_install, lib)
     end
   end
-  
+
   L.do_install(to_install)
 end
 
@@ -393,10 +393,7 @@ L.do_install = function(to_install)
     core.notify("No libraries to install", "info")
     return
   end
-  
-  local libs_dir = vim.fn.getcwd() .. "/" .. L.config.libraries_dir
-  local types_dir = vim.fn.getcwd() .. "/" .. L.config.types_dir
-  
+
   local pending = #to_install
   local completed = 0
   local installed_names = {}
@@ -423,11 +420,10 @@ L.do_install = function(to_install)
   end
   
   for _, lib in ipairs(to_install) do
-    -- Handle library names that already end with .js
     local lib_name = lib.name:gsub("%.js$", "")
-    local dest = libs_dir .. "/" .. lib_name .. ".js"
-    local types_dest = types_dir .. "/" .. lib_name .. ".d.ts"
-    
+    local dest = libs_dir() .. "/" .. lib_name .. ".js"
+    local types_dest = types_dir() .. "/" .. lib_name .. ".d.ts"
+
     L.download_library(lib, dest, function(success)
       if success then
         table.insert(installed_names, lib_name)

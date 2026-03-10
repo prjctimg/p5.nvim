@@ -1,9 +1,9 @@
 -- Live server management
 local S = {}
 local core = require("p5.core")
-local notify = core.notify
 local console = require("p5.console")
 local project = require("p5.project")
+local notify = core.notify
 
 -- Default configuration
 S.config = {
@@ -36,7 +36,7 @@ S.detect = function()
 		local plugin_root = core.get_plugin_root()
 		local server_script = plugin_root .. "/server.py"
 
-		if vim.fn.filereadable(server_script) == 1 then
+		if core.file_exists(server_script) then
 			return "python"
 		else
 			notify("Server script not found: " .. server_script, "warn")
@@ -55,19 +55,16 @@ S.validate_server = function(server_type, port)
 		return false, "Unknown server type: " .. tostring(server_type)
 	end
 
-	-- Check if runtime is available
 	if not core.command_exists(server_config.check) then
 		return false, server_config.cmd .. " is not available"
 	end
 
-	-- Check if server script exists
 	local plugin_root = core.get_plugin_root()
 	local server_script = plugin_root .. "/server.py"
-	if vim.fn.filereadable(server_script) == 0 then
+	if not core.file_exists(server_script) then
 		return false, "Server script not found: " .. server_script
 	end
 
-	-- Check Python dependencies
 	if server_type == "python" then
 		local result = vim.fn.system("python3 -c 'import websockets' 2>/dev/null")
 		if vim.v.shell_error ~= 0 then
@@ -75,12 +72,10 @@ S.validate_server = function(server_type, port)
 		end
 	end
 
-	-- Validate port range
 	if not port or port <= 0 or port >= 65536 then
 		return false, "Invalid port number: " .. tostring(port)
 	end
 
-	-- System port check (more robust)
 	if port < 1024 then
 		local result = vim.fn.system("id -u 2>/dev/null")
 		local user_id = vim.trim(result)
@@ -145,20 +140,14 @@ end
 
 -- Start live server
 S.start = function(port)
-	local console = require("p5.console")
-	local project = require("p5.project")
-
-	-- Get directory from currently focused buffer, fallback to cwd
 	local buffer_dir = vim.fn.expand("%:p:h")
-	if buffer_dir == "" or vim.fn.isdirectory(buffer_dir) == 0 then
+	if buffer_dir == "" or not core.dir_exists(buffer_dir) then
 		buffer_dir = vim.fn.getcwd()
 	end
 
-	-- Check if buffer's directory is a valid p5.js project
-	local is_project, _, _ = project.is_p5_project(buffer_dir)
+	local is_project = project.is_p5_project(buffer_dir)
 
 	if not is_project then
-		local core = require("p5.core")
 		vim.ui.select(
 			{ "Create new sketchspace", "Open recent sketchspace" },
 			{ prompt = "Not in a valid p5.js sketchspace. What would you like to do?" },
@@ -292,15 +281,13 @@ S.stop_server = function()
 		return
 	end
 
-	local stopped_port = S.port -- Store port for notification
-	local server_type = S.type -- Store server type for notification
+	local stopped_port = S.port
+	local server_type = S.type
 
 	vim.fn.jobstop(S.server_job)
 	S.server_job = nil
 	S.type = nil
 
-	-- Stop console
-	local console = require("p5.console")
 	console.hide()
 
 	notify("🛑 Server stopped on port " .. stopped_port .. " (" .. server_type .. ")", "info")
@@ -308,9 +295,6 @@ end
 
 -- Start console polling after server is ready
 S.start_console_after_ready = function()
-	local console = require("p5.console")
-
-	-- Pass the actual server port to console module
 	local console_config = vim.deepcopy(S.config)
 	console_config.server = {
 		port = S.port,
