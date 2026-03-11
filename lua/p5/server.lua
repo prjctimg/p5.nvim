@@ -31,12 +31,11 @@ S.config = {
 
 -- Detect available server options
 S.detect = function()
-	local server_config = core.server_configs.python
-	if core.command_exists(server_config.check) then
-		local plugin_root = core.get_plugin_root()
+	if core.is_cmd("python3") then
+		local plugin_root = core.plugin_root()
 		local server_script = plugin_root .. "/server.py"
 
-		if core.file_exists(server_script) then
+		if core.is_file(server_script) then
 			return "python"
 		else
 			notify("Server script not found: " .. server_script, "warn")
@@ -50,18 +49,13 @@ end
 
 -- Validate server before starting
 S.validate_server = function(server_type, port)
-	local server_config = core.server_configs[server_type]
-	if not server_config then
-		return false, "Unknown server type: " .. tostring(server_type)
+	if not core.is_cmd("python3") then
+		return false, "python3 is not available"
 	end
 
-	if not core.command_exists(server_config.check) then
-		return false, server_config.cmd .. " is not available"
-	end
-
-	local plugin_root = core.get_plugin_root()
+	local plugin_root = core.plugin_root()
 	local server_script = plugin_root .. "/server.py"
-	if not core.file_exists(server_script) then
+	if not core.is_file(server_script) then
 		return false, "Server script not found: " .. server_script
 	end
 
@@ -124,12 +118,7 @@ end
 
 -- Get server command
 S.get_cmd = function(server_type, port)
-	local plugin_root = core.get_plugin_root()
-
-	local server_cfg = core.server_configs[server_type]
-	if not server_cfg then
-		return nil
-	end
+	local plugin_root = core.plugin_root()
 
 	if server_type == "python" then
 		return { "python3", plugin_root .. "/server.py", tostring(port) }
@@ -141,7 +130,7 @@ end
 -- Start live server
 S.start = function(port)
 	local buffer_dir = vim.fn.expand("%:p:h")
-	if buffer_dir == "" or not core.dir_exists(buffer_dir) then
+	if buffer_dir == "" or not core.is_dir(buffer_dir) then
 		buffer_dir = vim.fn.getcwd()
 	end
 
@@ -155,7 +144,7 @@ S.start = function(port)
 				if choice == "Create new sketchspace" then
 					vim.cmd("P5 create")
 				elseif choice == "Open recent sketchspace" then
-					local recent = core.get_recent_sketchspaces()
+					local recent = core.ls_ss()
 					if #recent == 0 then
 						notify("No recent sketchspaces found", "warn")
 						return

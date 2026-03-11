@@ -121,7 +121,7 @@ C.show = function(opts)
 		return
 	end
 
-	if C.win and vim.api.nvim_win_is_valid(C.win) then
+	if C.win and is_win(C.win) then
 		if enter then
 			vim.api.nvim_set_current_win(C.win)
 		end
@@ -133,19 +133,12 @@ C.show = function(opts)
 	local height = math.floor(viewport_height * 0.3)
 	C.port = server.port
 
-	if C.win and vim.api.nvim_win_is_valid(C.win) then
-		if enter then
-			vim.api.nvim_set_current_win(C.win)
-		end
-		return
-	end
-
 	-- Reset state since window was closed externally
 	C.win = nil
 	C.buf = nil
 
 	-- Use snacks.terminal if available
-	local snacks = core.require_snacks()
+	local snacks = core.snacks()
 	if snacks and snacks.terminal then
 		local url = string.format("http://localhost:%d/api/console/stream", C.port)
 		local term = snacks.terminal({ "curl", "-s", "-N", url }, {
@@ -182,7 +175,7 @@ C.show = function(opts)
 		return
 	end
 
-	local split_pattern = core.split_commands[position] or core.split_commands.below
+	local split_pattern = core.split[position] or core.split.below
 	local split = split_pattern:format(height)
 
 	vim.cmd(split)
@@ -214,7 +207,7 @@ C.show = function(opts)
 end
 
 C.hide = function()
-	if C.win and vim.api.nvim_win_is_valid(C.win) then
+	if C.win and is_win(C.win) then
 		vim.api.nvim_win_close(C.win, true)
 		C.win = nil
 	end
@@ -244,7 +237,7 @@ C.setup = function(config)
 	hl(0, "P5ConsoleLog", { fg = "#6272a4" })
 
 	-- Register toggle with snacks.toggle if available
-	local snacks = core.require_snacks()
+	local snacks = core.snacks()
 	if snacks and snacks.toggle then
 		snacks.toggle.new({
 			name = "p5console",
