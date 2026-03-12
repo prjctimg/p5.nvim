@@ -117,34 +117,34 @@ LUA API
 require("p5").setup({config})                        *p5.setup()*
    Initialize the plugin with optional configuration.
 
-require("p5.libraries").install_libs({names})       *p5.libraries.install_libs()*
+require("p5.addons").install_libs({names})          *p5.addons.install_libs()*
    Install libraries by name.
 
-require("p5.libraries").uninstall_libs({names})     *p5.libraries.uninstall_libs()*
+require("p5.addons").uninstall_libs({names})        *p5.addons.uninstall_libs()*
    Uninstall libraries by name.
 
-require("p5.libraries").get_available_libs()         *p5.libraries.get_available_libs()*
+require("p5.addons").get_available_libs()            *p5.addons.get_available_libs()*
    Get list of all available contributor libraries.
 
-require("p5.libraries").get_installed_libs()        *p5.libraries.get_installed_libs()*
+require("p5.addons").get_installed_libs()             *p5.addons.get_installed_libs()*
    Get list of currently installed libraries in the project.
 
-require("p5.server").start_server({port})            *p5.server.start_server()*
+require("p5.server").start({port})                   *p5.server.start()*
    Start the live development server.
 
 require("p5.server").stop_server()                   *p5.server.stop_server()*
    Stop the running server.
 
-require("p5.console").show()                        *p5.console.show()*
+require("p5.console").show()                         *p5.console.show()*
    Show the browser console terminal.
 
-require("p5.console").hide()                        *p5.console.hide()*
+require("p5.console").hide()                          *p5.console.hide()*
    Hide the browser console terminal.
 
-require("p5.console").toggle()                      *p5.console.toggle()*
+require("p5.console").toggle()                        *p5.console.toggle()*
    Toggle the browser console visibility.
 
-require("p5.project").create_project({name})        *p5.project.create_project()*
+require("p5.sketchspace").create_project({name})    *p5.sketchspace.create_project()*
    Create a new p5.js project.
 
 ==============================================================================
