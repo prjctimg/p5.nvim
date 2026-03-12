@@ -1,7 +1,7 @@
 -- Project creation and management for p5.nvim
 local P = {}
 local core = require("p5.core")
-local libraries = require("p5.libraries")
+local addons = require("p5.addons")
 local notify = core.notify
 
 local required_assets = {
@@ -202,7 +202,7 @@ function draw() {
 	vim.fn.mkdir(project_path .. "/assets/libs", "p")
 
 	-- Generate initial libs.js (empty since no contrib libs installed yet)
-	libraries.generate_libs_js(project_path)
+	addons.generate_libs_js(project_path)
 end
 
 -- Copy plugin assets to project with bundled types and libraries
@@ -264,7 +264,7 @@ P.copy_assets_to_project = function(project_path, callback)
 end
 
 -- Check if current directory is a valid p5.js sketchspace
-P.is_p5_project = function(dir)
+P.is_ss = function(dir)
 	local cwd = vim.fs.normalize(dir or vim.fn.getcwd())
 
 	local config_file = cwd .. "/p5.json"

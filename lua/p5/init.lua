@@ -2,9 +2,9 @@
 local I = {}
 
 local core = require("p5.core")
-local project = require("p5.project")
+local ss = require("p5.sketchspace")
 local server = require("p5.server")
-local libraries = require("p5.libraries")
+local addons = require("p5.addons")
 local console = require("p5.console")
 local gist = require("p5.gist")
 
@@ -37,14 +37,14 @@ I.config = {
 I.setup = function(opts)
 	I.config = vim.tbl_deep_extend("force", I.config, opts or {})
 
-	project.setup(I.config)
+	ss.setup(I.config)
 	server.setup(I.config)
-	libraries.setup(I.config)
+	addons.setup(I.config)
 	console.setup(I.config)
 	gist.setup(I.config)
 
 	vim.api.nvim_create_autocmd("DirChanged", {
-		callback = function(args)
+		callback = function()
 			local dir = vim.fn.getcwd()
 			if core.is_file(dir .. "/p5.json") then
 				core.add_recent_sketchspace(dir)
@@ -53,7 +53,7 @@ I.setup = function(opts)
 	})
 
 	local function require_sketchspace(action)
-		if not project.is_p5_project() then
+		if not ss.is_p5_project() then
 			core.notify(action .. " requires a sketchspace (p5.json)", "error")
 			return false
 		end
@@ -67,15 +67,15 @@ I.setup = function(opts)
 		if not name then
 			vim.ui.input({
 				prompt = "Sketchspace name: ",
-				default = "p5-sketch",
+				default = "my-sketch",
 				completion = "dir",
 			}, function(input)
 				if input and input ~= "" then
-					project.create_project(input)
+					ss.create_project(input)
 				end
 			end)
 		else
-			project.create_project(name)
+			ss.create_project(name)
 		end
 	end
 
@@ -114,7 +114,7 @@ function draw() {
 			core.notify("Created default sketch.js", "info")
 		end
 
-		project.copy_assets_to_project(cwd, function(err)
+		ss.copy_assets_to_project(cwd, function(err)
 			if err then
 				core.notify("Failed to copy assets: " .. err, "error")
 				return
@@ -122,13 +122,13 @@ function draw() {
 
 			core.notify("Assets copied successfully", "info")
 
-			libraries.generate_libs_js(cwd)
+			addons.generate_libs_js(cwd)
 
 			local updated_config = core.r_ss_cfg()
 			if updated_config and updated_config.libs then
 				local lib_names = vim.tbl_keys(updated_config.libs)
 				if #lib_names > 0 then
-					libraries.install_libs(lib_names)
+					addons.install_libs(lib_names)
 				end
 			end
 
@@ -143,7 +143,7 @@ function draw() {
 
 		local lib_names = #args > 0 and args or nil
 		if not lib_names then
-			local libs = libraries.get_available_libs()
+			local libs = addons.get_available_libs()
 			if not libs or #libs == 0 then
 				core.notify("No libraries available", "warn")
 				return
@@ -163,11 +163,11 @@ function draw() {
 			end
 			vim.ui.select(items, { prompt = "Select library to install:" }, function(selected)
 				if selected then
-					libraries.install_libs({ lib_map[selected] or selected })
+					addons.install_libs({ lib_map[selected] or selected })
 				end
 			end)
 		else
-			libraries.install_libs(lib_names)
+			addons.install_libs(lib_names)
 		end
 	end
 
@@ -178,9 +178,10 @@ function draw() {
 
 		local lib_names = #args > 0 and args or nil
 		if not lib_names then
-			local installed = libraries.get_installed_libs()
+			local installed = addons.get_installed_libs()
 			if #installed == 0 then
 				core.notify("No contrib libraries installed", "warn")
+
 				return
 			end
 			local items = {}
@@ -191,11 +192,11 @@ function draw() {
 			end
 			vim.ui.select(items, { prompt = "Select library to uninstall:" }, function(selected)
 				if selected then
-					libraries.uninstall_libs({ lib_map[selected] or selected })
+					addons.uninstall_libs({ lib_map[selected] or selected })
 				end
 			end)
 		else
-			libraries.uninstall_libs(lib_names)
+			addons.uninstall_libs(lib_names)
 		end
 	end
 
@@ -230,7 +231,7 @@ function draw() {
 					if not require_sketchspace("Sync libraries") then
 						return
 					end
-					libraries.update_libs()
+					addons.update_libs()
 				end
 			end)
 		elseif target == "gist" then
@@ -242,7 +243,7 @@ function draw() {
 			if not require_sketchspace("Sync libraries") then
 				return
 			end
-			libraries.update_libs()
+			addons.update_libs()
 		else
 			core.notify("Unknown sync target: " .. target .. ". Use 'gist' or 'libs'", "warn")
 		end
@@ -344,7 +345,7 @@ function draw() {
 
 		local subcmd = args[subcmd_pos]
 		if subcmd == "install" or subcmd == "uninstall" then
-			local libs = libraries.get_available_libs()
+			local libs = addons.get_available_libs()
 			return vim.tbl_map(function(l)
 				return l.name
 			end, libs or {})

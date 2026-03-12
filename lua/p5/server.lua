@@ -2,7 +2,7 @@
 local S = {}
 local core = require("p5.core")
 local console = require("p5.console")
-local project = require("p5.project")
+local ss = require("p5.sketchspace")
 local notify = core.notify
 
 -- Default configuration
@@ -134,7 +134,7 @@ S.start = function(port)
 		buffer_dir = vim.fn.getcwd()
 	end
 
-	local is_project = project.is_p5_project(buffer_dir)
+	local is_project = ss.is_p5_project(buffer_dir)
 
 	if not is_project then
 		vim.ui.select(

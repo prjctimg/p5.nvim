@@ -1,7 +1,7 @@
 -- Browser console integration for p5.nvim with SSE streaming
 local C = {}
 local core = require("p5.core")
-local project = require("p5.project")
+local ss = require("p5.sketchspace")
 local notify = core.notify
 local set = vim.api.nvim_set_option_value
 local is_win = vim.api.nvim_win_is_valid
@@ -109,7 +109,7 @@ C.show = function(opts)
 	opts = opts or {}
 	local enter = opts.enter ~= false
 
-	if not project.is_p5_project() then
+	if not ss.is_ss() then
 		--- At this point we should trigger a picker to pick an sexisting project or create a new one.
 
 		notify("Console only works in p5.js projects", "warn")
@@ -175,12 +175,16 @@ C.show = function(opts)
 		return
 	end
 
+	local cur_win = vim.api.nvim_get_current_win()
+
 	local split_pattern = core.split[position] or core.split.below
 	local split = split_pattern:format(height)
 
 	vim.cmd(split)
 	C.win = vim.api.nvim_get_current_win()
 	vim.api.nvim_win_set_buf(C.win, buf)
+
+	vim.api.nvim_set_current_win(cur_win)
 
 	set("wrap", true, { scope = "local", win = C.win })
 	set("number", false, { scope = "local", win = C.win })
@@ -201,6 +205,16 @@ C.show = function(opts)
 	keymap("t", "<C-d>", "<C-d>zT")
 	keymap("t", "<C-u>", "<C-u>zb")
 	keymap("t", "<C-c>", C.hide)
+
+	keymap("n", "q", C.hide)
+	keymap("n", "j", "gj")
+	keymap("n", "k", "gk")
+	keymap("n", "<Down>", "gj")
+	keymap("n", "<Up>", "gk")
+	keymap("n", "G", "G")
+	keymap("n", "gg", "gg")
+	keymap("n", "<C-d>", "<C-d>zT")
+	keymap("n", "<C-u>", "<C-u>zb")
 
 	C.auto_clear()
 	notify("✅ console connected to server on port " .. C.port, "info")
