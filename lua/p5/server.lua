@@ -182,7 +182,7 @@ S.start = function(port)
 		return
 	end
 
-	port = port or S.config.server.port or 8000
+	port = port or S.config.port or 8000
 
 	-- Check if port is available and find alternative if needed
 	local actual_port = S.find(port)
@@ -259,7 +259,7 @@ S.start = function(port)
 		end
 
 		-- Auto-open browser (delayed to allow server to be ready)
-		if S.config.server.auto_open_browser ~= false then
+		if S.config.auto_open_browser ~= false then
 			vim.defer_fn(function()
 				S.open_browser(url)
 			end, 2000)
