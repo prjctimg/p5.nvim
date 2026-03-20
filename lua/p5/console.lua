@@ -194,9 +194,6 @@ C.show = function(opts)
 
   vim.keymap.set("n", "q", C.hide, { buffer = buf, desc = "Hide p5 console" })
   vim.keymap.set("n", "c", C.clear_terminal, { buffer = buf, desc = "Clear p5 console" })
-  vim.keymap.set("n", "i", function()
-    vim.cmd("startinsert")
-  end, { buffer = buf, desc = "Enter terminal mode" })
 
   vim.keymap.set("n", "j", "gj", { buffer = buf, noremap = true, silent = true })
   vim.keymap.set("n", "k", "gk", { buffer = buf, noremap = true, silent = true })
@@ -207,8 +204,6 @@ C.show = function(opts)
   vim.keymap.set("n", "<C-d>", "<C-d>zT", { buffer = buf, noremap = true, silent = true, desc = "Page down" })
   vim.keymap.set("n", "<C-u>", "<C-u>zb", { buffer = buf, noremap = true, silent = true, desc = "Page up" })
   vim.keymap.set("n", "<C-c>", C.hide, { buffer = buf, desc = "Hide console" })
-
-  vim.cmd("startinsert")
 
   C.start_auto_clear()
   notify("Console connected to server on port " .. C.server_port, "info")
