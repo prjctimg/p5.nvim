@@ -145,6 +145,7 @@ C.show = function(opts)
 		local term = snacks.terminal({ "curl", "-s", "-N", url }, {
 			win = {
 				title = "p5-console",
+				---@diagnostic disable-next-line: assign-type-mismatch
 				position = pos == "below" and "bottom" or pos,
 				size = height,
 			},
