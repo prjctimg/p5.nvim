@@ -1,4 +1,4 @@
-/*! p5.js v2.2.2 February 22, 2026 */
+/*! p5.js v2.2.3 March 21, 2026 */
 var p5 = (function () {
   'use strict';
 
@@ -15,7 +15,7 @@ var p5 = (function () {
    * @property {String} VERSION
    * @final
    */
-  const VERSION = '2.2.2';
+  const VERSION = '2.2.3';
 
   // GRAPHICS RENDERER
   /**
@@ -4526,14 +4526,18 @@ var p5 = (function () {
     };
 
     Object.defineProperty(fn, 'width', {
+      configurable: true,
+      enumerable: true,
       get(){
-        return this._renderer.width;
+        return this._renderer?.width;
       }
     });
 
     Object.defineProperty(fn, 'height', {
+      configurable: true,
+      enumerable: true,
       get(){
-        return this._renderer.height;
+        return this._renderer?.height;
       }
     });
 
@@ -12787,7 +12791,7 @@ var p5 = (function () {
      * Returns the element's name as a `String`.
      *
      * An XML element's name is given by its tag. For example, the element
-     * `&lt;language&gt;JavaScript&lt;/language&gt;` has the name `language`.
+     * `<language>JavaScript</language>` has the name `language`.
      *
      * @return {String} name of the element.
      *
@@ -12830,11 +12834,11 @@ var p5 = (function () {
      * Sets the element's tag name.
      *
      * An XML element's name is given by its tag. For example, the element
-     * `&lt;language&gt;JavaScript&lt;/language&gt;` has the name `language`.
+     * `<language>JavaScript</language>` has the name `language`.
      *
      * The parameter, `name`, is the element's new name as a string. For example,
      * calling `myXML.setName('planet')` will make the element's new tag name
-     * `&lt;planet&gt;&lt;/planet&gt;`.
+     * `<planet></planet>`.
      *
      * @param {String} name new tag name of the element.
      *
@@ -12976,7 +12980,7 @@ var p5 = (function () {
      *
      * The parameter, `name`, is optional. If a string is passed, as in
      * `myXML.getChildren('cat')`, then the method will only return child elements
-     * with the tag `&lt;cat&gt;`.
+     * with the tag `<cat>`.
      *
      * @param {String} [name] name of the elements to return.
      * @return {p5.XML[]} child elements.
@@ -13070,7 +13074,7 @@ var p5 = (function () {
      *
      * The parameter, `name`, is optional. If a string is passed, as in
      * `myXML.getChild('cat')`, then the first child element with the tag
-     * `&lt;cat&gt;` will be returned. If a number is passed, as in
+     * `<cat>` will be returned. If a number is passed, as in
      * `myXML.getChild(1)`, then the child element at that index will be returned.
      *
      * @param {String|Integer} name element name or index.
@@ -13203,7 +13207,7 @@ var p5 = (function () {
      *
      * The parameter, `name`, is the child element to remove. If a string is
      * passed, as in `myXML.removeChild('cat')`, then the first child element
-     * with the tag `&lt;cat&gt;` will be removed. If a number is passed, as in
+     * with the tag `<cat>` will be removed. If a number is passed, as in
      * `myXML.removeChild(1)`, then the child element at that index will be
      * removed.
      *
@@ -13757,7 +13761,7 @@ var p5 = (function () {
      * Sets the element's content.
      *
      * An element's content is the text between its tags. For example, the element
-     * `&lt;language&gt;JavaScript&lt;/language&gt;` has the content `JavaScript`.
+     * `<language>JavaScript</language>` has the content `JavaScript`.
      *
      * The parameter, `content`, is a string with the element's new content.
      *
@@ -13875,7 +13879,7 @@ var p5 = (function () {
      * (<a href="https://developer.mozilla.org/en-US/docs/Web/XML/XML_introduction" target="_blank">XML</a>)
      * is a standard format for sending data between applications. Like HTML, the
      * XML format is based on tags and attributes, as in
-     * `&lt;time units="s"&gt;1234&lt;/time&gt;`.
+     * `<time units="s">1234</time>`.
      *
      * Note: Use <a href="#/p5/loadXML">loadXML()</a> to load external XML files.
      *
@@ -14369,9 +14373,9 @@ var p5 = (function () {
     /**
      * Attaches the element to a parent element.
      *
-     * For example, a `&lt;div&gt;&lt;/div&gt;` element may be used as a box to
+     * For example, a `<div></div>` element may be used as a box to
      * hold two pieces of text, a header and a paragraph. The
-     * `&lt;div&gt;&lt;/div&gt;` is the parent element of both the header and
+     * `<div></div>` is the parent element of both the header and
      * paragraph.
      *
      * The parameter `parent` can have one of three types. `parent` can be a
@@ -18942,8 +18946,9 @@ var p5 = (function () {
           props.displayIndex = index;
           this.drawingContext.putImageData(props.frames[index].image, 0, 0);
         } else {
-          console.log(
-            'Cannot set GIF to a frame number that is higher than total number of frames or below zero.'
+          p5._friendlyError(
+            'Cannot set GIF to a frame number that is higher than total number of frames or below zero.',
+            'setFrame'
           );
         }
       }
@@ -26161,7 +26166,14 @@ var p5 = (function () {
       this._pInst = pInst;
       this._isMainCanvas = isMainCanvas;
       this.pixels = [];
-      this._pixelDensity = Math.ceil(window.devicePixelRatio) || 1;
+
+      if (isMainCanvas) {
+        this._pixelDensity = Math.ceil(window.devicePixelRatio) || 1;
+      } else {
+        
+        const parentDensity = pInst._pInst?._renderer?._pixelDensity;
+        this._pixelDensity = parentDensity || Math.ceil(window.devicePixelRatio) || 1;
+      }
 
       this.width = w;
       this.height = h;
@@ -27225,6 +27237,13 @@ var p5 = (function () {
     duration() {
       return this.elt.duration;
     }
+    _checkIfTextureNeedsUpdate() {
+      const needsUpdate = this._frameOnTexture !== this._pInst.frameCount;
+      if (needsUpdate) {
+        this.setModified(true);
+        this._frameOnTexture = this._pInst.frameCount;
+      }
+    }
     _ensureCanvas() {
       if (!this.canvas) {
         this.canvas = document.createElement('canvas');
@@ -27675,7 +27694,6 @@ var p5 = (function () {
     removeCue(id) {
       for (let i = 0; i < this._cues.length; i++) {
         if (this._cues[i].id === id) {
-          console.log(id);
           this._cues.splice(i, 1);
         }
       }
@@ -27825,7 +27843,7 @@ var p5 = (function () {
     }
 
     /**
-     * Creates a `&lt;video&gt;` element for simple audio/video playback.
+     * Creates a `<video>` element for simple audio/video playback.
      *
      * `createVideo()` returns a new
      * <a href="#/p5.MediaElement">p5.MediaElement</a> object. Videos are shown by
@@ -27913,7 +27931,7 @@ var p5 = (function () {
     /* AUDIO STUFF */
 
     /**
-     * Creates a hidden `&lt;audio&gt;` element for simple audio playback.
+     * Creates a hidden `<audio>` element for simple audio playback.
      *
      * `createAudio()` returns a new
      * <a href="#/p5.MediaElement">p5.MediaElement</a> object.
@@ -27990,7 +28008,7 @@ var p5 = (function () {
     }
 
     /**
-     * Creates a `&lt;video&gt;` element that "captures" the audio/video stream from
+     * Creates a `<video>` element that "captures" the audio/video stream from
      * the webcam and microphone.
      *
      * `createCapture()` returns a new
@@ -28159,12 +28177,12 @@ var p5 = (function () {
         if (domElement.width) {
           videoEl.width = domElement.width;
           videoEl.height = domElement.height;
-          if (flipped) {
-            videoEl.elt.style.transform = 'scaleX(-1)';
-          }
         } else {
           videoEl.width = videoEl.elt.width = domElement.videoWidth;
           videoEl.height = videoEl.elt.height = domElement.videoHeight;
+        }
+        if (flipped) {
+          videoEl.elt.style.transform = 'scaleX(-1)';
         }
         videoEl.loadedmetadata = true;
 
@@ -36523,8 +36541,11 @@ var p5 = (function () {
 
       try{
         const { data } = await request(path, 'json');
-        if (successCallback) return successCallback(data);
-        return data;
+        const cb = () => {
+          if (successCallback) return successCallback(data);
+          return data;
+        };
+        return this._internal ? this._internal(cb) : cb();
       } catch(err) {
         p5._friendlyFileLoadError(5, path);
         if(errorCallback) {
@@ -36659,10 +36680,12 @@ var p5 = (function () {
 
       try{
         let { data } = await request(path, 'text');
-        data = data.split(/\r?\n/);
-
-        if (successCallback) return successCallback(data);
-        return data;
+        const cb = () => {
+          data = data.split(/\r?\n/);
+          if (successCallback) return successCallback(data);
+          return data;
+        };
+        return this._internal ? this._internal(cb) : cb();
       } catch(err) {
         p5._friendlyFileLoadError(3, path);
         if(errorCallback) {
@@ -36746,28 +36769,30 @@ var p5 = (function () {
 
       try{
         let { data } = await request(path, 'text');
+        const cb = () => {
+          let ret = new p5.Table();
+          data = parse$3(data, {
+            separator
+          });
 
-        let ret = new p5.Table();
-        data = parse$3(data, {
-          separator
-        });
+          if(header){
+            ret.columns = data.shift();
+          }else {
+            ret.columns = Array(data[0].length).fill(null);
+          }
 
-        if(header){
-          ret.columns = data.shift();
-        }else {
-          ret.columns = Array(data[0].length).fill(null);
-        }
+          data.forEach(line => {
+            const row = new p5.TableRow(line);
+            ret.addRow(row);
+          });
 
-        data.forEach(line => {
-          const row = new p5.TableRow(line);
-          ret.addRow(row);
-        });
-
-        if (successCallback) {
-          return successCallback(ret);
-        } else {
-          return ret;
-        }
+          if (successCallback) {
+            return successCallback(ret);
+          } else {
+            return ret;
+          }
+        };
+        return this._internal ? this._internal(cb) : cb();
       } catch(err) {
         p5._friendlyFileLoadError(2, path);
         if(errorCallback) {
@@ -36785,7 +36810,7 @@ var p5 = (function () {
      * (<a href="https://developer.mozilla.org/en-US/docs/Web/XML/XML_introduction" target="_blank">XML</a>)
      * is a standard format for sending data between applications. Like HTML, the
      * XML format is based on tags and attributes, as in
-     * `&lt;time units="s"&gt;1234&lt;/time&gt;`.
+     * `<time units="s">1234</time>`.
      *
      * The first parameter, `path`, is always a string with the path to the file.
      * Paths to local files should be relative, as in
@@ -36931,11 +36956,13 @@ var p5 = (function () {
         const parser = new DOMParser();
 
         let { data } = await request(path, 'text');
-        const parsedDOM = parser.parseFromString(data, 'application/xml');
-        data = new p5.XML(parsedDOM);
-
-        if (successCallback) return successCallback(data);
-        return data;
+        const cb = () => {
+          const parsedDOM = parser.parseFromString(data, 'application/xml');
+          data = new p5.XML(parsedDOM);
+          if (successCallback) return successCallback(data);
+          return data;
+        };
+        return this._internal ? this._internal(cb) : cb();
       } catch(err) {
         p5._friendlyFileLoadError(1, path);
         if(errorCallback) {
@@ -36979,9 +37006,12 @@ var p5 = (function () {
     fn.loadBytes = async function (path, successCallback, errorCallback) {
       try{
         let { data } = await request(path, 'arrayBuffer');
-        data = new Uint8Array(data);
-        if (successCallback) return successCallback(data);
-        return data;
+        const cb = () => {
+          data = new Uint8Array(data);
+          if (successCallback) return successCallback(data);
+          return data;
+        };
+        return this._internal ? this._internal(cb) : cb();
       } catch(err) {
         p5._friendlyFileLoadError(6, path);
         if(errorCallback) {
@@ -37034,8 +37064,11 @@ var p5 = (function () {
     fn.loadBlob = async function(path, successCallback, errorCallback) {
       try{
         const { data } = await request(path, 'blob');
-        if (successCallback) return successCallback(data);
-        return data;
+        const cb = () => {
+          if (successCallback) return successCallback(data);
+          return data;
+        };
+        return this._internal ? this._internal(cb) : cb();
       } catch(err) {
         if(errorCallback) {
           return errorCallback(err);
@@ -38486,13 +38519,15 @@ var p5 = (function () {
           pImg.drawingContext.drawImage(img, 0, 0);
         }
 
-        pImg.modified = true;
-
-        if(successCallback){
-          return successCallback(pImg);
-        }else {
-          return pImg;
-        }
+        const cb = () => {
+          pImg.modified = true;
+          if(successCallback){
+            return successCallback(pImg);
+          }else {
+            return pImg;
+          }
+        };
+        return this._internal ? this._internal(cb) : cb();
 
       } catch(err) {
         p5._friendlyFileLoadError(0, path);
@@ -47679,6 +47714,17 @@ var p5 = (function () {
 
       _cam.cameraType = this.cameraType;
 
+      _cam.defaultAspectRatio = this.defaultAspectRatio;
+      _cam.defaultEyeX = this.defaultEyeX;
+      _cam.defaultEyeY = this.defaultEyeY;
+      _cam.defaultEyeZ = this.defaultEyeZ;
+      _cam.defaultCameraFOV = this.defaultCameraFOV;
+      _cam.defaultCenterX = this.defaultCenterX;
+      _cam.defaultCenterY = this.defaultCenterY;
+      _cam.defaultCenterZ = this.defaultCenterZ;
+      _cam.defaultCameraNear = this.defaultCameraNear;
+      _cam.defaultCameraFar = this.defaultCameraFar;
+
       return _cam;
     }
 
@@ -55081,11 +55127,6 @@ var p5 = (function () {
      * The parameter, `callback`, is a function with the drawing instructions for
      * the new <a href="#/p5.Geometry">p5.Geometry</a> object. It will be called
      * once to create the new 3D shape.
-     *
-     * See <a href="#/p5/beginGeometry">beginGeometry()</a> and
-     * <a href="#/p5/endGeometry">endGeometry()</a> for another way to build 3D
-     * shapes.
-     *
      * Note: `buildGeometry()` can only be used in WebGL mode.
      *
      * @method buildGeometry
@@ -55289,12 +55330,8 @@ var p5 = (function () {
      * <a href="#/p5.Geometry">p5.Geometry</a> objects can contain lots of data
      * about their vertices, surface normals, colors, and so on. Complex 3D shapes
      * can use lots of memory which is a limited resource in many GPUs. Calling
-     * `freeGeometry()` can improve performance by freeing a
-     * <a href="#/p5.Geometry">p5.Geometry</a> object’s resources from GPU memory.
      * `freeGeometry()` works with <a href="#/p5.Geometry">p5.Geometry</a> objects
-     * created with <a href="#/p5/beginGeometry">beginGeometry()</a> and
-     * <a href="#/p5/endGeometry">endGeometry()</a>,
-     * <a href="#/p5/buildGeometry">buildGeometry()</a>, and
+     * created with <a href="#/p5/buildGeometry">buildGeometry()</a> and
      * <a href="#/p5/loadModel">loadModel()</a>.
      *
      * The parameter, `geometry`, is the <a href="#/p5.Geometry">p5.Geometry</a>
@@ -55308,24 +55345,6 @@ var p5 = (function () {
      *
      * @method freeGeometry
      * @param {p5.Geometry} geometry 3D shape whose resources should be freed.
-     *
-     * @example
-     * function setup() {
-     *   createCanvas(100, 100, WEBGL);
-     *
-     *   background(200);
-     *
-     *   // Create a p5.Geometry object.
-     *   beginGeometry();
-     *   cone();
-     *   let shape = endGeometry();
-     *
-     *   // Draw the shape.
-     *   model(shape);
-     *
-     *   // Free the shape's resources.
-     *   freeGeometry(shape);
-     * }
      *
      * @example
      * // Click and drag the mouse to view the scene from different angles.
@@ -59564,29 +59583,37 @@ var p5 = (function () {
      *
      * In addition to calling hooks, you can create uniforms, which are special variables
      * used to pass data from p5.js into the shader. They can be created by calling `uniform` + the
-     * type of the data, such as `uniformFloat` for a number of `uniformVector2` for a two-component vector.
+     * type of the data, such as `uniformFloat` for a number or `uniformVector2` for a two-component vector.
      * They take in a function that returns the data for the variable. You can then reference these
      * variables in your hooks, and their values will update every time you apply
-     * the shader with the result of your function.
+     * the shader with the result of your function.  
+     * 
+     * Move the mouse over this sketch to increase the moveCounter which will be passed to the shader as a uniform.
      *
      * ```js example
      * let myShader;
-     *
+     * //count of frames in which mouse has been moved
+     * let moveCounter = 0;
+     * 
      * function setup() {
      *   createCanvas(200, 200, WEBGL);
      *   myShader = baseMaterialShader().modify(() => {
-     *     // Get the current time from p5.js
-     *     let t = uniformFloat(() => millis());
+     *     // Get the move counter from our sketch
+     *     let count = uniformFloat(() => moveCounter);
      *
      *     getPixelInputs((inputs) => {
      *       inputs.color = [
      *         inputs.texCoord,
-     *         sin(t * 0.01) / 2 + 0.5,
+     *         sin(count/100) / 2 + 0.5,
      *         1,
      *       ];
      *       return inputs;
      *     });
      *   });
+     * }
+     *
+     * function mouseDragged(){
+     *   moveCounter += 1;
      * }
      *
      * function draw() {
@@ -60967,7 +60994,7 @@ var p5 = (function () {
      *   // Make a version of the shader with a hook overridden
      *   modifiedShader = myShader.modify(() => {
      *     // Create new uniforms and override the getColor hook
-     *     let t = uniformFloat(() => millis() / 1000);
+     *     let t = millis() / 1000;
      *     getColor(() => {
      *       return [0, 0.5 + 0.5 * sin(t), 1, 1];
      *     });
@@ -61080,11 +61107,11 @@ var p5 = (function () {
         // Test if we've loaded GLSL or not by checking for the existence of `void main`
         let loadedShader;
         if (/void\s+main/.exec(fragString)) {
-          loadedShader = this.createFilterShader(fragString, true);
+          loadedShader = this._internal(() => this.createFilterShader(fragString, true));
         } else {
-          loadedShader = withGlobalStrands(this, () =>
+          loadedShader = this._internal(() => withGlobalStrands(this, () =>
             this.baseFilterShader().modify(new Function(fragString)),
-          );
+          ));
         }
 
         if (successCallback) {
@@ -61213,7 +61240,7 @@ var p5 = (function () {
      * }
      * ```
      *
-     * You can also animate your filters over time by passing the time into the shader with `uniformFloat`.
+     * You can also animate your filters over time using the `millis()` function.
      *
      * ```js example
      * let myFilter;
@@ -61224,7 +61251,7 @@ var p5 = (function () {
      * }
      *
      * function gradient() {
-     *   let time = uniformFloat();
+     *   let time = millis();
      *   filterColor.begin();
      *   filterColor.set(mix(
      *     [1, 0, 0, 1], // Red
@@ -61235,12 +61262,11 @@ var p5 = (function () {
      * }
      *
      * function draw() {
-     *   myFilter.setUniform('time', millis());
      *   filter(myFilter);
      * }
      * ```
      *
-     * We can use the `noise()` function built into strands to generate a color for each pixel.  (Again no need here for underlying content for the filter to operate on.)  Again we'll animate by passing in an announced uniform variable  `time` with `setUniform()`, each frame.
+     * We can use the `noise()` function built into strands to generate a color for each pixel.  (Again no need here for underlying content for the filter to operate on.)  Again we'll animate by using the millis() function to get an up-to-date time value.
      *
      * ```js example
      * let myFilter;
@@ -61252,7 +61278,7 @@ var p5 = (function () {
      * }
      *
      * function noiseShaderCallback() {
-     *   let time = uniformFloat();
+     *   let time = millis();
      *   filterColor.begin();
      *   let coord = filterColor.texCoord;
      *
@@ -61269,7 +61295,6 @@ var p5 = (function () {
      * }
      *
      * function draw() {
-     *   myFilter.setUniform("time", millis());
      *   filter(myFilter);
      * }
      * ```
@@ -61483,7 +61508,7 @@ var p5 = (function () {
      * }
      *
      * function material() {
-     *   let time = uniformFloat();
+     *   let time = millis() / 1000;
      *   finalColor.begin();
      *   let r = 0.2 + 0.5 * abs(sin(time + 0));
      *   let g = 0.2 + 0.5 * abs(sin(time + 1));
@@ -61494,7 +61519,6 @@ var p5 = (function () {
      *
      * function draw() {
      *   background(245, 245, 220);
-     *   myShader.setUniform('time', millis() / 1000);
      *   shader(myShader);
      *
      *   rectMode(CENTER);
@@ -61970,7 +61994,7 @@ var p5 = (function () {
      * }
      *
      * function material() {
-     *   let time = uniformFloat();
+     *   let time = millis();
      *   worldInputs.begin();
      *   worldInputs.position.y +=
      *     20 * sin(time * 0.001 + worldInputs.position.x * 0.05);
@@ -61980,7 +62004,6 @@ var p5 = (function () {
      * function draw() {
      *   background(255);
      *   shader(myShader);
-     *   myShader.setUniform('time', millis());
      *   lights();
      *   noStroke();
      *   fill('red');
@@ -62149,7 +62172,6 @@ var p5 = (function () {
      * function draw() {
      *   background(255);
      *   shader(myShader);
-     *   myShader.setUniform('time', millis());
      *   lights();
      *   noStroke();
      *   fill('red');
@@ -62163,7 +62185,7 @@ var p5 = (function () {
      *
      * ```js
      * // myMaterial.js
-     * let time = uniformFloat();
+     * let time = millis();
      * worldInputs.begin();
      * worldInputs.position.y +=
      *   20 * sin(time * 0.001 + worldInputs.position.x * 0.05);
@@ -62191,7 +62213,7 @@ var p5 = (function () {
     fn.loadMaterialShader = async function (url, onSuccess, onFail) {
       try {
         const cb = await urlToStrandsCallback(url);
-        let shader = withGlobalStrands(this, () => this.buildMaterialShader(cb));
+        let shader = this._internal(() => withGlobalStrands(this, () => this.buildMaterialShader(cb)));
         if (onSuccess) {
           shader = onSuccess(shader) || shader;
         }
@@ -62272,7 +62294,7 @@ var p5 = (function () {
      * }
      *
      * function material() {
-     *   let time = uniformFloat();
+     *   let time = millis();
      *   worldInputs.begin();
      *   worldInputs.position.y +=
      *     20. * sin(time * 0.001 + worldInputs.position.x * 0.05);
@@ -62282,7 +62304,6 @@ var p5 = (function () {
      * function draw() {
      *   background(255);
      *   shader(myShader);
-     *   myShader.setUniform('time', millis());
      *   noStroke();
      *   sphere(50);
      * }
@@ -62368,7 +62389,6 @@ var p5 = (function () {
      * function draw() {
      *   background(255);
      *   shader(myShader);
-     *   myShader.setUniform('time', millis());
      *   lights();
      *   noStroke();
      *   fill('red');
@@ -62382,7 +62402,7 @@ var p5 = (function () {
      *
      * ```js
      * // myMaterial.js
-     * let time = uniformFloat();
+     * let time = millis();
      * worldInputs.begin();
      * worldInputs.position.y +=
      *   20 * sin(time * 0.001 + worldInputs.position.x * 0.05);
@@ -62410,9 +62430,9 @@ var p5 = (function () {
     fn.loadNormalShader = async function (url, onSuccess, onFail) {
       try {
         const cb = await urlToStrandsCallback(url);
-        let shader = this.withGlobalStrands(this, () =>
+        let shader = this._internal(() => this.withGlobalStrands(this, () =>
           this.buildNormalShader(cb),
-        );
+        ));
         if (onSuccess) {
           shader = onSuccess(shader) || shader;
         }
@@ -62475,7 +62495,7 @@ var p5 = (function () {
      * }
      *
      * function material() {
-     *   let time = uniformFloat();
+     *   let time = millis();
      *   worldInputs.begin();
      *   worldInputs.position.y +=
      *     20 * sin(time * 0.001 + worldInputs.position.x * 0.05);
@@ -62485,7 +62505,6 @@ var p5 = (function () {
      * function draw() {
      *   background(255);
      *   shader(myShader);
-     *   myShader.setUniform('time', millis());
      *   noStroke();
      *   fill('red');
      *   circle(0, 0, 50);
@@ -62534,7 +62553,6 @@ var p5 = (function () {
      * function draw() {
      *   background(255);
      *   shader(myShader);
-     *   myShader.setUniform('time', millis());
      *   lights();
      *   noStroke();
      *   fill('red');
@@ -62548,7 +62566,7 @@ var p5 = (function () {
      *
      * ```js
      * // myMaterial.js
-     * let time = uniformFloat();
+     * let time = millis();
      * worldInputs.begin();
      * worldInputs.position.y +=
      *   20 * sin(time * 0.001 + worldInputs.position.x * 0.05);
@@ -62576,7 +62594,7 @@ var p5 = (function () {
     fn.loadColorShader = async function (url, onSuccess, onFail) {
       try {
         const cb = await urlToStrandsCallback(url);
-        let shader = withGlobalStrands(this, () => this.buildColorShader(cb));
+        let shader = this._internal(() => withGlobalStrands(this, () => this.buildColorShader(cb)));
         if (onSuccess) {
           shader = onSuccess(shader) || shader;
         }
@@ -62720,7 +62738,7 @@ var p5 = (function () {
      * }
      *
      * function material() {
-     *   let time = uniformFloat();
+     *   let time = millis();
      *   worldInputs.begin();
      *   // Add a somewhat random offset to the weight
      *   // that varies based on position and time
@@ -62736,7 +62754,6 @@ var p5 = (function () {
      * function draw() {
      *   background(255);
      *   strokeShader(myShader);
-     *   myShader.setUniform('time', millis());
      *   strokeWeight(10);
      *   beginShape();
      *   for (let i = 0; i <= 50; i++) {
@@ -62837,7 +62854,7 @@ var p5 = (function () {
     fn.loadStrokeShader = async function (url, onSuccess, onFail) {
       try {
         const cb = await urlToStrandsCallback(url);
-        let shader = withGlobalStrands(this, () => this.buildStrokeShader(cb));
+        let shader = this._internal(() => withGlobalStrands(this, () => this.buildStrokeShader(cb)));
         if (onSuccess) {
           shader = onSuccess(shader) || shader;
         }
@@ -65433,7 +65450,7 @@ var p5 = (function () {
      * Removes the graphics buffer from the web page.
      *
      * Calling `myGraphics.remove()` removes the graphics buffer's
-     * `&lt;canvas&gt;` element from the web page. The graphics buffer also uses
+     * `<canvas>` element from the web page. The graphics buffer also uses
      * a bit of memory on the CPU that can be freed like so:
      *
      * ```js
@@ -65789,7 +65806,7 @@ var p5 = (function () {
      * @param {Number} h            height height of the graphics buffer in pixels.
      * @param {(P2D|WEBGL|P2DHDR)} renderer   the renderer to use, either P2D or WEBGL.
      * @param {p5} [pInst]          sketch instance.
-     * @param {HTMLCanvasElement} [canvas]     existing `&lt;canvas&gt;` element to use.
+     * @param {HTMLCanvasElement} [canvas]     existing `<canvas>` element to use.
      *
      * @example
      * let pg;
@@ -65964,11 +65981,18 @@ var p5 = (function () {
         this.isSrcMediaElement ||
         this.isSrcHTMLElement
       ) {
-        // if param is a video HTML element
-        if (this.src._ensureCanvas) {
+        // createCapture elements that are flipped need
+        // to go through a canvas
+        if (this.isSrcMediaElement && this.src.flipped) {
           this.src._ensureCanvas();
+          textureData = this.src.canvas;
+        } else {
+          // if param is a video HTML element
+          if (this.src._checkIfTextureNeedsUpdate) {
+            this.src._checkIfTextureNeedsUpdate();
+          }
+          textureData = this.src.elt;
         }
-        textureData = this.src.elt;
       } else if (this.isSrcP5Graphics || this.isSrcP5Renderer) {
         textureData = this.src.canvas;
       } else if (this.isImageData) {
@@ -68761,9 +68785,9 @@ var p5 = (function () {
 
     /**
      * A system variable that provides direct access to the sketch's
-     * `&lt;canvas&gt;` element.
+     * `<canvas>` element.
      *
-     * The `&lt;canvas&gt;` element provides many specialized features that aren't
+     * The `<canvas>` element provides many specialized features that aren't
      * included in the p5.js library. The `drawingContext` system variable
      * provides access to these features by exposing the sketch's
      * <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">CanvasRenderingContext2D</a>
@@ -68860,6 +68884,7 @@ var p5 = (function () {
     BOOL: "bool",
     MAT: "mat",
     DEFER: "defer",
+    ASSIGN_ON_USE: "assign_on_use",
     SAMPLER2D: "sampler2D",
     SAMPLER: "sampler",
   };
@@ -68869,6 +68894,7 @@ var p5 = (function () {
     [BaseType.BOOL]: 1,
     [BaseType.MAT]: 0,
     [BaseType.DEFER]: -1,
+    [BaseType.ASSIGN_ON_USE]: -2,
     [BaseType.SAMPLER2D]: -10,
     [BaseType.SAMPLER]: -11,
   };
@@ -68889,6 +68915,7 @@ var p5 = (function () {
     mat3: { fnName: "mat3x3", baseType: BaseType.MAT, dimension:3, priority: 0,  },
     mat4: { fnName: "mat4x4", baseType: BaseType.MAT, dimension:4, priority: 0,  },
     defer: { fnName:  null, baseType: BaseType.DEFER, dimension: null, priority: -1 },
+    assign_on_use: { fnName: null, baseType: BaseType.ASSIGN_ON_USE, dimension: null, priority: -2 },
     sampler2D: { fnName: "sampler2D", baseType: BaseType.SAMPLER2D, dimension: 1, priority: -10 },
     sampler: { fnName: "sampler", baseType: BaseType.SAMPLER, dimension: 1, priority: -11 },
   };
@@ -68952,7 +68979,7 @@ var p5 = (function () {
       CONSTRUCTOR: 201,
     }};
   const OperatorTable = [
-    { arity: "unary", name: "not", symbol: "!", opCode: OpCode.Unary.LOGICAL_NOT },
+    { arity: "unary", boolean: true, name: "not", symbol: "!", opCode: OpCode.Unary.LOGICAL_NOT },
     { arity: "unary", name: "neg", symbol: "-", opCode: OpCode.Unary.NEGATE },
     { arity: "unary", name: "plus", symbol: "+", opCode: OpCode.Unary.PLUS },
     { arity: "binary", name: "add", symbol: "+", opCode: OpCode.Binary.ADD },
@@ -68960,23 +68987,27 @@ var p5 = (function () {
     { arity: "binary", name: "mult", symbol: "*", opCode: OpCode.Binary.MULTIPLY },
     { arity: "binary", name: "div", symbol: "/", opCode: OpCode.Binary.DIVIDE },
     { arity: "binary", name: "mod", symbol: "%", opCode: OpCode.Binary.MODULO },
-    { arity: "binary", name: "equalTo", symbol: "==", opCode: OpCode.Binary.EQUAL },
-    { arity: "binary", name: "notEqual", symbol: "!=", opCode: OpCode.Binary.NOT_EQUAL },
-    { arity: "binary", name: "greaterThan", symbol: ">", opCode: OpCode.Binary.GREATER_THAN },
-    { arity: "binary", name: "greaterEqual", symbol: ">=", opCode: OpCode.Binary.GREATER_EQUAL },
-    { arity: "binary", name: "lessThan", symbol: "<", opCode: OpCode.Binary.LESS_THAN },
-    { arity: "binary", name: "lessEqual", symbol: "<=", opCode: OpCode.Binary.LESS_EQUAL },
-    { arity: "binary", name: "and", symbol: "&&", opCode: OpCode.Binary.LOGICAL_AND },
-    { arity: "binary", name: "or", symbol: "||", opCode: OpCode.Binary.LOGICAL_OR },
+    { arity: "binary", boolean: true, name: "equalTo", symbol: "==", opCode: OpCode.Binary.EQUAL },
+    { arity: "binary", boolean: true, name: "notEqual", symbol: "!=", opCode: OpCode.Binary.NOT_EQUAL },
+    { arity: "binary", boolean: true, name: "greaterThan", symbol: ">", opCode: OpCode.Binary.GREATER_THAN },
+    { arity: "binary", boolean: true, name: "greaterEqual", symbol: ">=", opCode: OpCode.Binary.GREATER_EQUAL },
+    { arity: "binary", boolean: true, name: "lessThan", symbol: "<", opCode: OpCode.Binary.LESS_THAN },
+    { arity: "binary", boolean: true, name: "lessEqual", symbol: "<=", opCode: OpCode.Binary.LESS_EQUAL },
+    { arity: "binary", boolean: true, name: "and", symbol: "&&", opCode: OpCode.Binary.LOGICAL_AND },
+    { arity: "binary", boolean: true, name: "or", symbol: "||", opCode: OpCode.Binary.LOGICAL_OR },
   ];
   // export const SymbolToOpCode = {};
   const OpCodeToSymbol = {};
   const UnarySymbolToName = {};
-  for (const { symbol, opCode, name, arity } of OperatorTable) {
+  const booleanOpCode = {};
+  for (const { symbol, opCode, name, arity, boolean } of OperatorTable) {
     // SymbolToOpCode[symbol] = opCode;
     OpCodeToSymbol[opCode] = symbol;
     if (arity === 'unary') {
       UnarySymbolToName[symbol] = name;
+    }
+    if (boolean) {
+      booleanOpCode[opCode] = true;
     }
   }
   const BlockType = {
@@ -69084,6 +69115,36 @@ var p5 = (function () {
       dimension: dag.dimensions[nodeID],
       priority: BasePriority[dag.baseTypes[nodeID]],
     };
+  }
+
+  // Propagate a known type to an ASSIGN_ON_USE node and all its ASSIGN_ON_USE dependencies
+  function propagateTypeToAssignOnUse(dag, nodeId, baseType, dimension, visited = new Set()) {
+    // Avoid infinite loops
+    if (visited.has(nodeId)) {
+      return;
+    }
+    visited.add(nodeId);
+
+    const node = getNodeDataFromID(dag, nodeId);
+
+    // Only update if this node is ASSIGN_ON_USE
+    if (node.baseType !== BaseType.ASSIGN_ON_USE) {
+      return;
+    }
+
+    // Update this node's type
+    dag.baseTypes[nodeId] = baseType;
+    dag.dimensions[nodeId] = dimension;
+
+    // Recursively propagate to any ASSIGN_ON_USE dependencies
+    if (node.dependsOn && node.dependsOn.length > 0) {
+      for (const depId of node.dependsOn) {
+        const dep = getNodeDataFromID(dag, depId);
+        if (dep.baseType === BaseType.ASSIGN_ON_USE) {
+          propagateTypeToAssignOnUse(dag, depId, baseType, dimension, visited);
+        }
+      }
+    }
   }
 
   /////////////////////////////////
@@ -69277,9 +69338,6 @@ var p5 = (function () {
         const assignmentID = getOrCreateNode(dag, assignmentNode);
         recordInBasicBlock(cfg, cfg.currentBlock, assignmentID);
 
-        // Track for global assignments processing
-        this.strandsContext.globalAssignments.push(assignmentID);
-
         // Simply update this node to be a variable node with the identifier
         // This ensures it always generates the variable name in expressions
         const variableNodeData = createNodeData({
@@ -69342,9 +69400,6 @@ var p5 = (function () {
         });
         const assignmentID = getOrCreateNode(dag, assignmentNode);
         recordInBasicBlock(cfg, cfg.currentBlock, assignmentID);
-
-        // Track for global assignments processing in the current hook context
-        this.strandsContext.globalAssignments.push(assignmentID);
 
         // Simply update this node to be a variable node with the identifier
         // This ensures it always generates the variable name in expressions
@@ -69540,12 +69595,22 @@ var p5 = (function () {
       node = createStrandsNode(id, dimension, strandsContext);
     }
     dependsOn = [node.id];
+
+    const typeInfo = {
+      baseType: dag.baseTypes[node.id],
+      dimension: node.dimension
+    };
+    if (booleanOpCode[opCode]) {
+      typeInfo.baseType = BaseType.BOOL;
+      typeInfo.dimension = 1;
+    }
+
     const nodeData = createNodeData({
       nodeType: NodeType.OPERATION,
       opCode,
       dependsOn,
-      baseType: dag.baseTypes[node.id],
-      dimension: node.dimension
+      baseType: typeInfo.baseType,
+      dimension: typeInfo.dimension
     });
     const id = getOrCreateNode(dag, nodeData);
     recordInBasicBlock(cfg, cfg.currentBlock, id);
@@ -69566,8 +69631,17 @@ var p5 = (function () {
     let finalRightNodeID = rightStrandsNode.id;
 
     // Check if we have to cast either node
-    const leftType = extractNodeTypeInfo(dag, leftStrandsNode.id);
-    const rightType = extractNodeTypeInfo(dag, rightStrandsNode.id);
+    let leftType = extractNodeTypeInfo(dag, leftStrandsNode.id);
+    let rightType = extractNodeTypeInfo(dag, rightStrandsNode.id);
+
+    // Update ASSIGN_ON_USE nodes to match the type of the other operand
+    if (leftType.baseType === BaseType.ASSIGN_ON_USE && rightType.baseType !== BaseType.ASSIGN_ON_USE) {
+      propagateTypeToAssignOnUse(dag, leftStrandsNode.id, rightType.baseType, rightType.dimension);
+      leftType = extractNodeTypeInfo(dag, leftStrandsNode.id);
+    } else if (rightType.baseType === BaseType.ASSIGN_ON_USE && leftType.baseType !== BaseType.ASSIGN_ON_USE) {
+      propagateTypeToAssignOnUse(dag, rightStrandsNode.id, leftType.baseType, leftType.dimension);
+      rightType = extractNodeTypeInfo(dag, rightStrandsNode.id);
+    }
     const cast = { node: null, toType: leftType };
     const bothDeferred = leftType.baseType === rightType.baseType && leftType.baseType === BaseType.DEFER;
     if (bothDeferred) {
@@ -69625,6 +69699,11 @@ var p5 = (function () {
         rightStrandsNode = createStrandsNode(casted.id, casted.dimension, strandsContext);
         finalRightNodeID = rightStrandsNode.id;
       }
+    }
+
+    if (booleanOpCode[opCode]) {
+      cast.toType.baseType = BaseType.BOOL;
+      cast.toType.dimension = 1;
     }
 
     const nodeData = createNodeData({
@@ -69700,6 +69779,17 @@ var p5 = (function () {
         calculatedDimensions += dimension;
         continue;
       }
+      else if (typeof dep === 'boolean') {
+        // Handle boolean literals - convert to bool type
+        const { id, dimension } = scalarLiteralNode(strandsContext, { dimension: 1, baseType: BaseType.BOOL }, dep);
+        mappedDependencies.push(id);
+        calculatedDimensions += dimension;
+        // Update baseType to BOOL if it was inferred
+        if (baseType !== BaseType.BOOL) {
+          baseType = BaseType.BOOL;
+        }
+        continue;
+      }
       else {
         userError('type error', `You've tried to construct a scalar or vector type with a non-numeric value: ${dep}`);
       }
@@ -69750,7 +69840,12 @@ var p5 = (function () {
     const { mappedDependencies, inferredTypeInfo } = mapPrimitiveDepsToIDs(strandsContext, typeInfo, dependsOn);
 
     const finalType = {
-      baseType: typeInfo.baseType,
+      // We might have inferred a non numeric type. Currently this is
+      // just used for booleans. Maybe this needs to be something more robust
+      // if we ever want to support inference of e.g. int vectors?
+      baseType: inferredTypeInfo.baseType === BaseType.BOOL
+        ? BaseType.BOOL
+        : typeInfo.baseType,
       dimension: inferredTypeInfo.dimension
     };
 
@@ -72272,30 +72367,7 @@ var p5 = (function () {
     constructor(sketch, node) {
       // Apply addon defined decorations
       if(p5.decorations.size > 0){
-        for (const [patternArray, decoration] of p5.decorations) {
-          for(const member in p5.prototype) {
-            // Member must be a function
-            if (typeof p5.prototype[member] !== 'function') continue;
-
-            if (!patternArray.some(pattern => {
-              if (typeof pattern === 'string') {
-                return pattern === member;
-              } else if (pattern instanceof RegExp) {
-                return pattern.test(member);
-              }
-            })) continue;
-
-            p5.prototype[member] = decoration(p5.prototype[member], {
-              kind: 'method',
-              name: member,
-              access: {},
-              static: false,
-              private: false,
-              addInitializer(initializer){}
-            });
-          }
-        }
-
+        decorateClass(p5, p5.decorations);
         p5.decorations.clear();
       }
 
@@ -72387,11 +72459,11 @@ var p5 = (function () {
     }
 
     get pixels(){
-      return this._renderer.pixels;
+      return this._renderer?.pixels;
     }
 
     get drawingContext(){
-      return this._renderer.drawingContext;
+      return this._renderer?.drawingContext;
     }
 
     static _registeredAddons = new Set();
@@ -72415,10 +72487,20 @@ var p5 = (function () {
     }
 
     static decorations = new Map();
-    static decorateHelper(pattern, decoration){
-      let patternArray = pattern;
-      if (!Array.isArray(pattern)) patternArray = [pattern];
-      p5.decorations.set(patternArray, decoration);
+    static registerDecorator(pattern, decoration){
+      if(typeof pattern === 'string'){
+        const patternStr = pattern;
+        pattern = ({ path }) => patternStr === path;
+      }else if(
+        Array.isArray(pattern) &&
+        pattern.every(value => typeof value === 'string')
+      ){
+        const patternArray = pattern;
+        pattern = ({ path }) => patternArray.includes(path);
+      }else if(typeof pattern !== 'function'){
+        throw new Error('Decorator matching pattern must be a function, a string, or an array of strings');
+      }
+      p5.decorations.set(pattern, decoration);
     }
 
     #customActions = {};
@@ -72659,6 +72741,11 @@ var p5 = (function () {
     }
   };
 
+  // Attach constants to p5 prototype
+  for (const k in constants) {
+    p5$2.prototype[k] = constants[k];
+  }
+
   // Global helper function for binding properties to window in global mode
   function createBindGlobal(instance) {
     return function bindGlobal(property) {
@@ -72749,9 +72836,107 @@ var p5 = (function () {
     };
   }
 
-  // Attach constants to p5 prototype
-  for (const k in constants) {
-    p5$2.prototype[k] = constants[k];
+  // Generic function to decorate classes
+  function decorateClass(Target, decorations, path){
+    path ??= Target.name;
+    // Static properties
+    for(const key in Target){
+      if(!key.startsWith('_')){
+        for (const [pattern, decorator] of decorations) {
+          if(pattern({ path: `${path}.${key}` })){
+            // Check if method or accessor
+            if(typeof Target[key] === 'function'){
+              const result = decorator(Target[key], {
+                kind: 'method',
+                name: key,
+                static: true
+              });
+              if(result){
+                Object.defineProperty(Target, key, {
+                  enumerable: true,
+                  writable: true,
+                  value: result
+                });
+              }
+            }else {
+              const result = decorator(undefined, {
+                kind: 'field',
+                name: key,
+                static: true
+              });
+              if(result && typeof result === 'function'){
+                Target[key] = result(Target[key]);
+              }
+            }
+          }
+        }
+
+        if(typeof Target[key] === 'function' && Target[key].prototype){
+          decorateClass(Target[key], decorations, `${path}.${key}`);
+        }
+      }
+    }
+
+    // Member properties
+    for(const member of Object.getOwnPropertyNames(Target.prototype)){
+      if(member !== 'constructor' && !member.startsWith('_')){
+        for (const [pattern, decorator] of decorations) {
+          if(pattern({ path: `${path}.prototype.${member}` })){
+            // Check if method or accessor
+            if(typeof Target.prototype[member] === 'function'){
+              const result = decorator(Target.prototype[member], {
+                kind: 'method',
+                name: member,
+                static: false
+              });
+              if(result) {
+                Object.defineProperty(Target.prototype, member, {
+                  enumerable: true,
+                  writable: true,
+                  value: result
+                });
+              }
+            }else {
+              const descriptor = Object.getOwnPropertyDescriptor(
+                Target.prototype,
+                member
+              );
+              if(descriptor.hasOwnProperty('value')){
+                const result = decorator(undefined, {
+                  kind: 'field',
+                  name: member,
+                  static: false
+                });
+                Object.defineProperty(Target.prototype, member, {
+                  enumerable: true,
+                  writable: true,
+                  value: result && typeof result === 'function' ?
+                    result(Target.prototype[member]) :
+                    Target.prototype[member]
+                });
+              }else {
+                const { get, set } = descriptor;
+                const getterResult = decorator(get, {
+                  kind: 'getter',
+                  name: member,
+                  static: false
+                });
+                const setterResult = decorator(set, {
+                  kind: 'setter',
+                  name: member,
+                  static: false
+                });
+                Object.defineProperty(Target.prototype, member, {
+                  enumerable: true,
+                  get: getterResult ?? get,
+                  set: setterResult ?? set
+                });
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   p5$2.registerAddon(transform$1);
@@ -84568,37 +84753,6 @@ var p5 = (function () {
   }
 
   var p5$1 = {
-  	describe: {
-  		overloads: [
-  			[
-  				"String",
-  				"FALLBACK|LABEL?"
-  			]
-  		]
-  	},
-  	describeElement: {
-  		overloads: [
-  			[
-  				"String",
-  				"String",
-  				"FALLBACK|LABEL?"
-  			]
-  		]
-  	},
-  	textOutput: {
-  		overloads: [
-  			[
-  				"FALLBACK|LABEL?"
-  			]
-  		]
-  	},
-  	gridOutput: {
-  		overloads: [
-  			[
-  				"FALLBACK|LABEL?"
-  			]
-  		]
-  	},
   	remove: {
   		overloads: [
   			[
@@ -84613,256 +84767,33 @@ var p5 = (function () {
   			]
   		]
   	},
-  	color: {
+  	fromAxisAngle: {
   		overloads: [
   			[
-  				"Number",
+  				"Number?",
+  				"Number?",
+  				"Number?",
   				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"String"
-  			],
-  			[
-  				"Number[]"
-  			],
-  			[
-  				"p5.Color"
   			]
   		]
   	},
-  	red: {
+  	day: {
   		overloads: [
   			[
-  				"p5.Color|Number[]|String"
   			]
   		]
   	},
-  	green: {
+  	abs: {
   		overloads: [
   			[
-  				"p5.Color|Number[]|String"
-  			]
-  		]
-  	},
-  	blue: {
-  		overloads: [
-  			[
-  				"p5.Color|Number[]|String"
-  			]
-  		]
-  	},
-  	alpha: {
-  		overloads: [
-  			[
-  				"p5.Color|Number[]|String"
-  			]
-  		]
-  	},
-  	hue: {
-  		overloads: [
-  			[
-  				"p5.Color|Number[]|String"
-  			]
-  		]
-  	},
-  	saturation: {
-  		overloads: [
-  			[
-  				"p5.Color|Number[]|String"
-  			]
-  		]
-  	},
-  	brightness: {
-  		overloads: [
-  			[
-  				"p5.Color|Number[]|String"
-  			]
-  		]
-  	},
-  	lightness: {
-  		overloads: [
-  			[
-  				"p5.Color|Number[]|String"
-  			]
-  		]
-  	},
-  	lerpColor: {
-  		overloads: [
-  			[
-  				"p5.Color",
-  				"p5.Color",
   				"Number"
   			]
   		]
   	},
-  	paletteLerp: {
+  	mult: {
   		overloads: [
   			[
-  				"[p5.Color|String|Number|Number[], Number][]",
-  				"Number"
-  			]
-  		]
-  	},
-  	beginClip: {
-  		overloads: [
-  			[
-  				"Object?"
-  			]
-  		]
-  	},
-  	endClip: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	clip: {
-  		overloads: [
-  			[
-  				"Function",
-  				"Object?"
-  			]
-  		]
-  	},
-  	background: {
-  		overloads: [
-  			[
-  				"p5.Color"
-  			],
-  			[
-  				"String",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"Number[]"
-  			],
-  			[
-  				"p5.Image",
-  				"Number?"
-  			]
-  		]
-  	},
-  	clear: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  			]
-  		]
-  	},
-  	colorMode: {
-  		overloads: [
-  			[
-  				"RGB|HSB|HSL|RGBHDR|HWB|LAB|LCH|OKLAB|OKLCH",
-  				"Number?"
-  			],
-  			[
-  				"RGB|HSB|HSL|RGBHDR|HWB|LAB|LCH|OKLAB|OKLCH",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  			]
-  		]
-  	},
-  	fill: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"String"
-  			],
-  			[
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"Number[]"
-  			],
-  			[
-  				"p5.Color"
-  			]
-  		]
-  	},
-  	noFill: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	noStroke: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	stroke: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"String"
-  			],
-  			[
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"Number[]"
-  			],
-  			[
-  				"p5.Color"
-  			]
-  		]
-  	},
-  	erase: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	noErase: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	blendMode: {
-  		overloads: [
-  			[
-  				"BLEND|DARKEST|LIGHTEST|DIFFERENCE|MULTIPLY|EXCLUSION|SCREEN|REPLACE|OVERLAY|HARD_LIGHT|SOFT_LIGHT|DODGE|BURN|ADD|REMOVE|SUBTRACT"
+  				"p5.Quat?"
   			]
   		]
   	},
@@ -84876,117 +84807,120 @@ var p5 = (function () {
   			]
   		]
   	},
-  	cursor: {
+  	hour: {
   		overloads: [
   			[
-  				"ARROW|CROSS|HAND|MOVE|TEXT|WAIT|String",
-  				"Number?",
-  				"Number?"
   			]
   		]
   	},
-  	frameRate: {
+  	randomSeed: {
   		overloads: [
   			[
   				"Number"
+  			]
+  		]
+  	},
+  	float: {
+  		overloads: [
+  			[
+  				"String"
   			],
   			[
+  				"String[]"
   			]
   		]
   	},
-  	getTargetFrameRate: {
+  	rotateBy: {
   		overloads: [
   			[
+  				"p5.Quat?"
   			]
   		]
   	},
-  	noCursor: {
+  	ceil: {
   		overloads: [
   			[
+  				"Number"
   			]
   		]
   	},
-  	windowResized: {
+  	ellipseMode: {
   		overloads: [
   			[
-  				"Event?"
+  				"CENTER|RADIUS|CORNER|CORNERS"
   			]
   		]
   	},
-  	fullscreen: {
+  	nf: {
   		overloads: [
   			[
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	pixelDensity: {
-  		overloads: [
-  			[
-  				"Number?"
+  				"Number|String",
+  				"Integer|String?",
+  				"Integer|String?"
   			],
   			[
+  				"Number[]",
+  				"Integer|String?",
+  				"Integer|String?"
   			]
   		]
   	},
-  	displayDensity: {
+  	strokeMode: {
+  		overloads: [
+  			[
+  				"String"
+  			]
+  		]
+  	},
+  	select: {
+  		overloads: [
+  			[
+  				"String",
+  				"String|p5.Element|HTMLElement?"
+  			]
+  		]
+  	},
+  	loadImage: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"function(p5.Image)?",
+  				"function(Event)?"
+  			]
+  		]
+  	},
+  	createVector: {
+  		overloads: [
+  			[
+  				"...Number[]"
+  			]
+  		]
+  	},
+  	minute: {
   		overloads: [
   			[
   			]
   		]
   	},
-  	getURL: {
+  	noLoop: {
   		overloads: [
   			[
   			]
   		]
   	},
-  	getURLPath: {
+  	describe: {
   		overloads: [
   			[
+  				"String",
+  				"FALLBACK|LABEL?"
   			]
   		]
   	},
-  	getURLParams: {
+  	storeItem: {
   		overloads: [
   			[
-  			]
-  		]
-  	},
-  	worldToScreen: {
-  		overloads: [
-  			[
-  				"Number|p5.Vector",
-  				"Number",
-  				"Number?"
-  			]
-  		]
-  	},
-  	screenToWorld: {
-  		overloads: [
-  			[
-  				"Number|p5.Vector",
-  				"Number",
-  				"Number?"
-  			]
-  		]
-  	},
-  	setup: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	draw: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	registerAddon: {
-  		overloads: [
-  			[
-  				"Function"
+  				"String",
+  				"String|Number|Boolean|Object|Array"
   			]
   		]
   	},
@@ -85005,629 +84939,10 @@ var p5 = (function () {
   			]
   		]
   	},
-  	resizeCanvas: {
+  	textOutput: {
   		overloads: [
   			[
-  				"Number",
-  				"Number",
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	noCanvas: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	createGraphics: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"P2D|WEBGL?",
-  				"HTMLCanvasElement?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"HTMLCanvasElement?"
-  			]
-  		]
-  	},
-  	createFramebuffer: {
-  		overloads: [
-  			[
-  				"Object?"
-  			]
-  		]
-  	},
-  	clearDepth: {
-  		overloads: [
-  			[
-  				"Number?"
-  			]
-  		]
-  	},
-  	noLoop: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	loop: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	isLooping: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	redraw: {
-  		overloads: [
-  			[
-  				"Integer?"
-  			]
-  		]
-  	},
-  	applyMatrix: {
-  		overloads: [
-  			[
-  				"Number[]"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	resetMatrix: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	rotate: {
-  		overloads: [
-  			[
-  				"Number",
-  				"p5.Vector|Number[]?"
-  			]
-  		]
-  	},
-  	rotateX: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	rotateY: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	rotateZ: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	scale: {
-  		overloads: [
-  			[
-  				"Number|p5.Vector|Number[]",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"p5.Vector|Number[]"
-  			]
-  		]
-  	},
-  	shearX: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	shearY: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	translate: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"p5.Vector"
-  			]
-  		]
-  	},
-  	push: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	pop: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	storeItem: {
-  		overloads: [
-  			[
-  				"String",
-  				"String|Number|Boolean|Object|Array"
-  			]
-  		]
-  	},
-  	getItem: {
-  		overloads: [
-  			[
-  				"String"
-  			]
-  		]
-  	},
-  	clearStorage: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	removeItem: {
-  		overloads: [
-  			[
-  				"String"
-  			]
-  		]
-  	},
-  	select: {
-  		overloads: [
-  			[
-  				"String",
-  				"String|p5.Element|HTMLElement?"
-  			]
-  		]
-  	},
-  	selectAll: {
-  		overloads: [
-  			[
-  				"String",
-  				"String|p5.Element|HTMLElement?"
-  			]
-  		]
-  	},
-  	createElement: {
-  		overloads: [
-  			[
-  				"String",
-  				"String?"
-  			]
-  		]
-  	},
-  	removeElements: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	addElement: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	createDiv: {
-  		overloads: [
-  			[
-  				"String?"
-  			]
-  		]
-  	},
-  	createP: {
-  		overloads: [
-  			[
-  				"String?"
-  			]
-  		]
-  	},
-  	createSpan: {
-  		overloads: [
-  			[
-  				"String?"
-  			]
-  		]
-  	},
-  	createImg: {
-  		overloads: [
-  			[
-  				"String",
-  				"String"
-  			],
-  			[
-  				"String",
-  				"String",
-  				"String?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	createA: {
-  		overloads: [
-  			[
-  				"String",
-  				"String",
-  				"String?"
-  			]
-  		]
-  	},
-  	createSlider: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	createButton: {
-  		overloads: [
-  			[
-  				"String",
-  				"String?"
-  			]
-  		]
-  	},
-  	createCheckbox: {
-  		overloads: [
-  			[
-  				"String?",
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	createSelect: {
-  		overloads: [
-  			[
-  				"Boolean?"
-  			],
-  			[
-  				"Object"
-  			]
-  		]
-  	},
-  	createRadio: {
-  		overloads: [
-  			[
-  				"Object?"
-  			],
-  			[
-  				"String?"
-  			],
-  			[
-  			]
-  		]
-  	},
-  	createColorPicker: {
-  		overloads: [
-  			[
-  				"String|p5.Color?"
-  			]
-  		]
-  	},
-  	createInput: {
-  		overloads: [
-  			[
-  				"String?",
-  				"String?"
-  			],
-  			[
-  				"String?"
-  			]
-  		]
-  	},
-  	createFileInput: {
-  		overloads: [
-  			[
-  				"Function",
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	createVideo: {
-  		overloads: [
-  			[
-  				"String|String[]?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	createAudio: {
-  		overloads: [
-  			[
-  				"String|String[]?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	createCapture: {
-  		overloads: [
-  			[
-  				"AUDIO|VIDEO|Object?",
-  				"Object?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	setMoveThreshold: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	setShakeThreshold: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	deviceMoved: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	deviceTurned: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	deviceShaken: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	keyPressed: {
-  		overloads: [
-  			[
-  				"KeyboardEvent?"
-  			]
-  		]
-  	},
-  	keyReleased: {
-  		overloads: [
-  			[
-  				"KeyboardEvent?"
-  			]
-  		]
-  	},
-  	keyTyped: {
-  		overloads: [
-  			[
-  				"KeyboardEvent?"
-  			]
-  		]
-  	},
-  	keyIsDown: {
-  		overloads: [
-  			[
-  				"Number|String"
-  			]
-  		]
-  	},
-  	mouseMoved: {
-  		overloads: [
-  			[
-  				"MouseEvent?"
-  			]
-  		]
-  	},
-  	mouseDragged: {
-  		overloads: [
-  			[
-  				"MouseEvent?"
-  			]
-  		]
-  	},
-  	mousePressed: {
-  		overloads: [
-  			[
-  				"MouseEvent?"
-  			]
-  		]
-  	},
-  	mouseReleased: {
-  		overloads: [
-  			[
-  				"MouseEvent?"
-  			]
-  		]
-  	},
-  	mouseClicked: {
-  		overloads: [
-  			[
-  				"MouseEvent?"
-  			]
-  		]
-  	},
-  	doubleClicked: {
-  		overloads: [
-  			[
-  				"MouseEvent?"
-  			]
-  		]
-  	},
-  	mouseWheel: {
-  		overloads: [
-  			[
-  				"WheelEvent?"
-  			]
-  		]
-  	},
-  	requestPointerLock: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	exitPointerLock: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	createImage: {
-  		overloads: [
-  			[
-  				"Integer",
-  				"Integer"
-  			]
-  		]
-  	},
-  	saveCanvas: {
-  		overloads: [
-  			[
-  				"p5.Framebuffer|p5.Element|HTMLCanvasElement",
-  				"String?",
-  				"String?"
-  			],
-  			[
-  				"String?",
-  				"String?"
-  			]
-  		]
-  	},
-  	saveFrames: {
-  		overloads: [
-  			[
-  				"String",
-  				"String",
-  				"Number",
-  				"Number",
-  				"function(Array)?"
-  			]
-  		]
-  	},
-  	loadImage: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"function(p5.Image)?",
-  				"function(Event)?"
-  			]
-  		]
-  	},
-  	saveGif: {
-  		overloads: [
-  			[
-  				"String",
-  				"Number",
-  				"Object?"
-  			]
-  		]
-  	},
-  	image: {
-  		overloads: [
-  			[
-  				"p5.Image|p5.Element|p5.Texture|p5.Framebuffer|p5.FramebufferTexture|p5.Renderer|p5.Graphics",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"p5.Image|p5.Element|p5.Texture|p5.Framebuffer|p5.FramebufferTexture",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?",
-  				"CONTAIN|COVER?",
-  				"LEFT|RIGHT|CENTER?",
-  				"TOP|BOTTOM|CENTER?"
-  			]
-  		]
-  	},
-  	tint: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"String"
-  			],
-  			[
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"Number[]"
-  			],
-  			[
-  				"p5.Color"
-  			]
-  		]
-  	},
-  	noTint: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	imageMode: {
-  		overloads: [
-  			[
-  				"CORNER|CORNERS|CENTER"
+  				"FALLBACK|LABEL?"
   			]
   		]
   	},
@@ -85658,272 +84973,13 @@ var p5 = (function () {
   			]
   		]
   	},
-  	copy: {
+  	loadShader: {
   		overloads: [
   			[
-  				"p5.Image|p5.Element",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer"
-  			],
-  			[
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer"
-  			]
-  		]
-  	},
-  	filter: {
-  		overloads: [
-  			[
-  				"THRESHOLD|GRAY|OPAQUE|INVERT|POSTERIZE|BLUR|ERODE|DILATE|BLUR",
-  				"Number?",
-  				"Boolean?"
-  			],
-  			[
-  				"p5.Shader"
-  			]
-  		]
-  	},
-  	get: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  			],
-  			[
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	loadPixels: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	set: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number|Number[]|Object"
-  			]
-  		]
-  	},
-  	updatePixels: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  			]
-  		]
-  	},
-  	loadJSON: {
-  		overloads: [
-  			[
+  				"String|Request",
   				"String|Request",
   				"Function?",
   				"Function?"
-  			]
-  		]
-  	},
-  	loadStrings: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"Function?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	loadTable: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"String?",
-  				"String?",
-  				"Function?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	loadXML: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"Function?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	loadBytes: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"Function?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	loadBlob: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"Function?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	httpGet: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"String?",
-  				"Function?",
-  				"Function?"
-  			],
-  			[
-  				"String|Request",
-  				"Function",
-  				"Function?"
-  			]
-  		]
-  	},
-  	httpPost: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"Object|Boolean?",
-  				"String?",
-  				"Function?",
-  				"Function?"
-  			],
-  			[
-  				"String|Request",
-  				"Object|Boolean",
-  				"Function?",
-  				"Function?"
-  			],
-  			[
-  				"String|Request",
-  				"Function?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	httpDo: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"String?",
-  				"String?",
-  				"Object?",
-  				"Function?",
-  				"Function?"
-  			],
-  			[
-  				"String|Request",
-  				"Function?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	createWriter: {
-  		overloads: [
-  			[
-  				"String",
-  				"String?"
-  			]
-  		]
-  	},
-  	write: {
-  		overloads: [
-  			[
-  				"String|Number|Array"
-  			]
-  		]
-  	},
-  	close: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	save: {
-  		overloads: [
-  			[
-  				"Object|String?",
-  				"String?",
-  				"Boolean|String?"
-  			]
-  		]
-  	},
-  	saveJSON: {
-  		overloads: [
-  			[
-  				"Array|Object",
-  				"String",
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	saveStrings: {
-  		overloads: [
-  			[
-  				"String[]",
-  				"String",
-  				"String?",
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	saveTable: {
-  		overloads: [
-  			[
-  				"p5.Table",
-  				"String",
-  				"String?"
-  			]
-  		]
-  	},
-  	setContent: {
-  		overloads: [
-  			[
-  				"String"
-  			]
-  		]
-  	},
-  	abs: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	ceil: {
-  		overloads: [
-  			[
-  				"Number"
   			]
   		]
   	},
@@ -85936,199 +84992,11 @@ var p5 = (function () {
   			]
   		]
   	},
-  	dist: {
+  	createImage: {
   		overloads: [
   			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	exp: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	floor: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	lerp: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	log: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	mag: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	map: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	max: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number[]"
-  			]
-  		]
-  	},
-  	min: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number[]"
-  			]
-  		]
-  	},
-  	norm: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	pow: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	round: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number?"
-  			]
-  		]
-  	},
-  	sq: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	sqrt: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	fract: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	createVector: {
-  		overloads: [
-  			[
-  				"...Number[]"
-  			]
-  		]
-  	},
-  	noise: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	noiseDetail: {
-  		overloads: [
-  			[
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	noiseSeed: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	randomSeed: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	random: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"Array"
-  			]
-  		]
-  	},
-  	randomGaussian: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?"
+  				"Integer",
+  				"Integer"
   			]
   		]
   	},
@@ -86139,504 +85007,43 @@ var p5 = (function () {
   			]
   		]
   	},
-  	asin: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	atan: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	atan2: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	cos: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	sin: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	tan: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	degrees: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	radians: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	angleMode: {
-  		overloads: [
-  			[
-  				"RADIANS|DEGREES"
-  			],
-  			[
-  			]
-  		]
-  	},
-  	arc: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"CHORD|PIE|OPEN?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	ellipse: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	circle: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	line: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	point: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"p5.Vector"
-  			]
-  		]
-  	},
-  	quad: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Integer?",
-  				"Integer?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Integer?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	rect: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Integer?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	square: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	triangle: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	ellipseMode: {
-  		overloads: [
-  			[
-  				"CENTER|RADIUS|CORNER|CORNERS"
-  			]
-  		]
-  	},
   	noSmooth: {
   		overloads: [
   			[
   			]
   		]
   	},
-  	rectMode: {
+  	orbitControl: {
   		overloads: [
   			[
-  				"CENTER|RADIUS|CORNER|CORNERS"
-  			]
-  		]
-  	},
-  	smooth: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	strokeCap: {
-  		overloads: [
-  			[
-  				"ROUND|SQUARE|PROJECT"
-  			]
-  		]
-  	},
-  	strokeJoin: {
-  		overloads: [
-  			[
-  				"MITER|BEVEL|ROUND"
-  			]
-  		]
-  	},
-  	strokeWeight: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	bezier: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	bezierPoint: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	bezierTangent: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	spline: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	splinePoint: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	splineTangent: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	bezierOrder: {
-  		overloads: [
-  			[
-  				"Number"
-  			],
-  			[
-  			]
-  		]
-  	},
-  	splineVertex: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
   				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
   				"Number?",
-  				"Number?"
+  				"Number?",
+  				"Object?"
   			]
   		]
   	},
-  	splineProperty: {
+  	beginClip: {
   		overloads: [
   			[
-  				"String",
+  				"Object?"
+  			]
+  		]
+  	},
+  	smoothstep: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	getTexture: {
+  		overloads: [
+  			[
+  				null,
   				null
-  			],
-  			[
-  				"String"
-  			]
-  		]
-  	},
-  	splineProperties: {
-  		overloads: [
-  			[
-  				"Object"
-  			]
-  		]
-  	},
-  	vertex: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	beginContour: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	endContour: {
-  		overloads: [
-  			[
-  				"OPEN|CLOSE?"
-  			]
-  		]
-  	},
-  	beginShape: {
-  		overloads: [
-  			[
-  				"POINTS|LINES|TRIANGLES|TRIANGLE_FAN|TRIANGLE_STRIP|QUADS|QUAD_STRIP|PATH?"
-  			]
-  		]
-  	},
-  	bezierVertex: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	endShape: {
-  		overloads: [
-  			[
-  				"CLOSE?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	normal: {
-  		overloads: [
-  			[
-  				"p5.Vector"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	vertexProperty: {
-  		overloads: [
-  			[
-  				"String",
-  				"Number|Number[]"
   			]
   		]
   	},
@@ -86682,19 +85089,2159 @@ var p5 = (function () {
   			]
   		]
   	},
-  	loadFont: {
+  	ambientLight: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"String"
+  			],
+  			[
+  				"Number[]"
+  			],
+  			[
+  				"p5.Color"
+  			]
+  		]
+  	},
+  	selectAll: {
   		overloads: [
   			[
   				"String",
+  				"String|p5.Element|HTMLElement?"
+  			]
+  		]
+  	},
+  	bezier: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	int: {
+  		overloads: [
+  			[
+  				"String|Boolean|Number"
+  			],
+  			[
+  				"Array"
+  			]
+  		]
+  	},
+  	endClip: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	copy: {
+  		overloads: [
+  			[
+  				"p5.Image|p5.Element",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer"
+  			],
+  			[
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer"
+  			]
+  		]
+  	},
+  	loop: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	dist: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	asin: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	millis: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	nfc: {
+  		overloads: [
+  			[
+  				"Number|String",
+  				"Integer|String?"
+  			],
+  			[
+  				"Number[]",
+  				"Integer|String?"
+  			]
+  		]
+  	},
+  	applyMatrix: {
+  		overloads: [
+  			[
+  				"Number[]"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	resizeCanvas: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	push: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	noise: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	describeElement: {
+  		overloads: [
+  			[
+  				"String",
+  				"String",
+  				"FALLBACK|LABEL?"
+  			]
+  		]
+  	},
+  	saveGif: {
+  		overloads: [
+  			[
+  				"String",
+  				"Number",
+  				"Object?"
+  			]
+  		]
+  	},
+  	month: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	random: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"Array"
+  			]
+  		]
+  	},
+  	isLooping: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	gridOutput: {
+  		overloads: [
+  			[
+  				"FALLBACK|LABEL?"
+  			]
+  		]
+  	},
+  	saveCanvas: {
+  		overloads: [
+  			[
+  				"p5.Framebuffer|p5.Element|HTMLCanvasElement",
+  				"String?",
+  				"String?"
+  			],
+  			[
+  				"String?",
+  				"String?"
+  			]
+  		]
+  	},
+  	rectMode: {
+  		overloads: [
+  			[
+  				"CENTER|RADIUS|CORNER|CORNERS"
+  			]
+  		]
+  	},
+  	atan: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	noCanvas: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	resetMatrix: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	getItem: {
+  		overloads: [
+  			[
+  				"String"
+  			]
+  		]
+  	},
+  	exp: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	second: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	loadJSON: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"Function?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	arc: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"CHORD|PIE|OPEN?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	cursor: {
+  		overloads: [
+  			[
+  				"ARROW|CROSS|HAND|MOVE|TEXT|WAIT|String",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	createElement: {
+  		overloads: [
+  			[
+  				"String",
+  				"String?"
+  			]
+  		]
+  	},
+  	year: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	floor: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	str: {
+  		overloads: [
+  			[
+  				"String|Boolean|Number"
+  			]
+  		]
+  	},
+  	byte: {
+  		overloads: [
+  			[
+  				"String|Boolean|Number"
+  			],
+  			[
+  				"Array"
+  			]
+  		]
+  	},
+  	bezierPoint: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	buildGeometry: {
+  		overloads: [
+  			[
+  				"Function"
+  			]
+  		]
+  	},
+  	loadModel: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"String?",
+  				"Boolean?",
+  				"function(p5.Geometry)?",
+  				"function(Event)?"
+  			],
+  			[
+  				"String|Request",
+  				"String?",
+  				"function(p5.Geometry)?",
+  				"function(Event)?"
+  			],
+  			[
+  				"String|Request",
+  				"Object?"
+  			]
+  		]
+  	},
+  	randomGaussian: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	redraw: {
+  		overloads: [
+  			[
+  				"Integer?"
+  			]
+  		]
+  	},
+  	atan2: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	smooth: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	clearStorage: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	nfp: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Integer?",
+  				"Integer?"
+  			],
+  			[
+  				"Number[]",
+  				"Integer?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	removeElements: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	beginShape: {
+  		overloads: [
+  			[
+  				"POINTS|LINES|TRIANGLES|TRIANGLE_FAN|TRIANGLE_STRIP|QUADS|QUAD_STRIP|PATH?"
+  			]
+  		]
+  	},
+  	saveObj: {
+  		overloads: [
+  			[
+  				"String?"
+  			]
+  		]
+  	},
+  	addElement: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	color: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"String"
+  			],
+  			[
+  				"Number[]"
+  			],
+  			[
+  				"p5.Color"
+  			]
+  		]
+  	},
+  	clip: {
+  		overloads: [
+  			[
+  				"Function",
+  				"Object?"
+  			]
+  		]
+  	},
+  	noiseDetail: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number?"
+  			]
+  		]
+  	},
+  	createGraphics: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"P2D|WEBGL?",
+  				"HTMLCanvasElement?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"HTMLCanvasElement?"
+  			]
+  		]
+  	},
+  	strokeCap: {
+  		overloads: [
+  			[
+  				"ROUND|SQUARE|PROJECT"
+  			]
+  		]
+  	},
+  	lerp: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	frameRate: {
+  		overloads: [
+  			[
+  				"Number"
+  			],
+  			[
+  			]
+  		]
+  	},
+  	cos: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	specularColor: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number"
+  			],
+  			[
+  				"String"
+  			],
+  			[
+  				"Number[]"
+  			],
+  			[
+  				"p5.Color"
+  			]
+  		]
+  	},
+  	createDiv: {
+  		overloads: [
+  			[
+  				"String?"
+  			]
+  		]
+  	},
+  	loadStrings: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"Function?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	boolean: {
+  		overloads: [
+  			[
+  				"String|Boolean|Number"
+  			],
+  			[
+  				"Array"
+  			]
+  		]
+  	},
+  	removeItem: {
+  		overloads: [
+  			[
+  				"String"
+  			]
+  		]
+  	},
+  	rotate: {
+  		overloads: [
+  			[
+  				"Number",
+  				"p5.Vector|Number[]?"
+  			]
+  		]
+  	},
+  	freeGeometry: {
+  		overloads: [
+  			[
+  				"p5.Geometry"
+  			]
+  		]
+  	},
+  	setMoveThreshold: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	bezierTangent: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	noiseSeed: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	ellipse: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	log: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	createP: {
+  		overloads: [
+  			[
+  				"String?"
+  			]
+  		]
+  	},
+  	createShader: {
+  		overloads: [
+  			[
+  				"String",
+  				"String",
+  				"Object?"
+  			]
+  		]
+  	},
+  	getTargetFrameRate: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	nfs: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Integer?",
+  				"Integer?"
+  			],
+  			[
+  				"Array",
+  				"Integer?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	setShakeThreshold: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	saveStl: {
+  		overloads: [
+  			[
+  				"String?",
+  				"Object?"
+  			]
+  		]
+  	},
+  	sin: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	strokeJoin: {
+  		overloads: [
+  			[
+  				"MITER|BEVEL|ROUND"
+  			]
+  		]
+  	},
+  	noCursor: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	circle: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	mag: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	loadTable: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"String?",
+  				"String?",
+  				"Function?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	red: {
+  		overloads: [
+  			[
+  				"p5.Color|Number[]|String"
+  			]
+  		]
+  	},
+  	filter: {
+  		overloads: [
+  			[
+  				"THRESHOLD|GRAY|OPAQUE|INVERT|POSTERIZE|BLUR|ERODE|DILATE|BLUR",
+  				"Number?",
+  				"Boolean?"
+  			],
+  			[
+  				"p5.Shader"
+  			]
+  		]
+  	},
+  	tan: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	createSpan: {
+  		overloads: [
+  			[
+  				"String?"
+  			]
+  		]
+  	},
+  	loadFilterShader: {
+  		overloads: [
+  			[
+  				"String",
+  				"Function?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	plane: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Integer?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	createFramebuffer: {
+  		overloads: [
+  			[
+  				"Object?"
+  			]
+  		]
+  	},
+  	strokeWeight: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	degrees: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	rotateX: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	setup: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	draw: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	registerAddon: {
+  		overloads: [
+  			[
+  				"Function"
+  			]
+  		]
+  	},
+  	map: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	createImg: {
+  		overloads: [
+  			[
+  				"String",
+  				"String"
+  			],
+  			[
+  				"String",
+  				"String",
+  				"String?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	radians: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	deviceMoved: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	deviceTurned: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	deviceShaken: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	directionalLight: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"p5.Vector"
+  			],
+  			[
+  				"p5.Color|Number[]|String",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"p5.Color|Number[]|String",
+  				"p5.Vector"
+  			]
+  		]
+  	},
+  	background: {
+  		overloads: [
+  			[
+  				"p5.Color"
+  			],
+  			[
+  				"String",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number[]"
+  			],
+  			[
+  				"p5.Image",
+  				"Number?"
+  			]
+  		]
+  	},
+  	clearDepth: {
+  		overloads: [
+  			[
+  				"Number?"
+  			]
+  		]
+  	},
+  	splitTokens: {
+  		overloads: [
+  			[
+  				"String",
+  				"String?"
+  			]
+  		]
+  	},
+  	keyPressed: {
+  		overloads: [
+  			[
+  				"KeyboardEvent?"
+  			]
+  		]
+  	},
+  	green: {
+  		overloads: [
+  			[
+  				"p5.Color|Number[]|String"
+  			]
+  		]
+  	},
+  	max: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number[]"
+  			]
+  		]
+  	},
+  	bezierVertex: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	createA: {
+  		overloads: [
+  			[
+  				"String",
+  				"String",
+  				"String?"
+  			]
+  		]
+  	},
+  	saveFrames: {
+  		overloads: [
+  			[
+  				"String",
+  				"String",
+  				"Number",
+  				"Number",
+  				"function(Array)?"
+  			]
+  		]
+  	},
+  	line: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	clear: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  			]
+  		]
+  	},
+  	box: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Integer?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	char: {
+  		overloads: [
+  			[
+  				"String|Number"
+  			],
+  			[
+  				"Array"
+  			]
+  		]
+  	},
+  	rotateY: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	debugMode: {
+  		overloads: [
+  			[
+  			],
+  			[
+  				"GRID|AXES"
+  			],
+  			[
+  				"GRID|AXES",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"GRID|AXES",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	roll: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	spline: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	loadXML: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"Function?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	get: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  			],
+  			[
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	min: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number[]"
+  			]
+  		]
+  	},
+  	windowResized: {
+  		overloads: [
+  			[
+  				"Event?"
+  			]
+  		]
+  	},
+  	shuffle: {
+  		overloads: [
+  			[
+  				"Array",
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	loadBytes: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"Function?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	noDebugMode: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	blue: {
+  		overloads: [
+  			[
+  				"p5.Color|Number[]|String"
+  			]
+  		]
+  	},
+  	unchar: {
+  		overloads: [
+  			[
+  				"String"
+  			],
+  			[
+  				"String[]"
+  			]
+  		]
+  	},
+  	angleMode: {
+  		overloads: [
+  			[
+  				"RADIANS|DEGREES"
+  			],
+  			[
+  			]
+  		]
+  	},
+  	loadPixels: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	buildFilterShader: {
+  		overloads: [
+  			[
+  				"Function",
+  				"Object?"
+  			],
+  			[
+  				"Object",
+  				"Object?"
+  			]
+  		]
+  	},
+  	createSlider: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	norm: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	sphere: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Integer?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	keyReleased: {
+  		overloads: [
+  			[
+  				"KeyboardEvent?"
+  			]
+  		]
+  	},
+  	rotateZ: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	loadBlob: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"Function?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	pow: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	fullscreen: {
+  		overloads: [
+  			[
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	pointLight: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"p5.Vector"
+  			],
+  			[
+  				"p5.Color|Number[]|String",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"p5.Color|Number[]|String",
+  				"p5.Vector"
+  			]
+  		]
+  	},
+  	point: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"p5.Vector"
+  			]
+  		]
+  	},
+  	alpha: {
+  		overloads: [
+  			[
+  				"p5.Color|Number[]|String"
+  			]
+  		]
+  	},
+  	createButton: {
+  		overloads: [
+  			[
+  				"String",
+  				"String?"
+  			]
+  		]
+  	},
+  	createFilterShader: {
+  		overloads: [
+  			[
+  				"String"
+  			]
+  		]
+  	},
+  	endShape: {
+  		overloads: [
+  			[
+  				"CLOSE?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	set: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number|Number[]|Object"
+  			]
+  		]
+  	},
+  	round: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number?"
+  			]
+  		]
+  	},
+  	hex: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number[]",
+  				"Number?"
+  			]
+  		]
+  	},
+  	splinePoint: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	httpGet: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"String?",
+  				"Function?",
+  				"Function?"
+  			],
+  			[
+  				"String|Request",
+  				"Function",
+  				"Function?"
+  			]
+  		]
+  	},
+  	pixelDensity: {
+  		overloads: [
+  			[
+  				"Number?"
+  			],
+  			[
+  			]
+  		]
+  	},
+  	imageLight: {
+  		overloads: [
+  			[
+  				"p5.Image"
+  			]
+  		]
+  	},
+  	updatePixels: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  			]
+  		]
+  	},
+  	sq: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	displayDensity: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	panorama: {
+  		overloads: [
+  			[
+  				"p5.Image"
+  			]
+  		]
+  	},
+  	createCheckbox: {
+  		overloads: [
+  			[
+  				"String?",
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	keyTyped: {
+  		overloads: [
+  			[
+  				"KeyboardEvent?"
+  			]
+  		]
+  	},
+  	hue: {
+  		overloads: [
+  			[
+  				"p5.Color|Number[]|String"
+  			]
+  		]
+  	},
+  	scale: {
+  		overloads: [
+  			[
+  				"Number|p5.Vector|Number[]",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"p5.Vector|Number[]"
+  			]
+  		]
+  	},
+  	httpPost: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"Object|Boolean?",
+  				"String?",
+  				"Function?",
+  				"Function?"
+  			],
+  			[
+  				"String|Request",
+  				"Object|Boolean",
+  				"Function?",
+  				"Function?"
+  			],
+  			[
+  				"String|Request",
+  				"Function?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	unhex: {
+  		overloads: [
+  			[
+  				"String"
+  			],
+  			[
+  				"String[]"
+  			]
+  		]
+  	},
+  	quad: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Integer?",
+  				"Integer?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Integer?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	sqrt: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	cylinder: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Integer?",
+  				"Integer?",
+  				"Boolean?",
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	getURL: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	lights: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	fract: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	getURLPath: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	splineTangent: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	normal: {
+  		overloads: [
+  			[
+  				"p5.Vector"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	image: {
+  		overloads: [
+  			[
+  				"p5.Image|p5.Element|p5.Texture|p5.Framebuffer|p5.FramebufferTexture|p5.Renderer|p5.Graphics",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"p5.Image|p5.Element|p5.Texture|p5.Framebuffer|p5.FramebufferTexture",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?",
+  				"CONTAIN|COVER?",
+  				"LEFT|RIGHT|CENTER?",
+  				"TOP|BOTTOM|CENTER?"
+  			]
+  		]
+  	},
+  	getURLParams: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	colorMode: {
+  		overloads: [
+  			[
+  				"RGB|HSB|HSL|RGBHDR|HWB|LAB|LCH|OKLAB|OKLCH",
+  				"Number?"
+  			],
+  			[
+  				"RGB|HSB|HSL|RGBHDR|HWB|LAB|LCH|OKLAB|OKLCH",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  			]
+  		]
+  	},
+  	shearX: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	lightFalloff: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	mouseMoved: {
+  		overloads: [
+  			[
+  				"MouseEvent?"
+  			]
+  		]
+  	},
+  	mouseDragged: {
+  		overloads: [
+  			[
+  				"MouseEvent?"
+  			]
+  		]
+  	},
+  	keyIsDown: {
+  		overloads: [
+  			[
+  				"Number|String"
+  			]
+  		]
+  	},
+  	shader: {
+  		overloads: [
+  			[
+  				"p5.Shader"
+  			]
+  		]
+  	},
+  	model: {
+  		overloads: [
+  			[
+  				"p5.Geometry",
+  				"Number?"
+  			]
+  		]
+  	},
+  	setContent: {
+  		overloads: [
+  			[
+  				"String"
+  			]
+  		]
+  	},
+  	httpDo: {
+  		overloads: [
+  			[
+  				"String|Request",
+  				"String?",
   				"String?",
   				"Object?",
   				"Function?",
   				"Function?"
   			],
   			[
-  				"String",
+  				"String|Request",
   				"Function?",
   				"Function?"
+  			]
+  		]
+  	},
+  	rect: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Integer?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	shearY: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	saturation: {
+  		overloads: [
+  			[
+  				"p5.Color|Number[]|String"
+  			]
+  		]
+  	},
+  	createSelect: {
+  		overloads: [
+  			[
+  				"Boolean?"
+  			],
+  			[
+  				"Object"
+  			]
+  		]
+  	},
+  	worldToScreen: {
+  		overloads: [
+  			[
+  				"Number|p5.Vector",
+  				"Number",
+  				"Number?"
+  			]
+  		]
+  	},
+  	cone: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Integer?",
+  				"Integer?",
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	createModel: {
+  		overloads: [
+  			[
+  				"String",
+  				"String?",
+  				"Boolean?",
+  				"function(p5.Geometry)?",
+  				"function(Event)?"
+  			],
+  			[
+  				"String",
+  				"String?",
+  				"function(p5.Geometry)?",
+  				"function(Event)?"
+  			],
+  			[
+  				"String",
+  				"String?",
+  				"Object?"
+  			]
+  		]
+  	},
+  	vertexProperty: {
+  		overloads: [
+  			[
+  				"String",
+  				"Number|Number[]"
+  			]
+  		]
+  	},
+  	square: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	screenToWorld: {
+  		overloads: [
+  			[
+  				"Number|p5.Vector",
+  				"Number",
+  				"Number?"
+  			]
+  		]
+  	},
+  	mousePressed: {
+  		overloads: [
+  			[
+  				"MouseEvent?"
+  			]
+  		]
+  	},
+  	strokeShader: {
+  		overloads: [
+  			[
+  				"p5.Shader"
+  			]
+  		]
+  	},
+  	tint: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"String"
+  			],
+  			[
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number[]"
+  			],
+  			[
+  				"p5.Color"
+  			]
+  		]
+  	},
+  	brightness: {
+  		overloads: [
+  			[
+  				"p5.Color|Number[]|String"
+  			]
+  		]
+  	},
+  	createWriter: {
+  		overloads: [
+  			[
+  				"String",
+  				"String?"
+  			]
+  		]
+  	},
+  	spotLight: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"p5.Color|Number[]|String",
+  				"p5.Vector",
+  				"p5.Vector",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"p5.Vector",
+  				"p5.Vector",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"p5.Color|Number[]|String",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"p5.Vector",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"p5.Color|Number[]|String",
+  				"p5.Vector",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"p5.Vector",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"p5.Vector",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"p5.Color|Number[]|String",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	translate: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"p5.Vector"
+  			]
+  		]
+  	},
+  	noTint: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	fill: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"String"
+  			],
+  			[
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number[]"
+  			],
+  			[
+  				"p5.Color"
+  			]
+  		]
+  	},
+  	triangle: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
   			]
   		]
   	},
@@ -86859,281 +87406,6 @@ var p5 = (function () {
   			]
   		]
   	},
-  	float: {
-  		overloads: [
-  			[
-  				"String"
-  			],
-  			[
-  				"String[]"
-  			]
-  		]
-  	},
-  	int: {
-  		overloads: [
-  			[
-  				"String|Boolean|Number"
-  			],
-  			[
-  				"Array"
-  			]
-  		]
-  	},
-  	str: {
-  		overloads: [
-  			[
-  				"String|Boolean|Number"
-  			]
-  		]
-  	},
-  	boolean: {
-  		overloads: [
-  			[
-  				"String|Boolean|Number"
-  			],
-  			[
-  				"Array"
-  			]
-  		]
-  	},
-  	byte: {
-  		overloads: [
-  			[
-  				"String|Boolean|Number"
-  			],
-  			[
-  				"Array"
-  			]
-  		]
-  	},
-  	char: {
-  		overloads: [
-  			[
-  				"String|Number"
-  			],
-  			[
-  				"Array"
-  			]
-  		]
-  	},
-  	unchar: {
-  		overloads: [
-  			[
-  				"String"
-  			],
-  			[
-  				"String[]"
-  			]
-  		]
-  	},
-  	hex: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"Number[]",
-  				"Number?"
-  			]
-  		]
-  	},
-  	unhex: {
-  		overloads: [
-  			[
-  				"String"
-  			],
-  			[
-  				"String[]"
-  			]
-  		]
-  	},
-  	day: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	hour: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	minute: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	millis: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	month: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	second: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	year: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	nf: {
-  		overloads: [
-  			[
-  				"Number|String",
-  				"Integer|String?",
-  				"Integer|String?"
-  			],
-  			[
-  				"Number[]",
-  				"Integer|String?",
-  				"Integer|String?"
-  			]
-  		]
-  	},
-  	nfc: {
-  		overloads: [
-  			[
-  				"Number|String",
-  				"Integer|String?"
-  			],
-  			[
-  				"Number[]",
-  				"Integer|String?"
-  			]
-  		]
-  	},
-  	nfp: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Integer?",
-  				"Integer?"
-  			],
-  			[
-  				"Number[]",
-  				"Integer?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	nfs: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Integer?",
-  				"Integer?"
-  			],
-  			[
-  				"Array",
-  				"Integer?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	splitTokens: {
-  		overloads: [
-  			[
-  				"String",
-  				"String?"
-  			]
-  		]
-  	},
-  	shuffle: {
-  		overloads: [
-  			[
-  				"Array",
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	strokeMode: {
-  		overloads: [
-  			[
-  				"String"
-  			]
-  		]
-  	},
-  	buildGeometry: {
-  		overloads: [
-  			[
-  				"Function"
-  			]
-  		]
-  	},
-  	freeGeometry: {
-  		overloads: [
-  			[
-  				"p5.Geometry"
-  			]
-  		]
-  	},
-  	plane: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Integer?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	box: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Integer?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	sphere: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Integer?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	cylinder: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Integer?",
-  				"Integer?",
-  				"Boolean?",
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	cone: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Integer?",
-  				"Integer?",
-  				"Boolean?"
-  			]
-  		]
-  	},
   	ellipsoid: {
   		overloads: [
   			[
@@ -87142,6 +87414,120 @@ var p5 = (function () {
   				"Number?",
   				"Integer?",
   				"Integer?"
+  			]
+  		]
+  	},
+  	noFill: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	noLights: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	write: {
+  		overloads: [
+  			[
+  				"String|Number|Array"
+  			]
+  		]
+  	},
+  	lightness: {
+  		overloads: [
+  			[
+  				"p5.Color|Number[]|String"
+  			]
+  		]
+  	},
+  	imageMode: {
+  		overloads: [
+  			[
+  				"CORNER|CORNERS|CENTER"
+  			]
+  		]
+  	},
+  	mouseReleased: {
+  		overloads: [
+  			[
+  				"MouseEvent?"
+  			]
+  		]
+  	},
+  	imageShader: {
+  		overloads: [
+  			[
+  				"p5.Shader"
+  			]
+  		]
+  	},
+  	noStroke: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	createRadio: {
+  		overloads: [
+  			[
+  				"Object?"
+  			],
+  			[
+  				"String?"
+  			],
+  			[
+  			]
+  		]
+  	},
+  	createVideo: {
+  		overloads: [
+  			[
+  				"String|String[]?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	loadFont: {
+  		overloads: [
+  			[
+  				"String",
+  				"String?",
+  				"Object?",
+  				"Function?",
+  				"Function?"
+  			],
+  			[
+  				"String",
+  				"Function?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	lerpColor: {
+  		overloads: [
+  			[
+  				"p5.Color",
+  				"p5.Color",
+  				"Number"
+  			]
+  		]
+  	},
+  	createAudio: {
+  		overloads: [
+  			[
+  				"String|String[]?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	paletteLerp: {
+  		overloads: [
+  			[
+  				"[p5.Color|String|Number|Number[], Number][]",
+  				"Number"
   			]
   		]
   	},
@@ -87155,407 +87541,76 @@ var p5 = (function () {
   			]
   		]
   	},
-  	curveDetail: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	orbitControl: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Object?"
-  			]
-  		]
-  	},
-  	debugMode: {
-  		overloads: [
-  			[
-  			],
-  			[
-  				"GRID|AXES"
-  			],
-  			[
-  				"GRID|AXES",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"GRID|AXES",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	noDebugMode: {
+  	close: {
   		overloads: [
   			[
   			]
   		]
   	},
-  	ambientLight: {
+  	mouseClicked: {
   		overloads: [
   			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number?"
-  			],
-  			[
-  				"String"
-  			],
-  			[
-  				"Number[]"
-  			],
-  			[
-  				"p5.Color"
-  			]
-  		]
-  	},
-  	specularColor: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number"
-  			],
-  			[
-  				"String"
-  			],
-  			[
-  				"Number[]"
-  			],
-  			[
-  				"p5.Color"
-  			]
-  		]
-  	},
-  	directionalLight: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"p5.Vector"
-  			],
-  			[
-  				"p5.Color|Number[]|String",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"p5.Color|Number[]|String",
-  				"p5.Vector"
-  			]
-  		]
-  	},
-  	pointLight: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"p5.Vector"
-  			],
-  			[
-  				"p5.Color|Number[]|String",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  				"p5.Color|Number[]|String",
-  				"p5.Vector"
-  			]
-  		]
-  	},
-  	imageLight: {
-  		overloads: [
-  			[
-  				"p5.Image"
-  			]
-  		]
-  	},
-  	panorama: {
-  		overloads: [
-  			[
-  				"p5.Image"
-  			]
-  		]
-  	},
-  	lights: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	lightFalloff: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	spotLight: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"p5.Color|Number[]|String",
-  				"p5.Vector",
-  				"p5.Vector",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"p5.Vector",
-  				"p5.Vector",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"p5.Color|Number[]|String",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"p5.Vector",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"p5.Color|Number[]|String",
-  				"p5.Vector",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"p5.Vector",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"p5.Vector",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			],
-  			[
-  				"p5.Color|Number[]|String",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	noLights: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	loadModel: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"String?",
-  				"Boolean?",
-  				"function(p5.Geometry)?",
-  				"function(Event)?"
-  			],
-  			[
-  				"String|Request",
-  				"String?",
-  				"function(p5.Geometry)?",
-  				"function(Event)?"
-  			],
-  			[
-  				"String|Request",
-  				"Object?"
-  			]
-  		]
-  	},
-  	model: {
-  		overloads: [
-  			[
-  				"p5.Geometry",
-  				"Number?"
-  			]
-  		]
-  	},
-  	createModel: {
-  		overloads: [
-  			[
-  				"String",
-  				"String?",
-  				"Boolean?",
-  				"function(p5.Geometry)?",
-  				"function(Event)?"
-  			],
-  			[
-  				"String",
-  				"String?",
-  				"function(p5.Geometry)?",
-  				"function(Event)?"
-  			],
-  			[
-  				"String",
-  				"String?",
-  				"Object?"
-  			]
-  		]
-  	},
-  	loadShader: {
-  		overloads: [
-  			[
-  				"String|Request",
-  				"String|Request",
-  				"Function?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	createShader: {
-  		overloads: [
-  			[
-  				"String",
-  				"String",
-  				"Object?"
-  			]
-  		]
-  	},
-  	loadFilterShader: {
-  		overloads: [
-  			[
-  				"String",
-  				"Function?",
-  				"Function?"
-  			]
-  		]
-  	},
-  	buildFilterShader: {
-  		overloads: [
-  			[
-  				"Function"
-  			],
-  			[
-  				"Object"
-  			]
-  		]
-  	},
-  	createFilterShader: {
-  		overloads: [
-  			[
-  				"String"
-  			]
-  		]
-  	},
-  	shader: {
-  		overloads: [
-  			[
-  				"p5.Shader"
-  			]
-  		]
-  	},
-  	strokeShader: {
-  		overloads: [
-  			[
-  				"p5.Shader"
-  			]
-  		]
-  	},
-  	imageShader: {
-  		overloads: [
-  			[
-  				"p5.Shader"
+  				"MouseEvent?"
   			]
   		]
   	},
   	buildMaterialShader: {
   		overloads: [
   			[
-  				"Function"
+  				"Function",
+  				"Object?"
   			],
   			[
-  				"Object"
+  				"Object",
+  				"Object?"
+  			]
+  		]
+  	},
+  	createCapture: {
+  		overloads: [
+  			[
+  				"AUDIO|VIDEO|Object?",
+  				"Object?",
+  				"Function?"
+  			]
+  		]
+  	},
+  	stroke: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"String"
+  			],
+  			[
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number[]"
+  			],
+  			[
+  				"p5.Color"
+  			]
+  		]
+  	},
+  	createColorPicker: {
+  		overloads: [
+  			[
+  				"String|p5.Color?"
+  			]
+  		]
+  	},
+  	save: {
+  		overloads: [
+  			[
+  				"Object|String?",
+  				"String?",
+  				"Boolean|String?"
   			]
   		]
   	},
@@ -87568,9 +87623,33 @@ var p5 = (function () {
   			]
   		]
   	},
+  	bezierOrder: {
+  		overloads: [
+  			[
+  				"Number"
+  			],
+  			[
+  			]
+  		]
+  	},
+  	doubleClicked: {
+  		overloads: [
+  			[
+  				"MouseEvent?"
+  			]
+  		]
+  	},
   	baseMaterialShader: {
   		overloads: [
   			[
+  			]
+  		]
+  	},
+  	erase: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?"
   			]
   		]
   	},
@@ -87580,13 +87659,68 @@ var p5 = (function () {
   			]
   		]
   	},
+  	noErase: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	createInput: {
+  		overloads: [
+  			[
+  				"String?",
+  				"String?"
+  			],
+  			[
+  				"String?"
+  			]
+  		]
+  	},
+  	saveJSON: {
+  		overloads: [
+  			[
+  				"Array|Object",
+  				"String",
+  				"Boolean?"
+  			]
+  		]
+  	},
   	buildNormalShader: {
   		overloads: [
   			[
-  				"Function"
+  				"Function",
+  				"Object?"
   			],
   			[
-  				"Object"
+  				"Object",
+  				"Object?"
+  			]
+  		]
+  	},
+  	mouseWheel: {
+  		overloads: [
+  			[
+  				"WheelEvent?"
+  			]
+  		]
+  	},
+  	pop: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	createFileInput: {
+  		overloads: [
+  			[
+  				"Function",
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	requestPointerLock: {
+  		overloads: [
+  			[
   			]
   		]
   	},
@@ -87605,13 +87739,66 @@ var p5 = (function () {
   			]
   		]
   	},
+  	exitPointerLock: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	saveStrings: {
+  		overloads: [
+  			[
+  				"String[]",
+  				"String",
+  				"String?",
+  				"Boolean?"
+  			]
+  		]
+  	},
   	buildColorShader: {
   		overloads: [
   			[
-  				"Function"
+  				"Function",
+  				"Object?"
   			],
   			[
-  				"Object"
+  				"Object",
+  				"Object?"
+  			]
+  		]
+  	},
+  	splineVertex: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	saveTable: {
+  		overloads: [
+  			[
+  				"p5.Table",
+  				"String",
+  				"String?"
   			]
   		]
   	},
@@ -87630,13 +87817,69 @@ var p5 = (function () {
   			]
   		]
   	},
-  	buildStrokeShader: {
+  	setAttributes: {
   		overloads: [
   			[
-  				"Function"
+  				"String",
+  				"Boolean"
   			],
   			[
   				"Object"
+  			]
+  		]
+  	},
+  	blendMode: {
+  		overloads: [
+  			[
+  				"BLEND|DARKEST|LIGHTEST|DIFFERENCE|MULTIPLY|EXCLUSION|SCREEN|REPLACE|OVERLAY|HARD_LIGHT|SOFT_LIGHT|DODGE|BURN|ADD|REMOVE|SUBTRACT"
+  			]
+  		]
+  	},
+  	camera: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	buildStrokeShader: {
+  		overloads: [
+  			[
+  				"Function",
+  				"Object?"
+  			],
+  			[
+  				"Object",
+  				"Object?"
+  			]
+  		]
+  	},
+  	splineProperty: {
+  		overloads: [
+  			[
+  				"String",
+  				null
+  			],
+  			[
+  				"String"
+  			]
+  		]
+  	},
+  	perspective: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
   			]
   		]
   	},
@@ -87655,9 +87898,37 @@ var p5 = (function () {
   			]
   		]
   	},
+  	splineProperties: {
+  		overloads: [
+  			[
+  				"Object"
+  			]
+  		]
+  	},
+  	linePerspective: {
+  		overloads: [
+  			[
+  				"Boolean"
+  			],
+  			[
+  			]
+  		]
+  	},
   	resetShader: {
   		overloads: [
   			[
+  			]
+  		]
+  	},
+  	ortho: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
   			]
   		]
   	},
@@ -87668,10 +87939,76 @@ var p5 = (function () {
   			]
   		]
   	},
+  	vertex: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			],
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	frustum: {
+  		overloads: [
+  			[
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?",
+  				"Number?"
+  			]
+  		]
+  	},
+  	curveDetail: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	createCamera: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	beginContour: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
   	textureMode: {
   		overloads: [
   			[
   				"IMAGE|NORMAL"
+  			]
+  		]
+  	},
+  	setCamera: {
+  		overloads: [
+  			[
+  				"p5.Camera"
+  			]
+  		]
+  	},
+  	endContour: {
+  		overloads: [
+  			[
+  				"OPEN|CLOSE?"
   			]
   		]
   	},
@@ -87750,138 +88087,187 @@ var p5 = (function () {
   				"Number"
   			]
   		]
+  	}
+  };
+  var dataDoc = {
+  	"p5.Image": {
+  	pixelDensity: {
+  		overloads: [
+  			[
+  				"Number?"
+  			]
+  		]
   	},
-  	roll: {
+  	loadPixels: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	updatePixels: {
+  		overloads: [
+  			[
+  				"Integer?",
+  				"Integer?",
+  				"Integer?",
+  				"Integer?"
+  			]
+  		]
+  	},
+  	get: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  			],
+  			[
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	set: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number|Number[]|Object"
+  			]
+  		]
+  	},
+  	resize: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	copy: {
+  		overloads: [
+  			[
+  				"p5.Image|p5.Element",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer"
+  			],
+  			[
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer"
+  			]
+  		]
+  	},
+  	mask: {
+  		overloads: [
+  			[
+  				"p5.Image"
+  			]
+  		]
+  	},
+  	filter: {
+  		overloads: [
+  			[
+  				"THRESHOLD|GRAY|OPAQUE|INVERT|POSTERIZE|ERODE|DILATE|BLUR",
+  				"Number?"
+  			]
+  		]
+  	},
+  	blend: {
+  		overloads: [
+  			[
+  				"p5.Image",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"BLEND|DARKEST|LIGHTEST|DIFFERENCE|MULTIPLY|EXCLUSION|SCREEN|REPLACE|OVERLAY|HARD_LIGHT|SOFT_LIGHT|DODGE|BURN|ADD|NORMAL"
+  			],
+  			[
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"Integer",
+  				"BLEND|DARKEST|LIGHTEST|DIFFERENCE|MULTIPLY|EXCLUSION|SCREEN|REPLACE|OVERLAY|HARD_LIGHT|SOFT_LIGHT|DODGE|BURN|ADD|NORMAL"
+  			]
+  		]
+  	},
+  	save: {
+  		overloads: [
+  			[
+  				"String",
+  				"String?"
+  			]
+  		]
+  	},
+  	reset: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	getCurrentFrame: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	setFrame: {
   		overloads: [
   			[
   				"Number"
   			]
   		]
   	},
-  	camera: {
+  	numFrames: {
   		overloads: [
   			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
+  			]
+  		]
+  	},
+  	play: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	pause: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	delay: {
+  		overloads: [
+  			[
+  				"Number",
   				"Number?"
-  			]
-  		]
-  	},
-  	perspective: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	linePerspective: {
-  		overloads: [
-  			[
-  				"Boolean"
-  			],
-  			[
-  			]
-  		]
-  	},
-  	ortho: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	frustum: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	createCamera: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	setCamera: {
-  		overloads: [
-  			[
-  				"p5.Camera"
-  			]
-  		]
-  	},
-  	saveObj: {
-  		overloads: [
-  			[
-  				"String?"
-  			]
-  		]
-  	},
-  	saveStl: {
-  		overloads: [
-  			[
-  				"String?",
-  				"Object?"
-  			]
-  		]
-  	},
-  	fromAxisAngle: {
-  		overloads: [
-  			[
-  				"Number?",
-  				"Number?",
-  				"Number?",
-  				"Number?"
-  			]
-  		]
-  	},
-  	mult: {
-  		overloads: [
-  			[
-  				"p5.Quat?"
-  			]
-  		]
-  	},
-  	rotateBy: {
-  		overloads: [
-  			[
-  				"p5.Quat?"
-  			]
-  		]
-  	},
-  	setAttributes: {
-  		overloads: [
-  			[
-  				"String",
-  				"Boolean"
-  			],
-  			[
-  				"Object"
   			]
   		]
   	}
-  };
-  var dataDoc = {
-  	p5: p5$1,
+  },
   	"p5.Color": {
   	toString: {
   		overloads: [
@@ -87926,27 +88312,7 @@ var p5 = (function () {
   		]
   	}
   },
-  	"p5.Graphics": {
-  	reset: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	remove: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	createFramebuffer: {
-  		overloads: [
-  			[
-  				"Object?"
-  			]
-  		]
-  	}
-  },
+  	p5: p5$1,
   	"p5.Element": {
   	remove: {
   		overloads: [
@@ -88205,534 +88571,6 @@ var p5 = (function () {
   		]
   	}
   },
-  	"p5.MediaElement": {
-  	play: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	stop: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	pause: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	loop: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	noLoop: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	autoplay: {
-  		overloads: [
-  			[
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	volume: {
-  		overloads: [
-  			[
-  			],
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	speed: {
-  		overloads: [
-  			[
-  			],
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	time: {
-  		overloads: [
-  			[
-  				"Number?"
-  			]
-  		]
-  	},
-  	duration: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	onended: {
-  		overloads: [
-  			[
-  				"Function"
-  			]
-  		]
-  	},
-  	connect: {
-  		overloads: [
-  			[
-  				"AudioNode|Object"
-  			]
-  		]
-  	},
-  	disconnect: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	showControls: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	hideControls: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	addCue: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Function",
-  				"Object?"
-  			]
-  		]
-  	},
-  	removeCue: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	clearCues: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	}
-  },
-  	"p5.Image": {
-  	pixelDensity: {
-  		overloads: [
-  			[
-  				"Number?"
-  			]
-  		]
-  	},
-  	loadPixels: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	updatePixels: {
-  		overloads: [
-  			[
-  				"Integer?",
-  				"Integer?",
-  				"Integer?",
-  				"Integer?"
-  			]
-  		]
-  	},
-  	get: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  			],
-  			[
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	set: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number|Number[]|Object"
-  			]
-  		]
-  	},
-  	resize: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	copy: {
-  		overloads: [
-  			[
-  				"p5.Image|p5.Element",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer"
-  			],
-  			[
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer"
-  			]
-  		]
-  	},
-  	mask: {
-  		overloads: [
-  			[
-  				"p5.Image"
-  			]
-  		]
-  	},
-  	filter: {
-  		overloads: [
-  			[
-  				"THRESHOLD|GRAY|OPAQUE|INVERT|POSTERIZE|ERODE|DILATE|BLUR",
-  				"Number?"
-  			]
-  		]
-  	},
-  	blend: {
-  		overloads: [
-  			[
-  				"p5.Image",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"BLEND|DARKEST|LIGHTEST|DIFFERENCE|MULTIPLY|EXCLUSION|SCREEN|REPLACE|OVERLAY|HARD_LIGHT|SOFT_LIGHT|DODGE|BURN|ADD|NORMAL"
-  			],
-  			[
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"Integer",
-  				"BLEND|DARKEST|LIGHTEST|DIFFERENCE|MULTIPLY|EXCLUSION|SCREEN|REPLACE|OVERLAY|HARD_LIGHT|SOFT_LIGHT|DODGE|BURN|ADD|NORMAL"
-  			]
-  		]
-  	},
-  	save: {
-  		overloads: [
-  			[
-  				"String",
-  				"String?"
-  			]
-  		]
-  	},
-  	reset: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	getCurrentFrame: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	setFrame: {
-  		overloads: [
-  			[
-  				"Number"
-  			]
-  		]
-  	},
-  	numFrames: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	play: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	pause: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	delay: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number?"
-  			]
-  		]
-  	}
-  },
-  	"p5.Table": {
-  	addRow: {
-  		overloads: [
-  			[
-  				"p5.TableRow?"
-  			]
-  		]
-  	},
-  	removeRow: {
-  		overloads: [
-  			[
-  				"Integer"
-  			]
-  		]
-  	},
-  	getRow: {
-  		overloads: [
-  			[
-  				"Integer"
-  			]
-  		]
-  	},
-  	getRows: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	findRow: {
-  		overloads: [
-  			[
-  				"String",
-  				"Integer|String"
-  			]
-  		]
-  	},
-  	findRows: {
-  		overloads: [
-  			[
-  				"String",
-  				"Integer|String"
-  			]
-  		]
-  	},
-  	matchRow: {
-  		overloads: [
-  			[
-  				"String|RegExp",
-  				"String|Integer"
-  			]
-  		]
-  	},
-  	matchRows: {
-  		overloads: [
-  			[
-  				"String",
-  				"String|Integer?"
-  			]
-  		]
-  	},
-  	getColumn: {
-  		overloads: [
-  			[
-  				"String|Number"
-  			]
-  		]
-  	},
-  	clearRows: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	addColumn: {
-  		overloads: [
-  			[
-  				"String?"
-  			]
-  		]
-  	},
-  	getColumnCount: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	getRowCount: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	removeTokens: {
-  		overloads: [
-  			[
-  				"String",
-  				"String|Integer?"
-  			]
-  		]
-  	},
-  	trim: {
-  		overloads: [
-  			[
-  				"String|Integer?"
-  			]
-  		]
-  	},
-  	removeColumn: {
-  		overloads: [
-  			[
-  				"String|Integer"
-  			]
-  		]
-  	},
-  	set: {
-  		overloads: [
-  			[
-  				"Integer",
-  				"String|Integer",
-  				"String|Number"
-  			]
-  		]
-  	},
-  	setNum: {
-  		overloads: [
-  			[
-  				"Integer",
-  				"String|Integer",
-  				"Number"
-  			]
-  		]
-  	},
-  	setString: {
-  		overloads: [
-  			[
-  				"Integer",
-  				"String|Integer",
-  				"String"
-  			]
-  		]
-  	},
-  	get: {
-  		overloads: [
-  			[
-  				"Integer",
-  				"String|Integer"
-  			]
-  		]
-  	},
-  	getNum: {
-  		overloads: [
-  			[
-  				"Integer",
-  				"String|Integer"
-  			]
-  		]
-  	},
-  	getString: {
-  		overloads: [
-  			[
-  				"Integer",
-  				"String|Integer"
-  			]
-  		]
-  	},
-  	getObject: {
-  		overloads: [
-  			[
-  				"String?"
-  			]
-  		]
-  	},
-  	getArray: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	}
-  },
-  	"p5.TableRow": {
-  	set: {
-  		overloads: [
-  			[
-  				"String|Integer",
-  				"String|Number"
-  			]
-  		]
-  	},
-  	setNum: {
-  		overloads: [
-  			[
-  				"String|Integer",
-  				"Number|String"
-  			]
-  		]
-  	},
-  	setString: {
-  		overloads: [
-  			[
-  				"String|Integer",
-  				"String|Number|Boolean|Object"
-  			]
-  		]
-  	},
-  	get: {
-  		overloads: [
-  			[
-  				"String|Integer"
-  			]
-  		]
-  	},
-  	getNum: {
-  		overloads: [
-  			[
-  				"String|Integer"
-  			]
-  		]
-  	},
-  	getString: {
-  		overloads: [
-  			[
-  				"String|Integer"
-  			]
-  		]
-  	}
-  },
   	"p5.XML": {
   	getParent: {
   		overloads: [
@@ -88846,6 +88684,53 @@ var p5 = (function () {
   	serialize: {
   		overloads: [
   			[
+  			]
+  		]
+  	}
+  },
+  	"p5.TableRow": {
+  	set: {
+  		overloads: [
+  			[
+  				"String|Integer",
+  				"String|Number"
+  			]
+  		]
+  	},
+  	setNum: {
+  		overloads: [
+  			[
+  				"String|Integer",
+  				"Number|String"
+  			]
+  		]
+  	},
+  	setString: {
+  		overloads: [
+  			[
+  				"String|Integer",
+  				"String|Number|Boolean|Object"
+  			]
+  		]
+  	},
+  	get: {
+  		overloads: [
+  			[
+  				"String|Integer"
+  			]
+  		]
+  	},
+  	getNum: {
+  		overloads: [
+  			[
+  				"String|Integer"
+  			]
+  		]
+  	},
+  	getString: {
+  		overloads: [
+  			[
+  				"String|Integer"
   			]
   		]
   	}
@@ -89169,6 +89054,487 @@ var p5 = (function () {
   		]
   	}
   },
+  	"p5.Shader": {
+  	version: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	inspectHooks: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	modify: {
+  		overloads: [
+  			[
+  				"Function",
+  				"Object?"
+  			],
+  			[
+  				"Object?"
+  			]
+  		]
+  	},
+  	copyToContext: {
+  		overloads: [
+  			[
+  				"p5|p5.Graphics"
+  			]
+  		]
+  	},
+  	setUniform: {
+  		overloads: [
+  			[
+  				"String",
+  				"Boolean|Number|Number[]|p5.Image|p5.Graphics|p5.MediaElement|p5.Texture"
+  			]
+  		]
+  	}
+  },
+  	"p5.Table": {
+  	addRow: {
+  		overloads: [
+  			[
+  				"p5.TableRow?"
+  			]
+  		]
+  	},
+  	removeRow: {
+  		overloads: [
+  			[
+  				"Integer"
+  			]
+  		]
+  	},
+  	getRow: {
+  		overloads: [
+  			[
+  				"Integer"
+  			]
+  		]
+  	},
+  	getRows: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	findRow: {
+  		overloads: [
+  			[
+  				"String",
+  				"Integer|String"
+  			]
+  		]
+  	},
+  	findRows: {
+  		overloads: [
+  			[
+  				"String",
+  				"Integer|String"
+  			]
+  		]
+  	},
+  	matchRow: {
+  		overloads: [
+  			[
+  				"String|RegExp",
+  				"String|Integer"
+  			]
+  		]
+  	},
+  	matchRows: {
+  		overloads: [
+  			[
+  				"String",
+  				"String|Integer?"
+  			]
+  		]
+  	},
+  	getColumn: {
+  		overloads: [
+  			[
+  				"String|Number"
+  			]
+  		]
+  	},
+  	clearRows: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	addColumn: {
+  		overloads: [
+  			[
+  				"String?"
+  			]
+  		]
+  	},
+  	getColumnCount: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	getRowCount: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	removeTokens: {
+  		overloads: [
+  			[
+  				"String",
+  				"String|Integer?"
+  			]
+  		]
+  	},
+  	trim: {
+  		overloads: [
+  			[
+  				"String|Integer?"
+  			]
+  		]
+  	},
+  	removeColumn: {
+  		overloads: [
+  			[
+  				"String|Integer"
+  			]
+  		]
+  	},
+  	set: {
+  		overloads: [
+  			[
+  				"Integer",
+  				"String|Integer",
+  				"String|Number"
+  			]
+  		]
+  	},
+  	setNum: {
+  		overloads: [
+  			[
+  				"Integer",
+  				"String|Integer",
+  				"Number"
+  			]
+  		]
+  	},
+  	setString: {
+  		overloads: [
+  			[
+  				"Integer",
+  				"String|Integer",
+  				"String"
+  			]
+  		]
+  	},
+  	get: {
+  		overloads: [
+  			[
+  				"Integer",
+  				"String|Integer"
+  			]
+  		]
+  	},
+  	getNum: {
+  		overloads: [
+  			[
+  				"Integer",
+  				"String|Integer"
+  			]
+  		]
+  	},
+  	getString: {
+  		overloads: [
+  			[
+  				"Integer",
+  				"String|Integer"
+  			]
+  		]
+  	},
+  	getObject: {
+  		overloads: [
+  			[
+  				"String?"
+  			]
+  		]
+  	},
+  	getArray: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	}
+  },
+  	"p5.MediaElement": {
+  	play: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	stop: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	pause: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	loop: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	noLoop: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	autoplay: {
+  		overloads: [
+  			[
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	volume: {
+  		overloads: [
+  			[
+  			],
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	speed: {
+  		overloads: [
+  			[
+  			],
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	time: {
+  		overloads: [
+  			[
+  				"Number?"
+  			]
+  		]
+  	},
+  	duration: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	onended: {
+  		overloads: [
+  			[
+  				"Function"
+  			]
+  		]
+  	},
+  	connect: {
+  		overloads: [
+  			[
+  				"AudioNode|Object"
+  			]
+  		]
+  	},
+  	disconnect: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	showControls: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	hideControls: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	addCue: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Function",
+  				"Object?"
+  			]
+  		]
+  	},
+  	removeCue: {
+  		overloads: [
+  			[
+  				"Number"
+  			]
+  		]
+  	},
+  	clearCues: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	}
+  },
+  	"p5.Geometry": {
+  	calculateBoundingBox: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	clearColors: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	flipU: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	computeFaces: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	computeNormals: {
+  		overloads: [
+  			[
+  				"FLAT|SMOOTH?",
+  				"Object?"
+  			]
+  		]
+  	},
+  	makeEdgesFromFaces: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	normalize: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	vertexProperty: {
+  		overloads: [
+  			[
+  				"String",
+  				"Number|Number[]",
+  				"Number?"
+  			]
+  		]
+  	},
+  	flipV: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	}
+  },
+  	"p5.Framebuffer": {
+  	resize: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	},
+  	pixelDensity: {
+  		overloads: [
+  			[
+  				"Number?"
+  			]
+  		]
+  	},
+  	autoSized: {
+  		overloads: [
+  			[
+  				"Boolean?"
+  			]
+  		]
+  	},
+  	createCamera: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	remove: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	begin: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	end: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	draw: {
+  		overloads: [
+  			[
+  				"Function"
+  			]
+  		]
+  	},
+  	loadPixels: {
+  		overloads: [
+  			[
+  			]
+  		]
+  	},
+  	get: {
+  		overloads: [
+  			[
+  				"Number",
+  				"Number",
+  				"Number",
+  				"Number"
+  			],
+  			[
+  			],
+  			[
+  				"Number",
+  				"Number"
+  			]
+  		]
+  	}
+  },
   	"p5.Camera": {
   	perspective: {
   		overloads: [
@@ -89277,30 +89643,8 @@ var p5 = (function () {
   		]
   	}
   },
-  	"p5.Framebuffer": {
-  	resize: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	},
-  	pixelDensity: {
-  		overloads: [
-  			[
-  				"Number?"
-  			]
-  		]
-  	},
-  	autoSized: {
-  		overloads: [
-  			[
-  				"Boolean?"
-  			]
-  		]
-  	},
-  	createCamera: {
+  	"p5.Graphics": {
+  	reset: {
   		overloads: [
   			[
   			]
@@ -89312,145 +89656,10 @@ var p5 = (function () {
   			]
   		]
   	},
-  	begin: {
+  	createFramebuffer: {
   		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	end: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	draw: {
-  		overloads: [
-  			[
-  				"Function"
-  			]
-  		]
-  	},
-  	loadPixels: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	get: {
-  		overloads: [
-  			[
-  				"Number",
-  				"Number",
-  				"Number",
-  				"Number"
-  			],
-  			[
-  			],
-  			[
-  				"Number",
-  				"Number"
-  			]
-  		]
-  	}
-  },
-  	"p5.Geometry": {
-  	calculateBoundingBox: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	clearColors: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	flipU: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	computeFaces: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	computeNormals: {
-  		overloads: [
-  			[
-  				"FLAT|SMOOTH?",
-  				"Object?"
-  			]
-  		]
-  	},
-  	makeEdgesFromFaces: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	normalize: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	vertexProperty: {
-  		overloads: [
-  			[
-  				"String",
-  				"Number|Number[]",
-  				"Number?"
-  			]
-  		]
-  	},
-  	flipV: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	}
-  },
-  	"p5.Shader": {
-  	version: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	inspectHooks: {
-  		overloads: [
-  			[
-  			]
-  		]
-  	},
-  	modify: {
-  		overloads: [
-  			[
-  				"Function",
-  				"Object?"
-  			],
   			[
   				"Object?"
-  			]
-  		]
-  	},
-  	copyToContext: {
-  		overloads: [
-  			[
-  				"p5|p5.Graphics"
-  			]
-  		]
-  	},
-  	setUniform: {
-  		overloads: [
-  			[
-  				"String",
-  				"Boolean|Number|Number[]|p5.Image|p5.Graphics|p5.MediaElement|p5.Texture"
   			]
   		]
   	}
@@ -90029,15 +90238,40 @@ var p5 = (function () {
 
     fn._validate = validate; // TEMP: For unit tests
 
-    p5.decorateHelper(
-      /^(?!_).+$/,
-      function(target, { name }){
-        return function(...args){
-          if (!p5.disableFriendlyErrors && !p5.disableParameterValidator) {
-            validate(name, args);
-          }
-          return target.apply(this, args);
-        };
+    // Suppress FES param checking for the duration of a callback.
+    // Use this to wrap internal p5 calls that happen after an await.
+    // NOTE: shares the same _isUserCall flag logic as the decorator below.
+    fn._internal = function(callback) {
+      const wasInternalCall = this._isUserCall;
+      this._isUserCall = true;
+      try {
+        return callback();
+      } finally {
+        this._isUserCall = wasInternalCall;
+      }
+    };
+
+    // Skip FES validation for nested (internal) calls.
+    // NOTE: shares the same _isUserCall flag logic as _internal() above.
+    p5.registerDecorator(
+      ({ path }) => {
+        return path.startsWith('p5.prototype');
+      },
+      function(target, { kind, name }){
+        if(kind === 'method'){
+          return function(...args){
+            const wasInternalCall = this._isUserCall;
+            this._isUserCall = true;
+            try {
+              if (!wasInternalCall && !p5.disableFriendlyErrors && !p5.disableParameterValidator) {
+                validate(name, args);
+              }
+              return target.apply(this, args);
+            } finally {
+              this._isUserCall = wasInternalCall;
+            }
+          };
+        }
       }
     );
 
@@ -97036,18 +97270,20 @@ var p5 = (function () {
      */
     fn.storeItem = function(key, value) {
       if (typeof key !== 'string') {
-        console.log(
-          `The argument that you passed to storeItem() - ${key} is not a string.`
+        p5._friendlyError(
+          `The argument that you passed to storeItem() - ${key} is not a string.`,
+          'storeItem'
         );
       }
       if (key.endsWith('p5TypeID')) {
-        console.log(
-          `The argument that you passed to storeItem() - ${key} must not end with 'p5TypeID'.`
+        p5._friendlyError(
+          `The argument that you passed to storeItem() - ${key} must not end with 'p5TypeID'.`,
+          'storeItem'
         );
       }
 
       if (typeof value === 'undefined') {
-        console.log('You cannot store undefined variables using storeItem().');
+        p5._friendlyError('You cannot store undefined variables using storeItem().', 'storeItem');
       }
       let type = typeof value;
       switch (type) {
@@ -97182,8 +97418,9 @@ var p5 = (function () {
       let value = localStorage.getItem(key);
       const type = localStorage.getItem(`${key}p5TypeID`);
       if (typeof type === 'undefined') {
-        console.log(
-          `Unable to determine type of item stored under ${key}in local storage. Did you save the item with something other than setItem()?`
+        p5._friendlyError(
+          `Unable to determine type of item stored under ${key}in local storage. Did you save the item with something other than setItem()?`,
+          'getItem'
         );
       } else if (value !== null) {
         switch (type) {
@@ -97334,8 +97571,9 @@ var p5 = (function () {
      */
     fn.removeItem = function(key) {
       if (typeof key !== 'string') {
-        console.log(
-          `The argument that you passed to removeItem() - ${key} is not a string.`
+        p5._friendlyError(
+          `The argument that you passed to removeItem() - ${key} is not a string.`,
+          'removeItem'
         );
       }
       localStorage.removeItem(key);
@@ -97721,16 +97959,16 @@ var p5 = (function () {
     }
 
     /**
-     * Creates a `&lt;div&gt;&lt;/div&gt;` element.
+     * Creates a `<div></div>` element.
      *
-     * `&lt;div&gt;&lt;/div&gt;` elements are commonly used as containers for
+     * `<div></div>` elements are commonly used as containers for
      * other elements.
      *
      * The parameter `html` is optional. It accepts a string that sets the
-     * inner HTML of the new `&lt;div&gt;&lt;/div&gt;`.
+     * inner HTML of the new `<div></div>`.
      *
      * @method createDiv
-     * @param  {String} [html] inner HTML for the new `&lt;div&gt;&lt;/div&gt;` element.
+     * @param  {String} [html] inner HTML for the new `<div></div>` element.
      * @return {p5.Element} new <a href="#/p5.Element">p5.Element</a> object.
      *
      * @example
@@ -97768,13 +98006,13 @@ var p5 = (function () {
     /**
      * Creates a paragraph element.
      *
-     * `&lt;p&gt;&lt;/p&gt;` elements are commonly used for paragraph-length text.
+     * `<p></p>` elements are commonly used for paragraph-length text.
      *
      * The parameter `html` is optional. It accepts a string that sets the
-     * inner HTML of the new `&lt;p&gt;&lt;/p&gt;`.
+     * inner HTML of the new `<p></p>`.
      *
      * @method createP
-     * @param  {String} [html] inner HTML for the new `&lt;p&gt;&lt;/p&gt;` element.
+     * @param  {String} [html] inner HTML for the new `<p></p>` element.
      * @return {p5.Element} new <a href="#/p5.Element">p5.Element</a> object.
      *
      * @example
@@ -97797,18 +98035,18 @@ var p5 = (function () {
     };
 
     /**
-     * Creates a `&lt;span&gt;&lt;/span&gt;` element.
+     * Creates a `<span></span>` element.
      *
-     * `&lt;span&gt;&lt;/span&gt;` elements are commonly used as containers
-     * for inline elements. For example, a `&lt;span&gt;&lt;/span&gt;`
+     * `<span></span>` elements are commonly used as containers
+     * for inline elements. For example, a `<span></span>`
      * can hold part of a sentence that's a
      * <span style="color: deeppink;">different</span> style.
      *
      * The parameter `html` is optional. It accepts a string that sets the
-     * inner HTML of the new `&lt;span&gt;&lt;/span&gt;`.
+     * inner HTML of the new `<span></span>`.
      *
      * @method createSpan
-     * @param  {String} [html] inner HTML for the new `&lt;span&gt;&lt;/span&gt;` element.
+     * @param  {String} [html] inner HTML for the new `<span></span>` element.
      * @return {p5.Element} new <a href="#/p5.Element">p5.Element</a> object.
      *
      * @example
@@ -97861,7 +98099,7 @@ var p5 = (function () {
     };
 
     /**
-     * Creates an `&lt;img&gt;` element that can appear outside of the canvas.
+     * Creates an `<img>` element that can appear outside of the canvas.
      *
      * The first parameter, `src`, is a string with the path to the image file.
      * `src` should be a relative path, as in `'assets/image.png'`, or a URL, as
@@ -97932,7 +98170,7 @@ var p5 = (function () {
     };
 
     /**
-     * Creates an `&lt;a&gt;&lt;/a&gt;` element that links to another web page.
+     * Creates an `<a></a>` element that links to another web page.
      *
      * The first parmeter, `href`, is a string that sets the URL of the linked
      * page.
@@ -97989,7 +98227,7 @@ var p5 = (function () {
 
     /* INPUT */
     /**
-     * Creates a slider `&lt;input&gt;&lt;/input&gt;` element.
+     * Creates a slider `<input></input>` element.
      *
      * Range sliders are useful for quickly selecting numbers from a given range.
      *
@@ -98111,7 +98349,7 @@ var p5 = (function () {
     };
 
     /**
-     * Creates a `&lt;button&gt;&lt;/button&gt;` element.
+     * Creates a `<button></button>` element.
      *
      * The first parameter, `label`, is a string that sets the label displayed on
      * the button.
@@ -98188,7 +98426,7 @@ var p5 = (function () {
     };
 
     /**
-     * Creates a checkbox `&lt;input&gt;&lt;/input&gt;` element.
+     * Creates a checkbox `<input></input>` element.
      *
      * Checkboxes extend the <a href="#/p5.Element">p5.Element</a> class with a
      * `checked()` method. Calling `myBox.checked()` returns `true` if it the box
@@ -98329,11 +98567,11 @@ var p5 = (function () {
     };
 
     /**
-     * Creates a dropdown menu `&lt;select&gt;&lt;/select&gt;` element.
+     * Creates a dropdown menu `<select></select>` element.
      *
      * The parameter is optional. If `true` is passed, as in
      * `let mySelect = createSelect(true)`, then the dropdown will support
-     * multiple selections. If an existing `&lt;select&gt;&lt;/select&gt;` element
+     * multiple selections. If an existing `<select></select>` element
      * is passed, as in `let mySelect = createSelect(otherSelect)`, the existing
      * element will be wrapped in a new <a href="#/p5.Element">p5.Element</a>
      * object.
@@ -98600,8 +98838,8 @@ var p5 = (function () {
      *
      * The parameter is optional. If a string is passed, as in
      * `let myRadio = createSelect('food')`, then each radio option will
-     * have `"food"` as its `name` parameter: `&lt;input name="food"&gt;&lt;/input&gt;`.
-     * If an existing `&lt;div&gt;&lt;/div&gt;` or `&lt;span&gt;&lt;/span&gt;`
+     * have `"food"` as its `name` parameter: `<input name="food"></input>`.
+     * If an existing `<div></div>` or `<span></span>`
      * element is passed, as in `let myRadio = createSelect(container)`, it will
      * become the radio button's parent element.
      *
@@ -98614,8 +98852,8 @@ var p5 = (function () {
      * - `myRadio.disable(shouldDisable)` enables the entire radio button if `true` is passed and disables it if `false` is passed.
      *
      * @method createRadio
-     * @param  {Object} [containerElement] container HTML Element, either a `&lt;div&gt;&lt;/div&gt;`
-     * or `&lt;span&gt;&lt;/span&gt;`.
+     * @param  {Object} [containerElement] container HTML Element, either a `<div></div>`
+     * or `<span></span>`.
      * @return {p5.Element} new <a href="#/p5.Element">p5.Element</a> object.
      *
      * @example
@@ -98734,7 +98972,7 @@ var p5 = (function () {
      */
     /**
      * @method createRadio
-     * @param {String} [name] name parameter assigned to each option's `&lt;input&gt;&lt;/input&gt;` element.
+     * @param {String} [name] name parameter assigned to each option's `<input></input>` element.
      * @return {p5.Element} new <a href="#/p5.Element">p5.Element</a> object.
      */
     /**
@@ -99001,7 +99239,7 @@ var p5 = (function () {
     };
 
     /**
-     * Creates a text `&lt;input&gt;&lt;/input&gt;` element.
+     * Creates a text `<input></input>` element.
      *
      * Call `myInput.size()` to set the length of the text box.
      *
@@ -99077,7 +99315,7 @@ var p5 = (function () {
     };
 
     /**
-     * Creates an `&lt;input&gt;&lt;/input&gt;` element of type `'file'`.
+     * Creates an `<input></input>` element of type `'file'`.
      *
      * `createFileInput()` allows users to select local files for use in a sketch.
      * It returns a <a href="#/p5.File">p5.File</a> object.
@@ -99182,8 +99420,9 @@ var p5 = (function () {
 
       // If File API's are not supported, throw Error
       if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
-        console.log(
-          'The File APIs are not fully supported in this browser. Cannot create element.'
+        p5._friendlyError(
+          'The File APIs are not fully supported in this browser. Cannot create element.',
+          'createFileInput'
         );
         return;
       }
@@ -101045,6 +101284,10 @@ var p5 = (function () {
           signal: this._removeSignal
         });
       }
+
+      window.addEventListener('blur', () => {
+        this.mouseIsPressed = false;
+      }, { signal: this._removeSignal });
     };
 
     /**
@@ -102878,7 +103121,7 @@ var p5 = (function () {
       canvas.requestPointerLock =
         canvas.requestPointerLock || canvas.mozRequestPointerLock;
       if (!canvas.requestPointerLock) {
-        console.log('requestPointerLock is not implemented in this browser');
+        p5._friendlyError('requestPointerLock is not implemented in this browser', 'requestPointerLock');
         return false;
       }
       canvas.requestPointerLock();
@@ -109924,50 +110167,56 @@ var p5 = (function () {
       try{
         if (fileType.match(/\.stl$/i)) {
           const { data } = await request(path, 'arrayBuffer');
-          parseSTL(model, data);
+          const cb = () => {
+            parseSTL(model, data);
 
-          if (normalize) {
-            model.normalize();
-          }
+            if (normalize) {
+              model.normalize();
+            }
 
-          if (flipU) {
-            model.flipU();
-          }
+            if (flipU) {
+              model.flipU();
+            }
 
-          if (flipV) {
-            model.flipV();
-          }
-          model._makeTriangleEdges();
+            if (flipV) {
+              model.flipV();
+            }
+            model._makeTriangleEdges();
 
-          if (successCallback) {
-            return successCallback(model);
-          } else {
-            return model;
-          }
+            if (successCallback) {
+              return successCallback(model);
+            } else {
+              return model;
+            }
+          };
+          return this._internal ? this._internal(cb) : cb();
 
         } else if (fileType.match(/\.obj$/i)) {
           const { data } = await request(path, 'text');
           const lines = data.split('\n');
 
           const parsedMaterials = await getMaterials(lines);
-          parseObj(model, lines, parsedMaterials);
+          const cb = () => {
+            parseObj(model, lines, parsedMaterials);
 
-          if (normalize) {
-            model.normalize();
-          }
-          if (flipU) {
-            model.flipU();
-          }
-          if (flipV) {
-            model.flipV();
-          }
-          model._makeTriangleEdges();
+            if (normalize) {
+              model.normalize();
+            }
+            if (flipU) {
+              model.flipU();
+            }
+            if (flipV) {
+              model.flipV();
+            }
+            model._makeTriangleEdges();
 
-          if (successCallback) {
-            return successCallback(model);
-          } else {
-            return model;
-          }
+            if (successCallback) {
+              return successCallback(model);
+            } else {
+              return model;
+            }
+          };
+          return this._internal ? this._internal(cb) : cb();
         }
       } catch(err) {
         p5._friendlyFileLoadError(3, path);
@@ -110466,9 +110715,7 @@ var p5 = (function () {
      * The parameter, `model`, is the
      * <a href="#/p5.Geometry">p5.Geometry</a> object to draw.
      * <a href="#/p5.Geometry">p5.Geometry</a> objects can be built with
-     * <a href="#/p5/buildGeometry">buildGeometry()</a>, or
-     * <a href="#/p5/beginGeometry">beginGeometry()</a> and
-     * <a href="#/p5/endGeometry">endGeometry()</a>. They can also be loaded from
+     * <a href="#/p5/buildGeometry">buildGeometry()</a>. They can also be loaded from
      * a file with <a href="#/p5/loadGeometry">loadGeometry()</a>.
      *
      * Note: `model()` can only be used in WebGL mode.
@@ -120278,9 +120525,11 @@ var p5 = (function () {
           throw err;
         }
       }
-      if (success) return success(pfont);
-
-      return pfont;
+      const cb = () => {
+        if (success) return success(pfont);
+        return pfont;
+      };
+      return this._internal ? this._internal(cb) : cb();
     };
   }
   // Convert arrays to named objects
@@ -130470,7 +130719,7 @@ var p5 = (function () {
     }
   }
   function nodeIsUniform(ancestor) {
-    return ancestor.type === 'CallExpression'
+    return ancestor && ancestor.type === 'CallExpression'
       && (
         (
           // Global mode
@@ -130485,7 +130734,7 @@ var p5 = (function () {
   }
 
   function nodeIsVarying(node) {
-    return node?.type === 'CallExpression'
+    return node && node.type === 'CallExpression'
       && (
         (
           // Global mode
@@ -130725,65 +130974,103 @@ var p5 = (function () {
     Identifier(node, _state, ancestors) {
       if (ancestors.some(nodeIsUniform)) { return; }
       if (_state.varyings[node.name]
-        && !ancestors.some(a => a.type === 'AssignmentExpression' && a.left === node)) {
-          node.type = 'CallExpression';
-          node.callee = {
+        && !ancestors.some(a => a.type === 'AssignmentExpression' && a.left === node)
+      ) {
+        node.type = 'CallExpression';
+        node.callee = {
+          type: 'MemberExpression',
+          object: {
+            type: 'Identifier',
+            name: node.name
+          },
+          property: {
+            type: 'Identifier',
+            name: 'getValue'
+          },
+        };
+        node.arguments = [];
+      }
+    },
+    // The callbacks for AssignmentExpression and BinaryExpression handle
+    // operator overloading including +=, *= assignment expressions
+    ArrayExpression(node, _state, ancestors) {
+      if (ancestors.some(nodeIsUniform)) { return; }
+      const original = JSON.parse(JSON.stringify(node));
+      node.type = 'CallExpression';
+      node.callee = {
+        type: 'Identifier',
+        name: '__p5.strandsNode',
+      };
+      node.arguments = [original];
+    },
+    AssignmentExpression(node, _state, ancestors) {
+      if (ancestors.some(nodeIsUniform)) { return; }
+      const unsafeTypes = ['Literal', 'ArrayExpression', 'Identifier'];
+      if (node.operator !== '=') {
+        const methodName = replaceBinaryOperator(node.operator.replace('=',''));
+        const rightReplacementNode = {
+          type: 'CallExpression',
+          callee: {
+            type: 'MemberExpression',
+            object: unsafeTypes.includes(node.left.type)
+              ? {
+                  type: 'CallExpression',
+                  callee: {
+                    type: 'Identifier',
+                    name: '__p5.strandsNode',
+                  },
+                  arguments: [node.left]
+                }
+              : node.left,
+            property: {
+              type: 'Identifier',
+              name: methodName,
+            },
+          },
+          arguments: [node.right]
+        };
+        node.operator = '=';
+        node.right = rightReplacementNode;
+      }
+      // Handle direct varying variable assignment: myVarying = value
+      if (_state.varyings[node.left.name]) {
+        node.type = 'ExpressionStatement';
+        node.expression = {
+          type: 'CallExpression',
+          callee: {
             type: 'MemberExpression',
             object: {
               type: 'Identifier',
-              name: node.name
+              name: node.left.name
             },
             property: {
               type: 'Identifier',
-              name: 'getValue'
-            },
-          };
-          node.arguments = [];
-        }
-      },
-      // The callbacks for AssignmentExpression and BinaryExpression handle
-      // operator overloading including +=, *= assignment expressions
-      ArrayExpression(node, _state, ancestors) {
-        if (ancestors.some(nodeIsUniform)) { return; }
-        const original = JSON.parse(JSON.stringify(node));
-        node.type = 'CallExpression';
-        node.callee = {
-          type: 'Identifier',
-          name: '__p5.strandsNode',
+              name: 'bridge',
+            }
+          },
+          arguments: [node.right],
         };
-        node.arguments = [original];
-      },
-      AssignmentExpression(node, _state, ancestors) {
-        if (ancestors.some(nodeIsUniform)) { return; }
-        const unsafeTypes = ['Literal', 'ArrayExpression', 'Identifier'];
-        if (node.operator !== '=') {
-          const methodName = replaceBinaryOperator(node.operator.replace('=',''));
-          const rightReplacementNode = {
-            type: 'CallExpression',
-            callee: {
-              type: 'MemberExpression',
-              object: unsafeTypes.includes(node.left.type)
-                ? {
-                    type: 'CallExpression',
-                    callee: {
-                      type: 'Identifier',
-                      name: '__p5.strandsNode',
-                    },
-                    arguments: [node.left]
-                  }
-                : node.left,
-              property: {
-                type: 'Identifier',
-                name: methodName,
-              },
-            },
-            arguments: [node.right]
-          };
-          node.operator = '=';
-          node.right = rightReplacementNode;
+      }
+      // Handle swizzle assignment to varying variable: myVarying.xyz = value
+      // Note: node.left.object might be worldPos.getValue() due to prior Identifier transformation
+      else if (node.left.type === 'MemberExpression') {
+        let varyingName = null;
+
+        // Check if it's a direct identifier: myVarying.xyz
+        if (node.left.object.type === 'Identifier' && _state.varyings[node.left.object.name]) {
+          varyingName = node.left.object.name;
         }
-        // Handle direct varying variable assignment: myVarying = value
-        if (_state.varyings[node.left.name]) {
+        // Check if it's a getValue() call: myVarying.getValue().xyz
+        else if (node.left.object.type === 'CallExpression' &&
+                 node.left.object.callee?.type === 'MemberExpression' &&
+                 node.left.object.callee.property?.name === 'getValue' &&
+                 node.left.object.callee.object?.type === 'Identifier' &&
+                 _state.varyings[node.left.object.callee.object.name]) {
+          varyingName = node.left.object.callee.object.name;
+        }
+
+        if (varyingName) {
+          const swizzlePattern = node.left.property.name;
           node.type = 'ExpressionStatement';
           node.expression = {
             type: 'CallExpression',
@@ -130791,555 +131078,152 @@ var p5 = (function () {
               type: 'MemberExpression',
               object: {
                 type: 'Identifier',
-                name: node.left.name
+                name: varyingName
               },
               property: {
                 type: 'Identifier',
-                name: 'bridge',
+                name: 'bridgeSwizzle',
               }
             },
-            arguments: [node.right],
-          };
-        }
-        // Handle swizzle assignment to varying variable: myVarying.xyz = value
-        // Note: node.left.object might be worldPos.getValue() due to prior Identifier transformation
-        else if (node.left.type === 'MemberExpression') {
-          let varyingName = null;
-
-          // Check if it's a direct identifier: myVarying.xyz
-          if (node.left.object.type === 'Identifier' && _state.varyings[node.left.object.name]) {
-            varyingName = node.left.object.name;
-          }
-          // Check if it's a getValue() call: myVarying.getValue().xyz
-          else if (node.left.object.type === 'CallExpression' &&
-                   node.left.object.callee?.type === 'MemberExpression' &&
-                   node.left.object.callee.property?.name === 'getValue' &&
-                   node.left.object.callee.object?.type === 'Identifier' &&
-                   _state.varyings[node.left.object.callee.object.name]) {
-            varyingName = node.left.object.callee.object.name;
-          }
-
-          if (varyingName) {
-            const swizzlePattern = node.left.property.name;
-            node.type = 'ExpressionStatement';
-            node.expression = {
-              type: 'CallExpression',
-              callee: {
-                type: 'MemberExpression',
-                object: {
-                  type: 'Identifier',
-                  name: varyingName
-                },
-                property: {
-                  type: 'Identifier',
-                  name: 'bridgeSwizzle',
-                }
+            arguments: [
+              {
+                type: 'Literal',
+                value: swizzlePattern
               },
-              arguments: [
-                {
-                  type: 'Literal',
-                  value: swizzlePattern
-                },
-                node.right
-              ],
-            };
-          }
-        }
-      },
-      BinaryExpression(node, _state, ancestors) {
-        // Don't convert uniform default values to node methods, as
-        // they should be evaluated at runtime, not compiled.
-        if (ancestors.some(nodeIsUniform)) { return; }
-        // If the left hand side of an expression is one of these types,
-        // we should construct a node from it.
-        const unsafeTypes = ['Literal', 'ArrayExpression', 'Identifier'];
-        if (unsafeTypes.includes(node.left.type)) {
-          const leftReplacementNode = {
-            type: 'CallExpression',
-            callee: {
-              type: 'Identifier',
-              name: '__p5.strandsNode',
-            },
-            arguments: [node.left]
+              node.right
+            ],
           };
-          node.left = leftReplacementNode;
         }
-        // Replace the binary operator with a call expression
-        // in other words a call to BaseNode.mult(), .div() etc.
-        node.type = 'CallExpression';
-        node.callee = {
-          type: 'MemberExpression',
-          object: node.left,
-          property: {
+      }
+    },
+    BinaryExpression(node, _state, ancestors) {
+      // Don't convert uniform default values to node methods, as
+      // they should be evaluated at runtime, not compiled.
+      if (ancestors.some(nodeIsUniform)) { return; }
+      // If the left hand side of an expression is one of these types,
+      // we should construct a node from it.
+      const unsafeTypes = ['Literal', 'ArrayExpression', 'Identifier'];
+      if (unsafeTypes.includes(node.left.type)) {
+        const leftReplacementNode = {
+          type: 'CallExpression',
+          callee: {
             type: 'Identifier',
-            name: replaceBinaryOperator(node.operator),
+            name: '__p5.strandsNode',
           },
+          arguments: [node.left]
         };
-        node.arguments = [node.right];
-      },
-      LogicalExpression(node, _state, ancestors) {
-        // Don't convert uniform default values to node methods, as
-        // they should be evaluated at runtime, not compiled.
-        if (ancestors.some(nodeIsUniform)) { return; }
-        // If the left hand side of an expression is one of these types,
-        // we should construct a node from it.
-        const unsafeTypes = ['Literal', 'ArrayExpression', 'Identifier'];
-        if (unsafeTypes.includes(node.left.type)) {
-          const leftReplacementNode = {
-            type: 'CallExpression',
-            callee: {
-              type: 'Identifier',
-              name: '__p5.strandsNode',
-            },
-            arguments: [node.left]
-          };
-          node.left = leftReplacementNode;
+        node.left = leftReplacementNode;
+      }
+      // Replace the binary operator with a call expression
+      // in other words a call to BaseNode.mult(), .div() etc.
+      node.type = 'CallExpression';
+      node.callee = {
+        type: 'MemberExpression',
+        object: node.left,
+        property: {
+          type: 'Identifier',
+          name: replaceBinaryOperator(node.operator),
+        },
+      };
+      node.arguments = [node.right];
+    },
+    LogicalExpression(node, _state, ancestors) {
+      // Don't convert uniform default values to node methods, as
+      // they should be evaluated at runtime, not compiled.
+      if (ancestors.some(nodeIsUniform)) { return; }
+      // If the left hand side of an expression is one of these types,
+      // we should construct a node from it.
+      const unsafeTypes = ['Literal', 'ArrayExpression', 'Identifier'];
+      if (unsafeTypes.includes(node.left.type)) {
+        const leftReplacementNode = {
+          type: 'CallExpression',
+          callee: {
+            type: 'Identifier',
+            name: '__p5.strandsNode',
+          },
+          arguments: [node.left]
+        };
+        node.left = leftReplacementNode;
+      }
+      // Replace the logical operator with a call expression
+      // in other words a call to BaseNode.or(), .and() etc.
+      node.type = 'CallExpression';
+      node.callee = {
+        type: 'MemberExpression',
+        object: node.left,
+        property: {
+          type: 'Identifier',
+          name: replaceBinaryOperator(node.operator),
+        },
+      };
+      node.arguments = [node.right];
+    },
+    IfStatement(node, _state, ancestors) {
+      if (ancestors.some(nodeIsUniform)) { return; }
+      // Transform if statement into strandsIf() call
+      // The condition is evaluated directly, not wrapped in a function
+      const condition = node.test;
+      // Create the then function
+      const thenFunction = {
+        type: 'ArrowFunctionExpression',
+        params: [],
+        body: node.consequent.type === 'BlockStatement' ? node.consequent : {
+          type: 'BlockStatement',
+          body: [node.consequent]
         }
-        // Replace the logical operator with a call expression
-        // in other words a call to BaseNode.or(), .and() etc.
-        node.type = 'CallExpression';
-        node.callee = {
-          type: 'MemberExpression',
-          object: node.left,
-          property: {
-            type: 'Identifier',
-            name: replaceBinaryOperator(node.operator),
-          },
-        };
-        node.arguments = [node.right];
-      },
-      IfStatement(node, _state, ancestors) {
-        if (ancestors.some(nodeIsUniform)) { return; }
-        // Transform if statement into strandsIf() call
-        // The condition is evaluated directly, not wrapped in a function
-        const condition = node.test;
-        // Create the then function
-        const thenFunction = {
+      };
+      // Start building the call chain: __p5.strandsIf(condition, then)
+      let callExpression = {
+        type: 'CallExpression',
+        callee: {
+          type: 'Identifier',
+          name: '__p5.strandsIf'
+        },
+        arguments: [condition, thenFunction]
+      };
+      // Always chain .Else() even if there's no explicit else clause
+      // This ensures the conditional completes and returns phi nodes
+      let elseFunction;
+      if (node.alternate) {
+        elseFunction = {
           type: 'ArrowFunctionExpression',
           params: [],
-          body: node.consequent.type === 'BlockStatement' ? node.consequent : {
+          body: node.alternate.type === 'BlockStatement' ? node.alternate : {
             type: 'BlockStatement',
-            body: [node.consequent]
+            body: [node.alternate]
           }
         };
-        // Start building the call chain: __p5.strandsIf(condition, then)
-        let callExpression = {
-          type: 'CallExpression',
-          callee: {
+      } else {
+        // Create an empty else function
+        elseFunction = {
+          type: 'ArrowFunctionExpression',
+          params: [],
+          body: {
+            type: 'BlockStatement',
+            body: []
+          }
+        };
+      }
+      callExpression = {
+        type: 'CallExpression',
+        callee: {
+          type: 'MemberExpression',
+          object: callExpression,
+          property: {
             type: 'Identifier',
-            name: '__p5.strandsIf'
-          },
-          arguments: [condition, thenFunction]
-        };
-        // Always chain .Else() even if there's no explicit else clause
-        // This ensures the conditional completes and returns phi nodes
-        let elseFunction;
-        if (node.alternate) {
-          elseFunction = {
-            type: 'ArrowFunctionExpression',
-            params: [],
-            body: node.alternate.type === 'BlockStatement' ? node.alternate : {
-              type: 'BlockStatement',
-              body: [node.alternate]
-            }
-          };
-        } else {
-          // Create an empty else function
-          elseFunction = {
-            type: 'ArrowFunctionExpression',
-            params: [],
-            body: {
-              type: 'BlockStatement',
-              body: []
-            }
-          };
-        }
-        callExpression = {
-          type: 'CallExpression',
-          callee: {
-            type: 'MemberExpression',
-            object: callExpression,
-            property: {
-              type: 'Identifier',
-              name: 'Else'
-            }
-          },
-          arguments: [elseFunction]
-        };
-
-        // Analyze which outer scope variables are assigned in any branch
-        const assignedVars = new Set();
-
-        const analyzeBranch = (functionBody) => {
-          // First pass: collect all variable declarations in the branch
-          const localVars = new Set();
-          ancestor(functionBody, {
-            VariableDeclarator(node, ancestors) {
-              // Skip if we're inside a block that contains strands control flow
-              if (ancestors.some(statementContainsStrandsControlFlow)) return;
-              if (node.id.type === 'Identifier') {
-                localVars.add(node.id.name);
-              }
-            }
-          });
-
-          // Second pass: find assignments to non-local variables using acorn-walk
-          ancestor(functionBody, {
-            AssignmentExpression(node, ancestors) {
-              // Skip if we're inside a block that contains strands control flow
-              if (ancestors.some(statementContainsStrandsControlFlow)) return;
-
-              const left = node.left;
-              if (left.type === 'Identifier') {
-                // Direct variable assignment: x = value
-                if (!localVars.has(left.name)) {
-                  assignedVars.add(left.name);
-                }
-              } else if (left.type === 'MemberExpression') {
-                // Property assignment: obj.prop = value or obj.a.b = value
-                const propertyPath = buildPropertyPath(left);
-                if (propertyPath) {
-                  const baseName = propertyPath.split('.')[0];
-                  if (!localVars.has(baseName)) {
-                    assignedVars.add(propertyPath);
-                  }
-                }
-              }
-            }
-          });
-        };
-
-        // Analyze all branches for assignments to outer scope variables
-        analyzeBranch(thenFunction.body);
-        analyzeBranch(elseFunction.body);
-        if (assignedVars.size > 0) {
-          // Add copying, reference replacement, and return statements to branch functions
-          const addCopyingAndReturn = (functionBody, varsToReturn) => {
-            if (functionBody.type === 'BlockStatement') {
-              // Create temporary variables and copy statements
-              const tempVarMap = new Map(); // property path -> temp name
-              const copyStatements = [];
-              for (const varPath of varsToReturn) {
-                const parts = varPath.split('.');
-                const tempName = `__copy_${parts.join('_')}_${blockVarCounter++}`;
-                tempVarMap.set(varPath, tempName);
-
-                // Build the member expression for the property path
-                let sourceExpr = { type: 'Identifier', name: parts[0] };
-                for (let i = 1; i < parts.length; i++) {
-                  sourceExpr = {
-                    type: 'MemberExpression',
-                    object: sourceExpr,
-                    property: { type: 'Identifier', name: parts[i] },
-                    computed: false
-                  };
-                }
-
-                // let tempName = propertyPath.copy()
-                copyStatements.push({
-                  type: 'VariableDeclaration',
-                  declarations: [{
-                    type: 'VariableDeclarator',
-                    id: { type: 'Identifier', name: tempName },
-                    init: {
-                      type: 'CallExpression',
-                      callee: {
-                        type: 'MemberExpression',
-                        object: sourceExpr,
-                        property: { type: 'Identifier', name: 'copy' },
-                        computed: false
-                      },
-                      arguments: []
-                    }
-                  }],
-                  kind: 'let'
-                });
-              }
-              // Apply reference replacement to all statements
-              functionBody.body.forEach(node => replaceReferences(node, tempVarMap));
-              // Insert copy statements at the beginning
-              functionBody.body.unshift(...copyStatements);
-              // Add return statement with flat object using property paths as keys
-              const returnObj = {
-                type: 'ObjectExpression',
-                properties: Array.from(varsToReturn).map(varPath => ({
-                  type: 'Property',
-                  key: { type: 'Literal', value: varPath },
-                  value: { type: 'Identifier', name: tempVarMap.get(varPath) },
-                  kind: 'init',
-                  computed: false,
-                  shorthand: false
-                }))
-              };
-              functionBody.body.push({
-                type: 'ReturnStatement',
-                argument: returnObj
-              });
-            }
-          };
-          addCopyingAndReturn(thenFunction.body, assignedVars);
-          addCopyingAndReturn(elseFunction.body, assignedVars);
-          // Create a block variable to capture the return value
-          const blockVar = `__block_${blockVarCounter++}`;
-          // Replace with a block statement
-          const statements = [];
-          // Make sure every assigned variable starts as a node
-          for (const varPath of assignedVars) {
-            const parts = varPath.split('.');
-
-            // Build left side: inputs.color or just x
-            let leftExpr = { type: 'Identifier', name: parts[0] };
-            for (let i = 1; i < parts.length; i++) {
-              leftExpr = {
-                type: 'MemberExpression',
-                object: leftExpr,
-                property: { type: 'Identifier', name: parts[i] },
-                computed: false
-              };
-            }
-
-            // Build right side - same as left for strandsNode wrapping
-            let rightArgExpr = { type: 'Identifier', name: parts[0] };
-            for (let i = 1; i < parts.length; i++) {
-              rightArgExpr = {
-                type: 'MemberExpression',
-                object: rightArgExpr,
-                property: { type: 'Identifier', name: parts[i] },
-                computed: false
-              };
-            }
-
-            statements.push({
-              type: 'ExpressionStatement',
-              expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: leftExpr,
-                right: {
-                  type: 'CallExpression',
-                  callee: { type: 'Identifier', name: '__p5.strandsNode' },
-                  arguments: [rightArgExpr],
-                }
-              }
-            });
+            name: 'Else'
           }
-          statements.push({
-            type: 'VariableDeclaration',
-            declarations: [{
-              type: 'VariableDeclarator',
-              id: { type: 'Identifier', name: blockVar },
-              init: callExpression
-            }],
-            kind: 'const'
-          });
-          // 2. Assignments for each modified variable
-          for (const varPath of assignedVars) {
-            const parts = varPath.split('.');
+        },
+        arguments: [elseFunction]
+      };
 
-            // Build left side: inputs.color or just x
-            let leftExpr = { type: 'Identifier', name: parts[0] };
-            for (let i = 1; i < parts.length; i++) {
-              leftExpr = {
-                type: 'MemberExpression',
-                object: leftExpr,
-                property: { type: 'Identifier', name: parts[i] },
-                computed: false
-              };
-            }
+      // Analyze which outer scope variables are assigned in any branch
+      const assignedVars = new Set();
 
-            // Build right side: __block_2['inputs.color'] or __block_2['x']
-            const rightExpr = {
-              type: 'MemberExpression',
-              object: { type: 'Identifier', name: blockVar },
-              property: { type: 'Literal', value: varPath },
-              computed: true
-            };
-
-            statements.push({
-              type: 'ExpressionStatement',
-              expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: leftExpr,
-                right: rightExpr
-              }
-            });
-          }
-          // Replace the if statement with a block statement
-          node.type = 'BlockStatement';
-          node.body = statements;
-        } else {
-          // No assignments, just replace with the call expression
-          node.type = 'ExpressionStatement';
-          node.expression = callExpression;
-        }
-        delete node.test;
-        delete node.consequent;
-        delete node.alternate;
-      },
-      UpdateExpression(node, _state, ancestors) {
-        if (ancestors.some(nodeIsUniform)) { return; }
-
-        // Transform ++var, var++, --var, var-- into assignment expressions
-        let operator;
-        if (node.operator === '++') {
-          operator = '+';
-        } else if (node.operator === '--') {
-          operator = '-';
-        } else {
-          return; // Unknown update operator
-        }
-
-        // Convert to: var = var + 1 or var = var - 1
-        const assignmentExpr = {
-          type: 'AssignmentExpression',
-          operator: '=',
-          left: node.argument,
-          right: {
-            type: 'BinaryExpression',
-            operator: operator,
-            left: node.argument,
-            right: {
-              type: 'Literal',
-              value: 1
-            }
-          }
-        };
-
-        // Replace the update expression with the assignment expression
-        Object.assign(node, assignmentExpr);
-        delete node.prefix;
-        this.BinaryExpression(node.right, _state, [...ancestors, node]);
-        this.AssignmentExpression(node, _state, ancestors);
-      },
-      ForStatement(node, _state, ancestors) {
-        if (ancestors.some(nodeIsUniform)) { return; }
-
-        // Transform for statement into strandsFor() call
-        // for (init; test; update) body -> strandsFor(initCb, conditionCb, updateCb, bodyCb, initialVars)
-
-        // Generate unique loop variable name
-        const uniqueLoopVar = `loopVar${loopVarCounter++}`;
-
-        // Create the initial callback from the for loop's init
-        let initialFunction;
-        if (node.init && node.init.type === 'VariableDeclaration') {
-          // Handle: for (let i = 0; ...)
-          const declaration = node.init.declarations[0];
-          let initValue = declaration.init;
-
-          const initAst = { body: [{ type: 'ExpressionStatement', expression: initValue }] };
-          initValue = initAst.body[0].expression;
-
-          initialFunction = {
-            type: 'ArrowFunctionExpression',
-            params: [],
-            body: {
-              type: 'BlockStatement',
-              body: [{
-                type: 'ReturnStatement',
-                argument: initValue
-              }]
-            }
-          };
-        } else {
-          // Handle other cases - return a default value
-          initialFunction = {
-            type: 'ArrowFunctionExpression',
-            params: [],
-            body: {
-              type: 'BlockStatement',
-              body: [{
-                type: 'ReturnStatement',
-                argument: {
-                  type: 'Literal',
-                  value: 0
-                }
-              }]
-            }
-          };
-        }
-
-        // Create the condition callback
-        let conditionBody = node.test || { type: 'Literal', value: true };
-        // Replace loop variable references with the parameter
-        if (node.init?.type === 'VariableDeclaration') {
-          const loopVarName = node.init.declarations[0].id.name;
-          conditionBody = this.replaceIdentifierReferences(conditionBody, loopVarName, uniqueLoopVar);
-        }
-        const conditionAst = { body: [{ type: 'ExpressionStatement', expression: conditionBody }] };
-        conditionBody = conditionAst.body[0].expression;
-
-        const conditionFunction = {
-          type: 'ArrowFunctionExpression',
-          params: [{ type: 'Identifier', name: uniqueLoopVar }],
-          body: conditionBody
-        };
-
-        // Create the update callback
-        let updateFunction;
-        if (node.update) {
-          let updateExpr = node.update;
-          // Replace loop variable references with the parameter
-          if (node.init?.type === 'VariableDeclaration') {
-            const loopVarName = node.init.declarations[0].id.name;
-            updateExpr = this.replaceIdentifierReferences(updateExpr, loopVarName, uniqueLoopVar);
-          }
-          const updateAst = { body: [{ type: 'ExpressionStatement', expression: updateExpr }] };
-          updateExpr = updateAst.body[0].expression;
-
-          updateFunction = {
-            type: 'ArrowFunctionExpression',
-            params: [{ type: 'Identifier', name: uniqueLoopVar }],
-            body: {
-              type: 'BlockStatement',
-              body: [{
-                type: 'ReturnStatement',
-                argument: updateExpr
-              }]
-            }
-          };
-        } else {
-          updateFunction = {
-            type: 'ArrowFunctionExpression',
-            params: [{ type: 'Identifier', name: uniqueLoopVar }],
-            body: {
-              type: 'BlockStatement',
-              body: [{
-                type: 'ReturnStatement',
-                argument: { type: 'Identifier', name: uniqueLoopVar }
-              }]
-            }
-          };
-        }
-
-        // Create the body callback
-        let bodyBlock = node.body.type === 'BlockStatement' ? node.body : {
-          type: 'BlockStatement',
-          body: [node.body]
-        };
-
-        // Replace loop variable references in the body
-        if (node.init?.type === 'VariableDeclaration') {
-          const loopVarName = node.init.declarations[0].id.name;
-          bodyBlock = this.replaceIdentifierReferences(bodyBlock, loopVarName, uniqueLoopVar);
-        }
-
-        const bodyFunction = {
-          type: 'ArrowFunctionExpression',
-          params: [
-            { type: 'Identifier', name: uniqueLoopVar },
-            { type: 'Identifier', name: 'vars' }
-          ],
-          body: bodyBlock
-        };
-
-        // Analyze which outer scope variables are assigned in the loop body
-        const assignedVars = new Set();
-
-        // First pass: collect all variable declarations in the body
+      const analyzeBranch = (functionBody) => {
+        // First pass: collect all variable declarations in the branch
         const localVars = new Set();
-        ancestor(bodyFunction.body, {
+        ancestor(functionBody, {
           VariableDeclarator(node, ancestors) {
             // Skip if we're inside a block that contains strands control flow
             if (ancestors.some(statementContainsStrandsControlFlow)) return;
@@ -131350,12 +131234,10 @@ var p5 = (function () {
         });
 
         // Second pass: find assignments to non-local variables using acorn-walk
-        ancestor(bodyFunction.body, {
+        ancestor(functionBody, {
           AssignmentExpression(node, ancestors) {
             // Skip if we're inside a block that contains strands control flow
-            if (ancestors.some(statementContainsStrandsControlFlow)) {
-              return
-            }
+            if (ancestors.some(statementContainsStrandsControlFlow)) return;
 
             const left = node.left;
             if (left.type === 'Identifier') {
@@ -131375,306 +131257,1079 @@ var p5 = (function () {
             }
           }
         });
+      };
 
-        if (assignedVars.size > 0) {
-          // Add copying, reference replacement, and return statements similar to if statements
-          const addCopyingAndReturn = (functionBody, varsToReturn) => {
-            if (functionBody.type === 'BlockStatement') {
-              const tempVarMap = new Map();
-              const copyStatements = [];
-
-              for (const varPath of varsToReturn) {
-                const parts = varPath.split('.');
-                const tempName = `__copy_${parts.join('_')}_${blockVarCounter++}`;
-                tempVarMap.set(varPath, tempName);
-
-                // Build the member expression for vars.propertyPath
-                // e.g., vars.inputs.color or vars.x
-                let sourceExpr = { type: 'Identifier', name: 'vars' };
-                for (const part of parts) {
-                  sourceExpr = {
-                    type: 'MemberExpression',
-                    object: sourceExpr,
-                    property: { type: 'Identifier', name: part },
-                    computed: false
-                  };
-                }
-
-                copyStatements.push({
-                  type: 'VariableDeclaration',
-                  declarations: [{
-                    type: 'VariableDeclarator',
-                    id: { type: 'Identifier', name: tempName },
-                    init: {
-                      type: 'CallExpression',
-                      callee: {
-                        type: 'MemberExpression',
-                        object: sourceExpr,
-                        property: { type: 'Identifier', name: 'copy' },
-                        computed: false
-                      },
-                      arguments: []
-                    }
-                  }],
-                  kind: 'let'
-                });
-              }
-
-              functionBody.body.forEach(node => replaceReferences(node, tempVarMap));
-              functionBody.body.unshift(...copyStatements);
-
-              // Add return statement with flat object using property paths as keys
-              const returnObj = {
-                type: 'ObjectExpression',
-                properties: Array.from(varsToReturn).map(varPath => ({
-                  type: 'Property',
-                  key: { type: 'Literal', value: varPath },
-                  value: { type: 'Identifier', name: tempVarMap.get(varPath) },
-                  kind: 'init',
-                  computed: false,
-                  shorthand: false
-                }))
-              };
-
-              functionBody.body.push({
-                type: 'ReturnStatement',
-                argument: returnObj
-              });
-            }
-          };
-
-          addCopyingAndReturn(bodyFunction.body, assignedVars);
-
-          // Create block variable and assignments similar to if statements
-          const blockVar = `__block_${blockVarCounter++}`;
-          const statements = [];
-
-          const initialVarsObject = {
-            type: 'ObjectExpression',
-            properties: Array.from(assignedVars).map(varPath => {
+      // Analyze all branches for assignments to outer scope variables
+      analyzeBranch(thenFunction.body);
+      analyzeBranch(elseFunction.body);
+      if (assignedVars.size > 0) {
+        // Add copying, reference replacement, and return statements to branch functions
+        const addCopyingAndReturn = (functionBody, varsToReturn) => {
+          if (functionBody.type === 'BlockStatement') {
+            // Create temporary variables and copy statements
+            const tempVarMap = new Map(); // property path -> temp name
+            const copyStatements = [];
+            for (const varPath of varsToReturn) {
               const parts = varPath.split('.');
-              let expr = { type: 'Identifier', name: parts[0] };
+              const tempName = `__copy_${parts.join('_')}_${blockVarCounter++}`;
+              tempVarMap.set(varPath, tempName);
+
+              // Build the member expression for the property path
+              let sourceExpr = { type: 'Identifier', name: parts[0] };
               for (let i = 1; i < parts.length; i++) {
-                expr = {
+                sourceExpr = {
                   type: 'MemberExpression',
-                  object: expr,
+                  object: sourceExpr,
                   property: { type: 'Identifier', name: parts[i] },
                   computed: false
                 };
               }
-              const wrappedExpr = {
-                type: 'CallExpression',
-                callee: { type: 'Identifier', name: '__p5.strandsNode' },
-                arguments: [expr]
-              };
-              return {
+
+              // let tempName = propertyPath.copy()
+              copyStatements.push({
+                type: 'VariableDeclaration',
+                declarations: [{
+                  type: 'VariableDeclarator',
+                  id: { type: 'Identifier', name: tempName },
+                  init: {
+                    type: 'CallExpression',
+                    callee: {
+                      type: 'MemberExpression',
+                      object: sourceExpr,
+                      property: { type: 'Identifier', name: 'copy' },
+                      computed: false
+                    },
+                    arguments: []
+                  }
+                }],
+                kind: 'let'
+              });
+            }
+            // Apply reference replacement to all statements
+            functionBody.body.forEach(node => replaceReferences(node, tempVarMap));
+            // Insert copy statements at the beginning
+            functionBody.body.unshift(...copyStatements);
+            // Add return statement with flat object using property paths as keys
+            const returnObj = {
+              type: 'ObjectExpression',
+              properties: Array.from(varsToReturn).map(varPath => ({
                 type: 'Property',
                 key: { type: 'Literal', value: varPath },
-                value: wrappedExpr,
+                value: { type: 'Identifier', name: tempVarMap.get(varPath) },
                 kind: 'init',
                 computed: false,
                 shorthand: false
-              };
-            })
-          };
+              }))
+            };
+            functionBody.body.push({
+              type: 'ReturnStatement',
+              argument: returnObj
+            });
+          }
+        };
+        addCopyingAndReturn(thenFunction.body, assignedVars);
+        addCopyingAndReturn(elseFunction.body, assignedVars);
+        // Create a block variable to capture the return value
+        const blockVar = `__block_${blockVarCounter++}`;
+        // Replace with a block statement
+        const statements = [];
+        // Make sure every assigned variable starts as a node
+        for (const varPath of assignedVars) {
+          const parts = varPath.split('.');
 
-          // Create the strandsFor call
-          const callExpression = {
-            type: 'CallExpression',
-            callee: {
-              type: 'Identifier',
-              name: '__p5.strandsFor'
-            },
-            arguments: [initialFunction, conditionFunction, updateFunction, bodyFunction, initialVarsObject]
+          // Build left side: inputs.color or just x
+          let leftExpr = { type: 'Identifier', name: parts[0] };
+          for (let i = 1; i < parts.length; i++) {
+            leftExpr = {
+              type: 'MemberExpression',
+              object: leftExpr,
+              property: { type: 'Identifier', name: parts[i] },
+              computed: false
+            };
+          }
+
+          // Build right side - same as left for strandsNode wrapping
+          let rightArgExpr = { type: 'Identifier', name: parts[0] };
+          for (let i = 1; i < parts.length; i++) {
+            rightArgExpr = {
+              type: 'MemberExpression',
+              object: rightArgExpr,
+              property: { type: 'Identifier', name: parts[i] },
+              computed: false
+            };
+          }
+
+          statements.push({
+            type: 'ExpressionStatement',
+            expression: {
+              type: 'AssignmentExpression',
+              operator: '=',
+              left: leftExpr,
+              right: {
+                type: 'CallExpression',
+                callee: { type: 'Identifier', name: '__p5.strandsNode' },
+                arguments: [rightArgExpr],
+              }
+            }
+          });
+        }
+        statements.push({
+          type: 'VariableDeclaration',
+          declarations: [{
+            type: 'VariableDeclarator',
+            id: { type: 'Identifier', name: blockVar },
+            init: callExpression
+          }],
+          kind: 'const'
+        });
+        // 2. Assignments for each modified variable
+        for (const varPath of assignedVars) {
+          const parts = varPath.split('.');
+
+          // Build left side: inputs.color or just x
+          let leftExpr = { type: 'Identifier', name: parts[0] };
+          for (let i = 1; i < parts.length; i++) {
+            leftExpr = {
+              type: 'MemberExpression',
+              object: leftExpr,
+              property: { type: 'Identifier', name: parts[i] },
+              computed: false
+            };
+          }
+
+          // Build right side: __block_2['inputs.color'] or __block_2['x']
+          const rightExpr = {
+            type: 'MemberExpression',
+            object: { type: 'Identifier', name: blockVar },
+            property: { type: 'Literal', value: varPath },
+            computed: true
           };
 
           statements.push({
-            type: 'VariableDeclaration',
-            declarations: [{
-              type: 'VariableDeclarator',
-              id: { type: 'Identifier', name: blockVar },
-              init: callExpression
-            }],
-            kind: 'const'
+            type: 'ExpressionStatement',
+            expression: {
+              type: 'AssignmentExpression',
+              operator: '=',
+              left: leftExpr,
+              right: rightExpr
+            }
           });
+        }
+        // Replace the if statement with a block statement
+        node.type = 'BlockStatement';
+        node.body = statements;
+      } else {
+        // No assignments, just replace with the call expression
+        node.type = 'ExpressionStatement';
+        node.expression = callExpression;
+      }
+      delete node.test;
+      delete node.consequent;
+      delete node.alternate;
+    },
+    UpdateExpression(node, _state, ancestors) {
+      if (ancestors.some(nodeIsUniform)) { return; }
 
-          // Add assignments back to original variables
-          for (const varPath of assignedVars) {
+      // Transform ++var, var++, --var, var-- into assignment expressions
+      let operator;
+      if (node.operator === '++') {
+        operator = '+';
+      } else if (node.operator === '--') {
+        operator = '-';
+      } else {
+        return; // Unknown update operator
+      }
+
+      // Convert to: var = var + 1 or var = var - 1
+      const assignmentExpr = {
+        type: 'AssignmentExpression',
+        operator: '=',
+        left: node.argument,
+        right: {
+          type: 'BinaryExpression',
+          operator: operator,
+          left: node.argument,
+          right: {
+            type: 'Literal',
+            value: 1
+          }
+        }
+      };
+
+      // Replace the update expression with the assignment expression
+      Object.assign(node, assignmentExpr);
+      delete node.prefix;
+      this.BinaryExpression(node.right, _state, [...ancestors, node]);
+      this.AssignmentExpression(node, _state, ancestors);
+    },
+    ForStatement(node, _state, ancestors) {
+      if (ancestors.some(nodeIsUniform)) { return; }
+
+      // Transform for statement into strandsFor() call
+      // for (init; test; update) body -> strandsFor(initCb, conditionCb, updateCb, bodyCb, initialVars)
+
+      // Generate unique loop variable name
+      const uniqueLoopVar = `loopVar${loopVarCounter++}`;
+
+      // Create the initial callback from the for loop's init
+      let initialFunction;
+      if (node.init && node.init.type === 'VariableDeclaration') {
+        // Handle: for (let i = 0; ...)
+        const declaration = node.init.declarations[0];
+        let initValue = declaration.init;
+
+        const initAst = { body: [{ type: 'ExpressionStatement', expression: initValue }] };
+        initValue = initAst.body[0].expression;
+
+        initialFunction = {
+          type: 'ArrowFunctionExpression',
+          params: [],
+          body: {
+            type: 'BlockStatement',
+            body: [{
+              type: 'ReturnStatement',
+              argument: initValue
+            }]
+          }
+        };
+      } else {
+        // Handle other cases - return a default value
+        initialFunction = {
+          type: 'ArrowFunctionExpression',
+          params: [],
+          body: {
+            type: 'BlockStatement',
+            body: [{
+              type: 'ReturnStatement',
+              argument: {
+                type: 'Literal',
+                value: 0
+              }
+            }]
+          }
+        };
+      }
+
+      // Create the condition callback
+      let conditionBody = node.test || { type: 'Literal', value: true };
+      // Replace loop variable references with the parameter
+      if (node.init?.type === 'VariableDeclaration') {
+        const loopVarName = node.init.declarations[0].id.name;
+        conditionBody = this.replaceIdentifierReferences(conditionBody, loopVarName, uniqueLoopVar);
+      }
+      const conditionAst = { body: [{ type: 'ExpressionStatement', expression: conditionBody }] };
+      conditionBody = conditionAst.body[0].expression;
+
+      const conditionFunction = {
+        type: 'ArrowFunctionExpression',
+        params: [{ type: 'Identifier', name: uniqueLoopVar }],
+        body: conditionBody
+      };
+
+      // Create the update callback
+      let updateFunction;
+      if (node.update) {
+        let updateExpr = node.update;
+        // Replace loop variable references with the parameter
+        if (node.init?.type === 'VariableDeclaration') {
+          const loopVarName = node.init.declarations[0].id.name;
+          updateExpr = this.replaceIdentifierReferences(updateExpr, loopVarName, uniqueLoopVar);
+        }
+        const updateAst = { body: [{ type: 'ExpressionStatement', expression: updateExpr }] };
+        updateExpr = updateAst.body[0].expression;
+
+        updateFunction = {
+          type: 'ArrowFunctionExpression',
+          params: [{ type: 'Identifier', name: uniqueLoopVar }],
+          body: {
+            type: 'BlockStatement',
+            body: [{
+              type: 'ReturnStatement',
+              argument: updateExpr
+            }]
+          }
+        };
+      } else {
+        updateFunction = {
+          type: 'ArrowFunctionExpression',
+          params: [{ type: 'Identifier', name: uniqueLoopVar }],
+          body: {
+            type: 'BlockStatement',
+            body: [{
+              type: 'ReturnStatement',
+              argument: { type: 'Identifier', name: uniqueLoopVar }
+            }]
+          }
+        };
+      }
+
+      // Create the body callback
+      let bodyBlock = node.body.type === 'BlockStatement' ? node.body : {
+        type: 'BlockStatement',
+        body: [node.body]
+      };
+
+      // Replace loop variable references in the body
+      if (node.init?.type === 'VariableDeclaration') {
+        const loopVarName = node.init.declarations[0].id.name;
+        bodyBlock = this.replaceIdentifierReferences(bodyBlock, loopVarName, uniqueLoopVar);
+      }
+
+      const bodyFunction = {
+        type: 'ArrowFunctionExpression',
+        params: [
+          { type: 'Identifier', name: uniqueLoopVar },
+          { type: 'Identifier', name: 'vars' }
+        ],
+        body: bodyBlock
+      };
+
+      // Analyze which outer scope variables are assigned in the loop body
+      const assignedVars = new Set();
+
+      // First pass: collect all variable declarations in the body
+      const localVars = new Set();
+      ancestor(bodyFunction.body, {
+        VariableDeclarator(node, ancestors) {
+          // Skip if we're inside a block that contains strands control flow
+          if (ancestors.some(statementContainsStrandsControlFlow)) return;
+          if (node.id.type === 'Identifier') {
+            localVars.add(node.id.name);
+          }
+        }
+      });
+
+      // Second pass: find assignments to non-local variables using acorn-walk
+      ancestor(bodyFunction.body, {
+        AssignmentExpression(node, ancestors) {
+          // Skip if we're inside a block that contains strands control flow
+          if (ancestors.some(statementContainsStrandsControlFlow)) {
+            return
+          }
+
+          const left = node.left;
+          if (left.type === 'Identifier') {
+            // Direct variable assignment: x = value
+            if (!localVars.has(left.name)) {
+              assignedVars.add(left.name);
+            }
+          } else if (left.type === 'MemberExpression') {
+            // Property assignment: obj.prop = value or obj.a.b = value
+            const propertyPath = buildPropertyPath(left);
+            if (propertyPath) {
+              const baseName = propertyPath.split('.')[0];
+              if (!localVars.has(baseName)) {
+                assignedVars.add(propertyPath);
+              }
+            }
+          }
+        }
+      });
+
+      if (assignedVars.size > 0) {
+        // Add copying, reference replacement, and return statements similar to if statements
+        const addCopyingAndReturn = (functionBody, varsToReturn) => {
+          if (functionBody.type === 'BlockStatement') {
+            const tempVarMap = new Map();
+            const copyStatements = [];
+
+            for (const varPath of varsToReturn) {
+              const parts = varPath.split('.');
+              const tempName = `__copy_${parts.join('_')}_${blockVarCounter++}`;
+              tempVarMap.set(varPath, tempName);
+
+              // Build the member expression for vars.propertyPath
+              // e.g., vars.inputs.color or vars.x
+              let sourceExpr = { type: 'Identifier', name: 'vars' };
+              for (const part of parts) {
+                sourceExpr = {
+                  type: 'MemberExpression',
+                  object: sourceExpr,
+                  property: { type: 'Identifier', name: part },
+                  computed: false
+                };
+              }
+
+              copyStatements.push({
+                type: 'VariableDeclaration',
+                declarations: [{
+                  type: 'VariableDeclarator',
+                  id: { type: 'Identifier', name: tempName },
+                  init: {
+                    type: 'CallExpression',
+                    callee: {
+                      type: 'MemberExpression',
+                      object: sourceExpr,
+                      property: { type: 'Identifier', name: 'copy' },
+                      computed: false
+                    },
+                    arguments: []
+                  }
+                }],
+                kind: 'let'
+              });
+            }
+
+            functionBody.body.forEach(node => replaceReferences(node, tempVarMap));
+            functionBody.body.unshift(...copyStatements);
+
+            // Add return statement with flat object using property paths as keys
+            const returnObj = {
+              type: 'ObjectExpression',
+              properties: Array.from(varsToReturn).map(varPath => ({
+                type: 'Property',
+                key: { type: 'Literal', value: varPath },
+                value: { type: 'Identifier', name: tempVarMap.get(varPath) },
+                kind: 'init',
+                computed: false,
+                shorthand: false
+              }))
+            };
+
+            functionBody.body.push({
+              type: 'ReturnStatement',
+              argument: returnObj
+            });
+          }
+        };
+
+        addCopyingAndReturn(bodyFunction.body, assignedVars);
+
+        // Create block variable and assignments similar to if statements
+        const blockVar = `__block_${blockVarCounter++}`;
+        const statements = [];
+
+        const initialVarsObject = {
+          type: 'ObjectExpression',
+          properties: Array.from(assignedVars).map(varPath => {
             const parts = varPath.split('.');
-
-            // Build left side: inputs.color or just x
-            let leftExpr = { type: 'Identifier', name: parts[0] };
+            let expr = { type: 'Identifier', name: parts[0] };
             for (let i = 1; i < parts.length; i++) {
-              leftExpr = {
+              expr = {
                 type: 'MemberExpression',
-                object: leftExpr,
+                object: expr,
                 property: { type: 'Identifier', name: parts[i] },
                 computed: false
               };
             }
-
-            // Build right side: __block_2.inputs.color or __block_2.x
-            let rightExpr = { type: 'Identifier', name: blockVar };
-            for (const part of parts) {
-              rightExpr = {
-                type: 'MemberExpression',
-                object: rightExpr,
-                property: { type: 'Identifier', name: part },
-                computed: false
-              };
-            }
-
-            statements.push({
-              type: 'ExpressionStatement',
-              expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: leftExpr,
-                right: rightExpr
-              }
-            });
-          }
-
-          node.type = 'BlockStatement';
-          node.body = statements;
-        } else {
-          // No assignments, just replace with call expression
-          node.type = 'ExpressionStatement';
-          node.expression = {
-            type: 'CallExpression',
-            callee: {
-              type: 'Identifier',
-              name: '__p5.strandsFor'
-            },
-            arguments: [initialFunction, conditionFunction, updateFunction, bodyFunction, {
-              type: 'ObjectExpression',
-              properties: []
-            }]
-          };
-        }
-
-        delete node.init;
-        delete node.test;
-        delete node.update;
-      },
-
-      // Helper method to replace identifier references in AST nodes
-      replaceIdentifierReferences(node, oldName, newName) {
-        if (!node || typeof node !== 'object') return node;
-
-        const replaceInNode = (n) => {
-          if (!n || typeof n !== 'object') return n;
-
-          if (n.type === 'Identifier' && n.name === oldName) {
-            return { ...n, name: newName };
-          }
-
-          // Create a copy and recursively process properties
-          const newNode = { ...n };
-          for (const key in n) {
-            if (n.hasOwnProperty(key) && key !== 'parent') {
-              if (Array.isArray(n[key])) {
-                newNode[key] = n[key].map(replaceInNode);
-              } else if (typeof n[key] === 'object') {
-                newNode[key] = replaceInNode(n[key]);
-              }
-            }
-          }
-          return newNode;
+            const wrappedExpr = {
+              type: 'CallExpression',
+              callee: { type: 'Identifier', name: '__p5.strandsNode' },
+              arguments: [expr]
+            };
+            return {
+              type: 'Property',
+              key: { type: 'Literal', value: varPath },
+              value: wrappedExpr,
+              kind: 'init',
+              computed: false,
+              shorthand: false
+            };
+          })
         };
 
-        return replaceInNode(node);
+        // Create the strandsFor call
+        const callExpression = {
+          type: 'CallExpression',
+          callee: {
+            type: 'Identifier',
+            name: '__p5.strandsFor'
+          },
+          arguments: [initialFunction, conditionFunction, updateFunction, bodyFunction, initialVarsObject]
+        };
+
+        statements.push({
+          type: 'VariableDeclaration',
+          declarations: [{
+            type: 'VariableDeclarator',
+            id: { type: 'Identifier', name: blockVar },
+            init: callExpression
+          }],
+          kind: 'const'
+        });
+
+        // Add assignments back to original variables
+        for (const varPath of assignedVars) {
+          const parts = varPath.split('.');
+
+          // Build left side: inputs.color or just x
+          let leftExpr = { type: 'Identifier', name: parts[0] };
+          for (let i = 1; i < parts.length; i++) {
+            leftExpr = {
+              type: 'MemberExpression',
+              object: leftExpr,
+              property: { type: 'Identifier', name: parts[i] },
+              computed: false
+            };
+          }
+
+          // Build right side: __block_2.inputs.color or __block_2.x
+          let rightExpr = { type: 'Identifier', name: blockVar };
+          for (const part of parts) {
+            rightExpr = {
+              type: 'MemberExpression',
+              object: rightExpr,
+              property: { type: 'Identifier', name: part },
+              computed: false
+            };
+          }
+
+          statements.push({
+            type: 'ExpressionStatement',
+            expression: {
+              type: 'AssignmentExpression',
+              operator: '=',
+              left: leftExpr,
+              right: rightExpr
+            }
+          });
+        }
+
+        node.type = 'BlockStatement';
+        node.body = statements;
+      } else {
+        // No assignments, just replace with call expression
+        node.type = 'ExpressionStatement';
+        node.expression = {
+          type: 'CallExpression',
+          callee: {
+            type: 'Identifier',
+            name: '__p5.strandsFor'
+          },
+          arguments: [initialFunction, conditionFunction, updateFunction, bodyFunction, {
+            type: 'ObjectExpression',
+            properties: []
+          }]
+        };
+      }
+
+      delete node.init;
+      delete node.test;
+      delete node.update;
+    },
+
+    // Helper method to replace identifier references in AST nodes
+    replaceIdentifierReferences(node, oldName, newName) {
+      if (!node || typeof node !== 'object') return node;
+
+      const replaceInNode = (n) => {
+        if (!n || typeof n !== 'object') return n;
+
+        if (n.type === 'Identifier' && n.name === oldName) {
+          return { ...n, name: newName };
+        }
+
+        // Create a copy and recursively process properties
+        const newNode = { ...n };
+        for (const key in n) {
+          if (n.hasOwnProperty(key) && key !== 'parent') {
+            if (Array.isArray(n[key])) {
+              newNode[key] = n[key].map(replaceInNode);
+            } else if (typeof n[key] === 'object') {
+              newNode[key] = replaceInNode(n[key]);
+            }
+          }
+        }
+        return newNode;
+      };
+
+      return replaceInNode(node);
+    }
+  };
+
+  // Helper function to check if a function body contains return statements in control flow
+  function functionHasEarlyReturns(functionNode) {
+    let hasEarlyReturn = false;
+    let inControlFlow = 0;
+
+    const checkForEarlyReturns = {
+      IfStatement(node, state, c) {
+        inControlFlow++;
+        if (node.test) c(node.test, state);
+        if (node.consequent) c(node.consequent, state);
+        if (node.alternate) c(node.alternate, state);
+        inControlFlow--;
+      },
+      ForStatement(node, state, c) {
+        inControlFlow++;
+        if (node.init) c(node.init, state);
+        if (node.test) c(node.test, state);
+        if (node.update) c(node.update, state);
+        if (node.body) c(node.body, state);
+        inControlFlow--;
+      },
+      ReturnStatement(node) {
+        if (inControlFlow > 0) {
+          hasEarlyReturn = true;
+        }
       }
     };
-    function transpileStrandsToJS(p5, sourceString, srcLocations, scope) {
-      // Reset counters at the start of each transpilation
-      blockVarCounter = 0;
-      loopVarCounter = 0;
 
-      const ast = parse(sourceString, {
-        ecmaVersion: 2021,
-        locations: srcLocations
-      });
-      // First pass: transform everything except if/for statements using normal ancestor traversal
-      const nonControlFlowCallbacks = { ...ASTCallbacks };
-      delete nonControlFlowCallbacks.IfStatement;
-      delete nonControlFlowCallbacks.ForStatement;
-      ancestor(ast, nonControlFlowCallbacks, undefined, { varyings: {} });
-      // Second pass: transform if/for statements in post-order using recursive traversal
-      const postOrderControlFlowTransform = {
-        IfStatement(node, state, c) {
-          state.inControlFlow++;
-          // First recursively process children
-          if (node.test) c(node.test, state);
-          if (node.consequent) c(node.consequent, state);
-          if (node.alternate) c(node.alternate, state);
-          // Then apply the transformation to this node
-          ASTCallbacks.IfStatement(node, state, []);
-          state.inControlFlow--;
-        },
-        ForStatement(node, state, c) {
-          state.inControlFlow++;
-          // First recursively process children
-          if (node.init) c(node.init, state);
-          if (node.test) c(node.test, state);
-          if (node.update) c(node.update, state);
-          if (node.body) c(node.body, state);
-          // Then apply the transformation to this node
-          ASTCallbacks.ForStatement(node, state, []);
-          state.inControlFlow--;
-        },
-        ReturnStatement(node, state, c) {
-          if (!state.inControlFlow) return;
-          // Convert return statement to strandsEarlyReturn call
-          node.type = 'ExpressionStatement';
-          node.expression = {
-            type: 'CallExpression',
-            callee: {
-              type: 'Identifier',
-              name: '__p5.strandsEarlyReturn'
-            },
-            arguments: node.argument ? [node.argument] : []
-          };
-          delete node.argument;
+    if (functionNode.body && functionNode.body.type === 'BlockStatement') {
+      recursive(functionNode.body, {}, checkForEarlyReturns);
+    }
+
+    return hasEarlyReturn;
+  }
+
+  // Helper function to check if a block contains a return anywhere in it
+  function blockContainsReturn(block) {
+    let hasReturn = false;
+    const findReturn = {
+      ReturnStatement() {
+        hasReturn = true;
+      }
+    };
+    if (block) {
+      recursive(block, {}, findReturn);
+    }
+    return hasReturn;
+  }
+
+  // Transform a helper function to use __returnValue pattern instead of early returns.
+  // This is necessary because we evaluate helper function *in javascript* rather than
+  // converting them to functions in GLSL (which is hard because we don't know the types
+  // of function parameters upfront, and they may change from use to use.) So they act
+  // like macros, all contributing to build up a single function overall. An early return
+  // in a helper should not be an early return of the entire hook function. Instead, we
+  // just make sure helper functions always evaluate to a single value.
+  function transformHelperFunction(functionNode) {
+    // 1. Add __returnValue declaration at the start of function body
+    const returnValueDecl = {
+      type: 'VariableDeclaration',
+      declarations: [{
+        type: 'VariableDeclarator',
+        id: { type: 'Identifier', name: '__returnValue' },
+        init: null
+      }],
+      kind: 'let'
+    };
+
+    if (!functionNode.body || functionNode.body.type !== 'BlockStatement') {
+      return; // Can't transform arrow functions with expression bodies
+    }
+
+    functionNode.body.body.unshift(returnValueDecl);
+
+    // 2. Restructure if statements: move siblings after if with return into else block
+    function restructureIfStatements(statements) {
+      for (let i = 0; i < statements.length; i++) {
+        const stmt = statements[i];
+
+        if (stmt.type === 'IfStatement' && blockContainsReturn(stmt.consequent) && !stmt.alternate) {
+          // Find all subsequent statements
+          const subsequentStatements = statements.slice(i + 1);
+
+          if (subsequentStatements.length > 0) {
+            // Create else block with subsequent statements
+            stmt.alternate = {
+              type: 'BlockStatement',
+              body: subsequentStatements
+            };
+
+            // Remove the subsequent statements from this level
+            statements.splice(i + 1);
+
+            // Recursively process the new else block
+            restructureIfStatements(stmt.alternate.body);
+          }
         }
-      };
-      recursive(ast, { varyings: {}, inControlFlow: 0 }, postOrderControlFlowTransform);
-      const transpiledSource = escodegen.generate(ast);
-      const scopeKeys = Object.keys(scope);
-      const match = /\(?\s*(?:function)?\s*\w*\s*\(([^)]*)\)\s*(?:=>)?\s*{((?:.|\n)*)}\s*;?\s*\)?/
-        .exec(transpiledSource);
-      if (!match) {
-        console.log(transpiledSource);
-        throw new Error('Could not parse p5.strands function!');
-      }
-      const params = match[1].split(/,\s*/).filter(param => !!param.trim());
-      let paramVals, paramNames;
-      if (params.length > 0) {
-        paramNames = params;
-        paramVals = [scope];
-      } else {
-        paramNames = scopeKeys;
-        paramVals = scopeKeys.map(key => scope[key]);
-      }
-      const body = match[2];
-      try {
-        const internalStrandsCallback = new Function(
-            // Create a parameter called __p5, not just p5, because users of instance mode
-            // may pass in a variable called p5 as a scope variable. If we rely on a variable called
-            // p5, then the scope variable called p5 might accidentally override internal function
-            // calls to p5 static methods.
-          '__p5',
-          ...paramNames,
-          body,
-        );
-        return () => internalStrandsCallback(p5, ...paramVals);
-      } catch (e) {
-        console.error(e);
-        console.log(paramNames);
-        console.log(body);
-        throw new Error('Error transpiling p5.strands callback!');
+
+        // Recursively process nested blocks
+        if (stmt.type === 'IfStatement') {
+          if (stmt.consequent && stmt.consequent.type === 'BlockStatement') {
+            restructureIfStatements(stmt.consequent.body);
+          }
+          if (stmt.alternate && stmt.alternate.type === 'BlockStatement') {
+            restructureIfStatements(stmt.alternate.body);
+          }
+        } else if (stmt.type === 'ForStatement' && stmt.body && stmt.body.type === 'BlockStatement') {
+          restructureIfStatements(stmt.body.body);
+        } else if (stmt.type === 'BlockStatement') {
+          restructureIfStatements(stmt.body);
+        }
       }
     }
+
+    restructureIfStatements(functionNode.body.body);
+
+    // 3. Transform all return statements to assignments
+    const transformReturns = {
+      ReturnStatement(node) {
+        // Convert return statement to assignment
+        node.type = 'ExpressionStatement';
+        node.expression = {
+          type: 'AssignmentExpression',
+          operator: '=',
+          left: { type: 'Identifier', name: '__returnValue' },
+          right: node.argument || { type: 'Identifier', name: 'undefined' }
+        };
+        delete node.argument;
+      }
+    };
+
+    recursive(functionNode.body, {}, transformReturns);
+
+    // 4. Add final return statement
+    const finalReturn = {
+      type: 'ReturnStatement',
+      argument: { type: 'Identifier', name: '__returnValue' }
+    };
+
+    functionNode.body.body.push(finalReturn);
+  }
+
+  // Helper function to check if a function body contains .set() calls in control flow
+  function functionHasSetInControlFlow(functionNode) {
+    let hasSetInControlFlow = false;
+    let inControlFlow = 0;
+
+    const checkForSetCalls = {
+      IfStatement(node, state, c) {
+        inControlFlow++;
+        if (node.test) c(node.test, state);
+        if (node.consequent) c(node.consequent, state);
+        if (node.alternate) c(node.alternate, state);
+        inControlFlow--;
+      },
+      ForStatement(node, state, c) {
+        inControlFlow++;
+        if (node.init) c(node.init, state);
+        if (node.test) c(node.test, state);
+        if (node.update) c(node.update, state);
+        if (node.body) c(node.body, state);
+        inControlFlow--;
+      },
+      CallExpression(node) {
+        // Check if this is a .set() call
+        if (inControlFlow > 0 &&
+            node.callee?.type === 'MemberExpression' &&
+            node.callee?.property?.name === 'set') {
+          hasSetInControlFlow = true;
+        }
+      }
+    };
+
+    if (functionNode.body && functionNode.body.type === 'BlockStatement') {
+      recursive(functionNode.body, {}, checkForSetCalls);
+    }
+
+    return hasSetInControlFlow;
+  }
+
+  // Transform a function to use __setValue pattern instead of .set() calls in branches/loops
+  function transformFunctionSetCalls(functionNode) {
+    if (!functionNode.body || functionNode.body.type !== 'BlockStatement') {
+      return; // Can't transform arrow functions with expression bodies
+    }
+
+    // Track which hooks have .set() calls, mapping expression string to the actual AST node
+    const hooksWithSetCalls = new Map(); // exprString -> hookObjectNode
+
+    // First pass: find all hooks that have .set() calls in control flow
+    const findSetCalls = {
+      CallExpression(node) {
+        if (node.callee?.type === 'MemberExpression' &&
+            node.callee?.property?.name === 'set' &&
+            node.callee?.object) {
+          // This is something like filterColor.set(...) or myp5.filterColor.set(...)
+          const hookObjectNode = node.callee.object;
+          const exprString = escodegen.generate(hookObjectNode);
+          if (!hooksWithSetCalls.has(exprString)) {
+            hooksWithSetCalls.set(exprString, hookObjectNode);
+          }
+        }
+      }
+    };
+
+    recursive(functionNode.body, {}, findSetCalls);
+
+    if (hooksWithSetCalls.size === 0) {
+      return; // No .set() calls to transform
+    }
+
+    // For each hook with .set() calls, add intermediate variable and transform
+    for (const [exprString, hookObjectNode] of hooksWithSetCalls) {
+      // Create a safe variable name from the expression
+      const safeVarName = exprString.replace(/[^a-zA-Z0-9_]/g, '_');
+      const intermediateVarName = `__${safeVarName}_value`;
+
+      // 1. Find the .begin() call and insert intermediate variable right after it
+      const intermediateVarDecl = {
+        type: 'VariableDeclaration',
+        declarations: [{
+          type: 'VariableDeclarator',
+          id: { type: 'Identifier', name: intermediateVarName },
+          init: null
+        }],
+        kind: 'let'
+      };
+
+      let beginCallIndex = -1;
+      for (let i = 0; i < functionNode.body.body.length; i++) {
+        const stmt = functionNode.body.body[i];
+        if (stmt.type === 'ExpressionStatement' &&
+            stmt.expression?.type === 'CallExpression' &&
+            stmt.expression?.callee?.type === 'MemberExpression' &&
+            stmt.expression?.callee?.property?.name === 'begin') {
+          const beginExprString = escodegen.generate(stmt.expression.callee.object);
+          if (beginExprString === exprString) {
+            beginCallIndex = i;
+            break;
+          }
+        }
+      }
+
+      // Insert intermediate variable after .begin() if found, otherwise at the start
+      if (beginCallIndex !== -1) {
+        functionNode.body.body.splice(beginCallIndex + 1, 0, intermediateVarDecl);
+      } else {
+        functionNode.body.body.unshift(intermediateVarDecl);
+      }
+
+      // 2. Transform all .set() calls to assignments
+      const transformSetToAssignment = {
+        CallExpression(node, state, ancestors) {
+          // Check if this is a .set() call for this hook
+          if (node.callee?.type === 'MemberExpression' &&
+              node.callee?.property?.name === 'set' &&
+              node.callee?.object) {
+            const currentExprString = escodegen.generate(node.callee.object);
+            if (currentExprString === exprString && node.arguments.length > 0) {
+              // Find the parent statement
+              let parentStmt = null;
+              for (let i = ancestors.length - 1; i >= 0; i--) {
+                if (ancestors[i].type === 'ExpressionStatement') {
+                  parentStmt = ancestors[i];
+                  break;
+                }
+              }
+
+              if (parentStmt) {
+                // Replace the .set() call with an assignment
+                parentStmt.type = 'ExpressionStatement';
+                parentStmt.expression = {
+                  type: 'AssignmentExpression',
+                  operator: '=',
+                  left: { type: 'Identifier', name: intermediateVarName },
+                  right: node.arguments[0]
+                };
+              }
+            }
+          }
+        }
+      };
+
+      ancestor(functionNode.body, transformSetToAssignment);
+
+      // 3. Find the .end() call and insert final .set() call right before it
+      const finalSetCall = {
+        type: 'ExpressionStatement',
+        expression: {
+          type: 'CallExpression',
+          callee: {
+            type: 'MemberExpression',
+            object: JSON.parse(JSON.stringify(hookObjectNode)), // Deep copy the original node
+            property: { type: 'Identifier', name: 'set' },
+            computed: false
+          },
+          arguments: [{ type: 'Identifier', name: intermediateVarName }]
+        }
+      };
+
+      // Find the .end() call for this hook
+      let endCallIndex = -1;
+      for (let i = 0; i < functionNode.body.body.length; i++) {
+        const stmt = functionNode.body.body[i];
+        if (stmt.type === 'ExpressionStatement' &&
+            stmt.expression?.type === 'CallExpression' &&
+            stmt.expression?.callee?.type === 'MemberExpression' &&
+            stmt.expression?.callee?.property?.name === 'end') {
+          const endExprString = escodegen.generate(stmt.expression.callee.object);
+          if (endExprString === exprString) {
+            endCallIndex = i;
+            break;
+          }
+        }
+      }
+
+      // Insert the final .set() call before .end() if found, otherwise at the end
+      if (endCallIndex !== -1) {
+        functionNode.body.body.splice(endCallIndex, 0, finalSetCall);
+      } else {
+        // If no .end() found, insert before return statement or at the end
+        const lastStatement = functionNode.body.body[functionNode.body.body.length - 1];
+        if (lastStatement && lastStatement.type === 'ReturnStatement') {
+          functionNode.body.body.splice(functionNode.body.body.length - 1, 0, finalSetCall);
+        } else {
+          functionNode.body.body.push(finalSetCall);
+        }
+      }
+    }
+  }
+
+  // Main transformation pass: find and transform functions with .set() calls in control flow
+  function transformSetCallsInControlFlow(ast) {
+    const functionsToTransform = [];
+
+    // Collect functions that have .set() calls in control flow
+    const collectFunctions = {
+      ArrowFunctionExpression(node, ancestors) {
+        if (functionHasSetInControlFlow(node)) {
+          functionsToTransform.push(node);
+        }
+      },
+      FunctionExpression(node, ancestors) {
+        if (functionHasSetInControlFlow(node)) {
+          functionsToTransform.push(node);
+        }
+      },
+      FunctionDeclaration(node, ancestors) {
+        if (functionHasSetInControlFlow(node)) {
+          functionsToTransform.push(node);
+        }
+      }
+    };
+
+    ancestor(ast, collectFunctions);
+
+    // Transform each collected function
+    for (const funcNode of functionsToTransform) {
+      transformFunctionSetCalls(funcNode);
+    }
+  }
+
+  // Main transformation pass: find and transform helper functions with early returns
+  function transformHelperFunctionEarlyReturns(ast) {
+    const helperFunctionsToTransform = [];
+
+    // Collect helper functions that need transformation
+    const collectHelperFunctions = {
+      VariableDeclarator(node, ancestors) {
+        const init = node.init;
+        if (init && (init.type === 'ArrowFunctionExpression' || init.type === 'FunctionExpression')) {
+          if (functionHasEarlyReturns(init)) {
+            helperFunctionsToTransform.push(init);
+          }
+        }
+      },
+      FunctionDeclaration(node, ancestors) {
+        if (functionHasEarlyReturns(node)) {
+          helperFunctionsToTransform.push(node);
+        }
+      },
+      // Don't transform functions that are direct arguments to call expressions
+      CallExpression(node, ancestors) {
+        // Arguments to CallExpressions are base callbacks, not helpers
+        // We skip them by not adding them to the transformation list
+      }
+    };
+
+    ancestor(ast, collectHelperFunctions);
+
+    // Transform each collected helper function
+    for (const funcNode of helperFunctionsToTransform) {
+      transformHelperFunction(funcNode);
+    }
+  }
+
+  function transpileStrandsToJS(p5, sourceString, srcLocations, scope) {
+    // Reset counters at the start of each transpilation
+    blockVarCounter = 0;
+    loopVarCounter = 0;
+
+    const ast = parse(sourceString, {
+      ecmaVersion: 2021,
+      locations: srcLocations
+    });
+
+    // First pass: transform .set() calls in control flow to use intermediate variables
+    transformSetCallsInControlFlow(ast);
+
+    // Second pass: transform everything except if/for statements using normal ancestor traversal
+    const nonControlFlowCallbacks = { ...ASTCallbacks };
+    delete nonControlFlowCallbacks.IfStatement;
+    delete nonControlFlowCallbacks.ForStatement;
+    ancestor(ast, nonControlFlowCallbacks, undefined, { varyings: {} });
+
+    // Third pass: transform helper functions with early returns to use __returnValue pattern
+    transformHelperFunctionEarlyReturns(ast);
+
+    // Fourth pass: transform if/for statements in post-order using recursive traversal
+    const postOrderControlFlowTransform = {
+      IfStatement(node, state, c) {
+        state.inControlFlow++;
+        // First recursively process children
+        if (node.test) c(node.test, state);
+        if (node.consequent) c(node.consequent, state);
+        if (node.alternate) c(node.alternate, state);
+        // Then apply the transformation to this node
+        ASTCallbacks.IfStatement(node, state, []);
+        state.inControlFlow--;
+      },
+      ForStatement(node, state, c) {
+        state.inControlFlow++;
+        // First recursively process children
+        if (node.init) c(node.init, state);
+        if (node.test) c(node.test, state);
+        if (node.update) c(node.update, state);
+        if (node.body) c(node.body, state);
+        // Then apply the transformation to this node
+        ASTCallbacks.ForStatement(node, state, []);
+        state.inControlFlow--;
+      },
+      ReturnStatement(node, state, c) {
+        if (!state.inControlFlow) return;
+        // Convert return statement to strandsEarlyReturn call
+        node.type = 'ExpressionStatement';
+        node.expression = {
+          type: 'CallExpression',
+          callee: {
+            type: 'Identifier',
+            name: '__p5.strandsEarlyReturn'
+          },
+          arguments: node.argument ? [node.argument] : []
+        };
+        delete node.argument;
+      }
+    };
+    recursive(ast, { varyings: {}, inControlFlow: 0 }, postOrderControlFlowTransform);
+    const transpiledSource = escodegen.generate(ast);
+    const scopeKeys = Object.keys(scope);
+    const match = /\(?\s*(?:function)?\s*\w*\s*\(([^)]*)\)\s*(?:=>)?\s*{((?:.|\n)*)}\s*;?\s*\)?/
+      .exec(transpiledSource);
+    if (!match) {
+      console.log(transpiledSource);
+      throw new Error('Could not parse p5.strands function!');
+    }
+    const params = match[1].split(/,\s*/).filter(param => !!param.trim());
+    let paramVals, paramNames;
+    if (params.length > 0) {
+      paramNames = params;
+      paramVals = [scope];
+    } else {
+      paramNames = scopeKeys;
+      paramVals = scopeKeys.map(key => scope[key]);
+    }
+    const body = match[2];
+    try {
+      const internalStrandsCallback = new Function(
+          // Create a parameter called __p5, not just p5, because users of instance mode
+          // may pass in a variable called p5 as a scope variable. If we rely on a variable called
+          // p5, then the scope variable called p5 might accidentally override internal function
+          // calls to p5 static methods.
+        '__p5',
+        ...paramNames,
+        body,
+      );
+      return () => internalStrandsCallback(p5, ...paramVals);
+    } catch (e) {
+      console.error(e);
+      console.log(paramNames);
+      console.log(body);
+      throw new Error('Error transpiling p5.strands callback!');
+    }
+  }
 
   function generateShaderCode(strandsContext) {
     const {
@@ -131720,18 +132375,6 @@ var p5 = (function () {
       for (const blockID of blocks) {
         backend.generateBlock(blockID, strandsContext, generationContext);
       }
-
-      // Process any unvisited global assignments to ensure side effects are generated
-      for (const assignmentNodeID of strandsContext.globalAssignments) {
-        if (!generationContext.visitedNodes.has(assignmentNodeID)) {
-          // This assignment hasn't been visited yet, so we need to generate it
-          backend.generateAssignment(generationContext, strandsContext.dag, assignmentNodeID);
-          generationContext.visitedNodes.add(assignmentNodeID);
-        }
-      }
-
-      // Reset global assignments for next hook
-      strandsContext.globalAssignments = [];
 
       const firstLine = backend.hookEntry(hookType);
       let returnType;
@@ -131779,13 +132422,31 @@ var p5 = (function () {
     if (validInputs.length === 0) {
       throw new Error(`No valid inputs for phi node for variable ${varName}`);
     }
-    // Get dimension and baseType from first valid input
-    let firstInput = validInputs
-      .map((input) => getNodeDataFromID(strandsContext.dag, input.value.id))
-      .find((input) => input.dimension) ??
-        getNodeDataFromID(strandsContext.dag, validInputs[0].value.id);
-    const dimension = firstInput.dimension;
-    const baseType = firstInput.baseType;
+
+    // Get dimension and baseType from first valid input, skipping ASSIGN_ON_USE nodes
+    const inputNodes = validInputs.map((input) => getNodeDataFromID(strandsContext.dag, input.value.id));
+
+    // Find first non-ASSIGN_ON_USE input to determine type
+    let typeSource = inputNodes.find((input) => input.baseType !== BaseType.ASSIGN_ON_USE && input.dimension) ??
+      inputNodes.find((input) => input.baseType !== BaseType.ASSIGN_ON_USE);
+
+    // If all are ASSIGN_ON_USE, fall back to first input
+    if (!typeSource) {
+      typeSource = inputNodes[0];
+    }
+
+    const dimension = typeSource.dimension;
+    const baseType = typeSource.baseType;
+
+    // Propagate the type to all ASSIGN_ON_USE inputs
+    if (baseType !== BaseType.ASSIGN_ON_USE) {
+      for (const input of inputNodes) {
+        if (input.baseType === BaseType.ASSIGN_ON_USE) {
+          propagateTypeToAssignOnUse(strandsContext.dag, input.id, baseType, dimension);
+        }
+      }
+    }
+
     const nodeData = {
       nodeType: NodeType.PHI,
       dimension,
@@ -132447,6 +133108,42 @@ var p5 = (function () {
   }
 
   //////////////////////////////////////////////
+  // Prototype mirroring helpers
+  //////////////////////////////////////////////
+
+  /*
+   * Permanently augment both p5.prototype (fn) and p5.Graphics.prototype
+   * with a strands function. Overwrites unconditionally - strands wrappers
+   * are the correct dual mode implementation.
+   */
+  function augmentFn(fn, p5, name, value) {
+    fn[name] = value;
+    const GraphicsProto = p5?.Graphics?.prototype;
+    if (GraphicsProto) {
+      GraphicsProto[name] = value;
+    }
+  }
+
+  /*
+   * Temporarily augment window, p5.prototype (fn), and p5.Graphics.prototype
+   * with a hook function. Saves previous values into strandsContext override
+   * stores so deinitStrandsContext can restore them.
+   */
+  function augmentFnTemporary(fn, strandsContext, name, value) {
+    strandsContext.windowOverrides[name] = window[name];
+    strandsContext.fnOverrides[name] = fn[name];
+    window[name] = value;
+    fn[name] = value;
+    const GraphicsProto = strandsContext.p5?.Graphics?.prototype;
+    if (GraphicsProto) {
+      strandsContext.graphicsOverrides[name] = Object.prototype.hasOwnProperty.call(GraphicsProto, name)
+        ? GraphicsProto[name]
+        : undefined;
+      GraphicsProto[name] = value;
+    }
+  }
+
+  //////////////////////////////////////////////
   // User nodes
   //////////////////////////////////////////////
   function initGlobalStrandsAPI(p5, fn, strandsContext) {
@@ -132469,27 +133166,27 @@ var p5 = (function () {
     //////////////////////////////////////////////
     // Unique Functions
     //////////////////////////////////////////////
-    fn.discard = function() {
+    augmentFn(fn, p5, 'discard', function() {
       statementNode(strandsContext, StatementType.DISCARD);
-    };
-    fn.break = function() {
+    });
+    augmentFn(fn, p5, 'break', function() {
       statementNode(strandsContext, StatementType.BREAK);
-    };
+    });
     p5.break = fn.break;
-    fn.instanceID = function() {
+    augmentFn(fn, p5, 'instanceID', function() {
       const node = variableNode(strandsContext, { baseType: BaseType.INT, dimension: 1 }, strandsContext.backend.instanceIdReference());
       return createStrandsNode(node.id, node.dimension, strandsContext);
-    };
+    });
     // Internal methods use p5 static methods; user-facing methods use fn.
     // Some methods need to be used by both.
     p5.strandsIf = function(conditionNode, ifBody) {
       return new StrandsConditional(strandsContext, conditionNode, ifBody);
     };
-    fn.strandsIf = p5.strandsIf;
+    augmentFn(fn, p5, 'strandsIf', p5.strandsIf);
     p5.strandsFor = function(initialCb, conditionCb, updateCb, bodyCb, initialVars) {
       return new StrandsFor(strandsContext, initialCb, conditionCb, updateCb, bodyCb, initialVars).build();
     };
-    fn.strandsFor = p5.strandsFor;
+    augmentFn(fn, p5, 'strandsFor', p5.strandsFor);
     p5.strandsEarlyReturn = function(value) {
       const { dag, cfg } = strandsContext;
 
@@ -132522,7 +133219,7 @@ var p5 = (function () {
 
       return valueNode;
     };
-    fn.strandsEarlyReturn = p5.strandsEarlyReturn;
+    augmentFn(fn, p5, 'strandsEarlyReturn', p5.strandsEarlyReturn);
     p5.strandsNode = function(...args) {
       if (args.length === 1 && args[0] instanceof StrandsNode) {
         return args[0];
@@ -132530,7 +133227,20 @@ var p5 = (function () {
       if (args.length > 4) {
         userError("type error", "It looks like you've tried to construct a p5.strands node implicitly, with more than 4 components. This is currently not supported.");
       }
-      const { id, dimension } = primitiveConstructorNode(strandsContext, { baseType: BaseType.FLOAT, dimension: null }, args.flat());
+      // Filter out undefined/null values
+      const flatArgs = args.flat();
+      const definedArgs = flatArgs.filter(a => a !== undefined && a !== null);
+
+      // If all args are undefined, this is likely a `let myVar` at the
+      // start of an if statement and it will be assigned within the branches.
+      // For that, we use an assign-on-use node, meaning we'll take the type of the
+      // values assigned to it.
+      if (definedArgs.length === 0) {
+        const { id, dimension } = primitiveConstructorNode(strandsContext, { baseType: BaseType.ASSIGN_ON_USE, dimension: null }, [0]);
+        return createStrandsNode(id, dimension, strandsContext);
+      }
+
+      const { id, dimension } = primitiveConstructorNode(strandsContext, { baseType: BaseType.FLOAT, dimension: null }, definedArgs);
       return createStrandsNode(id, dimension, strandsContext);//new StrandsNode(id, dimension, strandsContext);
     };
     //////////////////////////////////////////////
@@ -132540,16 +133250,16 @@ var p5 = (function () {
       const isp5Function = overrides[0].isp5Function;
       if (isp5Function) {
         const originalFn = fn[functionName];
-        fn[functionName] = function(...args) {
+        augmentFn(fn, p5, functionName, function(...args) {
           if (strandsContext.active) {
             const { id, dimension } =  functionCallNode(strandsContext, functionName, args);
             return createStrandsNode(id, dimension, strandsContext);
           } else {
             return originalFn.apply(this, args);
           }
-        };
+        });
       } else {
-        fn[functionName] = function (...args) {
+        augmentFn(fn, p5, functionName, function (...args) {
           if (strandsContext.active) {
             const { id, dimension } = functionCallNode(strandsContext, functionName, args);
             return createStrandsNode(id, dimension, strandsContext);
@@ -132558,11 +133268,11 @@ var p5 = (function () {
               `It looks like you've called ${functionName} outside of a shader's modify() function.`
             );
           }
-        };
+        });
       }
     }
 
-    fn.getTexture = function (...rawArgs) {
+    augmentFn(fn, p5, 'getTexture', function (...rawArgs) {
       if (strandsContext.active) {
         const { id, dimension } = strandsContext.backend.createGetTextureCall(strandsContext, rawArgs);
         return createStrandsNode(id, dimension, strandsContext);
@@ -132571,17 +133281,17 @@ var p5 = (function () {
           `It looks like you've called getTexture outside of a shader's modify() function.`
         );
       }
-    };
+    });
 
     // Add texture function as alias for getTexture with p5 fallback
     const originalTexture = fn.texture;
-    fn.texture = function (...args) {
+    augmentFn(fn, p5, 'texture', function (...args) {
       if (strandsContext.active) {
         return this.getTexture(...args);
       } else {
         return originalTexture.apply(this, args);
       }
-    };
+    });
 
     // Add noise function with backend-agnostic implementation
     const originalNoise = fn.noise;
@@ -132591,16 +133301,16 @@ var p5 = (function () {
     strandsContext._noiseOctaves = null;
     strandsContext._noiseAmpFalloff = null;
 
-    fn.noiseDetail = function (lod, falloff = 0.5) {
+    augmentFn(fn, p5, 'noiseDetail', function (lod, falloff = 0.5) {
       if (!strandsContext.active) {
         return originalNoiseDetail.apply(this, arguments);
       }
 
       strandsContext._noiseOctaves = lod;
       strandsContext._noiseAmpFalloff = falloff;
-    };
+    });
 
-    fn.noise = function (...args) {
+    augmentFn(fn, p5, 'noise', function (...args) {
       if (!strandsContext.active) {
         return originalNoise.apply(this, args); // fallback to regular p5.js noise
       }
@@ -132647,9 +133357,9 @@ var p5 = (function () {
         }]
       });
       return createStrandsNode(id, dimension, strandsContext);
-    };
+    });
 
-    fn.millis = function (...args) {
+    augmentFn(fn, p5, 'millis', function (...args) {
       if (!strandsContext.active) {
         return originalMillis.apply(this, args);
       }
@@ -132662,14 +133372,14 @@ var p5 = (function () {
           return instance ? instance.millis() : undefined;
         }
       );
-    };
+    });
 
     // Next is type constructors and uniform functions.
     // For some of them, we have aliases so that you can write either a more human-readable
     // variant or also one more directly translated from GLSL, or to be more compatible with
     // APIs we documented at the release of 2.x and have to continue supporting.
     for (const type in DataType) {
-      if (type === BaseType.DEFER || type === 'sampler') {
+      if (type === BaseType.DEFER || type === BaseType.ASSIGN_ON_USE || type === 'sampler') {
         continue;
       }
       const typeInfo = DataType[type];
@@ -132691,13 +133401,13 @@ var p5 = (function () {
           typeAliases.push(pascalTypeName.replace('Vec', 'Vector'));
         }
       }
-      fn[`uniform${pascalTypeName}`] = function(name, defaultValue) {
+      augmentFn(fn, p5, `uniform${pascalTypeName}`, function(name, defaultValue) {
         const { id, dimension } = variableNode(strandsContext, typeInfo, name);
         strandsContext.uniforms.push({ name, typeInfo, defaultValue });
         return createStrandsNode(id, dimension, strandsContext);
-      };
+      });
       // Shared variables with smart context detection
-      fn[`shared${pascalTypeName}`] = function(name) {
+      augmentFn(fn, p5, `shared${pascalTypeName}`, function(name) {
         const { id, dimension } = variableNode(strandsContext, typeInfo, name);
 
         // Initialize shared variables tracking if not present
@@ -132710,24 +133420,23 @@ var p5 = (function () {
           typeInfo,
           usedInVertex: false,
           usedInFragment: false,
-          declared: false
         });
 
         return createStrandsNode(id, dimension, strandsContext);
-      };
+      });
 
       // Alias varying* as shared* for backward compatibility
-      fn[`varying${pascalTypeName}`] = fn[`shared${pascalTypeName}`];
+      augmentFn(fn, p5, `varying${pascalTypeName}`, fn[`shared${pascalTypeName}`]);
 
       for (const typeAlias of typeAliases) {
         // For compatibility, also alias uniformVec2 as uniformVector2, what we initially
         // documented these as
-        fn[`uniform${typeAlias}`] = fn[`uniform${pascalTypeName}`];
-        fn[`varying${typeAlias}`] = fn[`varying${pascalTypeName}`];
-        fn[`shared${typeAlias}`] = fn[`shared${pascalTypeName}`];
+        augmentFn(fn, p5, `uniform${typeAlias}`, fn[`uniform${pascalTypeName}`]);
+        augmentFn(fn, p5, `varying${typeAlias}`, fn[`varying${pascalTypeName}`]);
+        augmentFn(fn, p5, `shared${typeAlias}`, fn[`shared${pascalTypeName}`]);
       }
       const originalp5Fn = fn[typeInfo.fnName];
-      fn[typeInfo.fnName] = function(...args) {
+      augmentFn(fn, p5, typeInfo.fnName, function(...args) {
         if (strandsContext.active) {
           if (args.length === 1 && args[0].dimension && args[0].dimension === typeInfo.dimension) {
             const { id, dimension } = functionCallNode(
@@ -132759,7 +133468,7 @@ var p5 = (function () {
             `It looks like you've called ${typeInfo.fnName} outside of a shader's modify() function.`
           );
         }
-      };
+      });
     }
   }
   //////////////////////////////////////////////
@@ -133040,10 +133749,7 @@ var p5 = (function () {
       }
 
       for (const name of aliases) {
-        strandsContext.windowOverrides[name] = window[name];
-        strandsContext.fnOverrides[name] = fn[name];
-        window[name] = hook;
-        fn[name] = hook;
+        augmentFnTemporary(fn, strandsContext, name, hook);
       }
       hook.earlyReturns = [];
     }
@@ -133077,7 +133783,6 @@ var p5 = (function () {
       ctx.vertexDeclarations = new Set();
       ctx.fragmentDeclarations = new Set();
       ctx.hooks = [];
-      ctx.globalAssignments = [];
       ctx.backend = backend;
       ctx.active = active;
       ctx.renderer = renderer;
@@ -133085,6 +133790,7 @@ var p5 = (function () {
       ctx.previousFES = p5.disableFriendlyErrors;
       ctx.windowOverrides = {};
       ctx.fnOverrides = {};
+      ctx.graphicsOverrides = {};
       if (active) {
         p5.disableFriendlyErrors = true;
       }
@@ -133098,7 +133804,6 @@ var p5 = (function () {
       ctx.vertexDeclarations = new Set();
       ctx.fragmentDeclarations = new Set();
       ctx.hooks = [];
-      ctx.globalAssignments = [];
       ctx.active = false;
       p5.disableFriendlyErrors = ctx.previousFES;
       for (const key in ctx.windowOverrides) {
@@ -133106,6 +133811,17 @@ var p5 = (function () {
       }
       for (const key in ctx.fnOverrides) {
         fn[key] = ctx.fnOverrides[key];
+      }
+      // Clean up the hooks temporarily installed on p5.Graphics.prototype (#8549)
+      const GraphicsProto = p5.Graphics?.prototype;
+      if (GraphicsProto) {
+        for (const key in ctx.graphicsOverrides) {
+          if (ctx.graphicsOverrides[key] === undefined) {
+            delete GraphicsProto[key];
+          } else {
+            GraphicsProto[key] = ctx.graphicsOverrides[key];
+          }
+        }
       }
     }
 
@@ -133232,7 +133948,7 @@ var p5 = (function () {
    * }
    *
    * function material() {
-   *   let t = uniformFloat();
+   *   let t = millis();
    *   worldInputs.begin();
    *   // Move the vertex up and down in a wave in world space
    *   // In world space, moving the object (e.g., with translate()) will affect these coordinates
@@ -133244,7 +133960,6 @@ var p5 = (function () {
    * function draw() {
    *   background(255);
    *   shader(myShader);
-   *   myShader.setUniform('t', millis());
    *   lights();
    *   noStroke();
    *   fill('red');
@@ -133333,9 +134048,7 @@ var p5 = (function () {
    *          A value between `0.0` and `1.0`
    *
    * @example
-   * <div modernizr="webgl">
-   * <code>
-   * // Example 1: A soft vertical fade using smoothstep (no uniforms)
+   * // Example 1: A soft vertical fade using smoothstep
    *
    * let fadeShader;
    *
@@ -133354,31 +134067,25 @@ var p5 = (function () {
    *
    * function setup() {
    *   createCanvas(300, 200, WEBGL);
-   *   fadeShader = baseFilterShader().modify(fadeCallback);
+   *   fadeShader = buildFilterShader(fadeCallback);
    * }
    *
    * function draw() {
    *   background(0);
    *   filter(fadeShader);
    * }
-   * </code>
-   * </div>
    *
    * @example
-   * <div modernizr="webgl">
-   * <code>
-   * // Example 2: Animate the smooth transition using a uniform
+   * // Example 2: Animate the smooth transition over time
    *
    * let animatedShader;
    *
    * function animatedFadeCallback() {
-   *   const time = uniformFloat(() => millis() * 0.001);
-   *
    *   getColor((inputs) => {
    *     let x = inputs.texCoord.x;
    *
    *     // Move the smoothstep band back and forth over time
-   *     let center = 0.5 + 0.25 * sin(time);
+   *     let center = 0.5 + 0.25 * sin(millis() * 0.001);
    *     let t = smoothstep(center - 0.05, center + 0.05, x);
    *
    *     return [t, t, t, 1];
@@ -133387,15 +134094,13 @@ var p5 = (function () {
    *
    * function setup() {
    *   createCanvas(300, 200, WEBGL);
-   *   animatedShader = baseFilterShader().modify(animatedFadeCallback);
+   *   animatedShader = buildFilterShader(animatedFadeCallback);
    * }
    *
    * function draw() {
    *   background(0);
    *   filter(animatedShader);
    * }
-   * </code>
-   * </div>
    */
 
   /**
@@ -133512,7 +134217,7 @@ var p5 = (function () {
    * }
    *
    * function material() {
-   *   let t = uniformFloat();
+   *   let t = millis();
    *   pixelInputs.begin();
    *   // Animate alpha (transparency) based on x position
    *   pixelInputs.color.a = 0.5 + 0.5 *
@@ -133523,7 +134228,6 @@ var p5 = (function () {
    * function draw() {
    *   background(240);
    *   shader(myShader);
-   *   myShader.setUniform('t', millis());
    *   lights();
    *   noStroke();
    *   fill('purple');
@@ -133675,7 +134379,8 @@ var p5 = (function () {
    *     filterColor.texCoord.x,
    *     filterColor.texCoord.y + 0.1 * sin(filterColor.texCoord.x * 10)
    *   ];
-   *   filterColor.set(getTexture(canvasContent, warped));
+   *   let tex = filterColor.canvasContent;
+   *   filterColor.set(getTexture(tex, warped));
    *   filterColor.end();
    * }
    *
@@ -133713,7 +134418,7 @@ var p5 = (function () {
    * }
    *
    * function material() {
-   *   let t = uniformFloat();
+   *   let t = millis();
    *   objectInputs.begin();
    *   // Create a sine wave along the object
    *   objectInputs.position.y += sin(t * 0.001 + objectInputs.position.x);
@@ -133723,7 +134428,6 @@ var p5 = (function () {
    * function draw() {
    *   background(220);
    *   shader(myShader);
-   *   myShader.setUniform('t', millis());
    *   noStroke();
    *   fill('orange');
    *   sphere(50);
@@ -133755,7 +134459,7 @@ var p5 = (function () {
    * }
    *
    * function material() {
-   *   let t = uniformFloat();
+   *   let t = millis();
    *   cameraInputs.begin();
    *   // Move vertices in camera space based on their x position
    *   cameraInputs.position.y += 30 * sin(cameraInputs.position.x * 0.05 + t * 0.001);
@@ -133767,7 +134471,6 @@ var p5 = (function () {
    * function draw() {
    *   background(200);
    *   shader(myShader);
-   *   myShader.setUniform('t', millis());
    *   noStroke();
    *   fill('red');
    *   sphere(50);
@@ -133814,8 +134517,6 @@ var p5 = (function () {
    * will behave as a vec4 holding components r, g, b, and a (alpha), with each component being in the range 0.0 to 1.0.
    *
    * @example
-   * <div modernizr='webgl'>
-   * <code>
    * // A filter shader (using p5.strands) which will
    * // sample and invert the color of each pixel
    * // from the canvas.
@@ -133848,12 +134549,8 @@ var p5 = (function () {
    *
    *   filterColor.end();
    * }
-   * </code>
-   *
    *
    * @example
-   * <div modernizr='webgl'>
-   * <code>
    * // This primitive edge-detection filter samples
    * // and compares the colors of the current pixel
    * // on the canvas, and a little to the right.
@@ -133910,8 +134607,6 @@ var p5 = (function () {
    *   rotate(frameCount / 300);
    *   square(0, 0, 30);
    * }
-   * </code>
-   * </div>
    */
 
   /**
