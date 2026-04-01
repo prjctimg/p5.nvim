@@ -8,7 +8,7 @@ Table of Contents                                  *p5-modules-table-of-contents
 📚 p5.js Modules Documentation
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-03-21 03:53:35Z~
+⏰ Last Updated: 2026-04-01 11:02:32Z~
 
 ==============================================================================
 1. Available Modules                                      |p5-modules-available|
