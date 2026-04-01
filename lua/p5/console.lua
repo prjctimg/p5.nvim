@@ -2,7 +2,13 @@
 local C = {}
 local core = require("p5.core")
 local project = require("p5.project")
+
+local server = require("p5.server")
 local notify = core.notify
+local is_win = vim.api.nvim_win_is_valid
+local set_opt = vim.api.nvim_set_option_value
+-- Use snacks.terminal if available
+local has_snacks, snacks = pcall(require, "snacks")
 
 C.win = nil
 C.buf = nil
@@ -17,9 +23,7 @@ C.last_error = 0
 C.clear_interval = 30000 -- 30 seconds
 
 C.create = function()
-	local server = require("p5.server")
-
-	if C.win and vim.api.nvim_win_is_valid(C.win) then
+	if C.win and is_win(C.win) then
 		return C.win
 	end
 
@@ -31,17 +35,17 @@ C.create = function()
 	C.port = server.port
 	C.attempts = 0
 
-	local curl_cmd = string.format('curl -s -N "http://localhost:%d/api/console/stream" 2>/dev/null', C.port)
+	local cmd = string.format('curl -s -N "http://localhost:%d/api/console/stream" 2>/dev/null', C.port)
 
 	C.buf = vim.api.nvim_create_buf(false, true)
 	vim.api.nvim_buf_set_name(C.buf, "p5-console-terminal")
-	vim.api.nvim_set_option_value("filetype", "log", { buf = C.buf })
-	vim.api.nvim_set_option_value("modifiable", true, { buf = C.buf })
-	vim.api.nvim_set_option_value("scrollback", 1000, { buf = C.buf })
+	set_opt("filetype", "log", { buf = C.buf })
+	set_opt("modifiable", true, { buf = C.buf })
+	set_opt("scrollback", 1000, { buf = C.buf })
 
-	local connection_confirmed = false
+	local connected = false
 
-	C.job = vim.fn.jobstart(curl_cmd, {
+	C.job = vim.fn.jobstart(cmd, {
 		term = true,
 		on_stdout = function(_, data)
 			if data and #data > 0 then
@@ -52,14 +56,12 @@ C.create = function()
 					end
 				end
 
-				if not connection_confirmed then
+				if not connected then
 					for _, line in ipairs(data) do
 						if line:match("\027%[%d") then
-							connection_confirmed = true
+							connected = true
 							C.attempts = 0
-							vim.schedule(function()
-								notify("Console connected to browser", "info")
-							end)
+							notify("Console connected to browser", "info")
 							break
 						end
 					end
@@ -69,7 +71,7 @@ C.create = function()
 		on_exit = function(_, exit_code)
 			if exit_code ~= 0 and C.win and vim.api.nvim_win_is_valid(C.win) then
 				vim.schedule(function()
-					if connection_confirmed then
+					if connected then
 						notify("Console disconnected from browser", "warn")
 						C.reconnect()
 					else
@@ -94,7 +96,7 @@ C.reconnect = function()
 	C.attempts = C.attempts + 1
 
 	vim.defer_fn(function()
-		if C.win and vim.api.nvim_win_is_valid(C.win) then
+		if C.win and is_win(C.win) then
 			notify(string.format("Reconnecting to console (attempt %d)...", C.attempts), "info")
 			C.create()
 		end
@@ -102,7 +104,6 @@ C.reconnect = function()
 end
 
 C.show = function(opts)
-	local server = require("p5.server")
 	opts = opts or {}
 	local enter = opts.enter ~= false
 
@@ -116,19 +117,19 @@ C.show = function(opts)
 		return
 	end
 
-	if C.win and vim.api.nvim_win_is_valid(C.win) then
+	if C.win and is_win(C.win) then
 		if enter then
 			vim.api.nvim_set_current_win(C.win)
 		end
 		return
 	end
 
-	local position = (C.config and C.config.console and C.config.console.position) or "below"
+	local pos = C.config.console.position or "below"
 	local viewport_height = vim.o.lines
 	local height = math.floor(viewport_height * 0.3)
 	C.port = server.port
 
-	if C.win and vim.api.nvim_win_is_valid(C.win) then
+	if C.win and is_win(C.win) then
 		if enter then
 			vim.api.nvim_set_current_win(C.win)
 		end
@@ -139,19 +140,17 @@ C.show = function(opts)
 	C.win = nil
 	C.buf = nil
 
-	-- Use snacks.terminal if available
-	local snacks = core.require_snacks()
-	if snacks and snacks.terminal then
+	if has_snacks then
 		local url = string.format("http://localhost:%d/api/console/stream", C.port)
 		local term = snacks.terminal({ "curl", "-s", "-N", url }, {
 			win = {
 				title = "p5-console",
-				position = position == "below" and "bottom" or position,
+				position = pos == "below" and "bottom" or pos,
 				size = height,
 			},
 			auto_close = false,
 			scrollback = 1000,
-			enter = enter,
+			interactive = false,
 			keys = {
 				q = "hide",
 				["<C-c>"] = "hide",
@@ -177,44 +176,35 @@ C.show = function(opts)
 		return
 	end
 
-	local split_pattern = core.split_commands[position] or core.split_commands.below
+	local split_pattern = core.split_commands[pos] or core.split_commands.below
 	local split_cmd = split_pattern:format(height)
 
 	vim.cmd(split_cmd)
 	C.win = vim.api.nvim_get_current_win()
 	vim.api.nvim_win_set_buf(C.win, buf)
 
-	vim.api.nvim_set_option_value("wrap", true, { scope = "local", win = C.win })
-	vim.api.nvim_set_option_value("number", false, { scope = "local", win = C.win })
-	vim.api.nvim_set_option_value("relativenumber", false, { scope = "local", win = C.win })
-	vim.api.nvim_set_option_value("signcolumn", "no", { scope = "local", win = C.win })
-
-	vim.keymap.set("n", "q", C.hide, { buffer = buf, desc = "Hide p5 console" })
-	vim.keymap.set("n", "c", C.clear, { buffer = buf, desc = "Clear p5 console" })
-
-	vim.keymap.set("n", "j", "gj", { buffer = buf, noremap = true, silent = true })
-	vim.keymap.set("n", "k", "gk", { buffer = buf, noremap = true, silent = true })
-	vim.keymap.set("n", "<Down>", "gj", { buffer = buf, noremap = true, silent = true })
-	vim.keymap.set("n", "<Up>", "gk", { buffer = buf, noremap = true, silent = true })
-	vim.keymap.set("n", "G", "G", { buffer = buf, noremap = true, silent = true, desc = "Scroll to bottom" })
-	vim.keymap.set("n", "gg", "gg", { buffer = buf, noremap = true, silent = true, desc = "Scroll to top" })
-	vim.keymap.set("n", "<C-d>", "<C-d>zT", { buffer = buf, noremap = true, silent = true, desc = "Page down" })
-	vim.keymap.set("n", "<C-u>", "<C-u>zb", { buffer = buf, noremap = true, silent = true, desc = "Page up" })
-	vim.keymap.set("n", "<C-c>", C.hide, { buffer = buf, desc = "Hide console" })
+	set_opt("wrap", true, { scope = "local", win = C.win })
+	set_opt("number", false, { scope = "local", win = C.win })
+	set_opt("relativenumber", false, { scope = "local", win = C.win })
+	set_opt("signcolumn", "no", { scope = "local", win = C.win })
+	local keymap = vim.keymap.set
+	keymap("n", "q", C.hide, { buffer = buf, desc = "Hide p5 console" })
+	keymap("n", "c", C.clear, { buffer = buf, desc = "Clear p5 console" })
+	keymap("n", "<C-c>", C.hide, { buffer = buf, desc = "Hide console" })
 
 	C.auto_clear()
 	notify("Console connected to server on port " .. C.port, "info")
 end
 
 C.hide = function()
-	if C.win and vim.api.nvim_win_is_valid(C.win) then
+	if C.win and is_win(C.win) then
 		vim.api.nvim_win_close(C.win, true)
 		C.win = nil
 	end
 end
 
 C.toggle = function()
-	if C.win and vim.api.nvim_win_is_valid(C.win) then
+	if C.win and is_win(C.win) then
 		C.hide()
 	else
 		C.show()
@@ -230,18 +220,18 @@ end
 C.setup = function(config)
 	C.config = config
 
-	vim.api.nvim_set_hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
-	vim.api.nvim_set_hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
-	vim.api.nvim_set_hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
-	vim.api.nvim_set_hl(0, "P5ConsoleLog", { fg = "#6272a4" })
+	local hl = vim.api.nvim_set_hl
+	hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
+	hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
+	hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
+	hl(0, "P5ConsoleLog", { fg = "#6272a4" })
 
 	-- Register toggle with snacks.toggle if available
-	local snacks = core.require_snacks()
-	if snacks and snacks.toggle then
+	if has_snacks then
 		snacks.toggle.new({
 			name = "p5console",
 			get = function()
-				return C.win and vim.api.nvim_win_is_valid(C.win) or false
+				return C.win and is_win(C.win) or false
 			end,
 			set = function(state)
 				if state then
@@ -264,23 +254,19 @@ C.auto_clear = function()
 	C.timer = vim.uv.new_timer()
 
 	if C.timer then
-		C.timer:start(
-			C.clear_interval,
-			C.clear_interval,
-			vim.schedule_wrap(function()
-				if not C.buf or not vim.api.nvim_buf_is_valid(C.buf) then
-					return
-				end
+		C.timer:start(C.clear_interval, C.clear_interval, function()
+			if not C.buf or not vim.api.nvim_buf_is_valid(C.buf) then
+				return
+			end
 
-				local current_time = os.time()
-				if current_time - C.last_error > 30 then
-					local line_count = vim.api.nvim_buf_line_count(C.buf)
-					if line_count > 100 then
-						vim.api.nvim_buf_set_lines(C.buf, 0, line_count - 50, false, {})
-					end
+			local now = os.time()
+			if now - C.last_error > 30 then
+				local line_count = vim.api.nvim_buf_line_count(C.buf)
+				if line_count > 100 then
+					vim.api.nvim_buf_set_lines(C.buf, 0, line_count - 50, false, {})
 				end
-			end)
-		)
+			end
+		end)
 	end
 end
 
