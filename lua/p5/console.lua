@@ -3,7 +3,6 @@ local C = {}
 local core = require("p5.core")
 local project = require("p5.project")
 
-local server = require("p5.server")
 local notify = core.notify
 local is_win = vim.api.nvim_win_is_valid
 local set_opt = vim.api.nvim_set_option_value
@@ -23,6 +22,7 @@ C.last_error = 0
 C.clear_interval = 30000 -- 30 seconds
 
 C.create = function()
+	local server = require("p5.server")
 	if C.win and is_win(C.win) then
 		return C.win
 	end
@@ -104,6 +104,7 @@ C.reconnect = function()
 end
 
 C.show = function(opts)
+	local server = require("p5.server")
 	opts = opts or {}
 	local enter = opts.enter ~= false
 
@@ -177,7 +178,7 @@ C.show = function(opts)
 		return
 	end
 
-	local split_pattern = core.split_commands[pos] or core.split_commands.below
+	local split_pattern = core.split_cmd[pos] or core.split_cmd.below
 	local split_cmd = split_pattern:format(height)
 
 	vim.cmd(split_cmd)

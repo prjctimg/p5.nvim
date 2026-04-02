@@ -9,7 +9,6 @@ local notify = core.notify
 S.config = {
 	port = 8000,
 	auto_start = false,
-	preferred_order = { "python" },
 	live_reload = {
 		enabled = true,
 		port = 12002,
@@ -31,12 +30,12 @@ S.config = {
 
 -- Detect available server options
 S.detect = function()
-	local server_config = core.server_configs.python
-	if core.command_exists(server_config.check) then
-		local plugin_root = core.get_plugin_root()
+	local cfg = core.server_cfg
+	if core.is_cmd(cfg.check) then
+		local plugin_root = core.plugin_root()
 		local server_script = plugin_root .. "/server.py"
 
-		if core.file_exists(server_script) then
+		if core.is_file(server_script) then
 			return "python"
 		else
 			notify("Server script not found: " .. server_script, "warn")
@@ -50,25 +49,25 @@ end
 
 -- Validate server before starting
 S.validate_server = function(server_type, port)
-	local server_config = core.server_configs[server_type]
+	local server_config = core.server_cfg
 	if not server_config then
 		return false, "Unknown server type: " .. tostring(server_type)
 	end
 
-	if not core.command_exists(server_config.check) then
+	if not core.is_cmd(server_config.check) then
 		return false, server_config.cmd .. " is not available"
 	end
 
-	local plugin_root = core.get_plugin_root()
+	local plugin_root = core.plugin_root()
 	local server_script = plugin_root .. "/server.py"
-	if not core.file_exists(server_script) then
+	if not core.is_file(server_script) then
 		return false, "Server script not found: " .. server_script
 	end
 
 	if server_type == "python" then
-		local result = vim.fn.system("python3 -c 'import websockets' 2>/dev/null")
+		vim.fn.system("python3 -c 'import websockets' 2>/dev/null")
 		if vim.v.shell_error ~= 0 then
-			return false, "websockets module not found. Install with: pip install websockets"
+			return false, "websockets module not found. Install with: pipx install websockets"
 		end
 	end
 
@@ -124,9 +123,9 @@ end
 
 -- Get server command
 S.get_cmd = function(server_type, port)
-	local plugin_root = core.get_plugin_root()
+	local plugin_root = core.plugin_root()
 
-	local server_cfg = core.server_configs[server_type]
+	local server_cfg = core.server_cfg[server_type]
 	if not server_cfg then
 		return nil
 	end
@@ -141,7 +140,7 @@ end
 -- Start live server
 S.start = function(port)
 	local buffer_dir = vim.fn.expand("%:p:h")
-	if buffer_dir == "" or not core.dir_exists(buffer_dir) then
+	if buffer_dir == "" or not core.is_dir(buffer_dir) then
 		buffer_dir = vim.fn.getcwd()
 	end
 
@@ -155,7 +154,7 @@ S.start = function(port)
 				if choice == "Create new sketchspace" then
 					vim.cmd("P5 create")
 				elseif choice == "Open recent sketchspace" then
-					local recent = core.get_recent_sketchspaces()
+					local recent = core.read_ss()
 					if #recent == 0 then
 						notify("No recent sketchspaces found", "warn")
 						return

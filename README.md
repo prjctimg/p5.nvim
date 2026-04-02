@@ -30,7 +30,7 @@
 
 - Neovim >= 0.9.0
 - Python 3.7+ (for development server)
-- [websockets](https://pypi.org/project/websockets/) Python package (`python3-websockets` on Debian/Ubuntu, or `pip install websockets`)
+- [websockets](https://pypi.org/project/websockets/) Python package (`python3-websockets` on Debian/Ubuntu, or `sudo pipx install websockets`)
 - curl (for console streaming)
 
 ## Installation 💾
