@@ -1,3 +1,2 @@
 -- Load the plugin
-require("p5").setup()
-
+require("p5")
