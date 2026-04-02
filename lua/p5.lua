@@ -1,1 +1,1 @@
-require("p5")
+require("p5").setup()
