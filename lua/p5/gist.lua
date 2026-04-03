@@ -25,7 +25,7 @@ else
 				for _, p in pairs(patterns) do
 					if file:match(p) then
 						is_unsafe = true
-						return
+						break
 					end
 				end
 				if is_unsafe then

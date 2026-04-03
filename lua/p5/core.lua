@@ -87,6 +87,23 @@ C.asset_dir = function()
 	return C.plugin_root() .. "/assets"
 end
 
+-- Lazy dependency management
+C.require_snacks = function()
+	local ok, lazy_module = pcall(require, "p5.lazy")
+	if ok then
+		return lazy_module.require("snacks")
+	end
+	return nil
+end
+
+C.require_chrome_remote = function()
+	local ok, chrome_remote = pcall(require, "chrome-remote")
+	if ok then
+		return chrome_remote
+	end
+	return nil
+end
+
 -- Validate file exists
 C.validate_file = function(path, name, required)
 	if C.is_file(path) then
