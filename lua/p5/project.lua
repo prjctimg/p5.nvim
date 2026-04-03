@@ -202,7 +202,7 @@ function draw() {
 	vim.fn.mkdir(project_path .. "/assets/libs", "p")
 
 	-- Generate initial libs.js (empty since no contrib libs installed yet)
-	libraries.generate_libs_js(project_path)
+	libraries.bootstrap(project_path)
 end
 
 -- Copy plugin assets to project with bundled types and libraries
