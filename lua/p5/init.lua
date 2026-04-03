@@ -86,9 +86,9 @@ I.setup = function(opts)
 		local config = core.read_workspace_config()
 
 		if config and config.gist then
-			local gist_info = gist.get_project_gist()
+			local gist_info = gist.current()
 			if gist_info and gist_info.id then
-				local ok, err = gist.download_gist(gist_info.id, cwd)
+				local ok, err = gist.fetch(gist_info.id, cwd)
 				if not ok then
 					core.notify("Gist download failed: " .. err .. ". Removing invalid gist URL.", "warn")
 					config.gist = nil
@@ -223,7 +223,7 @@ function draw() {
 					if not require_sketchspace("Sync gist") then
 						return
 					end
-					gist.update_current_gist()
+					gist.update()
 				elseif choice == "Libraries" then
 					if not require_sketchspace("Sync libraries") then
 						return
@@ -235,7 +235,7 @@ function draw() {
 			if not require_sketchspace("Sync gist") then
 				return
 			end
-			gist.update_current_gist()
+			gist.update()
 		elseif target == "libs" or target == "libraries" then
 			if not require_sketchspace("Sync libraries") then
 				return
@@ -251,7 +251,7 @@ function draw() {
 			return
 		end
 		local desc = args[1]
-		gist.create_gist(desc)
+		gist.create(desc)
 	end
 
 	handlers.menu = function()
