@@ -120,13 +120,13 @@ function draw() {
 
 			core.notify("Assets copied successfully", "info")
 
-			libraries.generate_libs_js(cwd)
+			libraries.bootstrap(cwd)
 
 			local updated_config = core.read_workspace_config()
 			if updated_config and updated_config.libs then
 				local lib_names = vim.tbl_keys(updated_config.libs)
 				if #lib_names > 0 then
-					libraries.install_libs(lib_names)
+					libraries.install(lib_names)
 				end
 			end
 
@@ -141,7 +141,7 @@ function draw() {
 
 		local lib_names = #args > 0 and args or nil
 		if not lib_names then
-			local libs = libraries.get_available_libs()
+			local libs = libraries.available()
 			if not libs or #libs == 0 then
 				core.notify("No libraries available", "warn")
 				return
@@ -161,11 +161,11 @@ function draw() {
 			end
 			vim.ui.select(items, { prompt = "Select library to install:" }, function(selected)
 				if selected then
-					libraries.install_libs({ lib_map[selected] or selected })
+					libraries.install({ lib_map[selected] or selected })
 				end
 			end)
 		else
-			libraries.install_libs(lib_names)
+			libraries.install(lib_names)
 		end
 	end
 
@@ -176,7 +176,7 @@ function draw() {
 
 		local lib_names = #args > 0 and args or nil
 		if not lib_names then
-			local installed = libraries.get_installed_libs()
+			local installed = libraries.installed()
 			if #installed == 0 then
 				core.notify("No contrib libraries installed", "warn")
 				return
@@ -189,11 +189,11 @@ function draw() {
 			end
 			vim.ui.select(items, { prompt = "Select library to uninstall:" }, function(selected)
 				if selected then
-					libraries.uninstall_libs({ lib_map[selected] or selected })
+					libraries.uninstall({ lib_map[selected] or selected })
 				end
 			end)
 		else
-			libraries.uninstall_libs(lib_names)
+			libraries.uninstall(lib_names)
 		end
 	end
 
@@ -342,7 +342,7 @@ function draw() {
 
 		local subcmd = args[subcmd_pos]
 		if subcmd == "install" or subcmd == "uninstall" then
-			local libs = libraries.get_available_libs()
+			local libs = libraries.available()
 			return vim.tbl_map(function(l)
 				return l.name
 			end, libs or {})
