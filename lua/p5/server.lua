@@ -144,7 +144,7 @@ S.start = function(port)
 		buffer_dir = vim.fn.getcwd()
 	end
 
-	local is_project = project.is_p5_project(buffer_dir)
+	local is_project = project.is_ss(buffer_dir)
 
 	if not is_project then
 		vim.ui.select(

@@ -51,7 +51,7 @@ I.setup = function(opts)
 	})
 
 	local function require_sketchspace(action)
-		if not project.is_p5_project() then
+		if not project.is_ss() then
 			core.notify(action .. " requires a sketchspace (p5.json)", "error")
 			return false
 		end
@@ -69,11 +69,11 @@ I.setup = function(opts)
 				completion = "dir",
 			}, function(input)
 				if input and input ~= "" then
-					project.create_project(input)
+					project.create(input)
 				end
 			end)
 		else
-			project.create_project(name)
+			project.create(name)
 		end
 	end
 
@@ -112,7 +112,7 @@ function draw() {
 			core.notify("Created default sketch.js", "info")
 		end
 
-		project.copy_assets_to_project(cwd, function(err)
+		project.cpassets(cwd, function(err)
 			if err then
 				core.notify("Failed to copy assets: " .. err, "error")
 				return
@@ -228,7 +228,7 @@ function draw() {
 					if not require_sketchspace("Sync libraries") then
 						return
 					end
-					libraries.update_libs()
+					libraries.update()
 				end
 			end)
 		elseif target == "gist" then
@@ -240,7 +240,7 @@ function draw() {
 			if not require_sketchspace("Sync libraries") then
 				return
 			end
-			libraries.update_libs()
+			libraries.update()
 		else
 			core.notify("Unknown sync target: " .. target .. ". Use 'gist' or 'libs'", "warn")
 		end
