@@ -11,7 +11,7 @@ local required = {
 }
 
 -- Validate bundled assets before project creation
-P.chkassets = function()
+P.validate_bundled_assets = function()
 	local plugin_assets = core.asset_dir()
 	local missing = {}
 
@@ -30,7 +30,7 @@ P.chkassets = function()
 end
 
 -- Validate asset paths in generated config files
-P.chkpaths = function(project_path)
+P.validate_asset_paths = function(project_path)
 	local project_assets = project_path .. "/assets"
 	local missing = {}
 
@@ -49,11 +49,11 @@ P.chkpaths = function(project_path)
 end
 
 -- Create new p5.js project
-P.create = function(name)
+P.create_project = function(name)
 	name = name or "p5-sketch"
 
 	-- Validate bundled assets first
-	if not P.chkassets() then
+	if not P.validate_bundled_assets() then
 		notify("😩 Cannot create project - required assets are missing", "info")
 		return false
 	end
@@ -69,7 +69,7 @@ P.create = function(name)
 	local path = vim.fn.fnamemodify(name, ":p")
 
 	-- Create project files synchronously (fast)
-	P.mkfiles(path, function(err)
+	P.create_files(path, function(err)
 		if err then
 			notify("Failed to create project: " .. err, "info")
 			return
@@ -87,9 +87,9 @@ P.create = function(name)
 end
 
 -- Create project files
-P.mkfiles = function(project_path, callback)
+P.create_files = function(project_path, callback)
 	-- Copy plugin assets to project (async with callback)
-	P.cpassets(project_path, function(err)
+	P.copy_assets_to_project(project_path, function(err)
 		-- Validate asset paths after copying
 		if callback then
 			vim.schedule(function()
@@ -199,11 +199,11 @@ function draw() {
 	vim.fn.mkdir(project_path .. "/assets/libs", "p")
 
 	-- Generate initial libs.js (empty since no contrib libs installed yet)
-	libraries.bootstrap(project_path)
+	libraries.generate_libs_js(project_path)
 end
 
 -- Copy plugin assets to project with bundled types and libraries
-P.cpassets = function(project_path, callback)
+P.copy_assets_to_project = function(project_path, callback)
 	local plugin_assets = core.asset_dir()
 	local project_assets = project_path .. "/assets"
 
@@ -261,7 +261,7 @@ P.cpassets = function(project_path, callback)
 end
 
 -- Check if current directory is a valid p5.js sketchspace
-P.is_ss = function(dir)
+P.is_p5_project = function(dir)
 	local cwd = vim.fs.normalize(dir or vim.fn.getcwd())
 
 	local config_file = cwd .. "/p5.json"

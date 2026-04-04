@@ -108,7 +108,7 @@ C.show = function(opts)
 	opts = opts or {}
 	local enter = opts.enter ~= false
 
-	if not project.is_ss() then
+	if not project.is_p5_project() then
 		notify("Console only works in p5.js projects", "warn")
 		return
 	end

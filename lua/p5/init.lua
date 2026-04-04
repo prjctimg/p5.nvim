@@ -51,7 +51,7 @@ I.setup = function(opts)
 	})
 
 	local function require_sketchspace(action)
-		if not project.is_ss() then
+		if not project.is_p5_project() then
 			core.notify(action .. " requires a sketchspace (p5.json)", "error")
 			return false
 		end
@@ -69,11 +69,11 @@ I.setup = function(opts)
 				completion = "dir",
 			}, function(input)
 				if input and input ~= "" then
-					project.create(input)
+					project.create_project(input)
 				end
 			end)
 		else
-			project.create(name)
+			project.create_project(name)
 		end
 	end
 
@@ -112,7 +112,7 @@ function draw() {
 			core.notify("Created default sketch.js", "info")
 		end
 
-		project.cpassets(cwd, function(err)
+		project.copy_assets_to_project(cwd, function(err)
 			if err then
 				core.notify("Failed to copy assets: " .. err, "error")
 				return
@@ -120,13 +120,13 @@ function draw() {
 
 			core.notify("Assets copied successfully", "info")
 
-			libraries.bootstrap(cwd)
+			libraries.generate_libs_js(cwd)
 
 			local updated_config = core.read_workspace_config()
 			if updated_config and updated_config.libs then
 				local lib_names = vim.tbl_keys(updated_config.libs)
 				if #lib_names > 0 then
-					libraries.install(lib_names)
+					libraries.install_libs(lib_names)
 				end
 			end
 
@@ -141,7 +141,7 @@ function draw() {
 
 		local lib_names = #args > 0 and args or nil
 		if not lib_names then
-			local libs = libraries.available()
+			local libs = libraries.get_available_libs()
 			if not libs or #libs == 0 then
 				core.notify("No libraries available", "warn")
 				return
@@ -161,11 +161,11 @@ function draw() {
 			end
 			vim.ui.select(items, { prompt = "Select library to install:" }, function(selected)
 				if selected then
-					libraries.install({ lib_map[selected] or selected })
+					libraries.install_libs({ lib_map[selected] or selected })
 				end
 			end)
 		else
-			libraries.install(lib_names)
+			libraries.install_libs(lib_names)
 		end
 	end
 
@@ -176,7 +176,7 @@ function draw() {
 
 		local lib_names = #args > 0 and args or nil
 		if not lib_names then
-			local installed = libraries.installed()
+			local installed = libraries.get_installed_libs()
 			if #installed == 0 then
 				core.notify("No contrib libraries installed", "warn")
 				return
@@ -189,11 +189,11 @@ function draw() {
 			end
 			vim.ui.select(items, { prompt = "Select library to uninstall:" }, function(selected)
 				if selected then
-					libraries.uninstall({ lib_map[selected] or selected })
+					libraries.uninstall_libs({ lib_map[selected] or selected })
 				end
 			end)
 		else
-			libraries.uninstall(lib_names)
+			libraries.uninstall_libs(lib_names)
 		end
 	end
 
@@ -228,7 +228,7 @@ function draw() {
 					if not require_sketchspace("Sync libraries") then
 						return
 					end
-					libraries.update()
+					libraries.update_libs()
 				end
 			end)
 		elseif target == "gist" then
@@ -240,7 +240,7 @@ function draw() {
 			if not require_sketchspace("Sync libraries") then
 				return
 			end
-			libraries.update()
+			libraries.update_libs()
 		else
 			core.notify("Unknown sync target: " .. target .. ". Use 'gist' or 'libs'", "warn")
 		end
@@ -342,7 +342,7 @@ function draw() {
 
 		local subcmd = args[subcmd_pos]
 		if subcmd == "install" or subcmd == "uninstall" then
-			local libs = libraries.available()
+			local libs = libraries.get_available_libs()
 			return vim.tbl_map(function(l)
 				return l.name
 			end, libs or {})
