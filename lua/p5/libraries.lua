@@ -23,7 +23,7 @@ local function index()
 end
 
 -- Load libraries from JSON file
-L.libs = function()
+L.load_libs_json = function()
 	local plugin_root = core.plugin_root()
 	local libs_file = plugin_root .. "/libs.json"
 
@@ -34,7 +34,7 @@ L.libs = function()
 	return {}
 end
 
-L.contrib_libs = L.libs()
+L.contrib_libs = L.load_libs_json()
 
 -- Get installed libraries (core + contrib)
 L.load = function()
@@ -58,7 +58,7 @@ L.load = function()
 end
 
 -- Get library info from contrib libs
-L.info = function(lib_name)
+L.get_library_info = function(lib_name)
 	for _, lib in ipairs(L.contrib_libs) do
 		if lib.name == lib_name then
 			return lib
@@ -68,7 +68,7 @@ L.info = function(lib_name)
 end
 
 -- Add library to project
-L.add = function(lib_name, version)
+L.add_library = function(lib_name, version)
 	local config = core.read_workspace_config()
 	if not config then
 		local p5_version = core.p5_version()
@@ -90,7 +90,7 @@ L.add = function(lib_name, version)
 end
 
 -- Get list of installed libraries from project
-L.installed = function()
+L.get_installed_libs = function()
 	local installed = {}
 
 	if core.is_dir(libs()) then
@@ -110,7 +110,7 @@ L.installed = function()
 end
 
 -- Validate and clean broken links in index.html
-L.validate = function()
+L.validate_libs = function()
 	local idx_file = index()
 	if not core.is_file(idx_file) then
 		return { cleaned = 0 }
@@ -154,7 +154,7 @@ L.validate = function()
 end
 
 -- Uninstall libraries (remove files and update config)
-L.uninstall = function(lib_names)
+L.uninstall_libs = function(lib_names)
 	if not lib_names or #lib_names == 0 then
 		core.notify("No libraries specified", "warn")
 		return
@@ -207,7 +207,7 @@ L.uninstall = function(lib_names)
 end
 
 -- Generate static libs.js that reads from p5.json at runtime
-L.bootstrap = function(project_path)
+L.generate_libs_js = function(project_path)
 	local cwd = project_path or vim.fn.getcwd()
 	local l_dir = cwd .. "/" .. L.config.libraries_dir
 	local libs_js = l_dir .. "/libs.js"
@@ -268,7 +268,7 @@ L.bootstrap = function(project_path)
 end
 
 -- Get available libraries for picker
-L.available = function()
+L.get_available_libs = function()
 	local installed = L.load()
 	local items = {}
 
@@ -288,7 +288,7 @@ L.available = function()
 end
 
 -- Validate downloaded file contains actual JavaScript code
-L.chkfile = function(dest)
+L.validate_download = function(dest)
 	if not core.is_file(dest) then
 		return false
 	end
@@ -326,7 +326,7 @@ L.chkfile = function(dest)
 end
 
 -- Download library file from hardcoded CDN URL
-L.fetch = function(lib, dest, callback)
+L.download_library = function(lib, dest, callback)
 	local function done(success)
 		if callback then
 			callback(success)
@@ -339,7 +339,7 @@ L.fetch = function(lib, dest, callback)
 	end
 
 	core.fetch(lib.cdn_url, dest, function(dl_success)
-		if dl_success and L.chkfile(dest) then
+		if dl_success and L.validate_download(dest) then
 			done(true)
 		else
 			done(false)
@@ -348,7 +348,7 @@ L.fetch = function(lib, dest, callback)
 end
 
 -- Download types for library
-L.types = function(lib_name, dest, callback)
+L.download_types = function(lib_name, dest, callback)
 	local types_urls = {
 		ml5 = "https://unpkg.com/ml5@latest/dist/ml5.d.ts",
 		["p5.speech"] = "https://unpkg.com/p5.js-speech@latest/lib/p5.speech.d.ts",
@@ -365,13 +365,13 @@ L.types = function(lib_name, dest, callback)
 end
 
 -- Install libraries with version check
-L.install = function(pkgs)
+L.install_libs = function(pkgs)
 	if not pkgs or #pkgs == 0 then
 		core.notify("No libraries selected", "warn")
 		return
 	end
 
-	L.validate()
+	L.validate_libs()
 
 	vim.fn.mkdir(libs(), "p")
 	vim.fn.mkdir(types(), "p")
@@ -379,7 +379,7 @@ L.install = function(pkgs)
 	local to_install = {}
 
 	for _, pkg in ipairs(pkgs) do
-		local lib = L.info(pkg)
+		local lib = L.get_library_info(pkg)
 		if lib then
 			table.insert(to_install, lib)
 		end
@@ -404,7 +404,7 @@ L.do_install = function(to_install)
 		if completed >= pending then
 			-- Add each installed library to config
 			for _, name in ipairs(installed_names) do
-				L.add(name)
+				L.add_library(name)
 			end
 			-- Note: libs.js reads from p5.json at runtime
 
@@ -424,10 +424,10 @@ L.do_install = function(to_install)
 		local dest = libs() .. "/" .. lib_name .. ".js"
 		local types_dest = types() .. "/" .. lib_name .. ".d.ts"
 
-		L.fetch(lib, dest, function(success)
+		L.download_library(lib, dest, function(success)
 			if success then
 				table.insert(installed_names, lib_name)
-				L.types(lib_name, types_dest, function()
+				L.download_types(lib_name, types_dest, function()
 					check_done()
 				end)
 			else
@@ -439,7 +439,7 @@ L.do_install = function(to_install)
 end
 
 -- Update all installed libraries
-L.update = function()
+L.update_libs = function()
 	local installed = L.load()
 	if #installed == 0 then
 		core.notify("No libraries installed", "warn")
@@ -447,7 +447,7 @@ L.update = function()
 	end
 
 	core.notify("Updating " .. #installed .. " libraries...", "info")
-	L.install(installed)
+	L.install_libs(installed)
 end
 
 L.setup = function(config)
