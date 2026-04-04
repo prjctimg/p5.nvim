@@ -65,8 +65,23 @@ S.validate_server = function(server_type, port)
 	end
 
 	if server_type == "python" then
-		vim.fn.system("python3 -c 'import websockets' 2>/dev/null")
-		if vim.v.shell_error ~= 0 then
+		local has_websockets = false
+		
+		-- Check via pipx first (most common installation method)
+		if core.is_cmd("pipx") then
+			local pipx_list = vim.fn.system("pipx list 2>/dev/null")
+			if pipx_list:match("websockets") then
+				has_websockets = true
+			end
+		end
+		
+		-- Fallback: check system Python
+		if not has_websockets then
+			vim.fn.system("python3 -c 'import websockets' 2>/dev/null")
+			has_websockets = vim.v.shell_error == 0
+		end
+		
+		if not has_websockets then
 			return false, "websockets module not found. Install with: pipx install websockets"
 		end
 	end
@@ -144,7 +159,7 @@ S.start = function(port)
 		buffer_dir = vim.fn.getcwd()
 	end
 
-	local is_project = project.is_ss(buffer_dir)
+	local is_project = project.is_p5_project(buffer_dir)
 
 	if not is_project then
 		vim.ui.select(
