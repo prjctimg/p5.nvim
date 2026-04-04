@@ -1,3 +1,6 @@
+
+![](./logo.png)
+
 # p5.nvim 🎨
 
 > Better editor support for p5.js sketchspaces in Neovim.
