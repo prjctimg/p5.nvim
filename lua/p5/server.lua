@@ -65,24 +65,9 @@ S.validate_server = function(server_type, port)
 	end
 
 	if server_type == "python" then
-		local has_websockets = false
-		
-		-- Check via pipx first (most common installation method)
-		if core.is_cmd("pipx") then
-			local pipx_list = vim.fn.system("pipx list 2>/dev/null")
-			if pipx_list:match("websockets") then
-				has_websockets = true
-			end
-		end
-		
-		-- Fallback: check system Python
-		if not has_websockets then
-			vim.fn.system("python3 -c 'import websockets' 2>/dev/null")
-			has_websockets = vim.v.shell_error == 0
-		end
-		
-		if not has_websockets then
-			return false, "websockets module not found. Install with: pipx install websockets"
+		vim.fn.system("python3 -c 'import websockets' 2>/dev/null")
+		if vim.v.shell_error ~= 0 then
+			return false, "websockets module not found. Install with: pip install websockets"
 		end
 	end
 
@@ -137,19 +122,15 @@ S.find = function(start_port)
 end
 
 -- Get server command
-S.get_cmd = function(server_type, port)
+S.get_cmd = function(port)
 	local plugin_root = core.plugin_root()
 
-	local server_cfg = core.server_cfg[server_type]
+	local server_cfg = core.server_cfg
 	if not server_cfg then
 		return nil
 	end
 
-	if server_type == "python" then
-		return { "python3", plugin_root .. "/server.py", tostring(port) }
-	end
-
-	return nil
+	return { "python3", plugin_root .. "/server.py", tostring(port) }
 end
 
 -- Start live server
@@ -215,7 +196,7 @@ S.start = function(port)
 	S.port = port
 	S.type = type
 
-	local cmd = S.get_cmd(type, port)
+	local cmd = S.get_cmd(port)
 	if not cmd then
 		notify("Failed to get server command for: " .. type, "error")
 		return
@@ -230,10 +211,12 @@ S.start = function(port)
 				-- Handle specific error cases
 				if error_msg:match("Address already in use") then
 					notify("Port " .. port .. " is already in use. Try a different port.", "error")
-				elseif error_msg:match("Permission denied") then
+				elseif error_msg:match("Permission denied") or error_msg:match("EACCES") then
 					notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "error")
-				elseif error_msg:match("EACCES") then
-					notify("Access denied. Check file permissions.", "error")
+				elseif error_msg:match("ModuleNotFoundError") or error_msg:match("ImportError") then
+					notify("Server import error: " .. error_msg, "error")
+				else
+					notify("Server warning: " .. error_msg, "warn")
 				end
 			end
 		end,
