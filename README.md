@@ -353,7 +353,7 @@ Library installation fails or downloads timeout.
 
 3. Verify firewall isn't blocking `localhost` connections
 
-4. Check that you're in a valid sketchspace (has p5.json)
+4. Check that you're in a valid sketchspace (has `p5.json`)
 
 ### Gist Upload/Sync Fails
 
@@ -373,7 +373,7 @@ Library installation fails or downloads timeout.
    gh auth login
    ```
 
-3. Verify gist URL in p5.json is valid:
+3. Verify gist URL in `p5.json` is valid:
 
    ```vim
    :edit p5.json
