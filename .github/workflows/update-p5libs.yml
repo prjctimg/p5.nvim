@@ -63,10 +63,10 @@ jobs:
           print(f"Found {len(libs)} libraries")
           EOF
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          commit-message: "chore: update p5.js libraries"
-          title: "Update p5.js Libraries"
-          body: "Automated update of p5.js contributor libraries"
-          branch: "feat/update-libs"
+      - name: Commit changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add libs.json
+          git diff --staged --exit-code || git commit -m "chore: update p5.js libraries"
+          git push
