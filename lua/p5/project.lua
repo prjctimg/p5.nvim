@@ -4,26 +4,27 @@ local core = require("p5.core")
 local libraries = require("p5.libraries")
 local notify = core.notify
 
-local required = {
-	"libs/p5.js",
-	"libs/p5.sound.js",
-	"types/p5.d.ts",
-}
-
-P.create_project = function(name)
+P.create_project = function(name, major)
+	major = major or 2
 	name = name or "p5-sketch"
 
-	local plugin_assets = core.asset_dir()
-	local missing = {}
-	for _, asset in ipairs(required) do
-		if not core.is_file(plugin_assets .. "/" .. asset) then
-			table.insert(missing, asset)
+	if major == 1 then
+		local required_1x = {
+			"libs/p5.js",
+			"libs/p5.sound.js",
+			"types/p5.d.ts",
+		}
+		local missing = {}
+		for _, asset in ipairs(required_1x) do
+			if not core.is_file(core.asset_dir() .. "/" .. asset) then
+				table.insert(missing, asset)
+			end
 		end
-	end
-	if #missing > 0 then
-		notify("Missing required assets: " .. table.concat(missing, ", "), "error")
-		notify("😩 Cannot create project - required assets are missing", "info")
-		return false
+		if #missing > 0 then
+			notify("Missing required assets: " .. table.concat(missing, ", "), "error")
+			notify("😩 Cannot create project - required assets are missing", "info")
+			return false
+		end
 	end
 
 	if vim.fn.isdirectory(name) ~= 0 then
@@ -31,10 +32,52 @@ P.create_project = function(name)
 		return false
 	end
 
+	if major == 2 and not core.is_file(core.asset_dir() .. "/libs/p5-v2.js") then
+		notify("Downloading p5.js 2.x assets...", "info")
+		local libs_dir = core.asset_dir() .. "/libs"
+		local types_dir = core.asset_dir() .. "/types"
+		core.fetch(
+			"https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.0/p5.min.js",
+			libs_dir .. "/p5-v2.js",
+			function(ok)
+				if ok then
+					core.fetch(
+						"https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.0/p5.sound.min.js",
+						libs_dir .. "/p5-v2.sound.js",
+						function(ok2)
+							if ok2 then
+								core.fetch(
+									"https://raw.githubusercontent.com/processing/p5.js-website/next/types/p5.d.ts",
+									types_dir .. "/p5-v2.d.ts",
+									function(ok3)
+										if ok3 then
+											create_project_continue(name, major)
+										else
+											notify("Failed to download p5.js 2.x types", "error")
+										end
+									end
+								)
+							else
+								notify("Failed to download p5.js 2.x sound", "error")
+							end
+						end
+					)
+				else
+					notify("Failed to download p5.js 2.x core", "error")
+				end
+			end
+		)
+		return
+	end
+
+	create_project_continue(name, major)
+end
+
+local function create_project_continue(name, major)
 	core.mkdir(name)
 	local path = vim.fn.fnamemodify(name, ":p")
 
-	P.copy_assets_to_project(path, function(err)
+	P.copy_assets_to_project(path, major, function(err)
 		if err then
 			notify("Failed to create project: " .. err, "info")
 			return
@@ -73,7 +116,7 @@ function draw() {
     "target": "ES2022",
     "module": "ESNext", 
     "lib": ["DOM", "ES2022"],
-    "types": ["./assets/types/p5.d.ts"],
+    "types":["./assets/types/p5.d.ts"],
     "checkJs": true,
     "strict": false,
     "allowJs": true,
@@ -94,7 +137,7 @@ function draw() {
     "target": "ES2022",
     "module": "ESNext",
     "lib": ["DOM", "ES2022"],
-    "types": ["./assets/types/p5.d.ts"],
+    "types":["./assets/types/p5.d.ts"],
     "strict": true,
     "allowJs": true,
     "checkJs": false,
@@ -117,7 +160,8 @@ function draw() {
 		vim.fn.writefile(vim.split(tsconfig, "\n"), path .. "/tsconfig.json")
 
 		local p5_config = {
-			version = core.p5_version(),
+			version = core.p5_version(major),
+			major = major,
 			libs = {},
 			includes = { "sketch.js" },
 		}
@@ -133,14 +177,14 @@ function draw() {
 	end)
 end
 
--- Copy plugin assets to project with bundled types and libraries
-P.copy_assets_to_project = function(project_path, callback)
+P.copy_assets_to_project = function(project_path, major, callback)
+	major = major or 2
 	local plugin_assets = core.asset_dir()
 	local project_assets = project_path .. "/assets"
 
-core.mkdir(project_assets)
-core.mkdir(project_assets .. "/types")
-core.mkdir(project_assets .. "/libs")
+	core.mkdir(project_assets)
+	core.mkdir(project_assets .. "/types")
+	core.mkdir(project_assets .. "/libs")
 
 	local pending_copies = 0
 	local copy_errors = {}
@@ -174,10 +218,13 @@ core.mkdir(project_assets .. "/libs")
 		end
 	end
 
-	try_copy(plugin_assets .. "/types/p5.d.ts", project_assets .. "/types/p5.d.ts")
+	local types_file = major == 1 and "p5.d.ts" or "p5-v2.d.ts"
+	try_copy(plugin_assets .. "/types/" .. types_file, project_assets .. "/types/p5.d.ts")
 
 	if core.is_dir(plugin_assets .. "/libs") then
-		for _, file in ipairs({ "p5.js", "p5.sound.js" }) do
+		local p5_file = major == 1 and "p5.js" or "p5-v2.js"
+		local sound_file = major == 1 and "p5.sound.js" or "p5-v2.sound.js"
+		for _, file in ipairs({ p5_file, sound_file }) do
 			try_copy(plugin_assets .. "/libs/" .. file, project_assets .. "/libs/" .. file)
 		end
 	end
@@ -191,7 +238,6 @@ core.mkdir(project_assets .. "/libs")
 	end
 end
 
--- Check if current directory is a valid p5.js sketchspace
 P.is_p5_project = function(dir)
 	local cwd = vim.fs.normalize(dir or vim.fn.getcwd())
 
