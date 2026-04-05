@@ -1,0 +1,2 @@
+- During project creation add an extra prompt menu allowing users to choose the latest 1.x.x release or the new 2.x.x p5.js. This must be shown after the user types the project name.
+- Fix the manpages to use the license defined in the Readme

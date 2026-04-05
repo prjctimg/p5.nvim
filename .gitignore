@@ -1,31 +1,10 @@
 # Ignore static assets - these should be fetched by workflows
-assets/core/p5.js
-assets/core/p5.min.js
-assets/core/p5.sound.js
-assets/core/p5.sound.min.js
-assets/types/p5.d.ts
-assets/types/constants.d.ts
-assets/types/literals.d.ts
+assets/
 
-# Ignore test projects (always use same name for testing)
-test-project/
-p5-demo/
-
-# Ignore cache directories
 .cache/
 __pycache__/
-
-# Ignore OS generated files
 .DS_Store
 Thumbs.db
-
-# Ignore editor backup files
-*~
 *.swp
 *.swo
-
-# Ignore node modules (if any)
-node_modules/
-
-# Ignore temporary files
 *.tmp

@@ -28,7 +28,7 @@ C.create = function()
 	end
 
 	if not (server.server_job and server.port) then
-		notify("Console requires a running server first", "warn")
+		notify("Console requires a running server first", "info")
 		return nil
 	end
 
@@ -72,10 +72,10 @@ C.create = function()
 			if exit_code ~= 0 and C.win and vim.api.nvim_win_is_valid(C.win) then
 				vim.schedule(function()
 					if connected then
-						notify("Console disconnected from browser", "warn")
+						notify("🔌 Console disconnected from browser", "info")
 						C.reconnect()
 					else
-						notify("Console connection failed", "error")
+						notify("☹️ Console connection failed", "warn")
 					end
 				end)
 			end
@@ -88,7 +88,7 @@ end
 
 C.reconnect = function()
 	if C.attempts >= C.max_attempts then
-		notify("Console reconnection failed: max attempts reached", "error")
+		notify(" ☹️ Console reconnection failed: max attempts reached", "warn")
 		return
 	end
 
@@ -109,12 +109,12 @@ C.show = function(opts)
 	local enter = opts.enter ~= false
 
 	if not project.is_p5_project() then
-		notify("Console only works in p5.js projects", "warn")
+		notify("📺 Console only works in p5.js projects", "warn")
 		return
 	end
 
 	if not server.server_job then
-		notify("Start server first with :P5 server", "info")
+		notify("📺 Start server first with :P5 server", "info")
 		return
 	end
 
@@ -168,7 +168,7 @@ C.show = function(opts)
 		C.win = term.win
 		C.buf = term.buf
 		C.auto_clear()
-		notify("Console connected to server on port " .. C.port, "info")
+		notify("📺 Console connected to server on port " .. C.port, "info")
 		return
 	end
 

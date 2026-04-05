@@ -4,14 +4,13 @@ local H = {}
 local function get_core()
 	return require("p5.core")
 end
+local ok = vim.health.ok
+local error = vim.health.error
+local warn = vim.health.warn
 
+local core = get_core()
 H.check_dependencies = function()
 	vim.health.start("Dependencies")
-	local core = get_core()
-	local ok = vim.health.ok
-	local error = vim.health.error
-	local warn = vim.health.warn
-
 	local snacks, _ = core.require_snacks()
 	if snacks then
 		ok("snacks.nvim: available")
@@ -29,9 +28,6 @@ end
 
 H.check_external_tools = function()
 	vim.health.start("External Tools")
-	local core = get_core()
-	local ok = vim.health.ok
-	local warn = vim.health.warn
 
 	if core.is_cmd("curl") then
 		ok("curl: available")
@@ -56,9 +52,6 @@ end
 
 H.check_plugin_env = function()
 	vim.health.start("Plugin Environment")
-	local core = get_core()
-	local ok = vim.health.ok
-	local error = vim.health.error
 
 	local plugin_root = core.plugin_root()
 	if core.validate_dir(plugin_root, "Plugin root", false) then
@@ -77,9 +70,7 @@ end
 
 H.check_workspace = function()
 	vim.health.start("Workspace")
-	local core = get_core()
 	local info = vim.health.info
-	local ok = vim.health.ok
 
 	local cwd = vim.fs.normalize(vim.fn.getcwd())
 	info("Current directory: " .. cwd)
@@ -107,10 +98,6 @@ end
 
 H.check_project_config = function()
 	vim.health.start("Project Configuration")
-	local core = get_core()
-	local ok = vim.health.ok
-	local error = vim.health.error
-	local info = vim.health.info
 
 	local cwd = vim.fs.normalize(vim.fn.getcwd())
 	local config_file = cwd .. "/p5.json"
@@ -137,14 +124,12 @@ H.check_project_config = function()
 			error("p5.json: invalid format")
 		end
 	else
-		info("p5.json: not found - not in a sketchspace")
+		warn("p5.json: not found - not in a sketchspace")
 	end
 end
 
 H.check_neovim = function()
 	vim.health.start("Neovim")
-	local ok = vim.health.ok
-	local warn = vim.health.warn
 
 	local version = vim.version()
 	if version.major > 0 or version.minor >= 9 then
