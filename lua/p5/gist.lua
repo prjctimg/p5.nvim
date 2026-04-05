@@ -77,10 +77,10 @@ else
 			local gist_files = {}
 
 			local gist_temp_dir = vim.fn.stdpath("cache") or (vim.uv.os_tmpdir()) .. "/p5_gist"
-			vim.fn.mkdir(gist_temp_dir, "p")
+			core.mkdir(gist_temp_dir)
 
 			local dir = gist_temp_dir .. "/" .. os.time() .. "_" .. vim.fn.getpid()
-			vim.fn.mkdir(dir, "p")
+			core.mkdir(dir)
 
 			for _, file_name in ipairs(files) do
 				local target_path = dir .. "/" .. file_name
@@ -88,7 +88,7 @@ else
 
 				local parent_dir = vim.fn.fnamemodify(target_path, ":h")
 				if parent_dir ~= dir then
-					vim.fn.mkdir(parent_dir, "p")
+					core.mkdir(parent_dir)
 				end
 
 				vim.fn.system({ "cp", source_path, target_path })
@@ -165,108 +165,6 @@ else
 		end
 	end
 
-	-- Update existing gist
-	-- List gists
-	G.list_gists = function()
-		local result = vim.fn.system({ "gh", "gist", "list", "--limit", "20" })
-		local code = vim.v.shell_error
-
-		if code == 0 then
-			-- Create a new buffer to display gists
-			local buf = vim.api.nvim_create_buf(false, true)
-			vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(result, "\n"))
-			vim.api.nvim_buf_set_name(buf, "p5-gists")
-			vim.api.nvim_set_option_value("filetype", "text", { buf = buf })
-
-			-- Show in new window
-			vim.cmd("split")
-			local win = vim.api.nvim_get_current_win()
-			vim.api.nvim_win_set_buf(win, buf)
-
-			-- Set up keymaps to open gist
-			vim.api.nvim_buf_set_keymap(buf, "n", "<CR>", "", {
-				callback = function()
-					local line = vim.api.nvim_get_current_line()
-					local gist_id = line:match("(%w+)")
-					if gist_id then
-						vim.cmd("bdelete")
-						G.open(gist_id)
-					end
-				end,
-				desc = "Open p5 gist",
-			})
-		else
-			notify("We couldn't find any Gists on your GitHub account 🍂 " .. result, "info")
-		end
-	end
-
-	-- Open gist in browser
-	G.open = function(gist_id)
-		local result = vim.fn.system({ "gh", "gist", "view", gist_id, "--web" })
-		local code = vim.v.shell_error
-
-		if code ~= 0 then
-			notify("😢 Failed to open gist: " .. result, "error")
-		end
-	end
-
-	-- Clone gist as new p5 project
-	G.clone = function(id)
-		if not id then
-			notify("🧐 Gist ID required", "error")
-			return
-		end
-
-		-- Get gist info
-		local result = vim.fn.system({ "gh", "gist", "view", id })
-
-		if vim.v.shell_error ~= 0 then
-			notify("🏃 Failed to get gist info: " .. result, "info")
-			return
-		end
-
-		-- Extract description for project name
-		local desc = result:match("# ([^\n]+)") or "p5-sketch-from-gist"
-		local project = desc:gsub("%s+", "-"):lower()
-
-		-- Create project directory
-		if vim.fn.isdirectory(project) ~= 0 then
-			notify("😅 Directory '" .. project .. "' already exists", "error")
-			return
-		end
-
-		vim.fn.mkdir(project, "p")
-		local project_path = vim.fn.fnamemodify(project, ":p")
-
-		-- Clone gist files
-		result = vim.fn.system({ "gh", "gist", "clone", id, project_path })
-
-		if vim.v.shell_error == 0 then
-			-- Create p5.json if doesn't exist
-			if vim.fn.filereadable(project_path .. "/p5.json") == 0 then
-				local p5_config = {
-					version = "1.9.0",
-					libs = {},
-					includes = { "sketch.js" },
-					gist = {
-						id = id,
-						cloned_at = os.date("%Y-%m-%d"),
-					},
-				}
-
-				vim.fn.writefile(vim.split(vim.fn.json_encode(p5_config), "\n"), project_path .. "/p5.json")
-			end
-
-			-- Open project
-			vim.cmd("edit " .. project_path .. "/sketch.js")
-			notify("🎊 Cloned gist as sketchspace: " .. project, "ok")
-		else
-			-- Clean up failed clone
-			vim.fn.delete(project_path, "rf")
-			notify("🤕 Failed to clone gist: " .. result, "error")
-		end
-	end
-
 	-- Get current gist info from project
 	G.current = function()
 		local _, config = core.find_project_root()
@@ -331,7 +229,7 @@ else
 
 		local temp_base = vim.fn.stdpath("cache") or (vim.uv.os_tmpdir() or "/tmp")
 		local gist_temp_dir = temp_base .. "/p5_gist_update"
-		vim.fn.mkdir(gist_temp_dir, "p")
+		core.mkdir(gist_temp_dir)
 
 		local update_errors = {}
 		for _, file_name in ipairs(files_to_update) do
@@ -425,10 +323,6 @@ else
 		end
 
 		return true, nil
-	end
-
-	G.setup = function(config)
-		G.config = config
 	end
 end
 return G

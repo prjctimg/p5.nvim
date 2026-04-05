@@ -10,96 +10,37 @@ local required = {
 	"types/p5.d.ts",
 }
 
--- Validate bundled assets before project creation
-P.validate_bundled_assets = function()
+P.create_project = function(name)
+	name = name or "p5-sketch"
+
 	local plugin_assets = core.asset_dir()
 	local missing = {}
-
 	for _, asset in ipairs(required) do
 		if not core.is_file(plugin_assets .. "/" .. asset) then
 			table.insert(missing, asset)
 		end
 	end
-
 	if #missing > 0 then
 		notify("Missing required assets: " .. table.concat(missing, ", "), "error")
-		return false
-	end
-
-	return true
-end
-
--- Validate asset paths in generated config files
-P.validate_asset_paths = function(project_path)
-	local project_assets = project_path .. "/assets"
-	local missing = {}
-
-	for _, path in ipairs(required) do
-		if not core.is_file(project_assets .. "/" .. path) then
-			table.insert(missing, path)
-		end
-	end
-
-	if #missing > 0 then
-		notify("Asset path validation failed - missing: " .. table.concat(missing, ", "), "info")
-		return false
-	end
-
-	return true
-end
-
--- Create new p5.js project
-P.create_project = function(name)
-	name = name or "p5-sketch"
-
-	-- Validate bundled assets first
-	if not P.validate_bundled_assets() then
 		notify("😩 Cannot create project - required assets are missing", "info")
 		return false
 	end
 
-	-- Check if directory already exists
 	if vim.fn.isdirectory(name) ~= 0 then
 		notify("😅 Directory '" .. name .. "' already exists", "info")
 		return false
 	end
 
-	-- Create project directory
-	vim.fn.mkdir(name, "p")
+	core.mkdir(name)
 	local path = vim.fn.fnamemodify(name, ":p")
 
-	-- Create project files synchronously (fast)
-	P.create_files(path, function(err)
+	P.copy_assets_to_project(path, function(err)
 		if err then
 			notify("Failed to create project: " .. err, "info")
 			return
 		end
 
-		-- Only notify on final success
-		notify("🎉 Project created: " .. name, "ok")
-
-		-- Change CWD to new project directory
-		vim.api.nvim_set_current_dir(path)
-
-		-- Open sketch.js in editor
-		vim.cmd({ cmd = "edit", args = { path .. "/sketch.js" } })
-	end)
-end
-
--- Create project files
-P.create_files = function(project_path, callback)
-	-- Copy plugin assets to project (async with callback)
-	P.copy_assets_to_project(project_path, function(err)
-		-- Validate asset paths after copying
-		if callback then
-			vim.schedule(function()
-				callback(err)
-			end)
-		end
-	end)
-
-	-- Create index.html
-	local index_html = [[<!DOCTYPE html>
+		local index_html = [[<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -115,11 +56,9 @@ P.create_files = function(project_path, callback)
   <script src="sketch.js"></script>
 </body>
 </html>]]
+		vim.fn.writefile(vim.split(index_html, "\n"), path .. "/index.html")
 
-	vim.fn.writefile(vim.split(index_html, "\n"), project_path .. "/index.html")
-
-	-- Create sketch.js
-	local sketch_js = [[function setup() {
+		local sketch_js = [[function setup() {
   createCanvas(400, 400);
 }
 
@@ -127,11 +66,9 @@ function draw() {
   background(220);
   circle(mouseX, mouseY, 50);
 }]]
+		vim.fn.writefile(vim.split(sketch_js, "\n"), path .. "/sketch.js")
 
-	vim.fn.writefile(vim.split(sketch_js, "\n"), project_path .. "/sketch.js")
-
-	-- Create jsconfig.json for TypeScript support
-	local jsconfig = [[{
+		local jsconfig = [[{
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext", 
@@ -150,11 +87,9 @@ function draw() {
     "node_modules"
   ]
 }]]
+		vim.fn.writefile(vim.split(jsconfig, "\n"), path .. "/jsconfig.json")
 
-	vim.fn.writefile(vim.split(jsconfig, "\n"), project_path .. "/jsconfig.json")
-
-	-- Create tsconfig.json for TypeScript projects
-	local tsconfig = [[{
+		local tsconfig = [[{
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
@@ -179,27 +114,23 @@ function draw() {
     "build"
   ]
 }]]
+		vim.fn.writefile(vim.split(tsconfig, "\n"), path .. "/tsconfig.json")
 
-	vim.fn.writefile(vim.split(tsconfig, "\n"), project_path .. "/tsconfig.json")
+		local p5_config = {
+			version = core.p5_version(),
+			libs = {},
+			includes = { "sketch.js" },
+		}
+		vim.fn.writefile(vim.split(vim.fn.json_encode(p5_config), "\n"), path .. "/p5.json")
 
-	-- Get p5.js version from bundled library
-	local p5_version = core.p5_version()
+		core.mkdir(path .. "/assets/types")
+		core.mkdir(path .. "/assets/libs")
+		libraries.generate_libs_js(path)
 
-	-- Create p5.json with new structure (libs object, includes array)
-	local p5_config = {
-		version = p5_version,
-		libs = {},
-		includes = { "sketch.js" },
-	}
-
-	vim.fn.writefile(vim.split(vim.fn.json_encode(p5_config), "\n"), project_path .. "/p5.json")
-
-	-- Create assets directory
-	vim.fn.mkdir(project_path .. "/assets/types", "p")
-	vim.fn.mkdir(project_path .. "/assets/libs", "p")
-
-	-- Generate initial libs.js (empty since no contrib libs installed yet)
-	libraries.generate_libs_js(project_path)
+		notify("🎉 Project created: " .. name, "ok")
+		vim.api.nvim_set_current_dir(path)
+		vim.cmd({ cmd = "edit", args = { path .. "/sketch.js" } })
+	end)
 end
 
 -- Copy plugin assets to project with bundled types and libraries
@@ -207,9 +138,9 @@ P.copy_assets_to_project = function(project_path, callback)
 	local plugin_assets = core.asset_dir()
 	local project_assets = project_path .. "/assets"
 
-	vim.fn.mkdir(project_assets, "p")
-	vim.fn.mkdir(project_assets .. "/types", "p")
-	vim.fn.mkdir(project_assets .. "/libs", "p")
+core.mkdir(project_assets)
+core.mkdir(project_assets .. "/types")
+core.mkdir(project_assets .. "/libs")
 
 	local pending_copies = 0
 	local copy_errors = {}
@@ -313,10 +244,6 @@ P.is_p5_project = function(dir)
 			includes = includes,
 			project_root = cwd,
 		}
-end
-
-P.setup = function(config)
-	P.config = config
 end
 
 return P

@@ -34,12 +34,37 @@ I.config = {
 I.setup = function(opts)
 	I.config = vim.tbl_deep_extend("force", I.config, opts or {})
 
-	core.setup(I.config)
-	project.setup(I.config)
-	server.setup(I.config)
-	libraries.setup(I.config)
-	console.setup(I.config)
-	gist.setup(I.config)
+	core.config = I.config
+	project.config = I.config
+	server.config = vim.tbl_deep_extend("force", server.config, I.config)
+	libraries.config = vim.tbl_deep_extend("force", libraries.config, I.config)
+	console.config = I.config
+	gist.config = I.config
+
+	local hl = vim.api.nvim_set_hl
+	hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
+	hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
+	hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
+	hl(0, "P5ConsoleLog", { fg = "#6272a4" })
+
+	local has_snacks, snacks = pcall(require, "snacks")
+	if has_snacks then
+		snacks.toggle.new({
+			name = "p5console",
+			get = function()
+				return console.win and vim.api.nvim_win_is_valid(console.win) or false
+			end,
+			set = function(state)
+				if state then
+					console.show()
+				else
+					console.hide()
+				end
+			end,
+		})
+	end
+
+	console.auto_clear()
 
 	vim.api.nvim_create_autocmd("DirChanged", {
 		callback = function(args)

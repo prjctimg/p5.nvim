@@ -162,12 +162,4 @@ describe("p5.gist", function()
       end)
     end)
   end)
-
-  describe("setup", function()
-    it("stores config", function()
-      local config = {test = true}
-      gist.setup(config)
-      assert.is_not_nil(gist.config)
-    end)
-  end)
 end)

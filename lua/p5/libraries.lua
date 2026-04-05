@@ -373,8 +373,8 @@ L.install_libs = function(pkgs)
 
 	L.validate_libs()
 
-	vim.fn.mkdir(libs(), "p")
-	vim.fn.mkdir(types(), "p")
+core.mkdir(libs())
+core.mkdir(types())
 
 	local to_install = {}
 
@@ -448,10 +448,6 @@ L.update_libs = function()
 
 	core.notify("Updating " .. #installed .. " libraries...", "info")
 	L.install_libs(installed)
-end
-
-L.setup = function(config)
-	L.config = vim.tbl_deep_extend("force", L.config, config or {})
 end
 
 return L
