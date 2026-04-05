@@ -1,40 +1,49 @@
 
 ![](./logo.png)
 
-# p5.nvim 🎨
+# `p5.nvim` 🌸
 
 > Better editor support for p5.js sketchspaces in Neovim.
 
 [![Release](https://img.shields.io/github/v/release/prjctimg/p5.nvim)](https://github.com/prjctimg/p5.nvim/releases/latest)
+---
 
-## Table of Contents
+## On this page
 
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Commands](#commands)
-- [Configuration](#configuration)
-- [Auto Commands](#auto-commands)
-- [Keyboard Shortcuts](#keyboard-shortcuts)
-- [Troubleshooting](#troubleshooting)
-- [License](#license)
+- [Features ✨](#features)
+- [Requirements 📋](#requirements-📋)
+- [Installation 💾](#installation-💾)
+- [What's a sketchspace ?](#whats-a-sketchspace)
+- [Quick Start 🚀](#quick-start-🚀)
+- [Commands 📖](#commands-📖)
+- [Configuration ⚡](#configuration)
+- [Auto Commands 🔌](#auto-commands-🔌)
+- [Keyboard Shortcuts ⌨️](#keyboard-shortcuts-️)
+- [Troubleshooting 🔧](#troubleshooting-🔧)
+- [License 📜](#license-📜)
+
+---
 
 ## Features ✨
 
 - **Live Server** 🚀 - Auto-reload preview in browser
 - **Package Management** 📦 - Install contributor libraries
-- **Sketchspace** 📁 - Minimal project structure
+- **Sketchspace** 📁 - Minimal project setup
 - **GitHub Gist** 🔗 - Share sketches (synced to sketchspace)
 - **Console** 📺 - View browser logs in Neovim
 - **p5.js Docs** 📖 - Built-in reference via snacks.picker
 
+---
+
 ## Requirements 📋
 
-- Neovim >= 0.9.0
+- `nvim` >= 0.11.0
 - Python 3.7+ (for development server)
 - [websockets](https://pypi.org/project/websockets/) Python package (`python3-websockets` on Debian/Ubuntu, or `sudo pipx install websockets`)
-- curl (for console streaming)
+- `curl` (for console streaming)
+- `lsof` (checking ports)
+
+---
 
 ## Installation 💾
 
@@ -51,6 +60,36 @@
 }
 ```
 
+---
+
+## What's a sketchspace ?
+
+A directory that has a `p5.json` file is called a `sketchspace`. The file looks like this:
+
+```json
+{
+  "version": "1.9.0",
+  "libs": {
+    "ml5": "latest"
+  },
+  "includes": ["sketch.js"],
+  "gist": "https://gist.github.com/..."
+}
+```
+
+- `version`: p5.js version to use
+- `libs`: Object with library names as keys and their versions as values
+- `includes`: Files to include in the Gist (default: `["sketch.js"]`)
+- `gist`: URL of associated GitHub Gist (optional)
+
+> [!important]
+>
+> This file is needed for setting up and running `sketchspaces`.
+>
+> It currently only works with this plugin.
+
+---
+
 ## Quick Start 🚀
 
 ```vim
@@ -59,7 +98,7 @@
 :P5 console
 ```
 
-Or use the interactive picker:
+---
 
 ## Commands 📖
 
@@ -72,7 +111,7 @@ Create a new sketchspace.
 :P5 create
 ```
 
-[![asciicast](https://asciinema.org/a/795753.svg)](https://asciinema.org/a/795753)
+[![P5 create](https://asciinema.org/a/795753.svg)](https://asciinema.org/a/795753)
 
 ---
 
@@ -85,8 +124,6 @@ Downloads files from gist (if configured), creates default sketch.js if missing,
 ```vim
 :P5 setup
 ```
-
-[![asciicast](https://img.shields.io/badge/asciinema-demo-blue)](https://asciinema.org)
 
 ---
 
@@ -134,7 +171,7 @@ Toggle browser console to view console.log, errors, and warnings in Neovim.
 :P5 console
 ```
 
-[![asciicast](https://asciinema.org/a/801611.svg)](https://asciinema.org/a/801611)
+[![P5 console](https://asciinema.org/a/801611.svg)](https://asciinema.org/a/801611)
 
 ---
 
@@ -148,7 +185,7 @@ Sync gist or libraries.
 :P5 sync
 ```
 
-[![asciicast](https://asciinema.org/a/801610.svg)](https://asciinema.org/a/801610)
+[![P5 sync](https://asciinema.org/a/801610.svg)](https://asciinema.org/a/801610)
 
 ---
 
@@ -161,7 +198,7 @@ Create a GitHub Gist from your sketchspace.
 :P5 gist
 ```
 
-[![asciicast](https://asciinema.org/a/799472.svg)](https://asciinema.org/a/799472)
+[![P5 gist](https://asciinema.org/a/799472.svg)](https://asciinema.org/a/799472)
 
 ---
 
@@ -212,6 +249,8 @@ require("p5").setup({
 })
 ```
 
+---
+
 ## Auto Commands 🔌
 
 Auto-start server when opening a sketch.js file:
@@ -233,9 +272,11 @@ vim.api.nvim_create_autocmd({ "User", "P5ServerStarted" }, {
 })
 ```
 
+---
+
 ## Keyboard Shortcuts ⌨️
 
-Recommended keybindings using `<leader>p` prefix:
+Example keybindings using `<leader>p` prefix:
 
 ```lua
 -- General
@@ -262,6 +303,8 @@ vim.keymap.set("n", "<leader>pgg", ":P5 sync gist<CR>", { desc = "Sync gist" })
 vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
 ```
 
+---
+
 ## Troubleshooting 🔧
 
 ### Server Won't Start
@@ -284,13 +327,11 @@ vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
 
 3. Try a different port:
 
-   ```vim
+```vim
    :P5 server 8080
-   ```
+```
 
-4. Check Neovim notifications for specific error messages
-
----
+1. Check Neovim notifications for specific error messages
 
 ### Downloads Not Working
 
@@ -310,11 +351,9 @@ Library installation fails or downloads timeout.
    curl -I https://cdnjs.cloudflare.com
    ```
 
-3. Verify firewall isn't blocking localhost connections
+3. Verify firewall isn't blocking `localhost` connections
 
 4. Check that you're in a valid sketchspace (has p5.json)
-
----
 
 ### Gist Upload/Sync Fails
 
@@ -342,15 +381,13 @@ Library installation fails or downloads timeout.
 
 4. For sync failures, the gist may have been deleted - run `:P5 gist` to create a new one
 
----
-
 ### Library Install/Uninstall Fails
 
 `:P5 install` or `:P5 uninstall` shows an error.
 
 **Solutions:**
 
-1. Verify you're in a sketchspace (has p5.json):
+1. Verify you're in a sketchspace (directory with a `p5.json` file):
 
    ```bash
    ls p5.json
@@ -370,29 +407,11 @@ Library installation fails or downloads timeout.
 
 ---
 
-### p5.json Format
-
-```json
-{
-  "version": "1.9.0",
-  "libs": {
-    "ml5": "latest"
-  },
-  "includes": ["sketch.js"],
-  "gist": "https://gist.github.com/..."
-}
-```
-
-- `version`: p5.js version to use
-- `libs`: Object with library names as keys and their versions as values
-- `includes`: Files to include in the Gist (default: `["sketch.js"]`)
-- `gist`: URL of associated GitHub Gist (optional)
-
----
-
-You can also find the project's devlog [here](https://dvlg.prjctimg.me/devlogs/p5.nvim)
-
 > ## License 📜
 
 > (c) 2026, [Dean Tarisai](https://prjctimg.me)
+>
 > This is free software, released under the GPL-3.0 license.
+
+---
+---

@@ -229,7 +229,7 @@ end
 
 S.stop_server = function()
 	if not S.server_job then
-		notify("No server running", "warn")
+		notify("No server running", "info")
 		return
 	end
 
