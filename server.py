@@ -558,7 +558,8 @@ class HTTPServer:
                 pass
         
         libs = config.get('libs', {})
-        version = config.get('version', '1.9.0')
+        major = config.get('major', 2)
+        version = config.get('version', '2.0.0' if major == 2 else '1.9.0')
         
         # Auto-create sketch.js if missing
         sketch_js_path = os.path.join(self.directory, 'sketch.js')

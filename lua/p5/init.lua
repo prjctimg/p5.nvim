@@ -94,11 +94,21 @@ I.setup = function(opts)
 				completion = "dir",
 			}, function(input)
 				if input and input ~= "" then
-					project.create_project(input)
+					vim.ui.select({"Latest (2.x)", "Legacy (1.x)"}, {
+						prompt = "Choose p5.js version:",
+						default = 1,
+					}, function(choice)
+						local major = choice and choice:match("^Legacy") and 1 or 2
+						project.create_project(input, major)
+					end)
 				end
 			end)
 		else
-			project.create_project(name)
+			if name == "--1" or name == "--1.x" then
+				project.create_project(args[2], 1)
+			else
+				project.create_project(name, 2)
+			end
 		end
 	end
 

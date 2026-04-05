@@ -249,16 +249,18 @@ C.fetch = function(url, dest, callback, options)
 end
 
 -- Get p5 version from bundled library
-C.p5_version = function()
-	local p5 = C.asset_dir() .. "/libs/p5.js"
+C.p5_version = function(major)
+	major = major or 2
+	local p5_file = major == 1 and "p5.js" or "p5-v2.js"
+	local p5 = C.asset_dir() .. "/libs/" .. p5_file
 	if C.is_file(p5) then
 		local lines = fn.readfile(p5)
 		if lines and #lines > 0 then
 			local version = lines[1]:match("p5%.js v([%d%.]+)")
-			return version or "unknown"
+			return version or (major == 2 and "2.0.0" or "1.9.0")
 		end
 	end
-	return "unknown"
+	return major == 2 and "2.0.0" or "1.9.0"
 end
 
 -- Add recent sketchspaces
