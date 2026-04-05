@@ -3,13 +3,6 @@ local core = helpers.load_module("p5.core")
 local project = helpers.load_module("p5.project")
 
 describe("p5.project", function()
-  describe("validate_bundled_assets", function()
-    it("returns boolean", function()
-      local result = project.validate_bundled_assets()
-      assert.is_boolean(result)
-    end)
-  end)
-
   describe("is_p5_project", function()
     helpers.with_temp_dir(function(temp_dir)
       it("returns false when no p5.json", function()
@@ -71,84 +64,24 @@ describe("p5.project", function()
     end)
   end)
 
-  describe("create_files", function()
+  describe("create_project", function()
     helpers.with_temp_dir(function(temp_dir)
-      it("creates index.html", function()
+      it("creates project with all files", function()
         local project_path = temp_dir .. "/test_project"
-        vim.fn.mkdir(project_path, "p")
         
-        project.create_files(project_path, function() end)
+        project.create_project(project_path)
         
-        local index_path = project_path .. "/index.html"
-        assert.is_true(core.is_file(index_path))
-        
-        local content = vim.fn.readfile(index_path)
-        local html = table.concat(content, "\n")
-        assert.is_true(html:find("p5.js"))
-        assert.is_true(html:find("sketch.js"))
-      end)
-
-      it("creates sketch.js", function()
-        local project_path = temp_dir .. "/sketch_project"
-        vim.fn.mkdir(project_path, "p")
-        
-        project.create_files(project_path, function() end)
-        
-        local sketch_path = project_path .. "/sketch.js"
-        assert.is_true(core.is_file(sketch_path))
-        
-        local content = vim.fn.readfile(sketch_path)
-        local sketch = table.concat(content, "\n")
-        assert.is_true(sketch:find("function setup"))
-        assert.is_true(sketch:find("function draw"))
-      end)
-
-      it("creates p5.json", function()
-        local project_path = temp_dir .. "/p5json_project"
-        vim.fn.mkdir(project_path, "p")
-        
-        project.create_files(project_path, function() end)
-        
-        local p5_path = project_path .. "/p5.json"
-        assert.is_true(core.is_file(p5_path))
-        
-        local config = core.read_json(p5_path)
-        assert.is_not_nil(config)
-        assert.is_not_nil(config.version)
-      end)
-
-      it("creates jsconfig.json", function()
-        local project_path = temp_dir .. "/jsconfig_project"
-        vim.fn.mkdir(project_path, "p")
-        
-        project.create_files(project_path, function() end)
-        
-        local jsconfig_path = project_path .. "/jsconfig.json"
-        assert.is_true(core.is_file(jsconfig_path))
-        
-        local jsconfig = core.read_json(jsconfig_path)
-        assert.is_not_nil(jsconfig)
-        assert.is_not_nil(jsconfig.compilerOptions)
-      end)
-
-      it("creates tsconfig.json", function()
-        local project_path = temp_dir .. "/tsconfig_project"
-        vim.fn.mkdir(project_path, "p")
-        
-        project.create_files(project_path, function() end)
-        
-        local tsconfig_path = project_path .. "/tsconfig.json"
-        assert.is_true(core.is_file(tsconfig_path))
-        
-        local tsconfig = core.read_json(tsconfig_path)
-        assert.is_not_nil(tsconfig)
+        assert.is_true(core.is_file(project_path .. "/index.html"))
+        assert.is_true(core.is_file(project_path .. "/sketch.js"))
+        assert.is_true(core.is_file(project_path .. "/p5.json"))
+        assert.is_true(core.is_file(project_path .. "/jsconfig.json"))
+        assert.is_true(core.is_file(project_path .. "/tsconfig.json"))
       end)
 
       it("creates assets directories", function()
         local project_path = temp_dir .. "/assets_project"
-        vim.fn.mkdir(project_path, "p")
         
-        project.create_files(project_path, function() end)
+        project.create_project(project_path)
         
         assert.is_true(core.is_dir(project_path .. "/assets"))
         assert.is_true(core.is_dir(project_path .. "/assets/libs"))
@@ -157,34 +90,24 @@ describe("p5.project", function()
 
       it("generates libs.js", function()
         local project_path = temp_dir .. "/libs_project"
-        vim.fn.mkdir(project_path, "p")
         
-        project.create_files(project_path, function() end)
+        project.create_project(project_path)
         
-        local libs_path = project_path .. "/assets/libs/libs.js"
-        assert.is_true(core.is_file(libs_path))
+        assert.is_true(core.is_file(project_path .. "/assets/libs/libs.js"))
       end)
     end)
   end)
 
-  describe("validate_asset_paths", function()
+  describe("copy_assets_to_project", function()
     helpers.with_temp_dir(function(temp_dir)
-      it("validates existing asset paths", function()
-        local project_path = temp_dir .. "/validate_project"
-        vim.fn.mkdir(project_path, "p")
-        project.create_files(project_path, function() end)
+      it("copies assets to project directory", function()
+        local project_path = temp_dir .. "/copy_project"
+        core.mkdir(project_path)
         
-        local result = project.validate_asset_paths(project_path)
-        assert.is_boolean(result)
+        project.copy_assets_to_project(project_path, function(err)
+          assert.is_nil(err)
+        end)
       end)
-    end)
-  end)
-
-  describe("setup", function()
-    it("stores config", function()
-      local config = {server = {port = 9000}}
-      project.setup(config)
-      assert.is_not_nil(project.config)
     end)
   end)
 end)

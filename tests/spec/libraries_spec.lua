@@ -276,18 +276,4 @@ describe("p5.libraries", function()
       end)
     end)
   end)
-
-  describe("setup", function()
-    it("merges config with defaults", function()
-      local config = {
-        libraries_dir = "custom/libs",
-        types_dir = "custom/types"
-      }
-      libraries.setup(config)
-      
-      assert.is_not_nil(libraries.config)
-      assert.are.equal("custom/libs", libraries.config.libraries_dir)
-      assert.are.equal("custom/types", libraries.config.types_dir)
-    end)
-  end)
 end)

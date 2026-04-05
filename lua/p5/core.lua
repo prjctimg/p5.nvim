@@ -33,6 +33,10 @@ C.is_dir = function(path)
 	return fn.isdirectory(path) == 1
 end
 
+C.mkdir = function(path)
+	fn.mkdir(path, "p")
+end
+
 -- Read JSON file safely
 C.read_json = function(path)
 	if not C.is_file(path) then
@@ -92,14 +96,6 @@ C.require_snacks = function()
 	local ok, lazy_module = pcall(require, "p5.lazy")
 	if ok then
 		return lazy_module.require("snacks")
-	end
-	return nil
-end
-
-C.require_chrome_remote = function()
-	local ok, chrome_remote = pcall(require, "chrome-remote")
-	if ok then
-		return chrome_remote
 	end
 	return nil
 end
@@ -292,11 +288,6 @@ C.purge_ss = function()
 	end
 	C.write_ss(cleaned)
 	return cleaned
-end
-
--- Setup function
-C.setup = function(config)
-	C.config = config
 end
 
 return C

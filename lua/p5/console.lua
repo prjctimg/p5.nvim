@@ -219,35 +219,6 @@ C.clear = function()
 	end
 end
 
-C.setup = function(config)
-	C.config = config
-
-	local hl = vim.api.nvim_set_hl
-	hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
-	hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
-	hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
-	hl(0, "P5ConsoleLog", { fg = "#6272a4" })
-
-	-- Register toggle with snacks.toggle if available
-	if has_snacks then
-		snacks.toggle.new({
-			name = "p5console",
-			get = function()
-				return C.win and is_win(C.win) or false
-			end,
-			set = function(state)
-				if state then
-					C.show()
-				else
-					C.hide()
-				end
-			end,
-		})
-	end
-
-	C.auto_clear()
-end
-
 C.auto_clear = function()
 	if C.timer then
 		C.timer:close()
