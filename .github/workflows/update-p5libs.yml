@@ -8,8 +8,6 @@ on:
 jobs:
   update-libs:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
 
@@ -20,39 +18,87 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests beautifulsoup4
+          pip install pyyaml requests
 
       - name: Scrape libraries
         run: |
           python << 'EOF'
           import requests
-          from bs4 import BeautifulSoup
+          import yaml
           import json
-          import re
+          import hashlib
           from datetime import datetime
+          from concurrent.futures import ThreadPoolExecutor, as_completed
 
-          url = "https://p5js.org/libraries/"
-          response = requests.get(url)
-          soup = BeautifulSoup(response.text, "html.parser")
+          LIBS_URL = "https://api.github.com/repos/processing/p5.js-website/contents/src/content/libraries/en"
+          CDN_BASE = "https://cdn.jsdelivr.net/npm"
+          BRANCH = "main"
+
+          def get_file_content(url):
+              resp = requests.get(url, timeout=30)
+              resp.raise_for_status()
+              return resp.text
+
+          def get_file_sha256(url):
+              resp = requests.get(url, timeout=60)
+              resp.raise_for_status()
+              return hashlib.sha256(resp.content).hexdigest()
+
+          # Fetch library list from p5.js-website
+          resp = requests.get(LIBS_URL, params={"ref": BRANCH}, timeout=30)
+          resp.raise_for_status()
+          files = resp.json()
+
+          # Filter YAML files
+          yaml_files = [f for f in files if f["name"].endswith(".yaml")]
+
+          print(f"Found {len(yaml_files)} library definitions")
 
           libs = []
-          for card in soup.select(".library-card, .col-lg-4, .card"):
-              name_elem = card.select_one("h3, .card-title, h5")
-              desc_elem = card.select_one("p, .card-text")
-              
-              if name_elem:
-                  name = name_elem.get_text(strip=True)
-                  description = desc_elem.get_text(strip=True) if desc_elem else ""
-                  
-                  libs.append({
-                      "name": name,
-                      "description": description,
-                      "category": "",
-                      "github_repo": "",
-                      "github_release": "latest",
-                      "asset_pattern": "",
-                      "cdn_fallback": ""
-                  })
+          skipped = []
+
+          def process_library(f):
+              try:
+                  yaml_content = get_file_content(f["download_url"])
+                  data = yaml.safe_load(yaml_content)
+
+                  if not data.get("npm"):
+                      return {"skipped": f["name"], "reason": "no npm field"}
+
+                  npm_pkg = data["npm"]
+                  npm_file_path = data.get("npmFilePath", "")
+                  cdn_url = f"{CDN_BASE}/{npm_pkg}@latest/{npm_file_path}"
+
+                  # Compute hash from CDN
+                  sha256 = get_file_sha256(cdn_url)
+
+                  lib = {
+                      "name": data.get("name", ""),
+                      "category": data.get("category", ""),
+                      "description": data.get("description", ""),
+                      "npm": npm_pkg,
+                      "cdn_url": cdn_url,
+                      "sha256": sha256,
+                  }
+
+                  return {"success": lib}
+              except Exception as e:
+                  return {"skipped": f["name"], "reason": str(e)}
+
+          # Process libraries in parallel
+          with ThreadPoolExecutor(max_workers=10) as executor:
+              futures = {executor.submit(process_library, f): f for f in yaml_files}
+              for future in as_completed(futures):
+                  result = future.result()
+                  if "success" in result:
+                      libs.append(result["success"])
+                      print(f"✓ {result['success']['name']}")
+                  else:
+                      skipped.append(f"{result['skipped']}: {result['reason']}")
+                      print(f"✗ {result['skipped']} ({result['reason']})")
+
+          # Sort by name
+          libs.sort(key=lambda x: x["name"].lower())
 
           data = {
               "last_updated": datetime.now().strftime("%Y-%m-%d"),
@@ -62,7 +108,13 @@ jobs:
           with open("libs.json", "w") as f:
               json.dump(data, f, indent=2)
 
-          print(f"Found {len(libs)} libraries")
+          print(f"\n=== Summary ===")
+          print(f"Processed: {len(libs)}")
+          print(f"Skipped: {len(skipped)}")
+          if skipped:
+              print("Skipped libraries:")
+              for s in skipped:
+                  print(f"  - {s}")
           EOF
 
       - name: Commit changes
