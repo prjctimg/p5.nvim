@@ -43,7 +43,7 @@ Table of Contents                           *p5-utilities-table-of-contents*
 🛠️ Utilities module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-04-09 04:21:14Z~
+⏰ Last Updated: 2026-04-10 04:34:59Z~
 
 ==============================================================================
 2. Functions                                                |p5-utilities-functions|
