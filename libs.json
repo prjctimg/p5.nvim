@@ -1,4 +1,21 @@
 {
   "last_updated": "2026-04-12",
-  "libraries": []
+  "libraries": [
+    {
+      "name": "ml5.js",
+      "category": "ai-ml-cv",
+      "description": "Friendly machine learning for the web—a neighborly approach to creating and exploring artificial intelligence in the browser.",
+      "npm": "ml5",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/ml5@latest/dist/ml5.min.js",
+      "sha256": "3c0f5bac95bb92020d6c6b3d976784560e2e9c98a80a3fb7c02871c5e2f166bd"
+    },
+    {
+      "name": "c2.js",
+      "category": "algorithms",
+      "description": "c2.js is a JavaScript library for creative coding based on computational geometry, physics simulation, evolutionary algorithm and other modules.",
+      "npm": "c2.js",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/c2.js@latest/dist/c2.min.js",
+      "sha256": "36be147c26992e1901f1b0b024631f507d52984840712fcf3020eeea127e0621"
+    }
+  ]
 }
