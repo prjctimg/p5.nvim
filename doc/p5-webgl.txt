@@ -68,7 +68,7 @@ Table of Contents                           *p5-webgl-table-of-contents*
 🎮 Webgl module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-04-18 02:58:24Z~
+⏰ Last Updated: 2026-04-19 02:58:57Z~
 
 ==============================================================================
 2. Functions                                                |p5-webgl-functions|
