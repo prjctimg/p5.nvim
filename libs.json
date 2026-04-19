@@ -1,14 +1,6 @@
 {
-  "last_updated": "2026-04-12",
+  "last_updated": "2026-04-19",
   "libraries": [
-    {
-      "name": "ml5.js",
-      "category": "ai-ml-cv",
-      "description": "Friendly machine learning for the web—a neighborly approach to creating and exploring artificial intelligence in the browser.",
-      "npm": "ml5",
-      "cdn_url": "https://cdn.jsdelivr.net/npm/ml5@latest/dist/ml5.min.js",
-      "sha256": "3c0f5bac95bb92020d6c6b3d976784560e2e9c98a80a3fb7c02871c5e2f166bd"
-    },
     {
       "name": "c2.js",
       "category": "algorithms",
@@ -16,6 +8,310 @@
       "npm": "c2.js",
       "cdn_url": "https://cdn.jsdelivr.net/npm/c2.js@latest/dist/c2.min.js",
       "sha256": "36be147c26992e1901f1b0b024631f507d52984840712fcf3020eeea127e0621"
+    },
+    {
+      "name": "concaveHull",
+      "category": "algorithms",
+      "description": "Calculate a Concave Hull from a set of points in 2D space",
+      "npm": "@markroland/concave-hull",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/@markroland/concave-hull@latest/",
+      "sha256": "49667cedf182d5652920b4a54e686be9e33195e01fe4fb3dbd26c7537241b705"
+    },
+    {
+      "name": "lygia",
+      "category": "shaders",
+      "description": "LYGIA is a shader library of reusable functions that will let you prototype, port or ship a project in just few minutes. It's very granular, flexible and efficient. Support multiple shading languages and can easily be added to any project, enviroment or framework of your choice. \n",
+      "npm": "resolve-lygia",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/resolve-lygia@latest/",
+      "sha256": "14e292d01e857c898e9684d86b9676b96bfc7dea6aff5d0c0aa04c838e23d26e"
+    },
+    {
+      "name": "ml5.js",
+      "category": "ai-ml-cv",
+      "description": "Friendly machine learning for the web\u2014a neighborly approach to creating and exploring artificial intelligence in the browser.",
+      "npm": "ml5",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/ml5@latest/dist/ml5.min.js",
+      "sha256": "1130a65b5505ba9a83d75aaff38180374833dc15b4b7ed6922a5c289ae8b94d6"
+    },
+    {
+      "name": "p5-phone",
+      "category": "hardware",
+      "description": "Mobile hardware access for p5.js - Simplifies accessing phone hardware, locks default gestures, and adds an onscreen console.",
+      "npm": "p5-phone",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5-phone@latest/dist/p5-phone.min.js",
+      "sha256": "cecbd47bc94cfbe16dfcdfa4b5786783cc8e7dcebdad9bd18fe6d0779955609f"
+    },
+    {
+      "name": "p5.animS",
+      "category": "animation",
+      "description": "Animates p5.js shapes by rendering their drawing processes.",
+      "npm": "p5.anims",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.anims@latest/",
+      "sha256": "ae2f101d868b585a19b70a02da749ecc4d9369decb82dbcb2f060e9b2c2ae649"
+    },
+    {
+      "name": "p5.asciify",
+      "category": "shaders",
+      "description": "Apply real-time ASCII conversion to your favorite WEBGL p5.js sketches instantly.",
+      "npm": "p5.asciify",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.asciify@latest/",
+      "sha256": "3f9c0adf7d347a31d4f593885cf8ff9b135d8cd43e154a98aa587fd08c4a4e54"
+    },
+    {
+      "name": "p5.bezier",
+      "category": "drawing",
+      "description": "p5.bezier helps draw B\u00e9zier curves with more than four control points and closed curves.",
+      "npm": "p5bezier",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5bezier@latest/",
+      "sha256": "b531f3331e39423b1306ba883859e46c4cbcf6edf94843068c5bcaf2234f6b4c"
+    },
+    {
+      "name": "p5.brush",
+      "category": "drawing",
+      "description": "Unlock custom brushes, natural fill effects and intuitive hatching in p5.js.",
+      "npm": "p5.brush",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.brush@latest/",
+      "sha256": "896cfd526f4f2d62f4d0e90fae51145045fef4028f262b2a314d1f1b6db2391e"
+    },
+    {
+      "name": "p5.capture",
+      "category": "export",
+      "description": "Record your p5.js sketches effortlessly!",
+      "npm": "p5.capture",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.capture@latest/",
+      "sha256": "b160eafdacd65e14881829c9c7e09168960ec030aa136d95680fbefcde502526"
+    },
+    {
+      "name": "p5.chart",
+      "category": "data",
+      "description": "Interactive, mobile-responsive data visualization library for p5.js",
+      "npm": "p5.chart",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.chart@latest/",
+      "sha256": "a841ffccf932e504bacb3b766f1e8942d54f1530f2db06b4de2b694010c75b98"
+    },
+    {
+      "name": "p5.collide2d",
+      "category": "math",
+      "description": "p5.collide2D provides tools for calculating collision detection for 2D geometry with p5.js.",
+      "npm": "p5.collide2d",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.collide2d@latest/",
+      "sha256": "fe6b22bc5eb086b68c8f7a85886020c8a493b6535e74090a5b5663d617ec9eaf"
+    },
+    {
+      "name": "p5.comfyui-helper",
+      "category": "ai-ml-cv",
+      "description": "A library for interfacing with ComfyUI",
+      "npm": "@gohai/p5.comfyui-helper",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/@gohai/p5.comfyui-helper@latest/libraries/p5.comfyui-helper.js",
+      "sha256": "c6cbd5d0f23b7e9d24c9b067251b8c9343f4c0898336de34b585d92a6d3f9bc3"
+    },
+    {
+      "name": "p5.createLoop",
+      "category": "animation",
+      "description": "Create animation loops with noise and GIF exports in one line of code.",
+      "npm": "p5.createloop",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.createloop@latest/",
+      "sha256": "17fcb1088dcc282c79fa2a0c0c00ae44e348e8f2dd59cc5d47fa8a8a4216eb68"
+    },
+    {
+      "name": "p5.csg",
+      "category": "3d",
+      "description": "A library for constructive solid geometry. Do Boolean operations on your p5.Geometry to make new shapes!",
+      "npm": "@davepagurek/p5.csg",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/@davepagurek/p5.csg@latest/",
+      "sha256": "6feb2e3a9f78a7f1b48feea0b5e2327aa52d3f3e94dc794e9839f1e0b275023f"
+    },
+    {
+      "name": "p5.embroider",
+      "category": "hardware",
+      "description": "p5.embroider.js is a p5.js library for creating machine-ready digital embroidery patterns.",
+      "npm": "p5.embroider",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.embroider@latest/",
+      "sha256": "09fe6208e06b4561027f6bb0ca3629c33ac9c868443ca4c7f859c846ae3e3a95"
+    },
+    {
+      "name": "p5.fab",
+      "category": "hardware",
+      "description": "p5.fab controls digital fabrication machines from p5.js!\n",
+      "npm": "p5-fab",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5-fab@latest/",
+      "sha256": "647ae36688ce62435e077a112bb37eedcc74b9e9790b1b30b7e33e427aa792e8"
+    },
+    {
+      "name": "p5.fillGradient",
+      "category": "drawing",
+      "description": "Fill shapes in p5.js with Linear, Radial and Conic Gradients.",
+      "npm": "p5.fillgradient",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.fillgradient@latest/",
+      "sha256": "f022b96f728ea61e33dddb57c7c48a3df0ecd407bdd02e5fad4dfdd3ffb941ff"
+    },
+    {
+      "name": "p5.filterRenderer",
+      "category": "3d",
+      "description": "A library for rendering 3D scenes with depth-of-field blur and with ambient occlusion shadows.",
+      "npm": "@davepagurek/p5.filterrenderer",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/@davepagurek/p5.filterrenderer@latest/p5.filterRenderer.min.js",
+      "sha256": "a789b4d1c18028e9aba62f582b4af9dfcc1b09290adf156171a8a8e754ec3ee2"
+    },
+    {
+      "name": "p5.flex",
+      "category": "utils",
+      "description": "p5 container with responsive canvas feature.",
+      "npm": "p5.flex",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.flex@latest/src/p5.flex.min.js",
+      "sha256": "161926008a6ef001db3a78331ce582e9b784374da1bfc81410eb035afa48fbe0"
+    },
+    {
+      "name": "p5.glitch",
+      "category": "animation",
+      "description": "p5.js library for glitching images and binary files in the web browser",
+      "npm": "p5.glitch",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.glitch@latest/",
+      "sha256": "248a1d231914074befe53b062bbacd015c54ff019459a3bc7554b3df2097c522"
+    },
+    {
+      "name": "p5.grain",
+      "category": "drawing",
+      "description": "Conveniently add film grain, seamless texture overlays, and manipulate pixels to achieve nostalgic and artistic effects in p5.js sketches and artworks.",
+      "npm": "p5.grain",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.grain@latest/",
+      "sha256": "ce8490721f200c4f879d75f6be4bc058d7ceebf3d8e1ce600aad4722a10ffcb6"
+    },
+    {
+      "name": "p5.joystick",
+      "category": "hardware",
+      "description": "Connect and play with physical joysticks.",
+      "npm": "p5.joystick",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.joystick@latest/",
+      "sha256": "749dc4b2105fe151f14a5c35cbb999b7efa9413f1ca665ef34a3288f451d527c"
+    },
+    {
+      "name": "p5.palette",
+      "category": "color",
+      "description": "A library to manage color palettes in p5.js",
+      "npm": "p5.palette",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.palette@latest/dist/p5.palette.min.js",
+      "sha256": "fc989b581b418f9fa8271f1981f022785aedd96733e6b72b738191c213a767d2"
+    },
+    {
+      "name": "p5.party",
+      "category": "networking",
+      "description": "quickly prototype networked multiplayer games and apps",
+      "npm": "p5.party",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.party@latest/dist/p5.party.js",
+      "sha256": "b8b9087d649dc5c29bf850d7d4075479c9aaaabe0d0f4fc9d6e382ce8e57767f"
+    },
+    {
+      "name": "p5.Polar",
+      "category": "drawing",
+      "description": "p5.Polar provides mathematical abstractions making it easy to create create beautiful, kaleidoscopic, radial patterns.",
+      "npm": "@liz-peng/p5.polar",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/@liz-peng/p5.polar@latest/",
+      "sha256": "991fdb512cb71b5d1d4c8b5274617a67741fdb8204facf84a82eb9cd7e807fa8"
+    },
+    {
+      "name": "p5.qol",
+      "category": "utils",
+      "description": "Extend p5 with Quality of Life utilities.",
+      "npm": "p5.qol",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.qol@latest/",
+      "sha256": "928e6bb3b50df4b0c8b906670ebec07d317d0b27551e09e5171714005a283356"
+    },
+    {
+      "name": "p5.transparency",
+      "category": "3d",
+      "description": "In WebGL mode, you may have noticed that transparent images still occlude other objects as if they're opaque. This library provides helper functions you can surround each item with to make your items blend better.",
+      "npm": "p5.transparency",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.transparency@latest/",
+      "sha256": "6dfc6b52a40f0b87975e953d5a641e6e3d2e39f83a382d147d91c5532ac91c86"
+    },
+    {
+      "name": "p5.tree",
+      "category": "3d",
+      "description": "Render pipeline for p5.js v2 \u2014 pose and camera interpolation, space transforms, frustum visibility, HUD, post-processing pipe, picking, and declarative control panels.",
+      "npm": "p5.tree",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.tree@latest/dist/p5.tree.min.js",
+      "sha256": "bae907c2456157dc098dc11f4b8023caeb5a83ff17931f228554de8f1a3154e2"
+    },
+    {
+      "name": "p5.tween",
+      "category": "animation",
+      "description": "With p5.tween you can create easily animations as tween in a few keyframes.",
+      "npm": "p5.tween",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.tween@latest/",
+      "sha256": "f1b5568f5b639947bc1aeac6df63ab7b32b2776462a518fce0372c0592f6a69f"
+    },
+    {
+      "name": "p5.warp",
+      "category": "3d",
+      "description": "Fast 3D domain warping using shaders.",
+      "npm": "@davepagurek/p5.warp",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/@davepagurek/p5.warp@latest/",
+      "sha256": "b560be00bc1d6c5e2f38d62d0733a9eabe74fada40ada827b079aec7adc3cd58"
+    },
+    {
+      "name": "p5.webserial",
+      "category": "hardware",
+      "description": "A library for interacting with Serial devices from within the browser, based on Web Serial API (available on Chrome and Edge).",
+      "npm": "@gohai/p5.webserial",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/@gohai/p5.webserial@latest/libraries/p5.webserial.js",
+      "sha256": "9986d79096400565131b5b9cab1592bdd7184013d36df0223e71529f1251ef77"
+    },
+    {
+      "name": "p5.woff2",
+      "category": "utils",
+      "description": "An addon to add support for WebGL rendering, textToPoints, and related text methods for woff2 fonts. Load a Google Fonts URL and you're good to go!",
+      "npm": "p5.woff2",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.woff2@latest/",
+      "sha256": "8f65677ea6e9b48e43d5149082e4032909b36850329ff94b31999231b8f32117"
+    },
+    {
+      "name": "p5.xr",
+      "category": "3d",
+      "description": "A library for creating VR and AR sketches with p5.",
+      "npm": "p5.xr",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5.xr@latest/dist/p5xr.min.js",
+      "sha256": "91dab31ed98cb5a1958638590c5b2443c3a20a501669a71515544209bed14cb8"
+    },
+    {
+      "name": "p5play",
+      "category": "physics",
+      "description": "JS game engine that uses p5.js for graphics and Box2D for physics.",
+      "npm": "p5play",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/p5play@latest/",
+      "sha256": "e33879480426138c3c9c9ccc74759600e94b1ceb5e7d272a84cb003e85349589"
+    },
+    {
+      "name": "pretty-grid",
+      "category": "utils",
+      "description": "Create and manipulate grids with Javascript",
+      "npm": "pretty-grid",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/pretty-grid@latest/dist/pretty-grid.js",
+      "sha256": "8b0e21d7bc3f0e1751c74c22a2336f496183f0fa1ef308b25c0e5c96b476fc2e"
+    },
+    {
+      "name": "rita.js",
+      "category": "language",
+      "description": "AI-free tools for natural language and generative writing",
+      "npm": "rita",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/rita@latest/dist/rita.min.js",
+      "sha256": "d940877657a6beca61e7d1ce160c724c7752b07c10e7bbe4cb9d635c3b60f0f7"
+    },
+    {
+      "name": "Total Serialism",
+      "category": "algorithms",
+      "description": "A toolbox full of methods for procedurally generating and transforming arrays mainly focused on algorithmic composition. Includes methods like markov-chain, cellular automaton, lindenmayer system, euclidean distribution and much more! Generate the array with your desired method and easily iterate over them in a for-loop to draw the results.",
+      "npm": "total-serialism",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/total-serialism@latest/build/ts.es5.min.js",
+      "sha256": "4ad71c46ffd0e65b9cd223f32dd3364a352e0efac558466184cb711783f572bd"
+    },
+    {
+      "name": "WEBMIDI.js",
+      "category": "sound",
+      "description": "A user-friendly library to send and receive MIDI messages with ease.",
+      "npm": "webmidi",
+      "cdn_url": "https://cdn.jsdelivr.net/npm/webmidi@latest/",
+      "sha256": "74dacaf940a41d905faf2bd947f09d0255b889592d483894f3dc495db016d9f3"
     }
   ]
 }
