@@ -43,8 +43,11 @@ jobs:
           DOC_FILE="doc/p5-nvim.txt"
 
           if [ -f "$DOC_FILE" ]; then
-            sed -i "s/^\\*p5\\.nvim\\*/*p5.nvim* (v${TAG_NAME#v})/" "$DOC_FILE"
-            echo "Updated $DOC_FILE with version ${TAG_NAME#v}"
+            sed -i "1s/^\\*p5\\.nvim\\*/*p5.nvim* (v${TAG_NAME#v})/" "$DOC_FILE"
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git add "$DOC_FILE"
+            git commit -m "chore: bump version to ${TAG_NAME#v}" || true
           fi
 
       - name: Create Release
