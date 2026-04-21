@@ -1,6 +1,35 @@
 *p5.nvim* Neovim plugin for p5.js creative coding
 
-==============================================================================
+================================================================================
+TABLE OF CONTENTS                                  *p5-nvim-table-of-contents*
+
+1. Introduction                    |p5-nvim-introduction|
+2. Requirements                     |p5-nvim-requirements|
+3. Quick Start                      |p5-nvim-quick-start|
+4. Commands                         |p5-nvim-commands|
+5. Library Management               |p5-nvim-library-management|
+6. Configuration                    |p5-nvim-configuration|
+7. Lua API                          |p5-nvim-lua-api|
+8. Keymapping                       |p5-nvim-keymapping|
+9. Troubleshooting                      |p5-nvim-troubleshooting|
+10. License                         |p5-nvim-license|
+
+p5.js Module Reference:
+11. p5-accessibility        |p5-accessibility|
+12. p5-color                |p5-color|
+13. p5-core                 |p5-core|
+14. p5-data                 |p5-data|
+15. p5-dom                  |p5-dom|
+16. p5-events               |p5-events|
+17. p5-image                |p5-image|
+18. p5-io                   |p5-io|
+19. p5-math                 |p5-math|
+20. p5-modules              |p5-modules|
+21. p5-typography           |p5-typography|
+22. p5-utilities            |p5-utilities|
+23. p5-webgl                 |p5-webgl|
+
+================================================================================
 INTRODUCTION
 
 p5.nvim is a Neovim plugin for creative coding with p5.js. It provides a
@@ -8,12 +37,12 @@ complete development environment for building interactive sketches directly
 in Neovim.
 
 Features:
-- Live server with auto-reload for instant preview
-- Package manager for p5.js contributor libraries
-- Console to view browser logs in Neovim
-- p5.js reference as built-in manpages
-- Template projects with p5.js and sound addon
-- GitHub Gist integration for sharing sketches
+- 🛰️ Live server with auto-reload for instant preview
+- 📦 Package manager for p5.js contributor libraries
+- 📺 Console to view browser logs in Neovim
+- 📚 p5.js reference as built-in manpages
+- 🗂️ Template projects with p5.js and sound addon
+- 🔗 GitHub Gist integration for sharing sketches
 
 ==============================================================================
 REQUIREMENTS
@@ -173,9 +202,22 @@ A: Check your internet connection. Some libraries may have rate-limited
    GitHub API access.
 
 ==============================================================================
-LICENSE
+LICENSE                                                *p5-nvim-license*
 
-MIT License
+GNU General Public License v3.0
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:
