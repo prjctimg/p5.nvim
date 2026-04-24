@@ -228,17 +228,19 @@ C.auto_clear = function()
 
 	if C.timer then
 		C.timer:start(C.clear_interval, C.clear_interval, function()
-			if not C.buf or not vim.api.nvim_buf_is_valid(C.buf) then
-				return
-			end
-
-			local now = os.time()
-			if now - C.last_error > 30 then
-				local line_count = vim.api.nvim_buf_line_count(C.buf)
-				if line_count > 100 then
-					vim.api.nvim_buf_set_lines(C.buf, 0, line_count - 50, false, {})
+			vim.schedule(function()
+				if not C.buf or not vim.api.nvim_buf_is_valid(C.buf) then
+					return
 				end
-			end
+
+				local now = os.time()
+				if now - C.last_error > 30 then
+					local line_count = vim.api.nvim_buf_line_count(C.buf)
+					if line_count > 100 then
+						vim.api.nvim_buf_set_lines(C.buf, 0, line_count - 50, false, {})
+					end
+				end
+			end)
 		end)
 	end
 end

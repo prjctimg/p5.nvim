@@ -51,7 +51,7 @@ P.create_project = function(name, major)
 									types_dir .. "/p5-v2.d.ts",
 									function(ok3)
 										if ok3 then
-											create_project_continue(name, major)
+											P.create_project_continue(name, major)
 										else
 											notify("Failed to download p5.js 2.x types", "error")
 										end
@@ -73,10 +73,10 @@ P.create_project = function(name, major)
 		return
 	end
 
-	create_project_continue(name, major)
+	P.create_project_continue(name, major)
 end
 
-local function create_project_continue(name, major)
+function P.create_project_continue(name, major)
 	core.mkdir(name)
 	local path = vim.fn.fnamemodify(name, ":p")
 
