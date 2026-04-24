@@ -29,7 +29,7 @@ Table of Contents                           *p5-events-table-of-contents*
 🖱️ Events module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-04-23 02:58:41Z~
+⏰ Last Updated: 2026-04-24 02:58:41Z~
 
 ==============================================================================
 2. Functions                                                |p5-events-functions|
