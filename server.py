@@ -142,6 +142,8 @@ class LiveReloadServer:
         for client in clients_snapshot:
             try:
                 await client.send(data)
+            except (websockets.exceptions.ConnectionClosedOK, websockets.exceptions.ConnectionClosedError, websockets.exceptions.InvalidState):
+                disconnected.add(client)
             except Exception:
                 disconnected.add(client)
         
@@ -796,8 +798,11 @@ async def main():
             "file": path,
             "timestamp": datetime.now().isoformat()
         }
-        await live_reload_server.broadcast(message)
-        print(f"Reload triggered for: {path}")
+        try:
+            await live_reload_server.broadcast(message)
+            print(f"Reload triggered for: {path}")
+        except Exception:
+            pass
     
     file_watcher.start(on_file_change)
     
