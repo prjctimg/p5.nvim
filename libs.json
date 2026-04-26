@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-19",
+  "last_updated": "2026-04-26",
   "libraries": [
     {
       "name": "c2.js",
@@ -231,7 +231,7 @@
       "description": "Render pipeline for p5.js v2 \u2014 pose and camera interpolation, space transforms, frustum visibility, HUD, post-processing pipe, picking, and declarative control panels.",
       "npm": "p5.tree",
       "cdn_url": "https://cdn.jsdelivr.net/npm/p5.tree@latest/dist/p5.tree.min.js",
-      "sha256": "bae907c2456157dc098dc11f4b8023caeb5a83ff17931f228554de8f1a3154e2"
+      "sha256": "08b0ec5a3fa358bbb5faf86cfbf18be7f4e2a31089e65fb5c465171da5a6a63b"
     },
     {
       "name": "p5.tween",
