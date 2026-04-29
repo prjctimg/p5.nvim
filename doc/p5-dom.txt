@@ -57,7 +57,7 @@ Table of Contents                           *p5-dom-table-of-contents*
 🌐 Dom module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-04-28 02:59:35Z~
+⏰ Last Updated: 2026-04-29 02:59:19Z~
 
 ==============================================================================
 2. Functions                                                |p5-dom-functions|
