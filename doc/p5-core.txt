@@ -52,7 +52,7 @@ Table of Contents                           *p5-core-table-of-contents*
 ⚙️ Core module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-05-02 02:59:07Z~
+⏰ Last Updated: 2026-05-03 02:59:23Z~
 
 ==============================================================================
 2. Functions                                                |p5-core-functions|
