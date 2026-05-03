@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-26",
+  "last_updated": "2026-05-03",
   "libraries": [
     {
       "name": "c2.js",
@@ -223,7 +223,7 @@
       "description": "In WebGL mode, you may have noticed that transparent images still occlude other objects as if they're opaque. This library provides helper functions you can surround each item with to make your items blend better.",
       "npm": "p5.transparency",
       "cdn_url": "https://cdn.jsdelivr.net/npm/p5.transparency@latest/",
-      "sha256": "6dfc6b52a40f0b87975e953d5a641e6e3d2e39f83a382d147d91c5532ac91c86"
+      "sha256": "40d7b3a327354a5936c46600d53c507608cd2b7e49db9fdd953ae6d4d4585089"
     },
     {
       "name": "p5.tree",
@@ -231,7 +231,7 @@
       "description": "Render pipeline for p5.js v2 \u2014 pose and camera interpolation, space transforms, frustum visibility, HUD, post-processing pipe, picking, and declarative control panels.",
       "npm": "p5.tree",
       "cdn_url": "https://cdn.jsdelivr.net/npm/p5.tree@latest/dist/p5.tree.min.js",
-      "sha256": "08b0ec5a3fa358bbb5faf86cfbf18be7f4e2a31089e65fb5c465171da5a6a63b"
+      "sha256": "bc46736efaff65fc6d5c1d3f2980a01d72849ff64be29f7d5c85f454a1a46fca"
     },
     {
       "name": "p5.tween",
@@ -255,7 +255,7 @@
       "description": "A library for interacting with Serial devices from within the browser, based on Web Serial API (available on Chrome and Edge).",
       "npm": "@gohai/p5.webserial",
       "cdn_url": "https://cdn.jsdelivr.net/npm/@gohai/p5.webserial@latest/libraries/p5.webserial.js",
-      "sha256": "9986d79096400565131b5b9cab1592bdd7184013d36df0223e71529f1251ef77"
+      "sha256": "dd833449fe8a22d060511a0053778631cbf96cda766767953d5aa280151d52a4"
     },
     {
       "name": "p5.woff2",
@@ -295,7 +295,7 @@
       "description": "AI-free tools for natural language and generative writing",
       "npm": "rita",
       "cdn_url": "https://cdn.jsdelivr.net/npm/rita@latest/dist/rita.min.js",
-      "sha256": "d940877657a6beca61e7d1ce160c724c7752b07c10e7bbe4cb9d635c3b60f0f7"
+      "sha256": "7be25105437ad31456b04d4a34faaa605ddf271c12bd633cbf35135e2bdd7678"
     },
     {
       "name": "Total Serialism",
@@ -303,7 +303,7 @@
       "description": "A toolbox full of methods for procedurally generating and transforming arrays mainly focused on algorithmic composition. Includes methods like markov-chain, cellular automaton, lindenmayer system, euclidean distribution and much more! Generate the array with your desired method and easily iterate over them in a for-loop to draw the results.",
       "npm": "total-serialism",
       "cdn_url": "https://cdn.jsdelivr.net/npm/total-serialism@latest/build/ts.es5.min.js",
-      "sha256": "4ad71c46ffd0e65b9cd223f32dd3364a352e0efac558466184cb711783f572bd"
+      "sha256": "1fbad30ebda9fb3a1d8d2c7cb484c9f0fbeb43e90a75b7a4d1b3db82efe17677"
     },
     {
       "name": "WEBMIDI.js",
