@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-03",
+  "last_updated": "2026-05-10",
   "libraries": [
     {
       "name": "c2.js",
@@ -71,7 +71,7 @@
       "description": "Unlock custom brushes, natural fill effects and intuitive hatching in p5.js.",
       "npm": "p5.brush",
       "cdn_url": "https://cdn.jsdelivr.net/npm/p5.brush@latest/",
-      "sha256": "896cfd526f4f2d62f4d0e90fae51145045fef4028f262b2a314d1f1b6db2391e"
+      "sha256": "d8e108dabe258fad683f93b1c2b0a3ec7967cbde0b5502f67941b5f3c78209bd"
     },
     {
       "name": "p5.capture",
@@ -231,7 +231,7 @@
       "description": "Render pipeline for p5.js v2 \u2014 pose and camera interpolation, space transforms, frustum visibility, HUD, post-processing pipe, picking, and declarative control panels.",
       "npm": "p5.tree",
       "cdn_url": "https://cdn.jsdelivr.net/npm/p5.tree@latest/dist/p5.tree.min.js",
-      "sha256": "bc46736efaff65fc6d5c1d3f2980a01d72849ff64be29f7d5c85f454a1a46fca"
+      "sha256": "813b878ef9fb31f16d0063c86c437c632a52549e590b061bbeaf49ffae627ff3"
     },
     {
       "name": "p5.tween",
