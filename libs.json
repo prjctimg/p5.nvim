@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-10",
+  "last_updated": "2026-05-17",
   "libraries": [
     {
       "name": "c2.js",
@@ -279,7 +279,7 @@
       "description": "JS game engine that uses p5.js for graphics and Box2D for physics.",
       "npm": "p5play",
       "cdn_url": "https://cdn.jsdelivr.net/npm/p5play@latest/",
-      "sha256": "e33879480426138c3c9c9ccc74759600e94b1ceb5e7d272a84cb003e85349589"
+      "sha256": "e4be5f2baa3d8c975d3ed270d9aaba7e12e4c6dae8148bb38e5428018a4610ce"
     },
     {
       "name": "pretty-grid",
