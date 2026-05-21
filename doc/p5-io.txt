@@ -67,7 +67,7 @@ Table of Contents                           *p5-io-table-of-contents*
 📁 Io module for p5.js
 
 📦 p5.js Version: 1.7.7~
-⏰ Last Updated: 2026-05-20 05:55:07Z~
+⏰ Last Updated: 2026-05-21 05:58:16Z~
 
 ==============================================================================
 2. Functions                                                |p5-io-functions|
