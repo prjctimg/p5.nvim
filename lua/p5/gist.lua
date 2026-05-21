@@ -32,6 +32,8 @@ else
 					notify("We skipped a sketchy looking path. Check your p5.json 🕵️ ")
 				elseif file:match("^assets/") or file:match("^assets$") then
 					core.notify("🗄️ assets/ directory excluded from gist (not needed for sketchspace)", "info")
+				elseif file:match("^skchbk/") then
+					core.notify("🗄️ skchbk/ directory excluded from gist", "info")
 				else
 					table.insert(filtered, file)
 				end
@@ -271,6 +273,165 @@ else
 				vim.ui.open(url)
 			end
 		end
+	end
+
+	-- Clone all gists for a user into skchbk/
+	G.skchbk_clone = function(username, skchbk_dir)
+		core.mkdir(skchbk_dir)
+
+		local result = vim.fn.system({ "gh", "api", "/users/" .. username .. "/gists", "--paginate" })
+		if vim.v.shell_error ~= 0 then
+			notify("Failed to list gists for user: " .. username, "error")
+			return
+		end
+
+		local ok, gists = pcall(vim.fn.json_decode, result)
+		if not ok or type(gists) ~= "table" then
+			notify("Failed to parse gist list", "error")
+			return
+		end
+
+		if #gists == 0 then
+			notify("No gists found for user: " .. username, "info")
+			return
+		end
+
+		local cloned, skipped, errors = 0, 0, 0
+
+		for _, gist in ipairs(gists) do
+			local desc = gist.description or gist.id
+			local slug = core.slugify(desc)
+			local target = skchbk_dir .. "/" .. slug
+
+			if core.is_dir(target) then
+				skipped = skipped + 1
+			else
+				local res = vim.fn.system({ "gh", "gist", "view", gist.id, "--json", "files" })
+				if vim.v.shell_error ~= 0 then
+					errors = errors + 1
+				else
+					local ok2, gd = pcall(vim.fn.json_decode, res)
+					if not ok2 or not gd.files then
+						errors = errors + 1
+					else
+						core.mkdir(target)
+						for fn, fd in pairs(gd.files) do
+							vim.fn.writefile(vim.split(fd.content or "", "\n"), target .. "/" .. fn)
+						end
+						cloned = cloned + 1
+					end
+				end
+			end
+		end
+
+		local msg = {}
+		if cloned > 0 then table.insert(msg, "Cloned: " .. cloned) end
+		if skipped > 0 then table.insert(msg, "Skipped: " .. skipped) end
+		if errors > 0 then table.insert(msg, "Errors: " .. errors) end
+		if #msg > 0 then notify(table.concat(msg, " | "), "info") end
+	end
+
+	-- Browse gists remotely and clone selected
+	G.skchbk_browse_remote = function(username, skchbk_dir)
+		local result = vim.fn.system({ "gh", "api", "/users/" .. username .. "/gists", "--paginate" })
+		if vim.v.shell_error ~= 0 then
+			notify("Failed to list gists for user: " .. username, "error")
+			return
+		end
+
+		local ok, gists = pcall(vim.fn.json_decode, result)
+		if not ok or type(gists) ~= "table" then
+			notify("Failed to parse gist list", "error")
+			return
+		end
+
+		if #gists == 0 then
+			notify("No gists found for user: " .. username, "info")
+			return
+		end
+
+		local items = {}
+		local map = {}
+		for _, gist in ipairs(gists) do
+			local label = gist.description or ("untitled-" .. gist.id:sub(1, 7))
+			table.insert(items, label)
+			map[label] = gist.id
+		end
+		table.sort(items)
+
+		vim.ui.select(items, { prompt = "Select a remote sketch to clone:" }, function(sel)
+			if not sel or not map[sel] then return end
+			local res = vim.fn.system({ "gh", "gist", "view", map[sel], "--json", "files" })
+			if vim.v.shell_error ~= 0 then
+				notify("Failed to fetch gist", "error")
+				return
+			end
+			local ok2, gd = pcall(vim.fn.json_decode, res)
+			if not ok2 or not gd.files then
+				notify("Failed to parse gist data", "error")
+				return
+			end
+
+			core.mkdir(skchbk_dir)
+			local slug = core.slugify(sel)
+			local target = skchbk_dir .. "/" .. slug
+			core.mkdir(target)
+			for fn, fd in pairs(gd.files) do
+				vim.fn.writefile(vim.split(fd.content or "", "\n"), target .. "/" .. fn)
+			end
+			notify("Cloned: " .. sel, "ok")
+			vim.api.nvim_set_current_dir(target)
+			if core.is_file(target .. "/sketch.js") then
+				vim.cmd("edit sketch.js")
+			end
+		end)
+	end
+
+	-- List local skchbk entries or offer remote browse
+	G.skchbk_list = function(username, skchbk_dir)
+		local prompt_action = function()
+			vim.ui.select({ "Clone all gists", "Browse gists remotely" }, {
+				prompt = "No local sketches found. What would you like to do?",
+			}, function(choice)
+				if choice == "Clone all gists" then
+					G.skchbk_clone(username, skchbk_dir)
+				elseif choice == "Browse gists remotely" then
+					G.skchbk_browse_remote(username, skchbk_dir)
+				end
+			end)
+		end
+
+		local has_local = false
+		local entries = {}
+		if core.is_dir(skchbk_dir) then
+			for entry, type in vim.fs.dir(skchbk_dir) do
+				if type == "directory" then
+					has_local = true
+					table.insert(entries, {
+						display = core.deslugify(entry),
+						path = skchbk_dir .. "/" .. entry,
+					})
+				end
+			end
+		end
+
+		if not has_local then
+			prompt_action()
+			return
+		end
+
+		table.sort(entries, function(a, b) return a.display < b.display end)
+		local items = vim.tbl_map(function(e) return e.display end, entries)
+		local item_map = {}
+		for _, e in ipairs(entries) do item_map[e.display] = e.path end
+
+		vim.ui.select(items, { prompt = "Select a sketch:" }, function(sel)
+			if not sel or not item_map[sel] then return end
+			vim.api.nvim_set_current_dir(item_map[sel])
+			if core.is_file(item_map[sel] .. "/sketch.js") then
+				vim.cmd("edit sketch.js")
+			end
+		end)
 	end
 
 	-- Download gist files to current project

@@ -315,6 +315,26 @@ C.add_ss = function(path)
 	C.write_ss(recent)
 end
 
+-- Encode a string to a filesystem-safe slug
+C.slugify = function(str)
+	if type(str) ~= "string" then
+		return "untitled"
+	end
+	str = str:lower()
+	str = str:gsub("[^a-z0-9]+", "-")
+	str = str:gsub("^-+", ""):gsub("-+$", "")
+	return str ~= "" and str or "untitled"
+end
+
+-- Decode a slug back to a human-readable title
+C.deslugify = function(str)
+	str = str:gsub("-", " ")
+	str = str:gsub("(%a)([%w]*)", function(f, r)
+		return f:upper() .. r:lower()
+	end)
+	return str
+end
+
 -- Clean recent sketchspaces
 C.purge_ss = function()
 	local recent = C.read_ss()
