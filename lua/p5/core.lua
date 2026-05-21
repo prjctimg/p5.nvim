@@ -329,6 +329,7 @@ end
 -- Decode a slug back to a human-readable title
 C.deslugify = function(str)
 	str = str:gsub("-", " ")
+	str = str:gsub("%s+", " ")
 	str = str:gsub("(%a)([%w]*)", function(f, r)
 		return f:upper() .. r:lower()
 	end)

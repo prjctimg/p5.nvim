@@ -6,6 +6,7 @@
 > Better editor support for p5.js sketchspaces in Neovim.
 
 [![Release](https://img.shields.io/github/v/release/prjctimg/p5.nvim)](https://github.com/prjctimg/p5.nvim/releases/latest)
+[![Tests](https://github.com/prjctimg/p5.nvim/actions/workflows/release.yml/badge.svg)](https://github.com/prjctimg/p5.nvim/actions/workflows/release.yml)
 ---
 
 ## On this page
