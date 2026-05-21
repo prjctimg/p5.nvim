@@ -6,6 +6,7 @@
 > Better editor support for p5.js sketchspaces in Neovim.
 
 [![Release](https://img.shields.io/github/v/release/prjctimg/p5.nvim)](https://github.com/prjctimg/p5.nvim/releases/latest)
+[![Tests](https://github.com/prjctimg/p5.nvim/actions/workflows/release.yml/badge.svg)](https://github.com/prjctimg/p5.nvim/actions/workflows/release.yml)
 ---
 
 ## On this page
@@ -202,6 +203,23 @@ Create a GitHub Gist from your sketchspace.
 
 ---
 
+### :P5 skchbk [list]
+
+Clone all gists from a GitHub user into a local `skchbk/` directory. Each gist is saved in its own subdirectory named after the gist description.
+
+Requires a [dedicated GitHub account](https://docs.github.com/en/gists) whose gists are all valid p5.js sketches.
+
+```vim
+:P5 skchbk                # Clone all gists from configured user
+:P5 skchbk list           # Browse local sketches or browse/list remotely
+```
+
+If `skchbk/` doesn't exist or is empty, `:P5 skchbk list` prompts you to clone all gists or browse them remotely and clone individual ones.
+
+The `skchbk/` directory is automatically excluded from gist uploads.
+
+---
+
 ### :P5 docs
 
 Open p5.js documentation via snacks.picker.
@@ -245,6 +263,11 @@ require("p5").setup({
   -- Library settings
   libraries = {
     auto_update = false            -- Auto update libraries on setup
+  },
+
+  -- Sketchbook settings
+  sketchbook = {
+    user = ""                      -- GitHub username whose gists form the sketchbook
   }
 })
 ```

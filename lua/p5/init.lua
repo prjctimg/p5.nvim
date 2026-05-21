@@ -29,6 +29,9 @@ I.config = {
 		cdn_sources = { "jsdelivr", "cdnjs", "unpkg" },
 		auto_update = false,
 	},
+	sketchbook = {
+		user = "",
+	},
 }
 
 I.setup = function(opts)
@@ -289,6 +292,35 @@ function draw() {
 		gist.create(desc)
 	end
 
+	handlers.skchbk = function(args)
+		local subcmd = args[1]
+		local username = I.config.sketchbook.user
+
+		if not username or username == "" then
+			vim.ui.input({ prompt = "GitHub username for sketchbook: " }, function(input)
+				if input and input ~= "" then
+					username = input
+					if subcmd == "list" then
+						gist.skchbk_list(username, vim.fn.getcwd() .. "/skchbk")
+					else
+						gist.skchbk_clone(username, vim.fn.getcwd() .. "/skchbk")
+					end
+				else
+					notify("Set sketchbook.user in p5 config or provide a username", "warn")
+				end
+			end)
+			return
+		end
+
+		local skchbk_dir = vim.fn.getcwd() .. "/skchbk"
+
+		if subcmd == "list" then
+			gist.skchbk_list(username, skchbk_dir)
+		else
+			gist.skchbk_clone(username, skchbk_dir)
+		end
+	end
+
 	handlers.menu = function()
 		local server_status = server.server_job and "Stop server" or "Start server"
 
@@ -303,6 +335,7 @@ function draw() {
 			"Open docs",
 			"Sync",
 			"Create/update Gist",
+			"Download sketchbook",
 		}
 
 		local menu_dispatch = {
@@ -338,6 +371,9 @@ function draw() {
 			end,
 			["Create/update Gist"] = function()
 				handlers.gist({})
+			end,
+			["Download sketchbook"] = function()
+				handlers.skchbk({})
 			end,
 		}
 
@@ -385,6 +421,8 @@ function draw() {
 			return { "8000", "8001", "8002", "8003" }
 		elseif subcmd == "sync" then
 			return { "gist", "libs", "libraries" }
+		elseif subcmd == "skchbk" then
+			return { "list" }
 		end
 
 		return {}
