@@ -288,12 +288,8 @@ function draw() {
 		if not require_sketchspace("Gist") then
 			return
 		end
-		local sub = args[1]
-		if sub == "edit" then
-			gist.edit()
-		else
-			gist.create(table.concat(args, " "))
-		end
+		local desc = args[1]
+		gist.create(desc)
 	end
 
 	handlers.skchbk = function(args)
@@ -425,8 +421,6 @@ function draw() {
 			return { "8000", "8001", "8002", "8003" }
 		elseif subcmd == "sync" then
 			return { "gist", "libs", "libraries" }
-		elseif subcmd == "gist" then
-			return { "edit" }
 		elseif subcmd == "skchbk" then
 			return { "list" }
 		end
