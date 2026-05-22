@@ -306,7 +306,7 @@ else
 			if core.is_dir(target) then
 				skipped = skipped + 1
 			else
-				local res = vim.fn.system({ "gh", "gist", "view", gist.id, "--json", "files" })
+				local res = vim.fn.system({ "gh", "api", "/gists/" .. gist.id })
 				if vim.v.shell_error ~= 0 then
 					errors = errors + 1
 				else
@@ -317,6 +317,10 @@ else
 						core.mkdir(target)
 						for fn, fd in pairs(gd.files) do
 							vim.fn.writefile(vim.split(fd.content or "", "\n"), target .. "/" .. fn)
+						end
+						local cm = G.get_comment(gist.id)
+						if cm and cm.body and cm.body ~= "" then
+							vim.fn.writefile(vim.split(cm.body, "\n"), target .. "/README.md")
 						end
 						cloned = cloned + 1
 					end
@@ -329,6 +333,104 @@ else
 		if skipped > 0 then table.insert(msg, "Skipped: " .. skipped) end
 		if errors > 0 then table.insert(msg, "Errors: " .. errors) end
 		if #msg > 0 then notify(table.concat(msg, " | "), "info") end
+	end
+
+	-- Fetch the first comment body for a gist
+	G.get_comment = function(gist_id)
+		local res = vim.fn.system({ "gh", "api", "/gists/" .. gist_id .. "/comments" })
+		if vim.v.shell_error ~= 0 then return nil end
+		local ok, comments = pcall(vim.fn.json_decode, res)
+		if not ok or type(comments) ~= "table" or #comments == 0 then return nil end
+		return comments[1]
+	end
+
+	-- Create a new comment on a gist
+	G.create_comment = function(gist_id, body)
+		local tmp = vim.fn.stdpath("cache") .. "/p5_gist_comment_" .. os.time()
+		vim.fn.writefile(vim.split(body, "\n"), tmp)
+		local res = vim.fn.system({ "gh", "api", "/gists/" .. gist_id .. "/comments", "--input", tmp, "-f", "body=" .. body })
+		vim.fn.delete(tmp)
+		return vim.v.shell_error == 0, res
+	end
+
+	-- Update an existing comment on a gist
+	G.update_comment = function(gist_id, comment_id, body)
+		local res = vim.fn.system({ "gh", "api", "/gists/" .. gist_id .. "/comments/" .. comment_id, "-X", "PATCH", "-f", "body=" .. body })
+		return vim.v.shell_error == 0, res
+	end
+
+	-- Edit gist description or first comment
+	G.edit = function()
+		local gist_info = G.current()
+		if not gist_info or not gist_info.id then
+			notify("No gist associated with current sketchspace", "warn")
+			return
+		end
+
+		local items = { "Description", "First comment (sketch details)" }
+		vim.ui.select(items, { prompt = "What to edit on the gist?" }, function(choice)
+			if not choice then return end
+
+			if choice == "Description" then
+				local res = vim.fn.system({ "gh", "api", "/gists/" .. gist_info.id, "--jq", ".description" })
+				local current = vim.v.shell_error == 0 and vim.trim(res) or ""
+				vim.ui.input({ prompt = "New description: ", default = current or "" }, function(input)
+					if not input or input == "" then
+						notify("Edit cancelled", "info")
+						return
+					end
+					vim.fn.system({ "gh", "gist", "edit", gist_info.id, "--desc", input })
+					if vim.v.shell_error == 0 then
+						notify("Description updated", "ok")
+					else
+						notify("Failed to update description", "error")
+					end
+				end)
+			elseif choice == "First comment (sketch details)" then
+				local comment = G.get_comment(gist_info.id)
+				local body = comment and comment.body or ""
+				local comment_id = comment and comment.id or nil
+
+				-- Open a scratch buffer for editing
+				local buf = vim.api.nvim_create_buf(false, true)
+				vim.api.nvim_buf_set_option(buf, "buftype", "acwrite")
+				vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
+				vim.api.nvim_buf_set_name(buf, "gist-comment.md")
+
+				local lines = vim.split(body, "\n")
+				vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+				vim.api.nvim_create_autocmd("BufWriteCmd", {
+					buffer = buf,
+					once = true,
+					callback = function()
+						local new_body = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1), "\n")
+						if comment_id then
+							local ok = G.update_comment(gist_info.id, comment_id, new_body)
+							if ok then
+								notify("Sketch details updated", "ok")
+							else
+								notify("Failed to update sketch details", "error")
+								return
+							end
+						else
+							local ok = G.create_comment(gist_info.id, new_body)
+							if ok then
+								notify("Sketch details created", "ok")
+							else
+								notify("Failed to create sketch details", "error")
+								return
+							end
+						end
+						vim.api.nvim_buf_set_option(buf, "modified", false)
+					end,
+				})
+
+				vim.api.nvim_win_set_buf(0, buf)
+				vim.api.nvim_buf_set_option(buf, "modified", false)
+				notify("Edit the comment and :w to save", "info")
+			end
+		end)
 	end
 
 	-- Browse gists remotely and clone selected
@@ -361,7 +463,7 @@ else
 
 		vim.ui.select(items, { prompt = "Select a remote sketch to clone:" }, function(sel)
 			if not sel or not map[sel] then return end
-			local res = vim.fn.system({ "gh", "gist", "view", map[sel], "--json", "files" })
+			local res = vim.fn.system({ "gh", "api", "/gists/" .. map[sel] })
 			if vim.v.shell_error ~= 0 then
 				notify("Failed to fetch gist", "error")
 				return
@@ -378,6 +480,10 @@ else
 			core.mkdir(target)
 			for fn, fd in pairs(gd.files) do
 				vim.fn.writefile(vim.split(fd.content or "", "\n"), target .. "/" .. fn)
+			end
+			local cm = G.get_comment(map[sel])
+			if cm and cm.body and cm.body ~= "" then
+				vim.fn.writefile(vim.split(cm.body, "\n"), target .. "/README.md")
 			end
 			notify("Cloned: " .. sel, "ok")
 			vim.api.nvim_set_current_dir(target)
@@ -443,7 +549,7 @@ else
 		end
 
 		-- Get gist files in JSON format
-		local result = vim.fn.system({ "gh", "gist", "view", id, "--json", "files" })
+		local result = vim.fn.system({ "gh", "api", "/gists/" .. id })
 
 		if vim.v.shell_error ~= 0 then
 			return false, "Gist not found or no longer exists: " .. result
