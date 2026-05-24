@@ -80,7 +80,7 @@ I.setup = function(opts)
 
 	local function require_sketchspace(action)
 		if not project.is_p5_project() then
-			core.notify(action .. " requires a sketchspace (p5.json)", "error")
+			core.notify(action .. " requires a sketchspace (p5.json)", "warn")
 			return false
 		end
 		return true
@@ -152,7 +152,7 @@ function draw() {
 
 		project.copy_assets_to_project(cwd, function(err)
 			if err then
-				core.notify("Failed to copy assets: " .. err, "error")
+				core.notify("Failed to copy assets: " .. err, "warn")
 				return
 			end
 
@@ -307,7 +307,7 @@ function draw() {
 					if subcmd == "list" then
 						gist.skchbk_list(username, vim.fn.getcwd() .. "/skchbk")
 					else
-						gist.skchbk_clone(username, vim.fn.getcwd() .. "/skchbk")
+						gist.clone(username, vim.fn.getcwd() .. "/skchbk", "all")
 					end
 				else
 					notify("Set sketchbook.user in p5 config or provide a username", "warn")
@@ -321,7 +321,7 @@ function draw() {
 		if subcmd == "list" then
 			gist.skchbk_list(username, skchbk_dir)
 		else
-			gist.skchbk_clone(username, skchbk_dir)
+			gist.clone(username, skchbk_dir, "all")
 		end
 	end
 

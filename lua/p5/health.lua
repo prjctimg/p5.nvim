@@ -1,17 +1,18 @@
--- Health check module for p5.nvim
 local H = {}
 
 local function get_core()
 	return require("p5.core")
 end
+
 local ok = vim.health.ok
 local error = vim.health.error
 local warn = vim.health.warn
 
 local core = get_core()
+
 H.check_dependencies = function()
 	vim.health.start("Dependencies")
-	local snacks, _ = core.require_snacks()
+	local snacks, _ = pcall(require, "snacks")
 	if snacks then
 		ok("snacks.nvim: available")
 	else
@@ -34,19 +35,26 @@ H.check_external_tools = function()
 	elseif core.is_cmd("wget") then
 		ok("wget: available")
 	else
-		warn("curl/wget: not found - required for library downloads")
+		error("curl/wget: not found - required for library downloads")
 	end
 
 	if core.is_cmd("gh") then
 		ok("gh CLI: available")
 	else
-		warn("gh CLI: not found - optional for GitHub gist functionality")
+		warn("gh CLI: not found - gist features will be unavailable")
 	end
 
-	if core.is_cmd("python3") or core.is_cmd("python") then
-		ok("Python: available")
+	local python_cmd = core.is_cmd("python3") and "python3" or core.is_cmd("python") and "python" or nil
+	if python_cmd then
+		ok("Python: available (" .. python_cmd .. ")")
+		local ws_result = vim.fn.system(python_cmd .. " -c 'import websockets' 2>/dev/null")
+		if vim.v.shell_error == 0 then
+			ok("websockets module: available")
+		else
+			warn("websockets module: not found - live server will not work. Install with: pip install websockets")
+		end
 	else
-		warn("Python: not found - optional for live server")
+		warn("Python: not found - live server will be unavailable")
 	end
 end
 
@@ -54,17 +62,39 @@ H.check_plugin_env = function()
 	vim.health.start("Plugin Environment")
 
 	local plugin_root = core.plugin_root()
-	if core.validate_dir(plugin_root, "Plugin root", false) then
+	if core.is_dir(plugin_root) then
 		ok("Plugin root: " .. plugin_root)
 	else
 		error("Plugin root: not found at " .. plugin_root)
 	end
 
-	local asset_dir = core.asset_dir()
-	if core.validate_dir(asset_dir, "Asset directory", false) then
-		ok("Asset directory: " .. asset_dir)
+	local server_script = plugin_root .. "/server.py"
+	if core.is_file(server_script) then
+		ok("Server script: found")
 	else
-		vim.health.warn("Asset directory: not found - optional, for IDE types only")
+		warn("Server script: not found at " .. server_script)
+	end
+
+	local asset_dir = core.asset_dir()
+	if core.is_dir(asset_dir) then
+		ok("Asset directory: " .. asset_dir)
+		local libs_dir = asset_dir .. "/libs"
+		if core.is_dir(libs_dir) then
+			local p5_file = libs_dir .. "/p5-v2.js"
+			if core.is_file(p5_file) then
+				ok("p5.js 2.x: bundled")
+			else
+				warn("p5.js 2.x: not bundled - will be downloaded on project creation")
+			end
+			local p5sound_file = libs_dir .. "/p5-v2.sound.js"
+			if core.is_file(p5sound_file) then
+				ok("p5.sound 2.x: bundled")
+			else
+				warn("p5.sound 2.x: not bundled - will be downloaded on project creation")
+			end
+		end
+	else
+		warn("Asset directory: not found at " .. asset_dir)
 	end
 end
 
@@ -76,18 +106,17 @@ H.check_workspace = function()
 	info("Current directory: " .. cwd)
 
 	local config_file = cwd .. "/p5.json"
-	if core.validate_file(config_file, "p5.json", false) then
+	if core.is_file(config_file) then
 		ok("p5.json: found")
 	else
 		info("p5.json: not found - not in a sketchspace")
 	end
 
 	local assets_dir = cwd .. "/assets"
-	if core.validate_dir(assets_dir, "assets/", false) then
+	if core.is_dir(assets_dir) then
 		ok("assets/: directory exists")
-
 		local libs_dir = assets_dir .. "/libs"
-		if core.validate_dir(libs_dir, "libs/", false) then
+		if core.is_dir(libs_dir) then
 			local js_files = vim.fn.glob(libs_dir .. "/*.js", false, true)
 			ok("libs/: " .. #js_files .. " library files")
 		end
@@ -102,11 +131,10 @@ H.check_project_config = function()
 	local cwd = vim.fs.normalize(vim.fn.getcwd())
 	local config_file = cwd .. "/p5.json"
 
-	if core.validate_file(config_file, "p5.json", false) then
+	if core.is_file(config_file) then
 		ok("p5.json: found")
-
-		local cfg, data = pcall(vim.fn.json_decode, vim.fn.readfile(config_file))
-		if cfg then
+		local ok2, data = pcall(vim.fn.json_decode, table.concat(vim.fn.readfile(config_file), "\n"))
+		if ok2 then
 			ok("p5.json: valid format")
 
 			if type(data.libs) == "table" then
@@ -133,9 +161,9 @@ H.check_neovim = function()
 
 	local version = vim.version()
 	if version.major > 0 or version.minor >= 9 then
-		ok("Neovim version: " .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch)
+		ok("Neovim version: " .. version.major .. "." .. version.minor .. "." .. version.patch)
 	else
-		warn("Neovim version: " .. vim.version().major .. "." .. vim.version().minor .. " (>= 0.9 recommended)")
+		warn("Neovim version: " .. version.major .. "." .. version.minor .. " (>= 0.9 recommended)")
 	end
 
 	if vim.fn.has("nvim") == 1 then

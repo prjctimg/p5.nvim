@@ -1,8 +1,8 @@
-name: Update p5.js Libraries
+name: 🤤  update p5.js contributor libraries (addons) list
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday
+    - cron: "0 0 * * 0" # Weekly on Sunday
   workflow_dispatch:
 
 jobs:
@@ -14,13 +14,13 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Install deps
         run: |
           pip install pyyaml requests
 
-      - name: Scrape libraries
+      - name: Scrape libs
         run: |
           python << 'EOF'
           import requests

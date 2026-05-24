@@ -72,11 +72,11 @@ S.start = function(port)
 			notify("Server script not found: " .. server_script, "warn")
 		end
 	else
-		notify("python3 not found in PATH. Please install Python to use the development server.", "error")
+		notify("python3 not found in PATH. Please install Python to use the development server.", "warn")
 	end
 
 	if not type then
-		notify("No suitable server found (python3, bun, deno, or node)", "error")
+		notify("No suitable server found (python3, bun, deno, or node)", "warn")
 		notify("Please install one of the supported runtimes", "info")
 		return
 	end
@@ -112,30 +112,20 @@ S.start = function(port)
 		port = actual_port
 	end
 
-	local server_config = core.server_cfg
-	if not core.is_cmd(server_config.check) then
-		notify("Server validation failed: " .. server_config.cmd .. " is not available", "error")
-		return
-	end
-	local server_script = core.plugin_root() .. "/server.py"
-	if not core.is_file(server_script) then
-		notify("Server validation failed: Server script not found", "error")
-		return
-	end
 	vim.fn.system("python3 -c 'import websockets' 2>/dev/null")
 	if vim.v.shell_error ~= 0 then
-		notify("Server validation failed: websockets module not found. Install with: pip install websockets", "error")
+		notify("Server validation failed: websockets module not found. Install with: pip install websockets", "warn")
 		return
 	end
-	if not port or port <= 0 or port >= 65536 then
-		notify("Server validation failed: Invalid port number", "error")
+	if port <= 0 or port >= 65536 then
+		notify("Server validation failed: Invalid port number", "warn")
 		return
 	end
 	if port < 1024 then
 		local result = vim.fn.system("id -u 2>/dev/null")
 		local user_id = vim.trim(result)
 		if user_id ~= "0" then
-			notify("Server validation failed: Port " .. port .. " requires root privileges", "error")
+			notify("Server validation failed: Port " .. port .. " requires root privileges", "warn")
 			return
 		end
 	end
@@ -152,11 +142,11 @@ S.start = function(port)
 				local error_msg = table.concat(data, " ")
 
 				if error_msg:match("Address already in use") then
-					notify("Port " .. port .. " is already in use. Try a different port.", "error")
+					notify("Port " .. port .. " is already in use. Try a different port.", "warn")
 				elseif error_msg:match("Permission denied") or error_msg:match("EACCES") then
-					notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "error")
+					notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "warn")
 				elseif error_msg:match("ModuleNotFoundError") or error_msg:match("ImportError") then
-					notify("Server import error: " .. error_msg, "error")
+					notify("Server import error: " .. error_msg, "warn")
 				else
 					notify("Server warning: " .. error_msg, "warn")
 				end

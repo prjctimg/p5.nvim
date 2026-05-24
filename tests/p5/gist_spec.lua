@@ -102,7 +102,7 @@ describe("G.edit", function()
   end)
 end)
 
-describe("G.skchbk_clone", function()
+describe("G.clone (all mode)", function()
   local tmp_dir
   local orig_system
 
@@ -124,7 +124,7 @@ describe("G.skchbk_clone", function()
       end
       return orig_system(cmd)
     end
-    G.skchbk_clone("testuser", tmp_dir)
+    G.clone("testuser", tmp_dir, "all")
     local count = 0
     for _, _ in vim.fs.dir(tmp_dir) do count = count + 1 end
     assert.are.equal(0, count)
@@ -160,7 +160,7 @@ describe("G.skchbk_clone", function()
       return orig_system(cmd)
     end
 
-    G.skchbk_clone("testuser", tmp_dir)
+    G.clone("testuser", tmp_dir, "all")
 
     local dirs = {}
     for entry, type in vim.fs.dir(tmp_dir) do
@@ -200,7 +200,7 @@ describe("G.skchbk_clone", function()
       end
       return orig_system(cmd)
     end
-    G.skchbk_clone("testuser", tmp_dir)
+    G.clone("testuser", tmp_dir, "all")
     local content = vim.fn.readfile(tmp_dir .. "/cool-demo/sketch.js")
     assert.are.same({ "old content" }, content,
       "existing dir should not be overwritten")
@@ -225,7 +225,7 @@ describe("G.skchbk_clone", function()
       end
       return orig_system(cmd)
     end
-    G.skchbk_clone("testuser", tmp_dir)
+    G.clone("testuser", tmp_dir, "all")
     local dirs = {}
     for entry, type in vim.fs.dir(tmp_dir) do
       if type == "directory" then
@@ -242,7 +242,7 @@ describe("G.skchbk_clone", function()
       end
       return orig_system(cmd)
     end
-    G.skchbk_clone("nonexistent-user", tmp_dir)
+    G.clone("nonexistent-user", tmp_dir, "all")
   end)
 end)
 

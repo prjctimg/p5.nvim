@@ -48,7 +48,7 @@ L.load = function()
 	-- Handle libs as object with {name: version} format
 	if config and type(config.libs) == "table" then
 		for lib_name, _ in pairs(config.libs) do
-			if lib_name and not vim.tbl_contains(_libs, lib_name) then
+			if not vim.tbl_contains(_libs, lib_name) then
 				table.insert(_libs, lib_name)
 			end
 		end
@@ -202,7 +202,7 @@ L.uninstall_libs = function(lib_names)
 	end
 
 	if #failed > 0 then
-		core.notify("Failed to remove: " .. table.concat(failed, ", "), "error")
+		core.notify("Failed to remove: " .. table.concat(failed, ", "), "warn")
 	end
 end
 
@@ -421,7 +421,7 @@ L.do_install = function(to_install)
 				core.notify(msg, "info")
 			end
 			if #failed_names > 0 then
-				core.notify("Failed: " .. table.concat(failed_names, ", "), "error")
+				core.notify("Failed: " .. table.concat(failed_names, ", "), "warn")
 			end
 		end
 	end
