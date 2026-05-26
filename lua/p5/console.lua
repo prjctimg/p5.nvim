@@ -9,6 +9,13 @@ local set_opt = vim.api.nvim_set_option_value
 -- Use snacks.terminal if available
 local has_snacks, snacks = pcall(require, "snacks")
 
+local disable_term_mode = function(buf_)
+	vim.cmd("stopinsert")
+	for _, k in ipairs({ "<Esc>", "<C-c>", "<C-[>" }) do
+		vim.keymap.set("t", k, "<C-\\><C-n>", { buffer = buf_ })
+	end
+end
+
 C.win = nil
 C.buf = nil
 C.job = nil
@@ -163,6 +170,7 @@ C.show = function(opts)
 		C.win = term.win
 		C.buf = term.buf
 		C.auto_clear()
+		disable_term_mode(C.buf)
 		notify("📺 Console connected to server on port " .. C.port, "info")
 		return
 	end
@@ -188,6 +196,7 @@ C.show = function(opts)
 	keymap("n", "q", C.hide, { buffer = buf, desc = "Hide p5 console" })
 	keymap("n", "c", C.clear, { buffer = buf, desc = "Clear p5 console" })
 	keymap("n", "<C-c>", C.hide, { buffer = buf, desc = "Hide console" })
+	disable_term_mode(buf)
 
 	C.auto_clear()
 	notify("Console connected to server on port " .. C.port, "info")

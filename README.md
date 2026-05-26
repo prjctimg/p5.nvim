@@ -33,6 +33,7 @@
 - **GitHub Gist** 🔗 - Share sketches (synced to sketchspace)
 - **Console** 📺 - View browser logs in Neovim
 - **p5.js Docs** 📖 - Built-in reference via snacks.picker
+- **Snippets** ✂️ - 100+ p5.js code snippets (VS Code JSON format, compatible with luasnip, blink.cmp, nvim-cmp)
 
 ---
 
@@ -69,19 +70,23 @@ A directory that has a `p5.json` file is called a `sketchspace`. The file looks 
 
 ```json
 {
-  "version": "1.9.0",
-  "libs": {
-    "ml5": "latest"
-  },
+  "version": "2.0.0",
+  "major": 2,
+  "libs": {},
   "includes": ["sketch.js"],
-  "gist": "https://gist.github.com/..."
+  "gist": {
+    "url": "username/gistId",
+    "title": "My Sketch",
+    "description": "Description from gist comment"
+  }
 }
 ```
 
 - `version`: p5.js version to use
+- `major`: p5.js major version (`1` or `2`)
 - `libs`: Object with library names as keys and their versions as values
 - `includes`: Files to include in the Gist (default: `["sketch.js"]`)
-- `gist`: URL of associated GitHub Gist (optional)
+- `gist`: Gist metadata object (optional) with `url` (`"user/gistId"`), `title`, and `description`
 
 > [!important]
 >
@@ -178,7 +183,11 @@ Toggle browser console to view console.log, errors, and warnings in Neovim.
 
 ### :P5 sync [gist|libs]
 
-Sync gist or libraries.
+Sync gist (bidirectional) or libraries.
+
+When syncing a gist, compares remote vs local state and prompts per difference:
+title, description (first comment), and each source file. Files existing on
+only one side are auto-accepted.
 
 ```vim
 :P5 sync gist
@@ -186,20 +195,22 @@ Sync gist or libraries.
 :P5 sync
 ```
 
-[![P5 sync](https://asciinema.org/a/801610.svg)](https://asciinema.org/a/801610)
-
 ---
 
 ### :P5 gist [desc]
 
-Create a GitHub Gist from your sketchspace.
+Create or edit a GitHub Gist from your sketchspace.
 
 ```vim
-:P5 gist "My awesome sketch"
-:P5 gist
+:P5 gist "My awesome sketch"     # Create gist with title
+:P5 gist                         # Prompt for title then create
+:P5 gist edit                    # Edit gist title or first comment
 ```
 
-[![P5 gist](https://asciinema.org/a/799472.svg)](https://asciinema.org/a/799472)
+On creation, stores `gist` as an object in `p5.json` with `url`, `title`,
+and `description` (from the gist's first comment). Use `:P5 gist edit`
+to change the title or first comment — changes are synced both to the
+remote gist and the local `p5.json`.
 
 ---
 
@@ -229,6 +240,92 @@ Open p5.js documentation via snacks.picker.
 ```
 
 <a href="https://asciinema.org/a/799478" target="_blank"><img src="https://asciinema.org/a/799478.svg" /></a>
+
+---
+
+## Snippets ✂️
+
+p5.nvim ships with 100+ p5.js code snippets in VS Code JSON format. All snippets use a `p5-` prefix to avoid conflicts with other snippet packs.
+
+### Installation
+
+Snippets are auto-discovered from runtimepath. Just add a snippet loader:
+
+**LuaSnip:**
+```lua
+require("luasnip.loaders.from_vscode").lazy_load()
+```
+
+**blink.cmp (default preset):** Auto-discovered, zero configuration.
+
+**blink.cmp (luasnip preset):**
+```lua
+-- Already using luasnip? snippets are auto-discovered via luasnip
+sources = {
+  default = { "lsp", "path", "snippets", "buffer" },
+}
+```
+
+**nvim-cmp:**
+```lua
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      require("luasnip").lsp_expand(args.body)
+    end,
+  },
+  sources = {
+    { name = "luasnip" },
+  },
+})
+```
+
+### Trigger Convention
+
+Type `p5-` followed by the snippet name in a `.js` file to trigger:
+
+| Category | Example Trigger | Expands To |
+|----------|----------------|------------|
+| Lifecycle | `p5-sketch`, `p5-setup`, `p5-draw`, `p5-preload` | Full sketch skeleton or function |
+| Paired constructs | `p5-push`, `p5-beginshape`, `p5-loadpixels`, `p5-creategraphics` | Block with open/close calls |
+| Vertex calls | `p5-vertex`, `p5-curvevertex`, `p5-beziervertex` | Single vertex() inside shape |
+| Basic shapes | `p5-canvas`, `p5-circle`, `p5-rect`, `p5-line` | Common 2D primitives |
+| Color & style | `p5-fill`, `p5-stroke`, `p5-nofill`, `p5-colormode-hsb` | Color and attribute setters |
+| Transformations | `p5-translate`, `p5-rotate`, `p5-scale` | Coordinate transforms |
+| Math & vector | `p5-map`, `p5-constrain`, `p5-random`, `p5-vector` | Math utilities |
+| Typography | `p5-text`, `p5-textsize`, `p5-loadfont`, `p5-textalign` | Text rendering |
+| Images | `p5-loadimage`, `p5-pixels`, `p5-tint`, `p5-filter` | Image loading and processing |
+| Events | `p5-mousepressed`, `p5-keypressed`, `p5-mousedragged` | Input event handlers |
+| 3D / WebGL | `p5-box`, `p5-sphere`, `p5-orbitcontrol`, `p5-texture` | 3D primitives and lights |
+| DOM | `p5-createslider`, `p5-createbutton`, `p5-createselect` | UI elements |
+| Sound | `p5-loadsound`, `p5-fft`, `p5-oscillator` | Audio playback and analysis |
+| IO | `p5-loadjson`, `p5-loadstrings`, `p5-savecanvas` | Data loading and saving |
+| Common idioms | `p5-forgrid`, `p5-forpolar`, `p5-particles`, `p5-bounce` | Multi-line patterns |
+
+### Example
+
+Typing `p5-sketch` and expanding gives:
+
+```javascript
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(220);
+}
+```
+
+Typing `p5-beginshape` and expanding gives:
+
+```javascript
+beginShape();
+  vertex(x, y)
+endShape(CLOSE);
+```
+
+All tab stops (`$1`, `$2`, etc.) are navigable; press `<Tab>` to jump between
+them (requires luasnip or blink.cmp luasnip preset).
 
 ---
 

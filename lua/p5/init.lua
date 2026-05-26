@@ -261,7 +261,7 @@ function draw() {
 					if not require_sketchspace("Sync gist") then
 						return
 					end
-					gist.update()
+					gist.sync()
 				elseif choice == "Libraries" then
 					if not require_sketchspace("Sync libraries") then
 						return
@@ -273,7 +273,7 @@ function draw() {
 			if not require_sketchspace("Sync gist") then
 				return
 			end
-			gist.update()
+			gist.sync()
 		elseif target == "libs" or target == "libraries" then
 			if not require_sketchspace("Sync libraries") then
 				return

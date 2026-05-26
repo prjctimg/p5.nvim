@@ -1,0 +1,8 @@
+{
+  "name": "p5-nvim-snippets",
+  "contributes": {
+    "snippets": [
+      { "language": "javascript", "path": "./p5.js.json" }
+    ]
+  }
+}

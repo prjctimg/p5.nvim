@@ -1,0 +1,707 @@
+{
+  "p5-setup": {
+    "prefix": "p5-setup",
+    "body": ["function setup() {", "  createCanvas(${1:400}, ${2:400});", "  ${3}", "}"],
+    "description": "setup() function skeleton"
+  },
+  "p5-draw": {
+    "prefix": "p5-draw",
+    "body": ["function draw() {", "  background(${1:220});", "  ${2}", "}"],
+    "description": "draw() function skeleton"
+  },
+  "p5-preload": {
+    "prefix": "p5-preload",
+    "body": ["function preload() {", "  ${1}", "}"],
+    "description": "preload() function skeleton"
+  },
+  "p5-sketch": {
+    "prefix": "p5-sketch",
+    "body": ["function setup() {", "  createCanvas(400, 400);", "}", "", "function draw() {", "  background(220);", "}"],
+    "description": "Full p5.js sketch skeleton (setup + draw)"
+  },
+  "p5-push": {
+    "prefix": ["p5-push", "p5-pushpop"],
+    "body": ["push();", "${1}", "pop();"],
+    "description": "push() / pop() block"
+  },
+  "p5-beginshape": {
+    "prefix": "p5-beginshape",
+    "body": ["beginShape();", "  ${1:vertex(x, y)}", "endShape(CLOSE);"],
+    "description": "beginShape() / endShape(CLOSE) polygon"
+  },
+  "p5-beginshapelines": {
+    "prefix": "p5-beginshapelines",
+    "body": ["beginShape(LINES);", "  vertex(${1:x1}, ${2:y1});", "  vertex(${3:x2}, ${4:y2});", "endShape();"],
+    "description": "beginShape(LINES) / endShape()"
+  },
+  "p5-beginshapetriangles": {
+    "prefix": "p5-beginshapetriangles",
+    "body": ["beginShape(TRIANGLES);", "  ${1}", "endShape();"],
+    "description": "beginShape(TRIANGLES) / endShape()"
+  },
+  "p5-beginshapetrianglestrip": {
+    "prefix": "p5-beginshapetrianglestrip",
+    "body": ["beginShape(TRIANGLE_STRIP);", "  ${1}", "endShape();"],
+    "description": "beginShape(TRIANGLE_STRIP) / endShape()"
+  },
+  "p5-beginshapetrifan": {
+    "prefix": "p5-beginshapetrifan",
+    "body": ["beginShape(TRIANGLE_FAN);", "  ${1}", "endShape();"],
+    "description": "beginShape(TRIANGLE_FAN) / endShape()"
+  },
+  "p5-beginshapequads": {
+    "prefix": "p5-beginshapequads",
+    "body": ["beginShape(QUADS);", "  ${1}", "endShape();"],
+    "description": "beginShape(QUADS) / endShape()"
+  },
+  "p5-beginshapepoints": {
+    "prefix": "p5-beginshapepoints",
+    "body": ["beginShape(POINTS);", "  ${1:vertex(x, y)}", "endShape();"],
+    "description": "beginShape(POINTS) / endShape()"
+  },
+  "p5-beginshapelinestrip": {
+    "prefix": "p5-beginshapelinestrip",
+    "body": ["beginShape(LINE_STRIP);", "  ${1}", "endShape();"],
+    "description": "beginShape(LINE_STRIP) / endShape()"
+  },
+  "p5-beginshapelineloop": {
+    "prefix": "p5-beginshapelineloop",
+    "body": ["beginShape(LINE_LOOP);", "  ${1}", "endShape();"],
+    "description": "beginShape(LINE_LOOP) / endShape()"
+  },
+  "p5-begincontour": {
+    "prefix": "p5-begincontour",
+    "body": ["beginContour();", "  ${1:vertex(x, y)}", "endContour();"],
+    "description": "beginContour() / endContour() for shape holes"
+  },
+  "p5-loadpixels": {
+    "prefix": "p5-loadpixels",
+    "body": ["loadPixels();", "${1}", "updatePixels();"],
+    "description": "loadPixels() / updatePixels() block"
+  },
+  "p5-creategraphics": {
+    "prefix": "p5-creategraphics",
+    "body": ["const ${1:pg} = createGraphics(${2:400}, ${3:400});", "${1:pg}.beginDraw();", "  ${4}", "${1:pg}.endDraw();", "image(${1:pg}, ${5:0}, ${6:0});"],
+    "description": "createGraphics() off-screen buffer"
+  },
+  "p5-vertex": {
+    "prefix": "p5-vertex",
+    "body": ["vertex(${1:x}, ${2:y});"],
+    "description": "vertex(x, y)"
+  },
+  "p5-vertex3d": {
+    "prefix": "p5-vertex3d",
+    "body": ["vertex(${1:x}, ${2:y}, ${3:z});"],
+    "description": "vertex(x, y, z)"
+  },
+  "p5-curvevertex": {
+    "prefix": "p5-curvevertex",
+    "body": ["curveVertex(${1:x}, ${2:y});"],
+    "description": "curveVertex(x, y)"
+  },
+  "p5-beziervertex": {
+    "prefix": "p5-beziervertex",
+    "body": ["bezierVertex(${1:x1}, ${2:y1}, ${3:x2}, ${4:y2}, ${5:x3}, ${6:y3});"],
+    "description": "bezierVertex(x1, y1, x2, y2, x3, y3)"
+  },
+  "p5-quadraticvertex": {
+    "prefix": "p5-quadraticvertex",
+    "body": ["quadraticVertex(${1:cx}, ${2:cy}, ${3:x3}, ${4:y3});"],
+    "description": "quadraticVertex(cx, cy, x3, y3)"
+  },
+  "p5-canvas": {
+    "prefix": "p5-canvas",
+    "body": ["createCanvas(${1:400}, ${2:400});"],
+    "description": "createCanvas(w, h)"
+  },
+  "p5-canvas-webgl": {
+    "prefix": "p5-canvas-webgl",
+    "body": ["createCanvas(${1:400}, ${2:400}, WEBGL);"],
+    "description": "createCanvas(w, h, WEBGL)"
+  },
+  "p5-circle": {
+    "prefix": "p5-circle",
+    "body": ["circle(${1:x}, ${2:y}, ${3:d});"],
+    "description": "circle(x, y, d)"
+  },
+  "p5-rect": {
+    "prefix": "p5-rect",
+    "body": ["rect(${1:x}, ${2:y}, ${3:w}, ${4:h});"],
+    "description": "rect(x, y, w, h)"
+  },
+  "p5-rect-rounded": {
+    "prefix": "p5-rect-rounded",
+    "body": ["rect(${1:x}, ${2:y}, ${3:w}, ${4:h}, ${5:r});"],
+    "description": "rect(x, y, w, h, r) with rounded corners"
+  },
+  "p5-ellipse": {
+    "prefix": "p5-ellipse",
+    "body": ["ellipse(${1:x}, ${2:y}, ${3:w}, ${4:h});"],
+    "description": "ellipse(x, y, w, h)"
+  },
+  "p5-line": {
+    "prefix": "p5-line",
+    "body": ["line(${1:x1}, ${2:y1}, ${3:x2}, ${4:y2});"],
+    "description": "line(x1, y1, x2, y2)"
+  },
+  "p5-triangle": {
+    "prefix": "p5-triangle",
+    "body": ["triangle(${1:x1}, ${2:y1}, ${3:x2}, ${4:y2}, ${5:x3}, ${6:y3});"],
+    "description": "triangle(x1, y1, x2, y2, x3, y3)"
+  },
+  "p5-quad": {
+    "prefix": "p5-quad",
+    "body": ["quad(${1:x1}, ${2:y1}, ${3:x2}, ${4:y2}, ${5:x3}, ${6:y3}, ${7:x4}, ${8:y4});"],
+    "description": "quad(x1, y1, x2, y2, x3, y3, x4, y4)"
+  },
+  "p5-square": {
+    "prefix": "p5-square",
+    "body": ["square(${1:x}, ${2:y}, ${3:s});"],
+    "description": "square(x, y, s)"
+  },
+  "p5-arc": {
+    "prefix": "p5-arc",
+    "body": ["arc(${1:x}, ${2:y}, ${3:w}, ${4:h}, ${5:start}, ${6:stop});"],
+    "description": "arc(x, y, w, h, start, stop)"
+  },
+  "p5-point": {
+    "prefix": "p5-point",
+    "body": ["point(${1:x}, ${2:y});"],
+    "description": "point(x, y)"
+  },
+  "p5-point3d": {
+    "prefix": "p5-point3d",
+    "body": ["point(${1:x}, ${2:y}, ${3:z});"],
+    "description": "point(x, y, z)"
+  },
+  "p5-background": {
+    "prefix": "p5-background",
+    "body": ["background(${1:r}, ${2:g}, ${3:b});"],
+    "description": "background(r, g, b)"
+  },
+  "p5-fill": {
+    "prefix": "p5-fill",
+    "body": ["fill(${1:r}, ${2:g}, ${3:b});"],
+    "description": "fill(r, g, b)"
+  },
+  "p5-fill-alpha": {
+    "prefix": "p5-fill-alpha",
+    "body": ["fill(${1:r}, ${2:g}, ${3:b}, ${4:a});"],
+    "description": "fill(r, g, b, a) with alpha"
+  },
+  "p5-nofill": {
+    "prefix": "p5-nofill",
+    "body": ["noFill();"],
+    "description": "noFill()"
+  },
+  "p5-stroke": {
+    "prefix": "p5-stroke",
+    "body": ["stroke(${1:r}, ${2:g}, ${3:b});"],
+    "description": "stroke(r, g, b)"
+  },
+  "p5-stroke-alpha": {
+    "prefix": "p5-stroke-alpha",
+    "body": ["stroke(${1:r}, ${2:g}, ${3:b}, ${4:a});"],
+    "description": "stroke(r, g, b, a) with alpha"
+  },
+  "p5-nostroke": {
+    "prefix": "p5-nostroke",
+    "body": ["noStroke();"],
+    "description": "noStroke()"
+  },
+  "p5-strokeweight": {
+    "prefix": "p5-strokeweight",
+    "body": ["strokeWeight(${1:w});"],
+    "description": "strokeWeight(w)"
+  },
+  "p5-strokecap": {
+    "prefix": "p5-strokecap",
+    "body": ["strokeCap(${1:ROUND});"],
+    "description": "strokeCap(ROUND|SQUARE|PROJECT)"
+  },
+  "p5-strokejoin": {
+    "prefix": "p5-strokejoin",
+    "body": ["strokeJoin(${1:ROUND});"],
+    "description": "strokeJoin(MITER|BEVEL|ROUND)"
+  },
+  "p5-colormode-rgb": {
+    "prefix": "p5-colormode-rgb",
+    "body": ["colorMode(RGB, ${1:255});"],
+    "description": "colorMode(RGB, max)"
+  },
+  "p5-colormode-hsb": {
+    "prefix": "p5-colormode-hsb",
+    "body": ["colorMode(HSB, ${1:360}, ${2:100}, ${3:100});"],
+    "description": "colorMode(HSB, H, S, B)"
+  },
+  "p5-color": {
+    "prefix": "p5-color",
+    "body": ["color(${1:r}, ${2:g}, ${3:b});"],
+    "description": "color(r, g, b)"
+  },
+  "p5-lerpcolor": {
+    "prefix": "p5-lerpcolor",
+    "body": ["lerpColor(${1:c1}, ${2:c2}, ${3:amt});"],
+    "description": "lerpColor(c1, c2, amt)"
+  },
+  "p5-ellipsemode": {
+    "prefix": "p5-ellipsemode",
+    "body": ["ellipseMode(${1:CENTER});"],
+    "description": "ellipseMode(CENTER|RADIUS|CORNER|CORNERS)"
+  },
+  "p5-rectmode": {
+    "prefix": "p5-rectmode",
+    "body": ["rectMode(${1:CENTER});"],
+    "description": "rectMode(CENTER|RADIUS|CORNER|CORNERS)"
+  },
+  "p5-smooth": {
+    "prefix": "p5-smooth",
+    "body": ["smooth();"],
+    "description": "smooth()"
+  },
+  "p5-nosmooth": {
+    "prefix": "p5-nosmooth",
+    "body": ["noSmooth();"],
+    "description": "noSmooth()"
+  },
+  "p5-translate": {
+    "prefix": "p5-translate",
+    "body": ["translate(${1:x}, ${2:y});"],
+    "description": "translate(x, y)"
+  },
+  "p5-translate3d": {
+    "prefix": "p5-translate3d",
+    "body": ["translate(${1:x}, ${2:y}, ${3:z});"],
+    "description": "translate(x, y, z)"
+  },
+  "p5-rotate": {
+    "prefix": "p5-rotate",
+    "body": ["rotate(${1:angle});"],
+    "description": "rotate(angle)"
+  },
+  "p5-rotatex": {
+    "prefix": "p5-rotatex",
+    "body": ["rotateX(${1:angle});"],
+    "description": "rotateX(angle)"
+  },
+  "p5-rotatey": {
+    "prefix": "p5-rotatey",
+    "body": ["rotateY(${1:angle});"],
+    "description": "rotateY(angle)"
+  },
+  "p5-rotatez": {
+    "prefix": "p5-rotatez",
+    "body": ["rotateZ(${1:angle});"],
+    "description": "rotateZ(angle)"
+  },
+  "p5-scale": {
+    "prefix": "p5-scale",
+    "body": ["scale(${1:x}, ${2:y});"],
+    "description": "scale(x, y)"
+  },
+  "p5-shearx": {
+    "prefix": "p5-shearx",
+    "body": ["shearX(${1:angle});"],
+    "description": "shearX(angle)"
+  },
+  "p5-sheary": {
+    "prefix": "p5-sheary",
+    "body": ["shearY(${1:angle});"],
+    "description": "shearY(angle)"
+  },
+  "p5-map": {
+    "prefix": "p5-map",
+    "body": ["map(${1:value}, ${2:low1}, ${3:high1}, ${4:low2}, ${5:high2});"],
+    "description": "map(value, low1, high1, low2, high2)"
+  },
+  "p5-constrain": {
+    "prefix": "p5-constrain",
+    "body": ["constrain(${1:amt}, ${2:low}, ${3:high});"],
+    "description": "constrain(amt, low, high)"
+  },
+  "p5-lerp": {
+    "prefix": "p5-lerp",
+    "body": ["lerp(${1:start}, ${2:stop}, ${3:amt});"],
+    "description": "lerp(start, stop, amt)"
+  },
+  "p5-norm": {
+    "prefix": "p5-norm",
+    "body": ["norm(${1:value}, ${2:low}, ${3:high});"],
+    "description": "norm(value, low, high)"
+  },
+  "p5-dist": {
+    "prefix": "p5-dist",
+    "body": ["dist(${1:x1}, ${2:y1}, ${3:x2}, ${4:y2});"],
+    "description": "dist(x1, y1, x2, y2)"
+  },
+  "p5-dist3d": {
+    "prefix": "p5-dist3d",
+    "body": ["dist(${1:x1}, ${2:y1}, ${3:z1}, ${4:x2}, ${5:y2}, ${6:z2});"],
+    "description": "dist(x1, y1, z1, x2, y2, z2)"
+  },
+  "p5-random": {
+    "prefix": "p5-random",
+    "body": ["random(${1:high});"],
+    "description": "random(high)"
+  },
+  "p5-randomrange": {
+    "prefix": "p5-randomrange",
+    "body": ["random(${1:low}, ${2:high});"],
+    "description": "random(low, high)"
+  },
+  "p5-randomgaussian": {
+    "prefix": "p5-randomgaussian",
+    "body": ["randomGaussian(${1:mean}, ${2:sd});"],
+    "description": "randomGaussian(mean, sd)"
+  },
+  "p5-noise": {
+    "prefix": "p5-noise",
+    "body": ["noise(${1:x}, ${2:y});"],
+    "description": "noise(x, y)"
+  },
+  "p5-noise3d": {
+    "prefix": "p5-noise3d",
+    "body": ["noise(${1:x}, ${2:y}, ${3:z});"],
+    "description": "noise(x, y, z)"
+  },
+  "p5-noisedetail": {
+    "prefix": "p5-noisedetail",
+    "body": ["noiseDetail(${1:lod}, ${2:falloff});"],
+    "description": "noiseDetail(lod, falloff)"
+  },
+  "p5-vector": {
+    "prefix": "p5-vector",
+    "body": ["createVector(${1:x}, ${2:y});"],
+    "description": "createVector(x, y)"
+  },
+  "p5-vector-fromangle": {
+    "prefix": "p5-vector-fromangle",
+    "body": ["p5.Vector.fromAngle(${1:angle}).mult(${2:mag});"],
+    "description": "p5.Vector.fromAngle(angle).mult(mag)"
+  },
+  "p5-vector-random2d": {
+    "prefix": "p5-vector-random2d",
+    "body": ["p5.Vector.random2D().mult(${1:mag});"],
+    "description": "p5.Vector.random2D().mult(mag)"
+  },
+  "p5-vector-random3d": {
+    "prefix": "p5-vector-random3d",
+    "body": ["p5.Vector.random3D().mult(${1:mag});"],
+    "description": "p5.Vector.random3D().mult(mag)"
+  },
+  "p5-text": {
+    "prefix": "p5-text",
+    "body": ["text(${1:str}, ${2:x}, ${3:y});"],
+    "description": "text(str, x, y)"
+  },
+  "p5-text-size": {
+    "prefix": "p5-text-size",
+    "body": ["textSize(${1:size});"],
+    "description": "textSize(size)"
+  },
+  "p5-textalign": {
+    "prefix": "p5-textalign",
+    "body": ["textAlign(${1:CENTER}, ${2:CENTER});"],
+    "description": "textAlign(H, V)"
+  },
+  "p5-loadfont": {
+    "prefix": "p5-loadfont",
+    "body": ["function preload() {", "  ${1:font} = loadFont('${2:path}');", "}", "", "function setup() {", "  textFont(${1:font});", "}"],
+    "description": "loadFont() + textFont() in preload"
+  },
+  "p5-textleading": {
+    "prefix": "p5-textleading",
+    "body": ["textLeading(${1:leading});"],
+    "description": "textLeading(leading)"
+  },
+  "p5-loadimage": {
+    "prefix": "p5-loadimage",
+    "body": ["function preload() {", "  ${1:img} = loadImage('${2:path}');", "}", "", "function draw() {", "  image(${1:img}, 0, 0);", "}"],
+    "description": "loadImage() + image() in preload/draw"
+  },
+  "p5-image": {
+    "prefix": "p5-image",
+    "body": ["image(${1:img}, ${2:x}, ${3:y}, ${4:w}, ${5:h});"],
+    "description": "image(img, x, y, w, h)"
+  },
+  "p5-createimage": {
+    "prefix": "p5-createimage",
+    "body": ["const ${1:img} = createImage(${2:w}, ${3:h});"],
+    "description": "createImage(w, h)"
+  },
+  "p5-tint": {
+    "prefix": "p5-tint",
+    "body": ["tint(${1:r}, ${2:g}, ${3:b});"],
+    "description": "tint(r, g, b)"
+  },
+  "p5-pixels": {
+    "prefix": "p5-pixels",
+    "body": ["loadPixels();", "for (let ${1:i} = 0; ${1:i} < pixels.length; ${1:i} += 4) {", "  pixels[${1:i}] = ${2:/* R */};", "  pixels[${1:i} + 1] = ${3:/* G */};", "  pixels[${1:i} + 2] = ${4:/* B */};", "  pixels[${1:i} + 3] = ${5:/* A */};", "}", "updatePixels();"],
+    "description": "pixels[] manipulation loop"
+  },
+  "p5-filter": {
+    "prefix": "p5-filter",
+    "body": ["filter(${1:THRESHOLD});"],
+    "description": "filter(type)"
+  },
+  "p5-mousepressed": {
+    "prefix": "p5-mousepressed",
+    "body": ["function mousePressed() {", "  ${1}", "}"],
+    "description": "mousePressed() handler"
+  },
+  "p5-mousereleased": {
+    "prefix": "p5-mousereleased",
+    "body": ["function mouseReleased() {", "  ${1}", "}"],
+    "description": "mouseReleased() handler"
+  },
+  "p5-mouseclicked": {
+    "prefix": "p5-mouseclicked",
+    "body": ["function mouseClicked() {", "  ${1}", "}"],
+    "description": "mouseClicked() handler"
+  },
+  "p5-mousemoved": {
+    "prefix": "p5-mousemoved",
+    "body": ["function mouseMoved() {", "  ${1}", "}"],
+    "description": "mouseMoved() handler"
+  },
+  "p5-mousedragged": {
+    "prefix": "p5-mousedragged",
+    "body": ["function mouseDragged() {", "  ${1}", "}"],
+    "description": "mouseDragged() handler"
+  },
+  "p5-mousewheel": {
+    "prefix": "p5-mousewheel",
+    "body": ["function mouseWheel(${1:event}) {", "  ${2}", "  return false;", "}"],
+    "description": "mouseWheel(event) handler"
+  },
+  "p5-keypressed": {
+    "prefix": "p5-keypressed",
+    "body": ["function keyPressed() {", "  ${1}", "}"],
+    "description": "keyPressed() handler"
+  },
+  "p5-keyreleased": {
+    "prefix": "p5-keyreleased",
+    "body": ["function keyReleased() {", "  ${1}", "}"],
+    "description": "keyReleased() handler"
+  },
+  "p5-keytyped": {
+    "prefix": "p5-keytyped",
+    "body": ["function keyTyped() {", "  ${1}", "}"],
+    "description": "keyTyped() handler"
+  },
+  "p5-box": {
+    "prefix": "p5-box",
+    "body": ["box(${1:size});"],
+    "description": "box(size)"
+  },
+  "p5-sphere": {
+    "prefix": "p5-sphere",
+    "body": ["sphere(${1:radius});"],
+    "description": "sphere(radius)"
+  },
+  "p5-cylinder": {
+    "prefix": "p5-cylinder",
+    "body": ["cylinder(${1:radius}, ${2:height});"],
+    "description": "cylinder(radius, height)"
+  },
+  "p5-cone": {
+    "prefix": "p5-cone",
+    "body": ["cone(${1:radius}, ${2:height});"],
+    "description": "cone(radius, height)"
+  },
+  "p5-torus": {
+    "prefix": "p5-torus",
+    "body": ["torus(${1:radius}, ${2:tubeRadius});"],
+    "description": "torus(radius, tubeRadius)"
+  },
+  "p5-ellipsoid": {
+    "prefix": "p5-ellipsoid",
+    "body": ["ellipsoid(${1:rx}, ${2:ry}, ${3:rz});"],
+    "description": "ellipsoid(rx, ry, rz)"
+  },
+  "p5-plane": {
+    "prefix": "p5-plane",
+    "body": ["plane(${1:w}, ${2:h});"],
+    "description": "plane(w, h)"
+  },
+  "p5-orbitcontrol": {
+    "prefix": "p5-orbitcontrol",
+    "body": ["orbitControl();"],
+    "description": "orbitControl() for 3D mouse interaction"
+  },
+  "p5-directionallight": {
+    "prefix": "p5-directionallight",
+    "body": ["directionalLight(${1:r}, ${2:g}, ${3:b}, ${4:x}, ${5:y}, ${6:z});"],
+    "description": "directionalLight(r, g, b, x, y, z)"
+  },
+  "p5-ambientlight": {
+    "prefix": "p5-ambientlight",
+    "body": ["ambientLight(${1:r}, ${2:g}, ${3:b});"],
+    "description": "ambientLight(r, g, b)"
+  },
+  "p5-pointlight": {
+    "prefix": "p5-pointlight",
+    "body": ["pointLight(${1:r}, ${2:g}, ${3:b}, ${4:x}, ${5:y}, ${6:z});"],
+    "description": "pointLight(r, g, b, x, y, z)"
+  },
+  "p5-ambientmaterial": {
+    "prefix": "p5-ambientmaterial",
+    "body": ["ambientMaterial(${1:r}, ${2:g}, ${3:b});"],
+    "description": "ambientMaterial(r, g, b)"
+  },
+  "p5-specularmaterial": {
+    "prefix": "p5-specularmaterial",
+    "body": ["specularMaterial(${1:r}, ${2:g}, ${3:b});"],
+    "description": "specularMaterial(r, g, b)"
+  },
+  "p5-normalmaterial": {
+    "prefix": "p5-normalmaterial",
+    "body": ["normalMaterial();"],
+    "description": "normalMaterial()"
+  },
+  "p5-texture": {
+    "prefix": "p5-texture",
+    "body": ["texture(${1:img});"],
+    "description": "texture(img)"
+  },
+  "p5-camera": {
+    "prefix": "p5-camera",
+    "body": ["camera(${1:x}, ${2:y}, ${3:z}, ${4:cx}, ${5:cy}, ${6:cz});"],
+    "description": "camera(x, y, z, cx, cy, cz)"
+  },
+  "p5-createslider": {
+    "prefix": "p5-createslider",
+    "body": ["const ${1:slider} = createSlider(${2:min}, ${3:max}, ${4:val}, ${5:step});", "${1:slider}.input(() => ${6});"],
+    "description": "createSlider(min, max, val, step)"
+  },
+  "p5-createbutton": {
+    "prefix": "p5-createbutton",
+    "body": ["const ${1:btn} = createButton('${2:label}');", "${1:btn}.mousePressed(() => ${3});"],
+    "description": "createButton(label) with click handler"
+  },
+  "p5-createinput": {
+    "prefix": "p5-createinput",
+    "body": ["const ${1:input} = createInput('${2:value}');", "${1:input}.input(() => ${3});"],
+    "description": "createInput(value) with input handler"
+  },
+  "p5-createselect": {
+    "prefix": "p5-createselect",
+    "body": ["const ${1:sel} = createSelect();", "${1:sel}.option('${2:a}');", "${1:sel}.option('${3:b}');", "${1:sel}.changed(() => ${4});"],
+    "description": "createSelect() with options"
+  },
+  "p5-createcheckbox": {
+    "prefix": "p5-createcheckbox",
+    "body": ["const ${1:cb} = createCheckbox('${2:label}', ${3:false});", "${1:cb}.changed(() => ${4});"],
+    "description": "createCheckbox(label, checked)"
+  },
+  "p5-createp": {
+    "prefix": "p5-createp",
+    "body": ["const ${1:p} = createP('${2:html}');"],
+    "description": "createP(html)"
+  },
+  "p5-createa": {
+    "prefix": "p5-createa",
+    "body": ["const ${1:link} = createA('${2:url}', '${3:text}');"],
+    "description": "createA(url, text)"
+  },
+  "p5-loadsound": {
+    "prefix": "p5-loadsound",
+    "body": ["function preload() {", "  ${1:sound} = loadSound('${2:path}');", "}", "", "function mousePressed() {", "  ${1:sound}.play();", "}"],
+    "description": "loadSound() + play()"
+  },
+  "p5-fft": {
+    "prefix": "p5-fft",
+    "body": ["const ${1:fft} = new p5.FFT();", "", "function draw() {", "  const ${2:spectrum} = ${1:fft}.analyze();", "  for (let ${3:i} = 0; ${3:i} < ${2:spectrum}.length; ${3:i}++) {", "    ${4}", "  }", "}"],
+    "description": "p5.FFT frequency analysis skeleton"
+  },
+  "p5-oscillator": {
+    "prefix": "p5-oscillator",
+    "body": ["const ${1:osc} = new p5.Oscillator('${2:sine}');", "${1:osc}.start();", "${1:osc}.amp(${3:0.5});", "${1:osc}.freq(${4:440});"],
+    "description": "p5.Oscillator skeleton"
+  },
+  "p5-userstartaudio": {
+    "prefix": "p5-userstartaudio",
+    "body": ["userStartAudio();"],
+    "description": "userStartAudio() for user-gesture audio activation"
+  },
+  "p5-loadjson": {
+    "prefix": "p5-loadjson",
+    "body": ["function preload() {", "  ${1:data} = loadJSON('${2:url}');", "}"],
+    "description": "loadJSON(url) in preload"
+  },
+  "p5-loadstrings": {
+    "prefix": "p5-loadstrings",
+    "body": ["function preload() {", "  ${1:lines} = loadStrings('${2:url}');", "}"],
+    "description": "loadStrings(url) in preload"
+  },
+  "p5-savecanvas": {
+    "prefix": "p5-savecanvas",
+    "body": ["saveCanvas('${1:filename}', '${2:png}');"],
+    "description": "saveCanvas(filename, extension)"
+  },
+  "p5-savegif": {
+    "prefix": "p5-savegif",
+    "body": ["saveGif('${1:filename}', ${2:5});"],
+    "description": "saveGif(filename, duration)"
+  },
+  "p5-httpget": {
+    "prefix": "p5-httpget",
+    "body": ["httpGet('${1:url}', ${2:callback});"],
+    "description": "httpGet(url, callback)"
+  },
+  "p5-forrandom": {
+    "prefix": "p5-forrandom",
+    "body": ["for (let ${1:i} = 0; ${1:i} < ${2:n}; ${1:i}++) {", "  const ${3:x} = random(width);", "  const ${4:y} = random(height);", "  ${5}", "}"],
+    "description": "For loop with random positions"
+  },
+  "p5-forgrid": {
+    "prefix": "p5-forgrid",
+    "body": ["const ${1:cols} = ${2:10};", "const ${3:rows} = ${4:10};", "const ${5:w} = width / ${1:cols};", "const ${6:h} = height / ${3:rows};", "for (let ${7:i} = 0; ${7:i} < ${1:cols}; ${7:i}++) {", "  for (let ${8:j} = 0; ${8:j} < ${3:rows}; ${8:j}++) {", "    const ${9:x} = ${7:i} * ${5:w} + ${5:w} / 2;", "    const ${10:y} = ${8:j} * ${6:h} + ${6:h} / 2;", "    ${11}", "  }", "}"],
+    "description": "Nested grid loop"
+  },
+  "p5-forpolar": {
+    "prefix": "p5-forpolar",
+    "body": ["for (let ${1:i} = 0; ${1:i} < ${2:n}; ${1:i}++) {", "  const ${3:angle} = map(${1:i}, 0, ${2:n}, 0, TWO_PI);", "  const ${4:x} = ${5:cx} + ${6:r} * cos(${3:angle});", "  const ${7:y} = ${5:cy} + ${6:r} * sin(${3:angle});", "  ${8}", "}"],
+    "description": "Polar coordinates loop around a circle"
+  },
+  "p5-oscillation": {
+    "prefix": "p5-oscillation",
+    "body": ["const ${1:osc} = sin(${2:angle}) * ${3:amplitude} + ${4:offset};"],
+    "description": "Sine oscillation value"
+  },
+  "p5-bounce": {
+    "prefix": "p5-bounce",
+    "body": ["if (${1:x} > width - ${2:r} || ${1:x} < ${2:r}) ${3:vx} *= -1;", "if (${4:y} > height - ${2:r} || ${4:y} < ${2:r}) ${5:vy} *= -1;", "${1:x} += ${3:vx};", "${4:y} += ${5:vy};"],
+    "description": "Bounce ball off edges"
+  },
+  "p5-particles": {
+    "prefix": "p5-particles",
+    "body": ["const ${1:particles} = [];", "", "function setup() {", "  createCanvas(400, 400);", "}", "", "function draw() {", "  background(220);", "  ${1:particles}.push(new Particle());", "  for (let ${2:i} = ${1:particles}.length - 1; ${2:i} >= 0; ${2:i}--) {", "    ${1:particles}[${2:i}].update();", "    ${1:particles}[${2:i}].show();", "    if (${1:particles}[${2:i}].isDead()) {", "      ${1:particles}.splice(${2:i}, 1);", "    }", "  }", "}", "", "class Particle {", "  constructor() {", "    this.pos = createVector(width / 2, height / 2);", "    this.vel = p5.Vector.random2D().mult(2);", "    this.lifespan = 255;", "  }", "  update() {", "    this.pos.add(this.vel);", "    this.lifespan -= 2;", "  }", "  show() {", "    noStroke();", "    fill(this.lifespan);", "    circle(this.pos.x, this.pos.y, 8);", "  }", "  isDead() {", "    return this.lifespan < 0;", "  }", "}"],
+    "description": "Simple particle system class"
+  },
+  "p5-fadeout": {
+    "prefix": "p5-fadeout",
+    "body": ["noStroke();", "fill(255, ${1:10});", "rect(0, 0, width, height);"],
+    "description": "Semi-transparent overlay for motion trails"
+  },
+  "p5-wrap": {
+    "prefix": "p5-wrap",
+    "body": ["if (${1:x} > width) ${1:x} = 0;", "if (${1:x} < 0) ${1:x} = width;", "if (${2:y} > height) ${2:y} = 0;", "if (${2:y} < 0) ${2:y} = height;"],
+    "description": "Wrap position around screen edges"
+  },
+  "p5-colorswap": {
+    "prefix": "p5-colorswap",
+    "body": ["const ${1:palette} = [", "  color(${2:r1}, ${3:g1}, ${4:b1}),", "  color(${5:r2}, ${6:g2}, ${7:b2}),", "  color(${8:r3}, ${9:g3}, ${10:b3}),", "];", "fill(random(${1:palette}));"],
+    "description": "Color palette array with random selection"
+  },
+  "p5-camerafollow": {
+    "prefix": "p5-camerafollow",
+    "body": ["push();", "translate(width / 2 - ${1:target}.x, height / 2 - ${1:target}.y);", "${2}", "pop();"],
+    "description": "Camera follow a target"
+  },
+  "p5-mouseliner": {
+    "prefix": "p5-mouseliner",
+    "body": ["line(${1:x}, ${2:y}, mouseX, mouseY);"],
+    "description": "Line from position to mouse"
+  }
+}

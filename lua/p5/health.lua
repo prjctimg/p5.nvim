@@ -145,6 +145,17 @@ H.check_project_config = function()
 				ok("Libraries: " .. count .. " configured")
 			end
 
+			if data.gist then
+				if type(data.gist) == "table" then
+					if data.gist.url then ok("Gist: linked to " .. data.gist.url) end
+					if data.gist.title and data.gist.title ~= "" then ok("Gist title: " .. data.gist.title) end
+					if data.gist.description and data.gist.description ~= "" then ok("Gist description: present") end
+				elseif type(data.gist) == "string" then
+					-- Legacy format
+
+				end
+			end
+
 			if data.server then
 				ok("Server configuration: found")
 			end
