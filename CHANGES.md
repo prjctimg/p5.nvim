@@ -4,7 +4,9 @@ All notable changes since v0.5.0.
 
 ---
 
-## Unreleased
+## v0.6.0-alpha-7b9accc
+
+> Tag: `7b9accc` — Merge branch 'pr/gist-edit'
 
 ### Highlights
 - Bidirectional gist sync with per-item conflict prompts
