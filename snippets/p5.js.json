@@ -81,7 +81,7 @@
   },
   "p5-creategraphics": {
     "prefix": "p5-creategraphics",
-    "body": ["const ${1:pg} = createGraphics(${2:400}, ${3:400});", "${1:pg}.beginDraw();", "  ${4}", "${1:pg}.endDraw();", "image(${1:pg}, ${5:0}, ${6:0});"],
+    "body": ["const ${1:pg} = createGraphics(${2:400}, ${3:400});", "${1:pg}.background(${4:220});", "${1:pg}.${5:ellipse(${6:x}, ${7:y}, ${8:d})};", "image(${1:pg}, ${9:0}, ${10:0});"],
     "description": "createGraphics() off-screen buffer"
   },
   "p5-vertex": {
