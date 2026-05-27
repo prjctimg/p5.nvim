@@ -21,7 +21,7 @@ P.create_project = function(name, major)
 			end
 		end
 		if #missing > 0 then
-			notify("Missing required assets: " .. table.concat(missing, ", "), "error")
+			notify("Missing required assets: " .. table.concat(missing, ", "), "warn")
 			notify("😩 Cannot create project - required assets are missing", "info")
 			return false
 		end
@@ -36,40 +36,38 @@ P.create_project = function(name, major)
 		notify("Downloading p5.js 2.x assets...", "info")
 		local libs_dir = core.asset_dir() .. "/libs"
 		local types_dir = core.asset_dir() .. "/types"
-		core.fetch(
-			"https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.0/p5.min.js",
-			libs_dir .. "/p5-v2.js",
-			function(ok)
-				if ok then
-					core.fetch(
-						"https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.0/p5.sound.min.js",
-						libs_dir .. "/p5-v2.sound.js",
-						function(ok2)
-							if ok2 then
-								core.fetch(
-									"https://raw.githubusercontent.com/processing/p5.js-website/next/types/p5.d.ts",
-									types_dir .. "/p5-v2.d.ts",
-									function(ok3)
-										if ok3 then
-											P.create_project_continue(name, major)
-										else
-											notify("Failed to download p5.js 2.x types", "error")
-										end
-									end,
-									{ cache = true, expected_hash = "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed" }
-								)
-							else
-								notify("Failed to download p5.js 2.x sound", "error")
-							end
-						end,
-						{ cache = true, expected_hash = "55f7d9e99b8e2d4e0e193b2f0275501e6d9c1ebd29cadbea6a0da48a8587e3e0" }
-					)
-				else
-					notify("Failed to download p5.js 2.x core", "error")
-				end
-			end,
-			{ cache = true, expected_hash = "9f0f6bfc935541daf584a797fdbdaeac25efcffb2fba899a8fdc891a46be79dd" }
-		)
+		core.fetch("https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.0/p5.min.js", libs_dir .. "/p5-v2.js", function(ok)
+			if ok then
+				core.fetch(
+					"https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.0/p5.sound.min.js",
+					libs_dir .. "/p5-v2.sound.js",
+					function(ok2)
+						if ok2 then
+							core.fetch(
+								"https://raw.githubusercontent.com/processing/p5.js-website/next/types/p5.d.ts",
+								types_dir .. "/p5-v2.d.ts",
+								function(ok3)
+									if ok3 then
+										P.create_project_continue(name, major)
+									else
+										notify("Failed to download p5.js 2.x types", "warn")
+									end
+								end,
+								{
+									cache = true,
+									expected_hash = "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed",
+								}
+							)
+						else
+							notify("Failed to download p5.js 2.x sound", "warn")
+						end
+					end,
+					{ cache = true, expected_hash = "55f7d9e99b8e2d4e0e193b2f0275501e6d9c1ebd29cadbea6a0da48a8587e3e0" }
+				)
+			else
+				notify("Failed to download p5.js 2.x core", "warn")
+			end
+		end, { cache = true, expected_hash = "9f0f6bfc935541daf584a797fdbdaeac25efcffb2fba899a8fdc891a46be79dd" })
 		return
 	end
 
@@ -174,7 +172,7 @@ function draw() {
 		core.mkdir(path .. "/assets/libs")
 		libraries.generate_libs_js(path)
 
-		notify("🎉 Project created: " .. name, "ok")
+		notify("🎉 Sketchspace created: " .. name, "ok")
 		vim.api.nvim_set_current_dir(path)
 		vim.cmd({ cmd = "edit", args = { path .. "/sketch.js" } })
 	end)

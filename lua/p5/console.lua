@@ -9,6 +9,13 @@ local set_opt = vim.api.nvim_set_option_value
 -- Use snacks.terminal if available
 local has_snacks, snacks = pcall(require, "snacks")
 
+local disable_term_mode = function(buf_)
+	vim.cmd("stopinsert")
+	for _, k in ipairs({ "<Esc>", "<C-c>", "<C-[>" }) do
+		vim.keymap.set("t", k, "<C-\\><C-n>", { buffer = buf_ })
+	end
+end
+
 C.win = nil
 C.buf = nil
 C.job = nil
@@ -20,6 +27,7 @@ C.delay = 1000
 C.timer = nil
 C.last_error = 0
 C.clear_interval = 30000 -- 30 seconds
+local connected = false
 
 C.create = function()
 	local server = require("p5.server")
@@ -43,7 +51,7 @@ C.create = function()
 	set_opt("modifiable", true, { buf = C.buf })
 	set_opt("scrollback", 1000, { buf = C.buf })
 
-	local connected = false
+	connected = false
 
 	C.job = vim.fn.jobstart(cmd, {
 		term = true,
@@ -69,6 +77,7 @@ C.create = function()
 			end
 		end,
 		on_exit = function(_, exit_code)
+			connected = false
 			if exit_code ~= 0 and C.win and vim.api.nvim_win_is_valid(C.win) then
 				vim.schedule(function()
 					if connected then
@@ -130,13 +139,6 @@ C.show = function(opts)
 	local height = math.floor(viewport_height * 0.3)
 	C.port = server.port
 
-	if C.win and is_win(C.win) then
-		if enter then
-			vim.api.nvim_set_current_win(C.win)
-		end
-		return
-	end
-
 	-- Reset state since window was closed externally
 	C.win = nil
 	C.buf = nil
@@ -168,6 +170,7 @@ C.show = function(opts)
 		C.win = term.win
 		C.buf = term.buf
 		C.auto_clear()
+		disable_term_mode(C.buf)
 		notify("📺 Console connected to server on port " .. C.port, "info")
 		return
 	end
@@ -193,6 +196,7 @@ C.show = function(opts)
 	keymap("n", "q", C.hide, { buffer = buf, desc = "Hide p5 console" })
 	keymap("n", "c", C.clear, { buffer = buf, desc = "Clear p5 console" })
 	keymap("n", "<C-c>", C.hide, { buffer = buf, desc = "Hide console" })
+	disable_term_mode(buf)
 
 	C.auto_clear()
 	notify("Console connected to server on port " .. C.port, "info")
@@ -201,8 +205,17 @@ end
 C.hide = function()
 	if C.win and is_win(C.win) then
 		vim.api.nvim_win_close(C.win, true)
-		C.win = nil
 	end
+	if C.job then
+		vim.fn.jobstop(C.job)
+	end
+	if C.term then
+		C.term:close()
+	end
+	C.win = nil
+	C.buf = nil
+	C.job = nil
+	C.term = nil
 end
 
 C.toggle = function()

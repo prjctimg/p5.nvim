@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-p5.nvim asyncio-based live server with SSE console streaming.
-Replaces blocking http.server with asyncio for better performance.
+asyncio-based live server with SSE console streaming.
 """
 import asyncio
 import os

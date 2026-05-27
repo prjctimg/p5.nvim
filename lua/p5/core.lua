@@ -1,6 +1,5 @@
--- Core utilities and functions for p5.nvim
 local C = {}
--- Split commands for window positioning
+-- window positioning
 C.split_cmd = {
 	below = "belowright split",
 	above = "aboveleft split",
@@ -8,27 +7,22 @@ C.split_cmd = {
 	right = "belowright vsplit",
 }
 
--- Server configurations for runtime environments
 C.server_cfg = {
 	check = "python3",
 	script = "server.py",
 	cmd = "python3",
 }
 
--- Aliases for commonly used vim.fn calls
 local fn = vim.fn
 
--- Check if command exists
 C.is_cmd = function(cmd)
 	return fn.executable(cmd) ~= 0
 end
 
--- Check if file exists (returns boolean)
 C.is_file = function(path)
 	return fn.filereadable(path) == 1
 end
 
--- Check if directory exists (returns boolean)
 C.is_dir = function(path)
 	return fn.isdirectory(path) == 1
 end
@@ -37,15 +31,11 @@ C.mkdir = function(path)
 	fn.mkdir(path, "p")
 end
 
--- Read JSON file safely
 C.read_json = function(path)
 	if not C.is_file(path) then
 		return nil, "File not found"
 	end
 	local content = fn.readfile(path)
-	if not content then
-		return nil, "Failed to read file"
-	end
 	local ok, data = pcall(fn.json_decode, table.concat(content, "\n"))
 	if not ok then
 		return nil, "Invalid JSON"
@@ -53,13 +43,11 @@ C.read_json = function(path)
 	return data, nil
 end
 
--- Write JSON file with formatting
 C.write_json = function(path, data)
 	local content = fn.json_encode(data)
 	fn.writefile(fn.split(content, "\n"), path)
 end
 
--- Get cache file path
 C.cache_path = function(filename)
 	local dir = C.cache_dir()
 	return dir .. "/" .. filename
@@ -86,18 +74,8 @@ C.plugin_root = function()
 	return fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h:h:h")
 end
 
--- Get asset directory
 C.asset_dir = function()
 	return C.plugin_root() .. "/assets"
-end
-
--- Lazy dependency management
-C.require_snacks = function()
-	local ok, lazy_module = pcall(require, "p5.lazy")
-	if ok then
-		return lazy_module.require("snacks")
-	end
-	return nil
 end
 
 -- Validate file exists
@@ -105,7 +83,7 @@ C.validate_file = function(path, name, required)
 	if C.is_file(path) then
 		return true
 	elseif required then
-		C.notify(name .. " not found: " .. path, "error")
+		C.notify(name .. " not found: " .. path, "warn")
 	end
 	return false
 end
@@ -114,7 +92,7 @@ C.validate_dir = function(path, name, required)
 	if C.is_dir(path) then
 		return true
 	elseif required then
-		C.notify(name .. " not found: " .. path, "error")
+		C.notify(name .. " not found: " .. path, "warn")
 	end
 	return false
 end
@@ -153,7 +131,6 @@ C.write_workspace_config = function(config, project_dir)
 	C.write_json(config_file, config)
 end
 
--- Show notification
 C.notify = function(msg, level)
 	local level_map = {
 		ok = vim.log.levels.INFO,
@@ -162,10 +139,9 @@ C.notify = function(msg, level)
 		error = vim.log.levels.ERROR,
 	}
 
-	vim.notify(msg, level_map[level] or vim.log.levels.INFO, { title = "p5.nvim 🌸" })
+	vim.notify(msg, level_map[level], { title = "p5.nvim 🌸" })
 end
 
--- Get cache directory for host system
 C.cache_dir = function()
 	local cache_home = os.getenv("XDG_CACHE_HOME") or fn.expand("~/.cache")
 	local dir = cache_home .. "/p5.nvim"
@@ -184,9 +160,6 @@ C.verify_hash = function(file, expected)
 		return false
 	end
 	local content = fn.readfile(file)
-	if not content then
-		return false
-	end
 	local hash = fn.sha256(table.concat(content, "\n"))
 	return hash == expected
 end
@@ -196,7 +169,7 @@ C.is_cache = function(cache_file, _)
 	return C.is_file(cache_file)
 end
 
--- Download file with caching support and integrity check (async version)
+-- Download file with caching and integrity check
 C.fetch = function(url, dest, callback, options)
 	options = options or {}
 	local use_cache = options.cache ~= false
@@ -212,7 +185,7 @@ C.fetch = function(url, dest, callback, options)
 		elseif C.is_cmd("wget") then
 			cmd = { "wget", "-q", "-T", "30", "-O", dest, url }
 		else
-			C.notify("Neither curl nor wget found. Cannot download: " .. url, "error")
+			C.notify("Neither curl nor wget found. Cannot download: " .. url, "warn")
 			if callback then
 				callback(false)
 			end
@@ -233,7 +206,7 @@ C.fetch = function(url, dest, callback, options)
 						retry_count = retry_count + 1
 						do_fetch()
 					else
-						C.notify("Integrity check failed for: " .. url, "error")
+						C.notify("Integrity check failed for: " .. url, "warn")
 						if callback then
 							callback(false)
 						end
@@ -265,9 +238,7 @@ C.fetch = function(url, dest, callback, options)
 			if ok then
 				if expected_hash and not C.verify_hash(dest, expected_hash) then
 					vim.uv.fs_unlink(dest)
-					if cache_file then
-						vim.uv.fs_unlink(cache_file)
-					end
+					vim.uv.fs_unlink(cache_file)
 				else
 					if callback then
 						callback(true)
@@ -286,12 +257,12 @@ end
 
 -- Get p5 version from bundled library
 C.p5_version = function(major)
-	major = major or 2
 	local p5_file = major == 1 and "p5.js" or "p5-v2.js"
 	local p5 = C.asset_dir() .. "/libs/" .. p5_file
 	if C.is_file(p5) then
 		local lines = fn.readfile(p5)
 		if lines and #lines > 0 then
+			-- strip version
 			local version = lines[1]:match("p5%.js v([%d%.]+)")
 			return version or (major == 2 and "2.0.0" or "1.9.0")
 		end
@@ -320,17 +291,13 @@ C.slugify = function(str)
 	if type(str) ~= "string" then
 		return "untitled"
 	end
-	str = str:lower()
-	str = str:gsub("[^a-z0-9]+", "-")
-	str = str:gsub("^-+", ""):gsub("-+$", "")
+	str = str:lower():gsub("[^a-z0-9]+", "-"):gsub("^-+", ""):gsub("-+$", "")
 	return str ~= "" and str or "untitled"
 end
 
 -- Decode a slug back to a human-readable title
 C.deslugify = function(str)
-	str = str:gsub("-", " ")
-	str = str:gsub("%s+", " ")
-	str = str:gsub("(%a)([%w]*)", function(f, r)
+	str = str:gsub("-", " "):gsub("%s+", " "):gsub("(%a)([%w]*)", function(f, r)
 		return f:upper() .. r:lower()
 	end)
 	return str

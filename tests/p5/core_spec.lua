@@ -43,6 +43,12 @@ describe("slugify", function()
 	it("preserves digits", function()
 		assert.are.equal("v2-0-test", C.slugify("v2.0 test"))
 	end)
+
+	it("handles emoji characters", function()
+		assert.are.equal("my-cool-sketch", C.slugify("🎨 My Cool Sketch"))
+		assert.are.equal("untitled", C.slugify("🎨🎮🔥"))
+		assert.are.equal("a-b", C.slugify("a🎨b"))
+	end)
 end)
 
 describe("deslugify", function()

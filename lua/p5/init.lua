@@ -80,7 +80,7 @@ I.setup = function(opts)
 
 	local function require_sketchspace(action)
 		if not project.is_p5_project() then
-			core.notify(action .. " requires a sketchspace (p5.json)", "error")
+			core.notify(action .. " requires a sketchspace (p5.json)", "warn")
 			return false
 		end
 		return true
@@ -152,7 +152,7 @@ function draw() {
 
 		project.copy_assets_to_project(cwd, function(err)
 			if err then
-				core.notify("Failed to copy assets: " .. err, "error")
+				core.notify("Failed to copy assets: " .. err, "warn")
 				return
 			end
 
@@ -261,7 +261,7 @@ function draw() {
 					if not require_sketchspace("Sync gist") then
 						return
 					end
-					gist.update()
+					gist.sync()
 				elseif choice == "Libraries" then
 					if not require_sketchspace("Sync libraries") then
 						return
@@ -273,7 +273,7 @@ function draw() {
 			if not require_sketchspace("Sync gist") then
 				return
 			end
-			gist.update()
+			gist.sync()
 		elseif target == "libs" or target == "libraries" then
 			if not require_sketchspace("Sync libraries") then
 				return
@@ -288,8 +288,12 @@ function draw() {
 		if not require_sketchspace("Gist") then
 			return
 		end
-		local desc = args[1]
-		gist.create(desc)
+		local sub = args[1]
+		if sub == "edit" then
+			gist.edit()
+		else
+			gist.create(table.concat(args, " "))
+		end
 	end
 
 	handlers.skchbk = function(args)
@@ -303,7 +307,7 @@ function draw() {
 					if subcmd == "list" then
 						gist.skchbk_list(username, vim.fn.getcwd() .. "/skchbk")
 					else
-						gist.skchbk_clone(username, vim.fn.getcwd() .. "/skchbk")
+						gist.clone(username, vim.fn.getcwd() .. "/skchbk", "all")
 					end
 				else
 					notify("Set sketchbook.user in p5 config or provide a username", "warn")
@@ -317,7 +321,7 @@ function draw() {
 		if subcmd == "list" then
 			gist.skchbk_list(username, skchbk_dir)
 		else
-			gist.skchbk_clone(username, skchbk_dir)
+			gist.clone(username, skchbk_dir, "all")
 		end
 	end
 
@@ -421,6 +425,8 @@ function draw() {
 			return { "8000", "8001", "8002", "8003" }
 		elseif subcmd == "sync" then
 			return { "gist", "libs", "libraries" }
+		elseif subcmd == "gist" then
+			return { "edit" }
 		elseif subcmd == "skchbk" then
 			return { "list" }
 		end
