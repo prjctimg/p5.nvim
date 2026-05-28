@@ -4,6 +4,42 @@ All notable changes since v0.5.0.
 
 ---
 
+## v0.6.1-alpha.1
+
+> Tag: `v0.6.1-alpha.1` — fix: resolve gist sync/edit hang caused by `gh gist edit --desc` in non-interactive mode
+
+### Highlights
+- Fixed `G.sync` and `G.edit` hanging when `gh gist edit --desc` blocks in non-interactive mode (gh ≥2.89)
+- `P5 sync` deprecated; use `P5 gist sync` and `P5 update` instead
+- `P5 gist sync` — gist sync moved to gist subcommand
+- `P5 update [libs...]` — update all or specific installed libraries (replaces `P5 sync libs`)
+- SHA256 integrity verification removed (dead code that blocked library installs)
+- Gist creation and comment fixes; integration tests added
+
+### Features
+- `:P5 gist sync` — bidirectional gist sync via `gist` subcommand
+- `:P5 update [libs...]` — update installed libraries (all if no args, specific if named)
+- `:P5 sync` deprecated — shows error with migration hint
+- Updated menu: "Sync" → "Update libraries", "Create gist" separated
+
+### Fixes
+- **G.sync hang** — replaced `gh gist edit --desc` with `gh api -X PATCH /gists/:id -f description=` to avoid blocking in non-interactive mode
+- **G.edit hang** — same `gh gist edit --desc` → `gh api -X PATCH` fix
+- **G.create empty description** — guard added: requires a description before creating a gist
+- **G.create_comment** — now sends JSON body via `--input` file instead of raw `-f body=` argument, fixing gh CLI argument parsing
+- **Temp file cleanup** — migrated `vim.fn.delete(temp_file)` → `vim.uv.fs_unlink(temp_file)` for consistency
+- **SHA256 verification removed** — `core.verify_hash`, `expected_hash` option, and CI hash computation stripped; hash mismatches were silently blocking library installs
+- **Unit tests** — added `G.create_comment` JSON body test and `G.create` unit test suite
+
+### Refactoring
+- `core.fetch` — removed integrity check and retry logic; unused `verify_hash` function deleted
+- `gist.lua` — flattened deeply nested conditionals in `G.create` callback; moved sync title-update into callback chain instead of fire-and-forget `vim.fn.system`
+- `init.lua` — extracted `handlers.update` for `:P5 update`; simplified `handlers.sync` to deprecation stub
+- `project.lua`, `libraries.lua` — dropped `expected_hash` from all `core.fetch` calls
+- CI — removed `hashlib` import and `get_file_sha256` computation from `update-p5libs.yml`
+
+---
+
 ## v0.6.0-alpha-7b9accc
 
 > Tag: `7b9accc` — Merge branch 'pr/gist-edit'
@@ -27,6 +63,7 @@ All notable changes since v0.5.0.
   - Typography, images, events, 3D/WebGL, DOM, sound, IO
   - Common idioms (grid loop, polar loop, particles, bounce, fadeout, color palette)
   - Works with LuaSnip (from_vscode loader), blink.cmp (default/ luasnip preset), nvim-cmp
+- **Removed** SHA256 integrity verification during library downloads — hash mismatches were blocking installs; `core.fetch` simplified, `libs.json` sha256 fields dropped, CI no longer computes hashes
 
 ### Gist URL format change
 

@@ -53,21 +53,18 @@ P.create_project = function(name, major)
 										notify("Failed to download p5.js 2.x types", "warn")
 									end
 								end,
-								{
-									cache = true,
-									expected_hash = "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed",
-								}
+								{ cache = true }
 							)
 						else
 							notify("Failed to download p5.js 2.x sound", "warn")
 						end
 					end,
-					{ cache = true, expected_hash = "55f7d9e99b8e2d4e0e193b2f0275501e6d9c1ebd29cadbea6a0da48a8587e3e0" }
+					{ cache = true }
 				)
 			else
 				notify("Failed to download p5.js 2.x core", "warn")
 			end
-		end, { cache = true, expected_hash = "9f0f6bfc935541daf584a797fdbdaeac25efcffb2fba899a8fdc891a46be79dd" })
+		end, { cache = true })
 		return
 	end
 

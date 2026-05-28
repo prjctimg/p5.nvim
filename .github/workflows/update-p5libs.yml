@@ -26,7 +26,6 @@ jobs:
           import requests
           import yaml
           import json
-          import hashlib
           from datetime import datetime
           from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -38,11 +37,6 @@ jobs:
               resp = requests.get(url, timeout=30)
               resp.raise_for_status()
               return resp.text
-
-          def get_file_sha256(url):
-              resp = requests.get(url, timeout=60)
-              resp.raise_for_status()
-              return hashlib.sha256(resp.content).hexdigest()
 
           # Fetch library list from p5.js-website
           resp = requests.get(LIBS_URL, params={"ref": BRANCH}, timeout=30)
@@ -69,16 +63,12 @@ jobs:
                   npm_file_path = data.get("npmFilePath", "")
                   cdn_url = f"{CDN_BASE}/{npm_pkg}@latest/{npm_file_path}"
 
-                  # Compute hash from CDN
-                  sha256 = get_file_sha256(cdn_url)
-
                   lib = {
                       "name": data.get("name", ""),
                       "category": data.get("category", ""),
                       "description": data.get("description", ""),
                       "npm": npm_pkg,
                       "cdn_url": cdn_url,
-                      "sha256": sha256,
                   }
 
                   return {"success": lib}

@@ -154,29 +154,16 @@ C.cache_keygen = function(url)
 	return fn.sha256(url):sub(1, 16)
 end
 
--- Verify file hash matches expected SHA256
-C.verify_hash = function(file, expected)
-	if not C.is_file(file) then
-		return false
-	end
-	local content = fn.readfile(file)
-	local hash = fn.sha256(table.concat(content, "\n"))
-	return hash == expected
-end
-
 -- Check if cached file is valid
 C.is_cache = function(cache_file, _)
 	return C.is_file(cache_file)
 end
 
--- Download file with caching and integrity check
+-- Download file with caching
 C.fetch = function(url, dest, callback, options)
 	options = options or {}
 	local use_cache = options.cache ~= false
-	local expected_hash = options.expected_hash
 	local cache_file = nil
-	local retry_count = 0
-	local max_retries = 1
 
 	local function do_fetch()
 		local cmd
@@ -195,24 +182,6 @@ C.fetch = function(url, dest, callback, options)
 		fn.jobstart(cmd, {
 			on_exit = function(_, exit_code)
 				local ok = exit_code == 0
-
-				if ok and expected_hash and not C.verify_hash(dest, expected_hash) then
-					vim.uv.fs_unlink(dest)
-					if cache_file then
-						vim.uv.fs_unlink(cache_file)
-					end
-
-					if retry_count < max_retries then
-						retry_count = retry_count + 1
-						do_fetch()
-					else
-						C.notify("Integrity check failed for: " .. url, "warn")
-						if callback then
-							callback(false)
-						end
-					end
-					return
-				end
 
 				if ok and use_cache and cache_file then
 					local content = fn.readfile(dest)
@@ -236,15 +205,10 @@ C.fetch = function(url, dest, callback, options)
 		if C.is_file(cache_file) then
 			local ok, err = vim.uv.fs_copyfile(cache_file, dest)
 			if ok then
-				if expected_hash and not C.verify_hash(dest, expected_hash) then
-					vim.uv.fs_unlink(dest)
-					vim.uv.fs_unlink(cache_file)
-				else
-					if callback then
-						callback(true)
-					end
-					return true
+				if callback then
+					callback(true)
 				end
+				return true
 			else
 				C.notify("Cache copy failed: " .. tostring(err), "warn")
 			end

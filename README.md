@@ -181,36 +181,37 @@ Toggle browser console to view console.log, errors, and warnings in Neovim.
 
 ---
 
-### :P5 sync [gist|libs]
+### :P5 gist [desc|sync|edit]
 
-Sync gist (bidirectional) or libraries.
-
-When syncing a gist, compares remote vs local state and prompts per difference:
-title, description (first comment), and each source file. Files existing on
-only one side are auto-accepted.
-
-```vim
-:P5 sync gist
-:P5 sync libs
-:P5 sync
-```
-
----
-
-### :P5 gist [desc]
-
-Create or edit a GitHub Gist from your sketchspace.
+Create, sync, or edit a GitHub Gist from your sketchspace.
 
 ```vim
 :P5 gist "My awesome sketch"     # Create gist with title
 :P5 gist                         # Prompt for title then create
+:P5 gist sync                    # Bidirectional sync (title, description, files)
 :P5 gist edit                    # Edit gist title or first comment
 ```
 
 On creation, stores `gist` as an object in `p5.json` with `url`, `title`,
-and `description` (from the gist's first comment). Use `:P5 gist edit`
-to change the title or first comment — changes are synced both to the
-remote gist and the local `p5.json`.
+and `description` (from the gist's first comment).
+
+When syncing, compares remote vs local state and prompts per difference:
+title, description (first comment), and each source file. Files existing on
+only one side are auto-accepted.
+
+Use `:P5 gist edit` to change the title or first comment — changes sync
+both to the remote gist and the local `p5.json`.
+
+---
+
+### :P5 update [libs...]
+
+Update all installed libraries or specific ones.
+
+```vim
+:P5 update                       # Update all installed addons
+:P5 update ml5 p5play            # Update specific libraries
+```
 
 ---
 
@@ -417,7 +418,7 @@ vim.keymap.set("n", "<leader>pU", ":P5 sync libs<CR>", { desc = "Update librarie
 
 -- Gist
 vim.keymap.set("n", "<leader>pg", ":P5 gist ", { desc = "Create gist" })
-vim.keymap.set("n", "<leader>pgg", ":P5 sync gist<CR>", { desc = "Sync gist" })
+vim.keymap.set("n", "<leader>pgg", ":P5 gist sync<CR>", { desc = "Sync gist" })
 
 -- Docs
 vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })

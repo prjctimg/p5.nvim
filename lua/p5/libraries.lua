@@ -325,7 +325,7 @@ L.validate_download = function(dest)
 	return true
 end
 
--- Download library file from CDN URL with integrity check
+-- Download library file from CDN URL
 L.download_library = function(lib, dest, callback)
 	local function done(success)
 		if callback then
@@ -344,7 +344,7 @@ L.download_library = function(lib, dest, callback)
 		else
 			done(false)
 		end
-	end, { cache = true, expected_hash = lib.sha256 })
+	end, { cache = true })
 end
 
 -- Download types for library
@@ -353,17 +353,10 @@ L.download_types = function(lib_name, dest, callback)
 		ml5 = "https://unpkg.com/ml5@latest/dist/ml5.d.ts",
 		["p5.speech"] = "https://unpkg.com/p5.js-speech@latest/lib/p5.speech.d.ts",
 	}
-	local types_hashes = {
-		ml5 = "6dcb99c4f65fabf220a7c2f62f46906be08f1cbcc249acf653f2b5ad08afae0c",
-		["p5.speech"] = "c239d434dde8450af2ed4f52fd1d65a6c3b3ebb5389dcaa604f48ec646f3bff6",
-	}
 
 	local types_url = types_urls[lib_name]
 	if types_url then
-		core.fetch(types_url, dest, callback, {
-			cache = true,
-			expected_hash = types_hashes[lib_name],
-		})
+		core.fetch(types_url, dest, callback, { cache = true })
 	else
 		if callback then
 			callback(true)

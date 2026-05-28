@@ -82,6 +82,99 @@ describe("G.get_comment", function()
   end)
 end)
 
+describe("G.create_comment", function()
+  local orig_system = vim.fn.system
+  local orig_stdpath = vim.fn.stdpath
+  local tmpdir
+
+  before_each(function()
+    tmpdir = vim.fn.tempname()
+    vim.fn.mkdir(tmpdir, "p")
+    vim.fn.stdpath = function(name)
+      if name == "cache" then return tmpdir end
+      return orig_stdpath(name)
+    end
+  end)
+
+  after_each(function()
+    vim.fn.system = orig_system
+    vim.fn.stdpath = orig_stdpath
+    vim.fn.delete(tmpdir, "rf")
+  end)
+
+  it("creates a comment using JSON body via --input", function()
+    local captured_cmd, captured_input
+    vim.fn.system = function(cmd)
+      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("^/gists/.*/comments$") then
+        captured_cmd = cmd
+        -- Read the --input file to capture the body
+        local input_idx = nil
+        for i, v in ipairs(cmd) do
+          if v == "--input" then input_idx = i end
+        end
+        if input_idx then
+          captured_input = table.concat(vim.fn.readfile(cmd[input_idx + 1]) or {}, "\n")
+        end
+        return vim.fn.json_encode({ id = 42 })
+      end
+      return ""
+    end
+    local ok, res = G.create_comment("abc123", "Test comment body")
+    assert.is_true(ok)
+    assert.not_nil(captured_cmd, "should have called gh api")
+    assert.is_true(captured_cmd[#captured_cmd - 1] == "--input",
+      "should use --input flag")
+    local parsed = vim.fn.json_decode(captured_input)
+    assert.are.same({ body = "Test comment body" }, parsed,
+      "should send JSON body")
+  end)
+
+end)
+
+describe("G.create", function()
+  local orig_system = vim.fn.system
+  local orig_select = vim.ui.select
+  local orig_input = vim.ui.input
+  local orig_is_file = require("p5.core").is_file
+  local orig_find_project_root = require("p5.core").find_project_root
+
+  after_each(function()
+    vim.fn.system = orig_system
+    vim.ui.select = orig_select
+    vim.ui.input = orig_input
+    require("p5.core").is_file = orig_is_file
+    require("p5.core").find_project_root = orig_find_project_root
+  end)
+
+  it("warns when not in a sketchspace", function()
+    require("p5.core").find_project_root = function() return nil, nil end
+    local ok, err = pcall(G.create, "test description")
+    assert.is_true(ok, "create should not crash: " .. tostring(err))
+  end)
+
+  it("prompts for description when none given", function()
+    local prompted = false
+    require("p5.core").find_project_root = function() return "/tmp/fake", { includes = { "sketch.js" } } end
+    require("p5.core").is_file = function(_) return true end
+    vim.ui.input = function(_, cb)
+      prompted = true
+      cb("test description")
+    end
+    vim.fn.system = function(_) return "" end
+    local ok, err = pcall(G.create, "")
+    assert.is_true(ok, "create should not crash: " .. tostring(err))
+    assert.is_true(prompted, "should prompt for description")
+  end)
+
+  it("cancels creation when input is empty", function()
+    require("p5.core").find_project_root = function() return "/tmp/fake", { includes = { "sketch.js" } } end
+    require("p5.core").is_file = function(_) return true end
+    vim.ui.input = function(_, cb) cb("") end
+    local ok, err = pcall(G.create, "")
+    assert.is_true(ok, "create should not crash on cancel: " .. tostring(err))
+  end)
+end)
+
 describe("G.edit", function()
   local orig_system = vim.fn.system
   local orig_select = vim.ui.select

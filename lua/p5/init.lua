@@ -252,36 +252,11 @@ function draw() {
 		vim.cmd("help p5.nvim")
 	end
 
-	handlers.sync = function(args)
-		local target = args[1]
-
-		if not target then
-			vim.ui.select({ "Gist", "Libraries" }, { prompt = "What to sync:" }, function(choice)
-				if choice == "Gist" then
-					if not require_sketchspace("Sync gist") then
-						return
-					end
-					gist.sync()
-				elseif choice == "Libraries" then
-					if not require_sketchspace("Sync libraries") then
-						return
-					end
-					libraries.update_libs()
-				end
-			end)
-		elseif target == "gist" then
-			if not require_sketchspace("Sync gist") then
-				return
-			end
-			gist.sync()
-		elseif target == "libs" or target == "libraries" then
-			if not require_sketchspace("Sync libraries") then
-				return
-			end
-			libraries.update_libs()
-		else
-			core.notify("Unknown sync target: " .. target .. ". Use 'gist' or 'libs'", "warn")
-		end
+	handlers.sync = function(_)
+		core.notify(
+			"P5 sync is deprecated. Use 'P5 gist sync' to sync gists or 'P5 update' to update libraries.",
+			"error"
+		)
 	end
 
 	handlers.gist = function(args)
@@ -289,10 +264,23 @@ function draw() {
 			return
 		end
 		local sub = args[1]
-		if sub == "edit" then
+		if sub == "sync" then
+			gist.sync()
+		elseif sub == "edit" then
 			gist.edit()
 		else
 			gist.create(table.concat(args, " "))
+		end
+	end
+
+	handlers.update = function(args)
+		if not require_sketchspace("Update") then
+			return
+		end
+		if #args > 0 then
+			libraries.install_libs(args)
+		else
+			libraries.update_libs()
 		end
 	end
 
@@ -337,8 +325,8 @@ function draw() {
 			server_status,
 			"Toggle console",
 			"Open docs",
-			"Sync",
-			"Create/update Gist",
+			"Update libraries",
+			"Create gist",
 			"Download sketchbook",
 		}
 
@@ -370,10 +358,10 @@ function draw() {
 			["Open docs"] = function()
 				handlers.docs()
 			end,
-			["Sync"] = function()
-				handlers.sync({})
+			["Update libraries"] = function()
+				handlers.update({})
 			end,
-			["Create/update Gist"] = function()
+			["Create gist"] = function()
 				handlers.gist({})
 			end,
 			["Download sketchbook"] = function()
@@ -401,7 +389,7 @@ function draw() {
 		end)
 	end
 
-	local subcommands = vim.tbl_keys(handlers)
+	local subcommands = vim.tbl_filter(function(k) return k ~= "sync" end, vim.tbl_keys(handlers))
 
 	local function get_completion(line)
 		local args = vim.split(line, "%s+")
@@ -423,10 +411,13 @@ function draw() {
 			end, libs or {})
 		elseif subcmd == "server" then
 			return { "8000", "8001", "8002", "8003" }
-		elseif subcmd == "sync" then
-			return { "gist", "libs", "libraries" }
 		elseif subcmd == "gist" then
-			return { "edit" }
+			return { "sync", "edit" }
+		elseif subcmd == "update" then
+			local libs = libraries.get_available_libs()
+			return vim.tbl_map(function(l)
+				return l.name
+			end, libs or {})
 		elseif subcmd == "skchbk" then
 			return { "list" }
 		end
