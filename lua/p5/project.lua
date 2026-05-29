@@ -32,43 +32,38 @@ P.create_project = function(name, major)
 		return false
 	end
 
+	local path = vim.fn.fnamemodify(name, ":p")
+
+	-- Create the project skeleton first (dir, files, navigate, open sketch.js)
+	P.create_project_continue(name, major)
+
+	-- Download v2 assets in background if not cached
 	if major == 2 and not core.is_file(core.asset_dir() .. "/libs/p5-v2.js") then
 		notify("Downloading p5.js 2.x assets...", "info")
 		local libs_dir = core.asset_dir() .. "/libs"
 		local types_dir = core.asset_dir() .. "/types"
-		core.fetch("https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.0/p5.min.js", libs_dir .. "/p5-v2.js", function(ok)
+		core.fetch("https://cdn.jsdelivr.net/npm/p5@2.0.5/lib/p5.min.js", libs_dir .. "/p5-v2.js", function(ok)
 			if ok then
+				-- Best-effort types download; skip silently if unavailable for this major
 				core.fetch(
-					"https://cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.0/p5.sound.min.js",
-					libs_dir .. "/p5-v2.sound.js",
-					function(ok2)
-						if ok2 then
-							core.fetch(
-								"https://raw.githubusercontent.com/processing/p5.js-website/next/types/p5.d.ts",
-								types_dir .. "/p5-v2.d.ts",
-								function(ok3)
-									if ok3 then
-										P.create_project_continue(name, major)
-									else
-										notify("Failed to download p5.js 2.x types", "warn")
-									end
-								end,
-								{ cache = true }
-							)
-						else
-							notify("Failed to download p5.js 2.x sound", "warn")
-						end
+					"https://cdn.jsdelivr.net/npm/p5@2.0.5/types/p5.d.ts",
+					types_dir .. "/p5-v2.d.ts",
+					function(_)
+						P.copy_assets_to_project(path, 2, function(err)
+							if err then
+								notify("Failed to copy p5.js assets: " .. err, "warn")
+							else
+								notify("p5.js 2.x assets ready", "ok")
+							end
+						end)
 					end,
 					{ cache = true }
 				)
 			else
-				notify("Failed to download p5.js 2.x core", "warn")
+				notify("Download failed. Run :P5 setup to retry.", "warn")
 			end
 		end, { cache = true })
-		return
 	end
-
-	P.create_project_continue(name, major)
 end
 
 function P.create_project_continue(name, major)
