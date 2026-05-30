@@ -540,7 +540,7 @@ Library installation fails or downloads timeout.
 
 > ## License 📜
 
-> (c) 2026, [Dean Tarisai](https://prjctimg.me)
+> (c) 2026, [prjctimg](https://prjctimg.me)
 >
 > This is free software, released under the GPL-3.0 license.
 
