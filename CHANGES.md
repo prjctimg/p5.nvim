@@ -30,12 +30,17 @@ All notable changes since v0.5.0.
 - **Temp file cleanup** — migrated `vim.fn.delete(temp_file)` → `vim.uv.fs_unlink(temp_file)` for consistency
 - **SHA256 verification removed** — `core.verify_hash`, `expected_hash` option, and CI hash computation stripped; hash mismatches were silently blocking library installs
 - **Unit tests** — added `G.create_comment` JSON body test and `G.create` unit test suite
+- **P5 create blocking download** — project skeleton (dir, files, sketch.js, navigation) now created immediately; v2 assets download in background
+- **P5 create v2 CDN URL** — switched from `cdnjs.cloudflare.com/ajax/libs/p5.js/2.0.0` to `cdn.jsdelivr.net/npm/p5@2.0.5` for reliable version availability
+- **P5 create v2 sound removed** — `p5.sound.min.js` no longer downloaded for v2 (sound merged into core in p5.js 2.x), fixing a 404 that silently blocked project creation
+- **P5 create v2 types** — types download made best-effort; silently skipped when unavailable (v2 has no official types yet)
 
 ### Refactoring
 - `core.fetch` — removed integrity check and retry logic; unused `verify_hash` function deleted
 - `gist.lua` — flattened deeply nested conditionals in `G.create` callback; moved sync title-update into callback chain instead of fire-and-forget `vim.fn.system`
 - `init.lua` — extracted `handlers.update` for `:P5 update`; simplified `handlers.sync` to deprecation stub
-- `project.lua`, `libraries.lua` — dropped `expected_hash` from all `core.fetch` calls
+- `project.lua` — restructured `create_project` to separate skeleton creation from asset download; v2 download chain simplified (sound removed, types best-effort); CDN switched to jsdelivr
+- `libraries.lua` — dropped `expected_hash` from all `core.fetch` calls
 - CI — removed `hashlib` import and `get_file_sha256` computation from `update-p5libs.yml`
 
 ---

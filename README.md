@@ -1,6 +1,8 @@
 
 ![](./logo.png)
 
+![Sketchspace screenshot](./p5-nvim.png)
+
 # `p5.nvim` 🌸
 
 > Better editor support for p5.js sketchspaces in Neovim.
@@ -116,6 +118,11 @@ Create a new sketchspace.
 :P5 create my-sketch
 :P5 create
 ```
+
+When prompted for a version, selecting **Latest (2.x)** will skip TypeScript type definitions
+until the p5.js 2.x type declarations are officially released. The project is created
+immediately with everything else — you can start coding right away. Run `:P5 setup` later
+to copy types once they become available.
 
 [![P5 create](https://asciinema.org/a/795753.svg)](https://asciinema.org/a/795753)
 
@@ -253,6 +260,7 @@ p5.nvim ships with 100+ p5.js code snippets in VS Code JSON format. All snippets
 Snippets are auto-discovered from runtimepath. Just add a snippet loader:
 
 **LuaSnip:**
+
 ```lua
 require("luasnip.loaders.from_vscode").lazy_load()
 ```
@@ -260,6 +268,7 @@ require("luasnip.loaders.from_vscode").lazy_load()
 **blink.cmp (default preset):** Auto-discovered, zero configuration.
 
 **blink.cmp (luasnip preset):**
+
 ```lua
 -- Already using luasnip? snippets are auto-discovered via luasnip
 sources = {
@@ -268,6 +277,7 @@ sources = {
 ```
 
 **nvim-cmp:**
+
 ```lua
 cmp.setup({
   snippet = {
