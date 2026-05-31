@@ -349,10 +349,7 @@ end
 
 -- Download types for library
 L.download_types = function(lib_name, dest, callback)
-	local types_urls = {
-		ml5 = "https://unpkg.com/ml5@latest/dist/ml5.d.ts",
-		["p5.speech"] = "https://unpkg.com/p5.js-speech@latest/lib/p5.speech.d.ts",
-	}
+	local types_urls = {}
 
 	local types_url = types_urls[lib_name]
 	if types_url then

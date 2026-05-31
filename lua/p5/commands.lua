@@ -87,12 +87,11 @@ function draw() {
 			end,
 			function(next_step)
 				if major == 2 and not core.is_file(core.asset_dir() .. "/libs/p5-v2.js") then
-					local cdn_url = "https://cdn.jsdelivr.net/npm/p5@2.0.5/lib/p5.min.js"
 					core.notify("Downloading p5.js 2.x assets...", "info")
-					core.fetch(cdn_url, core.asset_dir() .. "/libs/p5-v2.js", function(ok)
+					core.fetch(project.cdn.lib, core.asset_dir() .. "/libs/p5-v2.js", function(ok)
 						if ok then
 							core.fetch(
-								"https://cdn.jsdelivr.net/npm/p5@2.0.5/types/p5.d.ts",
+								project.cdn.types,
 								core.asset_dir() .. "/types/p5-v2.d.ts",
 								function(_)
 									next_step()

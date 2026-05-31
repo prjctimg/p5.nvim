@@ -4,6 +4,11 @@ local core = require("p5.core")
 local libraries = require("p5.libraries")
 local notify = core.notify
 
+P.cdn = {
+	lib = "https://cdn.jsdelivr.net/npm/p5@2.0.5/lib/p5.min.js",
+	types = "https://cdn.jsdelivr.net/npm/p5@2.0.5/types/p5.d.ts",
+}
+
 P.create_project = function(name, major)
 	major = major or 2
 	name = name or "p5-sketch"
@@ -35,8 +40,7 @@ P.create_project = function(name, major)
 	local path = vim.fn.fnamemodify(name, ":p")
 
 	-- Always compute CDN version for p5.json, download if not cached
-	local cdn_url = "https://cdn.jsdelivr.net/npm/p5@2.0.5/lib/p5.min.js"
-	local cdn_version = cdn_url:match("@([^/]+)")
+	local cdn_version = P.cdn.lib:match("@([^/]+)")
 	if major == 2 and not core.is_file(core.asset_dir() .. "/libs/p5-v2.js") then
 		notify("Downloading p5.js 2.x assets...", "info")
 	end
@@ -50,7 +54,7 @@ P.create_project = function(name, major)
 			if ok then
 				-- Best-effort types download; skip silently if unavailable for this major
 				core.fetch(
-					"https://cdn.jsdelivr.net/npm/p5@2.0.5/types/p5.d.ts",
+					P.cdn.types,
 					types_dir .. "/p5-v2.d.ts",
 					function(_)
 						P.copy_assets_to_project(path, 2, function(err)
@@ -226,9 +230,9 @@ P.copy_assets_to_project = function(project_path, major, callback)
 
 	if core.is_dir(plugin_assets .. "/libs") then
 		local p5_file = major == 1 and "p5.js" or "p5-v2.js"
-		local sound_file = major == 1 and "p5.sound.js" or "p5-v2.sound.js"
-		for _, file in ipairs({ p5_file, sound_file }) do
-			try_copy(plugin_assets .. "/libs/" .. file, project_assets .. "/libs/" .. file)
+		try_copy(plugin_assets .. "/libs/" .. p5_file, project_assets .. "/libs/" .. p5_file)
+		if major == 1 then
+			try_copy(plugin_assets .. "/libs/p5.sound.js", project_assets .. "/libs/p5.sound.js")
 		end
 	end
 

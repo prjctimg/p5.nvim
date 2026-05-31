@@ -4,6 +4,29 @@ All notable changes since v0.5.0.
 
 ---
 
+## v0.7.0-alpha.3
+
+> Tag: `v0.7.0-alpha.3` — fix: eliminate all E5560 fast-event-context errors in async callbacks, consolidate CDN URLs, remove dead library references
+
+### Fixes
+- **E5560 in async callbacks** — replaced all `vim.fn.*` calls inside `vim.system`/`jobstart` callbacks with context-safe alternatives: `vim.fn.writefile` → `io.open`, `vim.fn.delete` → `core.rmtree` (UV-based recursive delete), `vim.fn.mkdir` → `vim.uv.fs_mkdir`, `vim.fn.json_decode/encode` → `vim.json.decode/encode`
+- **`core.notify` always schedules** — wrapped `vim.notify` call in `vim.schedule` so it's safe from any context
+- **`core.read_json`/`write_json`** — replaced `vim.fn.*` calls with `io.open` + `vim.json.*` to work in async contexts
+- **`core.rmtree`** — new UV-based recursive directory deletion (`vim.uv.fs_scandir`/`fs_unlink`/`fs_rmdir`), safe in fast event context
+- **`gist.lua` step-runner** — all error/early-exit branches now call `next_step()` instead of bare `return` (prevents silent hangs); removed undefined `wrap_cb` reference (LSP error)
+- **`p5-v2.sound.js` removed** — not bundled for p5 v2.x; sound merged into core
+- **Broken unpkg types URLs removed** — `ml5` and `p5.speech` type URLs returned 404
+
+### Refactoring
+- **CDN URL consolidation** — `project.cdn = { lib, types }` module-level constants, referenced by both `project.lua` and `commands.lua` instead of duplicating hardcoded strings
+
+### Tests
+- **Integration tests fixed** — `done`-reset race conditions fixed between sequential async calls; assertions updated for `io.open` read (trailing newline)
+- **All 121 tests pass** — 115 unit tests + 6 integration tests
+- **Manual gist creation verified** — E5560-free async gist create
+
+---
+
 ## v0.7.0-alpha.2
 
 > Tag: `v0.7.0-alpha.2` — fix: server blocking, CDP layout, gist edit save error, async CDP calls, and p5.json version field

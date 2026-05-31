@@ -28,15 +28,41 @@ C.is_dir = function(path)
 end
 
 C.mkdir = function(path)
-	fn.mkdir(path, "p")
+	if vim.uv.fs_stat(path) then return end
+	local parent = vim.fs.dirname(path)
+	if parent and parent ~= path then
+		C.mkdir(parent)
+	end
+	vim.uv.fs_mkdir(path, tonumber("755", 8))
+end
+
+C.rmtree = function(path)
+	local stat = vim.uv.fs_stat(path)
+	if not stat then return end
+	if stat.type == "directory" then
+		local dir = vim.uv.fs_scandir(path)
+		if dir then
+			while true do
+				local name = vim.uv.fs_scandir_next(dir)
+				if not name then break end
+				C.rmtree(path .. "/" .. name)
+			end
+		end
+		vim.uv.fs_rmdir(path)
+	else
+		vim.uv.fs_unlink(path)
+	end
 end
 
 C.read_json = function(path)
 	if not C.is_file(path) then
 		return nil, "File not found"
 	end
-	local content = fn.readfile(path)
-	local ok, data = pcall(fn.json_decode, table.concat(content, "\n"))
+	local fp = io.open(path, "r")
+	if not fp then return nil, "Cannot open file" end
+	local content = fp:read("*a")
+	fp:close()
+	local ok, data = pcall(vim.json.decode, content)
 	if not ok then
 		return nil, "Invalid JSON"
 	end
@@ -44,8 +70,12 @@ C.read_json = function(path)
 end
 
 C.write_json = function(path, data)
-	local content = fn.json_encode(data)
-	fn.writefile(fn.split(content, "\n"), path)
+	local fp = io.open(path, "w")
+	if fp then
+		fp:write(vim.json.encode(data))
+		fp:write("\n")
+		fp:close()
+	end
 end
 
 C.cache_path = function(filename)
@@ -138,8 +168,9 @@ C.notify = function(msg, level)
 		warn = vim.log.levels.WARN,
 		error = vim.log.levels.ERROR,
 	}
-
-	vim.notify(msg, level_map[level], { title = "p5.nvim 🌸" })
+	vim.schedule(function()
+		vim.notify(msg, level_map[level], { title = "p5.nvim 🌸" })
+	end)
 end
 
 C.cache_dir = function()
@@ -186,7 +217,12 @@ C.fetch = function(url, dest, callback, options)
 				if ok and use_cache and cache_file then
 					local content = fn.readfile(dest)
 					if content then
-						fn.writefile(content, cache_file)
+						local fp = io.open(cache_file, "w")
+						if fp then
+							fp:write(table.concat(content, "\n"))
+							fp:write("\n")
+							fp:close()
+						end
 					end
 				end
 

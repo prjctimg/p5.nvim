@@ -86,12 +86,6 @@ H.check_plugin_env = function()
 			else
 				warn("p5.js 2.x: not bundled - will be downloaded on project creation")
 			end
-			local p5sound_file = libs_dir .. "/p5-v2.sound.js"
-			if core.is_file(p5sound_file) then
-				ok("p5.sound 2.x: bundled")
-			else
-				warn("p5.sound 2.x: not bundled - will be downloaded on project creation")
-			end
 		end
 	else
 		warn("Asset directory: not found at " .. asset_dir)

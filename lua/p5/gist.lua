@@ -108,23 +108,17 @@ else
 							if out.code ~= 0 and not had_error then
 								had_error = true
 								core.notify("Failed to copy file: " .. file_name, "warn")
-								vim.fn.delete(dir, "rf")
+								core.rmtree(dir)
 							elseif out.code == 0 then
 								table.insert(gist_files, target_path)
 							end
 							if pending == 0 then
-								if had_error then return end
 								next_step()
 							end
 						end)
 					end
 				end,
 				function(next_step)
-					if desc == "" then
-						core.notify("A sketchspace needs a description to be created.", "warn")
-						return
-					end
-
 					local cmd = { "gh", "gist", "create", "--public", "--desc", desc }
 					for _, file_path in ipairs(gist_files) do
 						table.insert(cmd, file_path)
@@ -132,21 +126,21 @@ else
 
 					vim.system(cmd, nil, function(out)
 						if out.code ~= 0 then
-							vim.fn.delete(dir, "rf")
+							core.rmtree(dir)
 							core.notify("Gist creation failed. Run :checkhealth p5.nvim to find the problem.", "warn")
-							return
+							return next_step()
 						end
-						vim.fn.delete(dir, "rf")
+						core.rmtree(dir)
 						local url_full = out.stdout:match("https://gist%.github%.com/%S+")
 						if not url_full then
 							core.notify("Gist created but could not parse URL. Check your gist list on GitHub.", "warn")
-							return
+							return next_step()
 						end
 						gist_url = url_full:match("gist%.github%.com/(.+)")
 						gist_id = url_full:match("/([a-fA-F0-9]+)$")
 						if not gist_id then
 							core.notify("Gist created but could not extract ID. Check your gist list on GitHub.", "warn")
-							return
+							return next_step()
 						end
 						next_step()
 					end)
@@ -164,12 +158,8 @@ else
 							core.write_workspace_config(proj_config, proj_dir)
 
 							local p5_json_path = proj_dir .. "/p5.json"
-							vim.system({ "gh", "gist", "edit", gist_id, "--filename", "p5.json", p5_json_path }, nil, function(res)
-								if res.code == 0 then
-									core.notify("🎊 Sketchspace uploaded!", "ok")
-								else
-									core.notify("Gist created but p5.json upload failed. Try :P5 gist sync.", "warn")
-								end
+							vim.system({ "gh", "gist", "edit", gist_id, "--filename", "p5.json", p5_json_path }, nil, function(_)
+								next_step()
 							end)
 						end)
 					end)
@@ -255,12 +245,12 @@ else
 				vim.system({ "gh", "api", "/gists/" .. gist_info.id }, nil, function(out)
 					if out.code ~= 0 then
 						notify("Failed to fetch remote gist", "warn")
-						return
+						return next_step()
 					end
-					local ok, parsed = pcall(vim.fn.json_decode, out.stdout)
+					local ok, parsed = pcall(vim.json.decode, out.stdout)
 					if not ok or not parsed then
 						notify("Failed to parse remote gist data", "warn")
-						return
+						return next_step()
 					end
 					remote_title = parsed.description or ""
 					remote_files = parsed.files or {}
@@ -306,7 +296,7 @@ else
 
 				if #diffs == 0 then
 					notify("Gist is up to date", "ok")
-					return
+					return next_step()
 				end
 
 				local summary_parts = {}
@@ -329,7 +319,7 @@ else
 				}, function(choice)
 					if not choice or choice == "Skip all" then
 						notify("Gist sync cancelled", "info")
-						return
+						return next_step()
 					end
 					use_remote = choice:match("remote") and true or false
 					next_step()
@@ -405,6 +395,7 @@ else
 					else
 						core.notify("Gist synced successfully", "ok")
 					end
+					next_step()
 				end
 				if cm.id then
 					G.update_comment(gist_info.id, cm.id, gist_obj.description, on_done)
@@ -426,7 +417,7 @@ else
 				callback(nil)
 				return
 			end
-			local ok, gists = pcall(vim.fn.json_decode, out.stdout)
+			local ok, gists = pcall(vim.json.decode, out.stdout)
 			if not ok or type(gists) ~= "table" then
 				notify("Failed to parse gist list", "warn")
 				callback(nil)
@@ -442,19 +433,21 @@ else
 				callback(false)
 				return
 			end
-			local ok, gd = pcall(vim.fn.json_decode, out.stdout)
+			local ok, gd = pcall(vim.json.decode, out.stdout)
 			if not ok or not gd.files then
 				callback(false)
 				return
 			end
 			core.mkdir(target)
 			for fn, fd in pairs(gd.files) do
-				vim.fn.writefile(vim.split(fd.content or "", "\n"), target .. "/" .. fn)
+				local fp = io.open(target .. "/" .. fn, "w")
+				if fp then fp:write(fd.content or ""); fp:close() end
 			end
 			G.get_comment(id, function(cm)
 				local desc = cm and cm.body or ""
 				if desc ~= "" then
-					vim.fn.writefile(vim.split(desc, "\n"), target .. "/README.md")
+					local fp = io.open(target .. "/README.md", "w")
+					if fp then fp:write(desc); fp:close() end
 				end
 				local p5_path = target .. "/p5.json"
 				if core.is_file(p5_path) then
@@ -551,7 +544,7 @@ else
 				callback(nil)
 				return
 			end
-			local ok, comments = pcall(vim.fn.json_decode, out.stdout)
+			local ok, comments = pcall(vim.json.decode, out.stdout)
 			if not ok or type(comments) ~= "table" or #comments == 0 then
 				callback(nil)
 				return
@@ -740,7 +733,7 @@ else
 				return
 			end
 
-			local ok, gist = pcall(vim.fn.json_decode, out.stdout)
+			local ok, gist = pcall(vim.json.decode, out.stdout)
 			if not ok or not gist.files then
 				callback(false, "Failed to parse gist data")
 				return
@@ -757,7 +750,8 @@ else
 					table.insert(skipped, filename)
 				else
 					local content = filedata.content or ""
-					vim.fn.writefile(vim.split(content, "\n"), target_path)
+					local fp = io.open(target_path, "w")
+					if fp then fp:write(content); fp:close() end
 					table.insert(downloaded, filename)
 				end
 			end

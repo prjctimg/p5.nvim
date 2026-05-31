@@ -88,7 +88,9 @@ describe("gist integration (real API)", function()
 		assert.is_true(C.is_file(fetch_dir .. "/sketch.js"), "should download sketch.js")
 		assert.is_true(C.is_file(fetch_dir .. "/style.css"), "should download style.css")
 
-		local content = table.concat(vim.fn.readfile(fetch_dir .. "/sketch.js") or {}, "\n")
+		local fp = io.open(fetch_dir .. "/sketch.js", "r")
+		local content = fp and fp:read("*a") or ""
+		if fp then fp:close() end
 		assert.are.equal("// integration test sketch\n", content)
 	end)
 
@@ -114,8 +116,10 @@ describe("gist integration (real API)", function()
 		vim.wait(15000, function() return done end)
 		assert.is_true(ok, "fetch should succeed: " .. tostring(err))
 		-- Existing file should retain original content (not overwritten)
-		local content = table.concat(vim.fn.readfile(temp_dir .. "/data.json") or {}, "\n")
-		assert.are.equal("// existing, should not be overwritten", content,
+		local fp = io.open(temp_dir .. "/data.json", "r")
+		local content = fp and fp:read("*a") or ""
+		if fp then fp:close() end
+		assert.are.equal("// existing, should not be overwritten\n", content,
 			"existing file should not be overwritten")
 	end)
 
@@ -159,7 +163,7 @@ describe("gist integration (real API)", function()
 		vim.wait(15000, function() return done end)
 		assert.is_true(ok, "create_comment should succeed")
 
-		local cm
+		done = nil; local cm
 		G.get_comment(test_gist_id, function(r) cm = r; done = true end)
 		vim.wait(15000, function() return done end)
 		assert.are.same("Created from integration test", cm.body)
@@ -180,7 +184,7 @@ describe("gist integration (real API)", function()
 		vim.wait(15000, function() return done end)
 		assert.is_true(ok)
 
-		local cm
+		done = nil; local cm
 		G.get_comment(test_gist_id, function(r) cm = r; done = true end)
 		vim.wait(15000, function() return done end)
 		assert.not_nil(cm)
@@ -193,6 +197,7 @@ describe("gist integration (real API)", function()
 		vim.wait(15000, function() return done end)
 		assert.is_true(ok, "update_comment should succeed")
 
+		done = nil
 		G.get_comment(test_gist_id, function(r) cm = r; done = true end)
 		vim.wait(15000, function() return done end)
 		assert.are.same("Updated comment body", cm.body)
