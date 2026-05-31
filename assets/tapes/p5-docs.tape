@@ -17,14 +17,21 @@ Type "export TERM=xterm-256color"
 Enter
 Type "PS1='$ '"
 Enter
+Type "export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring"
+Enter
+Type "clear"
+Enter
 Show
 
 Type "nvim"
-Sleep 300ms
+Sleep 1s
 Enter
-Sleep 4s
+Sleep 3s
 Type ":P5 docs"
+Sleep 500ms
 Enter
 Sleep 3s
 Type ":q!"
+Sleep 1s
 Enter
+Sleep 3s

@@ -138,7 +138,7 @@ until the p5.js 2.x type declarations are officially released. The project is cr
 immediately with everything else — you can start coding right away. Run `:P5 setup` later
 to copy types once they become available.
 
-![P5 create](https://vhs.charm.sh/vhs-4ofHxKp7b5mFJTVG5VEUUk.gif)
+![P5 create](https://vhs.charm.sh/vhs-1eU5E9CvKE7X9BWL4eeiCH.gif)
 
 ---
 
@@ -173,7 +173,7 @@ Remove installed libraries.
 :P5 uninstall
 ```
 
-![P5 install/uninstall](https://vhs.charm.sh/vhs-7tliTBst5VB3IxXVVtWz4d.gif)
+![P5 install/uninstall](https://vhs.charm.sh/vhs-xt8KmFeP5uIQlnqn2BvDJ.gif)
 
 ---
 
@@ -186,7 +186,7 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 :P5 server 8080
 ```
 
-![P5 server](https://vhs.charm.sh/vhs-5j9LMGAhqjy5hZitbtcj06.gif)
+![P5 server](https://vhs.charm.sh/vhs-3uUBbSiLwX85tO60AVxCmp.gif)
 
 ---
 
@@ -198,7 +198,7 @@ Toggle browser console to view console.log, errors, and warnings in Neovim.
 :P5 console
 ```
 
-![P5 console](https://vhs.charm.sh/vhs-2suRvLIdqXwHfBk2lmzen0.gif)
+![P5 console](https://vhs.charm.sh/vhs-6J1bwYvo9mCsFpakgZcDDk.gif)
 
 ---
 
@@ -272,7 +272,7 @@ Open p5.js documentation via snacks.picker.
 :P5 docs
 ```
 
-![P5 docs](https://vhs.charm.sh/vhs-2KQiAiviVRfpiWgZNApdc6.gif)
+![P5 docs](https://vhs.charm.sh/vhs-4C2S4a7Egn4kQnIIuJHbpv.gif)
 
 ---
 

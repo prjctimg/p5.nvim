@@ -17,24 +17,33 @@ Type "export TERM=xterm-256color"
 Enter
 Type "PS1='$ '"
 Enter
+Type "export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring"
+Enter
 Type "mkdir -p ~/Sketches"
 Enter
 Type "cd ~/Sketches && nvim --headless -c 'P5 create my-sketch' -c 'qa!'"
 Enter
+Type "clear"
+Enter
 Show
 
 Type "cd ~/Sketches/my-sketch && nvim sketch.js"
-Sleep 300ms
+Sleep 1s
 Enter
-Sleep 4s
+Sleep 3s
 Type ":P5 server"
-Enter
-Sleep 4s
-Type ":P5 console"
+Sleep 500ms
 Enter
 Sleep 3s
 Type ":P5 console"
+Sleep 500ms
 Enter
-Sleep 2s
+Sleep 3s
+Type ":P5 console"
+Sleep 500ms
+Enter
+Sleep 3s
 Type ":q!"
+Sleep 1s
 Enter
+Sleep 3s
