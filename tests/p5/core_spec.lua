@@ -81,6 +81,87 @@ describe("deslugify", function()
 	end)
 end)
 
+describe("is_cmd", function()
+  local orig_executable = vim.fn.executable
+
+  after_each(function()
+    vim.fn.executable = orig_executable
+  end)
+
+  it("returns true for available commands", function()
+    vim.fn.executable = function(cmd)
+      if cmd == "python3" then return 1 end
+      return 0
+    end
+    assert.is_true(C.is_cmd("python3"))
+  end)
+
+  it("returns false for unavailable commands", function()
+    vim.fn.executable = function(_) return 0 end
+    assert.is_false(C.is_cmd("nonexistent-cmd-xyz"))
+  end)
+end)
+
+describe("is_file", function()
+  local tmp = vim.fn.tempname()
+
+  it("returns false for nonexistent file", function()
+    assert.is_false(C.is_file(tmp .. "/nope.lua"))
+  end)
+
+  it("returns true for existing file", function()
+    vim.fn.writefile({ "hello" }, tmp)
+    assert.is_true(C.is_file(tmp))
+    vim.fn.delete(tmp)
+  end)
+end)
+
+describe("is_dir", function()
+  it("returns true for existing directory", function()
+    assert.is_true(C.is_dir("/tmp"))
+  end)
+
+  it("returns false for nonexistent directory", function()
+    assert.is_false(C.is_dir("/nonexistent-dir-xyz"))
+  end)
+end)
+
+describe("read_json", function()
+  local tmp = vim.fn.tempname()
+
+  after_each(function()
+    pcall(vim.fn.delete, tmp)
+  end)
+
+  it("returns nil for missing file", function()
+    local data, err = C.read_json("/nonexistent.json")
+    assert.is_nil(data)
+    assert.matches("not found", err)
+  end)
+
+  it("parses valid JSON", function()
+    vim.fn.writefile(vim.split('{"key": "value", "num": 42}', "\n"), tmp)
+    local data = C.read_json(tmp)
+    assert.are.equal("value", data.key)
+    assert.are.equal(42, data.num)
+  end)
+end)
+
+describe("write_json", function()
+  local tmp = vim.fn.tempname()
+
+  after_each(function()
+    pcall(vim.fn.delete, tmp)
+  end)
+
+  it("writes valid JSON", function()
+    C.write_json(tmp, { hello = "world", num = 42 })
+    local data = C.read_json(tmp)
+    assert.are.equal("world", data.hello)
+    assert.are.equal(42, data.num)
+  end)
+end)
+
 describe("slugify roundtrip", function()
 	it("slugify then deslugify preserves meaning", function()
 		local original = "My Cool Sketch 42"

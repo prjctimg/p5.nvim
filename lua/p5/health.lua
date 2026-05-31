@@ -156,9 +156,6 @@ H.check_project_config = function()
 				end
 			end
 
-			if data.server then
-				ok("Server configuration: found")
-			end
 		else
 			error("p5.json: invalid format")
 		end

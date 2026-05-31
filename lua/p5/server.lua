@@ -209,11 +209,6 @@ S.start = function(port)
 			end, 2000)
 		end
 
-		if S.config.console.auto_show then
-			vim.defer_fn(function()
-				console.show({ enter = false })
-			end, 2500)
-		end
 	end
 end
 

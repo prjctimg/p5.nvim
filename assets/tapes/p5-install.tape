@@ -1,28 +1,32 @@
 Output assets/p5-install.gif
 
 Set Shell bash
-Set FontSize 20
+Set FontFamily "JetBrains Mono"
+Set FontSize 18
 Set Width 1200
 Set Height 800
-Set TypingSpeed 100ms
-Set PlaybackSpeed 1.5
+Set TypingSpeed 80ms
+Set PlaybackSpeed 1.0
 Set Theme "Catppuccin Frappe"
 Set Padding 20
 Set WindowBar Colorful
 
 Hide
-Type "R=$PWD"
+Sleep 1s
+Type "export TERM=xterm-256color"
 Enter
-Type "rm -rf /tmp/demo && mkdir -p /tmp/demo"
+Type "PS1='$ '"
 Enter
-Type "cd /tmp/demo && nvim -u $R/assets/init.lua --headless -c 'P5 create my-sketch' -c 'qa!'"
+Type "mkdir -p ~/Sketches"
+Enter
+Type "cd ~/Sketches && nvim --headless -c 'P5 create my-sketch' -c 'qa!'"
 Enter
 Show
 
-Type "cd /tmp/demo/my-sketch && nvim -u $R/assets/init.lua sketch.js"
-Sleep 500ms
+Type "cd ~/Sketches/my-sketch && nvim sketch.js"
+Sleep 300ms
 Enter
-Sleep 2s
+Sleep 4s
 Type ":P5 install ml5"
 Enter
 Sleep 5s

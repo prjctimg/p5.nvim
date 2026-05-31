@@ -102,57 +102,54 @@ else
 				table.insert(gist_files, target_path)
 			end
 
-			if desc ~= "" then
-				local cmd = { "gh", "gist", "create", "--public", "--desc", desc }
-
-				for _, file_path in ipairs(gist_files) do
-					table.insert(cmd, file_path)
-				end
-
-				vim.system(cmd, function(out)
-					if out.code ~= 0 then
-						vim.fn.delete(dir, "rf")
-						core.notify("Gist creation failed. Run :checkhealth p5.nvim to find the problem.", "warn")
-						return
-					end
-
-					vim.fn.delete(dir, "rf")
-					local url_full = out.stdout:match("https://gist%.github%.com/%S+")
-					if not url_full then
-						core.notify("Gist created but could not parse URL. Check your gist list on GitHub.", "warn")
-						return
-					end
-
-					local url = url_full:match("gist%.github%.com/(.+)")
-					local gist_id = url_full:match("/([a-fA-F0-9]+)$")
-					if not gist_id then
-						core.notify("Gist created but could not extract ID. Check your gist list on GitHub.", "warn")
-						return
-					end
-
-					local title_res = vim.fn.system({ "gh", "api", "/gists/" .. gist_id, "--jq", ".description" })
-					local title = vim.v.shell_error == 0 and vim.trim(title_res) or desc
-					local cm = G.get_comment(gist_id)
-					local description = cm and cm.body or ""
-					proj_config.gist = {
-						url = url,
-						title = title,
-						description = description,
-					}
-					core.write_workspace_config(proj_config, proj_dir)
-
-					local p5_json_path = proj_dir .. "/p5.json"
-					vim.system({ "gh", "gist", "edit", gist_id, "--filename", "p5.json", p5_json_path }, function(res)
-						if res.code == 0 then
-							core.notify("🎊 Sketchspace uploaded!", "ok")
-						else
-							core.notify("Gist created but p5.json upload failed. Try :P5 gist sync.", "warn")
-						end
-					end)
-				end)
-			else
+			if desc == "" then
 				core.notify("A sketchspace needs a description to be created.", "warn")
 				return
+			end
+
+			local cmd = { "gh", "gist", "create", "--public", "--desc", desc }
+			for _, file_path in ipairs(gist_files) do
+				table.insert(cmd, file_path)
+			end
+
+			local out = vim.system(cmd):wait()
+			if out.code ~= 0 then
+				vim.fn.delete(dir, "rf")
+				core.notify("Gist creation failed. Run :checkhealth p5.nvim to find the problem.", "warn")
+				return
+			end
+
+			vim.fn.delete(dir, "rf")
+			local url_full = out.stdout:match("https://gist%.github%.com/%S+")
+			if not url_full then
+				core.notify("Gist created but could not parse URL. Check your gist list on GitHub.", "warn")
+				return
+			end
+
+			local url = url_full:match("gist%.github%.com/(.+)")
+			local gist_id = url_full:match("/([a-fA-F0-9]+)$")
+			if not gist_id then
+				core.notify("Gist created but could not extract ID. Check your gist list on GitHub.", "warn")
+				return
+			end
+
+			local title_res = vim.fn.system({ "gh", "api", "/gists/" .. gist_id, "--jq", ".description" })
+			local title = vim.v.shell_error == 0 and vim.trim(title_res) or desc
+			local cm = G.get_comment(gist_id)
+			local description = cm and cm.body or ""
+			proj_config.gist = {
+				url = url,
+				title = title,
+				description = description,
+			}
+			core.write_workspace_config(proj_config, proj_dir)
+
+			local p5_json_path = proj_dir .. "/p5.json"
+			local res = vim.system({ "gh", "gist", "edit", gist_id, "--filename", "p5.json", p5_json_path }):wait()
+			if res.code == 0 then
+				core.notify("🎊 Sketchspace uploaded!", "ok")
+			else
+				core.notify("Gist created but p5.json upload failed. Try :P5 gist sync.", "warn")
 			end
 		end
 
@@ -163,7 +160,7 @@ else
 			-- Prompt for description
 			vim.ui.input({
 				prompt = "What do you call this (master)piece ?",
-				default = "sketch from " .. (config.name or "sketchspace"),
+				default = "sketchspace",
 				completion = "file",
 			}, function(input)
 				if input and input ~= "" then
@@ -323,45 +320,35 @@ else
 				return d.type == "file" and d.has_local
 			end, diffs)) or auto_push
 
-			local function upload_file(fns, uidx)
-				if uidx > #fns then
-					local function done()
-						if not use_remote then
-							if cm then
-								G.update_comment(gist_info.id, cm.id, gist_obj.description)
-							elseif gist_obj.description ~= "" then
-								G.create_comment(gist_info.id, gist_obj.description)
-							end
-						end
-						if #errors > 0 then
-							core.notify("Sync completed with errors: " .. table.concat(errors, ", "), "warn")
-						else
-							core.notify("Gist synced successfully", "ok")
-						end
-					end
-					vim.system({ "gh", "gist", "edit", gist_info.id, "--filename", "p5.json", project_dir .. "/p5.json" }, function(_)
-						if not use_remote then
-							vim.system({ "gh", "api", "-X", "PATCH", "/gists/" .. gist_info.id, "-f", "description=" .. gist_obj.title }, function(_)
-								done()
-							end)
-						else
-							done()
-						end
-					end)
-					return
-				end
-				local fn = fns[uidx]
+			for _, fn in ipairs(push_list) do
 				local temp_file = gist_temp_dir .. "/" .. os.time() .. "_" .. vim.fn.fnamemodify(fn, ":t")
 				vim.fn.system({ "cp", project_dir .. "/" .. fn, temp_file })
-				vim.system({ "gh", "gist", "edit", gist_info.id, "--filename", fn, temp_file }, function(uout)
-					if uout.code ~= 0 then
-						table.insert(errors, "Failed to upload: " .. fn)
-					end
-					vim.uv.fs_unlink(temp_file)
-					upload_file(fns, uidx + 1)
-				end)
+				local uout = vim.system({ "gh", "gist", "edit", gist_info.id, "--filename", fn, temp_file }):wait()
+				if uout.code ~= 0 then
+					table.insert(errors, "Failed to upload: " .. fn)
+				end
+				vim.uv.fs_unlink(temp_file)
 			end
-			upload_file(push_list, 1)
+
+			local function done()
+				if not use_remote then
+					if cm then
+						G.update_comment(gist_info.id, cm.id, gist_obj.description)
+					elseif gist_obj.description ~= "" then
+						G.create_comment(gist_info.id, gist_obj.description)
+					end
+				end
+				if #errors > 0 then
+					core.notify("Sync completed with errors: " .. table.concat(errors, ", "), "warn")
+				else
+					core.notify("Gist synced successfully", "ok")
+				end
+			end
+			vim.system({ "gh", "gist", "edit", gist_info.id, "--filename", "p5.json", project_dir .. "/p5.json" }):wait()
+			if not use_remote then
+				vim.system({ "gh", "api", "-X", "PATCH", "/gists/" .. gist_info.id, "-f", "description=" .. gist_obj.title }):wait()
+			end
+			done()
 		end
 
 		-- Single batch prompt

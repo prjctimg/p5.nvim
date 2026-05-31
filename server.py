@@ -8,7 +8,6 @@ import re
 import json
 import signal
 import sys
-import webbrowser
 from collections import deque
 from datetime import datetime
 from pathlib import Path
@@ -71,6 +70,27 @@ def format_log_entry(level: str, message: str, source: str = "browser") -> str:
     )
 
 
+async def try_start_server(handler, host, port, max_attempts=10):
+    for offset in range(max_attempts):
+        try:
+            server = await asyncio.start_server(handler, host, port + offset)
+            return server, port + offset
+        except OSError:
+            continue
+    raise OSError(f"No available port near {port}")
+
+
+def read_inject_script(name):
+    path = Path(__file__).parent / "assets" / "inject" / name
+    if path.is_file():
+        return path.read_text()
+    return ""
+
+
+INJECT_CONSOLE = read_inject_script("console.js")
+INJECT_LIVERELOAD = read_inject_script("livereload.js")
+
+
 class ConsoleBuffer:
     """Ring buffer for console logs with configurable size."""
     
@@ -116,19 +136,12 @@ class LiveReloadServer:
     async def start(self):
         """Start the WebSocket server."""
         try:
-            self.server = await websockets.serve(self.handler, 'localhost', self.port)
+            self.server, self.port = await try_start_server(
+                self.handler, 'localhost', self.port
+            )
             print(f"Live reload WebSocket running on ws://localhost:{self.port}")
-        except OSError as e:
-            for offset in range(1, 10):
-                try:
-                    alt_port = self.port + offset
-                    self.server = await websockets.serve(self.handler, 'localhost', alt_port)
-                    self.port = alt_port
-                    print(f"Live reload WebSocket running on ws://localhost:{self.port}")
-                    return
-                except OSError:
-                    continue
-            print(f"Warning: Could not start live reload server: {e}")
+        except OSError:
+            print("Warning: Could not start live reload server")
     
     async def broadcast(self, message: dict):
         """Broadcast message to all connected clients."""
@@ -474,13 +487,8 @@ class HTTPServer:
         # Build file path
         file_path = os.path.join(self.directory, path.lstrip('/'))
         
-        # Debug: log index.html request
-        if path == '/index.html':
-            print(f"[DEBUG] index.html request: file_path={file_path}, exists={os.path.isfile(file_path)}")
-        
         # Generate index.html on-the-fly if it doesn't exist
         if path == '/index.html' and not os.path.isfile(file_path):
-            print("[DEBUG] Generating index.html on-the-fly...")
             content = self.generate_index_html()
             content = self.inject_scripts(content.encode('utf-8'))
             writer.write(b'HTTP/1.1 200 OK\r\n')
@@ -547,8 +555,6 @@ class HTTPServer:
     
     def generate_index_html(self) -> str:
         """Generate index.html on-the-fly based on p5.json libs."""
-        import json
-        
         p5_json_path = os.path.join(self.directory, 'p5.json')
         config = {}
         if os.path.isfile(p5_json_path):
@@ -575,7 +581,6 @@ function draw() {
 }'''
             with open(sketch_js_path, 'w') as f:
                 f.write(default_sketch)
-            print(f"Created default sketch.js")
         
         # Build script tags for core and contrib libs
         scripts = []
@@ -609,142 +614,26 @@ function draw() {
         """Inject console and live reload scripts into HTML."""
         content = html_content.decode('utf-8', errors='ignore')
         
-        # Console injection script
-        console_script = '''
-    <script>
-      (function() {
-        console.log('p5.nvim console integration enabled');
+        cs = "<script>" + INJECT_CONSOLE + "</script>"
+        lr = "<script>" + INJECT_LIVERELOAD.replace("__LR_PORT__", str(self.live_reload_server.port)) + "</script>"
+        scripts = cs + lr
         
-        const originalConsole = {
-          log: console.log,
-          error: console.error,
-          warn: console.warn,
-          info: console.info
-        };
-        
-        function sendToConsole(level, args) {
-          const message = args.map(arg => {
-            if (typeof arg === 'object') {
-              try {
-                return JSON.stringify(arg);
-              } catch (e) {
-                return String(arg);
-              }
-            }
-            return String(arg);
-          }).join(' ');
-          
-          fetch('/api/console/log', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              type: 'console',
-              level: level,
-              message: message,
-              source: 'browser',
-              timestamp: new Date().toISOString()
-            })
-          }).catch(() => {});
-        }
-        
-        console.log = function(...args) {
-          originalConsole.log.apply(console, args);
-          sendToConsole('log', args);
-        };
-        
-        console.error = function(...args) {
-          originalConsole.error.apply(console, args);
-          sendToConsole('error', args);
-        };
-        
-        console.warn = function(...args) {
-          originalConsole.warn.apply(console, args);
-          sendToConsole('warn', args);
-        };
-        
-        console.info = function(...args) {
-          originalConsole.info.apply(console, args);
-          sendToConsole('info', args);
-        };
-        
-        window.onerror = function(msg, source, lineno, colno, error) {
-          sendToConsole('error', [msg + ' at ' + source + ':' + lineno + ':' + colno]);
-          return false;
-        };
-      })();
-    </script>'''
-        
-        # Live reload script
-        live_reload_script = f'''
-    <script>
-      (function() {{
-        let ws = null;
-        let reconnectAttempts = 0;
-        const maxReconnectAttempts = 10;
-        
-        function connect() {{
-          ws = new WebSocket('ws://localhost:{self.live_reload_server.port}');
-          
-          ws.onopen = function() {{
-            console.log('Live reload connected');
-            reconnectAttempts = 0;
-          }};
-          
-          ws.onclose = function() {{
-            // Only attempt reconnect, don't reload
-            if (reconnectAttempts < maxReconnectAttempts) {{
-              reconnectAttempts++;
-              setTimeout(connect, Math.min(1000 * reconnectAttempts, 5000));
-            }}
-          }};
-          
-          ws.onerror = function() {{
-            // Silently fail, onclose will handle reconnect
-          }};
-          
-          ws.onmessage = function(event) {{
-            try {{
-              const data = JSON.parse(event.data);
-              if (data.type === 'reload') {{
-                window.location.reload();
-              }}
-            }} catch (e) {{}}
-          }};
-        }}
-        
-        connect();
-      }})();
-    </script>'''
-        
-        # Inject scripts before </body>
         if '</body>' in content.lower():
-            content = re.sub(r'</body>', console_script + live_reload_script + '</body>', content, flags=re.IGNORECASE)
+            content = re.sub(r'</body>', scripts + '</body>', content, flags=re.IGNORECASE)
         else:
-            content += console_script + live_reload_script
+            content += scripts
         
         return content.encode('utf-8')
     
     async def start(self):
         """Start the HTTP server."""
         try:
-            self.server = await asyncio.start_server(
+            self.server, self.port = await try_start_server(
                 self.handle_client, 'localhost', self.port
             )
             print(f"Server running at http://localhost:{self.port}/")
-        except OSError as e:
-            print(f"Error starting server on port {self.port}: {e}")
-            # Try alternate ports
-            for offset in range(1, 10):
-                try:
-                    alt_port = self.port + offset
-                    self.server = await asyncio.start_server(
-                        self.handle_client, 'localhost', alt_port
-                    )
-                    self.port = alt_port
-                    print(f"Server running at http://localhost:{self.port}/")
-                    return
-                except OSError:
-                    continue
+        except OSError:
+            print(f"Error starting server on port {self.port}")
             raise
     
     async def close(self):

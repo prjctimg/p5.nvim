@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/prjctimg/p5.nvim/schema.json",
+  "title": "p5.json",
+  "description": "Schema for p5.nvim sketchspace configuration",
+  "type": "object",
+  "properties": {
+    "version": {
+      "description": "p5.js version to use",
+      "type": "string",
+      "examples": ["2.0.0", "1.9.0"]
+    },
+    "major": {
+      "description": "p5.js major version",
+      "type": "integer",
+      "enum": [1, 2]
+    },
+    "libs": {
+      "description": "Installed contributor libraries with versions",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "examples": [{ "ml5.js": "1.8.0" }]
+    },
+    "includes": {
+      "description": "Files to include in Gist uploads",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": ["sketch.js"]
+    },
+    "gist": {
+      "description": "GitHub Gist metadata",
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "Gist URL in format user/gistId",
+          "type": "string",
+          "pattern": "^[^/]+/[a-f0-9]+$"
+        },
+        "title": {
+          "description": "Gist title",
+          "type": "string"
+        },
+        "description": {
+          "description": "Gist description (first comment)",
+          "type": "string"
+        }
+      },
+      "required": ["url"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["version", "major", "libs", "includes"],
+  "additionalProperties": false
+}

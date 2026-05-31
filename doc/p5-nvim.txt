@@ -12,95 +12,135 @@ TABLE OF CONTENTS                                  *p5-nvim-table-of-contents*
 7. Lua API                          |p5-nvim-lua-api|
 8. Keymapping                       |p5-nvim-keymapping|
 9. Troubleshooting                      |p5-nvim-troubleshooting|
-10. License                         |p5-nvim-license|
 
 p5.js Module Reference:
-11. p5-accessibility        |p5-accessibility|
-12. p5-color                |p5-color|
-13. p5-core                 |p5-core|
-14. p5-data                 |p5-data|
-15. p5-dom                  |p5-dom|
-16. p5-events               |p5-events|
-17. p5-image                |p5-image|
-18. p5-io                   |p5-io|
-19. p5-math                 |p5-math|
-20. p5-modules              |p5-modules|
-21. p5-typography           |p5-typography|
-22. p5-utilities            |p5-utilities|
-23. p5-webgl                 |p5-webgl|
+10. p5-accessibility        |p5-accessibility|
+11. p5-color                |p5-color|
+12. p5-core                 |p5-core|
+13. p5-data                 |p5-data|
+14. p5-dom                  |p5-dom|
+15. p5-events               |p5-events|
+16. p5-image                |p5-image|
+17. p5-io                   |p5-io|
+18. p5-math                 |p5-math|
+19. p5-modules              |p5-modules|
+20. p5-typography           |p5-typography|
+21. p5-utilities            |p5-utilities|
+22. p5-webgl                 |p5-webgl|
 
 ================================================================================
-INTRODUCTION
+INTRODUCTION                                    *p5-nvim-introduction*
 
 p5.nvim is a Neovim plugin for creative coding with p5.js. It provides a
 complete development environment for building interactive sketches directly
 in Neovim.
 
 Features:
-- 🛰️ Live server with auto-reload for instant preview
+- 💻 Live server with auto-reload for instant browser preview
 - 📦 Package manager for p5.js contributor libraries
 - 📺 Console to view browser logs in Neovim
 - 📚 p5.js reference as built-in manpages
-- 🗂️ Template projects with p5.js and sound addon
+- 🗂️ Template projects with p5.js 2.x and 1.x
 - 🔗 GitHub Gist integration for sharing sketches
+- ✂️ 100+ p5.js code snippets (VS Code JSON format)
 
 ==============================================================================
-REQUIREMENTS
+REQUIREMENTS                                    *p5-nvim-requirements*
 
-- Neovim 0.9.0 or later
+- Neovim 0.11.0 or later
 - Python 3.7+ (for development server)
+- websockets Python package (pip install websockets)
 - curl (for console streaming and downloads)
+- gh CLI (optional, for gist features)
 
 ==============================================================================
-QUICK START
+QUICK START                                      *p5-nvim-quick-start*
 
-1. Install the plugin using your favorite package manager
-2. Create a new p5.js project: >
-   :P5 install
+1. Install the plugin using your favourite package manager: >
+
+   require("p5").setup({})
+
+<
+2. Create a new sketchspace: >
+
+   :P5 create my-sketch
+
 <
 3. Start the live server: >
-   :P5 server start
+
+   :P5 server
+
 <
 4. Open http://localhost:8000 in your browser to see your sketch
 
 ==============================================================================
-COMMANDS
+COMMANDS                                            *p5-nvim-commands*
 
-*P5*                                           
-   Main command picker. Opens a menu with all available options.
+*P5*
+   Main command. With no arguments, opens an interactive menu. With a
+   subcommand, runs the specified operation.
+
+:P5 menu
+   Open the interactive menu. This is the default when running `:P5`
+   without arguments.
+
+:P5 create [name] [--1.x]
+   Create a new sketchspace. If [name] is omitted, prompts for one.
+   Pass --1.x to create a p5.js 1.x project instead of 2.x. >
+   :P5 create my-sketch
+   :P5 create
+   :P5 create --1.x
+
+:P5 setup
+   Set up assets in the current sketchspace. Downloads gist files (if
+   configured), creates a default sketch.js if missing, copies p5.js
+   assets, generates libs.js, and installs configured libraries. >
+   :P5 setup
 
 :P5 install [library...]
    Install p5.js contributor libraries. Without arguments, shows a picker
    to select libraries. With arguments, installs specified libraries. >
    :P5 install ml5
-   :P5 install ml5 p5.speech
-<
+   :P5 install ml5 p5play
+
 :P5 uninstall [library...]
    Uninstall libraries. Without arguments, shows picker with installed
    libraries. With arguments, removes specified libraries. >
    :P5 uninstall ml5
-<
-:P5 server start [port]
-   Start the live development server. Default port is 8000. >
-   :P5 server start
-   :P5 server start 8080
-<
-:P5 server stop
-   Stop the running development server.
+
+:P5 server [port]
+   Start or stop the development server (toggle). Default port is 8000. >
+   :P5 server
+   :P5 server 8080
 
 :P5 console
    Toggle the browser console. Shows a terminal with logs from the
    browser's console.log/error/warn output.
 
 :P5 docs
-   Open this help file.
+   Open the p5.nvim help file.
 
-:P5 gist [description]
-   Create a GitHub Gist from the current sketch. Opens browser for
-   authentication if needed.
+:P5 gist [description|sync|edit]
+   Create, sync, or edit a GitHub Gist from your sketchspace. >
+   :P5 gist "My awesome sketch"
+   :P5 gist sync
+   :P5 gist edit
+
+:P5 update [library...]
+   Update all installed libraries or specific ones. >
+   :P5 update
+   :P5 update ml5 p5play
+
+:P5 skchbk [list]
+   Clone all gists from a GitHub user into a local skchbk/ directory. >
+   :P5 skchbk
+   :P5 skchbk list
+
+:P5 list
+   Open a picker of recently used sketchspaces.
 
 ==============================================================================
-LIBRARY MANAGEMENT
+LIBRARY MANAGEMENT                          *p5-nvim-library-management*
 
 p5.nvim includes 50+ contributor libraries for p5.js. Run `:P5 install`
 to see all available libraries in a searchable picker.
@@ -108,11 +148,12 @@ to see all available libraries in a searchable picker.
 Common libraries:
 - ml5.js - Machine learning for the web
 - p5.speech - Text-to-speech and speech recognition
-- p5.sound - Audio synthesis and analysis
-- p5.play - Game development with physics
+- p5play - Game development with physics
+- p5.party - Networked multiplayer sketches
+- p5.xr - VR and AR sketches
 
 ==============================================================================
-CONFIGURATION
+CONFIGURATION                                    *p5-nvim-configuration*
 
 Configure p5.nvim using the setup function: >
 
@@ -121,27 +162,29 @@ Configure p5.nvim using the setup function: >
        port = 8000,
        auto_start = false,
        auto_open_browser = true,
+       live_reload = {
+         enabled = true,
+         port = 12002,
+         debounce_ms = 300,
+         watch_extensions = {".js", ".css", ".html", ".json"},
+         exclude_dirs = {".git", "node_modules", "dist", "build"},
+       },
      },
      console = {
        enabled = true,
        position = "below",
        height = 10,
-     }
+     },
+     libraries = {
+       auto_update = false,
+     },
+     sketchbook = {
+       user = "",
+     },
    })
-<
-
-Server options:
-  port              Server port (default: 8000)
-  auto_start        Start server automatically (default: false)
-  auto_open_browser Open browser automatically (default: true)
-
-Console options:
-  enabled           Enable console (default: true)
-  position          Split position: "below", "above", "left", "right"
-  height            Split height in lines (default: 10)
 
 ==============================================================================
-LUA API
+LUA API                                                *p5-nvim-lua-api*
 
 require("p5").setup({config})                        *p5.setup()*
    Initialize the plugin with optional configuration.
@@ -158,7 +201,7 @@ require("p5.libraries").get_available_libs()         *p5.libraries.get_available
 require("p5.libraries").get_installed_libs()        *p5.libraries.get_installed_libs()*
    Get list of currently installed libraries in the project.
 
-require("p5.server").start_server({port})            *p5.server.start_server()*
+require("p5.server").start({port})                    *p5.server.start()*
    Start the live development server.
 
 require("p5.server").stop_server()                   *p5.server.stop_server()*
@@ -176,48 +219,45 @@ require("p5.console").toggle()                      *p5.console.toggle()*
 require("p5.project").create_project({name})        *p5.project.create_project()*
    Create a new p5.js project.
 
+require("p5.gist").create({description})              *p5.gist.create()*
+   Create a GitHub Gist from the current sketchspace.
+
+require("p5.gist").sync()                             *p5.gist.sync()*
+   Bidirectional sync with the associated gist.
+
+require("p5.gist").edit()                             *p5.gist.edit()*
+   Edit gist title or first comment.
+
 ==============================================================================
-KEYMAPPING
+KEYMAPPING                                          *p5-nvim-keymapping*
 
 No keymaps are set by default. You can create your own: >
 
-   vim.keymap.set("n", "<leader>p", ":P5<CR>")
-   vim.keymap.set("n", "<leader>ps", ":P5 server start<CR>")
-   vim.keymap.set("n", "<leader>pc", ":P5 console<CR>")
-<
+   vim.keymap.set("n", "<leader>p5", ":P5<CR>", { desc = "Open p5.nvim picker" })
+   vim.keymap.set("n", "<leader>ps", ":P5 server<CR>", { desc = "Toggle server" })
+   vim.keymap.set("n", "<leader>pc", ":P5 console<CR>", { desc = "Toggle console" })
+   vim.keymap.set("n", "<leader>pg", ":P5 gist sync<CR>", { desc = "Sync gist" })
 
 ==============================================================================
-TROUBLESHOOTING
+TROUBLESHOOTING                                  *p5-nvim-troubleshooting*
 
 Q: Server won't start
-A: Check that no other process is using port 8000. Try a different port:
-   :P5 server start 8080
+A: Check that Python 3 and the websockets module are installed:
+   pip install websockets
+   Try a different port:
+   :P5 server 8080
 
 Q: Console shows no logs
 A: Ensure the browser page is loaded and you've called console.log()
-   in your sketch.
+   in your sketch. The server must be running.
 
 Q: Library installation fails
-A: Check your internet connection. Some libraries may have rate-limited
-   GitHub API access.
+A: Check your internet connection. Ensure curl is installed.
+   Verify you're in a valid sketchspace (has p5.json).
 
-==============================================================================
-LICENSE                                                *p5-nvim-license*
-
-GNU General Public License v3.0
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>
+Q: Gist features don't work
+A: Install and authenticate the GitHub CLI:
+   gh auth login
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:

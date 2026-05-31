@@ -31,29 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Delete old releases
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          releases=$(gh release list --json tagName -q '.[:-1] | .[].tagName')
-          for release in $releases; do
-            echo "Deleting release: $release"
-            gh release delete "$release" --yes
-          done
-
-      - name: Delete old tags
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          current_tag=${GITHUB_REF#refs/tags/}
-          all_tags=$(git tag -l)
-          for tag in $all_tags; do
-            if [ "$tag" != "$current_tag" ]; then
-              echo "Deleting tag: $tag"
-              git push origin --delete "$tag" 2>/dev/null || true
-            fi
-          done
-
       - name: Update help file
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}

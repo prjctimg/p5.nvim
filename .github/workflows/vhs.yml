@@ -10,6 +10,8 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    env:
+      NVIM_APPNAME: nvim-p5-ci
     steps:
       - uses: actions/checkout@v4
 
@@ -19,13 +21,17 @@ jobs:
           neovim: true
           version: stable
 
-      - name: Install dependencies
+      - name: Setup Neovim config
+        run: |
+          mkdir -p ~/.config/nvim-p5-ci
+          cp assets/init.lua ~/.config/nvim-p5-ci/init.lua
+
+      - name: Install deps
         run: |
           sudo apt-get install -y python3 python3-websockets curl
-          mkdir -p ~/.local/share/nvim/site/pack/vendor/start
           for repo in nvim-lua/plenary.nvim folke/snacks.nvim folke/tokyonight.nvim; do
-            dir="${HOME}/.local/share/nvim/site/pack/vendor/start/${repo##*/}"
-            [ -d "$dir" ] || git clone --depth 1 "https://github.com/$repo" "$dir"
+            name="${repo##*/}"
+            git clone --depth 1 "https://github.com/$repo" "/tmp/lazy-deps/$name"
           done
 
       - name: Install VHS
@@ -37,12 +43,21 @@ jobs:
         run: |
           for tape in assets/tapes/*.tape; do
             echo "Generating GIF from $tape"
+            # Symlink p5.nvim checkout so lazy.nvim finds it
+            mkdir -p ~/.local/share/nvim-p5-ci/lazy
+            ln -sf "$PWD" ~/.local/share/nvim-p5-ci/lazy/p5.nvim
+            # Seed deps into lazy's directory (avoids re-cloning)
+            for dep in plenary.nvim snacks.nvim tokyonight.nvim; do
+              src="/tmp/lazy-deps/$dep"
+              dst="$HOME/.local/share/nvim-p5-ci/lazy/$dep"
+              [ -d "$src" ] && ln -sf "$src" "$dst"
+            done
             vhs "$tape"
           done
           for gif in assets/*.gif; do
             name=$(basename "$gif" .gif)
             url=$(vhs publish "$gif")
-            echo "Published $name → $url"
+            echo "Published $name -> $url"
             sed -i "s|!\\[$name\\]([^)]*\\.gif)|![$name]($url)|" README.md
           done
 
