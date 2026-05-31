@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+vim.g.lazy_dashboard_disable = 1
 vim.opt.termguicolors = true
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
