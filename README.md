@@ -14,7 +14,7 @@
 ## On this page
 
 - [Features ✨](#features)
-- [Requirements 📋](#requirements-📋)
+- [Requirements 📋](#requirements)
 - [Installation 💾](#installation-💾)
 - [What's a sketchspace ?](#whats-a-sketchspace)
 - [Quick Start 🚀](#quick-start-🚀)
@@ -110,6 +110,20 @@ A directory that has a `p5.json` file is called a `sketchspace`. The file looks 
 
 ## Commands 📖
 
+### :P5 (interactive menu)
+
+Open an interactive menu with all available commands. This is the default when
+`:P5` is called without arguments.
+
+```vim
+:P5              # Open interactive menu
+```
+
+The menu shows context-aware labels (e.g. "Stop server" when the server is
+running vs "Start server" when it's not).
+
+---
+
 ### :P5 create [name]
 
 Create a new sketchspace.
@@ -124,7 +138,7 @@ until the p5.js 2.x type declarations are officially released. The project is cr
 immediately with everything else — you can start coding right away. Run `:P5 setup` later
 to copy types once they become available.
 
-[![P5 create](https://asciinema.org/a/795753.svg)](https://asciinema.org/a/795753)
+![P5 create](https://vhs.charm.sh/vhs-7JmgJgNF3ociEIXEIo0h2Q.gif)
 
 ---
 
@@ -159,7 +173,7 @@ Remove installed libraries.
 :P5 uninstall
 ```
 
-[![asciicast](https://asciinema.org/a/795789.svg)](https://asciinema.org/a/795789)
+![P5 install/uninstall](https://vhs.charm.sh/vhs-EfuP5FFNggAcKoSyp5WOI.gif)
 
 ---
 
@@ -172,7 +186,7 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 :P5 server 8080
 ```
 
-<a href="https://asciinema.org/a/801610" target="_blank"><img src="https://asciinema.org/a/801610.svg" /></a>
+![P5 server](https://vhs.charm.sh/vhs-4Aofh6OI60J1HeIWJExfHO.gif)
 
 ---
 
@@ -184,7 +198,7 @@ Toggle browser console to view console.log, errors, and warnings in Neovim.
 :P5 console
 ```
 
-[![P5 console](https://asciinema.org/a/801611.svg)](https://asciinema.org/a/801611)
+![P5 console](https://vhs.charm.sh/vhs-355xUXAp9S7B1rgTwZEEzt.gif)
 
 ---
 
@@ -239,6 +253,17 @@ The `skchbk/` directory is automatically excluded from gist uploads.
 
 ---
 
+### :P5 list
+
+Open a picker of recently used sketchspaces and change directory to the
+selected one.
+
+```vim
+:P5 list
+```
+
+---
+
 ### :P5 docs
 
 Open p5.js documentation via snacks.picker.
@@ -247,7 +272,7 @@ Open p5.js documentation via snacks.picker.
 :P5 docs
 ```
 
-<a href="https://asciinema.org/a/799478" target="_blank"><img src="https://asciinema.org/a/799478.svg" /></a>
+![P5 docs](https://vhs.charm.sh/vhs-13m1FkOfCpi90SyH8kcAMB.gif)
 
 ---
 
@@ -349,8 +374,6 @@ require("p5").setup({
     port = 8000,                    -- Server port
     auto_start = false,             -- Auto start server when opening sketch.js
     auto_open_browser = true,      -- Open browser automatically
-    ready_timeout = 5000,           -- Server ready timeout (ms)
-    fallback_ports = {8001, 8002, 8003},  -- Ports to try if default is busy
 
     -- Live reload settings
     live_reload = {
@@ -364,6 +387,7 @@ require("p5").setup({
 
   -- Console settings
   console = {
+    enabled = true,                 -- Enable console integration
     position = "below",             -- Window position: below, above, left, right
     height = 10,                    -- Window height (lines)
   },

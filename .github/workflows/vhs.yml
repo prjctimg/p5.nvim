@@ -1,0 +1,53 @@
+name: VHS
+
+on:
+  push:
+    paths:
+      - 'assets/tapes/*.tape'
+      - 'assets/init.lua'
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: stable
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y python3 python3-websockets curl
+          mkdir -p ~/.local/share/nvim/site/pack/vendor/start
+          for repo in nvim-lua/plenary.nvim folke/snacks.nvim folke/tokyonight.nvim; do
+            dir="${HOME}/.local/share/nvim/site/pack/vendor/start/${repo##*/}"
+            [ -d "$dir" ] || git clone --depth 1 "https://github.com/$repo" "$dir"
+          done
+
+      - name: Install VHS
+        uses: charmbracelet/vhs-action@v2
+        with:
+          path: ''
+
+      - name: Generate & publish GIFs
+        run: |
+          for tape in assets/tapes/*.tape; do
+            echo "Generating GIF from $tape"
+            vhs "$tape"
+          done
+          for gif in assets/*.gif; do
+            name=$(basename "$gif" .gif)
+            url=$(vhs publish "$gif")
+            echo "Published $name → $url"
+            sed -i "s|!\\[$name\\]([^)]*\\.gif)|![$name]($url)|" README.md
+          done
+
+      - name: Commit updated README
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update VHS GIFs and README [skip ci]"
+          file_pattern: 'README.md'

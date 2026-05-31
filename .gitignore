@@ -1,5 +1,11 @@
-# Ignore static assets - these should be fetched by workflows
-assets/
+# Ignore runtime assets - these should be fetched by workflows
+assets/inject/
+assets/libs/
+assets/types/
+assets/favicon.ico
+
+# Ignore generated GIFs (hosted on vhs.charm.sh)
+assets/*.gif
 
 .cache/
 __pycache__/
