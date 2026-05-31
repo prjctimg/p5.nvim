@@ -6,6 +6,7 @@ local server = require("p5.server")
 local libraries = require("p5.libraries")
 local console = require("p5.console")
 local gist = require("p5.gist")
+local cdp = require("p5.cdp")
 local commands = require("p5.commands")
 
 I.config = {
@@ -32,6 +33,10 @@ I.config = {
 	sketchbook = {
 		user = "",
 	},
+	cdp = {
+		enabled = false,
+		remote_debugging_port = 9222,
+	},
 }
 
 I.setup = function(opts)
@@ -43,12 +48,16 @@ I.setup = function(opts)
 	libraries.config = vim.tbl_deep_extend("force", libraries.config, I.config)
 	console.config = I.config
 	gist.config = I.config
+	cdp.config = vim.tbl_deep_extend("force", cdp.config, I.config.cdp or {})
 
 	local hl = vim.api.nvim_set_hl
 	hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
 	hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
 	hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
 	hl(0, "P5ConsoleLog", { fg = "#6272a4" })
+	hl(0, "P5CDPActiveTab", { bold = true, reverse = true })
+	hl(0, "P5CDPTab", {})
+	hl(0, "P5CDPDebugPaused", { fg = "#ff5555", bold = true })
 
 	local has_snacks, snacks = pcall(require, "snacks")
 	if has_snacks then

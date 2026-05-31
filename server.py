@@ -28,6 +28,10 @@ CONFIG = {
     "console": {
         "buffer_size": 1000,
         "heartbeat_interval": 15,
+    },
+    "cdp": {
+        "enabled": False,
+        "remote_debugging_port": 9222,
     }
 }
 
@@ -110,6 +114,295 @@ class ConsoleBuffer:
     
     def __len__(self):
         return len(self.buffer)
+
+
+async def http_get(host, port, path):
+    """Simple async HTTP GET for CDP page discovery."""
+    try:
+        reader, writer = await asyncio.open_connection(host, port)
+    except (OSError, ConnectionRefusedError):
+        return None
+    request = f'GET {path} HTTP/1.1\r\nHost: {host}:{port}\r\nConnection: close\r\n\r\n'
+    writer.write(request.encode())
+    await writer.drain()
+    while True:
+        line = await reader.readline()
+        if line == b'\r\n' or not line:
+            break
+    body = await reader.read()
+    writer.close()
+    await writer.wait_closed()
+    return body.decode()
+
+
+class CDPClient:
+    """Chrome DevTools Protocol client via WebSocket."""
+
+    def __init__(self, cdp_port: int):
+        self.cdp_port = cdp_port
+        self.ws = None
+        self.page_url = ''
+        self.connected = False
+        self._msg_id = 0
+        self._pending = {}
+        self._recv_task: Optional[asyncio.Task] = None
+        self.event_buffer = deque(maxlen=2000)
+        self.pending_requests = {}
+        self.completed_requests = deque(maxlen=500)
+
+    def _next_id(self):
+        self._msg_id += 1
+        return self._msg_id
+
+    def _emit(self, event_type: str, data: dict):
+        self.event_buffer.append((event_type, data))
+
+    def drain_events(self):
+        events = list(self.event_buffer)
+        self.event_buffer.clear()
+        return events
+
+    def get_network_log(self):
+        return list(self.completed_requests)
+
+    def clear_network_log(self):
+        self.completed_requests.clear()
+
+    async def connect(self):
+        body = await http_get('localhost', self.cdp_port, '/json')
+        if body is None:
+            raise ConnectionError(f"No CDP endpoint at localhost:{self.cdp_port}")
+        pages = json.loads(body)
+        pages = [p for p in pages if p.get('type') == 'page']
+        if not pages:
+            raise ConnectionError("No debuggable pages found")
+        page = pages[0]
+        ws_url = page['webSocketDebuggerUrl']
+        self.page_url = page.get('url', '')
+        self.ws = await websockets.connect(ws_url, max_size=2 ** 24)
+        self.connected = True
+        self._recv_task = asyncio.create_task(self._message_loop())
+        await self.send_command('Runtime.enable')
+        await self.send_command('Network.enable')
+        await self.send_command('Debugger.enable')
+        self._emit('status', {'state': 'connected', 'url': self.page_url})
+
+    async def disconnect(self):
+        self.connected = False
+        if self._recv_task:
+            self._recv_task.cancel()
+            try:
+                await self._recv_task
+            except asyncio.CancelledError:
+                pass
+        if self.ws:
+            await self.ws.close()
+        self.ws = None
+        self._pending.clear()
+        self._emit('status', {'state': 'disconnected'})
+
+    async def send_command(self, method: str, params: Optional[dict] = None):
+        if not self.connected or not self.ws:
+            raise RuntimeError("CDP not connected")
+        msg_id = self._next_id()
+        msg = {'id': msg_id, 'method': method}
+        if params:
+            msg['params'] = params
+        future = asyncio.get_event_loop().create_future()
+        self._pending[msg_id] = future
+        await self.ws.send(json.dumps(msg))
+        try:
+            return await asyncio.wait_for(future, timeout=30)
+        except asyncio.TimeoutError:
+            self._pending.pop(msg_id, None)
+            raise TimeoutError(f"CDP command {method} timed out")
+
+    async def evaluate(self, expression: str):
+        result = await self.send_command('Runtime.evaluate', {
+            'expression': expression,
+            'returnByValue': True,
+            'includeCommandLineAPI': True,
+        })
+        return result
+
+    async def set_breakpoint(self, location: str):
+        parts = location.rsplit(':', 1)
+        if len(parts) != 2:
+            raise ValueError("Use format: file.js:line")
+        url, line = parts[0], int(parts[1])
+        result = await self.send_command('Debugger.setBreakpointByUrl', {
+            'url': url,
+            'lineNumber': line - 1,
+        })
+        return result
+
+    async def resume(self):
+        await self.send_command('Debugger.resume')
+
+    async def step_over(self):
+        await self.send_command('Debugger.stepOver')
+
+    async def step_into(self):
+        await self.send_command('Debugger.stepInto')
+
+    async def step_out(self):
+        await self.send_command('Debugger.stepOut')
+
+    async def _message_loop(self):
+        assert self.ws is not None
+        try:
+            async for message in self.ws:
+                try:
+                    data = json.loads(message)
+                    await self._handle_message(data)
+                except json.JSONDecodeError:
+                    continue
+        except websockets.exceptions.ConnectionClosed:
+            self.connected = False
+            self._emit('status', {'state': 'disconnected'})
+        except asyncio.CancelledError:
+            pass
+
+    async def _handle_message(self, data: dict):
+        if 'id' in data:
+            future = self._pending.pop(data['id'], None)
+            if future and not future.done():
+                if 'error' in data:
+                    future.set_exception(
+                        Exception(data['error'].get('message', 'CDP error'))
+                    )
+                else:
+                    future.set_result(data.get('result', {}))
+            return
+        method = data.get('method', '')
+        params = data.get('params', {})
+        if method == 'Runtime.consoleAPICalled':
+            await self._handle_console_api(params)
+        elif method == 'Runtime.exceptionThrown':
+            await self._handle_exception(params)
+        elif method == 'Network.requestWillBeSent':
+            self._handle_request_sent(params)
+        elif method == 'Network.responseReceived':
+            self._handle_response(params)
+        elif method == 'Network.loadingFailed':
+            self._handle_load_failed(params)
+        elif method == 'Debugger.paused':
+            await self._handle_paused(params)
+        elif method == 'Debugger.resumed':
+            self._emit('debugger', {'event': 'resumed'})
+
+    async def _handle_console_api(self, params: dict):
+        level_map = {
+            'warning': 'warn', 'error': 'error',
+            'debug': 'log', 'info': 'info', 'log': 'log',
+        }
+        level = level_map.get(params.get('level', 'log'), 'log')
+        args = params.get('args', [])
+        messages = []
+        for a in args:
+            t = a.get('type', '')
+            if t == 'string':
+                messages.append(a.get('value', ''))
+            elif t == 'object':
+                messages.append(a.get('description', ''))
+            elif t == 'number' or t == 'boolean':
+                messages.append(str(a.get('value', '')))
+            else:
+                messages.append(a.get('description', str(a.get('value', ''))))
+        message = ' '.join(messages)
+        stack = []
+        if 'stackTrace' in params:
+            for f in params['stackTrace'].get('callFrames', []):
+                stack.append({
+                    'function': f.get('functionName', '<anon>'),
+                    'url': f.get('url', ''),
+                    'line': f.get('lineNumber', 0) + 1,
+                    'column': f.get('columnNumber', 0) + 1,
+                })
+        self._emit('console', {
+            'level': level, 'message': message,
+            'timestamp': datetime.now().strftime('%H:%M:%S'),
+            'stack': stack,
+        })
+
+    async def _handle_exception(self, params: dict):
+        ed = params.get('exceptionDetails', {})
+        exc = ed.get('exception', {})
+        msg = exc.get('description', exc.get('value', 'Unknown error'))
+        stack = []
+        for f in ed.get('stackTrace', {}).get('callFrames', []):
+            stack.append({
+                'function': f.get('functionName', '<anon>'),
+                'url': f.get('url', ''),
+                'line': f.get('lineNumber', 0) + 1,
+                'column': f.get('columnNumber', 0) + 1,
+            })
+        self._emit('console', {
+            'level': 'error', 'message': msg,
+            'timestamp': datetime.now().strftime('%H:%M:%S'),
+            'stack': stack,
+        })
+
+    def _handle_request_sent(self, params: dict):
+        req_id = params.get('requestId', '')
+        req = params.get('request', {})
+        self.pending_requests[req_id] = {
+            'method': req.get('method', 'GET'),
+            'url': req.get('url', ''),
+            'start_time': datetime.now().timestamp(),
+            'status': None, 'status_text': None,
+            'size': None, 'error': None,
+        }
+
+    def _handle_response(self, params: dict):
+        req_id = params.get('requestId', '')
+        resp = params.get('response', {})
+        p = self.pending_requests.pop(req_id, None)
+        if not p:
+            return
+        p['status'] = resp.get('status', 0)
+        p['status_text'] = resp.get('statusText', '')
+        p['size'] = resp.get('transferSize', 0)
+        p['end_time'] = datetime.now().timestamp()
+        p['duration_ms'] = round((p['end_time'] - p['start_time']) * 1000, 1)
+        self.completed_requests.append(dict(p))
+        self._emit('network', {
+            'method': p['method'], 'url': p['url'],
+            'status': p['status'], 'duration': p['duration_ms'],
+            'size': p['size'],
+        })
+
+    def _handle_load_failed(self, params: dict):
+        req_id = params.get('requestId', '')
+        p = self.pending_requests.pop(req_id, None)
+        if not p:
+            return
+        p['status'] = 0
+        p['error'] = params.get('errorText', 'Failed')
+        p['end_time'] = datetime.now().timestamp()
+        p['duration_ms'] = round((p['end_time'] - p['start_time']) * 1000, 1)
+        self.completed_requests.append(dict(p))
+        self._emit('network', {
+            'method': p['method'], 'url': p['url'],
+            'status': 0, 'error': p['error'],
+            'duration': p['duration_ms'],
+        })
+
+    async def _handle_paused(self, params: dict):
+        frames = []
+        for f in params.get('callFrames', []):
+            loc = f.get('location', {})
+            frames.append({
+                'function': f.get('functionName', '<anon>'),
+                'url': f.get('url', ''),
+                'line': loc.get('lineNumber', 0) + 1,
+                'column': loc.get('columnNumber', 0) + 1,
+            })
+        self._emit('debugger', {
+            'event': 'paused',
+            'reason': params.get('reason', 'other'),
+            'callFrames': frames,
+        })
 
 
 class LiveReloadServer:
@@ -292,6 +585,7 @@ class HTTPServer:
         self.live_reload_server = live_reload_server
         self.server: Optional[asyncio.Server] = None
         self.running = True
+        self.cdp_client: Optional[CDPClient] = None
     
     async def handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         """Handle incoming HTTP client request."""
@@ -333,6 +627,8 @@ class HTTPServer:
                 await self.handle_console_stream(reader, writer, headers)
             elif method == 'GET' and path == '/api/health':
                 await self.handle_health(writer)
+            elif path.startswith('/api/cdp/'):
+                await self.handle_cdp(method, path, reader, writer, headers)
             else:
                 await self.handle_static(method, path, reader, writer, headers)
                 
@@ -453,7 +749,205 @@ class HTTPServer:
             "console_buffer_size": len(self.console_buffer),
         }).encode())
         await writer.drain()
-    
+
+    # --- CDP endpoint dispatcher ---
+
+    async def handle_cdp(self, method: str, path: str, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        if method == 'POST' and path == '/api/cdp/connect':
+            await self.handle_cdp_connect(writer)
+        elif method == 'DELETE' and path == '/api/cdp/connect':
+            await self.handle_cdp_disconnect(writer)
+        elif method == 'GET' and path == '/api/cdp/status':
+            await self.handle_cdp_status(writer)
+        elif method == 'GET' and path == '/api/cdp/stream':
+            await self.handle_cdp_stream(reader, writer, headers)
+        elif method == 'POST' and path == '/api/cdp/evaluate':
+            await self.handle_cdp_evaluate(reader, writer, headers)
+        elif method == 'POST' and path == '/api/cdp/debug/break':
+            await self.handle_cdp_debug_break(reader, writer, headers)
+        elif method == 'POST' and path == '/api/cdp/debug/continue':
+            await self.handle_cdp_debug_continue(writer)
+        elif method == 'POST' and path == '/api/cdp/debug/step':
+            await self.handle_cdp_debug_step(writer)
+        elif method == 'POST' and path == '/api/cdp/debug/stepIn':
+            await self.handle_cdp_debug_step_in(writer)
+        elif method == 'POST' and path == '/api/cdp/debug/stepOut':
+            await self.handle_cdp_debug_step_out(writer)
+        elif method == 'GET' and path == '/api/cdp/network/log':
+            await self.handle_cdp_network_log(writer)
+        elif method == 'POST' and path == '/api/cdp/network/clear':
+            await self.handle_cdp_network_clear(writer)
+        else:
+            await self._json_error(writer, 404, 'Unknown CDP endpoint')
+
+    async def _json_response(self, writer: asyncio.StreamWriter, data: dict, status: int = 200):
+        body = json.dumps(data).encode()
+        writer.write(f'HTTP/1.1 {status} {"OK" if status == 200 else "Error"}\r\n'.encode())
+        writer.write(b'Content-Type: application/json\r\n')
+        writer.write(b'Access-Control-Allow-Origin: *\r\n')
+        writer.write(b'Connection: close\r\n')
+        writer.write(b'\r\n')
+        writer.write(body)
+        await writer.drain()
+
+    async def _json_error(self, writer: asyncio.StreamWriter, status: int, message: str):
+        await self._json_response(writer, {'error': message}, status)
+
+    async def handle_cdp_connect(self, writer: asyncio.StreamWriter):
+        if self.cdp_client and self.cdp_client.connected:
+            await self._json_response(writer, {'status': 'already_connected', 'url': self.cdp_client.page_url})
+            return
+        port = CONFIG['cdp']['remote_debugging_port']
+        self.cdp_client = CDPClient(port)
+        try:
+            await self.cdp_client.connect()
+            await self._json_response(writer, {
+                'status': 'connected',
+                'url': self.cdp_client.page_url,
+                'port': port,
+            })
+        except (ConnectionError, OSError, websockets.exceptions.InvalidURI) as e:
+            self.cdp_client = None
+            await self._json_response(writer, {'status': 'error', 'message': str(e)}, 503)
+
+    async def handle_cdp_disconnect(self, writer: asyncio.StreamWriter):
+        if self.cdp_client and self.cdp_client.connected:
+            await self.cdp_client.disconnect()
+            await self._json_response(writer, {'status': 'disconnected'})
+        else:
+            await self._json_response(writer, {'status': 'not_connected'})
+
+    async def handle_cdp_status(self, writer: asyncio.StreamWriter):
+        if self.cdp_client and self.cdp_client.connected:
+            await self._json_response(writer, {
+                'connected': True,
+                'url': self.cdp_client.page_url,
+            })
+        else:
+            await self._json_response(writer, {'connected': False})
+
+    async def handle_cdp_stream(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        writer.write(b'HTTP/1.1 200 OK\r\n')
+        writer.write(b'Content-Type: application/x-ndjson\r\n')
+        writer.write(b'Cache-Control: no-cache\r\n')
+        writer.write(b'Access-Control-Allow-Origin: *\r\n')
+        writer.write(b'Connection: keep-alive\r\n')
+        writer.write(b'X-Accel-Buffering: no\r\n')
+        writer.write(b'\r\n')
+        await writer.drain()
+        heartbeat = 0
+        try:
+            while self.running:
+                if self.cdp_client and self.cdp_client.connected:
+                    events = self.cdp_client.drain_events()
+                    for etype, edata in events:
+                        line = json.dumps(edata) + '\n'
+                        writer.write(line.encode())
+                        await writer.drain()
+                    if not events:
+                        heartbeat += 1
+                        if heartbeat >= 15:
+                            writer.write(b'{"type":"hb"}\n')
+                            await writer.drain()
+                            heartbeat = 0
+                else:
+                    if heartbeat == 0:
+                        writer.write(b'{"type":"status","state":"disconnected"}\n')
+                        await writer.drain()
+                    heartbeat += 1
+                    if heartbeat >= 15:
+                        writer.write(b'{"type":"hb"}\n')
+                        await writer.drain()
+                        heartbeat = 0
+                await asyncio.sleep(1)
+        except (BrokenPipeError, ConnectionResetError, asyncio.CancelledError):
+            pass
+        finally:
+            try:
+                writer.close()
+                await writer.wait_closed()
+            except Exception:
+                pass
+
+    async def handle_cdp_evaluate(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        content_length = int(headers.get('content-length', 0))
+        body = await reader.read(content_length)
+        try:
+            data = json.loads(body.decode())
+            expr = data.get('expression', '')
+            result = await self.cdp_client.evaluate(expr)
+            await self._json_response(writer, result)
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_debug_break(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        content_length = int(headers.get('content-length', 0))
+        body = await reader.read(content_length)
+        try:
+            data = json.loads(body.decode())
+            loc = data.get('location', '')
+            result = await self.cdp_client.set_breakpoint(loc)
+            await self._json_response(writer, result)
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_debug_continue(self, writer: asyncio.StreamWriter):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        try:
+            await self.cdp_client.resume()
+            await self._json_response(writer, {'status': 'resumed'})
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_debug_step(self, writer: asyncio.StreamWriter):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        try:
+            await self.cdp_client.step_over()
+            await self._json_response(writer, {'status': 'stepped'})
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_debug_step_in(self, writer: asyncio.StreamWriter):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        try:
+            await self.cdp_client.step_into()
+            await self._json_response(writer, {'status': 'stepped_in'})
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_debug_step_out(self, writer: asyncio.StreamWriter):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        try:
+            await self.cdp_client.step_out()
+            await self._json_response(writer, {'status': 'stepped_out'})
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_network_log(self, writer: asyncio.StreamWriter):
+        if not self.cdp_client:
+            await self._json_response(writer, {'requests': []})
+            return
+        await self._json_response(writer, {'requests': self.cdp_client.get_network_log()})
+
+    async def handle_cdp_network_clear(self, writer: asyncio.StreamWriter):
+        if self.cdp_client:
+            self.cdp_client.clear_network_log()
+        await self._json_response(writer, {'status': 'cleared'})
+
     async def handle_static(self, method: str, path: str, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
         """Handle static file serving."""
         if method != 'GET':

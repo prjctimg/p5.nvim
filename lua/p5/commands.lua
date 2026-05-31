@@ -6,6 +6,7 @@ local server = require("p5.server")
 local libraries = require("p5.libraries")
 local console = require("p5.console")
 local gist = require("p5.gist")
+local cdp = require("p5.cdp")
 
 C.setup = function(opts)
 	local require_sketchspace = opts.require_sketchspace
@@ -237,6 +238,33 @@ function draw() {
 		end
 	end
 
+	handlers.cdp = function(args)
+		local sub = args[1]
+		if not sub then
+			cdp.toggle()
+		elseif sub == "connect" then
+			cdp.connect()
+		elseif sub == "disconnect" then
+			cdp.disconnect()
+		elseif sub == "status" then
+			cdp.status()
+		elseif sub == "eval" then
+			local expr = table.concat(args, " ", 2)
+			cdp.eval(expr ~= "" and expr or nil)
+		elseif sub == "break" then
+			local loc = args[2]
+			cdp.set_breakpoint(loc)
+		elseif sub == "continue" then
+			cdp.continue()
+		elseif sub == "step" then
+			cdp.step()
+		elseif sub == "stepIn" then
+			cdp.step_in()
+		elseif sub == "stepOut" then
+			cdp.step_out()
+		end
+	end
+
 	handlers.menu = function()
 		local server_status = server.server_job and "Stop server" or "Start server"
 		local menu_options = {
@@ -313,6 +341,11 @@ function draw() {
 			return vim.tbl_map(function(l) return l.name end, libs or {})
 		elseif subcmd == "skchbk" then
 			return { "list" }
+		elseif subcmd == "cdp" then
+			local sub = args[subcmd_pos + 1]
+			if not sub then
+				return { "connect", "disconnect", "status", "eval", "break", "continue", "step", "stepIn", "stepOut" }
+			end
 		end
 		return {}
 	end
