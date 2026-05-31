@@ -9,6 +9,7 @@ local is_buf = vim.api.nvim_buf_is_valid
 
 C.config = {
 	cdp = { enabled = false, remote_debugging_port = 9222 },
+	view = { position = "below", height = 10 },
 }
 
 C.state = {
@@ -42,46 +43,53 @@ C.connect = function()
 		return
 	end
 	local port = server.port
-	local result = vim.fn.system({
+	vim.fn.jobstart({
 		"curl", "-s", "-X", "POST",
 		string.format("http://localhost:%d/api/cdp/connect", port),
+	}, {
+		on_stdout = function(_, data)
+			if not data or #data == 0 then return end
+			local text = table.concat(data, "")
+			local ok, result = pcall(vim.json.decode, text)
+			vim.schedule(function()
+				if ok then
+					if result.status == "connected" or result.status == "already_connected" then
+						C.state.connected = true
+						C.state.page_url = result.url or ""
+						C.state.port = port
+						notify("CDP connected to " .. (result.url or "browser"), "info")
+					else
+						notify("CDP: " .. (result.message or "connection failed"), "warn")
+					end
+				else
+					notify("CDP: connection request failed", "warn")
+				end
+				if C.state.buf and is_buf(C.state.buf) then
+					C.render_all()
+				end
+			end)
+		end,
 	})
-	local ok, data = pcall(vim.json.decode, result)
-	if ok then
-		if data.status == "connected" then
-			C.state.connected = true
-			C.state.page_url = data.url or ""
-			C.state.port = port
-			notify("CDP connected to " .. (data.url or "browser"), "info")
-		elseif data.status == "already_connected" then
-			C.state.connected = true
-			C.state.page_url = data.url or ""
-			C.state.port = port
-			notify("CDP already connected", "info")
-		else
-			notify("CDP: " .. (data.message or "connection failed"), "warn")
-		end
-	else
-		notify("CDP: connection request failed", "warn")
-	end
-	if C.state.buf and is_buf(C.state.buf) then
-		C.render_all()
-	end
 end
 
 C.disconnect = function()
 	local port = C.state.port
 	if not port then return end
-	vim.fn.system({
+	vim.fn.jobstart({
 		"curl", "-s", "-X", "DELETE",
 		string.format("http://localhost:%d/api/cdp/connect", port),
+	}, {
+		on_exit = function()
+			vim.schedule(function()
+				C.state.connected = false
+				C.state.page_url = ""
+				notify("CDP disconnected", "info")
+				if C.state.buf and is_buf(C.state.buf) then
+					C.render_all()
+				end
+			end)
+		end,
 	})
-	C.state.connected = false
-	C.state.page_url = ""
-	notify("CDP disconnected", "info")
-	if C.state.buf and is_buf(C.state.buf) then
-		C.render_all()
-	end
 end
 
 C.status = function()
@@ -90,19 +98,26 @@ C.status = function()
 		notify("CDP: server not running", "warn")
 		return
 	end
-	local result = vim.fn.system({
+	vim.fn.jobstart({
 		"curl", "-s", string.format("http://localhost:%d/api/cdp/status", port),
+	}, {
+		on_stdout = function(_, data)
+			if not data or #data == 0 then return end
+			local text = table.concat(data, "")
+			local ok, result = pcall(vim.json.decode, text)
+			vim.schedule(function()
+				if ok then
+					if result.connected then
+						notify("CDP connected to " .. (result.url or "browser"), "info")
+					else
+						notify("CDP not connected", "warn")
+					end
+				else
+					notify("CDP status unavailable", "warn")
+				end
+			end)
+		end,
 	})
-	local ok, data = pcall(vim.json.decode, result)
-	if ok then
-		if data.connected then
-			notify("CDP connected to " .. (data.url or "browser"), "info")
-		else
-			notify("CDP not connected", "warn")
-		end
-	else
-		notify("CDP status unavailable", "warn")
-	end
 end
 
 C.eval = function(expr)
@@ -163,25 +178,32 @@ C.set_breakpoint = function(location)
 	end
 	local port = C.state.port
 	if not port then notify("CDP: not connected", "warn") return end
-	local result = vim.fn.system({
+	vim.fn.jobstart({
 		"curl", "-s", "-X", "POST",
 		"-H", "Content-Type: application/json",
 		"-d", vim.json.encode({ location = location }),
 		string.format("http://localhost:%d/api/cdp/debug/break", port),
+	}, {
+		on_stdout = function(_, data)
+			if not data or #data == 0 then return end
+			local text = table.concat(data, "")
+			local ok, result = pcall(vim.json.decode, text)
+			vim.schedule(function()
+				if ok then
+					notify("Breakpoint set at " .. location, "info")
+					if C.state.buf and is_buf(C.state.buf) then C.render_all() end
+				else
+					notify("Failed to set breakpoint: " .. (text or "unknown"), "warn")
+				end
+			end)
+		end,
 	})
-	local ok, data = pcall(vim.json.decode, result)
-	if ok then
-		notify("Breakpoint set at " .. location, "info")
-		if C.state.buf and is_buf(C.state.buf) then C.render_all() end
-	else
-		notify("Failed to set breakpoint: " .. (result or "unknown"), "warn")
-	end
 end
 
 C.continue = function()
 	local port = C.state.port
 	if not port then return end
-	vim.fn.system({
+	vim.fn.jobstart({
 		"curl", "-s", "-X", "POST",
 		string.format("http://localhost:%d/api/cdp/debug/continue", port),
 	})
@@ -190,7 +212,7 @@ end
 C.step = function()
 	local port = C.state.port
 	if not port then return end
-	vim.fn.system({
+	vim.fn.jobstart({
 		"curl", "-s", "-X", "POST",
 		string.format("http://localhost:%d/api/cdp/debug/step", port),
 	})
@@ -199,7 +221,7 @@ end
 C.step_in = function()
 	local port = C.state.port
 	if not port then return end
-	vim.fn.system({
+	vim.fn.jobstart({
 		"curl", "-s", "-X", "POST",
 		string.format("http://localhost:%d/api/cdp/debug/stepIn", port),
 	})
@@ -208,7 +230,7 @@ end
 C.step_out = function()
 	local port = C.state.port
 	if not port then return end
-	vim.fn.system({
+	vim.fn.jobstart({
 		"curl", "-s", "-X", "POST",
 		string.format("http://localhost:%d/api/cdp/debug/stepOut", port),
 	})
@@ -240,16 +262,21 @@ C.open = function()
 	set_opt("buftype", "nofile", { buf = buf })
 	set_opt("swapfile", false, { buf = buf })
 	set_opt("modifiable", true, { buf = buf })
-	vim.cmd("botright 40vnew")
+
+	local pos = C.config.view.position or "below"
+	local height = C.config.view.height or math.floor(vim.o.lines * 0.3)
+	local split_pattern = core.split_cmd[pos] or core.split_cmd.below
+	vim.cmd(split_pattern:format(height))
 	local win = vim.api.nvim_get_current_win()
 	vim.api.nvim_win_set_buf(win, buf)
-	set_opt("number", false, { scope = "local", win = win })
-	set_opt("relativenumber", false, { scope = "local", win = win })
-	set_opt("signcolumn", "no", { scope = "local", win = win })
-	set_opt("wrap", false, { scope = "local", win = win })
-	set_opt("cursorline", true, { scope = "local", win = win })
-	C.state.buf = buf
 	C.state.win = win
+
+	set_opt("number", false, { scope = "local", win = C.state.win })
+	set_opt("relativenumber", false, { scope = "local", win = C.state.win })
+	set_opt("signcolumn", "no", { scope = "local", win = C.state.win })
+	set_opt("wrap", false, { scope = "local", win = C.state.win })
+	set_opt("cursorline", true, { scope = "local", win = C.state.win })
+	C.state.buf = buf
 	C._set_keymaps(buf)
 	C.render_all()
 	C._start_sse_job()

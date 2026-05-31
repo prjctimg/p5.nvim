@@ -220,13 +220,13 @@ C.fetch = function(url, dest, callback, options)
 end
 
 -- Get p5 version from bundled library
-C.p5_version = function(major)
+C.p5_version = function(major, override_version)
+	if override_version then return override_version end
 	local p5_file = major == 1 and "p5.js" or "p5-v2.js"
 	local p5 = C.asset_dir() .. "/libs/" .. p5_file
 	if C.is_file(p5) then
 		local lines = fn.readfile(p5)
 		if lines and #lines > 0 then
-			-- strip version
 			local version = lines[1]:match("p5%.js v([%d%.]+)")
 			return version or (major == 2 and "2.0.0" or "1.9.0")
 		end

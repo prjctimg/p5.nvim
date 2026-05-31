@@ -48,22 +48,30 @@ C.setup = function(opts)
 
 		local cwd = vim.fs.normalize(vim.fn.getcwd())
 		local config = core.read_workspace_config()
+		local major = config and config.major or 2
 
-		if config and config.gist then
-			local gist_info = gist.current()
-			if gist_info and gist_info.id then
-				local ok, err = gist.fetch(gist_info.id, cwd)
-				if not ok then
-					core.notify("Gist download failed: " .. err .. ". Removing invalid gist URL.", "warn")
-					config.gist = nil
-					core.write_workspace_config(config)
+		local steps = {
+			function(next_step)
+				if config and config.gist then
+					local gist_info = gist.current()
+					if gist_info and gist_info.id then
+						gist.fetch(gist_info.id, cwd, function(ok, err)
+							if not ok then
+								core.notify("Gist download failed: " .. err .. ". Removing invalid gist URL.", "warn")
+								config.gist = nil
+								core.write_workspace_config(config)
+							end
+							next_step()
+						end)
+						return
+					end
 				end
-			end
-		end
-
-		local sketch_file = cwd .. "/sketch.js"
-		if not core.is_file(sketch_file) then
-			local sketch_js = [[function setup() {
+				next_step()
+			end,
+			function(next_step)
+				local sketch_file = cwd .. "/sketch.js"
+				if not core.is_file(sketch_file) then
+					local sketch_js = [[function setup() {
   createCanvas(400, 400);
 }
 
@@ -72,29 +80,63 @@ function draw() {
   circle(mouseX, mouseY, 50);
 }
 ]]
-			vim.fn.writefile(vim.split(sketch_js, "\n"), sketch_file)
-			core.notify("Created default sketch.js", "info")
-		end
-
-		project.copy_assets_to_project(cwd, function(err)
-			if err then
-				core.notify("Failed to copy assets: " .. err, "warn")
-				return
-			end
-
-			core.notify("Assets copied successfully", "info")
-			libraries.generate_libs_js(cwd)
-
-			local updated_config = core.read_workspace_config()
-			if updated_config and updated_config.libs then
-				local lib_names = vim.tbl_keys(updated_config.libs)
-				if #lib_names > 0 then
-					libraries.install_libs(lib_names)
+					vim.fn.writefile(vim.split(sketch_js, "\n"), sketch_file)
+					core.notify("Created default sketch.js", "info")
 				end
-			end
+				next_step()
+			end,
+			function(next_step)
+				if major == 2 and not core.is_file(core.asset_dir() .. "/libs/p5-v2.js") then
+					local cdn_url = "https://cdn.jsdelivr.net/npm/p5@2.0.5/lib/p5.min.js"
+					core.notify("Downloading p5.js 2.x assets...", "info")
+					core.fetch(cdn_url, core.asset_dir() .. "/libs/p5-v2.js", function(ok)
+						if ok then
+							core.fetch(
+								"https://cdn.jsdelivr.net/npm/p5@2.0.5/types/p5.d.ts",
+								core.asset_dir() .. "/types/p5-v2.d.ts",
+								function(_)
+									next_step()
+								end,
+								{ cache = true }
+							)
+						else
+							core.notify("Download failed. Run :P5 setup again to retry.", "warn")
+							next_step()
+						end
+					end, { cache = true })
+				else
+					next_step()
+				end
+			end,
+			function(_)
+				project.copy_assets_to_project(cwd, major, function(err)
+					if err then
+						core.notify("Failed to copy assets: " .. err, "warn")
+						return
+					end
 
-			core.notify("Sketchspace setup complete", "ok")
-		end)
+					core.notify("Assets copied successfully", "info")
+					libraries.generate_libs_js(cwd)
+
+					local updated_config = core.read_workspace_config()
+					if updated_config and updated_config.libs then
+						local lib_names = vim.tbl_keys(updated_config.libs)
+						if #lib_names > 0 then
+							libraries.install_libs(lib_names)
+						end
+					end
+
+					core.notify("Sketchspace setup complete", "ok")
+				end)
+			end,
+		}
+
+		local function run(i)
+			if i <= #steps then
+				steps[i](function() run(i + 1) end)
+			end
+		end
+		run(1)
 	end
 
 	handlers.install = function(args)

@@ -48,42 +48,51 @@ describe("G.includes", function()
 end)
 
 describe("G.get_comment", function()
-  local orig_system = vim.fn.system
+  local orig_system = vim.system
 
-  after_each(function() vim.fn.system = orig_system end)
+  after_each(function() vim.system = orig_system end)
 
   it("returns the first comment when comments exist", function()
-    vim.fn.system = function(cmd)
-      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("^/gists/.*/comments$") then
-        return vim.fn.json_encode({
+    vim.system = function(cmd, opts, cb)
+      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("/gists/.*/comments$") then
+        cb({ code = 0, stdout = vim.fn.json_encode({
           { id = 1, body = "This is a sketch detail comment" },
           { id = 2, body = "Another comment" },
-        })
+        }), stderr = "" })
+        return
       end
-      return ""
+      if cb then cb({ code = 0, stdout = "", stderr = "" }) end
     end
-    local cm = G.get_comment("abc123")
+    local cm
+    G.get_comment("abc123", function(r) cm = r end)
     assert.are.same({ id = 1, body = "This is a sketch detail comment" }, cm)
   end)
 
   it("returns nil when no comments exist", function()
-    vim.fn.system = function(cmd)
-      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("^/gists/.*/comments$") then
-        return "[]"
+    vim.system = function(cmd, opts, cb)
+      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("/gists/.*/comments$") then
+        cb({ code = 0, stdout = "[]", stderr = "" })
+        return
       end
-      return ""
+      if cb then cb({ code = 0, stdout = "", stderr = "" }) end
     end
-    assert.is_nil(G.get_comment("abc123"))
+    local cm
+    G.get_comment("abc123", function(r) cm = r end)
+    assert.is_nil(cm)
   end)
 
   it("returns nil on API failure", function()
-    vim.fn.system = function(_) return "" end
-    assert.is_nil(G.get_comment("abc123"))
+    vim.system = function(cmd, opts, cb)
+      if cb then cb({ code = 1, stdout = "", stderr = "error" }) end
+    end
+    local cm
+    G.get_comment("abc123", function(r) cm = r end)
+    assert.is_nil(cm)
   end)
 end)
 
 describe("G.create_comment", function()
-  local orig_system = vim.fn.system
+  local orig_system = vim.system
   local orig_stdpath = vim.fn.stdpath
   local tmpdir
 
@@ -97,17 +106,16 @@ describe("G.create_comment", function()
   end)
 
   after_each(function()
-    vim.fn.system = orig_system
+    vim.system = orig_system
     vim.fn.stdpath = orig_stdpath
     vim.fn.delete(tmpdir, "rf")
   end)
 
   it("creates a comment using JSON body via --input", function()
     local captured_cmd, captured_input
-    vim.fn.system = function(cmd)
-      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("^/gists/.*/comments$") then
+    vim.system = function(cmd, opts, cb)
+      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("/gists/.*/comments$") then
         captured_cmd = cmd
-        -- Read the --input file to capture the body
         local input_idx = nil
         for i, v in ipairs(cmd) do
           if v == "--input" then input_idx = i end
@@ -115,11 +123,15 @@ describe("G.create_comment", function()
         if input_idx then
           captured_input = table.concat(vim.fn.readfile(cmd[input_idx + 1]) or {}, "\n")
         end
-        return vim.fn.json_encode({ id = 42 })
+        cb({ code = 0, stdout = vim.fn.json_encode({ id = 42 }), stderr = "" })
+        return
       end
-      return ""
+      if cb then cb({ code = 0, stdout = "", stderr = "" }) end
     end
-    local ok, res = G.create_comment("abc123", "Test comment body")
+    local ok, res
+    G.create_comment("abc123", "Test comment body", function(ok_result, res_result)
+      ok, res = ok_result, res_result
+    end)
     assert.is_true(ok)
     assert.not_nil(captured_cmd, "should have called gh api")
     assert.is_true(captured_cmd[#captured_cmd - 1] == "--input",
@@ -202,20 +214,21 @@ describe("G.clone (all mode)", function()
   before_each(function()
     tmp_dir = vim.fn.tempname()
     vim.fn.mkdir(tmp_dir, "p")
-    orig_system = vim.fn.system
+    orig_system = vim.system
   end)
 
   after_each(function()
-    vim.fn.system = orig_system
+    vim.system = orig_system
     vim.fn.delete(tmp_dir, "rf")
   end)
 
   it("reports when no gists are found", function()
-    vim.fn.system = function(cmd)
-      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("^/users/") then
-        return "[]"
+    vim.system = function(cmd, opts, cb)
+      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("/users/") then
+        cb({ code = 0, stdout = "[]", stderr = "" })
+        return
       end
-      return orig_system(cmd)
+      if cb then cb({ code = 0, stdout = "", stderr = "" }) end
     end
     G.clone("testuser", tmp_dir, "all")
     local count = 0
@@ -224,33 +237,42 @@ describe("G.clone (all mode)", function()
   end)
 
   it("clones gists into subdirectories with README.md from comments", function()
-    vim.fn.system = function(cmd)
+    local gist_index = { abc123 = true, def456 = true }
+    vim.system = function(cmd, opts, cb)
       local joined = table.concat(cmd, " ")
       if joined:match("api /users/") then
-        return vim.fn.json_encode({
+        cb({ code = 0, stdout = vim.fn.json_encode({
           { id = "abc123", description = "My First Sketch" },
           { id = "def456", description = "Cool Demo" },
-        })
+        }), stderr = "" })
+        return
       end
       if joined:match("api /gists/.+/comments") then
         if cmd[3]:match("abc123") then
-          return vim.fn.json_encode({
+          cb({ code = 0, stdout = vim.fn.json_encode({
             { id = 99, body = "A p5 sketch that does cool things" },
-          })
+          }), stderr = "" })
+          return
         end
-        return "[]"
+        cb({ code = 0, stdout = "[]", stderr = "" })
+        return
       end
       if joined:match("api /gists/") then
-        local files = {}
-        if cmd[3]:match("abc123") then
-          files["sketch.js"] = { content = "function setup() {\n  createCanvas(400, 400);\n}\n" }
-          files["style.css"] = { content = "body { margin: 0; }\n" }
-        else
-          files["sketch.js"] = { content = "function draw() {\n  background(220);\n}\n" }
+        local gid = joined:match("/gists/([^%s]+)")
+        if gid then
+          local files = {}
+          if gid:match("abc123") then
+            files["sketch.js"] = { content = "function setup() {\n  createCanvas(400, 400);\n}\n" }
+            files["style.css"] = { content = "body { margin: 0; }\n" }
+          else
+            files["sketch.js"] = { content = "function draw() {\n  background(220);\n}\n" }
+          end
+          local owner = { login = "testuser" }
+          cb({ code = 0, stdout = vim.fn.json_encode({ files = files, owner = owner }), stderr = "" })
+          return
         end
-        return vim.fn.json_encode({ files = files })
       end
-      return orig_system(cmd)
+      if cb then cb({ code = 0, stdout = "", stderr = "" }) end
     end
 
     G.clone("testuser", tmp_dir, "all")
@@ -275,23 +297,28 @@ describe("G.clone (all mode)", function()
   it("skips existing directories", function()
     vim.fn.mkdir(tmp_dir .. "/cool-demo", "p")
     vim.fn.writefile({ "old content" }, tmp_dir .. "/cool-demo/sketch.js")
-    vim.fn.system = function(cmd)
+    vim.system = function(cmd, opts, cb)
       local joined = table.concat(cmd, " ")
       if joined:match("api /users/") then
-        return vim.fn.json_encode({
+        cb({ code = 0, stdout = vim.fn.json_encode({
           { id = "abc123", description = "My First Sketch" },
           { id = "def456", description = "Cool Demo" },
-        })
+        }), stderr = "" })
+        return
       end
       if joined:match("api /gists/.+/comments") then
-        return "[]"
+        cb({ code = 0, stdout = "[]", stderr = "" })
+        return
       end
       if joined:match("api /gists/") then
-        return vim.fn.json_encode({
+        local owner = { login = "testuser" }
+        cb({ code = 0, stdout = vim.fn.json_encode({
           files = { ["sketch.js"] = { content = "// new content\n" } },
-        })
+          owner = owner,
+        }), stderr = "" })
+        return
       end
-      return orig_system(cmd)
+      if cb then cb({ code = 0, stdout = "", stderr = "" }) end
     end
     G.clone("testuser", tmp_dir, "all")
     local content = vim.fn.readfile(tmp_dir .. "/cool-demo/sketch.js")
@@ -300,23 +327,28 @@ describe("G.clone (all mode)", function()
   end)
 
   it("handles empty descriptions", function()
-    vim.fn.system = function(cmd)
+    vim.system = function(cmd, opts, cb)
       local joined = table.concat(cmd, " ")
       if joined:match("api /users/") then
-        return vim.fn.json_encode({
+        cb({ code = 0, stdout = vim.fn.json_encode({
           { id = "abc123", description = vim.NIL },
           { id = "def456", description = "" },
-        })
+        }), stderr = "" })
+        return
       end
       if joined:match("api /gists/.+/comments") then
-        return "[]"
+        cb({ code = 0, stdout = "[]", stderr = "" })
+        return
       end
       if joined:match("api /gists/") then
-        return vim.fn.json_encode({
+        local owner = { login = "testuser" }
+        cb({ code = 0, stdout = vim.fn.json_encode({
           files = { ["sketch.js"] = { content = "" } },
-        })
+          owner = owner,
+        }), stderr = "" })
+        return
       end
-      return orig_system(cmd)
+      if cb then cb({ code = 0, stdout = "", stderr = "" }) end
     end
     G.clone("testuser", tmp_dir, "all")
     local dirs = {}
@@ -329,11 +361,12 @@ describe("G.clone (all mode)", function()
   end)
 
   it("does not crash on API failure", function()
-    vim.fn.system = function(cmd)
-      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("^/users/") then
-        return "Not Found"
+    vim.system = function(cmd, opts, cb)
+      if cmd[1] == "gh" and cmd[2] == "api" and cmd[3]:match("/users/") then
+        cb({ code = 1, stdout = "Not Found", stderr = "" })
+        return
       end
-      return orig_system(cmd)
+      if cb then cb({ code = 0, stdout = "", stderr = "" }) end
     end
     G.clone("nonexistent-user", tmp_dir, "all")
   end)

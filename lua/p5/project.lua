@@ -34,15 +34,19 @@ P.create_project = function(name, major)
 
 	local path = vim.fn.fnamemodify(name, ":p")
 
-	-- Create the project skeleton first (dir, files, navigate, open sketch.js)
-	P.create_project_continue(name, major)
-
-	-- Download v2 assets in background if not cached
+	-- Always compute CDN version for p5.json, download if not cached
+	local cdn_url = "https://cdn.jsdelivr.net/npm/p5@2.0.5/lib/p5.min.js"
+	local cdn_version = cdn_url:match("@([^/]+)")
 	if major == 2 and not core.is_file(core.asset_dir() .. "/libs/p5-v2.js") then
 		notify("Downloading p5.js 2.x assets...", "info")
+	end
+
+	P.create_project_continue(name, major, cdn_version)
+
+	if major == 2 and cdn_version then
 		local libs_dir = core.asset_dir() .. "/libs"
 		local types_dir = core.asset_dir() .. "/types"
-		core.fetch("https://cdn.jsdelivr.net/npm/p5@2.0.5/lib/p5.min.js", libs_dir .. "/p5-v2.js", function(ok)
+		core.fetch(cdn_url, libs_dir .. "/p5-v2.js", function(ok)
 			if ok then
 				-- Best-effort types download; skip silently if unavailable for this major
 				core.fetch(
@@ -66,7 +70,7 @@ P.create_project = function(name, major)
 	end
 end
 
-function P.create_project_continue(name, major)
+function P.create_project_continue(name, major, override_version)
 	core.mkdir(name)
 	local path = vim.fn.fnamemodify(name, ":p")
 
@@ -153,7 +157,7 @@ function draw() {
 		vim.fn.writefile(vim.split(tsconfig, "\n"), path .. "/tsconfig.json")
 
 		local p5_config = {
-			version = core.p5_version(major),
+			version = core.p5_version(major, override_version),
 			major = major,
 			libs = {},
 			includes = { "sketch.js" },
@@ -181,6 +185,7 @@ P.copy_assets_to_project = function(project_path, major, callback)
 
 	local pending_copies = 0
 	local copy_errors = {}
+	local called_once = false
 
 	local function try_copy(src, dest)
 		if core.is_file(src) then
@@ -191,9 +196,12 @@ P.copy_assets_to_project = function(project_path, major, callback)
 					table.insert(copy_errors, dest .. ": " .. vim.inspect(err))
 				end
 				if pending_copies == 0 and callback then
-					vim.schedule(function()
-						callback(#copy_errors > 0 and table.concat(copy_errors, ", ") or nil)
-					end)
+					if not called_once then
+						called_once = true
+						vim.schedule(function()
+							callback(#copy_errors > 0 and table.concat(copy_errors, ", ") or nil)
+						end)
+					end
 				end
 			end
 			if vim.uv and vim.uv.fs_copyfile then
@@ -208,6 +216,8 @@ P.copy_assets_to_project = function(project_path, major, callback)
 					end
 				end)
 			end
+		else
+			core.notify("Skipped (not found): " .. src, "info")
 		end
 	end
 
@@ -225,9 +235,12 @@ P.copy_assets_to_project = function(project_path, major, callback)
 	try_copy(plugin_assets .. "/favicon.ico", project_assets .. "/favicon.ico")
 
 	if pending_copies == 0 and callback then
-		vim.schedule(function()
-			callback(#copy_errors > 0 and table.concat(copy_errors, ", ") or nil)
-		end)
+		if not called_once then
+			called_once = true
+			vim.schedule(function()
+				callback(#copy_errors > 0 and table.concat(copy_errors, ", ") or nil)
+			end)
+		end
 	end
 end
 

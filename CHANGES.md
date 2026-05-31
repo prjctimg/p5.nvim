@@ -4,6 +4,35 @@ All notable changes since v0.5.0.
 
 ---
 
+## v0.7.0-alpha.2
+
+> Tag: `v0.7.0-alpha.2` — fix: server blocking, CDP layout, gist edit save error, async CDP calls, and p5.json version field
+
+### Fixes
+- **Server blocking** — detached all `jobstart` calls (server, browser-Chrome, fallback browser); reduced browser/console launch defer from 2000ms to 500ms
+- **CDP horizontal layout** — window creation now uses `core.split_cmd` respecting `C.config.view.position` and `view.height` instead of hardcoded `botright 10new`
+- **CDP async calls** — converted all remaining `vim.fn.system` calls in `cdp.lua` (connect, disconnect, status, set_breakpoint, continue, step, step_in, step_out) to `vim.fn.jobstart` with callbacks
+- **p5.json version field** — `cdn_url` and `cdn_version` are now always computed before the asset cache check, ensuring `override_version` is always passed to `p5_version` regardless of cache state
+- **Gist edit save error** — `BufWriteCmd` autocmd now sets `modified = false` immediately before the save branch (not only in the `on_done` callback), fixing re-save issues; added default no-op callback to `G.get_comment`
+- **P5 setup** — restructured as a step-runner chain: async gist fetch → create default sketch.js → download v2 assets if not cached → copy assets and install libs
+- **Project syntax error** — fixed missing `end` closing `vim.schedule` in `project.lua:217`
+
+### Refactoring
+- **gist.lua** — converted all synchronous `vim.fn.system` calls to async `vim.system` with callbacks; replaced recursive callback chaining with `step_runner` pattern in `G.create` and `G.sync`
+- **cdp.lua** — converted `vim.fn.system` to `vim.fn.jobstart` for all CDP operations; window creation respects config position
+- **server.lua** — detached all process launches; defer time reduced
+- **commands.lua** — `handlers.setup` rewritten as async step-runner
+- **init.lua** — added `view` config (position, height) for CDP window
+- **project.lua** — CDN version computation moved before cache check
+
+### Tests
+- **gist_spec.lua** — updated all mocks from `vim.fn.system` to `vim.system` with callback pattern (20 tests, all green)
+- **gist_integration_spec.lua** — converted sync calls to async with `vim.wait()` pattern (6 tests)
+
+---
+
+---
+
 ## v0.6.1-alpha.1
 
 > Tag: `v0.6.1-alpha.1` — fix: resolve gist sync/edit hang caused by `gh gist edit --desc` in non-interactive mode

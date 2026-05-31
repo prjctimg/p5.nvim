@@ -37,6 +37,10 @@ I.config = {
 		enabled = false,
 		remote_debugging_port = 9222,
 	},
+	view = {
+		position = "below",
+		height = 10,
+	},
 }
 
 I.setup = function(opts)
@@ -49,6 +53,7 @@ I.setup = function(opts)
 	console.config = I.config
 	gist.config = I.config
 	cdp.config = vim.tbl_deep_extend("force", cdp.config, I.config.cdp or {})
+	cdp.config.view = vim.tbl_deep_extend("force", cdp.config.view or {}, I.config.view or {})
 
 	local hl = vim.api.nvim_set_hl
 	hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })

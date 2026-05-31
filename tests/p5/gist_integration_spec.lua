@@ -78,7 +78,12 @@ describe("gist integration (real API)", function()
 		-- Fetch into a fresh directory
 		local fetch_dir = temp_dir .. "/fetched"
 		vim.fn.mkdir(fetch_dir, "p")
-		local ok, err = G.fetch(test_gist_id, fetch_dir)
+		local ok, err, done
+		G.fetch(test_gist_id, fetch_dir, function(ok_result, err_result)
+			ok, err = ok_result, err_result
+			done = true
+		end)
+		vim.wait(15000, function() return done end)
 		assert.is_true(ok, "fetch should succeed: " .. tostring(err))
 		assert.is_true(C.is_file(fetch_dir .. "/sketch.js"), "should download sketch.js")
 		assert.is_true(C.is_file(fetch_dir .. "/style.css"), "should download style.css")
@@ -101,7 +106,12 @@ describe("gist integration (real API)", function()
 		-- Pre-create data.json locally with different content
 		vim.fn.writefile({ "// existing, should not be overwritten" }, temp_dir .. "/data.json")
 
-		local ok, err = G.fetch(test_gist_id, temp_dir)
+		local ok, err, done
+		G.fetch(test_gist_id, temp_dir, function(ok_result, err_result)
+			ok, err = ok_result, err_result
+			done = true
+		end)
+		vim.wait(15000, function() return done end)
 		assert.is_true(ok, "fetch should succeed: " .. tostring(err))
 		-- Existing file should retain original content (not overwritten)
 		local content = table.concat(vim.fn.readfile(temp_dir .. "/data.json") or {}, "\n")
@@ -117,7 +127,9 @@ describe("gist integration (real API)", function()
 		assert.not_nil(test_gist_id)
 
 		-- Initially no comments
-		local cm = G.get_comment(test_gist_id)
+		local cm, done
+		G.get_comment(test_gist_id, function(r) cm = r; done = true end)
+		vim.wait(15000, function() return done end)
 		assert.is_nil(cm, "new gist should have no comments")
 
 		-- Create a comment directly via the API
@@ -127,7 +139,9 @@ describe("gist integration (real API)", function()
 		assert.are.equal(0, vim.v.shell_error, "should create comment via API")
 
 		-- Now get_comment should return it
-		cm = G.get_comment(test_gist_id)
+		done = nil; cm = nil
+		G.get_comment(test_gist_id, function(r) cm = r; done = true end)
+		vim.wait(15000, function() return done end)
 		assert.are.same("Integration test description", cm.body)
 	end)
 
@@ -138,10 +152,16 @@ describe("gist integration (real API)", function()
 		test_gist_id, _ = create_gist("p5-integration-create-comment-" .. ts, { temp_dir .. "/sketch.js" })
 		assert.not_nil(test_gist_id)
 
-		local ok, _ = G.create_comment(test_gist_id, "Created from integration test")
+		local ok, done
+		G.create_comment(test_gist_id, "Created from integration test", function(ok_result)
+			ok = ok_result; done = true
+		end)
+		vim.wait(15000, function() return done end)
 		assert.is_true(ok, "create_comment should succeed")
 
-		local cm = G.get_comment(test_gist_id)
+		local cm
+		G.get_comment(test_gist_id, function(r) cm = r; done = true end)
+		vim.wait(15000, function() return done end)
 		assert.are.same("Created from integration test", cm.body)
 	end)
 
@@ -153,16 +173,28 @@ describe("gist integration (real API)", function()
 		assert.not_nil(test_gist_id)
 
 		-- Create initial comment
-		local ok, _ = G.create_comment(test_gist_id, "Original comment body")
+		local ok, done
+		G.create_comment(test_gist_id, "Original comment body", function(ok_result)
+			ok = ok_result; done = true
+		end)
+		vim.wait(15000, function() return done end)
 		assert.is_true(ok)
-		local cm = G.get_comment(test_gist_id)
+
+		local cm
+		G.get_comment(test_gist_id, function(r) cm = r; done = true end)
+		vim.wait(15000, function() return done end)
 		assert.not_nil(cm)
 
 		-- Update it
-		ok, _ = G.update_comment(test_gist_id, cm.id, "Updated comment body")
+		done = nil; ok = nil
+		G.update_comment(test_gist_id, cm.id, "Updated comment body", function(ok_result)
+			ok = ok_result; done = true
+		end)
+		vim.wait(15000, function() return done end)
 		assert.is_true(ok, "update_comment should succeed")
 
-		cm = G.get_comment(test_gist_id)
+		G.get_comment(test_gist_id, function(r) cm = r; done = true end)
+		vim.wait(15000, function() return done end)
 		assert.are.same("Updated comment body", cm.body)
 	end)
 
@@ -178,6 +210,13 @@ describe("gist integration (real API)", function()
 
 		-- Clone the current user's gists
 		G.clone("prjctimg", clone_dir, "all")
+
+		-- Wait for async clone to finish
+		vim.wait(30000, function()
+			for _, etype in vim.fs.dir(clone_dir) do
+				if etype == "directory" then return true end
+			end
+		end)
 
 		-- Cleanup the test gist
 		delete_gist(cid)
