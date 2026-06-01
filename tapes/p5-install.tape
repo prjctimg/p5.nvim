@@ -5,7 +5,7 @@ Set FontFamily "JetBrains Mono"
 Set FontSize 18
 Set Width 1200
 Set Height 800
-Set TypingSpeed 150ms
+Set TypingSpeed 333ms
 Set PlaybackSpeed 0.8
 Set Theme "Catppuccin Frappe"
 Set Padding 20
