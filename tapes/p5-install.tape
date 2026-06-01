@@ -10,6 +10,7 @@ Set PlaybackSpeed 0.8
 Set Theme "Catppuccin Frappe"
 Set Padding 20
 Set WindowBar Colorful
+Env NVIM_APPNAME "p5nvim"
 
 Hide
 Sleep 1s
@@ -19,14 +20,15 @@ Type "export TERM=xterm-256color"
 Enter
 Type "PS1='$ '"
 Enter
+Type "rm -rf ~/Sketches ~/.config/p5nvim"
+Enter
+Type "mkdir -p ~/.config/p5nvim && ln -sf $ROOT/tapes/init.lua ~/.config/p5nvim/init.lua"
+Enter
 Type "mkdir -p ~/Sketches"
 Enter
-Type "mkdir -p ~/Sketches/my-sketch/assets/types ~/Sketches/my-sketch/assets/libs"
+Type "cd ~/Sketches && nvim --headless -c 'P5 create --1 my-sketch' -c 'sleep 3' -c 'qa!' && cd my-sketch"
 Enter
-Type "printf 'function setup(){createCanvas(400,400)}function draw(){background(220)}' > ~/Sketches/my-sketch/sketch.js"
-Enter
-Type "printf '{\`version\`:\`2.0.5\`,\`major\`:2,\`libs\`:{},\`includes\`:[\`sketch.js\`]}' > ~/Sketches/my-sketch/p5.json"
-Enter
+Sleep 8s
 Type "clear"
 Enter
 Sleep 500ms
@@ -34,19 +36,23 @@ Type "clear"
 Enter
 Show
 
-Type "cd ~/Sketches/my-sketch && nvim -u $ROOT/tapes/init.lua sketch.js"
-Sleep 500ms
+Type "nvim sketch.js"
+Sleep 250ms
 Enter
 Sleep 1.5s
 Type ":P5 install ml5"
-Sleep 400ms
+Sleep 250ms
 Enter
 Sleep 3s
 Type ":P5 uninstall ml5"
 Sleep 400ms
 Enter
-Sleep 3s
+Sleep 2.5s
 Type ":q!"
 Sleep 400ms
 Enter
-Sleep 1s
+Sleep 600ms
+Hide
+Type "rm -f ~/.config/p5nvim/init.lua && rmdir ~/.config/p5nvim 2>/dev/null; rm -rf ~/Sketches"
+Enter
+Sleep 500ms

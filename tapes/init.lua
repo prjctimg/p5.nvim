@@ -12,7 +12,7 @@ require("lazy").setup({
   { "nvim-lua/plenary.nvim" },
   { "folke/tokyonight.nvim", lazy = false, priority = 1000, opts = { style = "night" } },
   { "folke/snacks.nvim", priority = 1001, opts = { terminal = {}, picker = {}, toggle = {} } },
-  { dir = vim.fn.expand("<sfile>:p:h:h"), opts = {} },
+  { dir = vim.fn.fnamemodify(vim.fn.resolve(vim.fn.expand("<sfile>:p")), ":h:h") },
   defaults = { lazy = false },
   install = { colorscheme = { "tokyonight" } },
 })
