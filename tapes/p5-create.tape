@@ -5,14 +5,16 @@ Set FontFamily "JetBrains Mono"
 Set FontSize 18
 Set Width 1200
 Set Height 800
-Set TypingSpeed 300ms
-Set PlaybackSpeed 1.0
+Set TypingSpeed 150ms
+Set PlaybackSpeed 0.8
 Set Theme "Catppuccin Frappe"
 Set Padding 20
 Set WindowBar Colorful
 
 Hide
 Sleep 1s
+Type "ROOT=$PWD"
+Enter
 Type "export TERM=xterm-256color"
 Enter
 Type "PS1='$ '"
@@ -26,25 +28,26 @@ Type "clear"
 Enter
 Show
 
-Type "cd ~/Sketches && nvim"
-Sleep 1s
+Type "cd ~/Sketches && nvim -u $ROOT/tapes/init.lua"
+Sleep 500ms
 Enter
-Sleep 5s
+Sleep 1.5s
 Type ":P5 create my-sketch"
-Sleep 500ms
+Sleep 400ms
 Enter
-Sleep 5s
+Sleep 2.5s
 Type ":e my-sketch/sketch.js"
-Sleep 500ms
+Sleep 400ms
 Enter
-Sleep 5s
+Sleep 1.5s
 Type "/draw"
-Sleep 500ms
+Sleep 300ms
 Enter
 Sleep 1s
 Type "K"
-Sleep 4s
+Sleep 400ms
+Sleep 2.5s
 Type ":q!"
-Sleep 1s
+Sleep 400ms
 Enter
-Sleep 2s
+Sleep 1s
