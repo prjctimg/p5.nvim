@@ -149,6 +149,7 @@ class CDPClient:
         self.event_buffer = deque(maxlen=2000)
         self.pending_requests = {}
         self.completed_requests = deque(maxlen=500)
+        self._scripts = {}
 
     def _next_id(self):
         self._msg_id += 1
@@ -230,11 +231,18 @@ class CDPClient:
         if len(parts) != 2:
             raise ValueError("Use format: file.js:line")
         url, line = parts[0], int(parts[1])
-        result = await self.send_command('Debugger.setBreakpointByUrl', {
-            'url': url,
-            'lineNumber': line - 1,
-        })
-        return result
+        try:
+            return await self.send_command('Debugger.setBreakpointByUrl', {
+                'url': url,
+                'lineNumber': line - 1,
+            })
+        except Exception:
+            sid = self._scripts.get(url)
+            if sid:
+                return await self.send_command('Debugger.setBreakpoint', {
+                    'location': {'scriptId': sid, 'lineNumber': line - 1},
+                })
+            raise
 
     async def resume(self):
         await self.send_command('Debugger.resume')
@@ -286,6 +294,8 @@ class CDPClient:
             self._handle_response(params)
         elif method == 'Network.loadingFailed':
             self._handle_load_failed(params)
+        elif method == 'Debugger.scriptParsed':
+            self._scripts[params.get('url', '')] = params.get('scriptId', '')
         elif method == 'Debugger.paused':
             await self._handle_paused(params)
         elif method == 'Debugger.resumed':
@@ -773,10 +783,6 @@ class HTTPServer:
             await self.handle_cdp_debug_step_in(writer)
         elif method == 'POST' and path == '/api/cdp/debug/stepOut':
             await self.handle_cdp_debug_step_out(writer)
-        elif method == 'GET' and path == '/api/cdp/network/log':
-            await self.handle_cdp_network_log(writer)
-        elif method == 'POST' and path == '/api/cdp/network/clear':
-            await self.handle_cdp_network_clear(writer)
         else:
             await self._json_error(writer, 404, 'Unknown CDP endpoint')
 
@@ -797,6 +803,8 @@ class HTTPServer:
         if self.cdp_client and self.cdp_client.connected:
             await self._json_response(writer, {'status': 'already_connected', 'url': self.cdp_client.page_url})
             return
+        if self.cdp_client:
+            await self.cdp_client.disconnect()
         port = CONFIG['cdp']['remote_debugging_port']
         self.cdp_client = CDPClient(port)
         try:
@@ -807,6 +815,8 @@ class HTTPServer:
                 'port': port,
             })
         except (ConnectionError, OSError, websockets.exceptions.InvalidURI) as e:
+            if self.cdp_client:
+                await self.cdp_client.disconnect()
             self.cdp_client = None
             await self._json_response(writer, {'status': 'error', 'message': str(e)}, 503)
 
@@ -878,6 +888,11 @@ class HTTPServer:
         try:
             data = json.loads(body.decode())
             expr = data.get('expression', '')
+            dangerous = ['file://', ' require(', "require('", 'require("', 'process.env', 'global.', '__dirname']
+            for pat in dangerous:
+                if pat in expr:
+                    await self._json_error(writer, 400, f'Rejected: expression contains forbidden pattern "{pat}"')
+                    return
             result = await self.cdp_client.evaluate(expr)
             await self._json_response(writer, result)
         except Exception as e:
@@ -936,12 +951,6 @@ class HTTPServer:
             await self._json_response(writer, {'status': 'stepped_out'})
         except Exception as e:
             await self._json_error(writer, 400, str(e))
-
-    async def handle_cdp_network_log(self, writer: asyncio.StreamWriter):
-        if not self.cdp_client:
-            await self._json_response(writer, {'requests': []})
-            return
-        await self._json_response(writer, {'requests': self.cdp_client.get_network_log()})
 
     async def handle_cdp_network_clear(self, writer: asyncio.StreamWriter):
         if self.cdp_client:

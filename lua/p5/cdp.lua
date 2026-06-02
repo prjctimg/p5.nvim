@@ -8,7 +8,8 @@ local is_win = vim.api.nvim_win_is_valid
 local is_buf = vim.api.nvim_buf_is_valid
 
 C.config = {
-	cdp = { enabled = false, remote_debugging_port = 9222 },
+	enabled = false,
+	remote_debugging_port = 9222,
 	view = { position = "below", height = 10 },
 }
 
@@ -37,6 +38,10 @@ local tabs = {
 }
 
 C.connect = function()
+	if not C.config.enabled then
+		notify("CDP is disabled. Enable it in p5 config: cdp.enabled = true", "warn")
+		return
+	end
 	local server = require("p5.server")
 	if not (server.server_job and server.port) then
 		notify("CDP: start server first with :P5 server", "warn")
@@ -93,11 +98,11 @@ C.disconnect = function()
 end
 
 C.status = function()
-	local port = C.state.port or (require("p5.server").port)
-	if not port then
-		notify("CDP: server not running", "warn")
+	if not C.state.port then
+		notify("CDP: not connected", "warn")
 		return
 	end
+	local port = C.state.port
 	vim.fn.jobstart({
 		"curl", "-s", string.format("http://localhost:%d/api/cdp/status", port),
 	}, {
@@ -129,11 +134,11 @@ C.eval = function(expr)
 		end)
 		return
 	end
-	local port = C.state.port or (require("p5.server").port)
-	if not port then
-		notify("CDP: server not running", "warn")
+	if not C.state.port then
+		notify("CDP: not connected", "warn")
 		return
 	end
+	local port = C.state.port
 	local entry = { expression = expr, status = "pending", result = nil }
 	table.insert(C.tab_data.eval, entry)
 	if C.state.active_tab == 3 then C.render_all() end
@@ -251,6 +256,10 @@ C.toggle = function()
 end
 
 C.open = function()
+	if not C.config.enabled then
+		notify("CDP is disabled. Enable it in p5 config: cdp.enabled = true", "warn")
+		return
+	end
 	local server = require("p5.server")
 	if not (server.server_job and server.port) then
 		notify("CDP: start server first with :P5 server", "info")
@@ -293,6 +302,7 @@ C.open = function()
 end
 
 C.close = function()
+	C.disconnect()
 	if C.state.job_id then
 		vim.fn.jobstop(C.state.job_id)
 		C.state.job_id = nil
@@ -415,6 +425,8 @@ C._on_event = function(data)
 		if C.state.buf and is_buf(C.state.buf) then
 			C.render_all()
 		end
+	elseif t == "hb" then
+		-- heartbeat — connection is alive
 	end
 end
 

@@ -175,6 +175,7 @@ S.start = function(port)
 				end
 
 				-- Auto-open browser with CDP support if Chrome/Chromium is available
+				local cdp_enabled = S.config.cdp and S.config.cdp.enabled
 				if S.config.auto_open_browser ~= false then
 					vim.defer_fn(function()
 						-- Detect Chrome/Chromium in PATH
@@ -188,7 +189,12 @@ S.start = function(port)
 						end
 
 						if chrome_cmd then
-							vim.fn.jobstart({ chrome_cmd, "--remote-debugging-port=9222", url }, {
+							local chrome_args = { chrome_cmd }
+							if cdp_enabled then
+								table.insert(chrome_args, "--remote-debugging-port=9222")
+							end
+							table.insert(chrome_args, url)
+							vim.fn.jobstart(chrome_args, {
 								detach = true,
 								on_exit = function(_, exit_code)
 									if exit_code ~= 0 then

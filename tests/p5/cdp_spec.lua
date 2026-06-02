@@ -7,6 +7,7 @@ describe("cdp", function()
   local orig_server_port = server.port
 
   before_each(function()
+    cdp.config.enabled = true
     cdp.state.buf = nil
     cdp.state.win = nil
     cdp.state.job_id = nil
@@ -232,6 +233,35 @@ describe("cdp", function()
       cdp.state.port = nil
       local ok, err = pcall(cdp.set_breakpoint, "test.js:10")
       assert.is_true(ok, "set_breakpoint without port: " .. tostring(err))
+    end)
+  end)
+
+  describe("config.enabled gating", function()
+    it("open does nothing when disabled", function()
+      cdp.config.enabled = false
+      cdp.open()
+      assert.is_nil(cdp.state.buf)
+    end)
+
+    it("connect does nothing when disabled", function()
+      cdp.config.enabled = false
+      local called = false
+      local notify = require("p5.core").notify
+      cdp.connect()
+      assert.is_false(cdp.state.connected)
+    end)
+
+    it("open works when enabled", function()
+      cdp.config.enabled = true
+      cdp.open()
+      assert.is_not_nil(cdp.state.buf)
+      cdp.close()
+    end)
+
+    it("connect works when enabled", function()
+      cdp.config.enabled = true
+      local ok, err = pcall(cdp.connect)
+      assert.is_true(ok)
     end)
   end)
 end)
