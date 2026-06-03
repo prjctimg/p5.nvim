@@ -3,13 +3,15 @@ local G = {}
 local core = require("p5.core")
 local notify = core.notify
 
-local function step_runner(steps)
+local function step_runner(steps, cb)
 	local i = 1
 	local function next()
 		if i <= #steps then
 			local s = steps[i]
 			i = i + 1
 			s(next)
+		elseif cb then
+			cb()
 		end
 	end
 	next()
@@ -165,7 +167,9 @@ else
 					end)
 				end,
 			}
-			step_runner(steps)
+			step_runner(steps, function()
+								core.notify("Gist created successfully", "ok")
+							end)
 		end
 
 		if description ~= "" then
@@ -621,6 +625,7 @@ else
 					local body = comment and comment.body or ""
 					local comment_id = comment and comment.id or nil
 
+					vim.schedule(function()
 					local buf = vim.api.nvim_create_buf(false, true)
 					vim.api.nvim_buf_set_option(buf, "buftype", "acwrite")
 					vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
@@ -659,6 +664,7 @@ else
 					vim.api.nvim_win_set_buf(0, buf)
 					vim.api.nvim_buf_set_option(buf, "modified", false)
 					notify("Edit the comment and :w to save", "info")
+					end)
 				end)
 			end
 		end)

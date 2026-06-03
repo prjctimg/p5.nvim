@@ -37,10 +37,30 @@ local tabs = {
 	{ key = 4, name = "Debugger", data_key = "debugger" },
 }
 
+local function launch_browser()
+	local chrome_candidates = { "chromium", "chromium-browser", "google-chrome", "chrome" }
+	local chrome_cmd = nil
+	for _, c in ipairs(chrome_candidates) do
+		if vim.fn.executable(c) ~= 0 then chrome_cmd = c; break end
+	end
+	if not chrome_cmd then
+		notify("CDP: no Chrome/Chromium found in PATH", "warn")
+		return
+	end
+	local server = require("p5.server")
+	local port = server.port or C.config.remote_debugging_port
+	local url = server.port and string.format("http://localhost:%d", server.port) or nil
+	local args = { chrome_cmd, "--remote-debugging-port=" .. C.config.remote_debugging_port }
+	if url then table.insert(args, url) end
+	vim.fn.jobstart(args, { detach = true })
+	notify("CDP: launched " .. chrome_cmd .. " with remote debugging on port " .. C.config.remote_debugging_port, "info")
+end
+
 C.connect = function()
 	if not C.config.enabled then
-		notify("CDP is disabled. Enable it in p5 config: cdp.enabled = true", "warn")
-		return
+		C.config.enabled = true
+		notify("CDP auto-enabled", "info")
+		vim.defer_fn(launch_browser, 300)
 	end
 	local server = require("p5.server")
 	if not (server.server_job and server.port) then
@@ -257,8 +277,9 @@ end
 
 C.open = function()
 	if not C.config.enabled then
-		notify("CDP is disabled. Enable it in p5 config: cdp.enabled = true", "warn")
-		return
+		C.config.enabled = true
+		notify("CDP auto-enabled", "info")
+		vim.defer_fn(launch_browser, 300)
 	end
 	local server = require("p5.server")
 	if not (server.server_job and server.port) then

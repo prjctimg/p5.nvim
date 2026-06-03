@@ -5,6 +5,8 @@ local console = require("p5.console")
 local project = require("p5.project")
 local notify = core.notify
 
+local user_stopped = false
+
 S.config = {
 	port = 8000,
 	auto_start = false,
@@ -143,20 +145,23 @@ S.start = function(port)
 				on_exit = function(_, exit_code, event)
 					console.hide()
 
-					if exit_code == 0 then
-						notify("🛑 Server stopped", "info")
-					else
-						local reason = ""
-						if event == "exit" then
-							reason = " (exited normally)"
-						elseif event == "term" then
-							reason = " (terminated)"
+					if not user_stopped then
+						if exit_code == 0 then
+							notify("🛑 Server stopped", "info")
 						else
-							reason = " (event: " .. (event or "unknown") .. ")"
-						end
+							local reason = ""
+							if event == "exit" then
+								reason = " (exited normally)"
+							elseif event == "term" then
+								reason = " (terminated)"
+							else
+								reason = " (event: " .. (event or "unknown") .. ")"
+							end
 
-						notify("Server stopped with code " .. exit_code .. reason, "warn")
+							notify("Server stopped with code " .. exit_code .. reason, "warn")
+						end
 					end
+					user_stopped = false
 
 					S.server_job = nil
 					S.type = nil
@@ -165,14 +170,13 @@ S.start = function(port)
 
 			if S.server_job > 0 then
 				local url = "http://localhost:" .. port
-				notify("🎉 Server started (" .. type .. ") at " .. url, "ok")
-
+				local msg = "🎉 Server started (" .. type .. ") at " .. url
 				if S.config.console.enabled then
 					vim.defer_fn(function()
 						console.show({ enter = false })
-						notify("Console polling started on port " .. S.port, "ok")
 					end, 500)
 				end
+				notify(msg, "ok")
 
 				-- Auto-open browser with CDP support if Chrome/Chromium is available
 				local cdp_enabled = S.config.cdp and S.config.cdp.enabled
@@ -245,16 +249,14 @@ S.stop_server = function()
 		return
 	end
 
-	local stopped_port = S.port
-	local server_type = S.type
-
+	user_stopped = true
 	vim.fn.jobstop(S.server_job)
 	S.server_job = nil
 	S.type = nil
 
 	console.hide()
 
-	notify("🛑 Server stopped on port " .. stopped_port .. " (" .. server_type .. ")", "info")
+	notify("🛑 Server stopped", "info")
 end
 
 return S

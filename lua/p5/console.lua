@@ -69,7 +69,6 @@ C.create = function()
 						if line:match("\027%[%d") then
 							connected = true
 							C.attempts = 0
-							notify("Console connected to browser", "info")
 							break
 						end
 					end
@@ -171,7 +170,6 @@ C.show = function(opts)
 		C.buf = term.buf
 		C.auto_clear()
 		disable_term_mode(C.buf)
-		notify("📺 Console connected to server on port " .. C.port, "info")
 		return
 	end
 
@@ -199,7 +197,6 @@ C.show = function(opts)
 	disable_term_mode(buf)
 
 	C.auto_clear()
-	notify("Console connected to server on port " .. C.port, "info")
 end
 
 C.hide = function()
