@@ -78,15 +78,7 @@ H.check_plugin_env = function()
 	local asset_dir = core.asset_dir()
 	if core.is_dir(asset_dir) then
 		ok("Asset directory: " .. asset_dir)
-		local libs_dir = asset_dir .. "/libs"
-		if core.is_dir(libs_dir) then
-			local p5_file = libs_dir .. "/p5-v2.js"
-			if core.is_file(p5_file) then
-				ok("p5.js 2.x: bundled")
-			else
-				warn("p5.js 2.x: not bundled - will be downloaded on project creation")
-			end
-		end
+		ok("p5.js: downloaded dynamically on first project creation")
 	else
 		warn("Asset directory: not found at " .. asset_dir)
 	end

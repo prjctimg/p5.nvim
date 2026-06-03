@@ -1087,8 +1087,8 @@ function draw() {
         
         # Build script tags for core and contrib libs
         scripts = []
-        scripts.append(f'  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/{version}/p5.min.js"></script>')
-        scripts.append(f'  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/{version}/addons/p5.sound.min.js"></script>')
+        scripts.append('  <script src="assets/libs/p5.js"></script>')
+        scripts.append('  <script src="assets/libs/p5.sound.js"></script>')
         
         for lib_name in libs.keys():
             lib_version = libs[lib_name]

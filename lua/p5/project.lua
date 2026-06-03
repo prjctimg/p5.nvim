@@ -1,90 +1,84 @@
--- Project creation and management for p5.nvim
 local P = {}
 local core = require("p5.core")
 local libraries = require("p5.libraries")
 local notify = core.notify
 
-P.cdn = {
-	lib = "https://cdn.jsdelivr.net/npm/p5@2.0.5/lib/p5.min.js",
-	types = "https://cdn.jsdelivr.net/npm/p5@2.0.5/types/p5.d.ts",
-}
+local CDN = "https://cdn.jsdelivr.net/npm/p5"
+
+P.V1_VERSION = "1.11.3"
+
+P.download_p5_assets = function(project_path, major, version, callback)
+	local libs_dir = project_path .. "/assets/libs"
+	local types_dir = project_path .. "/assets/types"
+	core.mkdir(libs_dir)
+	core.mkdir(types_dir)
+
+	local urls = { lib = CDN .. "@" .. version .. "/lib/p5.min.js" }
+	if major == 1 then
+		urls.sound = CDN .. "@" .. version .. "/lib/addons/p5.sound.min.js"
+	end
+	urls.types = CDN .. "@" .. version .. "/types/p5.d.ts"
+
+	local pending = 0
+	local function dl(url, dest)
+		pending = pending + 1
+		core.fetch(url, dest, function(ok)
+			if not ok then
+				notify("Download failed: " .. url, "warn")
+			end
+			pending = pending - 1
+			if pending == 0 and callback then
+				callback()
+			end
+		end, { cache = true })
+	end
+
+	dl(urls.lib, libs_dir .. "/p5.js")
+	if urls.sound then
+		dl(urls.sound, libs_dir .. "/p5.sound.js")
+	end
+	dl(urls.types, types_dir .. "/p5.d.ts")
+end
 
 P.create_project = function(name, major)
 	major = major or 2
 	name = name or "p5-sketch"
 
-	if major == 1 then
-		local required_1x = {
-			"libs/p5.js",
-			"libs/p5.sound.js",
-			"types/p5.d.ts",
-		}
-		local missing = {}
-		for _, asset in ipairs(required_1x) do
-			if not core.is_file(core.asset_dir() .. "/" .. asset) then
-				table.insert(missing, asset)
-			end
-		end
-		if #missing > 0 then
-			notify("Missing required assets: " .. table.concat(missing, ", "), "warn")
-			notify("😩 Cannot create project - required assets are missing", "info")
-			return false
-		end
-	end
-
 	if vim.fn.isdirectory(name) ~= 0 then
-		notify("😅 Directory '" .. name .. "' already exists", "info")
+		notify("Directory '" .. name .. "' already exists", "info")
 		return false
 	end
 
 	local path = vim.fn.fnamemodify(name, ":p")
+	core.mkdir(path)
 
-	-- Always compute CDN version for p5.json, download if not cached
-	local cdn_version = P.cdn.lib:match("@([^/]+)")
-	if major == 2 and not core.is_file(core.asset_dir() .. "/libs/p5-v2.js") then
-		notify("Downloading p5.js 2.x assets...", "info")
+	local function finish(version)
+		P.create_project_continue(name, major, version)
 	end
 
-	P.create_project_continue(name, major, cdn_version)
-
-	if major == 2 and cdn_version then
-		local libs_dir = core.asset_dir() .. "/libs"
-		local types_dir = core.asset_dir() .. "/types"
-		core.fetch(cdn_url, libs_dir .. "/p5-v2.js", function(ok)
-			if ok then
-				-- Best-effort types download; skip silently if unavailable for this major
-				core.fetch(
-					P.cdn.types,
-					types_dir .. "/p5-v2.d.ts",
-					function(_)
-						P.copy_assets_to_project(path, 2, function(err)
-							if err then
-								notify("Failed to copy p5.js assets: " .. err, "warn")
-							else
-								notify("p5.js 2.x assets ready", "ok")
-							end
-						end)
-					end,
-					{ cache = true }
-				)
-			else
-				notify("Download failed. Run :P5 setup to retry.", "warn")
-			end
-		end, { cache = true })
+	if major == 1 then
+		P.download_p5_assets(path, 1, P.V1_VERSION, function()
+			finish(P.V1_VERSION)
+		end)
+	else
+		notify("Fetching latest p5.js version...", "info")
+		core.fetch_latest_p5_version(function(version)
+			version = version or "2.0.5"
+			notify("Downloading p5.js " .. version .. "...", "info")
+			P.download_p5_assets(path, 2, version, function()
+				finish(version)
+			end)
+		end)
 	end
 end
 
 function P.create_project_continue(name, major, override_version)
-	core.mkdir(name)
 	local path = vim.fn.fnamemodify(name, ":p")
 
-	P.copy_assets_to_project(path, major, function(err)
-		if err then
-			notify("Failed to create project: " .. err, "info")
-			return
-		end
+	P.copy_favicon(path)
 
-		local index_html = [[<!DOCTYPE html>
+	local version = core.p5_version(major, override_version)
+	local index_html = [[<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -92,6 +86,7 @@ function P.create_project_continue(name, major, override_version)
   <title>p5.js Sketch</title>
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <script src="assets/libs/p5.js"></script>
+  <script src="assets/libs/p5.sound.js"></script>
   <script src="assets/libs/libs.js"></script>
 </head>
 <body>
@@ -100,9 +95,9 @@ function P.create_project_continue(name, major, override_version)
   <script src="sketch.js"></script>
 </body>
 </html>]]
-		vim.fn.writefile(vim.split(index_html, "\n"), path .. "/index.html")
+	vim.fn.writefile(vim.split(index_html, "\n"), path .. "/index.html")
 
-		local sketch_js = [[function setup() {
+	local sketch_js = [[function setup() {
   createCanvas(400, 400);
 }
 
@@ -110,9 +105,9 @@ function draw() {
   background(220);
   circle(mouseX, mouseY, 50);
 }]]
-		vim.fn.writefile(vim.split(sketch_js, "\n"), path .. "/sketch.js")
+	vim.fn.writefile(vim.split(sketch_js, "\n"), path .. "/sketch.js")
 
-		local jsconfig = [[{
+	local jsconfig = [[{
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext", 
@@ -131,9 +126,9 @@ function draw() {
     "node_modules"
   ]
 }]]
-		vim.fn.writefile(vim.split(jsconfig, "\n"), path .. "/jsconfig.json")
+	vim.fn.writefile(vim.split(jsconfig, "\n"), path .. "/jsconfig.json")
 
-		local tsconfig = [[{
+	local tsconfig = [[{
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
@@ -158,93 +153,65 @@ function draw() {
     "build"
   ]
 }]]
-		vim.fn.writefile(vim.split(tsconfig, "\n"), path .. "/tsconfig.json")
+	vim.fn.writefile(vim.split(tsconfig, "\n"), path .. "/tsconfig.json")
 
-		local p5_config = {
-			version = core.p5_version(major, override_version),
-			major = major,
-			libs = {},
-			includes = { "sketch.js" },
-		}
-		vim.fn.writefile(vim.split(vim.fn.json_encode(p5_config), "\n"), path .. "/p5.json")
+	local p5_config = {
+		version = version,
+		major = major,
+		libs = {},
+		includes = { "sketch.js" },
+	}
+	vim.fn.writefile(vim.split(vim.fn.json_encode(p5_config), "\n"), path .. "/p5.json")
 
-		core.mkdir(path .. "/assets/types")
-		core.mkdir(path .. "/assets/libs")
-		libraries.generate_libs_js(path)
+	core.mkdir(path .. "/assets/types")
+	core.mkdir(path .. "/assets/libs")
+	libraries.generate_libs_js(path)
 
-		notify("🎉 Sketchspace created: " .. name, "ok")
-		vim.api.nvim_set_current_dir(path)
-		vim.cmd({ cmd = "edit", args = { path .. "/sketch.js" } })
-	end)
+	notify("Sketchspace created: " .. name, "ok")
+	vim.api.nvim_set_current_dir(path)
+	vim.cmd({ cmd = "edit", args = { path .. "/sketch.js" } })
 end
 
-P.copy_assets_to_project = function(project_path, major, callback)
+P.copy_favicon = function(project_path)
+	local src = core.asset_dir() .. "/favicon.ico"
+	local dest = project_path .. "/assets/favicon.ico"
+	core.mkdir(project_path .. "/assets")
+	if vim.uv and vim.uv.fs_copyfile then
+		vim.uv.fs_copyfile(src, dest)
+	else
+		vim.fn.system({ "cp", src, dest })
+	end
+end
+
+P.ensure_assets = function(project_path, major, callback)
 	major = major or 2
-	local plugin_assets = core.asset_dir()
-	local project_assets = project_path .. "/assets"
+	local libs_dir = project_path .. "/assets/libs"
+	local p5_file = libs_dir .. "/p5.js"
 
-	core.mkdir(project_assets)
-	core.mkdir(project_assets .. "/types")
-	core.mkdir(project_assets .. "/libs")
-
-	local pending_copies = 0
-	local copy_errors = {}
-	local called_once = false
-
-	local function try_copy(src, dest)
-		if core.is_file(src) then
-			pending_copies = pending_copies + 1
-			local function on_copy(err)
-				pending_copies = pending_copies - 1
-				if err then
-					table.insert(copy_errors, dest .. ": " .. vim.inspect(err))
-				end
-				if pending_copies == 0 and callback then
-					if not called_once then
-						called_once = true
-						vim.schedule(function()
-							callback(#copy_errors > 0 and table.concat(copy_errors, ", ") or nil)
-						end)
-					end
-				end
-			end
-			if vim.uv and vim.uv.fs_copyfile then
-				vim.uv.fs_copyfile(src, dest, on_copy)
-			else
-				local result = vim.fn.system({ "cp", src, dest })
-				vim.schedule(function()
-					if vim.v.shell_error ~= 0 then
-						on_copy(result)
-					else
-						on_copy(nil)
-					end
-				end)
-			end
-		else
-			core.notify("Skipped (not found): " .. src, "info")
-		end
+	if core.is_file(p5_file) then
+		P.copy_favicon(project_path)
+		if callback then callback() end
+		return
 	end
 
-	local types_file = major == 1 and "p5.d.ts" or "p5-v2.d.ts"
-	try_copy(plugin_assets .. "/types/" .. types_file, project_assets .. "/types/p5.d.ts")
+	core.mkdir(libs_dir)
+	core.mkdir(project_path .. "/assets/types")
 
-	if core.is_dir(plugin_assets .. "/libs") then
-		local p5_file = major == 1 and "p5.js" or "p5-v2.js"
-		try_copy(plugin_assets .. "/libs/" .. p5_file, project_assets .. "/libs/" .. p5_file)
-		if major == 1 then
-			try_copy(plugin_assets .. "/libs/p5.sound.js", project_assets .. "/libs/p5.sound.js")
-		end
-	end
-
-	try_copy(plugin_assets .. "/favicon.ico", project_assets .. "/favicon.ico")
-
-	if pending_copies == 0 and callback then
-		if not called_once then
-			called_once = true
-			vim.schedule(function()
-				callback(#copy_errors > 0 and table.concat(copy_errors, ", ") or nil)
+	if major == 1 then
+		P.download_p5_assets(project_path, 1, P.V1_VERSION, function()
+			P.copy_favicon(project_path)
+			if callback then callback() end
+		end)
+	else
+		notify("Fetching latest p5.js version...", "info")
+		core.fetch_latest_p5_version(function(version)
+			version = version or "2.0.5"
+			notify("Downloading p5.js " .. version .. "...", "info")
+			P.download_p5_assets(project_path, 2, version, function()
+				P.copy_favicon(project_path)
+				if callback then callback() end
 			end)
-		end
+		end)
 	end
 end
 

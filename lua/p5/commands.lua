@@ -86,37 +86,9 @@ function draw() {
 				next_step()
 			end,
 			function(next_step)
-				if major == 2 and not core.is_file(core.asset_dir() .. "/libs/p5-v2.js") then
-					core.notify("Downloading p5.js 2.x assets...", "info")
-					core.fetch(project.cdn.lib, core.asset_dir() .. "/libs/p5-v2.js", function(ok)
-						if ok then
-							core.fetch(
-								project.cdn.types,
-								core.asset_dir() .. "/types/p5-v2.d.ts",
-								function(_)
-									next_step()
-								end,
-								{ cache = true }
-							)
-						else
-							core.notify("Download failed. Run :P5 setup again to retry.", "warn")
-							next_step()
-						end
-					end, { cache = true })
-				else
-					next_step()
-				end
-			end,
-			function(_)
-				project.copy_assets_to_project(cwd, major, function(err)
-					if err then
-						core.notify("Failed to copy assets: " .. err, "warn")
-						return
-					end
-
-					core.notify("Assets copied successfully", "info")
+				project.ensure_assets(cwd, major, function()
+					core.notify("Assets ready", "info")
 					libraries.generate_libs_js(cwd)
-
 					local updated_config = core.read_workspace_config()
 					if updated_config and updated_config.libs then
 						local lib_names = vim.tbl_keys(updated_config.libs)
@@ -124,8 +96,8 @@ function draw() {
 							libraries.install_libs(lib_names)
 						end
 					end
-
 					core.notify("Sketchspace setup complete", "ok")
+					next_step()
 				end)
 			end,
 		}

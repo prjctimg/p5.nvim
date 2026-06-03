@@ -255,19 +255,34 @@ C.fetch = function(url, dest, callback, options)
 	return true
 end
 
--- Get p5 version from bundled library
+-- Fetch latest p5.js version from npm registry
+C.fetch_latest_p5_version = function(callback)
+	local url = "https://registry.npmjs.org/p5/latest"
+	local tmp = fn.tempname()
+	C.fetch(url, tmp, function(ok)
+		if ok then
+			local data, _ = C.read_json(tmp)
+			pcall(fn.delete, tmp)
+			if data and data.version then
+				if callback then callback(data.version) end
+			else
+				if callback then callback(nil) end
+			end
+		else
+			pcall(fn.delete, tmp)
+			if callback then callback(nil) end
+		end
+	end, { cache = false })
+end
+
+-- Get p5 version (from override, project config, or fallback default)
 C.p5_version = function(major, override_version)
 	if override_version then return override_version end
-	local p5_file = major == 1 and "p5.js" or "p5-v2.js"
-	local p5 = C.asset_dir() .. "/libs/" .. p5_file
-	if C.is_file(p5) then
-		local lines = fn.readfile(p5)
-		if lines and #lines > 0 then
-			local version = lines[1]:match("p5%.js v([%d%.]+)")
-			return version or (major == 2 and "2.0.0" or "1.9.0")
-		end
+	local config = C.read_workspace_config()
+	if config and config.version then
+		return config.version
 	end
-	return major == 2 and "2.0.0" or "1.9.0"
+	return major == 2 and "2.0.5" or "1.11.3"
 end
 
 -- Add recent sketchspaces

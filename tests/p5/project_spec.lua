@@ -157,24 +157,26 @@ describe("create_project_continue", function()
   end)
 end)
 
-describe("copy_assets_to_project", function()
+describe("ensure_assets", function()
   local P = require("p5.project")
   local tmp = vim.fn.tempname()
 
   before_each(function()
     vim.fn.mkdir(tmp, "p")
+    vim.fn.mkdir(tmp .. "/assets", "p")
+    vim.fn.mkdir(tmp .. "/assets/libs", "p")
   end)
 
   after_each(function()
     vim.fn.delete(tmp, "rf")
   end)
 
-  it("does not error on missing plugin assets", function()
-    local ok = true
-    local cb = function(err)
-      if err then ok = false end
-    end
-    P.copy_assets_to_project(tmp, 2, cb)
-    assert.is_true(ok)
+  it("calls callback immediately when p5.js already exists", function()
+    vim.fn.writefile({ "// p5 content" }, tmp .. "/assets/libs/p5.js")
+    local called = false
+    P.ensure_assets(tmp, 2, function()
+      called = true
+    end)
+    assert.is_true(called)
   end)
 end)
