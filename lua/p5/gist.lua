@@ -595,8 +595,7 @@ else
 		elseif choice == "First comment (sketch details)" then
 			G.get_comment(gist_info.id, function(comment)
 				local body = comment and comment.body or ""
-				local comment_id = comment and comment.id or nil
-				local is_new = not comment_id
+				local st = { comment_id = comment and comment.id or nil }
 
 				vim.schedule(function()
 				local buf = vim.api.nvim_create_buf(false, true)
@@ -612,28 +611,28 @@ else
 				callback = function()
 					local new_body = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
 					vim.api.nvim_buf_set_option(buf, "modified", false)
-					local function do_save()
-						local function on_done(api_ok)
-							if api_ok then
-								notify("Sketch details " .. (comment_id and "updated" or "created"), "ok")
-							else
-								notify("Failed to update sketch details", "warn")
+					local function on_done(api_ok, stdout)
+						if api_ok then
+							if not st.comment_id and stdout then
+								local ok, res = pcall(vim.json.decode, stdout)
+								if ok and res and res.id then
+									st.comment_id = res.id
+								end
 							end
-						end
-						if comment_id then
-							G.update_comment(gist_info.id, comment_id, new_body, on_done)
+							notify("Sketch details " .. (st.comment_id and "revised" or "created"), "ok")
 						else
-							G.create_comment(gist_info.id, new_body, on_done)
+							notify("Failed to update sketch details", "warn")
 						end
 					end
-					if is_new then
+					if st.comment_id then
+						G.update_comment(gist_info.id, st.comment_id, new_body, on_done)
+					else
 						vim.ui.select({ "Yes", "No" }, {
 							prompt = "No comment exists yet. Publish buffer contents as the first comment?",
 						}, function(choice)
-							if choice == "Yes" then do_save() else notify("Comment creation cancelled", "info") end
+							if choice == "Yes" then G.create_comment(gist_info.id, new_body, on_done)
+							else notify("Comment creation cancelled", "info") end
 						end)
-					else
-						do_save()
 					end
 				end,
 			})
