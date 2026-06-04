@@ -33,7 +33,8 @@
 - **Package Management** 📦 - Install contributor libraries
 - **Sketchspace** 📁 - Minimal project setup
 - **GitHub Gist** 🔗 - Share sketches (synced to sketchspace)
-- **Console** 📺 - View browser logs in Neovim
+- **CDP DevTools** 🛠️ - Full Chrome DevTools Protocol panel: Console, Network, Eval, Debugger, Performance, Info tabs
+- **Console** 📺 - View browser logs in Neovim (deprecated — use CDP panel)
 - **p5.js Docs** 📖 - Built-in reference via snacks.picker
 - **Snippets** ✂️ - 100+ p5.js code snippets (VS Code JSON format, compatible with luasnip, blink.cmp, nvim-cmp)
 
@@ -103,7 +104,7 @@ A directory that has a `p5.json` file is called a `sketchspace`. The file looks 
 ```vim
 :P5 create my-sketch
 :P5 server
-:P5 console
+:P5 cdp
 ```
 
 ---
@@ -138,8 +139,6 @@ until the p5.js 2.x type declarations are officially released. The project is cr
 immediately with everything else — you can start coding right away. Run `:P5 setup` later
 to copy types once they become available.
 
-![P5 create](https://vhs.charm.sh/vhs-4PGBC7Um4G1B9Y4a2WnqoS.gif)
-
 ---
 
 ### :P5 setup
@@ -173,8 +172,6 @@ Remove installed libraries.
 :P5 uninstall
 ```
 
-![P5 install/uninstall](https://vhs.charm.sh/vhs-7uZH90HNiWJNyWcpovzZ30.gif)
-
 ---
 
 ### :P5 server [port]
@@ -186,19 +183,79 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 :P5 server 8080
 ```
 
-![P5 server](https://vhs.charm.sh/vhs-16wfvF6IEuAQ2R0lBnRjTw.gif)
-
 ---
 
-### :P5 console
+### :P5 console (deprecated)
+
+> ⚠️ **Deprecated** — use `:P5 cdp` instead. The CDP panel's Console tab provides
+> richer output with stack traces, object previews, and structured log data.
 
 Toggle browser console to view console.log, errors, and warnings in Neovim.
 
 ```vim
-:P5 console
+:P5 console     # Opens CDP panel on Console tab (with deprecation notice)
+:P5 cdp         # Open CDP panel (6 tabs: Console, Network, Eval, Debug, Perf, Info)
 ```
 
-![P5 console](https://vhs.charm.sh/vhs-6zyLuyaYAi9xIfwNrbUe9r.gif)
+---
+
+### :P5 cdp [subcommand]
+
+Open the Chrome DevTools Protocol panel — a full-featured debugging dashboard
+for your p5.js sketch with 6 tabs:
+
+| Tab | Key | What it shows |
+|-----|-----|---------------|
+| Console | `1` | `console.log/warn/error/info` with stack traces, timestamps, and level filtering |
+| Network | `2` | HTTP requests: method, status, duration, URL with color-coded status codes |
+| Eval | `3` | Evaluate arbitrary JS expressions in the browser context |
+| Debug | `4` | Set breakpoints, step through code, inspect call stack |
+| Perf | `5` | Live FPS (instant/1s/10s avg), JS heap, DOM nodes, FPS sparkline |
+| Info | `6` | Project info, canvas state, LSP document symbols for current buffer |
+
+```vim
+:P5 cdp                # Toggle CDP panel
+:P5 cdp connect        # Connect to Chrome debugger
+:P5 cdp disconnect     # Disconnect
+:P5 cdp status         # Show connection status
+:P5 cdp eval <expr>    # Evaluate JS expression
+:P5 cdp break <loc>    # Set breakpoint (e.g., sketch.js:12)
+:P5 cdp continue       # Resume execution
+:P5 cdp step           # Step over
+:P5 cdp stepIn         # Step into
+:P5 cdp stepOut        # Step out
+:P5 cdp perf           # Open Performance tab
+```
+
+**CDP panel keymaps** (context-aware per tab):
+
+| Key | Console | Network | Eval | Debug | Perf | Info |
+|-----|---------|---------|------|-------|------|------|
+| `1`-`6` | Switch tab | Switch tab | Switch tab | Switch tab | Switch tab | Switch tab |
+| `q`/`<Esc>` | Close | Close | Close | Close | Close | Close |
+| `c` | Clear | Clear | Clear | Clear | Clear | — |
+| `r` | Refresh | Refresh | — | — | Toggle rec | Refresh LSP |
+| `<CR>` | — | — | Enter expr | Set BP | — | Jump to sym |
+| `f` | Filter | — | — | — | — | — |
+| `/` | Search | Search | — | — | — | — |
+| `s` | — | — | — | Step over | — | — |
+| `i` | — | — | — | Step into | — | — |
+| `o` | — | — | — | Step out | — | — |
+| `x` | — | — | — | Continue | — | — |
+| `b` | — | — | — | Breakpoint | — | — |
+| `D` | — | Clear all | — | — | — | — |
+| `K`/`J` | — | — | — | — | — | Nav symbols |
+| `g`/`G` | Top/Bot | Top/Bot | Top/Bot | Top/Bot | Top/Bot | Top/Bot |
+
+**Keyboard shortcuts** example:
+
+```lua
+vim.keymap.set("n", "<leader>pd", ":P5 cdp<CR>", { desc = "Toggle CDP DevTools" })
+```
+
+**Browser flags:** When CDP is enabled, Chrome launches with graphics-debugging flags:
+`--enable-gpu-rasterization`, `--disable-frame-rate-limit`, `--enable-precise-memory-info`,
+and more. Configure via `setup({ cdp = { browser_flags = { ... } } })`.
 
 ---
 
@@ -271,8 +328,6 @@ Open p5.js documentation via snacks.picker.
 ```vim
 :P5 docs
 ```
-
-![P5 docs](https://vhs.charm.sh/vhs-1Z3oYSknqEJj6LeIXF9u6I.gif)
 
 ---
 
@@ -400,7 +455,22 @@ require("p5").setup({
   -- Sketchbook settings
   sketchbook = {
     user = ""                      -- GitHub username whose gists form the sketchbook
-  }
+  },
+
+  -- CDP DevTools settings
+  cdp = {
+    enabled = false,               -- Enable CDP (auto-enabled when panel opens)
+    remote_debugging_port = 9222,  -- Chrome remote debugging port
+    browser_flags = {              -- Extra Chrome flags for graphics debugging
+      "--no-first-run",
+      "--no-default-browser-check",
+      "--enable-gpu-rasterization",
+      "--disable-frame-rate-limit",
+      "--disable-gpu-driver-bug-workarounds",
+      "--enable-precise-memory-info",
+      "--disable-software-rasterizer",
+    },
+  },
 })
 ```
 
@@ -419,10 +489,10 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
   end
 })
 
--- Auto-open console when server starts
+-- Auto-open CDP panel when server starts
 vim.api.nvim_create_autocmd({ "User", "P5ServerStarted" }, {
   callback = function()
-    vim.cmd("P5 console")
+    vim.cmd("P5 cdp")
   end
 })
 ```
@@ -443,7 +513,8 @@ vim.keymap.set("n", "<leader>ps", ":P5 setup<CR>", { desc = "Setup project" })
 
 -- Server
 vim.keymap.set("n", "<leader>pss", ":P5 server<CR>", { desc = "Toggle server" })
-vim.keymap.set("n", "<leader>pso", ":P5 console<CR>", { desc = "Toggle console" })
+vim.keymap.set("n", "<leader>pso", ":P5 console<CR>", { desc = "Toggle console (deprecated)" })
+vim.keymap.set("n", "<leader>psd", ":P5 cdp<CR>", { desc = "Toggle CDP DevTools" })
 
 -- Libraries
 vim.keymap.set("n", "<leader>pi", ":P5 install ", { desc = "Install library" })
@@ -563,7 +634,7 @@ Library installation fails or downloads timeout.
 ---
 
 > ## License 📜
-
+>
 > (c) 2026, [prjctimg](https://prjctimg.me)
 >
 > This is free software, released under the GPL-3.0 license.

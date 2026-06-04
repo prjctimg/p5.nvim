@@ -7,7 +7,8 @@ local CDN = "https://cdn.jsdelivr.net/npm/p5"
 
 P.V1_VERSION = "1.11.3"
 
-P.download_p5_assets = function(project_path, major, version, callback)
+P.download_p5_assets = function(project_path, version, callback)
+	local major = core.parse_major(version)
 	local libs_dir = project_path .. "/assets/libs"
 	local types_dir = project_path .. "/assets/types"
 	core.mkdir(libs_dir)
@@ -53,31 +54,33 @@ P.create_project = function(name, major)
 	core.mkdir(path)
 
 	local function finish(version)
-		P.create_project_continue(name, major, version)
+		P.create_project_continue(name, version)
 	end
 
 	if major == 1 then
-		P.download_p5_assets(path, 1, P.V1_VERSION, function()
+		P.download_p5_assets(path, P.V1_VERSION, function()
 			finish(P.V1_VERSION)
 		end)
 	else
 		notify("Fetching latest p5.js version...", "info")
 		core.fetch_latest_p5_version(function(version)
-			version = version or "2.0.5"
+			version = version or "2.3.0"
 			notify("Downloading p5.js " .. version .. "...", "info")
-			P.download_p5_assets(path, 2, version, function()
+			P.download_p5_assets(path, version, function()
 				finish(version)
 			end)
 		end)
 	end
 end
 
-function P.create_project_continue(name, major, override_version)
+function P.create_project_continue(name, override_version)
 	local path = vim.fn.fnamemodify(name, ":p")
 
 	P.copy_favicon(path)
 
-	local version = core.p5_version(major, override_version)
+	local version = core.p5_version(override_version)
+	local major = core.parse_major(version)
+	local sound_script = major == 1 and '\n  <script src="assets/libs/p5.sound.js"></script>' or ""
 	local index_html = [[<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,8 +88,7 @@ function P.create_project_continue(name, major, override_version)
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>p5.js Sketch</title>
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <script src="assets/libs/p5.js"></script>
-  <script src="assets/libs/p5.sound.js"></script>
+  <script src="assets/libs/p5.js"></script>~~sound_script~~
   <script src="assets/libs/libs.js"></script>
 </head>
 <body>
@@ -95,7 +97,7 @@ function P.create_project_continue(name, major, override_version)
   <script src="sketch.js"></script>
 </body>
 </html>]]
-	vim.fn.writefile(vim.split(index_html, "\n"), path .. "/index.html")
+	vim.fn.writefile(vim.split(index_html:gsub("~~sound_script~~", sound_script), "\n"), path .. "/index.html")
 
 	local sketch_js = [[function setup() {
   createCanvas(400, 400);
@@ -157,8 +159,7 @@ function draw() {
 
 	local p5_config = {
 		version = version,
-		major = major,
-		libs = {},
+		libs = vim.empty_dict(),
 		includes = { "sketch.js" },
 	}
 	vim.fn.writefile(vim.split(vim.fn.json_encode(p5_config), "\n"), path .. "/p5.json")
@@ -183,8 +184,10 @@ P.copy_favicon = function(project_path)
 	end
 end
 
-P.ensure_assets = function(project_path, major, callback)
-	major = major or 2
+P.ensure_assets = function(project_path, callback)
+	local config = core.read_workspace_config()
+	local version = config and config.version or "2.3.0"
+	local major = core.parse_major(version)
 	local libs_dir = project_path .. "/assets/libs"
 	local p5_file = libs_dir .. "/p5.js"
 
@@ -198,16 +201,16 @@ P.ensure_assets = function(project_path, major, callback)
 	core.mkdir(project_path .. "/assets/types")
 
 	if major == 1 then
-		P.download_p5_assets(project_path, 1, P.V1_VERSION, function()
+		P.download_p5_assets(project_path, P.V1_VERSION, function()
 			P.copy_favicon(project_path)
 			if callback then callback() end
 		end)
 	else
 		notify("Fetching latest p5.js version...", "info")
 		core.fetch_latest_p5_version(function(version)
-			version = version or "2.0.5"
+			version = version or "2.3.0"
 			notify("Downloading p5.js " .. version .. "...", "info")
-			P.download_p5_assets(project_path, 2, version, function()
+			P.download_p5_assets(project_path, version, function()
 				P.copy_favicon(project_path)
 				if callback then callback() end
 			end)

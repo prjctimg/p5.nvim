@@ -1,4 +1,7 @@
 -- Browser console integration for p5.nvim with SSE streaming
+---@deprecated Use p5.cdp (CDP panel, Console tab) instead.
+-- The CDP console provides richer structured data (stack traces, object previews)
+-- and eliminates the need for the injected JS console.js bridge.
 local C = {}
 local core = require("p5.core")
 local project = require("p5.project")

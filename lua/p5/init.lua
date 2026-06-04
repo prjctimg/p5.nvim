@@ -36,6 +36,15 @@ I.config = {
 	cdp = {
 		enabled = false,
 		remote_debugging_port = 9222,
+		browser_flags = {
+			"--no-first-run",
+			"--no-default-browser-check",
+			"--enable-gpu-rasterization",
+			"--disable-frame-rate-limit",
+			"--disable-gpu-driver-bug-workarounds",
+			"--enable-precise-memory-info",
+			"--disable-software-rasterizer",
+		},
 	},
 	view = {
 		position = "below",
@@ -54,6 +63,10 @@ I.setup = function(opts)
 	gist.config = I.config
 	cdp.config = vim.tbl_deep_extend("force", cdp.config, I.config.cdp or {})
 	cdp.config.view = vim.tbl_deep_extend("force", cdp.config.view or {}, I.config.view or {})
+	if cdp.config.browser_flags then
+		local user_flags = cdp.config.browser_flags
+		cdp.config.browser_flags = vim.tbl_deep_extend("force", {}, I.config.cdp.browser_flags or {}, user_flags)
+	end
 
 	local hl = vim.api.nvim_set_hl
 	hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
@@ -63,6 +76,25 @@ I.setup = function(opts)
 	hl(0, "P5CDPActiveTab", { bold = true, reverse = true })
 	hl(0, "P5CDPTab", {})
 	hl(0, "P5CDPDebugPaused", { fg = "#ff5555", bold = true })
+	hl(0, "P5CDPConnected", { fg = "#50fa7b", bold = true })
+	hl(0, "P5CDPDisconnected", { fg = "#ff5555", bold = true })
+	hl(0, "P5CDPClose", { fg = "#ff5555" })
+	hl(0, "P5CDPConsoleError", { fg = "#ff5555", bold = true })
+	hl(0, "P5CDPConsoleWarn", { fg = "#ffb86c" })
+	hl(0, "P5CDPConsoleInfo", { fg = "#8be9fd" })
+	hl(0, "P5CDPConsoleLog", { fg = "#6272a4" })
+	hl(0, "P5CDPNetwork2xx", { fg = "#50fa7b" })
+	hl(0, "P5CDPNetwork3xx", { fg = "#8be9fd" })
+	hl(0, "P5CDPNetwork4xx", { fg = "#ffb86c" })
+	hl(0, "P5CDPNetwork5xx", { fg = "#ff5555", bold = true })
+	hl(0, "P5CDPEvalSuccess", { fg = "#50fa7b" })
+	hl(0, "P5CDPEvalError", { fg = "#ff5555", bold = true })
+	hl(0, "P5CDPDebugCurrentLine", { bold = true, sp = "#f1fa8c", underline = true })
+	hl(0, "P5CDPDebugSign", { fg = "#f1fa8c", bold = true })
+	hl(0, "P5CDPPerfFPS", { fg = "#50fa7b", bold = true })
+	hl(0, "P5CDPPerfMem", { fg = "#8be9fd" })
+	hl(0, "P5CDPInfoSymbol", { fg = "#bd93f9" })
+	hl(0, "P5CDPInfoLabel", { fg = "#6272a4" })
 
 	local has_snacks, snacks = pcall(require, "snacks")
 	if has_snacks then

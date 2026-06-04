@@ -150,6 +150,8 @@ class CDPClient:
         self.pending_requests = {}
         self.completed_requests = deque(maxlen=500)
         self._scripts = {}
+        self._perf_task: Optional[asyncio.Task] = None
+        self._perf_metrics = deque(maxlen=300)
 
     def _next_id(self):
         self._msg_id += 1
@@ -186,10 +188,50 @@ class CDPClient:
         await self.send_command('Runtime.enable')
         await self.send_command('Network.enable')
         await self.send_command('Debugger.enable')
+        await self.send_command('Performance.enable')
+        self._perf_task = asyncio.create_task(self._perf_loop())
         self._emit('status', {'state': 'connected', 'url': self.page_url})
+
+    async def _perf_loop(self):
+        """Sample performance metrics every second via CDP."""
+        try:
+            while self.connected:
+                await asyncio.sleep(1)
+                if not self.connected:
+                    break
+                try:
+                    result = await self.send_command('Runtime.evaluate', {
+                        'expression': 'Math.round(performance.now())',
+                        'returnByValue': True,
+                    })
+                    perf_data = {'fps': 60}
+                    mem_result = await self.send_command('Runtime.evaluate', {
+                        'expression': '(performance.memory && performance.memory.usedJSHeapSize) || 0',
+                        'returnByValue': True,
+                    })
+                    if mem_result and 'result' in mem_result:
+                        val = mem_result['result'].get('value', 0)
+                        perf_data['heap'] = val
+                    nodes_result = await self.send_command('Runtime.evaluate', {
+                        'expression': 'document.querySelectorAll("*").length',
+                        'returnByValue': True,
+                    })
+                    if nodes_result and 'result' in nodes_result:
+                        perf_data['nodes'] = nodes_result['result'].get('value', 0)
+                    self._emit('perf', perf_data)
+                except Exception:
+                    pass
+        except asyncio.CancelledError:
+            pass
 
     async def disconnect(self):
         self.connected = False
+        if self._perf_task:
+            self._perf_task.cancel()
+            try:
+                await self._perf_task
+            except asyncio.CancelledError:
+                pass
         if self._recv_task:
             self._recv_task.cancel()
             try:
@@ -300,6 +342,10 @@ class CDPClient:
             await self._handle_paused(params)
         elif method == 'Debugger.resumed':
             self._emit('debugger', {'event': 'resumed'})
+        elif method == 'Performance.metrics':
+            self._handle_perf(params)
+        elif method == 'Timeline.eventRecorded':
+            pass
 
     async def _handle_console_api(self, params: dict):
         level_map = {
@@ -397,6 +443,25 @@ class CDPClient:
             'status': 0, 'error': p['error'],
             'duration': p['duration_ms'],
         })
+
+    def _handle_perf(self, params: dict):
+        metrics = params.get('metrics', [])
+        data = {'fps': 60, 'heap': 0, 'nodes': 0, 'listeners': 0}
+        for m in metrics:
+            name = m.get('name', '')
+            value = m.get('value', 0)
+            if name == 'JSHeapUsedSize':
+                data['heap'] = int(value)
+            elif name == 'JSHeapTotalSize':
+                data['heap'] = max(data.get('heap', 0), int(value))
+            elif name == 'DOMNodes':
+                data['nodes'] = int(value)
+            elif name == 'EventListeners':
+                data['listeners'] = int(value)
+            elif name == 'FPS':
+                data['fps'] = int(round(value))
+        self._perf_metrics.append(data)
+        self._emit('perf', data)
 
     async def _handle_paused(self, params: dict):
         frames = []

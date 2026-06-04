@@ -48,7 +48,6 @@ C.setup = function(opts)
 
 		local cwd = vim.fs.normalize(vim.fn.getcwd())
 		local config = core.read_workspace_config()
-		local major = config and config.major or 2
 
 		local steps = {
 			function(next_step)
@@ -86,7 +85,7 @@ function draw() {
 				next_step()
 			end,
 			function(next_step)
-				project.ensure_assets(cwd, major, function()
+				project.ensure_assets(cwd, function()
 					core.notify("Assets ready", "info")
 					libraries.generate_libs_js(cwd)
 					local updated_config = core.read_workspace_config()
@@ -183,7 +182,10 @@ function draw() {
 	end
 
 	handlers.console = function()
-		console.toggle()
+		vim.schedule(function()
+			core.notify("⚠ :P5 console is deprecated. Use :P5 cdp to open the CDP panel (Console tab).", "warn")
+		end)
+		cdp.toggle()
 	end
 
 	handlers.docs = function()
@@ -275,6 +277,9 @@ function draw() {
 			cdp.step_in()
 		elseif sub == "stepOut" then
 			cdp.step_out()
+		elseif sub == "perf" then
+			cdp.switch_tab(5)
+			cdp.toggle()
 		end
 	end
 
@@ -287,7 +292,7 @@ function draw() {
 			"Install library",
 			"Uninstall library",
 			server_status,
-			"Toggle console",
+			"Toggle CDP console",
 			"Open docs",
 			"Update libraries",
 			"Create gist",
@@ -301,7 +306,7 @@ function draw() {
 			["Uninstall library"] = function() handlers.uninstall({}) end,
 			["Start server"] = function() handlers.server({}) end,
 			["Stop server"] = function() handlers.server({}) end,
-			["Toggle console"] = function() handlers.console() end,
+			["Toggle CDP console"] = function() handlers.console() end,
 			["Open docs"] = function() handlers.docs() end,
 			["Update libraries"] = function() handlers.update({}) end,
 			["Create gist"] = function() handlers.gist({}) end,
@@ -357,7 +362,7 @@ function draw() {
 		elseif subcmd == "cdp" then
 			local sub = args[subcmd_pos + 1]
 			if not sub then
-				return { "connect", "disconnect", "status", "eval", "break", "continue", "step", "stepIn", "stepOut" }
+				return { "connect", "disconnect", "status", "eval", "break", "continue", "step", "stepIn", "stepOut", "perf" }
 			end
 		end
 		return {}

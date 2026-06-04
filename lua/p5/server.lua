@@ -196,6 +196,11 @@ S.start = function(port)
 							local chrome_args = { chrome_cmd }
 							if cdp_enabled then
 								table.insert(chrome_args, "--remote-debugging-port=9222")
+								local cdp_module = require("p5.cdp")
+								local flags = cdp_module.config.browser_flags or {}
+								for _, flag in ipairs(flags) do
+									table.insert(chrome_args, flag)
+								end
 							end
 							table.insert(chrome_args, url)
 							vim.fn.jobstart(chrome_args, {

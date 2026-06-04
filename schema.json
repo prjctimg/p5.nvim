@@ -10,11 +10,6 @@
       "type": "string",
       "examples": ["2.0.0", "1.9.0"]
     },
-    "major": {
-      "description": "p5.js major version",
-      "type": "integer",
-      "enum": [1, 2]
-    },
     "libs": {
       "description": "Installed contributor libraries with versions",
       "type": "object",
@@ -49,6 +44,6 @@
       "additionalProperties": false
     }
   },
-  "required": ["version", "major", "libs", "includes"],
+  "required": ["version", "libs", "includes"],
   "additionalProperties": false
 }

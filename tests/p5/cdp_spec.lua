@@ -19,6 +19,8 @@ describe("cdp", function()
       network = {},
       eval = {},
       debugger = { event = "resumed", callFrames = {}, reason = "" },
+      perf = { fps = {}, heap = 0, nodes = 0, listeners = 0, recording = true },
+      info = { symbols = {}, canvas_state = "" },
     }
     server.server_job = 1
     server.port = 9999
@@ -52,8 +54,8 @@ describe("cdp", function()
       assert.equals(1, cdp.state.active_tab)
     end)
 
-    it("ignores invalid tab index 5", function()
-      cdp.switch_tab(5)
+    it("ignores invalid tab index 7", function()
+      cdp.switch_tab(7)
       assert.equals(1, cdp.state.active_tab)
     end)
   end)
@@ -91,6 +93,13 @@ describe("cdp", function()
       assert.is_false(cdp.state.connected)
     end)
 
+    it("handles perf events", function()
+      cdp._on_event({ type = "perf", fps = 60, heap = 1048576, nodes = 42, listeners = 5 })
+      assert.equals(60, cdp.tab_data.perf.fps[1])
+      assert.equals(1048576, cdp.tab_data.perf.heap)
+      assert.equals(42, cdp.tab_data.perf.nodes)
+    end)
+
     it("caps console at 1000 entries", function()
       for i = 1, 1001 do
         cdp._on_event({ type = "console", message = tostring(i), level = "log", timestamp = "12:00:00", stack = {} })
@@ -107,23 +116,23 @@ describe("cdp", function()
   end)
 
   describe("_render_tab_bar", function()
-    it("highlights active tab with angle brackets", function()
+    it("highlights active tab with accent marker", function()
       cdp.state.active_tab = 2
       local bar = cdp._render_tab_bar()
-      assert.matches(">%[2:Network%]<", bar)
-      assert.not_matches(">%[1:Console%]<", bar)
+      assert.matches("▎2:Network", bar)
+      assert.not_matches("▎1:Console", bar)
     end)
 
-    it("shows disconnected when not connected", function()
+    it("shows connection indicator", function()
       cdp.state.connected = false
       local bar = cdp._render_tab_bar()
-      assert.matches("disconnected", bar)
+      assert.matches("●", bar)
     end)
 
-    it("hides disconnected status when connected", function()
+    it("shows connection indicator when connected", function()
       cdp.state.connected = true
       local bar = cdp._render_tab_bar()
-      assert.not_matches("disconnected", bar)
+      assert.matches("●", bar)
     end)
   end)
 
@@ -226,6 +235,18 @@ describe("cdp", function()
       local full = table.concat(content, " ")
       assert.matches("PAUSED", full)
     end)
+
+    it("returns perf content for tab 5", function()
+      cdp.state.active_tab = 5
+      local content = cdp._render_tab_content()
+      assert.is_true(#content > 0)
+    end)
+
+    it("returns info content for tab 6", function()
+      cdp.state.active_tab = 6
+      local content = cdp._render_tab_content()
+      assert.is_true(#content > 0)
+    end)
   end)
 
   describe("set_breakpoint", function()
@@ -237,8 +258,10 @@ describe("cdp", function()
   end)
 
   describe("config.enabled gating", function()
-    it("open does nothing when disabled", function()
+    it("open does nothing when disabled and server not running", function()
       cdp.config.enabled = false
+      server.server_job = nil
+      server.port = nil
       cdp.open()
       assert.is_nil(cdp.state.buf)
     end)

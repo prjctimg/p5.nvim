@@ -40,7 +40,7 @@ end
 local function setup_sketchspace(files)
 	local dir = vim.fn.tempname()
 	vim.fn.mkdir(dir, "p")
-	local config = { version = "2.0.0", major = 2, libs = {}, includes = files or { "sketch.js" } }
+	local config = { version = "2.0.0", libs = {}, includes = files or { "sketch.js" } }
 	vim.fn.writefile(vim.split(vim.fn.json_encode(config), "\n"), dir .. "/p5.json")
 	return dir
 end

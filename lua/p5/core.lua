@@ -83,6 +83,10 @@ C.cache_path = function(filename)
 	return dir .. "/" .. filename
 end
 
+C.cached_p5_version_path = function()
+	return C.cache_path("p5_version")
+end
+
 -- Read recent sketchspaces from cache
 C.read_ss = function()
 	local cache_file = C.cache_path("recent_sketchspaces.json")
@@ -255,7 +259,7 @@ C.fetch = function(url, dest, callback, options)
 	return true
 end
 
--- Fetch latest p5.js version from npm registry
+-- Fetch latest p5.js version from npm registry, with local cache fallback
 C.fetch_latest_p5_version = function(callback)
 	local url = "https://registry.npmjs.org/p5/latest"
 	local tmp = fn.tempname()
@@ -264,25 +268,31 @@ C.fetch_latest_p5_version = function(callback)
 			local data, _ = C.read_json(tmp)
 			pcall(fn.delete, tmp)
 			if data and data.version then
+				C.write_json(C.cached_p5_version_path(), data.version)
 				if callback then callback(data.version) end
 			else
 				if callback then callback(nil) end
 			end
 		else
 			pcall(fn.delete, tmp)
-			if callback then callback(nil) end
+			local cached, _ = C.read_json(C.cached_p5_version_path())
+			if callback then callback(cached) end
 		end
 	end, { cache = false })
 end
 
+C.parse_major = function(version)
+	return tonumber(version and version:match("^(%d+)")) or 2
+end
+
 -- Get p5 version (from override, project config, or fallback default)
-C.p5_version = function(major, override_version)
+C.p5_version = function(override_version)
 	if override_version then return override_version end
 	local config = C.read_workspace_config()
 	if config and config.version then
 		return config.version
 	end
-	return major == 2 and "2.0.5" or "1.11.3"
+	return "2.3.0"
 end
 
 -- Add recent sketchspaces

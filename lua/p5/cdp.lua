@@ -6,10 +6,12 @@ local notify = core.notify
 local set_opt = vim.api.nvim_set_option_value
 local is_win = vim.api.nvim_win_is_valid
 local is_buf = vim.api.nvim_buf_is_valid
+local ns = { debug = vim.api.nvim_create_namespace("p5-cdp-debug") }
 
 C.config = {
 	enabled = false,
 	remote_debugging_port = 9222,
+	browser_flags = {},
 	view = { position = "below", height = 10 },
 }
 
@@ -21,6 +23,7 @@ C.state = {
 	port = nil,
 	connected = false,
 	page_url = "",
+	console_filter = "all",
 }
 
 C.tab_data = {
@@ -28,14 +31,26 @@ C.tab_data = {
 	network = {},
 	eval = {},
 	debugger = { event = "resumed", callFrames = {}, reason = "" },
+	perf = {
+		fps = {},
+		heap = 0,
+		nodes = 0,
+		listeners = 0,
+		recording = true,
+	},
+	info = { symbols = {}, canvas_state = "" },
 }
 
 local tabs = {
 	{ key = 1, name = "Console", data_key = "console" },
 	{ key = 2, name = "Network", data_key = "network" },
-	{ key = 3, name = "Evaluate", data_key = "eval" },
-	{ key = 4, name = "Debugger", data_key = "debugger" },
+	{ key = 3, name = "Eval", data_key = "eval" },
+	{ key = 4, name = "Debug", data_key = "debugger" },
+	{ key = 5, name = "Perf", data_key = "perf" },
+	{ key = 6, name = "Info", data_key = "info" },
 }
+
+local tab_accents = { "#8be9fd", "#6272a4", "#f1fa8c", "#ff5555", "#50fa7b", "#bd93f9" }
 
 local function launch_browser()
 	local chrome_candidates = { "chromium", "chromium-browser", "google-chrome", "chrome" }
@@ -51,6 +66,10 @@ local function launch_browser()
 	local port = server.port or C.config.remote_debugging_port
 	local url = server.port and string.format("http://localhost:%d", server.port) or nil
 	local args = { chrome_cmd, "--remote-debugging-port=" .. C.config.remote_debugging_port }
+	local flags = C.config.browser_flags or {}
+	for _, flag in ipairs(flags) do
+		table.insert(args, flag)
+	end
 	if url then table.insert(args, url) end
 	vim.fn.jobstart(args, { detach = true })
 	notify("CDP: launched " .. chrome_cmd .. " with remote debugging on port " .. C.config.remote_debugging_port, "info")
@@ -264,6 +283,7 @@ end
 C.switch_tab = function(n)
 	if n < 1 or n > #tabs then return end
 	C.state.active_tab = n
+	if n == 6 then C._fetch_lsp_symbols() end
 	C.render_all()
 end
 
@@ -337,53 +357,96 @@ end
 
 C._set_keymaps = function(buf)
 	local km = vim.keymap.set
+	local tab = function() return C.state.active_tab end
 	km("n", "1", function() C.switch_tab(1) end, { buffer = buf, desc = "Console tab" })
 	km("n", "2", function() C.switch_tab(2) end, { buffer = buf, desc = "Network tab" })
-	km("n", "3", function() C.switch_tab(3) end, { buffer = buf, desc = "Evaluate tab" })
-	km("n", "4", function() C.switch_tab(4) end, { buffer = buf, desc = "Debugger tab" })
+	km("n", "3", function() C.switch_tab(3) end, { buffer = buf, desc = "Eval tab" })
+	km("n", "4", function() C.switch_tab(4) end, { buffer = buf, desc = "Debug tab" })
+	km("n", "5", function() C.switch_tab(5) end, { buffer = buf, desc = "Perf tab" })
+	km("n", "6", function() C.switch_tab(6) end, { buffer = buf, desc = "Info tab" })
 	km("n", "q", C.close, { buffer = buf, desc = "Close CDP" })
 	km("n", "<Esc>", C.close, { buffer = buf, desc = "Close CDP" })
-	km("n", "r", function() C.render_all() end, { buffer = buf, desc = "Refresh tab" })
+	km("n", "r", function()
+		local t = tab()
+		if t == 5 then
+			C.tab_data.perf.recording = not C.tab_data.perf.recording
+		elseif t == 6 then
+			C._fetch_lsp_symbols()
+		end
+		C.render_all()
+	end, { buffer = buf, desc = "Refresh / toggle recording" })
 	km("n", "c", function()
-		local k = C.state.active_tab
-		local keys = { "console", "network", "eval", "debugger" }
+		local k = tab()
+		local keys = { "console", "network", "eval", "debugger", "perf", "info" }
 		local dk = keys[k]
 		if dk == "debugger" then
 			C.tab_data.debugger = { event = "resumed", callFrames = {}, reason = "" }
 		elseif dk == "eval" then
 			C.tab_data.eval = {}
+		elseif dk == "perf" then
+			C.tab_data.perf = { fps = {}, heap = 0, nodes = 0, listeners = 0, recording = true }
+		elseif dk == "info" then
+			-- no-op, info is ephemeral
 		else
 			C.tab_data[dk] = {}
 		end
 		C.render_all()
 	end, { buffer = buf, desc = "Clear current tab" })
 	km("n", "<CR>", function()
-		if C.state.active_tab == 3 then C.eval() end
-		if C.state.active_tab == 4 then
+		local t = tab()
+		if t == 3 then C.eval() end
+		if t == 4 then
 			vim.ui.input({ prompt = "Breakpoint (file.js:line): " }, function(input)
 				if input then C.set_breakpoint(input) end
 			end)
 		end
-	end, { buffer = buf, desc = "Action" })
-	km("n", "b", function()
-		if C.state.active_tab == 4 then
-			C.set_breakpoint()
+		if t == 6 then
+			local s = C.tab_data.info.symbols[C.state.info_cursor or 1]
+			if s then
+				vim.api.nvim_win_set_cursor(0, { s.lnum, 0 })
+				vim.cmd("normal! zz")
+			end
 		end
+	end, { buffer = buf, desc = "Action" })
+	km("n", "f", function()
+		local t = tab()
+		if t == 1 then
+			vim.ui.input({ prompt = "Filter (all/error/warn/info/log): " }, function(input)
+				if input and input ~= "" then
+					C.state.console_filter = input
+					C.render_all()
+				end
+			end)
+		end
+	end, { buffer = buf, desc = "Filter console level" })
+	km("n", "/", function()
+		local t = tab()
+		if t == 1 or t == 2 then
+			vim.ui.input({ prompt = "Search: " }, function(input)
+				if input and input ~= "" then
+					C.state.search = input
+					C.render_all()
+				end
+			end)
+		end
+	end, { buffer = buf, desc = "Search" })
+	km("n", "b", function()
+		if tab() == 4 then C.set_breakpoint() end
 	end, { buffer = buf, desc = "Set breakpoint" })
 	km("n", "s", function()
-		if C.state.active_tab == 4 then C.step() end
+		if tab() == 4 then C.step() end
 	end, { buffer = buf, desc = "Step over" })
 	km("n", "i", function()
-		if C.state.active_tab == 4 then C.step_in() end
+		if tab() == 4 then C.step_in() end
 	end, { buffer = buf, desc = "Step into" })
 	km("n", "o", function()
-		if C.state.active_tab == 4 then C.step_out() end
+		if tab() == 4 then C.step_out() end
 	end, { buffer = buf, desc = "Step out" })
 	km("n", "x", function()
-		if C.state.active_tab == 4 then C.continue() end
+		if tab() == 4 then C.continue() end
 	end, { buffer = buf, desc = "Continue" })
 	km("n", "D", function()
-		if C.state.active_tab == 2 then
+		if tab() == 2 then
 			C.tab_data.network = {}
 			C.render_all()
 		end
@@ -398,6 +461,26 @@ C._set_keymaps = function(buf)
 			vim.cmd("normal! G")
 		end)
 	end, { buffer = buf, desc = "Bottom" })
+	km("n", "K", function()
+		if tab() == 6 then
+			local s = C.tab_data.info.symbols
+			C.state.info_cursor = C.state.info_cursor or 1
+			if #s > 0 then
+				C.state.info_cursor = math.max(1, C.state.info_cursor - 1)
+				C.render_all()
+			end
+		end
+	end, { buffer = buf, desc = "Previous symbol" })
+	km("n", "J", function()
+		if tab() == 6 then
+			local s = C.tab_data.info.symbols
+			C.state.info_cursor = C.state.info_cursor or 1
+			if #s > 0 then
+				C.state.info_cursor = math.min(#s, C.state.info_cursor + 1)
+				C.render_all()
+			end
+		end
+	end, { buffer = buf, desc = "Next symbol" })
 end
 
 C._start_sse_job = function()
@@ -439,7 +522,23 @@ C._on_event = function(data)
 		if C.state.active_tab == 2 then C.render_all() end
 	elseif t == "debugger" then
 		C.tab_data.debugger = data
+		if data.event == "paused" then
+			local frames = data.callFrames or {}
+			if #frames > 0 then C._highlight_paused(frames[1].url, frames[1].line) end
+		elseif data.event == "resumed" then
+			C._clear_debug_highlights()
+		end
 		if C.state.active_tab == 4 then C.render_all() end
+	elseif t == "perf" then
+		local pd = C.tab_data.perf
+		if data.fps then
+			table.insert(pd.fps, data.fps)
+			if #pd.fps > 100 then table.remove(pd.fps, 1) end
+		end
+		if data.heap then pd.heap = data.heap end
+		if data.nodes then pd.nodes = data.nodes end
+		if data.listeners then pd.listeners = data.listeners end
+		if C.state.active_tab == 5 then C.render_all() end
 	elseif t == "status" then
 		C.state.connected = (data.state == "connected")
 		C.state.page_url = data.url or ""
@@ -447,7 +546,73 @@ C._on_event = function(data)
 			C.render_all()
 		end
 	elseif t == "hb" then
-		-- heartbeat — connection is alive
+		-- heartbeat
+	end
+end
+
+C._highlight_paused = function(url, line)
+	C._clear_debug_highlights()
+	if not url or not line then return end
+	local filename = vim.fn.fnamemodify(url, ":t")
+	local project_root = vim.fn.getcwd()
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		local name = vim.api.nvim_buf_get_name(buf)
+		if vim.fn.fnamemodify(name, ":t") == filename and name:sub(1, #project_root) == project_root then
+			vim.api.nvim_buf_set_extmark(buf, ns.debug, line - 1, 0, {
+				sign_text = "●",
+				sign_hl_group = "P5CDPDebugSign",
+				hl_group = "P5CDPDebugCurrentLine",
+				priority = 200,
+			})
+			vim.api.nvim_set_current_buf(buf)
+			local ok, win = pcall(vim.api.nvim_buf_get_var, buf, "p5_sketch_win")
+			if ok and win and is_win(win) then
+				vim.api.nvim_set_current_win(win)
+			end
+			pcall(vim.api.nvim_win_set_cursor, 0, { line, 0 })
+			vim.cmd("normal! zz")
+			break
+		end
+	end
+end
+
+C._clear_debug_highlights = function()
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		pcall(vim.api.nvim_buf_clear_namespace, buf, ns.debug, 0, -1)
+	end
+end
+
+C._fetch_lsp_symbols = function()
+	C.tab_data.info.symbols = {}
+	local bufnr = vim.api.nvim_get_current_buf()
+	if not bufnr then return end
+	local clients = vim.lsp.get_clients({ bufnr = bufnr })
+	if #clients == 0 then return end
+	local ok, result = pcall(vim.lsp.buf_request_sync, bufnr, "textDocument/documentSymbol", {
+		textDocument = { uri = vim.uri_from_bufnr(bufnr) },
+	}, 1000)
+	if not ok or not result then return end
+	for _, res in ipairs(result) do
+		if res.result then
+			local function flatten(symbols, depth)
+				depth = depth or 0
+				for _, sym in ipairs(symbols) do
+					local kind_name = ({ "File", "Module", "Namespace", "Package", "Class", "Method", "Property", "Field", "Constructor", "Enum", "Interface", "Function", "Variable", "Constant", "String", "Number", "Boolean", "Array", "Object", "Key", "Null", "EnumMember", "Struct", "Event", "Operator", "TypeParameter" })[sym.kind] or "Unknown"
+					local icon = ({ Method = "ƒ", Function = "ƒ", Variable = "◆", Constant = "◇", Class = "○", Property = "●", Field = "●" })[kind_name] or "·"
+					table.insert(C.tab_data.info.symbols, {
+						name = sym.name,
+						kind = kind_name,
+						icon = icon,
+						depth = depth,
+						lnum = (sym.range or {}).start and sym.range.start.line + 1 or 0,
+					})
+					if sym.children then flatten(sym.children, depth + 1) end
+				end
+			end
+			if type(res.result) == "table" then
+				flatten(res.result)
+			end
+		end
 	end
 end
 
@@ -471,20 +636,26 @@ end
 
 C._render_tab_bar = function()
 	local parts = {}
-	table.insert(parts, " ")
 	for i, tab in ipairs(tabs) do
-		local label = string.format("[%d:%s]", tab.key, tab.name)
+		if i > 1 then table.insert(parts, "│") end
+		local accent = tab_accents[i]
+		local label = string.format("%s:%s", tab.key, tab.name)
 		if i == C.state.active_tab then
-			label = ">" .. label .. "<"
+			label = "▎" .. label
+		else
+			label = " " .. label
 		end
 		table.insert(parts, label)
-		table.insert(parts, " ")
 	end
-	table.insert(parts, "[X]")
-	if not C.state.connected then
-		table.insert(parts, " (disconnected)")
+	table.insert(parts, "  [X]")
+	local dot
+	if C.state.connected then
+		dot = { "●", "P5CDPConnected" }
+	else
+		dot = { "●", "P5CDPDisconnected" }
 	end
-	return table.concat(parts, "")
+	table.insert(parts, "  " .. dot[1])
+	return table.concat(parts, " ")
 end
 
 C._apply_highlights = function()
@@ -493,21 +664,26 @@ C._apply_highlights = function()
 	vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
 	local tab_line = vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] or ""
 	for i, tab in ipairs(tabs) do
-		local pattern = string.format(">%d:%s<", tab.key, tab.name)
+		local pattern = string.format("▎%d:%s", tab.key, tab.name)
 		local start_idx = tab_line:find(pattern, 1, true)
-		if start_idx and i == C.state.active_tab then
+		if start_idx then
 			vim.api.nvim_buf_add_highlight(buf, -1, "P5CDPActiveTab", 0, start_idx - 1, start_idx - 1 + #pattern)
-		elseif start_idx then
-			local raw = string.format("[%d:%s]", tab.key, tab.name)
+		else
+			local raw = string.format(" %d:%s", tab.key, tab.name)
 			local raw_start = tab_line:find(raw, 1, true)
 			if raw_start then
 				vim.api.nvim_buf_add_highlight(buf, -1, "P5CDPTab", 0, raw_start - 1, raw_start - 1 + #raw)
 			end
 		end
 	end
-	local disconnected_start = tab_line:find("(disconnected)", 1, true)
-	if disconnected_start then
-		vim.api.nvim_buf_add_highlight(buf, -1, "P5CDPDebugPaused", 0, disconnected_start - 1, disconnected_start - 1 + 13)
+	local close_start = tab_line:find("[X]", 1, true)
+	if close_start then
+		vim.api.nvim_buf_add_highlight(buf, -1, "P5CDPClose", 0, close_start - 1, close_start + 2)
+	end
+	local connected_dot = tab_line:find("●", 1, true)
+	if connected_dot then
+		local hl = C.state.connected and "P5CDPConnected" or "P5CDPDisconnected"
+		vim.api.nvim_buf_add_highlight(buf, -1, hl, 0, connected_dot - 1, connected_dot)
 	end
 end
 
@@ -517,19 +693,25 @@ C._render_tab_content = function()
 	if k == 2 then return C._render_network() end
 	if k == 3 then return C._render_eval() end
 	if k == 4 then return C._render_debugger() end
+	if k == 5 then return C._render_performance() end
+	if k == 6 then return C._render_info() end
 	return { "" }
 end
 
 C._render_console = function()
 	local data = C.tab_data.console
+	local filter = C.state.console_filter or "all"
+	local search = C.state.search or ""
 	if #data == 0 then
 		return { " No console output yet" }
 	end
 	local lines = {}
 	for _, entry in ipairs(data) do
+		if filter ~= "all" and entry.level ~= filter then goto continue end
 		local ts = entry.timestamp or ""
 		local lvl = (entry.level or "log"):upper():sub(1, 5)
 		local msg = entry.message or ""
+		if search ~= "" and not msg:lower():find(search:lower(), 1, true) then goto continue end
 		local line = string.format(" [%s] %s %s", ts, lvl, msg)
 		table.insert(lines, line)
 		if entry.stack and #entry.stack > 0 then
@@ -538,6 +720,10 @@ C._render_console = function()
 				table.insert(lines, floc)
 			end
 		end
+		::continue::
+	end
+	if #lines == 0 then
+		table.insert(lines, " (no matches for filter \"" .. filter .. "\")")
 	end
 	return lines
 end
@@ -609,7 +795,7 @@ C._render_debugger = function()
 	local d = C.tab_data.debugger
 	local lines = {}
 	if d.event == "paused" then
-		table.insert(lines, " Status: PAUSED")
+		table.insert(lines, " Status: ⏸ PAUSED")
 		if d.reason and d.reason ~= "" then
 			table.insert(lines, string.format(" Reason: %s", d.reason))
 		end
@@ -624,7 +810,7 @@ C._render_debugger = function()
 			table.insert(lines, "   (no frames)")
 		end
 	else
-		table.insert(lines, " Status: Running")
+		table.insert(lines, " Status: ▶ Running")
 	end
 	table.insert(lines, "")
 	table.insert(lines, " Keymaps:")
@@ -634,6 +820,91 @@ C._render_debugger = function()
 	table.insert(lines, "   o     step out")
 	table.insert(lines, "   x     continue")
 	table.insert(lines, "   c     clear tab")
+	return lines
+end
+
+C._render_performance = function()
+	local pd = C.tab_data.perf
+	local lines = {}
+	local rec = pd.recording
+	table.insert(lines, string.format(" Recording: %s", rec and "● ON" or "○ OFF"))
+	table.insert(lines, string.rep("─", 30))
+	local fps = pd.fps
+	local avg1 = 0
+	local avg10 = 0
+	local latest = fps[#fps] or 0
+	if #fps > 0 then
+		local sum1, sum10 = 0, 0
+		local n1 = math.min(#fps, math.floor(1 / (1 / 60)))
+		local n10 = math.min(#fps, math.floor(10 / (1 / 60)))
+		for i = #fps - n1 + 1, #fps do if i >= 1 then sum1 = sum1 + fps[i] end end
+		for i = #fps - n10 + 1, #fps do if i >= 1 then sum10 = sum10 + fps[i] end end
+		avg1 = n1 > 0 and math.floor(sum1 / n1) or 0
+		avg10 = n10 > 0 and math.floor(sum10 / n10) or 0
+	end
+	table.insert(lines, string.format(" FPS:      %d (1s: %d | 10s: %d)", latest, avg1, avg10))
+	local spark = {}
+	local bars = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
+	local window = 20
+	local recent = {}
+	for i = math.max(1, #fps - window + 1), #fps do
+		table.insert(recent, fps[i])
+	end
+	local max_fps = 60
+	for _, v in ipairs(recent) do
+		local idx = math.min(math.floor((v / max_fps) * #bars) + 1, #bars)
+		table.insert(spark, bars[idx])
+	end
+	if #spark > 0 then
+		table.insert(lines, " FPS trend: " .. table.concat(spark, ""))
+	end
+	table.insert(lines, "")
+	table.insert(lines, string.format(" JS Heap:  %.1f MB", pd.heap / 1048576))
+	table.insert(lines, string.format(" DOM nodes: %d", pd.nodes))
+	table.insert(lines, string.format(" Listeners: %d", pd.listeners))
+	table.insert(lines, "")
+	table.insert(lines, " Keymaps:")
+	table.insert(lines, "   r     toggle recording")
+	table.insert(lines, "   c     clear metrics")
+	return lines
+end
+
+C._render_info = function()
+	local info = C.tab_data.info
+	local lines = {}
+	table.insert(lines, " Project")
+	table.insert(lines, string.rep(" ─", 15))
+	local pconfig = core.read_workspace_config()
+	if pconfig then
+		table.insert(lines, string.format("   p5.js v%s", pconfig.version or "?"))
+		local libs = pconfig.libs and vim.tbl_keys(pconfig.libs) or {}
+		if #libs > 0 then
+			table.insert(lines, "   Libraries: " .. table.concat(libs, ", "))
+		end
+	end
+	table.insert(lines, "")
+	table.insert(lines, " Canvas")
+	table.insert(lines, string.rep(" ─", 15))
+	table.insert(lines, "   " .. (info.canvas_state ~= "" and info.canvas_state or "(evaluate to populate)"))
+	table.insert(lines, "")
+	table.insert(lines, " Symbols (" .. vim.fn.expand("%:t") .. ")")
+	table.insert(lines, string.rep(" ─", 15))
+	local symbols = info.symbols
+	if #symbols == 0 then
+		table.insert(lines, "   (no LSP data — press r to refresh)")
+	else
+		local cursor = C.state.info_cursor or 1
+		for i, sym in ipairs(symbols) do
+			local indent = string.rep("  ", sym.depth)
+			local marker = (i == cursor) and "▎" or " "
+			table.insert(lines, string.format(" %s%s%s %s", marker, indent, sym.icon, sym.name))
+		end
+	end
+	table.insert(lines, "")
+	table.insert(lines, " Keymaps:")
+	table.insert(lines, "   <CR>  jump to symbol")
+	table.insert(lines, "   K/J   navigate symbols")
+	table.insert(lines, "   r     refresh")
 	return lines
 end
 

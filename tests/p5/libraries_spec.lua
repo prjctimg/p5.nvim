@@ -23,7 +23,7 @@ describe("load", function()
 
   it("includes contrib libs from config", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = { ml5 = "latest" }, includes = { "sketch.js" },
+      version = "2.0.0", libs = { ml5 = "latest" }, includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
     local libs = L.load()
     assert.is_true(vim.tbl_contains(libs, "ml5"))
@@ -108,7 +108,7 @@ describe("add_library", function()
 
   it("adds library to existing config", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = {}, includes = { "sketch.js" },
+      version = "2.0.0", libs = {}, includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
     L.add_library("p5play")
     local config = C.read_workspace_config()
@@ -117,7 +117,7 @@ describe("add_library", function()
 
   it("does not duplicate existing library", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = { ml5 = "latest" }, includes = { "sketch.js" },
+      version = "2.0.0", libs = { ml5 = "latest" }, includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
     L.add_library("ml5")
     local config = C.read_workspace_config()

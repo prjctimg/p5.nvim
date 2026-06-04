@@ -23,7 +23,7 @@ describe("is_p5_project", function()
 
   it("returns true for a valid p5.json", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = {}, includes = { "sketch.js" },
+      version = "2.3.0", libs = {}, includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
     local ok, _, info = P.is_p5_project(tmp)
     assert.is_true(ok)
@@ -33,7 +33,7 @@ describe("is_p5_project", function()
 
   it("rejects p5.json with non-array includes", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = {}, includes = "sketch.js",
+      version = "2.3.0", libs = {}, includes = "sketch.js",
     }), "\n"), tmp .. "/p5.json")
     local ok, msg = P.is_p5_project(tmp)
     assert.is_false(ok)
@@ -42,7 +42,7 @@ describe("is_p5_project", function()
 
   it("rejects p5.json with non-string include items", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = {}, includes = { 42 },
+      version = "2.3.0", libs = {}, includes = { 42 },
     }), "\n"), tmp .. "/p5.json")
     local ok, msg = P.is_p5_project(tmp)
     assert.is_false(ok)
@@ -51,7 +51,7 @@ describe("is_p5_project", function()
 
   it("rejects p5.json with non-object libs", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = "ml5", includes = { "sketch.js" },
+      version = "2.3.0", libs = "ml5", includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
     local ok, msg = P.is_p5_project(tmp)
     assert.is_false(ok)
@@ -60,7 +60,7 @@ describe("is_p5_project", function()
 
   it("rejects p5.json with non-string lib keys", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = { [42] = "latest" }, includes = { "sketch.js" },
+      version = "2.3.0", libs = { [42] = "latest" }, includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
     local ok, msg = P.is_p5_project(tmp)
     assert.is_false(ok)
@@ -69,7 +69,7 @@ describe("is_p5_project", function()
 
   it("rejects p5.json with non-string lib values", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = { ml5 = true }, includes = { "sketch.js" },
+      version = "2.3.0", libs = { ml5 = true }, includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
     local ok, msg = P.is_p5_project(tmp)
     assert.is_false(ok)
@@ -78,7 +78,7 @@ describe("is_p5_project", function()
 
   it("detects existing sketch.js and index.html", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = {}, includes = { "sketch.js" },
+      version = "2.3.0", libs = {}, includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
     vim.fn.writefile({ "// test" }, tmp .. "/sketch.js")
     vim.fn.writefile({ "<html></html>" }, tmp .. "/index.html")
@@ -90,7 +90,7 @@ describe("is_p5_project", function()
 
   it("defaults includes to sketch.js when absent", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = {},
+      version = "2.3.0", libs = {},
     }), "\n"), tmp .. "/p5.json")
     local ok, _, info = P.is_p5_project(tmp)
     assert.is_true(ok)
@@ -99,7 +99,7 @@ describe("is_p5_project", function()
 
   it("uses custom includes from config", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
-      version = "2.0.0", major = 2, libs = {}, includes = { "main.js", "style.css" },
+      version = "2.3.0", libs = {}, includes = { "main.js", "style.css" },
     }), "\n"), tmp .. "/p5.json")
     local ok, _, info = P.is_p5_project(tmp)
     assert.is_true(ok)
@@ -135,15 +135,14 @@ describe("create_project_continue", function()
         assert.is_true(C.is_file(tmp .. "/testproj/tsconfig.json"))
         assert.is_true(C.is_file(tmp .. "/testproj/p5.json"))
         local config, _ = C.read_json(tmp .. "/testproj/p5.json")
-        assert.are.same(2, config.major)
         assert.are.same({}, config.libs)
       end
     end
     local orig_create_project_continue = P.create_project_continue
-    P.create_project_continue = function(path, major)
+    P.create_project_continue = function(path, version)
       vim.fn.mkdir(path, "p")
       vim.fn.writefile(vim.split(vim.fn.json_encode({
-        version = "2.0.0", major = 2, libs = {}, includes = { "sketch.js" },
+        version = "2.3.0", libs = {}, includes = { "sketch.js" },
       }), "\n"), path .. "/p5.json")
       vim.fn.writefile({ "<html></html>" }, path .. "/index.html")
       vim.fn.writefile({ "// sketch" }, path .. "/sketch.js")
@@ -151,7 +150,7 @@ describe("create_project_continue", function()
       vim.fn.writefile({ "{}" }, path .. "/tsconfig.json")
       check()
     end
-    P.create_project_continue(tmp .. "/testproj", 2)
+    P.create_project_continue(tmp .. "/testproj", "2.3.0")
     P.create_project_continue = orig_create_project_continue
     if not done then check() end
   end)
@@ -174,7 +173,7 @@ describe("ensure_assets", function()
   it("calls callback immediately when p5.js already exists", function()
     vim.fn.writefile({ "// p5 content" }, tmp .. "/assets/libs/p5.js")
     local called = false
-    P.ensure_assets(tmp, 2, function()
+    P.ensure_assets(tmp, function()
       called = true
     end)
     assert.is_true(called)
