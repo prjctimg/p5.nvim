@@ -150,12 +150,10 @@ else
 				function(next_step)
 					vim.system({ "gh", "api", "/gists/" .. gist_id, "--jq", ".description" }, nil, function(out)
 						local title = out.code == 0 and vim.trim(out.stdout) or desc
-						G.get_comment(gist_id, function(cm)
-							local description = cm and cm.body or ""
+						G.get_comment(gist_id, function(_)
 							proj_config.gist = {
 								url = gist_url,
 								title = title,
-								description = description,
 							}
 							core.write_workspace_config(proj_config, proj_dir)
 
@@ -196,12 +194,11 @@ else
 		end
 
 		local g = config.gist
-		local url, title, description
+		local url, title
 
 		if type(g) == "table" then
 			url = g.url or g.id
 			title = g.title
-			description = g.description
 		else
 			url = g
 		end
@@ -224,7 +221,6 @@ else
 			id = id,
 			url = url,
 			title = title or "",
-			description = description or "",
 		}
 	end
 
@@ -240,8 +236,8 @@ else
 			return
 		end
 
-		local remote_title, remote_desc, remote_files, cm
-		local diffs, auto_push, auto_pull, use_remote, local_title, local_desc
+		local remote_title, remote_files
+		local diffs, auto_push, auto_pull, use_remote, local_title
 		local gist_obj, sync_errors, sync_temp_dir
 
 		local steps = {
@@ -262,22 +258,11 @@ else
 				end)
 			end,
 			function(next_step)
-				G.get_comment(gist_info.id, function(c)
-					cm = c
-					remote_desc = cm and cm.body or ""
-					next_step()
-				end)
-			end,
-			function(next_step)
 				local_title = gist_info.title or ""
-				local_desc = gist_info.description or ""
 
 				diffs = {}
 				if local_title ~= remote_title then
 					table.insert(diffs, { type = "title", local_val = local_title, remote_val = remote_title })
-				end
-				if local_desc ~= remote_desc then
-					table.insert(diffs, { type = "desc", local_val = local_desc, remote_val = remote_desc })
 				end
 				for _, fn in ipairs(G.includes(cfg)) do
 					if fn ~= "p5.json" then
@@ -310,8 +295,7 @@ else
 						if d.has_local then table.insert(auto_push, d.name) end
 						if d.has_remote then table.insert(auto_pull, d.name) end
 					else
-						table.insert(summary_parts, d.type == "title" and "title" or d.type == "desc" and "description"
-							or d.name)
+						table.insert(summary_parts, d.type == "title" and "title" or d.name)
 					end
 				end
 				local summary = table.concat(summary_parts, ", ")
@@ -333,7 +317,6 @@ else
 				gist_obj = {
 					url = gist_info.url,
 					title = use_remote and remote_title or local_title,
-					description = use_remote and remote_desc or local_desc,
 				}
 				cfg.gist = gist_obj
 				core.write_workspace_config(cfg, project_dir)
@@ -392,22 +375,12 @@ else
 				end
 			end,
 			function(next_step)
-				cm = cm or {}
-				local function on_done()
-					if #sync_errors > 0 then
-						core.notify("Sync completed with errors: " .. table.concat(sync_errors, ", "), "warn")
-					else
-						core.notify("Gist synced successfully", "ok")
-					end
-					next_step()
-				end
-				if cm.id then
-					G.update_comment(gist_info.id, cm.id, gist_obj.description, on_done)
-				elseif gist_obj.description ~= "" then
-					G.create_comment(gist_info.id, gist_obj.description, on_done)
+				if #sync_errors > 0 then
+					core.notify("Sync completed with errors: " .. table.concat(sync_errors, ", "), "warn")
 				else
-					on_done()
+					core.notify("Gist synced successfully", "ok")
 				end
+				next_step()
 			end,
 		}
 
@@ -461,7 +434,6 @@ else
 						p5_data.gist = {
 							url = owner .. "/" .. id,
 							title = gist_title or "",
-							description = desc,
 						}
 						core.write_json(p5_path, p5_data)
 					end
@@ -620,53 +592,58 @@ else
 						end)
 					end)
 				end)
-			elseif choice == "First comment (sketch details)" then
-				G.get_comment(gist_info.id, function(comment)
-					local body = comment and comment.body or ""
-					local comment_id = comment and comment.id or nil
+		elseif choice == "First comment (sketch details)" then
+			G.get_comment(gist_info.id, function(comment)
+				local body = comment and comment.body or ""
+				local comment_id = comment and comment.id or nil
+				local is_new = not comment_id
 
-					vim.schedule(function()
-					local buf = vim.api.nvim_create_buf(false, true)
-					vim.api.nvim_buf_set_option(buf, "buftype", "acwrite")
-					vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-					vim.api.nvim_buf_set_name(buf, "gist-comment.md")
+				vim.schedule(function()
+				local buf = vim.api.nvim_create_buf(false, true)
+				vim.api.nvim_buf_set_option(buf, "buftype", "acwrite")
+				vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
+				vim.api.nvim_buf_set_name(buf, "gist-comment.md")
 
-					local lines = vim.split(body, "\n")
-					vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+				local lines = vim.split(body, "\n")
+				vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
 		vim.api.nvim_create_autocmd("BufWriteCmd", {
-					buffer = buf,
-					callback = function()
-						local new_body = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1), "\n")
-						vim.api.nvim_buf_set_option(buf, "modified", false)
+				buffer = buf,
+				callback = function()
+					local new_body = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1), "\n")
+					vim.api.nvim_buf_set_option(buf, "modified", false)
+					local function do_save()
 						local function on_done(api_ok)
 							if api_ok then
-									local _, cfg = core.find_project_root()
-									if cfg then
-										local g = type(cfg.gist) == "table" and cfg.gist or { url = cfg.gist }
-										g.description = new_body
-										cfg.gist = g
-										core.write_workspace_config(cfg)
-									end
-									notify("Sketch details " .. (comment_id and "updated" or "created"), "ok")
-								else
-									notify("Failed to update sketch details", "warn")
-								end
-							end
-							if comment_id then
-								G.update_comment(gist_info.id, comment_id, new_body, on_done)
+								notify("Sketch details " .. (comment_id and "updated" or "created"), "ok")
 							else
-								G.create_comment(gist_info.id, new_body, on_done)
+								notify("Failed to update sketch details", "warn")
 							end
-						end,
-					})
+						end
+						if comment_id then
+							G.update_comment(gist_info.id, comment_id, new_body, on_done)
+						else
+							G.create_comment(gist_info.id, new_body, on_done)
+						end
+					end
+					if is_new then
+						vim.ui.select({ "Yes", "No" }, {
+							prompt = "No comment exists yet. Publish buffer contents as the first comment?",
+						}, function(choice)
+							if choice == "Yes" then do_save() else notify("Comment creation cancelled", "info") end
+						end)
+					else
+						do_save()
+					end
+				end,
+			})
 
-					vim.api.nvim_win_set_buf(0, buf)
-					vim.api.nvim_buf_set_option(buf, "modified", false)
-					notify("Edit the comment and :w to save", "info")
-					end)
+				vim.api.nvim_win_set_buf(0, buf)
+				vim.api.nvim_buf_set_option(buf, "modified", false)
+				notify("Edit the comment and :w to save", "info")
 				end)
-			end
+			end)
+		end
 		end)
 	end
 

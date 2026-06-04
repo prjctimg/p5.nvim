@@ -1070,6 +1070,7 @@ class HTTPServer:
         libs = config.get('libs', {})
         major = config.get('major', 2)
         version = config.get('version', '2.0.0' if major == 2 else '1.9.0')
+        title = config.get('gist', {}).get('title', 'p5.js Sketch')
         
         # Auto-create sketch.js if missing
         sketch_js_path = os.path.join(self.directory, 'sketch.js')
@@ -1101,7 +1102,7 @@ function draw() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>p5.js Sketch</title>
+  <title>{title}</title>
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 {chr(10).join(scripts)}
 </head>
@@ -1116,16 +1117,28 @@ function draw() {
     def inject_scripts(self, html_content: bytes) -> bytes:
         """Inject console and live reload scripts into HTML."""
         content = html_content.decode('utf-8', errors='ignore')
-        
+
+        # Inject title from p5.json gist.title
+        p5_json_path = os.path.join(self.directory, 'p5.json')
+        if os.path.isfile(p5_json_path):
+            try:
+                with open(p5_json_path, 'r') as f:
+                    config = json.load(f)
+                gist_title = config.get('gist', {}).get('title', '')
+                if gist_title:
+                    content = re.sub(r'<title>[^<]*</title>', f'<title>{gist_title}</title>', content, flags=re.IGNORECASE)
+            except Exception:
+                pass
+
         cs = "<script>" + INJECT_CONSOLE + "</script>"
         lr = "<script>" + INJECT_LIVERELOAD.replace("__LR_PORT__", str(self.live_reload_server.port)) + "</script>"
         scripts = cs + lr
-        
+
         if '</body>' in content.lower():
             content = re.sub(r'</body>', scripts + '</body>', content, flags=re.IGNORECASE)
         else:
             content += scripts
-        
+
         return content.encode('utf-8')
     
     async def start(self):

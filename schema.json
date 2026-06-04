@@ -43,10 +43,6 @@
         "title": {
           "description": "Gist title",
           "type": "string"
-        },
-        "description": {
-          "description": "Gist description (first comment)",
-          "type": "string"
         }
       },
       "required": ["url"],
