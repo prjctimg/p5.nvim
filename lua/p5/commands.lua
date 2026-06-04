@@ -1,14 +1,13 @@
-local C = {}
+local Cm = {}
 
 local core = require("p5.core")
 local project = require("p5.project")
 local server = require("p5.server")
 local libraries = require("p5.libraries")
-local console = require("p5.console")
 local gist = require("p5.gist")
 local cdp = require("p5.cdp")
 
-C.setup = function(opts)
+Cm.setup = function(opts)
 	local require_sketchspace = opts.require_sketchspace
 	local config = opts.config
 
@@ -101,12 +100,7 @@ function draw() {
 			end,
 		}
 
-		local function run(i)
-			if i <= #steps then
-				steps[i](function() run(i + 1) end)
-			end
-		end
-		run(1)
+		core.step_runner(steps)
 	end
 
 	handlers.install = function(args)
@@ -395,4 +389,4 @@ function draw() {
 	})
 end
 
-return C
+return Cm

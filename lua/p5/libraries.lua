@@ -347,20 +347,6 @@ L.download_library = function(lib, dest, callback)
 	end, { cache = true })
 end
 
--- Download types for library
-L.download_types = function(lib_name, dest, callback)
-	local types_urls = {}
-
-	local types_url = types_urls[lib_name]
-	if types_url then
-		core.fetch(types_url, dest, callback, { cache = true })
-	else
-		if callback then
-			callback(true)
-		end
-	end
-end
-
 -- Install libraries with version check
 L.install_libs = function(pkgs)
 	if not pkgs or #pkgs == 0 then
@@ -419,18 +405,14 @@ L.do_install = function(to_install)
 	for _, lib in ipairs(to_install) do
 		local lib_name = lib.name:gsub("%.js$", "")
 		local dest = libs() .. "/" .. lib_name .. ".js"
-		local types_dest = types() .. "/" .. lib_name .. ".d.ts"
 
 		L.download_library(lib, dest, function(success)
 			if success then
 				table.insert(installed_names, lib_name)
-				L.download_types(lib_name, types_dest, function()
-					check_done()
-				end)
 			else
 				table.insert(failed_names, lib.name)
-				check_done()
 			end
+			check_done()
 		end)
 	end
 end

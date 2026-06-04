@@ -25,9 +25,9 @@ p5-utilities	p5-utilities.txt	/*p5-utilities*
 p5-utilities-table-of-contents	p5-utilities.txt	/*p5-utilities-table-of-contents*
 p5-webgl	p5-webgl.txt	/*p5-webgl*
 p5-webgl-table-of-contents	p5-webgl.txt	/*p5-webgl-table-of-contents*
-p5.console.hide()	p5-nvim.txt	/*p5.console.hide()*
-p5.console.show()	p5-nvim.txt	/*p5.console.show()*
-p5.console.toggle()	p5-nvim.txt	/*p5.console.toggle()*
+p5.cdp.close()	p5-nvim.txt	/*p5.cdp.close()*
+p5.cdp.open()	p5-nvim.txt	/*p5.cdp.open()*
+p5.cdp.toggle()	p5-nvim.txt	/*p5.cdp.toggle()*
 p5.libraries.get_available_libs()	p5-nvim.txt	/*p5.libraries.get_available_libs()*
 p5.libraries.get_installed_libs()	p5-nvim.txt	/*p5.libraries.get_installed_libs()*
 p5.libraries.install_libs()	p5-nvim.txt	/*p5.libraries.install_libs()*

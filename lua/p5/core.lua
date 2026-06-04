@@ -112,25 +112,6 @@ C.asset_dir = function()
 	return C.plugin_root() .. "/assets"
 end
 
--- Validate file exists
-C.validate_file = function(path, name, required)
-	if C.is_file(path) then
-		return true
-	elseif required then
-		C.notify(name .. " not found: " .. path, "warn")
-	end
-	return false
-end
-
-C.validate_dir = function(path, name, required)
-	if C.is_dir(path) then
-		return true
-	elseif required then
-		C.notify(name .. " not found: " .. path, "warn")
-	end
-	return false
-end
-
 -- Read workspace configuration
 C.find_project_root = function()
 	local search_dir = fn.getcwd()
@@ -165,6 +146,8 @@ C.write_workspace_config = function(config, project_dir)
 	C.write_json(config_file, config)
 end
 
+C.DEFAULT_P5_VERSION = "2.3.0"
+
 C.notify = function(msg, level)
 	local level_map = {
 		ok = vim.log.levels.INFO,
@@ -187,11 +170,6 @@ end
 -- Generate cache key for URL
 C.cache_keygen = function(url)
 	return fn.sha256(url):sub(1, 16)
-end
-
--- Check if cached file is valid
-C.is_cache = function(cache_file, _)
-	return C.is_file(cache_file)
 end
 
 -- Download file with caching
@@ -292,7 +270,7 @@ C.p5_version = function(override_version)
 	if config and config.version then
 		return config.version
 	end
-	return "2.3.0"
+	return C.DEFAULT_P5_VERSION
 end
 
 -- Add recent sketchspaces
@@ -339,6 +317,30 @@ C.purge_ss = function()
 	end
 	C.write_ss(cleaned)
 	return cleaned
+end
+
+-- Find Chrome/Chromium browser in PATH
+C.find_chrome = function()
+	local candidates = { "chromium", "chromium-browser", "google-chrome", "chrome" }
+	for _, c in ipairs(candidates) do
+		if C.is_cmd(c) then return c end
+	end
+	return nil
+end
+
+-- Execute steps sequentially, each receiving a next() callback
+C.step_runner = function(steps, cb)
+	local i = 1
+	local function next_fn()
+		if i <= #steps then
+			local s = steps[i]
+			i = i + 1
+			s(next_fn)
+		elseif cb then
+			cb()
+		end
+	end
+	next_fn()
 end
 
 return C

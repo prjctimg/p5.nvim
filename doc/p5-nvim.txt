@@ -207,14 +207,14 @@ require("p5.server").start({port})                    *p5.server.start()*
 require("p5.server").stop_server()                   *p5.server.stop_server()*
    Stop the running server.
 
-require("p5.console").show()                        *p5.console.show()*
-   Show the browser console terminal.
+require("p5.cdp").open()                            *p5.cdp.open()*
+   Open the CDP DevTools panel (or terminal fallback when Chrome not found).
 
-require("p5.console").hide()                        *p5.console.hide()*
-   Hide the browser console terminal.
+require("p5.cdp").close()                            *p5.cdp.close()*
+   Close the CDP panel or terminal console.
 
-require("p5.console").toggle()                      *p5.console.toggle()*
-   Toggle the browser console visibility.
+require("p5.cdp").toggle()                          *p5.cdp.toggle()*
+   Toggle the CDP panel/terminal console visibility.
 
 require("p5.project").create_project({name})        *p5.project.create_project()*
    Create a new p5.js project.
@@ -235,7 +235,7 @@ No keymaps are set by default. You can create your own: >
 
    vim.keymap.set("n", "<leader>p5", ":P5<CR>", { desc = "Open p5.nvim picker" })
    vim.keymap.set("n", "<leader>ps", ":P5 server<CR>", { desc = "Toggle server" })
-   vim.keymap.set("n", "<leader>pc", ":P5 console<CR>", { desc = "Toggle console" })
+   vim.keymap.set("n", "<leader>pc", ":P5 cdp<CR>", { desc = "Toggle CDP panel" })
    vim.keymap.set("n", "<leader>pg", ":P5 gist sync<CR>", { desc = "Sync gist" })
 
 ==============================================================================
@@ -247,9 +247,9 @@ A: Check that Python 3 and the websockets module are installed:
    Try a different port:
    :P5 server 8080
 
-Q: Console shows no logs
+Q: CDP panel or terminal console shows no logs
 A: Ensure the browser page is loaded and you've called console.log()
-   in your sketch. The server must be running.
+   in your sketch. The server must be running. Use :P5 cdp to open.
 
 Q: Library installation fails
 A: Check your internet connection. Ensure curl is installed.

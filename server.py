@@ -16,24 +16,53 @@ import websockets
 import websockets.exceptions
 
 # Configuration
-CONFIG = {
-    "port": int(sys.argv[1]) if len(sys.argv) > 1 else 8000,
-    "live_reload": {
-        "enabled": True,
-        "port": 12002,
-        "debounce_ms": 300,
-        "watch_extensions": [".js", ".css", ".html", ".json"],
-        "exclude_dirs": [".git", "node_modules", "dist", "build"],
-    },
-    "console": {
-        "buffer_size": 1000,
-        "heartbeat_interval": 15,
-    },
-    "cdp": {
-        "enabled": False,
-        "remote_debugging_port": 9222,
+def _parse_config(args=None):
+    """Parse CLI args into CONFIG dict."""
+    if args is None:
+        args = sys.argv[1:]
+    cfg = {
+        "port": 8000,
+        "live_reload": {
+            "enabled": True,
+            "port": 12002,
+            "debounce_ms": 300,
+            "watch_extensions": [".js", ".css", ".html", ".json"],
+            "exclude_dirs": [".git", "node_modules", "dist", "build"],
+        },
+        "console": {
+            "buffer_size": 1000,
+            "heartbeat_interval": 15,
+        },
+        "cdp": {
+            "enabled": False,
+            "remote_debugging_port": 9222,
+        }
     }
-}
+    i = 0
+    while i < len(args):
+        if args[i] == "--lr-port" and i + 1 < len(args):
+            cfg['live_reload']['port'] = int(args[i + 1])
+            i += 2
+        elif args[i] == "--lr-debounce" and i + 1 < len(args):
+            cfg['live_reload']['debounce_ms'] = int(args[i + 1])
+            i += 2
+        elif args[i] == "--lr-extensions" and i + 1 < len(args):
+            cfg['live_reload']['watch_extensions'] = args[i + 1].split(',')
+            i += 2
+        elif args[i] == "--lr-exclude" and i + 1 < len(args):
+            cfg['live_reload']['exclude_dirs'] = args[i + 1].split(',')
+            i += 2
+        elif args[i] == "--lr-disabled":
+            cfg['live_reload']['enabled'] = False
+            i += 1
+        elif args[i].startswith('--'):
+            i += 1
+        else:
+            cfg['port'] = int(args[i])
+            i += 1
+    return cfg
+
+CONFIG = _parse_config()
 
 # ANSI color codes for log formatting
 ANSI_COLORS = {
@@ -503,13 +532,18 @@ class LiveReloadServer:
     
     async def start(self):
         """Start the WebSocket server."""
-        try:
-            self.server, self.port = await try_start_server(
-                self.handler, 'localhost', self.port
-            )
-            print(f"Live reload WebSocket running on ws://localhost:{self.port}")
-        except OSError:
-            print("Warning: Could not start live reload server")
+        for offset in range(10):
+            try:
+                self.server = await websockets.serve(
+                    self.handler, 'localhost', self.port + offset
+                )
+                if self.server.sockets:
+                    self.port = self.server.sockets[0].getsockname()[1]
+                print(f"Live reload WebSocket running on ws://localhost:{self.port}")
+                return
+            except OSError:
+                continue
+        print("Warning: Could not start live reload server")
     
     async def broadcast(self, message: dict):
         """Broadcast message to all connected clients."""
@@ -1196,8 +1230,10 @@ function draw() {
                 pass
 
         cs = "<script>" + INJECT_CONSOLE + "</script>"
-        lr = "<script>" + INJECT_LIVERELOAD.replace("__LR_PORT__", str(self.live_reload_server.port)) + "</script>"
-        scripts = cs + lr
+        scripts = cs
+        if CONFIG['live_reload']['enabled'] and INJECT_LIVERELOAD:
+            lr = "<script>" + INJECT_LIVERELOAD.replace("__LR_PORT__", str(self.live_reload_server.port)) + "</script>"
+            scripts += lr
 
         if '</body>' in content.lower():
             content = re.sub(r'</body>', scripts + '</body>', content, flags=re.IGNORECASE)
@@ -1233,18 +1269,22 @@ async def main():
     console_buffer = ConsoleBuffer(max_size=CONFIG['console']['buffer_size'])
     
     lr_config = CONFIG['live_reload']
-    file_watcher = FileWatcher(
-        directory=directory,
-        extensions=lr_config['watch_extensions'],
-        exclude_dirs=lr_config['exclude_dirs'],
-        debounce_ms=lr_config['debounce_ms']
-    )
     
     live_reload_server = LiveReloadServer(
         port=lr_config['port'],
         directory=directory,
-        file_watcher=file_watcher
+        file_watcher=None,
     )
+    
+    file_watcher = None
+    if lr_config['enabled']:
+        file_watcher = FileWatcher(
+            directory=directory,
+            extensions=lr_config['watch_extensions'],
+            exclude_dirs=lr_config['exclude_dirs'],
+            debounce_ms=lr_config['debounce_ms']
+        )
+        live_reload_server.file_watcher = file_watcher
     
     http_server = HTTPServer(
         port=CONFIG['port'],
@@ -1254,26 +1294,29 @@ async def main():
     )
     
     # Start servers
-    await live_reload_server.start()
+    if lr_config['enabled']:
+        await live_reload_server.start()
     await http_server.start()
     
-    # Update live reload port in HTTP server if it changed
-    lr_config['port'] = live_reload_server.port
+    # Update live reload port in config if it changed
+    if live_reload_server.server:
+        lr_config['port'] = live_reload_server.port
     
     # Start file watcher
-    async def on_file_change(path: str):
-        message = {
-            "type": "reload",
-            "file": path,
-            "timestamp": datetime.now().isoformat()
-        }
-        try:
-            await live_reload_server.broadcast(message)
-            print(f"Reload triggered for: {path}")
-        except Exception:
-            pass
-    
-    file_watcher.start(on_file_change)
+    if file_watcher and lr_config['enabled']:
+        async def on_file_change(path: str):
+            message = {
+                "type": "reload",
+                "file": path,
+                "timestamp": datetime.now().isoformat()
+            }
+            try:
+                await live_reload_server.broadcast(message)
+                print(f"Reload triggered for: {path}")
+            except Exception:
+                pass
+        
+        file_watcher.start(on_file_change)
     
     # Handle shutdown
     shutdown_event = asyncio.Event()
@@ -1287,7 +1330,6 @@ async def main():
         try:
             loop.add_signal_handler(sig, signal_handler)
         except NotImplementedError:
-            # Windows doesn't support add_signal_handler
             pass
     
     # Wait for shutdown
@@ -1295,7 +1337,8 @@ async def main():
     
     # Cleanup
     print("Closing connections...")
-    await file_watcher.stop()
+    if file_watcher:
+        await file_watcher.stop()
     await live_reload_server.close()
     await http_server.close()
     print("Server stopped")

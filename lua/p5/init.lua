@@ -4,7 +4,6 @@ local core = require("p5.core")
 local project = require("p5.project")
 local server = require("p5.server")
 local libraries = require("p5.libraries")
-local console = require("p5.console")
 local gist = require("p5.gist")
 local cdp = require("p5.cdp")
 local commands = require("p5.commands")
@@ -21,10 +20,6 @@ I.config = {
 			watch_extensions = { ".js", ".css", ".html", ".json" },
 			exclude_dirs = { ".git", "node_modules", "dist", "build" },
 		},
-	},
-	console = {
-		position = "below",
-		height = 10,
 	},
 	libraries = {
 		cdn_sources = { "jsdelivr", "cdnjs", "unpkg" },
@@ -59,7 +54,6 @@ I.setup = function(opts)
 	project.config = I.config
 	server.config = vim.tbl_deep_extend("force", server.config, I.config)
 	libraries.config = vim.tbl_deep_extend("force", libraries.config, I.config)
-	console.config = I.config
 	gist.config = I.config
 	cdp.config = vim.tbl_deep_extend("force", cdp.config, I.config.cdp or {})
 	cdp.config.view = vim.tbl_deep_extend("force", cdp.config.view or {}, I.config.view or {})
@@ -69,10 +63,6 @@ I.setup = function(opts)
 	end
 
 	local hl = vim.api.nvim_set_hl
-	hl(0, "P5ConsoleError", { fg = "#ff5555", bold = true })
-	hl(0, "P5ConsoleWarn", { fg = "#ffb86c" })
-	hl(0, "P5ConsoleInfo", { fg = "#8be9fd" })
-	hl(0, "P5ConsoleLog", { fg = "#6272a4" })
 	hl(0, "P5CDPActiveTab", { bold = true, reverse = true })
 	hl(0, "P5CDPTab", {})
 	hl(0, "P5CDPDebugPaused", { fg = "#ff5555", bold = true })
@@ -99,21 +89,19 @@ I.setup = function(opts)
 	local has_snacks, snacks = pcall(require, "snacks")
 	if has_snacks then
 		snacks.toggle.new({
-			name = "p5console",
+			name = "p5cdp",
 			get = function()
-				return console.win and vim.api.nvim_win_is_valid(console.win) or false
+				return cdp.state.win and vim.api.nvim_win_is_valid(cdp.state.win) or false
 			end,
 			set = function(state)
 				if state then
-					console.show()
+					cdp.open()
 				else
-					console.hide()
+					cdp.close()
 				end
 			end,
 		})
 	end
-
-	console.auto_clear()
 
 	vim.api.nvim_create_autocmd("DirChanged", {
 		callback = function()

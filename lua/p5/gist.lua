@@ -3,24 +3,21 @@ local G = {}
 local core = require("p5.core")
 local notify = core.notify
 
-local function step_runner(steps, cb)
-	local i = 1
-	local function next()
-		if i <= #steps then
-			local s = steps[i]
-			i = i + 1
-			s(next)
-		elseif cb then
-			cb()
-		end
-	end
-	next()
-end
-
 if not core.is_cmd("gh") then
 	notify("GitHub CLI (gh) not found", "warn")
-	return nil
-else
+	G.includes = function() return {} end
+	G.create = function() notify("GitHub CLI (gh) required", "warn") end
+	G.current = function() return nil end
+	G.sync = function() notify("GitHub CLI (gh) required", "warn") end
+	G.clone = function() notify("GitHub CLI (gh) required", "warn") end
+	G.get_comment = function(_, cb) if cb then cb(nil) end end
+	G.create_comment = function(_, _, cb) if cb then cb(false) end end
+	G.update_comment = function(_, _, _, cb) if cb then cb(false) end end
+	G.edit = function() notify("GitHub CLI (gh) required", "warn") end
+	G.skchbk_list = function() notify("GitHub CLI (gh) required", "warn") end
+	G.fetch = function(_, _, cb) if cb then cb(false, "GitHub CLI (gh) not found") end end
+	return G
+end
 	G.includes = function(config)
 		local includes = config.includes or { "sketch.js" }
 
@@ -165,7 +162,7 @@ else
 					end)
 				end,
 			}
-			step_runner(steps, function()
+			core.step_runner(steps, function()
 								core.notify("Gist created successfully", "ok")
 							end)
 		end
@@ -384,7 +381,7 @@ else
 			end,
 		}
 
-		step_runner(steps)
+		core.step_runner(steps)
 	end
 
 	local list_user_gists = function(username, callback)
@@ -532,7 +529,7 @@ else
 	G.create_comment = function(gist_id, body, callback)
 		callback = callback or function() end
 		local tmp = vim.fn.stdpath("cache") .. "/p5_gist_comment_" .. os.time()
-		local json_body = vim.fn.json_encode({ body = body })
+		local json_body = vim.json.encode({ body = body })
 		vim.fn.writefile(vim.split(json_body, "\n"), tmp)
 		vim.system({ "gh", "api", "/gists/" .. gist_id .. "/comments", "--input", tmp }, nil, function(out)
 			vim.uv.fs_unlink(tmp)
@@ -543,7 +540,7 @@ else
 	G.update_comment = function(gist_id, comment_id, body, callback)
 		callback = callback or function() end
 		local tmp = vim.fn.stdpath("cache") .. "/p5_gist_comment_upd_" .. os.time()
-		local json_body = vim.fn.json_encode({ body = body })
+		local json_body = vim.json.encode({ body = body })
 		vim.fn.writefile(vim.split(json_body, "\n"), tmp)
 		vim.system({
 			"gh", "api",
@@ -599,8 +596,8 @@ else
 
 				vim.schedule(function()
 				local buf = vim.api.nvim_create_buf(false, true)
-				vim.api.nvim_buf_set_option(buf, "buftype", "acwrite")
-				vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
+	vim.api.nvim_set_option_value("buftype", "acwrite", { buf = buf })
+	vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
 				vim.api.nvim_buf_set_name(buf, "gist-comment.md")
 
 				local lines = vim.split(body, "\n")
@@ -610,7 +607,7 @@ else
 				buffer = buf,
 				callback = function()
 					local new_body = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
-					vim.api.nvim_buf_set_option(buf, "modified", false)
+					vim.api.nvim_set_option_value("modified", false, { buf = buf })
 					local function on_done(api_ok, stdout)
 						if api_ok then
 							if not st.comment_id and stdout then
@@ -638,8 +635,8 @@ else
 			})
 
 				vim.api.nvim_win_set_buf(0, buf)
-				vim.api.nvim_buf_set_option(buf, "modified", false)
-				notify("Edit the comment and :w to save", "info")
+	vim.api.nvim_set_option_value("modified", false, { buf = buf })
+	notify("Edit the comment and :w to save", "info")
 				end)
 			end)
 		end
@@ -753,5 +750,4 @@ else
 			callback(true, nil)
 		end)
 	end
-end
 return G

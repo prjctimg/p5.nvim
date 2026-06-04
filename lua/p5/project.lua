@@ -64,7 +64,7 @@ P.create_project = function(name, major)
 	else
 		notify("Fetching latest p5.js version...", "info")
 		core.fetch_latest_p5_version(function(version)
-			version = version or "2.3.0"
+			version = version or core.DEFAULT_P5_VERSION
 			notify("Downloading p5.js " .. version .. "...", "info")
 			P.download_p5_assets(path, version, function()
 				finish(version)
@@ -162,7 +162,7 @@ function draw() {
 		libs = vim.empty_dict(),
 		includes = { "sketch.js" },
 	}
-	vim.fn.writefile(vim.split(vim.fn.json_encode(p5_config), "\n"), path .. "/p5.json")
+	vim.fn.writefile(vim.split(vim.json.encode(p5_config), "\n"), path .. "/p5.json")
 
 	core.mkdir(path .. "/assets/types")
 	core.mkdir(path .. "/assets/libs")
@@ -186,7 +186,7 @@ end
 
 P.ensure_assets = function(project_path, callback)
 	local config = core.read_workspace_config()
-	local version = config and config.version or "2.3.0"
+	local version = config and config.version or core.DEFAULT_P5_VERSION
 	local major = core.parse_major(version)
 	local libs_dir = project_path .. "/assets/libs"
 	local p5_file = libs_dir .. "/p5.js"
@@ -208,7 +208,7 @@ P.ensure_assets = function(project_path, callback)
 	else
 		notify("Fetching latest p5.js version...", "info")
 		core.fetch_latest_p5_version(function(version)
-			version = version or "2.3.0"
+			version = version or core.DEFAULT_P5_VERSION
 			notify("Downloading p5.js " .. version .. "...", "info")
 			P.download_p5_assets(project_path, version, function()
 				P.copy_favicon(project_path)

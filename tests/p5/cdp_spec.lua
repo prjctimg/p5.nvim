@@ -1,10 +1,12 @@
 describe("cdp", function()
   local cdp = require("p5.cdp")
   local server = require("p5.server")
+  local core = require("p5.core")
   local orig_connected = cdp.state.connected
   local orig_port = cdp.state.port
   local orig_server_job = server.server_job
   local orig_server_port = server.port
+  local orig_find_chrome = core.find_chrome
 
   before_each(function()
     cdp.config.enabled = true
@@ -14,6 +16,10 @@ describe("cdp", function()
     cdp.state.active_tab = 1
     cdp.state.connected = false
     cdp.state.port = nil
+    cdp.state.mode = nil
+    cdp.state.terminal.attempts = 0
+    cdp.state.terminal.connected = false
+    cdp.state.terminal.timer = nil
     cdp.tab_data = {
       console = {},
       network = {},
@@ -24,6 +30,7 @@ describe("cdp", function()
     }
     server.server_job = 1
     server.port = 9999
+    core.find_chrome = function() return "google-chrome" end
   end)
 
   after_each(function()
@@ -36,6 +43,7 @@ describe("cdp", function()
     cdp.state.buf = nil
     cdp.state.win = nil
     cdp.state.job_id = nil
+    core.find_chrome = orig_find_chrome
   end)
 
   describe("switch_tab", function()
@@ -285,6 +293,69 @@ describe("cdp", function()
       cdp.config.enabled = true
       local ok, err = pcall(cdp.connect)
       assert.is_true(ok)
+    end)
+  end)
+
+  describe("terminal fallback", function()
+    describe("_terminal_auto_clear", function()
+      it("creates a timer", function()
+        assert.is_nil(cdp.state.terminal.timer)
+        cdp._terminal_auto_clear()
+        assert.is_not_nil(cdp.state.terminal.timer)
+        cdp.state.terminal.timer:close()
+        cdp.state.terminal.timer = nil
+      end)
+    end)
+
+    describe("_terminal_clear", function()
+      it("does not crash without job_id", function()
+        cdp.state.job_id = nil
+        local ok, err = pcall(cdp._terminal_clear)
+        assert.is_true(ok, "_terminal_clear without job: " .. tostring(err))
+      end)
+    end)
+
+    describe("_terminal_reconnect", function()
+      it("respects max attempts and stops", function()
+        cdp.state.terminal.attempts = 5
+        cdp.state.terminal.max_attempts = 5
+        local ok, err = pcall(cdp._terminal_reconnect)
+        assert.is_true(ok, "reconnect at max attempts: " .. tostring(err))
+      end)
+
+      it("does not crash when window gone", function()
+        cdp.state.terminal.attempts = 0
+        cdp.state.win = nil
+        local ok, err = pcall(cdp._terminal_reconnect)
+        assert.is_true(ok, "reconnect with no win: " .. tostring(err))
+      end)
+    end)
+
+    describe("open/close", function()
+      it("mode is terminal when Chrome not found", function()
+        core.find_chrome = function() return nil end
+        local ok, err = pcall(cdp.open)
+        assert.is_true(ok, "open terminal fallback: " .. tostring(err))
+        assert.equals("terminal", cdp.state.mode)
+        cdp.close()
+      end)
+
+      it("mode is panel when Chrome found", function()
+        core.find_chrome = function() return "google-chrome" end
+        local ok, err = pcall(cdp.open)
+        assert.is_true(ok, "open panel: " .. tostring(err))
+        assert.equals("panel", cdp.state.mode)
+        cdp.close()
+      end)
+
+      it("close resets mode and state", function()
+        core.find_chrome = function() return nil end
+        pcall(cdp.open)
+        cdp.close()
+        assert.is_nil(cdp.state.mode)
+        assert.is_nil(cdp.state.win)
+        assert.is_nil(cdp.state.buf)
+      end)
     end)
   end)
 end)

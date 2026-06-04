@@ -1,7 +1,7 @@
 -- Live server management
 local S = {}
 local core = require("p5.core")
-local console = require("p5.console")
+local cdp = require("p5.cdp")
 local project = require("p5.project")
 local notify = core.notify
 
@@ -16,12 +16,6 @@ S.config = {
 		debounce_ms = 300,
 		watch_extensions = { ".js", ".css", ".html", ".json" },
 		exclude_dirs = { ".git", "node_modules", "dist", "build" },
-	},
-	console = {
-		enabled = true,
-		auto_show = true,
-		position = "below",
-		height = 10,
 	},
 	libraries = {
 		cdn_sources = { "jsdelivr", "cdnjs", "unpkg" },
@@ -124,6 +118,24 @@ S.start = function(port)
 
 			local plugin_root = core.plugin_root()
 			local cmd = { "python3", plugin_root .. "/server.py", tostring(port) }
+			if S.config.live_reload then
+				local lr = S.config.live_reload
+				table.insert(cmd, "--lr-port")
+				table.insert(cmd, tostring(lr.port or 12002))
+				table.insert(cmd, "--lr-debounce")
+				table.insert(cmd, tostring(lr.debounce_ms or 300))
+				if lr.watch_extensions then
+					table.insert(cmd, "--lr-extensions")
+					table.insert(cmd, table.concat(lr.watch_extensions, ","))
+				end
+				if lr.exclude_dirs then
+					table.insert(cmd, "--lr-exclude")
+					table.insert(cmd, table.concat(lr.exclude_dirs, ","))
+				end
+				if lr.enabled == false then
+					table.insert(cmd, "--lr-disabled")
+				end
+			end
 
 			S.server_job = vim.fn.jobstart(cmd, {
 				detach = true,
@@ -143,7 +155,7 @@ S.start = function(port)
 					end
 				end,
 				on_exit = function(_, exit_code, event)
-					console.hide()
+					cdp.close()
 
 					if not user_stopped then
 						if exit_code == 0 then
@@ -171,27 +183,16 @@ S.start = function(port)
 			if S.server_job > 0 then
 				local url = "http://localhost:" .. port
 				local msg = "🎉 Server started (" .. type .. ") at " .. url
-				if S.config.console.enabled then
-					vim.defer_fn(function()
-						console.show({ enter = false })
-					end, 500)
-				end
+				vim.defer_fn(function()
+					cdp.open()
+				end, 500)
 				notify(msg, "ok")
 
 				-- Auto-open browser with CDP support if Chrome/Chromium is available
 				local cdp_enabled = S.config.cdp and S.config.cdp.enabled
 				if S.config.auto_open_browser ~= false then
 					vim.defer_fn(function()
-						-- Detect Chrome/Chromium in PATH
-						local chrome_candidates = { "chromium", "chromium-browser", "google-chrome", "chrome" }
-						local chrome_cmd = nil
-						for _, candidate in ipairs(chrome_candidates) do
-							if vim.fn.executable(candidate) ~= 0 then
-								chrome_cmd = candidate
-								break
-							end
-						end
-
+						local chrome_cmd = core.find_chrome()
 						if chrome_cmd then
 							local chrome_args = { chrome_cmd }
 							if cdp_enabled then
@@ -240,12 +241,7 @@ S.start = function(port)
 		end,
 	}
 
-	-- Execute validation steps sequentially
-	local function run_steps(steps, index)
-		if index > #steps then return end
-		steps[index](function() run_steps(steps, index + 1) end)
-	end
-	run_steps(validation_steps, 1)
+	core.step_runner(validation_steps)
 end
 
 S.stop_server = function()
@@ -259,7 +255,7 @@ S.stop_server = function()
 	S.server_job = nil
 	S.type = nil
 
-	console.hide()
+	cdp.close()
 
 	notify("🛑 Server stopped", "info")
 end

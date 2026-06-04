@@ -65,6 +65,112 @@ describe("server.start", function()
   end)
 end)
 
+describe("server.start live_reload CLI args", function()
+  local S = require("p5.server")
+  local tmp = vim.fn.tempname()
+  local orig_cwd = vim.fn.getcwd()
+  local orig_jobstart = vim.fn.jobstart
+  local captured_cmd
+
+  before_each(function()
+    vim.fn.mkdir(tmp, "p")
+    vim.fn.chdir(tmp)
+    S.server_job = nil
+    S.port = nil
+    S.type = nil
+    C.is_cmd = function(cmd)
+      if cmd == "python3" then return true end
+      return false
+    end
+    C.is_file = function(_) return true end
+    C.is_dir = function(_) return true end
+    C.plugin_root = function() return tmp end
+    project.is_p5_project = function(_) return true end
+    vim.ui.select = function(_, _, cb) if cb then cb() end end
+    captured_cmd = nil
+    vim.fn.jobstart = function(cmd, opts)
+      if type(cmd) == "table" and cmd[1] == "python3" and cmd[3] == "-c" then
+        -- validation step 1: call on_exit synchronously so step runner continues
+        if opts and opts.on_exit then opts.on_exit(0, 0) end
+      elseif type(cmd) == "table" and cmd[1] == "python3" and type(cmd[3]) == "string" and cmd[3]:match("^%d+$") then
+        -- server start step 3: capture cmd
+        captured_cmd = cmd
+        S.server_job = 1
+        if opts and opts.on_exit then opts.on_exit(0, 0, 'exit') end
+      else
+        -- any other job (e.g. id -u): just continue
+        if opts and opts.on_exit then opts.on_exit(0, 0) end
+      end
+      return 1
+    end
+  end)
+
+  after_each(function()
+    vim.fn.chdir(orig_cwd)
+    vim.fn.delete(tmp, "rf")
+    C.is_cmd = orig_is_cmd
+    C.is_file = orig_is_file
+    C.is_dir = orig_is_dir
+    C.plugin_root = orig_plugin_root
+    project.is_p5_project = orig_is_p5
+    vim.ui.select = orig_select
+    vim.fn.jobstart = orig_jobstart
+    S.server_job = nil
+  end)
+
+  it("forwards --lr-port and --lr-debounce flags", function()
+    S.start(8000)
+    assert.truthy(captured_cmd, "captured_cmd should be set")
+    local joined = table.concat(captured_cmd, " ")
+    assert.truthy(joined:match("%-%-lr%-port"))
+    assert.truthy(joined:match("%-%-lr%-debounce"))
+  end)
+
+  it("includes --lr-extensions with default extensions", function()
+    S.start(8000)
+    assert.truthy(captured_cmd)
+    local joined = table.concat(captured_cmd, " ")
+    assert.truthy(joined:match("%-%-lr%-extensions"))
+    assert.truthy(joined:match("%.js"))
+    assert.truthy(joined:match("%.css"))
+  end)
+
+  it("includes --lr-exclude with default exclude dirs", function()
+    S.start(8000)
+    assert.truthy(captured_cmd)
+    local joined = table.concat(captured_cmd, " ")
+    assert.truthy(joined:match("%-%-lr%-exclude"))
+    assert.truthy(joined:match("%.git"))
+    assert.truthy(joined:match("node_modules"))
+  end)
+
+  it("does not pass --lr-disabled when enabled is true", function()
+    S.start(8000)
+    assert.truthy(captured_cmd)
+    local joined = table.concat(captured_cmd, " ")
+    assert.falsy(joined:match("%-%-lr%-disabled"))
+  end)
+
+  it("passes --lr-disabled when enabled is false", function()
+    S.config.live_reload.enabled = false
+    S.start(8000)
+    assert.truthy(captured_cmd)
+    local joined = table.concat(captured_cmd, " ")
+    assert.truthy(joined:match("%-%-lr%-disabled"))
+    S.config.live_reload.enabled = true
+  end)
+
+  it("forwards custom port from config", function()
+    S.config.live_reload.port = 9999
+    S.start(8000)
+    assert.truthy(captured_cmd)
+    local joined = table.concat(captured_cmd, " ")
+    assert.truthy(joined:match("%-%-lr%-port"))
+    assert.truthy(joined:match("9999"))
+    S.config.live_reload.port = 12002
+  end)
+end)
+
 describe("server.stop_server", function()
   local S = require("p5.server")
 

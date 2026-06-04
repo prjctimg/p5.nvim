@@ -119,8 +119,8 @@ H.check_project_config = function()
 
 	if core.is_file(config_file) then
 		ok("p5.json: found")
-		local ok2, data = pcall(vim.fn.json_decode, table.concat(vim.fn.readfile(config_file), "\n"))
-		if ok2 then
+		local data, _ = core.read_json(config_file)
+		if data then
 			ok("p5.json: valid format")
 
 			if type(data.libs) == "table" then

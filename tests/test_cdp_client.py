@@ -1,15 +1,20 @@
 """Tests for CDPClient and CDP HTTP handlers in server.py."""
 import asyncio
 import json
+import os
 import sys
+import tempfile
 import unittest
 from collections import deque
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import websockets
+
 sys.argv = ['server.py', '8000']
 sys.path.insert(0, '.')
 
-from server import CDPClient, HTTPServer, CONFIG
+from server import CDPClient, FileWatcher, HTTPServer, LiveReloadServer, \
+    CONFIG, _parse_config, read_inject_script, INJECT_CONSOLE, INJECT_LIVERELOAD
 
 
 class TestCDPClientInit(unittest.TestCase):
@@ -418,6 +423,398 @@ class TestCDPHTTPServerHandlers(unittest.TestCase):
         asyncio.run(self.server.handle_cdp_network_clear(w))
         written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
         self.assertIn(b'"status": "cleared"', written)
+
+
+class TestCDPHTTPServerEvalAndDebugHandlers(unittest.TestCase):
+    def setUp(self):
+        self.server = HTTPServer(8000, '/tmp', MagicMock(), MagicMock())
+        self.server.running = True
+        self.server.cdp_client = None
+
+    def _make_writer(self):
+        w = AsyncMock()
+        w.write = MagicMock()
+        return w
+
+    def test_handle_cdp_evaluate_no_client(self):
+        w = self._make_writer()
+        reader = AsyncMock()
+        asyncio.run(self.server.handle_cdp_evaluate(reader, w, {'content-length': '0'}))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'"error"', written)
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_evaluate_rejects_dangerous_patterns(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        w = self._make_writer()
+        body = json.dumps({'expression': 'file:///etc/passwd'})
+        headers = {'content-length': str(len(body))}
+        reader = AsyncMock()
+        reader.read.return_value = body.encode()
+        asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'Rejected', written)
+
+    def test_handle_cdp_evaluate_rejects_require(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        w = self._make_writer()
+        body = json.dumps({'expression': ' require("fs")'})
+        headers = {'content-length': str(len(body))}
+        reader = AsyncMock()
+        reader.read.return_value = body.encode()
+        asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'Rejected', written)
+
+    def test_handle_cdp_evaluate_rejects_process_env(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        w = self._make_writer()
+        body = json.dumps({'expression': 'process.env.HOME'})
+        headers = {'content-length': str(len(body))}
+        reader = AsyncMock()
+        reader.read.return_value = body.encode()
+        asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'Rejected', written)
+
+    def test_handle_cdp_debug_break_no_client(self):
+        w = self._make_writer()
+        reader = AsyncMock()
+        asyncio.run(self.server.handle_cdp_debug_break(reader, w, {'content-length': '0'}))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_debug_continue_no_client(self):
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_continue(w))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_debug_step_no_client(self):
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_step(w))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_debug_step_in_no_client(self):
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_step_in(w))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_debug_step_out_no_client(self):
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_step_out(w))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_evaluate_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.evaluate = AsyncMock(
+            return_value={'result': {'type': 'number', 'value': 42}}
+        )
+        w = self._make_writer()
+        body = json.dumps({'expression': '2 + 2'})
+        headers = {'content-length': str(len(body))}
+        reader = AsyncMock()
+        reader.read.return_value = body.encode()
+        asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'"result"', written)
+        self.server.cdp_client.evaluate.assert_called_once_with('2 + 2')
+
+    def test_handle_cdp_debug_break_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.set_breakpoint = AsyncMock(
+            return_value={'breakpointId': '1'}
+        )
+        w = self._make_writer()
+        body = json.dumps({'location': 'sketch.js:42'})
+        headers = {'content-length': str(len(body))}
+        reader = AsyncMock()
+        reader.read.return_value = body.encode()
+        asyncio.run(self.server.handle_cdp_debug_break(reader, w, headers))
+        self.server.cdp_client.set_breakpoint.assert_called_once_with('sketch.js:42')
+
+    def test_handle_cdp_debug_continue_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.resume = AsyncMock()
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_continue(w))
+        self.server.cdp_client.resume.assert_called_once()
+
+    def test_handle_cdp_debug_step_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.step_over = AsyncMock()
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_step(w))
+        self.server.cdp_client.step_over.assert_called_once()
+
+    def test_handle_cdp_debug_step_in_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.step_into = AsyncMock()
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_step_in(w))
+        self.server.cdp_client.step_into.assert_called_once()
+
+    def test_handle_cdp_debug_step_out_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.step_out = AsyncMock()
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_step_out(w))
+        self.server.cdp_client.step_out.assert_called_once()
+
+    def test_handle_cdp_network_clear_with_client(self):
+        self.server.cdp_client = MagicMock()
+        asyncio.run(self.server.handle_cdp_network_clear(self._make_writer()))
+        self.server.cdp_client.clear_network_log.assert_called_once()
+
+
+class TestFileWatcherShouldWatch(unittest.TestCase):
+    def test_js_file_is_watched(self):
+        fw = FileWatcher('/tmp', ['.js'], ['.git'], 300)
+        self.assertTrue(fw.should_watch('/tmp/sketch.js'))
+
+    def test_excluded_dir_not_watched(self):
+        fw = FileWatcher('/tmp', ['.js'], ['.git'], 300)
+        self.assertFalse(fw.should_watch('/tmp/.git/sketch.js'))
+
+    def test_nested_excluded_dir_not_watched(self):
+        fw = FileWatcher('/tmp', ['.js'], ['node_modules'], 300)
+        self.assertFalse(fw.should_watch('/tmp/project/node_modules/pkg/lib.js'))
+
+    def test_unmatched_extension_not_watched(self):
+        fw = FileWatcher('/tmp', ['.js'], ['.git'], 300)
+        self.assertFalse(fw.should_watch('/tmp/data.txt'))
+
+    def test_multiple_extensions_all_watched(self):
+        fw = FileWatcher('/tmp', ['.js', '.css', '.html'], ['.git'], 300)
+        self.assertTrue(fw.should_watch('/tmp/style.css'))
+        self.assertTrue(fw.should_watch('/tmp/index.html'))
+        self.assertTrue(fw.should_watch('/tmp/sketch.js'))
+        self.assertFalse(fw.should_watch('/tmp/data.json'))
+
+    def test_empty_extensions_watches_nothing(self):
+        fw = FileWatcher('/tmp', [], ['.git'], 300)
+        self.assertFalse(fw.should_watch('/tmp/sketch.js'))
+
+    def test_multiple_exclude_dirs(self):
+        fw = FileWatcher('/tmp', ['.js'], ['.git', 'node_modules', 'dist'], 300)
+        self.assertFalse(fw.should_watch('/tmp/node_modules/pkg/index.js'))
+        self.assertFalse(fw.should_watch('/tmp/dist/bundle.js'))
+        self.assertTrue(fw.should_watch('/tmp/src/app.js'))
+
+
+class TestFileWatcherDetection(unittest.IsolatedAsyncioTestCase):
+    async def test_watch_detects_file_change(self):
+        fw = FileWatcher('/tmp', ['.js'], ['.git'], 50)
+        fw.running = True
+
+        with patch('server.os.walk') as mock_walk, \
+             patch('server.os.path.getmtime') as mock_mtime:
+            mock_walk.return_value = [('/tmp', [], ['sketch.js'])]
+            # Iter 1: 1000.0 (baseline), Iter 2: 1001.0 (change), Iter 3: 1001.0 (stable)
+            mock_mtime.side_effect = [1000.0, 1001.0, 1001.0]
+            gen = fw.watch()
+            result = await asyncio.wait_for(anext(gen), timeout=5.0)
+            self.assertEqual(result, '/tmp/sketch.js')
+            fw.running = False
+
+    async def test_watch_ignores_unchanged_files(self):
+        fw = FileWatcher('/tmp', ['.js'], ['.git'], 50)
+        fw.running = True
+
+        with patch('server.os.walk') as mock_walk, \
+             patch('server.os.path.getmtime') as mock_mtime:
+            mock_walk.return_value = [('/tmp', [], ['sketch.js'])]
+            # mtime never changes
+            mock_mtime.return_value = 1000.0
+            gen = fw.watch()
+            with self.assertRaises(asyncio.TimeoutError):
+                await asyncio.wait_for(anext(gen), timeout=0.5)
+            fw.running = False
+
+
+class TestLiveReloadServerIntegration(unittest.IsolatedAsyncioTestCase):
+    async def asyncTearDown(self):
+        if hasattr(self, 'server') and self.server:
+            await self.server.close()
+
+    async def test_start_and_close(self):
+        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        await self.server.start()
+        self.assertIsNotNone(self.server.server)
+        self.assertGreater(self.server.port, 0)
+
+    async def test_client_connects_and_receives_message(self):
+        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        await self.server.start()
+        async with websockets.connect(f'ws://localhost:{self.server.port}') as ws:
+            msg = await asyncio.wait_for(ws.recv(), timeout=5.0)
+            data = json.loads(msg)
+            self.assertEqual(data['type'], 'connected')
+
+    async def test_broadcast_to_connected_client(self):
+        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        await self.server.start()
+        async with websockets.connect(f'ws://localhost:{self.server.port}') as ws:
+            # Consume the 'connected' message first
+            connected = await asyncio.wait_for(ws.recv(), timeout=5.0)
+            self.assertEqual(json.loads(connected)['type'], 'connected')
+            await self.server.broadcast({'type': 'reload', 'file': 'test.js'})
+            msg = await asyncio.wait_for(ws.recv(), timeout=5.0)
+            data = json.loads(msg)
+            self.assertEqual(data['type'], 'reload')
+            self.assertEqual(data['file'], 'test.js')
+
+    async def test_broadcast_to_multiple_clients(self):
+        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        await self.server.start()
+        async with websockets.connect(f'ws://localhost:{self.server.port}') as ws1, \
+                    websockets.connect(f'ws://localhost:{self.server.port}') as ws2:
+            # Consume the 'connected' messages
+            await ws1.recv()
+            await ws2.recv()
+            await self.server.broadcast({'type': 'reload'})
+            msg1 = await asyncio.wait_for(ws1.recv(), timeout=5.0)
+            msg2 = await asyncio.wait_for(ws2.recv(), timeout=5.0)
+            self.assertEqual(json.loads(msg1)['type'], 'reload')
+            self.assertEqual(json.loads(msg2)['type'], 'reload')
+
+    async def test_disconnected_client_is_removed(self):
+        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        await self.server.start()
+        async with websockets.connect(f'ws://localhost:{self.server.port}') as ws:
+            await asyncio.sleep(0.1)
+            self.assertEqual(len(self.server.clients), 1)
+        # Client is now disconnected
+        await asyncio.sleep(0.1)
+        self.assertEqual(len(self.server.clients), 0)
+
+
+class TestInjectScripts(unittest.TestCase):
+    def setUp(self):
+        self.lr_mock = MagicMock()
+        self.lr_mock.port = 12002
+        self.server = HTTPServer(8000, '/tmp', MagicMock(), self.lr_mock)
+
+    def test_injects_livereload_before_body(self):
+        html = b'<html><head></head><body><p>hello</p></body></html>'
+        result = self.server.inject_scripts(html).decode()
+        self.assertIn('ws://localhost:12002', result)
+        self.assertTrue(
+            result.index('ws://localhost:12002') < result.index('</body>')
+        )
+
+    def test_injects_console_script(self):
+        html = b'<html><body></body></html>'
+        result = self.server.inject_scripts(html).decode()
+        self.assertIn('console.log', result)
+        self.assertIn('fetch', result)
+
+    def test_injects_both_scripts(self):
+        html = b'<html><body></body></html>'
+        result = self.server.inject_scripts(html).decode()
+        self.assertNotIn('__LR_PORT__', result)  # Port placeholder was replaced
+        # Verify both script blocks are present
+        script_count = result.count('<script>')
+        self.assertGreaterEqual(script_count, 2, "Should inject at least 2 scripts")
+
+    def test_appends_when_no_body_tag(self):
+        html = b'<html><p>no body tag</p></html>'
+        result = self.server.inject_scripts(html).decode()
+        self.assertIn('ws://localhost:12002', result)
+
+    def test_livereload_uses_correct_port(self):
+        self.lr_mock.port = 9999
+        html = b'<html><body></body></html>'
+        result = self.server.inject_scripts(html).decode()
+        self.assertIn('ws://localhost:9999', result)
+
+    def test_console_included_when_livereload_disabled(self):
+        original_enabled = CONFIG['live_reload']['enabled']
+        CONFIG['live_reload']['enabled'] = False
+        try:
+            html = b'<html><body></body></html>'
+            result = self.server.inject_scripts(html).decode()
+            self.assertIn('console.log', result)
+            self.assertNotIn('ws://localhost', result)
+        finally:
+            CONFIG['live_reload']['enabled'] = original_enabled
+
+
+class TestParseConfig(unittest.TestCase):
+    def test_defaults(self):
+        cfg = _parse_config(['8000'])
+        self.assertEqual(cfg['port'], 8000)
+        self.assertTrue(cfg['live_reload']['enabled'])
+        self.assertEqual(cfg['live_reload']['port'], 12002)
+        self.assertEqual(cfg['live_reload']['debounce_ms'], 300)
+        self.assertEqual(cfg['live_reload']['watch_extensions'], ['.js', '.css', '.html', '.json'])
+        self.assertEqual(cfg['live_reload']['exclude_dirs'], ['.git', 'node_modules', 'dist', 'build'])
+
+    def test_empty_args(self):
+        cfg = _parse_config([])
+        self.assertEqual(cfg['port'], 8000)
+
+    def test_port_arg(self):
+        cfg = _parse_config(['9090'])
+        self.assertEqual(cfg['port'], 9090)
+
+    def test_lr_port_flag(self):
+        cfg = _parse_config(['8000', '--lr-port', '13000'])
+        self.assertEqual(cfg['live_reload']['port'], 13000)
+
+    def test_lr_debounce_flag(self):
+        cfg = _parse_config(['8000', '--lr-debounce', '500'])
+        self.assertEqual(cfg['live_reload']['debounce_ms'], 500)
+
+    def test_lr_extensions_flag(self):
+        cfg = _parse_config(['8000', '--lr-extensions', '.js,.ts,.mjs'])
+        self.assertEqual(cfg['live_reload']['watch_extensions'], ['.js', '.ts', '.mjs'])
+
+    def test_lr_exclude_flag(self):
+        cfg = _parse_config(['8000', '--lr-exclude', '.git,dist,__pycache__'])
+        self.assertEqual(cfg['live_reload']['exclude_dirs'], ['.git', 'dist', '__pycache__'])
+
+    def test_lr_disabled_flag(self):
+        cfg = _parse_config(['8000', '--lr-disabled'])
+        self.assertFalse(cfg['live_reload']['enabled'])
+
+    def test_multiple_flags(self):
+        cfg = _parse_config([
+            '8888', '--lr-port', '13001', '--lr-debounce', '600',
+            '--lr-extensions', '.js,.css', '--lr-exclude', '.git,tmp',
+            '--lr-disabled'
+        ])
+        self.assertEqual(cfg['port'], 8888)
+        self.assertEqual(cfg['live_reload']['port'], 13001)
+        self.assertEqual(cfg['live_reload']['debounce_ms'], 600)
+        self.assertEqual(cfg['live_reload']['watch_extensions'], ['.js', '.css'])
+        self.assertEqual(cfg['live_reload']['exclude_dirs'], ['.git', 'tmp'])
+        self.assertFalse(cfg['live_reload']['enabled'])
+
+    def test_unknown_flag_is_skipped(self):
+        cfg = _parse_config(['8000', '--unknown-flag'])
+        self.assertEqual(cfg['port'], 8000)
+
+    def test_lr_port_without_value_uses_default(self):
+        cfg = _parse_config(['8000', '--lr-port'])
+        self.assertEqual(cfg['live_reload']['port'], 12002)
+
+    def test_config_matches_CONFIG_defaults(self):
+        self.assertEqual(CONFIG['port'], 8000)
+        self.assertEqual(CONFIG['live_reload']['port'], 12002)
+        self.assertTrue(CONFIG['live_reload']['enabled'])
 
 
 if __name__ == '__main__':
