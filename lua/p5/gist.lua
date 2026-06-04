@@ -610,7 +610,7 @@ else
 		vim.api.nvim_create_autocmd("BufWriteCmd", {
 				buffer = buf,
 				callback = function()
-					local new_body = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1), "\n")
+					local new_body = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
 					vim.api.nvim_buf_set_option(buf, "modified", false)
 					local function do_save()
 						local function on_done(api_ok)
