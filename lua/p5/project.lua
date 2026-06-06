@@ -20,12 +20,17 @@ P.download_p5_assets = function(project_path, version, callback)
 	end
 	urls.types = CDN .. "@" .. version .. "/types/p5.d.ts"
 
-	local pending = 0
-	local function dl(url, dest)
-		pending = pending + 1
-		core.fetch(url, dest, function(ok)
+	local downloads = { { url = urls.lib, dest = libs_dir .. "/p5.js" } }
+	if urls.sound then
+		table.insert(downloads, { url = urls.sound, dest = libs_dir .. "/p5.sound.js" })
+	end
+	table.insert(downloads, { url = urls.types, dest = types_dir .. "/p5.d.ts" })
+
+	local pending = #downloads
+	for _, d in ipairs(downloads) do
+		core.fetch(d.url, d.dest, function(ok)
 			if not ok then
-				notify("Download failed: " .. url, "warn")
+				notify("Download failed: " .. d.url, "warn")
 			end
 			pending = pending - 1
 			if pending == 0 and callback then
@@ -33,12 +38,6 @@ P.download_p5_assets = function(project_path, version, callback)
 			end
 		end, { cache = true })
 	end
-
-	dl(urls.lib, libs_dir .. "/p5.js")
-	if urls.sound then
-		dl(urls.sound, libs_dir .. "/p5.sound.js")
-	end
-	dl(urls.types, types_dir .. "/p5.d.ts")
 end
 
 P.create_project = function(name, major)
