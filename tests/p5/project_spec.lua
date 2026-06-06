@@ -179,3 +179,42 @@ describe("ensure_assets", function()
     assert.is_true(called)
   end)
 end)
+
+describe("create_project", function()
+  local P = require("p5.project")
+  local tmp = vim.fn.tempname()
+  local orig_cwd = vim.fn.getcwd()
+
+  before_each(function()
+    vim.fn.mkdir(tmp, "p")
+    vim.fn.chdir(tmp)
+  end)
+
+  after_each(function()
+    vim.fn.chdir(orig_cwd)
+    vim.fn.delete(tmp, "rf")
+  end)
+
+  it("prevents creating project inside existing p5 project", function()
+    vim.fn.writefile(vim.split(vim.fn.json_encode({
+      version = "2.3.0", libs = {}, includes = { "sketch.js" },
+    }), "\n"), tmp .. "/p5.json")
+    local ok = P.create_project("child", 2)
+    assert.is_false(ok)
+  end)
+
+  it("prevents creating deeply nested project", function()
+    vim.fn.mkdir(tmp .. "/sub", "p")
+    vim.fn.writefile(vim.split(vim.fn.json_encode({
+      version = "2.3.0", libs = {}, includes = { "sketch.js" },
+    }), "\n"), tmp .. "/p5.json")
+    local ok = P.create_project("sub/deep", 2)
+    assert.is_false(ok)
+  end)
+
+  it("allows creating project outside any existing project", function()
+    local ok = P.create_project("fresh", 1)
+    assert.is_nil(ok)
+    vim.fn.delete(tmp .. "/fresh", "rf")
+  end)
+end)

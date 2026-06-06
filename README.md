@@ -74,7 +74,6 @@ A directory that has a `p5.json` file is called a `sketchspace`. The file looks 
 ```json
 {
   "version": "2.0.0",
-  "major": 2,
   "libs": {},
   "includes": ["sketch.js"],
   "gist": {
@@ -86,7 +85,6 @@ A directory that has a `p5.json` file is called a `sketchspace`. The file looks 
 ```
 
 - `version`: p5.js version to use
-- `major`: p5.js major version (`1` or `2`)
 - `libs`: Object with library names as keys and their versions as values
 - `includes`: Files to include in the Gist (default: `["sketch.js"]`)
 - `gist`: Gist metadata object (optional) with `url` (`"user/gistId"`), `title`, and `description`
@@ -181,20 +179,6 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 ```vim
 :P5 server
 :P5 server 8080
-```
-
----
-
-### :P5 console (deprecated)
-
-> ⚠️ **Deprecated** — use `:P5 cdp` instead. The CDP panel's Console tab provides
-> richer output with stack traces, object previews, and structured log data.
-
-Toggle browser console to view console.log, errors, and warnings in Neovim.
-
-```vim
-:P5 console     # Opens CDP panel on Console tab (with deprecation notice)
-:P5 cdp         # Open CDP panel (6 tabs: Console, Network, Eval, Debug, Perf, Info)
 ```
 
 ---
@@ -513,7 +497,6 @@ vim.keymap.set("n", "<leader>ps", ":P5 setup<CR>", { desc = "Setup project" })
 
 -- Server
 vim.keymap.set("n", "<leader>pss", ":P5 server<CR>", { desc = "Toggle server" })
-vim.keymap.set("n", "<leader>pso", ":P5 console<CR>", { desc = "Toggle console (deprecated)" })
 vim.keymap.set("n", "<leader>psd", ":P5 cdp<CR>", { desc = "Toggle CDP DevTools" })
 
 -- Libraries

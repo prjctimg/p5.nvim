@@ -175,13 +175,6 @@ function draw() {
 		end
 	end
 
-	handlers.console = function()
-		vim.schedule(function()
-			core.notify("⚠ :P5 console is deprecated. Use :P5 cdp to open the CDP panel (Console tab).", "warn")
-		end)
-		cdp.toggle()
-	end
-
 	handlers.docs = function()
 		vim.cmd("help p5.nvim")
 	end
@@ -286,7 +279,6 @@ function draw() {
 			"Install library",
 			"Uninstall library",
 			server_status,
-			"Toggle CDP console",
 			"Open docs",
 			"Update libraries",
 			"Create gist",
@@ -300,7 +292,6 @@ function draw() {
 			["Uninstall library"] = function() handlers.uninstall({}) end,
 			["Start server"] = function() handlers.server({}) end,
 			["Stop server"] = function() handlers.server({}) end,
-			["Toggle CDP console"] = function() handlers.console() end,
 			["Open docs"] = function() handlers.docs() end,
 			["Update libraries"] = function() handlers.update({}) end,
 			["Create gist"] = function() handlers.gist({}) end,
@@ -326,7 +317,7 @@ function draw() {
 		end)
 	end
 
-	local subcommands = vim.tbl_filter(function(k) return k ~= "sync" end, vim.tbl_keys(handlers))
+	local subcommands = vim.tbl_filter(function(k) return k ~= "sync" and k ~= "console" end, vim.tbl_keys(handlers))
 
 	local function get_completion(line)
 		local args = vim.split(line, "%s+")

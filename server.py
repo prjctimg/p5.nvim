@@ -1167,8 +1167,7 @@ class HTTPServer:
                 pass
         
         libs = config.get('libs', {})
-        major = config.get('major', 2)
-        version = config.get('version', '2.0.0' if major == 2 else '1.9.0')
+        version = config.get('version', '2.0.0')
         title = config.get('gist', {}).get('title', 'p5.js Sketch')
         
         # Auto-create sketch.js if missing

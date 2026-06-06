@@ -113,10 +113,6 @@ COMMANDS                                            *p5-nvim-commands*
    :P5 server
    :P5 server 8080
 
-:P5 console
-   Toggle the browser console. Shows a terminal with logs from the
-   browser's console.log/error/warn output.
-
 :P5 docs
    Open the p5.nvim help file.
 

@@ -51,6 +51,18 @@ P.create_project = function(name, major)
 	end
 
 	local path = vim.fn.fnamemodify(name, ":p")
+
+	local search_dir = vim.fn.fnamemodify(path, ":h")
+	while search_dir and #search_dir > 1 do
+		if core.is_file(search_dir .. "/p5.json") then
+			notify("Cannot create project inside existing sketchspace at " .. search_dir, "error")
+			return false
+		end
+		local parent = vim.fn.fnamemodify(search_dir, ":h")
+		if parent == search_dir then break end
+		search_dir = parent
+	end
+
 	core.mkdir(path)
 
 	local function finish(version)
