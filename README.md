@@ -23,6 +23,7 @@
 - [Auto Commands 🔌](#auto-commands-🔌)
 - [Keyboard Shortcuts ⌨️](#keyboard-shortcuts-️)
 - [Troubleshooting 🔧](#troubleshooting-🔧)
+- [Doc Generation 📚](#doc-generation)
 - [License 📜](#license-📜)
 
 ---
@@ -613,6 +614,45 @@ Library installation fails or downloads timeout.
    ```vim
    :P5 setup
    ```
+
+---
+
+## Doc Generation 📚
+
+The p5.js API reference docs (`doc/p5-*.txt`) are generated from the
+[p5.js source](https://github.com/processing/p5.js) using
+[documentation](https://github.com/documentationjs/documentation) +
+[pandoc](https://pandoc.org).
+
+### Setup
+
+```bash
+# Install pandoc (required)
+sudo apt install pandoc        # Debian/Ubuntu
+brew install pandoc            # macOS
+
+# Enable the pre-push hook
+git config core.hooksPath .githooks
+```
+
+### Generating docs manually
+
+```bash
+./scripts/gen-docs.sh
+```
+
+The script:
+1. Shallow-clones the p5.js repository to `.cache/p5-src/`
+2. Runs `documentation` to extract JSDoc annotations as JSON
+3. Converts JSON to per-module markdown
+4. Uses pandoc with a Lua writer to produce Vim help files in `doc/`
+5. Regenerates `doc/tags` for help navigation
+
+Use `--force` to regenerate even if the p5.js version hasn't changed:
+
+```bash
+./scripts/gen-docs.sh --force
+```
 
 ---
 

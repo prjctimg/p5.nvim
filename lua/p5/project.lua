@@ -110,46 +110,29 @@ function P.create_project_continue(name, override_version)
 </html>]]
 	vim.fn.writefile(vim.split(index_html:gsub("~~sound_script~~", sound_script), "\n"), path .. "/index.html")
 
-	local sketch_js = [[function setup() {
-  createCanvas(400, 400);
-}
+	local sketch_js = [[const sketch = (p) => {
+  p.setup = () => {
+    p.createCanvas(400, 400);
+  };
 
-function draw() {
-  background(220);
-  circle(mouseX, mouseY, 50);
-}]]
+  p.draw = () => {
+    p.background(220);
+    p.circle(p.mouseX, p.mouseY, 50);
+  };
+};
+
+new p5(sketch);
+]]
 	vim.fn.writefile(vim.split(sketch_js, "\n"), path .. "/sketch.js")
-
-	local jsconfig = [[{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext", 
-    "lib": ["DOM", "ES2022"],
-    "types":["./assets/types/p5.d.ts"],
-    "checkJs": true,
-    "strict": false,
-    "allowJs": true,
-    "moduleResolution": "node"
-  },
-  "include": [
-    "**/*.js",
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-}]]
-	vim.fn.writefile(vim.split(jsconfig, "\n"), path .. "/jsconfig.json")
 
 	local tsconfig = [[{
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
     "lib": ["DOM", "ES2022"],
-    "types":["./assets/types/p5.d.ts"],
     "strict": true,
     "allowJs": true,
-    "checkJs": false,
+    "checkJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

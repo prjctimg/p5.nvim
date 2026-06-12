@@ -69,14 +69,18 @@ Cm.setup = function(opts)
 			function(next_step)
 				local sketch_file = cwd .. "/sketch.js"
 				if not core.is_file(sketch_file) then
-					local sketch_js = [[function setup() {
-  createCanvas(400, 400);
-}
+					local sketch_js = [[const sketch = (p) => {
+  p.setup = () => {
+    p.createCanvas(400, 400);
+  };
 
-function draw() {
-  background(220);
-  circle(mouseX, mouseY, 50);
-}
+  p.draw = () => {
+    p.background(220);
+    p.circle(p.mouseX, p.mouseY, 50);
+  };
+};
+
+new p5(sketch);
 ]]
 					vim.fn.writefile(vim.split(sketch_js, "\n"), sketch_file)
 					core.notify("Created default sketch.js", "info")
