@@ -137,45 +137,58 @@ end
 
 ---@param t pandoc.Table
 function Table(t)
-  local rows = {}
-  local col_widths = {}
-  for _, hdr in ipairs(t.headers) do
-    local txt = render_inlines(hdr.content)
-    table.insert(col_widths, #txt)
+  local function render_cell(cell)
+    local inlines = {}
+    if cell.content then
+      for _, block in ipairs(cell.content) do
+        if block.t == 'Plain' and block.content then
+          for _, inline in ipairs(block.content) do
+            table.insert(inlines, inline)
+          end
+        elseif block.t == 'Str' or block.t == 'Code' or block.t == 'Emph' or block.t == 'Strong' then
+          table.insert(inlines, block)
+        end
+      end
+    end
+    if #inlines > 0 then
+      return render_inlines(inlines)
+    end
+    return ''
   end
-  local function render_row(cells)
+
+  local function render_row(row)
     local parts = {}
-    for i, cell in ipairs(cells) do
-      local txt = render_inlines(cell.content or cell)
-      table.insert(parts, txt)
+    if row.cells then
+      for _, cell in ipairs(row.cells) do
+        table.insert(parts, render_cell(cell))
+      end
     end
     return '| ' .. table.concat(parts, ' | ') .. ' |'
   end
-  -- header row
-  if t.headers and #t.headers > 0 then
-    local hdr_parts = {}
-    for _, hdr in ipairs(t.headers) do
-      table.insert(hdr_parts, render_inlines(hdr.content))
-    end
-    write('| ' .. table.concat(hdr_parts, ' | ') .. ' |\n')
-    write('|' .. string.rep('-', #hdr_parts * 6) .. '|\n')
-  end
-  -- body rows
-  for _, row in ipairs(t.rows) do
-    local cells = {}
-    for _, cell in ipairs(row) do
-      local txt = ''
-      if cell.content then
-        for _, block in ipairs(cell.content) do
-          if block.content then
-            txt = txt .. render_inlines(block.content)
-          end
+
+  -- header row (from t.head.rows)
+  if t.head and t.head.rows then
+    local hdr = t.head.rows[1]
+    if hdr then
+      local hdr_parts = {}
+      if hdr.cells then
+        for _, cell in ipairs(hdr.cells) do
+          table.insert(hdr_parts, render_cell(cell))
         end
       end
-      table.insert(cells, txt)
+      write('| ' .. table.concat(hdr_parts, ' | ') .. ' |\n')
+      write('|' .. string.rep('-', #hdr_parts * 6) .. '|\n')
     end
-    if #cells > 0 then
-      write('| ' .. table.concat(cells, ' | ') .. ' |\n')
+  end
+
+  -- body rows (from t.bodies)
+  if t.bodies then
+    for _, body in ipairs(t.bodies) do
+      if body.body then
+        for _, row in ipairs(body.body) do
+          write(render_row(row) .. '\n')
+        end
+      end
     end
   end
   write('\n')

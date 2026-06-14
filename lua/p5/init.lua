@@ -45,6 +45,10 @@ I.config = {
 		position = "below",
 		height = 10,
 	},
+	hover = {
+		enabled = false,
+		delay_ms = 6000,
+	},
 }
 
 I.setup = function(opts)
@@ -111,6 +115,22 @@ I.setup = function(opts)
 			end
 		end,
 	})
+
+	if I.config.hover.enabled then
+		local hover_timer
+		local group = vim.api.nvim_create_augroup("P5Hover", { clear = true })
+		vim.api.nvim_create_autocmd("CursorMoved", {
+			group = group,
+			callback = function()
+				if hover_timer then
+					hover_timer:close()
+				end
+				hover_timer = vim.defer_fn(function()
+					vim.lsp.buf.hover()
+				end, I.config.hover.delay_ms)
+			end,
+		})
+	end
 
 	commands.setup({
 		require_sketchspace = function(action)

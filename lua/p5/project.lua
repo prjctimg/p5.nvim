@@ -5,26 +5,16 @@ local notify = core.notify
 
 local CDN = "https://cdn.jsdelivr.net/npm/p5"
 
-P.V1_VERSION = "1.11.3"
-
 P.download_p5_assets = function(project_path, version, callback)
-	local major = core.parse_major(version)
 	local libs_dir = project_path .. "/assets/libs"
 	local types_dir = project_path .. "/assets/types"
 	core.mkdir(libs_dir)
 	core.mkdir(types_dir)
 
-	local urls = { lib = CDN .. "@" .. version .. "/lib/p5.min.js" }
-	if major == 1 then
-		urls.sound = CDN .. "@" .. version .. "/lib/addons/p5.sound.min.js"
-	end
-	urls.types = CDN .. "@" .. version .. "/types/p5.d.ts"
-
-	local downloads = { { url = urls.lib, dest = libs_dir .. "/p5.js" } }
-	if urls.sound then
-		table.insert(downloads, { url = urls.sound, dest = libs_dir .. "/p5.sound.js" })
-	end
-	table.insert(downloads, { url = urls.types, dest = types_dir .. "/p5.d.ts" })
+	local downloads = {
+		{ url = CDN .. "@" .. version .. "/lib/p5.min.js", dest = libs_dir .. "/p5.js" },
+		{ url = CDN .. "@" .. version .. "/types/p5.d.ts", dest = types_dir .. "/p5.d.ts" },
+	}
 
 	local pending = #downloads
 	for _, d in ipairs(downloads) do
@@ -40,8 +30,7 @@ P.download_p5_assets = function(project_path, version, callback)
 	end
 end
 
-P.create_project = function(name, major)
-	major = major or 2
+P.create_project = function(name)
 	name = name or "p5-sketch"
 
 	if vim.fn.isdirectory(name) ~= 0 then
@@ -64,24 +53,14 @@ P.create_project = function(name, major)
 
 	core.mkdir(path)
 
-	local function finish(version)
-		P.create_project_continue(name, version)
-	end
-
-	if major == 1 then
-		P.download_p5_assets(path, P.V1_VERSION, function()
-			finish(P.V1_VERSION)
+	notify("Fetching latest p5.js version...", "info")
+	core.fetch_latest_p5_version(function(version)
+		version = version or core.DEFAULT_P5_VERSION
+		notify("Downloading p5.js " .. version .. "...", "info")
+		P.download_p5_assets(path, version, function()
+			P.create_project_continue(name, version)
 		end)
-	else
-		notify("Fetching latest p5.js version...", "info")
-		core.fetch_latest_p5_version(function(version)
-			version = version or core.DEFAULT_P5_VERSION
-			notify("Downloading p5.js " .. version .. "...", "info")
-			P.download_p5_assets(path, version, function()
-				finish(version)
-			end)
-		end)
-	end
+	end)
 end
 
 function P.create_project_continue(name, override_version)
@@ -90,8 +69,6 @@ function P.create_project_continue(name, override_version)
 	P.copy_favicon(path)
 
 	local version = core.p5_version(override_version)
-	local major = core.parse_major(version)
-	local sound_script = major == 1 and '\n  <script src="assets/libs/p5.sound.js"></script>' or ""
 	local index_html = [[<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +76,7 @@ function P.create_project_continue(name, override_version)
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>p5.js Sketch</title>
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <script src="assets/libs/p5.js"></script>~~sound_script~~
+  <script src="assets/libs/p5.js"></script>
   <script src="assets/libs/libs.js"></script>
 </head>
 <body>
@@ -108,7 +85,7 @@ function P.create_project_continue(name, override_version)
   <script src="sketch.js"></script>
 </body>
 </html>]]
-	vim.fn.writefile(vim.split(index_html:gsub("~~sound_script~~", sound_script), "\n"), path .. "/index.html")
+	vim.fn.writefile(vim.split(index_html, "\n"), path .. "/index.html")
 
 	local sketch_js = [[const sketch = (p) => {
   p.setup = () => {
@@ -136,6 +113,7 @@ new p5(sketch);
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "typeRoots": ["assets/types"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
@@ -181,7 +159,6 @@ end
 P.ensure_assets = function(project_path, callback)
 	local config = core.read_workspace_config()
 	local version = config and config.version or core.DEFAULT_P5_VERSION
-	local major = core.parse_major(version)
 	local libs_dir = project_path .. "/assets/libs"
 	local p5_file = libs_dir .. "/p5.js"
 
@@ -194,22 +171,15 @@ P.ensure_assets = function(project_path, callback)
 	core.mkdir(libs_dir)
 	core.mkdir(project_path .. "/assets/types")
 
-	if major == 1 then
-		P.download_p5_assets(project_path, P.V1_VERSION, function()
+	notify("Fetching latest p5.js version...", "info")
+	core.fetch_latest_p5_version(function(version)
+		version = version or core.DEFAULT_P5_VERSION
+		notify("Downloading p5.js " .. version .. "...", "info")
+		P.download_p5_assets(project_path, version, function()
 			P.copy_favicon(project_path)
 			if callback then callback() end
 		end)
-	else
-		notify("Fetching latest p5.js version...", "info")
-		core.fetch_latest_p5_version(function(version)
-			version = version or core.DEFAULT_P5_VERSION
-			notify("Downloading p5.js " .. version .. "...", "info")
-			P.download_p5_assets(project_path, version, function()
-				P.copy_favicon(project_path)
-				if callback then callback() end
-			end)
-		end)
-	end
+	end)
 end
 
 P.is_p5_project = function(dir)

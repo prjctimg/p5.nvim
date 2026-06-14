@@ -123,15 +123,12 @@ describe("create_project_continue", function()
   end)
 
   it("creates project skeleton files", function()
-    -- create_project_continue is async (copy_assets_to_project callback),
-    -- so we use a deferred check
     local done = false
     local function check()
       if not done then
         done = true
         assert.is_true(C.is_file(tmp .. "/testproj/index.html"))
         assert.is_true(C.is_file(tmp .. "/testproj/sketch.js"))
-        assert.is_true(C.is_file(tmp .. "/testproj/jsconfig.json"))
         assert.is_true(C.is_file(tmp .. "/testproj/tsconfig.json"))
         assert.is_true(C.is_file(tmp .. "/testproj/p5.json"))
         local config, _ = C.read_json(tmp .. "/testproj/p5.json")
@@ -146,8 +143,7 @@ describe("create_project_continue", function()
       }), "\n"), path .. "/p5.json")
       vim.fn.writefile({ "<html></html>" }, path .. "/index.html")
       vim.fn.writefile({ "// sketch" }, path .. "/sketch.js")
-      vim.fn.writefile({ "{}" }, path .. "/jsconfig.json")
-      vim.fn.writefile({ "{}" }, path .. "/tsconfig.json")
+      vim.fn.writefile({ "" }, path .. "/tsconfig.json")
       check()
     end
     P.create_project_continue(tmp .. "/testproj", "2.3.0")
@@ -199,7 +195,7 @@ describe("create_project", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
       version = "2.3.0", libs = {}, includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
-    local ok = P.create_project("child", 2)
+    local ok = P.create_project("child")
     assert.is_false(ok)
   end)
 
@@ -208,12 +204,12 @@ describe("create_project", function()
     vim.fn.writefile(vim.split(vim.fn.json_encode({
       version = "2.3.0", libs = {}, includes = { "sketch.js" },
     }), "\n"), tmp .. "/p5.json")
-    local ok = P.create_project("sub/deep", 2)
+    local ok = P.create_project("sub/deep")
     assert.is_false(ok)
   end)
 
   it("allows creating project outside any existing project", function()
-    local ok = P.create_project("fresh", 1)
+    local ok = P.create_project("fresh")
     assert.is_nil(ok)
     vim.fn.delete(tmp .. "/fresh", "rf")
   end)

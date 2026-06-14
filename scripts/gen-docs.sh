@@ -105,10 +105,11 @@ for md_file in "$P5_MODULES_MD"/*.md; do
   base=$(basename "$md_file" .md)
   txt_file="$DOC_DIR/$base.txt"
   echo "    $base.txt"
-  pandoc "$md_file" \
-    --lua-writer "$SCRIPT_DIR/vimhelp.lua" \
+  pandoc -f markdown "$md_file" \
+    --lua-filter "$SCRIPT_DIR/vimhelp.lua" \
     --metadata title="$base" \
-    -o "$txt_file"
+    -o /dev/null \
+    > "$txt_file"
 done
 
 echo "    Help files generated in $DOC_DIR"

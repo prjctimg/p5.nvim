@@ -234,7 +234,7 @@ end
 		end
 
 		local remote_title, remote_files
-		local diffs, auto_push, auto_pull, use_remote, local_title
+		local diffs, use_remote, local_title, auto_push, auto_pull
 		local gist_obj, sync_errors, sync_temp_dir
 
 		local steps = {
@@ -362,10 +362,8 @@ end
 			end,
 			function(next_step)
 				if not use_remote then
-					vim.system({ "gh", "gist", "edit", gist_info.id, "--filename", "p5.json", project_dir .. "/p5.json" }, nil, function()
-						vim.system({ "gh", "api", "-X", "PATCH", "/gists/" .. gist_info.id, "-f", "description=" .. gist_obj.title }, nil, function()
-							next_step()
-						end)
+					vim.system({ "gh", "gist", "edit", gist_info.id, "--desc", gist_obj.title, "--filename", "p5.json", project_dir .. "/p5.json" }, nil, function()
+						next_step()
 					end)
 				else
 					next_step()

@@ -259,10 +259,6 @@ C.fetch_latest_p5_version = function(callback)
 	end, { cache = false })
 end
 
-C.parse_major = function(version)
-	return tonumber(version and version:match("^(%d+)")) or 2
-end
-
 -- Get p5 version (from override, project config, or fallback default)
 C.p5_version = function(override_version)
 	if override_version then return override_version end

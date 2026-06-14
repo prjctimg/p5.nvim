@@ -1187,7 +1187,6 @@ function draw() {
         # Build script tags for core and contrib libs
         scripts = []
         scripts.append('  <script src="assets/libs/p5.js"></script>')
-        scripts.append('  <script src="assets/libs/p5.sound.js"></script>')
         
         for lib_name in libs.keys():
             lib_version = libs[lib_name]

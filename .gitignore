@@ -1,5 +1,7 @@
 # Ignore runtime assets - these should be fetched by workflows
 assets/inject/
+!assets/inject/console.js
+!assets/inject/livereload.js
 assets/libs/
 assets/types/
 assets/favicon.ico
