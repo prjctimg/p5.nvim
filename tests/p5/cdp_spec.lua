@@ -17,6 +17,8 @@ describe("cdp", function()
     cdp.state.connected = false
     cdp.state.port = nil
     cdp.state.mode = nil
+    cdp.state.browser_launched = false
+    cdp.state.connect_attempts = 0
     cdp.state.terminal.attempts = 0
     cdp.state.terminal.connected = false
     cdp.state.terminal.timer = nil
@@ -355,6 +357,7 @@ describe("cdp", function()
         assert.is_nil(cdp.state.mode)
         assert.is_nil(cdp.state.win)
         assert.is_nil(cdp.state.buf)
+        assert.is_false(cdp.state.browser_launched)
       end)
     end)
   end)

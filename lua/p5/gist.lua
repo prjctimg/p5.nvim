@@ -38,9 +38,9 @@ end
 				if is_unsafe then
 					notify("We skipped a sketchy looking path. Check your p5.json 🕵️ ")
 				elseif file:match("^assets/") or file:match("^assets$") then
-					core.notify("🗄️ assets/ directory excluded from gist (not needed for sketchspace)", "info")
+					notify("assets/ directory excluded from gist (not needed for sketchspace)", "info")
 				elseif file:match("^skchbk/") then
-					core.notify("🗄️ skchbk/ directory excluded from gist", "info")
+					notify("skchbk/ directory excluded from gist", "info")
 				else
 					table.insert(filtered, file)
 				end

@@ -6,6 +6,7 @@ local project = require("p5.project")
 local notify = core.notify
 
 local user_stopped = false
+local server_starting = false
 
 S.config = {
 	port = 8000,
@@ -24,6 +25,11 @@ S.config = {
 }
 
 S.start = function(port)
+	if S.server_job or server_starting then
+		return
+	end
+	server_starting = true
+
 	local buffer_dir = vim.fn.expand("%:p:h")
 	if buffer_dir == "" or not core.is_dir(buffer_dir) then
 		buffer_dir = vim.fn.getcwd()
@@ -32,6 +38,7 @@ S.start = function(port)
 	local is_project = project.is_p5_project(buffer_dir)
 
 	if not is_project then
+		server_starting = false
 		vim.ui.select(
 			{ "Create new sketchspace", "Open recent sketchspace" },
 			{ prompt = "Not in a valid p5.js sketchspace. What would you like to do?" },
@@ -72,6 +79,7 @@ S.start = function(port)
 	end
 
 	if not type then
+		server_starting = false
 		notify("No suitable server found (python3, bun, deno, or node)", "warn")
 		notify("Please install one of the supported runtimes", "info")
 		return
@@ -111,7 +119,7 @@ S.start = function(port)
 			end
 		end,
 		function(next_step)
-			if validation_cancelled then return end
+			if validation_cancelled then server_starting = false return end
 			-- All validations passed, start server
 			S.port = port
 			S.type = type
@@ -155,7 +163,8 @@ S.start = function(port)
 					end
 				end,
 				on_exit = function(_, exit_code, event)
-					cdp.close()
+					pcall(cdp.close)
+					vim.api.nvim_exec_autocmds("User", { pattern = "P5ServerStopped" })
 
 					if not user_stopped then
 						if exit_code == 0 then
@@ -181,28 +190,26 @@ S.start = function(port)
 			})
 
 			if S.server_job > 0 then
+				server_starting = false
 				local url = "http://localhost:" .. port
-				local msg = "🎉 Server started (" .. type .. ") at " .. url
-				vim.defer_fn(function()
-					cdp.open()
-				end, 500)
-				notify(msg, "ok")
-
-				-- Auto-open browser with CDP support if Chrome/Chromium is available
 				local cdp_enabled = S.config.cdp and S.config.cdp.enabled
-				if S.config.auto_open_browser ~= false then
+				local msg = "Server started (" .. type .. ") at " .. url
+				if cdp_enabled then
+					msg = msg .. " (CDP enabled)"
+				end
+				notify(msg, "ok")
+				vim.api.nvim_exec_autocmds("User", { pattern = "P5ServerStarted" })
+
+				vim.defer_fn(function()
+					pcall(cdp.open)
+				end, 500)
+
+				-- Auto-open browser (skip when CDP enabled - CDP module handles it)
+				if S.config.auto_open_browser ~= false and not cdp_enabled then
 					vim.defer_fn(function()
 						local chrome_cmd = core.find_chrome()
 						if chrome_cmd then
 							local chrome_args = { chrome_cmd }
-							if cdp_enabled then
-								table.insert(chrome_args, "--remote-debugging-port=9222")
-								local cdp_module = require("p5.cdp")
-								local flags = cdp_module.config.browser_flags or {}
-								for _, flag in ipairs(flags) do
-									table.insert(chrome_args, flag)
-								end
-							end
 							table.insert(chrome_args, url)
 							vim.fn.jobstart(chrome_args, {
 								detach = true,
@@ -237,6 +244,8 @@ S.start = function(port)
 						end
 					end, 500)
 				end
+			else
+				server_starting = false
 			end
 		end,
 	}

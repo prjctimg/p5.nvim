@@ -80,7 +80,7 @@ new p5(sketch);
 			function(next_step)
 				project.ensure_assets(cwd, function()
 					core.notify("Assets ready", "info")
-					libraries.generate_libs_js(cwd)
+					pcall(libraries.generate_libs_js, cwd)
 					local updated_config = core.read_workspace_config()
 					if updated_config and updated_config.libs then
 						local lib_names = vim.tbl_keys(updated_config.libs)
@@ -185,12 +185,14 @@ new p5(sketch);
 			return
 		end
 		local sub = args[1]
-		if sub == "sync" then
+		if not sub then
+			gist.create("")
+		elseif sub == "sync" then
 			gist.sync()
 		elseif sub == "edit" then
 			gist.edit()
 		else
-			gist.create(table.concat(args, " "))
+			gist.create(table.concat(args, " ", 2))
 		end
 	end
 
@@ -206,7 +208,7 @@ new p5(sketch);
 	end
 
 	handlers.skchbk = function(args)
-		local subcmd = args[1]
+		local subcmd = args and args[1]
 		local username = config.sketchbook.user
 
 		if not username or username == "" then
@@ -261,6 +263,11 @@ new p5(sketch);
 		elseif sub == "perf" then
 			cdp.switch_tab(5)
 			cdp.toggle()
+		elseif sub == "network_clear" then
+			cdp.tab_data.network = {}
+			if cdp.state.buf and vim.api.nvim_buf_is_valid(cdp.state.buf) then
+				cdp.render_all()
+			end
 		end
 	end
 
@@ -341,7 +348,7 @@ new p5(sketch);
 		elseif subcmd == "cdp" then
 			local sub = args[subcmd_pos + 1]
 			if not sub then
-				return { "connect", "disconnect", "status", "eval", "break", "continue", "step", "stepIn", "stepOut", "perf" }
+				return { "connect", "disconnect", "status", "eval", "break", "continue", "step", "stepIn", "stepOut", "perf", "network_clear" }
 			end
 		end
 		return {}

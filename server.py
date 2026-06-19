@@ -201,9 +201,16 @@ class CDPClient:
         self.completed_requests.clear()
 
     async def connect(self):
-        body = await http_get('localhost', self.cdp_port, '/json')
-        if body is None:
-            raise ConnectionError(f"No CDP endpoint at localhost:{self.cdp_port}")
+        for attempt in range(10):
+            body = await http_get('localhost', self.cdp_port, '/json')
+            if body is not None:
+                break
+            await asyncio.sleep(0.5)
+        else:
+            raise ConnectionError(
+                f"No CDP endpoint at localhost:{self.cdp_port} "
+                f"(chrome not ready after 5s wait)"
+            )
         pages = json.loads(body)
         pages = [p for p in pages if p.get('type') == 'page']
         if not pages:
@@ -960,14 +967,25 @@ class HTTPServer:
                             await writer.drain()
                             heartbeat = 0
                 else:
-                    if heartbeat == 0:
+                    logs = self.console_buffer.get_all()
+                    if logs:
+                        for entry in logs:
+                            entry.setdefault('stack', [])
+                            entry['type'] = 'console'
+                            line = json.dumps(entry) + '\n'
+                            writer.write(line.encode())
+                            await writer.drain()
+                        heartbeat = 0
+                    elif heartbeat == 0:
                         writer.write(b'{"type":"status","state":"disconnected"}\n')
                         await writer.drain()
-                    heartbeat += 1
-                    if heartbeat >= 15:
-                        writer.write(b'{"type":"hb"}\n')
-                        await writer.drain()
-                        heartbeat = 0
+                        heartbeat += 1
+                    else:
+                        heartbeat += 1
+                        if heartbeat >= 15:
+                            writer.write(b'{"type":"hb"}\n')
+                            await writer.drain()
+                            heartbeat = 0
                 await asyncio.sleep(1)
         except (BrokenPipeError, ConnectionResetError, asyncio.CancelledError):
             pass

@@ -289,12 +289,12 @@ end
 
 -- Validate downloaded file contains actual JavaScript code
 L.validate_download = function(dest)
-	if not core.is_file(dest) then
+	if not dest or not core.is_file(dest) then
 		return false
 	end
 
 	local size = vim.fn.getfsize(dest)
-	if size < 100 then
+	if not size or size < 100 then
 		return false
 	end
 
@@ -305,6 +305,8 @@ L.validate_download = function(dest)
 
 	local first_bytes = handle:read(100)
 	handle:close()
+
+	if not first_bytes then return false end
 
 	local error_patterns = {
 		"Not found",

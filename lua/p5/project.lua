@@ -17,14 +17,22 @@ P.download_p5_assets = function(project_path, version, callback)
 	}
 
 	local pending = #downloads
+	local had_error = false
 	for _, d in ipairs(downloads) do
 		core.fetch(d.url, d.dest, function(ok)
 			if not ok then
+				had_error = true
 				notify("Download failed: " .. d.url, "warn")
+			elseif not libraries.validate_download(d.dest) then
+				had_error = true
+				notify("Download validation failed: " .. d.url, "warn")
 			end
 			pending = pending - 1
-			if pending == 0 and callback then
-				callback()
+			if pending == 0 then
+				if had_error then
+					notify("Some p5.js assets failed to download", "warn")
+				end
+				if callback then callback() end
 			end
 		end, { cache = true })
 	end
@@ -138,7 +146,7 @@ new p5(sketch);
 
 	core.mkdir(path .. "/assets/types")
 	core.mkdir(path .. "/assets/libs")
-	libraries.generate_libs_js(path)
+	pcall(libraries.generate_libs_js, path)
 
 	notify("Sketchspace created: " .. name, "ok")
 	vim.api.nvim_set_current_dir(path)

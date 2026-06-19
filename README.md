@@ -463,22 +463,33 @@ require("p5").setup({
 
 ## Auto Commands 🔌
 
-Auto-start server when opening a sketch.js file:
+Toggle built-in autocmds via config to avoid boilerplate:
+
+```lua
+require("p5").setup({
+  autocmds = {
+    server_on_enter = false,      -- Auto-start server when opening sketch.js
+    cdp_on_server_start = false,  -- Open CDP panel when server starts
+    save_on_focus_lost = false,   -- Auto-save *.js on focus loss (triggers live reload)
+    refresh_on_save = false,      -- Refresh CDP info tab when sketch.js is saved
+    close_cdp_on_stop = true,     -- Close CDP panel when server stops
+    reset_on_dir_change = false,  -- Reset CDP connection when changing directories
+  },
+})
+```
+
+Or, create your own:
 
 ```lua
 -- Auto-start server when opening sketch.js
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
   pattern = "sketch.js",
-  callback = function()
-    vim.cmd("P5 server")
-  end
+  callback = function() vim.cmd("P5 server") end,
 })
 
 -- Auto-open CDP panel when server starts
 vim.api.nvim_create_autocmd({ "User", "P5ServerStarted" }, {
-  callback = function()
-    vim.cmd("P5 cdp")
-  end
+  callback = function() vim.cmd("P5 cdp") end,
 })
 ```
 

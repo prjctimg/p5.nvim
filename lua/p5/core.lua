@@ -55,15 +55,18 @@ C.rmtree = function(path)
 end
 
 C.read_json = function(path)
-	if not C.is_file(path) then
+	if not path or not C.is_file(path) then
 		return nil, "File not found"
 	end
 	local fp = io.open(path, "r")
 	if not fp then return nil, "Cannot open file" end
 	local content = fp:read("*a")
 	fp:close()
+	if not content or content == "" then
+		return nil, "Empty file"
+	end
 	local ok, data = pcall(vim.json.decode, content)
-	if not ok then
+	if not ok or type(data) ~= "table" then
 		return nil, "Invalid JSON"
 	end
 	return data, nil
