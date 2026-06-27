@@ -1,4 +1,4 @@
-local Cd = {}
+local C = {}
 local core = require("p5.core")
 local notify = core.notify
 
@@ -14,7 +14,7 @@ local function disable_term_mode(buf_)
 	end
 end
 
-Cd.config = {
+C.config = {
 	enabled = false,
 	remote_debugging_port = 9222,
 	browser_flags = {},
@@ -50,7 +50,7 @@ local function http_request(method, url, opts)
 	})
 end
 
-Cd.state = {
+C.state = {
 	buf = nil,
 	win = nil,
 	job_id = nil,
@@ -76,7 +76,7 @@ Cd.state = {
 	info_cursor = 1,
 }
 
-Cd.tab_data = {
+C.tab_data = {
 	console = {},
 	network = {},
 	eval = {},
@@ -100,8 +100,6 @@ local tabs = {
 	{ key = 6, name = "Info", data_key = "info" },
 }
 
-local tab_accents = { "#8be9fd", "#6272a4", "#f1fa8c", "#ff5555", "#50fa7b", "#bd93f9" }
-
 local function launch_browser()
 	local chrome_cmd = core.find_chrome()
 	if not chrome_cmd then
@@ -109,26 +107,30 @@ local function launch_browser()
 		return
 	end
 	local server = require("p5.server")
-	local port = server.port or Cd.config.remote_debugging_port
+	_ = server.port or C.config.remote_debugging_port
 	local url = server.port and string.format("http://localhost:%d", server.port) or nil
-	local args = { chrome_cmd, "--remote-debugging-port=" .. Cd.config.remote_debugging_port }
-	local flags = Cd.config.browser_flags or {}
+	local args = { chrome_cmd, "--remote-debugging-port=" .. C.config.remote_debugging_port }
+	local flags = C.config.browser_flags or {}
 	for _, flag in ipairs(flags) do
 		table.insert(args, flag)
 	end
-	if url then table.insert(args, url) end
+	if url then
+		table.insert(args, url)
+	end
 	vim.fn.jobstart(args, { detach = true })
-	notify("CDP: launched " .. chrome_cmd .. " with remote debugging on port " .. Cd.config.remote_debugging_port, "info")
+	notify("CDP: launched " .. chrome_cmd .. " with remote debugging on port " .. C.config.remote_debugging_port, "info")
 end
 
-Cd.connect = function(attempt)
+C.connect = function(attempt)
 	attempt = attempt or 1
-	if not check_curl() then return end
-	if not Cd.config.enabled then
-		Cd.config.enabled = true
+	if not check_curl() then
+		return
+	end
+	if not C.config.enabled then
+		C.config.enabled = true
 		notify("CDP auto-enabled", "info")
-		if not Cd.state.browser_launched then
-			Cd.state.browser_launched = true
+		if not C.state.browser_launched then
+			C.state.browser_launched = true
 			vim.defer_fn(launch_browser, 300)
 		end
 	end
@@ -142,25 +144,30 @@ Cd.connect = function(attempt)
 	http_request("POST", string.format("http://localhost:%d/api/cdp/connect", port), {
 		timeout = 10,
 		on_stdout = function(_, data)
-			if not data or #data == 0 then return end
+			if not data or #data == 0 then
+				return
+			end
 			local text = table.concat(data, "")
 			local ok, result = pcall(vim.json.decode, text)
 			vim.schedule(function()
 				if ok and type(result) == "table" then
 					if result.status == "connected" or result.status == "already_connected" then
-						Cd.state.connected = true
-						Cd.state.page_url = result.url or ""
-						Cd.state.port = port
+						C.state.connected = true
+						C.state.page_url = result.url or ""
+						C.state.port = port
 						notify("CDP connected to " .. (result.url or "browser"), "info")
-						if Cd.state.buf and is_buf(Cd.state.buf) then
-							Cd.render_all()
+						if C.state.buf and is_buf(C.state.buf) then
+							C.render_all()
 						end
 						return
 					elseif attempt < max_attempts then
 						local delay = math.min(500 * (2 ^ (attempt - 1)), 8000)
-						notify(string.format("CDP: connection attempt %d/%d failed, retrying in %dms...", attempt, max_attempts, delay), "info")
+						notify(
+							string.format("CDP: connection attempt %d/%d failed, retrying in %dms...", attempt, max_attempts, delay),
+							"info"
+						)
 						vim.defer_fn(function()
-							Cd.connect(attempt + 1)
+							C.connect(attempt + 1)
 						end, delay)
 					else
 						notify("CDP: " .. (result.message or "connection failed") .. " (all attempts exhausted)", "warn")
@@ -168,54 +175,62 @@ Cd.connect = function(attempt)
 				elseif attempt < max_attempts then
 					local delay = math.min(500 * (2 ^ (attempt - 1)), 8000)
 					vim.defer_fn(function()
-						Cd.connect(attempt + 1)
+						C.connect(attempt + 1)
 					end, delay)
 				else
 					notify("CDP: connection request failed (all attempts exhausted)", "warn")
 				end
-				if Cd.state.buf and is_buf(Cd.state.buf) then
-					Cd.render_all()
+				if C.state.buf and is_buf(C.state.buf) then
+					C.render_all()
 				end
 			end)
 		end,
 	})
 end
 
-Cd.disconnect = function()
-	local port = Cd.state.port
-	if not port then return end
+C.disconnect = function()
+	local port = C.state.port
+	if not port then
+		return
+	end
 	if not check_curl() then
-		Cd.state.connected = false
-		Cd.state.page_url = ""
-		if Cd.state.buf and is_buf(Cd.state.buf) then Cd.render_all() end
+		C.state.connected = false
+		C.state.page_url = ""
+		if C.state.buf and is_buf(C.state.buf) then
+			C.render_all()
+		end
 		return
 	end
 	http_request("DELETE", string.format("http://localhost:%d/api/cdp/connect", port), {
 		timeout = 5,
 		on_exit = function()
 			vim.schedule(function()
-				Cd.state.connected = false
-				Cd.state.page_url = ""
+				C.state.connected = false
+				C.state.page_url = ""
 				notify("CDP disconnected", "info")
-				if Cd.state.buf and is_buf(Cd.state.buf) then
-					Cd.render_all()
+				if C.state.buf and is_buf(C.state.buf) then
+					C.render_all()
 				end
 			end)
 		end,
 	})
 end
 
-Cd.status = function()
-	if not Cd.state.port then
+C.status = function()
+	if not C.state.port then
 		notify("CDP: not connected", "warn")
 		return
 	end
-	if not check_curl() then return end
-	local port = Cd.state.port
+	if not check_curl() then
+		return
+	end
+	local port = C.state.port
 	http_request("GET", string.format("http://localhost:%d/api/cdp/status", port), {
 		timeout = 5,
 		on_stdout = function(_, data)
-			if not data or #data == 0 then return end
+			if not data or #data == 0 then
+				return
+			end
 			local text = table.concat(data, "")
 			local ok, result = pcall(vim.json.decode, text)
 			vim.schedule(function()
@@ -233,33 +248,39 @@ Cd.status = function()
 	})
 end
 
-Cd.eval = function(expr)
+C.eval = function(expr)
 	if not expr then
 		vim.ui.input({ prompt = "JS expression: " }, function(input)
 			if input and input ~= "" then
-				Cd.eval(input)
+				C.eval(input)
 			end
 		end)
 		return
 	end
-	if not Cd.state.port then
+	if not C.state.port then
 		notify("CDP: not connected", "warn")
 		return
 	end
-	if not check_curl() then return end
-	local port = Cd.state.port
+	if not check_curl() then
+		return
+	end
+	local port = C.state.port
 	local entry = { expression = expr, status = "pending", result = nil }
-	table.insert(Cd.tab_data.eval, entry)
-	if Cd.state.active_tab == 3 then Cd.render_all() end
+	table.insert(C.tab_data.eval, entry)
+	if C.state.active_tab == 3 then
+		C.render_all()
+	end
 	http_request("POST", string.format("http://localhost:%d/api/cdp/evaluate", port), {
 		timeout = 15,
 		body = { expression = expr },
 		on_stdout = function(_, data)
-			if not data or #data == 0 then return end
+			if not data or #data == 0 then
+				return
+			end
 			local text = table.concat(data, "")
 			local ok, result = pcall(vim.json.decode, text)
 			vim.schedule(function()
-				local last = Cd.tab_data.eval[#Cd.tab_data.eval]
+				local last = C.tab_data.eval[#C.tab_data.eval]
 				if last then
 					if ok and type(result) == "table" then
 						last.status = "done"
@@ -272,35 +293,46 @@ Cd.eval = function(expr)
 						last.result = text
 					end
 				end
-				if Cd.state.active_tab == 3 then Cd.render_all() end
+				if C.state.active_tab == 3 then
+					C.render_all()
+				end
 			end)
 		end,
 	})
 end
 
-Cd.set_breakpoint = function(location)
+C.set_breakpoint = function(location)
 	if not location then
 		vim.ui.input({ prompt = "Breakpoint location (file.js:line): " }, function(input)
 			if input and input ~= "" then
-				Cd.set_breakpoint(input)
+				C.set_breakpoint(input)
 			end
 		end)
 		return
 	end
-	local port = Cd.state.port
-	if not port then notify("CDP: not connected", "warn") return end
-	if not check_curl() then return end
+	local port = C.state.port
+	if not port then
+		notify("CDP: not connected", "warn")
+		return
+	end
+	if not check_curl() then
+		return
+	end
 	http_request("POST", string.format("http://localhost:%d/api/cdp/debug/break", port), {
 		timeout = 10,
 		body = { location = location },
 		on_stdout = function(_, data)
-			if not data or #data == 0 then return end
+			if not data or #data == 0 then
+				return
+			end
 			local text = table.concat(data, "")
 			local ok, result = pcall(vim.json.decode, text)
 			vim.schedule(function()
 				if ok and type(result) == "table" then
 					notify("Breakpoint set at " .. location, "info")
-					if Cd.state.buf and is_buf(Cd.state.buf) then Cd.render_all() end
+					if C.state.buf and is_buf(C.state.buf) then
+						C.render_all()
+					end
 				else
 					notify("Failed to set breakpoint: " .. (text or "unknown"), "warn")
 				end
@@ -309,187 +341,217 @@ Cd.set_breakpoint = function(location)
 	})
 end
 
-Cd.continue = function()
-	local port = Cd.state.port
-	if not port or not check_curl() then return end
+C.continue = function()
+	local port = C.state.port
+	if not port or not check_curl() then
+		return
+	end
 	http_request("POST", string.format("http://localhost:%d/api/cdp/debug/continue", port), { timeout = 5 })
 end
 
-Cd.step = function()
-	local port = Cd.state.port
-	if not port or not check_curl() then return end
+C.step = function()
+	local port = C.state.port
+	if not port or not check_curl() then
+		return
+	end
 	http_request("POST", string.format("http://localhost:%d/api/cdp/debug/step", port), { timeout = 5 })
 end
 
-Cd.step_in = function()
-	local port = Cd.state.port
-	if not port or not check_curl() then return end
+C.step_in = function()
+	local port = C.state.port
+	if not port or not check_curl() then
+		return
+	end
 	http_request("POST", string.format("http://localhost:%d/api/cdp/debug/stepIn", port), { timeout = 5 })
 end
 
-Cd.step_out = function()
-	local port = Cd.state.port
-	if not port or not check_curl() then return end
+C.step_out = function()
+	local port = C.state.port
+	if not port or not check_curl() then
+		return
+	end
 	http_request("POST", string.format("http://localhost:%d/api/cdp/debug/stepOut", port), { timeout = 5 })
 end
 
-Cd.switch_tab = function(n)
-	if n < 1 or n > #tabs then return end
-	Cd.state.active_tab = n
-	if n == 6 then Cd._fetch_lsp_symbols() end
-	Cd.render_all()
+C.switch_tab = function(n)
+	if n < 1 or n > #tabs then
+		return
+	end
+	C.state.active_tab = n
+	if n == 6 then
+		C._fetch_lsp_symbols()
+	end
+	C.render_all()
 end
 
-Cd.toggle = function()
-	if Cd.state.win and is_win(Cd.state.win) then
-		Cd.close()
+C.toggle = function()
+	if C.state.win and is_win(C.state.win) then
+		C.close()
 	else
-		Cd.open()
+		C.open()
 	end
 end
 
-Cd.open = function()
+C.open = function()
 	local server = require("p5.server")
 	if not (server.server_job and server.port) then
 		notify("CDP: start server first with :P5 server", "info")
 		return
 	end
-	Cd.state.port = server.port
+	C.state.port = server.port
 
 	if not core.find_chrome() then
-		Cd._open_terminal()
+		C._open_terminal()
 		return
 	end
 
-	if not Cd.config.enabled then
-		Cd.config.enabled = true
+	if not C.config.enabled then
+		C.config.enabled = true
 		notify("CDP auto-enabled", "info")
 	end
-	if not Cd.state.browser_launched then
-		Cd.state.browser_launched = true
+	if not C.state.browser_launched then
+		C.state.browser_launched = true
 		vim.defer_fn(launch_browser, 300)
 	end
-	Cd.state.mode = "panel"
+	C.state.mode = "panel"
 	local buf = vim.api.nvim_create_buf(false, true)
 	set_opt("filetype", "p5-cdp", { buf = buf })
 	set_opt("buftype", "nofile", { buf = buf })
 	set_opt("swapfile", false, { buf = buf })
 	set_opt("modifiable", true, { buf = buf })
 
-	local pos = Cd.config.view.position or "below"
-	local height = Cd.config.view.height or math.floor(vim.o.lines * 0.3)
+	local pos = C.config.view.position or "below"
+	local height = C.config.view.height or math.floor(vim.o.lines * 0.3)
 	local split_pattern = core.split_cmd[pos] or core.split_cmd.below
 	vim.cmd(split_pattern:format(height))
 	local win = vim.api.nvim_get_current_win()
 	vim.api.nvim_win_set_buf(win, buf)
-	Cd.state.win = win
+	C.state.win = win
 
-	set_opt("number", false, { scope = "local", win = Cd.state.win })
-	set_opt("relativenumber", false, { scope = "local", win = Cd.state.win })
-	set_opt("signcolumn", "no", { scope = "local", win = Cd.state.win })
-	set_opt("wrap", false, { scope = "local", win = Cd.state.win })
-	set_opt("cursorline", true, { scope = "local", win = Cd.state.win })
-	Cd.state.buf = buf
-	Cd._set_keymaps(buf)
-	Cd.render_all()
-	Cd._start_sse_job()
-	if not Cd.state.connected then
+	set_opt("number", false, { scope = "local", win = C.state.win })
+	set_opt("relativenumber", false, { scope = "local", win = C.state.win })
+	set_opt("signcolumn", "no", { scope = "local", win = C.state.win })
+	set_opt("wrap", false, { scope = "local", win = C.state.win })
+	set_opt("cursorline", true, { scope = "local", win = C.state.win })
+	C.state.buf = buf
+	C._set_keymaps(buf)
+	C.render_all()
+	C._start_sse_job()
+	if not C.state.connected then
 		vim.defer_fn(function()
-			Cd.connect()
+			C.connect()
 		end, 2000)
 	end
 	vim.api.nvim_create_autocmd("BufWinLeave", {
 		buffer = buf,
 		once = true,
 		callback = function()
-			Cd.close()
+			C.close()
 		end,
 	})
 end
 
-Cd.close = function()
-	if Cd.state.mode == "panel" then
-		Cd.disconnect()
+C.close = function()
+	if C.state.mode == "panel" then
+		C.disconnect()
 	end
-	if Cd.state.mode == "terminal" then
+	if C.state.mode == "terminal" then
 		local has_snacks, snacks = pcall(require, "snacks")
-		if has_snacks and Cd.state.buf then
-			pcall(snacks.terminal.close, Cd.state.buf)
+		if has_snacks and C.state.buf then
+			pcall(snacks.terminal.close, C.state.buf)
 		end
 	end
-	if Cd.state.job_id then
-		vim.fn.jobstop(Cd.state.job_id)
-		Cd.state.job_id = nil
+	if C.state.job_id then
+		vim.fn.jobstop(C.state.job_id)
+		C.state.job_id = nil
 	end
-	if Cd.state.terminal and Cd.state.terminal.timer then
-		Cd.state.terminal.timer:close()
-		Cd.state.terminal.timer = nil
+	if C.state.terminal and C.state.terminal.timer then
+		C.state.terminal.timer:close()
+		C.state.terminal.timer = nil
 	end
-	if Cd.state.win and is_win(Cd.state.win) then
-		pcall(vim.api.nvim_win_close, Cd.state.win, true)
+	if C.state.win and is_win(C.state.win) then
+		pcall(vim.api.nvim_win_close, C.state.win, true)
 	end
-	Cd.state.win = nil
-	Cd.state.buf = nil
-	Cd.state.connected = false
-	Cd.state.page_url = ""
-	Cd.state.mode = nil
-	Cd.state.search = ""
-	Cd.state.info_cursor = 1
-	Cd.state.browser_launched = false
-	Cd.state.sse_buffer = ""
-	if Cd.state.terminal then
-		Cd.state.terminal.connected = false
-		Cd.state.terminal.attempts = 0
+	C.state.win = nil
+	C.state.buf = nil
+	C.state.connected = false
+	C.state.page_url = ""
+	C.state.mode = nil
+	C.state.search = ""
+	C.state.info_cursor = 1
+	C.state.browser_launched = false
+	C.state.sse_buffer = ""
+	if C.state.terminal then
+		C.state.terminal.connected = false
+		C.state.terminal.attempts = 0
 	end
 end
 
-Cd._set_keymaps = function(buf)
+C._set_keymaps = function(buf)
 	local km = vim.keymap.set
-	local tab = function() return Cd.state.active_tab end
-	km("n", "1", function() Cd.switch_tab(1) end, { buffer = buf, desc = "Console tab" })
-	km("n", "2", function() Cd.switch_tab(2) end, { buffer = buf, desc = "Network tab" })
-	km("n", "3", function() Cd.switch_tab(3) end, { buffer = buf, desc = "Eval tab" })
-	km("n", "4", function() Cd.switch_tab(4) end, { buffer = buf, desc = "Debug tab" })
-	km("n", "5", function() Cd.switch_tab(5) end, { buffer = buf, desc = "Perf tab" })
-	km("n", "6", function() Cd.switch_tab(6) end, { buffer = buf, desc = "Info tab" })
-	km("n", "q", Cd.close, { buffer = buf, desc = "Close CDP" })
-	km("n", "<Esc>", Cd.close, { buffer = buf, desc = "Close CDP" })
+	local tab = function()
+		return C.state.active_tab
+	end
+	km("n", "1", function()
+		C.switch_tab(1)
+	end, { buffer = buf, desc = "Console tab" })
+	km("n", "2", function()
+		C.switch_tab(2)
+	end, { buffer = buf, desc = "Network tab" })
+	km("n", "3", function()
+		C.switch_tab(3)
+	end, { buffer = buf, desc = "Eval tab" })
+	km("n", "4", function()
+		C.switch_tab(4)
+	end, { buffer = buf, desc = "Debug tab" })
+	km("n", "5", function()
+		C.switch_tab(5)
+	end, { buffer = buf, desc = "Perf tab" })
+	km("n", "6", function()
+		C.switch_tab(6)
+	end, { buffer = buf, desc = "Info tab" })
+	km("n", "q", C.close, { buffer = buf, desc = "Close CDP" })
+	km("n", "<Esc>", C.close, { buffer = buf, desc = "Close CDP" })
 	km("n", "r", function()
 		local t = tab()
 		if t == 5 then
-			Cd.tab_data.perf.recording = not Cd.tab_data.perf.recording
+			C.tab_data.perf.recording = not C.tab_data.perf.recording
 		elseif t == 6 then
-			Cd._fetch_lsp_symbols()
+			C._fetch_lsp_symbols()
 		end
-		Cd.render_all()
+		C.render_all()
 	end, { buffer = buf, desc = "Refresh / toggle recording" })
 	km("n", "c", function()
 		local k = tab()
 		local keys = { "console", "network", "eval", "debugger", "perf", "info" }
 		local dk = keys[k]
 		if dk == "debugger" then
-			Cd.tab_data.debugger = { event = "resumed", callFrames = {}, reason = "" }
+			C.tab_data.debugger = { event = "resumed", callFrames = {}, reason = "" }
 		elseif dk == "eval" then
-			Cd.tab_data.eval = {}
+			C.tab_data.eval = {}
 		elseif dk == "perf" then
-			Cd.tab_data.perf = { fps = {}, heap = 0, nodes = 0, listeners = 0, recording = true }
+			C.tab_data.perf = { fps = {}, heap = 0, nodes = 0, listeners = 0, recording = true }
 		elseif dk == "info" then
 			-- no-op, info is ephemeral
 		else
-			Cd.tab_data[dk] = {}
+			C.tab_data[dk] = {}
 		end
-		Cd.render_all()
+		C.render_all()
 	end, { buffer = buf, desc = "Clear current tab" })
 	km("n", "<CR>", function()
 		local t = tab()
-		if t == 3 then Cd.eval() end
+		if t == 3 then
+			C.eval()
+		end
 		if t == 4 then
 			vim.ui.input({ prompt = "Breakpoint (file.js:line): " }, function(input)
-				if input then Cd.set_breakpoint(input) end
+				if input then
+					C.set_breakpoint(input)
+				end
 			end)
 		end
 		if t == 6 then
-			local s = Cd.tab_data.info.symbols[Cd.state.info_cursor or 1]
+			local s = C.tab_data.info.symbols[C.state.info_cursor or 1]
 			if s then
 				vim.api.nvim_win_set_cursor(0, { s.lnum, 0 })
 				vim.cmd("normal! zz")
@@ -501,8 +563,8 @@ Cd._set_keymaps = function(buf)
 		if t == 1 then
 			vim.ui.input({ prompt = "Filter (all/error/warn/info/log): " }, function(input)
 				if input and input ~= "" then
-					Cd.state.console_filter = input
-					Cd.render_all()
+					C.state.console_filter = input
+					C.render_all()
 				end
 			end)
 		end
@@ -512,102 +574,118 @@ Cd._set_keymaps = function(buf)
 		if t == 1 or t == 2 then
 			vim.ui.input({ prompt = "Search: " }, function(input)
 				if input and input ~= "" then
-					Cd.state.search = input
-					Cd.render_all()
+					C.state.search = input
+					C.render_all()
 				end
 			end)
 		end
 	end, { buffer = buf, desc = "Search" })
 	km("n", "b", function()
-		if tab() == 4 then Cd.set_breakpoint() end
+		if tab() == 4 then
+			C.set_breakpoint()
+		end
 	end, { buffer = buf, desc = "Set breakpoint" })
 	km("n", "s", function()
-		if tab() == 4 then Cd.step() end
+		if tab() == 4 then
+			C.step()
+		end
 	end, { buffer = buf, desc = "Step over" })
 	km("n", "i", function()
-		if tab() == 4 then Cd.step_in() end
+		if tab() == 4 then
+			C.step_in()
+		end
 	end, { buffer = buf, desc = "Step into" })
 	km("n", "o", function()
-		if tab() == 4 then Cd.step_out() end
+		if tab() == 4 then
+			C.step_out()
+		end
 	end, { buffer = buf, desc = "Step out" })
 	km("n", "x", function()
-		if tab() == 4 then Cd.continue() end
+		if tab() == 4 then
+			C.continue()
+		end
 	end, { buffer = buf, desc = "Continue" })
 	km("n", "D", function()
 		if tab() == 2 then
-			Cd.tab_data.network = {}
-			Cd.render_all()
+			C.tab_data.network = {}
+			C.render_all()
 		end
 	end, { buffer = buf, desc = "Clear network" })
 	km("n", "g", function()
-		vim.api.nvim_win_call(Cd.state.win, function()
+		vim.api.nvim_win_call(C.state.win, function()
 			vim.cmd("normal! gg")
 		end)
 	end, { buffer = buf, desc = "Top" })
 	km("n", "G", function()
-		vim.api.nvim_win_call(Cd.state.win, function()
+		vim.api.nvim_win_call(C.state.win, function()
 			vim.cmd("normal! G")
 		end)
 	end, { buffer = buf, desc = "Bottom" })
 	km("n", "<LeftMouse>", function()
 		local click = vim.fn.getmousepos()
-		if click.line == 1 and click.winid == Cd.state.win then
-			local tab_line = vim.api.nvim_buf_get_lines(Cd.state.buf, 0, 1, false)[1] or ""
-			for _, tab in ipairs(tabs) do
-				local pattern = string.format("%d:%s", tab.key, tab.name)
+		if click.line == 1 and click.winid == C.state.win then
+			local tab_line = vim.api.nvim_buf_get_lines(C.state.buf, 0, 1, false)[1] or ""
+			for _, t in ipairs(tabs) do
+				local pattern = string.format("%d:%s", t.key, t.name)
 				local s, e = tab_line:find(pattern, 1, true)
 				if s and click.column >= s and click.column <= e then
-					Cd.switch_tab(tab.key)
+					C.switch_tab(t.key)
 					return
 				end
 			end
 			local xs, xe = tab_line:find("%[X%]", 1, true)
 			if xs and click.column >= xs and click.column <= xe then
-				Cd.close()
+				C.close()
 			end
 		end
 	end, { buffer = buf, desc = "Click tab / close" })
 	km("n", "K", function()
 		if tab() == 6 then
-			local s = Cd.tab_data.info.symbols
-			Cd.state.info_cursor = Cd.state.info_cursor or 1
+			local s = C.tab_data.info.symbols
+			C.state.info_cursor = C.state.info_cursor or 1
 			if #s > 0 then
-				Cd.state.info_cursor = math.max(1, Cd.state.info_cursor - 1)
-				Cd.render_all()
+				C.state.info_cursor = math.max(1, C.state.info_cursor - 1)
+				C.render_all()
 			end
 		end
 	end, { buffer = buf, desc = "Previous symbol" })
 	km("n", "J", function()
 		if tab() == 6 then
-			local s = Cd.tab_data.info.symbols
-			Cd.state.info_cursor = Cd.state.info_cursor or 1
+			local s = C.tab_data.info.symbols
+			C.state.info_cursor = C.state.info_cursor or 1
 			if #s > 0 then
-				Cd.state.info_cursor = math.min(#s, Cd.state.info_cursor + 1)
-				Cd.render_all()
+				C.state.info_cursor = math.min(#s, C.state.info_cursor + 1)
+				C.render_all()
 			end
 		end
 	end, { buffer = buf, desc = "Next symbol" })
 end
 
-Cd._start_sse_job = function()
-	if Cd.state.job_id then return end
-	if not check_curl() then return end
-	local url = string.format("http://localhost:%d/api/cdp/stream", Cd.state.port)
-	Cd.state.job_id = vim.fn.jobstart({ "curl", "-s", "-N", "--max-time", "3600", url }, {
+C._start_sse_job = function()
+	if C.state.job_id then
+		return
+	end
+	if not check_curl() then
+		return
+	end
+	local url = string.format("http://localhost:%d/api/cdp/stream", C.state.port)
+	C.state.job_id = vim.fn.jobstart({ "curl", "-s", "-N", "--max-time", "3600", url }, {
 		on_stdout = function(_, data)
-			if not data then return end
-			local buf = Cd.state.sse_buffer or ""
+			if not data then
+				return
+			end
+			local buf = C.state.sse_buffer or ""
 			for _, chunk in ipairs(data) do
 				buf = buf .. (chunk or "")
 			end
 			local lines = vim.split(buf, "\n", { plain = true })
-			Cd.state.sse_buffer = table.remove(lines) or ""
+			C.state.sse_buffer = table.remove(lines) or ""
 			for _, line in ipairs(lines) do
 				if line ~= "" then
 					local ok, ev = pcall(vim.json.decode, line)
 					if ok then
 						vim.schedule(function()
-							Cd._on_event(ev)
+							C._on_event(ev)
 						end)
 					end
 				end
@@ -615,12 +693,12 @@ Cd._start_sse_job = function()
 		end,
 		on_exit = function()
 			vim.schedule(function()
-				Cd.state.job_id = nil
-				Cd.state.sse_buffer = ""
-				if Cd.state.buf and is_buf(Cd.state.buf) and Cd.state.connected then
+				C.state.job_id = nil
+				C.state.sse_buffer = ""
+				if C.state.buf and is_buf(C.state.buf) and C.state.connected then
 					notify("CDP stream disconnected, reconnecting...", "info")
 					vim.defer_fn(function()
-						Cd._start_sse_job()
+						C._start_sse_job()
 					end, 1000)
 				end
 			end)
@@ -628,62 +706,86 @@ Cd._start_sse_job = function()
 	})
 end
 
-Cd._on_event = function(data)
+C._on_event = function(data)
 	local t = data.type
 	if t == "console" then
-		local cd = Cd.tab_data.console
+		local cd = C.tab_data.console
 		table.insert(cd, data)
-		if #cd > 1000 then table.remove(cd, 1) end
-		if Cd.state.active_tab == 1 then Cd.render_all() end
+		if #cd > 1000 then
+			table.remove(cd, 1)
+		end
+		if C.state.active_tab == 1 then
+			C.render_all()
+		end
 	elseif t == "network" then
-		local nd = Cd.tab_data.network
+		local nd = C.tab_data.network
 		table.insert(nd, data)
-		if #nd > 500 then table.remove(nd, 1) end
-		if Cd.state.active_tab == 2 then Cd.render_all() end
+		if #nd > 500 then
+			table.remove(nd, 1)
+		end
+		if C.state.active_tab == 2 then
+			C.render_all()
+		end
 	elseif t == "debugger" then
-		Cd.tab_data.debugger = data
+		C.tab_data.debugger = data
 		if data.event == "paused" then
 			local frames = data.callFrames or {}
-			if #frames > 0 then Cd._highlight_paused(frames[1].url, frames[1].line) end
+			if #frames > 0 then
+				C._highlight_paused(frames[1].url, frames[1].line)
+			end
 		elseif data.event == "resumed" then
-			Cd._clear_debug_highlights()
+			C._clear_debug_highlights()
 		end
-		if Cd.state.active_tab == 4 then Cd.render_all() end
+		if C.state.active_tab == 4 then
+			C.render_all()
+		end
 	elseif t == "perf" then
-		local pd = Cd.tab_data.perf
+		local pd = C.tab_data.perf
 		if data.fps then
 			table.insert(pd.fps, data.fps)
-			if #pd.fps > 100 then table.remove(pd.fps, 1) end
+			if #pd.fps > 100 then
+				table.remove(pd.fps, 1)
+			end
 		end
-		if data.heap then pd.heap = data.heap end
-		if data.nodes then pd.nodes = data.nodes end
-		if data.listeners then pd.listeners = data.listeners end
-		if Cd.state.active_tab == 5 then Cd.render_all() end
+		if data.heap then
+			pd.heap = data.heap
+		end
+		if data.nodes then
+			pd.nodes = data.nodes
+		end
+		if data.listeners then
+			pd.listeners = data.listeners
+		end
+		if C.state.active_tab == 5 then
+			C.render_all()
+		end
 	elseif t == "status" then
-		local was_connected = Cd.state.connected
-		Cd.state.connected = (data.state == "connected")
-		Cd.state.page_url = data.url or ""
-		if was_connected and not Cd.state.connected and Cd.state.buf and is_buf(Cd.state.buf) then
-			if Cd.state.mode == "panel" then
+		local was_connected = C.state.connected
+		C.state.connected = (data.state == "connected")
+		C.state.page_url = data.url or ""
+		if was_connected and not C.state.connected and C.state.buf and is_buf(C.state.buf) then
+			if C.state.mode == "panel" then
 				notify("CDP disconnected, reconnecting...", "info")
 				vim.defer_fn(function()
-					if Cd.state.buf and is_buf(Cd.state.buf) then
-						Cd.connect()
+					if C.state.buf and is_buf(C.state.buf) then
+						C.connect()
 					end
 				end, 1000)
 			end
 		end
-		if Cd.state.buf and is_buf(Cd.state.buf) then
-			Cd.render_all()
+		if C.state.buf and is_buf(C.state.buf) then
+			C.render_all()
 		end
 	end
 end
 
-Cd._highlight_paused = function(url, line)
-	Cd._clear_debug_highlights()
-	if not url or not line then return end
+C._highlight_paused = function(url, line)
+	C._clear_debug_highlights()
+	if not url or not line then
+		return
+	end
 	local project_root = vim.fn.getcwd()
-	local url_path = url:match("://[^/]+(/.*)") or "/" .. (vim.fn.fnamemodify(url, ":t") or "")
+	local url_path = (url:match("://[^/]+(/.*)") or "/") .. (vim.fn.fnamemodify(url, ":t") or "")
 	local abs_path = project_root .. url_path:gsub("/$", "")
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 		local name = vim.api.nvim_buf_get_name(buf)
@@ -705,14 +807,14 @@ Cd._highlight_paused = function(url, line)
 	end
 end
 
-Cd._clear_debug_highlights = function()
+C._clear_debug_highlights = function()
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 		pcall(vim.api.nvim_buf_clear_namespace, buf, ns.debug, 0, -1)
 	end
 end
 
-Cd._fetch_lsp_symbols = function()
-	Cd.tab_data.info.symbols = {}
+C._fetch_lsp_symbols = function()
+	C.tab_data.info.symbols = {}
 	local bufnr
 	for _, b in ipairs(vim.api.nvim_list_bufs()) do
 		if vim.api.nvim_buf_get_name(b):match("sketch%.js$") then
@@ -721,28 +823,71 @@ Cd._fetch_lsp_symbols = function()
 		end
 	end
 	bufnr = bufnr or vim.api.nvim_get_current_buf()
-	if not bufnr then return end
+	if not bufnr then
+		return
+	end
 	local clients = vim.lsp.get_clients({ bufnr = bufnr })
-	if #clients == 0 then return end
+	if #clients == 0 then
+		return
+	end
 	local ok, result = pcall(vim.lsp.buf_request_sync, bufnr, "textDocument/documentSymbol", {
 		textDocument = { uri = vim.uri_from_bufnr(bufnr) },
 	}, 1000)
-	if not ok or not result then return end
+	if not ok or not result then
+		return
+	end
 	for _, res in ipairs(result) do
 		if res.result then
 			local function flatten(symbols, depth)
 				depth = depth or 0
 				for _, sym in ipairs(symbols) do
-					local kind_name = ({ "File", "Module", "Namespace", "Package", "Class", "Method", "Property", "Field", "Constructor", "Enum", "Interface", "Function", "Variable", "Constant", "String", "Number", "Boolean", "Array", "Object", "Key", "Null", "EnumMember", "Struct", "Event", "Operator", "TypeParameter" })[sym.kind] or "Unknown"
-					local icon = ({ Method = "ƒ", Function = "ƒ", Variable = "◆", Constant = "◇", Class = "○", Property = "●", Field = "●" })[kind_name] or "·"
-					table.insert(Cd.tab_data.info.symbols, {
+					local kind_name = ({
+						"File",
+						"Module",
+						"Namespace",
+						"Package",
+						"Class",
+						"Method",
+						"Property",
+						"Field",
+						"Constructor",
+						"Enum",
+						"Interface",
+						"Function",
+						"Variable",
+						"Constant",
+						"String",
+						"Number",
+						"Boolean",
+						"Array",
+						"Object",
+						"Key",
+						"Null",
+						"EnumMember",
+						"Struct",
+						"Event",
+						"Operator",
+						"TypeParameter",
+					})[sym.kind] or "Unknown"
+					local icon = ({
+						Method = "ƒ",
+						Function = "ƒ",
+						Variable = "◆",
+						Constant = "◇",
+						Class = "○",
+						Property = "●",
+						Field = "●",
+					})[kind_name] or "·"
+					table.insert(C.tab_data.info.symbols, {
 						name = sym.name,
 						kind = kind_name,
 						icon = icon,
 						depth = depth,
 						lnum = (sym.range or {}).start and sym.range.start.line + 1 or 0,
 					})
-					if sym.children then flatten(sym.children, depth + 1) end
+					if sym.children then
+						flatten(sym.children, depth + 1)
+					end
 				end
 			end
 			if type(res.result) == "table" then
@@ -752,34 +897,41 @@ Cd._fetch_lsp_symbols = function()
 	end
 end
 
-Cd.render_all = function()
-	local buf = Cd.state.buf
-	if not buf or not is_buf(buf) then return end
-	local win = Cd.state.win
-	if not win or not is_win(win) then return end
+C.render_all = function()
+	local buf = C.state.buf
+	if not buf or not is_buf(buf) then
+		return
+	end
+	local win = C.state.win
+	if not win or not is_win(win) then
+		return
+	end
 	local lines = {}
-	table.insert(lines, Cd._render_tab_bar())
+	table.insert(lines, C._render_tab_bar())
 	table.insert(lines, string.rep("─", vim.api.nvim_win_get_width(win)))
-	local content = Cd._render_tab_content()
+	local content = C._render_tab_content()
 	for _, l in ipairs(content) do
 		table.insert(lines, l)
 	end
 	set_opt("modifiable", true, { buf = buf })
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 	set_opt("modifiable", false, { buf = buf })
-	Cd._apply_highlights()
+	C._apply_highlights()
 end
 
-Cd._render_tab_bar = function()
+C._render_tab_bar = function()
 	local parts = {}
-	local counts = { #Cd.tab_data.console, #Cd.tab_data.network, #Cd.tab_data.eval, 0, #Cd.tab_data.perf.fps, #Cd.tab_data.info.symbols }
+	local counts =
+		{ #C.tab_data.console, #C.tab_data.network, #C.tab_data.eval, 0, #C.tab_data.perf.fps, #C.tab_data.info.symbols }
 	for i, tab in ipairs(tabs) do
-		if i > 1 then table.insert(parts, "│") end
+		if i > 1 then
+			table.insert(parts, "│")
+		end
 		local label = string.format("%s:%s", tab.key, tab.name)
 		if counts[i] > 0 then
 			label = label .. "(" .. counts[i] .. ")"
 		end
-		if i == Cd.state.active_tab then
+		if i == C.state.active_tab then
 			label = "▎" .. label
 		else
 			label = " " .. label
@@ -788,7 +940,7 @@ Cd._render_tab_bar = function()
 	end
 	table.insert(parts, "  [X]")
 	local dot
-	if Cd.state.connected then
+	if C.state.connected then
 		dot = { "●", "P5CDPConnected" }
 	else
 		dot = { "●", "P5CDPDisconnected" }
@@ -797,13 +949,15 @@ Cd._render_tab_bar = function()
 	return table.concat(parts, " ")
 end
 
-Cd._apply_highlights = function()
-	local buf = Cd.state.buf
-	if not buf or not is_buf(buf) then return end
+C._apply_highlights = function()
+	local buf = C.state.buf
+	if not buf or not is_buf(buf) then
+		return
+	end
 	vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
 	local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 	local tab_line = lines[1] or ""
-	for i, tab in ipairs(tabs) do
+	for _, tab in ipairs(tabs) do
 		local pattern = string.format("▎%d:%s", tab.key, tab.name)
 		local start_idx = tab_line:find(pattern, 1, true)
 		if start_idx then
@@ -822,10 +976,10 @@ Cd._apply_highlights = function()
 	end
 	local connected_dot = tab_line:find("●", 1, true)
 	if connected_dot then
-		local hl = Cd.state.connected and "P5CDPConnected" or "P5CDPDisconnected"
+		local hl = C.state.connected and "P5CDPConnected" or "P5CDPDisconnected"
 		vim.api.nvim_buf_add_highlight(buf, -1, hl, 0, connected_dot - 1, connected_dot)
 	end
-	local k = Cd.state.active_tab
+	local k = C.state.active_tab
 	for ln = 3, #lines do
 		local l = lines[ln] or ""
 		if k == 1 then
@@ -843,10 +997,17 @@ Cd._apply_highlights = function()
 			local status = l:match("^%s+(%d+)")
 			if status then
 				local first = status:sub(1, 1)
-				local hl = ({ ["2"] = "P5CDPNetwork2xx", ["3"] = "P5CDPNetwork3xx", ["4"] = "P5CDPNetwork4xx", ["5"] = "P5CDPNetwork5xx" })[first]
+				local hl = ({
+					["2"] = "P5CDPNetwork2xx",
+					["3"] = "P5CDPNetwork3xx",
+					["4"] = "P5CDPNetwork4xx",
+					["5"] = "P5CDPNetwork5xx",
+				})[first]
 				if hl then
 					local _, s = l:find("^%s+%S+%s+")
-					if s then vim.api.nvim_buf_add_highlight(buf, -1, hl, ln - 1, s, s + #status) end
+					if s then
+						vim.api.nvim_buf_add_highlight(buf, -1, hl, ln - 1, s, s + #status)
+					end
 				end
 			end
 		elseif k == 3 then
@@ -871,31 +1032,47 @@ Cd._apply_highlights = function()
 	end
 end
 
-Cd._render_tab_content = function()
-	local k = Cd.state.active_tab
-	if k == 1 then return Cd._render_console() end
-	if k == 2 then return Cd._render_network() end
-	if k == 3 then return Cd._render_eval() end
-	if k == 4 then return Cd._render_debugger() end
-	if k == 5 then return Cd._render_performance() end
-	if k == 6 then return Cd._render_info() end
+C._render_tab_content = function()
+	local k = C.state.active_tab
+	if k == 1 then
+		return C._render_console()
+	end
+	if k == 2 then
+		return C._render_network()
+	end
+	if k == 3 then
+		return C._render_eval()
+	end
+	if k == 4 then
+		return C._render_debugger()
+	end
+	if k == 5 then
+		return C._render_performance()
+	end
+	if k == 6 then
+		return C._render_info()
+	end
 	return { "" }
 end
 
-Cd._render_console = function()
-	local data = Cd.tab_data.console
-	local filter = Cd.state.console_filter or "all"
-	local search = Cd.state.search or ""
+C._render_console = function()
+	local data = C.tab_data.console
+	local filter = C.state.console_filter or "all"
+	local search = C.state.search or ""
 	if #data == 0 then
 		return { " No console output yet" }
 	end
 	local lines = {}
 	for _, entry in ipairs(data) do
-		if filter ~= "all" and entry.level ~= filter then goto continue end
+		if filter ~= "all" and entry.level ~= filter then
+			goto continue
+		end
 		local ts = entry.timestamp or ""
 		local lvl = (entry.level or "log"):upper():sub(1, 5)
 		local msg = entry.message or ""
-		if search ~= "" and not msg:lower():find(search:lower(), 1, true) then goto continue end
+		if search ~= "" and not msg:lower():find(search:lower(), 1, true) then
+			goto continue
+		end
 		local line = string.format(" [%s] %s %s", ts, lvl, msg)
 		table.insert(lines, line)
 		if entry.stack and #entry.stack > 0 then
@@ -907,13 +1084,13 @@ Cd._render_console = function()
 		::continue::
 	end
 	if #lines == 0 then
-		table.insert(lines, " (no matches for filter \"" .. filter .. "\")")
+		table.insert(lines, ' (no matches for filter "' .. filter .. '")')
 	end
 	return lines
 end
 
-Cd._render_network = function()
-	local data = Cd.tab_data.network
+C._render_network = function()
+	local data = C.tab_data.network
 	if #data == 0 then
 		return { " No network requests yet" }
 	end
@@ -934,8 +1111,8 @@ Cd._render_network = function()
 	return lines
 end
 
-Cd._render_eval = function()
-	local data = Cd.tab_data.eval
+C._render_eval = function()
+	local data = C.tab_data.eval
 	local lines = {}
 	table.insert(lines, " Evaluate JavaScript expressions")
 	table.insert(lines, " Press <CR> or type :P5 cdp eval <expr>")
@@ -975,8 +1152,8 @@ Cd._render_eval = function()
 	return lines
 end
 
-Cd._render_debugger = function()
-	local d = Cd.tab_data.debugger
+C._render_debugger = function()
+	local d = C.tab_data.debugger
 	local lines = {}
 	if d.event == "paused" then
 		table.insert(lines, " Status: ⏸ PAUSED")
@@ -1007,8 +1184,8 @@ Cd._render_debugger = function()
 	return lines
 end
 
-Cd._render_performance = function()
-	local pd = Cd.tab_data.perf
+C._render_performance = function()
+	local pd = C.tab_data.perf
 	local lines = {}
 	local rec = pd.recording
 	table.insert(lines, string.format(" Recording: %s", rec and "● ON" or "○ OFF"))
@@ -1021,8 +1198,16 @@ Cd._render_performance = function()
 		local sum1, sum10 = 0, 0
 		local n1 = math.min(#fps, 1)
 		local n10 = math.min(#fps, 10)
-		for i = #fps - n1 + 1, #fps do if i >= 1 then sum1 = sum1 + fps[i] end end
-		for i = #fps - n10 + 1, #fps do if i >= 1 then sum10 = sum10 + fps[i] end end
+		for i = #fps - n1 + 1, #fps do
+			if i >= 1 then
+				sum1 = sum1 + fps[i]
+			end
+		end
+		for i = #fps - n10 + 1, #fps do
+			if i >= 1 then
+				sum10 = sum10 + fps[i]
+			end
+		end
 		avg1 = n1 > 0 and math.floor(sum1 / n1) or 0
 		avg10 = n10 > 0 and math.floor(sum10 / n10) or 0
 	end
@@ -1053,8 +1238,8 @@ Cd._render_performance = function()
 	return lines
 end
 
-Cd._render_info = function()
-	local info = Cd.tab_data.info
+C._render_info = function()
+	local info = C.tab_data.info
 	local lines = {}
 	table.insert(lines, " Project")
 	table.insert(lines, string.rep(" ─", 15))
@@ -1077,7 +1262,7 @@ Cd._render_info = function()
 	if #symbols == 0 then
 		table.insert(lines, "   (no LSP data — press r to refresh)")
 	else
-		local cursor = Cd.state.info_cursor or 1
+		local cursor = C.state.info_cursor or 1
 		for i, sym in ipairs(symbols) do
 			local indent = string.rep("  ", sym.depth)
 			local marker = (i == cursor) and "▎" or " "
@@ -1092,16 +1277,16 @@ Cd._render_info = function()
 	return lines
 end
 
-Cd._open_terminal = function()
+C._open_terminal = function()
 	local has_snacks, snacks = pcall(require, "snacks")
-	Cd.state.mode = "terminal"
-	local t = Cd.state.terminal
+	C.state.mode = "terminal"
+	local t = C.state.terminal
 	t.connected = false
 	t.attempts = 0
 
-	local url = string.format("http://localhost:%d/api/console/stream", Cd.state.port)
-	local pos = Cd.config.view.position or "below"
-	local height = Cd.config.view.height or math.floor(vim.o.lines * 0.3)
+	local url = string.format("http://localhost:%d/api/console/stream", C.state.port)
+	local pos = C.config.view.position or "below"
+	local height = C.config.view.height or math.floor(vim.o.lines * 0.3)
 	local split_cmd = core.split_cmd[pos] or core.split_cmd.below
 
 	if has_snacks then
@@ -1126,10 +1311,10 @@ Cd._open_terminal = function()
 				["<C-u>"] = "page_up",
 			},
 		})
-		Cd.state.win = term.win
-		Cd.state.buf = term.buf
-		disable_term_mode(Cd.state.buf)
-		Cd._terminal_auto_clear()
+		C.state.win = term.win
+		C.state.buf = term.buf
+		disable_term_mode(C.state.buf)
+		C._terminal_auto_clear()
 		return
 	end
 
@@ -1143,19 +1328,19 @@ Cd._open_terminal = function()
 	set_opt("filetype", "log", { buf = buf })
 	set_opt("scrollback", 1000, { buf = buf })
 
-	Cd.state.job_id = vim.fn.termopen({ "curl", "-s", "-N", url }, {
+	C.state.job_id = vim.fn.termopen({ "curl", "-s", "-N", url }, {
 		on_exit = function(_, exit_code, _)
 			vim.schedule(function()
-				if exit_code ~= 0 and Cd.state.win and is_win(Cd.state.win) then
+				if exit_code ~= 0 and C.state.win and is_win(C.state.win) then
 					notify("Console connection lost", "warn")
 				end
-				Cd.state.job_id = nil
+				C.state.job_id = nil
 			end)
 		end,
 	})
 
-	Cd.state.win = win
-	Cd.state.buf = buf
+	C.state.win = win
+	C.state.buf = buf
 
 	set_opt("wrap", true, { scope = "local", win = win })
 	set_opt("number", false, { scope = "local", win = win })
@@ -1163,16 +1348,18 @@ Cd._open_terminal = function()
 	set_opt("signcolumn", "no", { scope = "local", win = win })
 
 	local km = vim.keymap.set
-	km("n", "q", Cd.close, { buffer = buf, desc = "Hide console" })
-	km("n", "c", Cd._terminal_clear, { buffer = buf, desc = "Clear console" })
-	km("n", "<C-c>", Cd.close, { buffer = buf, desc = "Hide console" })
+	km("n", "q", C.close, { buffer = buf, desc = "Hide console" })
+	km("n", "c", C._terminal_clear, { buffer = buf, desc = "Clear console" })
+	km("n", "<C-c>", C.close, { buffer = buf, desc = "Hide console" })
 	disable_term_mode(buf)
-	Cd._terminal_auto_clear()
+	C._terminal_auto_clear()
 end
 
-Cd._terminal_reconnect = function()
-	local t = Cd.state.terminal
-	if not Cd.state.buf then return end
+C._terminal_reconnect = function()
+	local t = C.state.terminal
+	if not C.state.buf then
+		return
+	end
 	if t.attempts >= t.max_attempts then
 		notify("Console reconnection failed: max attempts reached", "warn")
 		return
@@ -1180,15 +1367,15 @@ Cd._terminal_reconnect = function()
 	local delay = t.delay * (2 ^ t.attempts)
 	t.attempts = t.attempts + 1
 	vim.defer_fn(function()
-		if Cd.state.win and is_win(Cd.state.win) and Cd.state.mode == "terminal" then
+		if C.state.win and is_win(C.state.win) and C.state.mode == "terminal" then
 			notify(string.format("Reconnecting to console (attempt %d)...", t.attempts), "info")
-			Cd._open_terminal()
+			C._open_terminal()
 		end
 	end, delay)
 end
 
-Cd._terminal_auto_clear = function()
-	local t = Cd.state.terminal
+C._terminal_auto_clear = function()
+	local t = C.state.terminal
 	if t.timer then
 		t.timer:close()
 	end
@@ -1196,12 +1383,14 @@ Cd._terminal_auto_clear = function()
 	if t.timer then
 		t.timer:start(t.clear_interval, t.clear_interval, function()
 			vim.schedule(function()
-				if not Cd.state.buf or not is_buf(Cd.state.buf) or Cd.state.mode ~= "terminal" then return end
+				if not C.state.buf or not is_buf(C.state.buf) or C.state.mode ~= "terminal" then
+					return
+				end
 				local now = os.time()
 				if now - t.last_error > 30 then
-					local lc = vim.api.nvim_buf_line_count(Cd.state.buf)
+					local lc = vim.api.nvim_buf_line_count(C.state.buf)
 					if lc > 100 then
-						pcall(vim.api.nvim_buf_set_lines, Cd.state.buf, 0, lc - 50, false, {})
+						pcall(vim.api.nvim_buf_set_lines, C.state.buf, 0, lc - 50, false, {})
 					end
 				end
 			end)
@@ -1209,10 +1398,10 @@ Cd._terminal_auto_clear = function()
 	end
 end
 
-Cd._terminal_clear = function()
-	if Cd.state.buf and is_buf(Cd.state.buf) and Cd.state.job_id then
-		vim.api.nvim_chan_send(Cd.state.job_id, "\027[H\027[2J")
+C._terminal_clear = function()
+	if C.state.buf and is_buf(C.state.buf) and C.state.job_id then
+		vim.api.nvim_chan_send(C.state.job_id, "\027[H\027[2J")
 	end
 end
 
-return Cd
+return C

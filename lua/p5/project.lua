@@ -14,6 +14,7 @@ P.download_p5_assets = function(project_path, version, callback)
 	local downloads = {
 		{ url = CDN .. "@" .. version .. "/lib/p5.min.js", dest = libs_dir .. "/p5.js" },
 		{ url = CDN .. "@" .. version .. "/types/p5.d.ts", dest = types_dir .. "/p5.d.ts" },
+		{ url = CDN .. "@" .. version .. "/types/global.d.ts", dest = types_dir .. "/global.d.ts" },
 	}
 
 	local pending = #downloads
@@ -118,16 +119,16 @@ new p5(sketch);
     "strict": true,
     "allowJs": true,
     "checkJs": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "typeRoots": ["assets/types"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": [
     "**/*.ts",
-    "**/*.js"
+    "**/*.js",
+    "assets/types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",

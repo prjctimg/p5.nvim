@@ -133,10 +133,10 @@ Create a new sketchspace.
 :P5 create
 ```
 
-When prompted for a version, selecting **Latest (2.x)** will skip TypeScript type definitions
-until the p5.js 2.x type declarations are officially released. The project is created
-immediately with everything else — you can start coding right away. Run `:P5 setup` later
-to copy types once they become available.
+p5.js ships its own TypeScript declarations since v2.x. Both `p5.d.ts` (instance mode)
+and `global.d.ts` (global mode) are downloaded from the CDN and placed in `assets/types/`.
+The generated `tsconfig.json` includes these types and enables `checkJs` for type-checking
+your JavaScript files. Create `.ts` files alongside `.js` for full TypeScript support.
 
 ---
 
