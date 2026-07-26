@@ -1,0 +1,16 @@
+version: 1
+
+denylist:
+  - ".git/**"
+  - ".gitignore"
+  - "__pycache__/**"
+  - "*.pyc"
+  - ".pytest_cache/**"
+
+maxFiles: 10
+
+autoMergeAllowlist:
+  - "**/*.md"
+  - "doc/**"
+  - "assets/**"
+  - "wiki/**"

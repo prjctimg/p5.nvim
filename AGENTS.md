@@ -16,3 +16,17 @@
 - Instead of the default `M` variable for a module's export, use the module's filename first letter.
 - Use non-blocking constructs for indefinitely running tasks.
 - Update the README for any user facing changes.
+
+## Loop Engineering
+
+This repo uses loop engineering patterns. See:
+- `.opencode/STATE.md` — current loop memory
+- `.opencode/LOOP.md` — active loops and cadence
+- `.opencode/loop-budget.md` — token caps
+- `.opencode/loop-constraints.md` — binding agent rules
+- `.opencode/loop-run-log.md` — run history
+- `.opencode/gate.yaml` — path denylist + auto-merge allowlist
+- `.opencode/skills/` — triage and verifier skills
+
+Start a loop: `opencode run "Run loop-triage. Update .opencode/STATE.md."`
+Verify changes: `opencode run "Verify diff in worktree" --agent verifier`
