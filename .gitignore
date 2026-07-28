@@ -3,8 +3,6 @@ assets/inject/
 !assets/inject/console.js
 !assets/inject/livereload.js
 assets/libs/
-assets/types/
-assets/favicon.ico
 
 # Ignore generated GIFs (hosted on vhs.charm.sh)
 assets/*.gif
