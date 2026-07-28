@@ -1,0 +1,9 @@
+Study the codebase and take note of the current implementation and suggest ways to improve the code without breaking functionality
+
+Also look into adding the following enhancements:
+
+- The plugin is taking too long to take the user to the sketch.js file after initialization
+- The type definitions are broken, figure out a more robust way to fetch types or either we should rely on a method that fetches the types from another repo that is responsible for fetching them
+- The plugin must use the cached version when 1) No new version exists 2) The user is offline. If a new version exists, prompt the user about it
+- Make the template sketch.js allow the user to pick between instance and global mode during project creation, this should also be configurable in the plugin options
+- Analyze the relevancy of our generated vim help files and suggest a better fix that updates the help files via the prjctimg/automata repo
