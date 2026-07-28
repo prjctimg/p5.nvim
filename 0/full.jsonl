@@ -17,19 +17,19 @@
       "deletions": 0,
       "files": 0
     },
-    "cost": 1.323562,
+    "cost": 1.5067619999999997,
     "tokens": {
-      "input": 188394,
-      "output": 26040,
-      "reasoning": 4001,
+      "input": 190585,
+      "output": 26684,
+      "reasoning": 4040,
       "cache": {
-        "read": 1533056,
+        "read": 1882496,
         "write": 0
       }
     },
     "time": {
       "created": 1785245512224,
-      "updated": 1785246903742
+      "updated": 1785246958939
     }
   },
   "messages": [
@@ -52075,21 +52075,24 @@
           "cwd": "/home/prjctimg/workspace/p5.nvim",
           "root": "/home/prjctimg/workspace/p5.nvim"
         },
-        "cost": 0,
+        "cost": 0.061972,
         "tokens": {
-          "input": 0,
-          "output": 0,
-          "reasoning": 0,
+          "total": 117094,
+          "input": 1220,
+          "output": 269,
+          "reasoning": 21,
           "cache": {
-            "read": 0,
-            "write": 0
+            "write": 0,
+            "read": 115584
           }
         },
         "modelID": "grok-4.5",
         "providerID": "opencode-go",
         "time": {
-          "created": 1785246903733
+          "created": 1785246903733,
+          "completed": 1785246949948
         },
+        "finish": "tool-calls",
         "id": "msg_fa901edb5002cdMoWBPLL8Xn8G",
         "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ"
       },
@@ -52123,17 +52126,22 @@
           "tool": "bash",
           "callID": "call-994b2172-d694-42c5-bc68-57a097d71913-71",
           "state": {
-            "metadata": {
-              "output": "",
-              "description": "Commit, tag v0.7.11, push to remote"
-            },
-            "status": "running",
+            "status": "completed",
             "input": {
               "command": "git add .githooks/pre-push CHANGES.md README.md lua/p5/commands.lua lua/p5/core.lua lua/p5/health.lua lua/p5/init.lua lua/p5/project.lua schema.json scripts/gen-docs.sh scripts/json-to-md.mjs scripts/vimhelp.lua tests/p5/core_spec.lua tests/p5/docs_spec.lua tests/p5/project_spec.lua wiki/configuration.md wiki/sketchspaces.md && \\\ngit commit --signoff -m \"$(cat <<'EOF'\nfeat: fast create, version cache, sketch modes, automata docs\n\nScaffold sketchspaces and open sketch.js immediately while p5.js\nhydrates from a versioned offline cache. Prompt for global/instance\nmode and newer p5.js on create/setup. Copy plugin types from automata\ninstead of broken CDN .d.ts downloads. Drop local vim help pipeline.\n\nEOF\n)\" && git status -sb && git tag -a v0.7.11 -m \"v0.7.11\" && git push origin main && git push origin v0.7.11\n",
               "description": "Commit, tag v0.7.11, push to remote"
             },
+            "output": "[main 5dbd705] feat: fast create, version cache, sketch modes, automata docs\n 17 files changed, 953 insertions(+), 1342 deletions(-)\n delete mode 100755 scripts/gen-docs.sh\n delete mode 100644 scripts/json-to-md.mjs\n delete mode 100644 scripts/vimhelp.lua\n## main...origin/main [ahead 1]\n[entire] Pushing 1 checkpoint ref(s) to origin......... done\nTo github.com:prjctimg/p5.nvim.git\n   cbe9227..5dbd705  main -> main\nTo github.com:prjctimg/p5.nvim.git\n * [new tag]         v0.7.11 -> v0.7.11\n",
+            "metadata": {
+              "output": "[main 5dbd705] feat: fast create, version cache, sketch modes, automata docs\n 17 files changed, 953 insertions(+), 1342 deletions(-)\n delete mode 100755 scripts/gen-docs.sh\n delete mode 100644 scripts/json-to-md.mjs\n delete mode 100644 scripts/vimhelp.lua\n## main...origin/main [ahead 1]\n[entire] Pushing 1 checkpoint ref(s) to origin......... done\nTo github.com:prjctimg/p5.nvim.git\n   cbe9227..5dbd705  main -> main\nTo github.com:prjctimg/p5.nvim.git\n * [new tag]         v0.7.11 -> v0.7.11\n",
+              "exit": 0,
+              "description": "Commit, tag v0.7.11, push to remote",
+              "truncated": false
+            },
+            "title": "Commit, tag v0.7.11, push to remote",
             "time": {
-              "start": 1785246913968
+              "start": 1785246949569,
+              "end": 1785246949596
             }
           },
           "metadata": {
@@ -52144,6 +52152,276 @@
           "id": "prt_fa902155500159MitxlkmPN4bE",
           "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
           "messageID": "msg_fa901edb5002cdMoWBPLL8Xn8G"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "85b723f61a2131320a6ee6192764e017ac6f91f2",
+          "type": "step-finish",
+          "tokens": {
+            "total": 117094,
+            "input": 1220,
+            "output": 269,
+            "reasoning": 21,
+            "cache": {
+              "write": 0,
+              "read": 115584
+            }
+          },
+          "cost": 0.061972,
+          "id": "prt_fa902a169001jVZa4MBTyFHsN7",
+          "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
+          "messageID": "msg_fa901edb5002cdMoWBPLL8Xn8G"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fa8fc51c8001aPY3XFEedhL61C",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0.060304,
+        "tokens": {
+          "total": 117396,
+          "input": 506,
+          "output": 144,
+          "reasoning": 10,
+          "cache": {
+            "write": 0,
+            "read": 116736
+          }
+        },
+        "modelID": "grok-4.5",
+        "providerID": "opencode-go",
+        "time": {
+          "created": 1785246949982,
+          "completed": 1785246958908
+        },
+        "finish": "tool-calls",
+        "id": "msg_fa902a25e002iKHm6kN2jU6pYC",
+        "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ"
+      },
+      "parts": [
+        {
+          "snapshot": "85b723f61a2131320a6ee6192764e017ac6f91f2",
+          "type": "step-start",
+          "id": "prt_fa902bc85001mdSlkTSDuQvBkm",
+          "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
+          "messageID": "msg_fa902a25e002iKHm6kN2jU6pYC"
+        },
+        {
+          "type": "reasoning",
+          "text": "Update todos to completed. Summarize for user.",
+          "time": {
+            "start": 1785246956692,
+            "end": 1785246958388
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "rs_ec87f10d-dd97-9c08-87df-a5dd44ed9b47",
+              "reasoningEncryptedContent": null
+            }
+          },
+          "id": "prt_fa902bc94001FDT82r458ZkdIz",
+          "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
+          "messageID": "msg_fa902a25e002iKHm6kN2jU6pYC"
+        },
+        {
+          "type": "tool",
+          "tool": "todowrite",
+          "callID": "call-6b640996-ef6c-48f5-8b28-b03fb1b89c11-72",
+          "state": {
+            "status": "completed",
+            "input": {
+              "todos": [
+                {
+                  "content": "core.lua: version meta, versioned cache, resolve_p5_version",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "project.lua: scaffold-first, types copy, mode templates",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "commands/init/schema: setup prompt, config, mode",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "Strip local doc pipeline; update tests + README",
+                  "status": "completed",
+                  "priority": "medium"
+                },
+                {
+                  "content": "Run tests, bump patch, commit, push",
+                  "status": "completed",
+                  "priority": "high"
+                }
+              ]
+            },
+            "output": "[\n  {\n    \"content\": \"core.lua: version meta, versioned cache, resolve_p5_version\",\n    \"status\": \"completed\",\n    \"priority\": \"high\"\n  },\n  {\n    \"content\": \"project.lua: scaffold-first, types copy, mode templates\",\n    \"status\": \"completed\",\n    \"priority\": \"high\"\n  },\n  {\n    \"content\": \"commands/init/schema: setup prompt, config, mode\",\n    \"status\": \"completed\",\n    \"priority\": \"high\"\n  },\n  {\n    \"content\": \"Strip local doc pipeline; update tests + README\",\n    \"status\": \"completed\",\n    \"priority\": \"medium\"\n  },\n  {\n    \"content\": \"Run tests, bump patch, commit, push\",\n    \"status\": \"completed\",\n    \"priority\": \"high\"\n  }\n]",
+            "metadata": {
+              "todos": [
+                {
+                  "content": "core.lua: version meta, versioned cache, resolve_p5_version",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "project.lua: scaffold-first, types copy, mode templates",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "commands/init/schema: setup prompt, config, mode",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "Strip local doc pipeline; update tests + README",
+                  "status": "completed",
+                  "priority": "medium"
+                },
+                {
+                  "content": "Run tests, bump patch, commit, push",
+                  "status": "completed",
+                  "priority": "high"
+                }
+              ],
+              "truncated": false
+            },
+            "title": "0 todos",
+            "time": {
+              "start": 1785246958508,
+              "end": 1785246958519
+            }
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "fc_ec87f10d-dd97-9c08-87df-a5dd44ed9b47_0"
+            }
+          },
+          "id": "prt_fa902c340001KufoDiGrHlv037",
+          "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
+          "messageID": "msg_fa902a25e002iKHm6kN2jU6pYC"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "85b723f61a2131320a6ee6192764e017ac6f91f2",
+          "type": "step-finish",
+          "tokens": {
+            "total": 117396,
+            "input": 506,
+            "output": 144,
+            "reasoning": 10,
+            "cache": {
+              "write": 0,
+              "read": 116736
+            }
+          },
+          "cost": 0.060304,
+          "id": "prt_fa902c48d001R8tIRuYKI0qq0w",
+          "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
+          "messageID": "msg_fa902a25e002iKHm6kN2jU6pYC"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fa8fc51c8001aPY3XFEedhL61C",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0.060924,
+        "tokens": {
+          "total": 117824,
+          "input": 465,
+          "output": 231,
+          "reasoning": 8,
+          "cache": {
+            "write": 0,
+            "read": 117120
+          }
+        },
+        "modelID": "grok-4.5",
+        "providerID": "opencode-go",
+        "time": {
+          "created": 1785246958933,
+          "completed": 1785246967640
+        },
+        "finish": "stop",
+        "id": "msg_fa902c555002EPxt5Mb3osyx05",
+        "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ"
+      },
+      "parts": [
+        {
+          "snapshot": "85b723f61a2131320a6ee6192764e017ac6f91f2",
+          "type": "step-start",
+          "id": "prt_fa902d8e6001u2I7QYrymWv5QZ",
+          "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
+          "messageID": "msg_fa902c555002EPxt5Mb3osyx05"
+        },
+        {
+          "type": "reasoning",
+          "text": "Provide a concise summary for the user.",
+          "time": {
+            "start": 1785246963960,
+            "end": 1785246963984
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "rs_d5bd3761-0974-9d77-909a-fd4cb3f014e5",
+              "reasoningEncryptedContent": null
+            }
+          },
+          "id": "prt_fa902d8f8001KM5uS6h97quPDS",
+          "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
+          "messageID": "msg_fa902c555002EPxt5Mb3osyx05"
+        },
+        {
+          "type": "text",
+          "text": "Shipped as **v0.7.11** (`5dbd705`).\n\n### Done\n- **Fast create** — scaffold + open `sketch.js` immediately; p5.js hydrates async from `~/.cache/p5.nvim/versions/`\n- **Cache/offline** — fixed meta round-trip; use cache when offline; prompt on create/setup if newer version exists\n- **Sketch mode** — always prompt global/instance (or set `sketch.mode`); stored in `p5.json`\n- **Types** — copy from plugin `assets/types` (automata-owned; not bundled here)\n- **Docs** — removed local gen pipeline; automata owns API help\n- **Config** — `sketch.mode`, `p5.version`, `p5.check_update`\n\n### Tests\ncore/project/docs green. Pre-existing `server_spec` failures (missing python/websockets) unchanged.\n\n### Note\n`assets/types/` is still empty until automata sync lands — create still works; tsserver types appear after that sync/plugin update.",
+          "time": {
+            "start": 1785246963992,
+            "end": 1785246967275
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_d5bd3761-0974-9d77-909a-fd4cb3f014e5"
+            }
+          },
+          "id": "prt_fa902d918001ZYyQo55QhkHpiB",
+          "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
+          "messageID": "msg_fa902c555002EPxt5Mb3osyx05"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "85b723f61a2131320a6ee6192764e017ac6f91f2",
+          "type": "step-finish",
+          "tokens": {
+            "total": 117824,
+            "input": 465,
+            "output": 231,
+            "reasoning": 8,
+            "cache": {
+              "write": 0,
+              "read": 117120
+            }
+          },
+          "cost": 0.060924,
+          "id": "prt_fa902e69d001343KHMnQLilz0c",
+          "sessionID": "ses_057134de0ffegQd23TrOxsLuFZ",
+          "messageID": "msg_fa902c555002EPxt5Mb3osyx05"
         }
       ]
     }
