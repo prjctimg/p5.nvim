@@ -3,82 +3,34 @@ local core = require("p5.core")
 local libraries = require("p5.libraries")
 local notify = core.notify
 
-local CDN = "https://cdn.jsdelivr.net/npm/p5"
+P.config = P.config or {}
 
-P.download_p5_assets = function(project_path, version, callback)
-	local libs_dir = project_path .. "/assets/libs"
-	local types_dir = project_path .. "/assets/types"
-	core.mkdir(libs_dir)
-	core.mkdir(types_dir)
+local TEMPLATES = {
+	instance = [[const sketch = (p) => {
+  p.setup = () => {
+    p.createCanvas(400, 400);
+  };
 
-	local downloads = {
-		{ url = CDN .. "@" .. version .. "/lib/p5.min.js", dest = libs_dir .. "/p5.js" },
-		{ url = CDN .. "@" .. version .. "/types/p5.d.ts", dest = types_dir .. "/p5.d.ts" },
-		{ url = CDN .. "@" .. version .. "/types/global.d.ts", dest = types_dir .. "/global.d.ts" },
-	}
+  p.draw = () => {
+    p.background(220);
+    p.circle(p.mouseX, p.mouseY, 50);
+  };
+};
 
-	local pending = #downloads
-	local had_error = false
-	for _, d in ipairs(downloads) do
-		core.fetch(d.url, d.dest, function(ok)
-			if not ok then
-				had_error = true
-				notify("Download failed: " .. d.url, "warn")
-			elseif not libraries.validate_download(d.dest) then
-				had_error = true
-				notify("Download validation failed: " .. d.url, "warn")
-			end
-			pending = pending - 1
-			if pending == 0 then
-				if had_error then
-					notify("Some p5.js assets failed to download", "warn")
-				end
-				if callback then callback() end
-			end
-		end, { cache = true })
-	end
-end
+new p5(sketch);
+]],
+	global = [[function setup() {
+  createCanvas(400, 400);
+}
 
-P.create_project = function(name)
-	name = name or "p5-sketch"
+function draw() {
+  background(220);
+  circle(mouseX, mouseY, 50);
+}
+]],
+}
 
-	if vim.fn.isdirectory(name) ~= 0 then
-		notify("Directory '" .. name .. "' already exists", "info")
-		return false
-	end
-
-	local path = vim.fn.fnamemodify(name, ":p")
-
-	local search_dir = vim.fn.fnamemodify(path, ":h")
-	while search_dir and #search_dir > 1 do
-		if core.is_file(search_dir .. "/p5.json") then
-			notify("Cannot create project inside existing sketchspace at " .. search_dir, "error")
-			return false
-		end
-		local parent = vim.fn.fnamemodify(search_dir, ":h")
-		if parent == search_dir then break end
-		search_dir = parent
-	end
-
-	core.mkdir(path)
-
-	notify("Fetching latest p5.js version...", "info")
-	core.fetch_latest_p5_version(function(version)
-		version = version or core.DEFAULT_P5_VERSION
-		notify("Downloading p5.js " .. version .. "...", "info")
-		P.download_p5_assets(path, version, function()
-			P.create_project_continue(name, version)
-		end)
-	end)
-end
-
-function P.create_project_continue(name, override_version)
-	local path = vim.fn.fnamemodify(name, ":p")
-
-	P.copy_favicon(path)
-
-	local version = core.p5_version(override_version)
-	local index_html = [[<!DOCTYPE html>
+local INDEX_HTML = [[<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -94,24 +46,8 @@ function P.create_project_continue(name, override_version)
   <script src="sketch.js"></script>
 </body>
 </html>]]
-	vim.fn.writefile(vim.split(index_html, "\n"), path .. "/index.html")
 
-	local sketch_js = [[const sketch = (p) => {
-  p.setup = () => {
-    p.createCanvas(400, 400);
-  };
-
-  p.draw = () => {
-    p.background(220);
-    p.circle(p.mouseX, p.mouseY, 50);
-  };
-};
-
-new p5(sketch);
-]]
-	vim.fn.writefile(vim.split(sketch_js, "\n"), path .. "/sketch.js")
-
-	local tsconfig = [[{
+local TSCONFIG = [[{
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
@@ -136,59 +72,226 @@ new p5(sketch);
     "build"
   ]
 }]]
-	vim.fn.writefile(vim.split(tsconfig, "\n"), path .. "/tsconfig.json")
 
-	local p5_config = {
-		version = version,
-		libs = vim.empty_dict(),
-		includes = { "sketch.js" },
-	}
-	vim.fn.writefile(vim.split(vim.json.encode(p5_config), "\n"), path .. "/p5.json")
-
-	core.mkdir(path .. "/assets/types")
-	core.mkdir(path .. "/assets/libs")
-	pcall(libraries.generate_libs_js, path)
-
-	notify("Sketchspace created: " .. name, "ok")
-	vim.api.nvim_set_current_dir(path)
-	vim.cmd({ cmd = "edit", args = { path .. "/sketch.js" } })
+P.sketch_template = function(mode)
+	return TEMPLATES[mode] or TEMPLATES.instance
 end
 
 P.copy_favicon = function(project_path)
 	local src = core.asset_dir() .. "/favicon.ico"
 	local dest = project_path .. "/assets/favicon.ico"
 	core.mkdir(project_path .. "/assets")
-	if vim.uv and vim.uv.fs_copyfile then
-		vim.uv.fs_copyfile(src, dest)
-	else
-		vim.fn.system({ "cp", src, dest })
+	if core.is_file(src) then
+		pcall(vim.uv.fs_copyfile, src, dest)
+	end
+end
+
+P.copy_types = function(project_path)
+	local src_dir = core.asset_dir() .. "/types"
+	local dest_dir = project_path .. "/assets/types"
+	core.mkdir(dest_dir)
+	if not core.is_dir(src_dir) then
+		return false
+	end
+	local files = vim.fn.readdir(src_dir) or {}
+	local copied = 0
+	for _, name in ipairs(files) do
+		if name:match("%.d%.ts$") then
+			local ok = vim.uv.fs_copyfile(src_dir .. "/" .. name, dest_dir .. "/" .. name)
+			if ok then
+				copied = copied + 1
+			end
+		end
+	end
+	return copied > 0
+end
+
+P.hydrate_assets = function(project_path, version, callback)
+	local dest = project_path .. "/assets/libs/p5.js"
+	core.mkdir(project_path .. "/assets/libs")
+	core.ensure_cached_p5(version, dest, function(ok, from_cache)
+		P.copy_favicon(project_path)
+		P.copy_types(project_path)
+		if ok then
+			notify(from_cache and ("p5.js " .. version .. " ready (cache)") or ("p5.js " .. version .. " downloaded"), "ok")
+		else
+			notify("Could not obtain p5.js " .. version .. " (offline or download failed)", "warn")
+		end
+		if callback then
+			callback(ok)
+		end
+	end)
+end
+
+-- Sync filesystem scaffold only (no network)
+P.scaffold = function(path, opts)
+	opts = opts or {}
+	local mode = opts.mode == "global" and "global" or "instance"
+	local version = opts.version or core.DEFAULT_P5_VERSION
+
+	core.mkdir(path)
+	core.mkdir(path .. "/assets/libs")
+	core.mkdir(path .. "/assets/types")
+
+	P.copy_favicon(path)
+	P.copy_types(path)
+
+	vim.fn.writefile(vim.split(INDEX_HTML, "\n"), path .. "/index.html")
+	vim.fn.writefile(vim.split(P.sketch_template(mode), "\n"), path .. "/sketch.js")
+	vim.fn.writefile(vim.split(TSCONFIG, "\n"), path .. "/tsconfig.json")
+
+	local p5_config = {
+		version = version,
+		mode = mode,
+		libs = vim.empty_dict(),
+		includes = { "sketch.js" },
+	}
+	core.write_json(path .. "/p5.json", p5_config)
+	pcall(libraries.generate_libs_js, path)
+	return true
+end
+
+local function open_project(path, name)
+	notify("Sketchspace created: " .. name, "ok")
+	vim.api.nvim_set_current_dir(path)
+	core.add_ss(path)
+	vim.cmd({ cmd = "edit", args = { path .. "/sketch.js" } })
+end
+
+local function after_scaffold(path, name, mode, preferred)
+	open_project(path, name)
+	core.resolve_p5_version({
+		preferred = preferred or core.p5_version(),
+		prompt = true,
+		on_done = function(version)
+			local cfg = core.read_json(path .. "/p5.json") or {}
+			cfg.version = version
+			cfg.mode = mode
+			core.write_json(path .. "/p5.json", cfg)
+			P.hydrate_assets(path, version)
+		end,
+	})
+end
+
+P.create_project = function(name, opts)
+	opts = opts or {}
+	name = name or "p5-sketch"
+
+	if vim.fn.isdirectory(name) ~= 0 then
+		notify("Directory '" .. name .. "' already exists", "info")
+		return false
+	end
+
+	local path = vim.fn.fnamemodify(name, ":p")
+
+	local search_dir = vim.fn.fnamemodify(path, ":h")
+	while search_dir and #search_dir > 1 do
+		if core.is_file(search_dir .. "/p5.json") then
+			notify("Cannot create project inside existing sketchspace at " .. search_dir, "error")
+			return false
+		end
+		local parent = vim.fn.fnamemodify(search_dir, ":h")
+		if parent == search_dir then
+			break
+		end
+		search_dir = parent
+	end
+
+	local function run(mode)
+		local preferred = (P.config and P.config.p5 and P.config.p5.version) or core.DEFAULT_P5_VERSION
+		P.scaffold(path, { mode = mode, version = preferred })
+		after_scaffold(path, name, mode, preferred)
+	end
+
+	local mode = opts.mode
+	if not mode and P.config and P.config.sketch then
+		mode = P.config.sketch.mode
+	end
+
+	if mode == "global" or mode == "instance" then
+		run(mode)
+		return true
+	end
+
+	vim.ui.select({ "global", "instance" }, {
+		prompt = "Sketch mode:",
+	}, function(choice)
+		if not choice then
+			return
+		end
+		run(choice)
+	end)
+	return true
+end
+
+-- Back-compat for tests / callers that only write skeleton
+function P.create_project_continue(name, override_version)
+	local path = vim.fn.fnamemodify(name, ":p")
+	local mode = "instance"
+	if P.config and P.config.sketch and P.config.sketch.mode then
+		mode = P.config.sketch.mode
+	end
+	P.scaffold(path, { mode = mode, version = override_version or core.DEFAULT_P5_VERSION })
+	open_project(path, name)
+	if override_version then
+		P.hydrate_assets(path, override_version)
 	end
 end
 
 P.ensure_assets = function(project_path, callback)
 	local config = core.read_workspace_config()
-	local version = config and config.version or core.DEFAULT_P5_VERSION
-	local libs_dir = project_path .. "/assets/libs"
-	local p5_file = libs_dir .. "/p5.js"
+	local version = (config and config.version) or core.DEFAULT_P5_VERSION
+	local p5_file = project_path .. "/assets/libs/p5.js"
+	local check = not (P.config and P.config.p5 and P.config.p5.check_update == false)
 
-	if core.is_file(p5_file) then
+	local function done()
 		P.copy_favicon(project_path)
-		if callback then callback() end
+		P.copy_types(project_path)
+		if callback then
+			callback()
+		end
+	end
+
+	local function apply(resolved)
+		if config and resolved ~= version then
+			config.version = resolved
+			core.write_workspace_config(config, project_path)
+		end
+		if core.is_file(p5_file) and resolved == version then
+			done()
+			return
+		end
+		P.hydrate_assets(project_path, resolved, function()
+			done()
+		end)
+	end
+
+	if core.is_file(p5_file) and not check then
+		done()
 		return
 	end
 
-	core.mkdir(libs_dir)
-	core.mkdir(project_path .. "/assets/types")
+	if core.is_file(p5_file) and check then
+		-- still allow upgrade prompt; keep existing file if user declines
+		core.resolve_p5_version({
+			preferred = version,
+			prompt = true,
+			on_done = function(resolved)
+				if resolved == version then
+					done()
+				else
+					apply(resolved)
+				end
+			end,
+		})
+		return
+	end
 
-	notify("Fetching latest p5.js version...", "info")
-	core.fetch_latest_p5_version(function(version)
-		version = version or core.DEFAULT_P5_VERSION
-		notify("Downloading p5.js " .. version .. "...", "info")
-		P.download_p5_assets(project_path, version, function()
-			P.copy_favicon(project_path)
-			if callback then callback() end
-		end)
-	end)
+	core.resolve_p5_version({
+		preferred = version,
+		prompt = check,
+		on_done = apply,
+	})
 end
 
 P.is_p5_project = function(dir)
@@ -231,7 +334,6 @@ P.is_p5_project = function(dir)
 
 	local sketch_file = cwd .. "/sketch.js"
 	local has_sketch = core.is_file(sketch_file)
-
 	local includes = config.includes or { "sketch.js" }
 
 	return true,

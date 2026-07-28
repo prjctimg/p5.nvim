@@ -13,10 +13,10 @@ my-sketch/
 ├── assets/
 │   ├── favicon.ico
 │   ├── libs/
-│   │   ├── p5.js        # p5.js core library
+│   │   ├── p5.js        # p5.js core library (version-cached)
 │   │   └── libs.js      # Runtime library loader
 │   └── types/
-│       └── p5.d.ts      # p5.js type definitions
+│       └── p5.d.ts      # ambient types (from plugin / automata)
 └── skchbk/              # Optional: cloned sketches
 ```
 
@@ -24,7 +24,8 @@ my-sketch/
 
 ```json
 {
-  "version": "2.3.0",
+  "version": "2.3.1",
+  "mode": "global",
   "libs": {},
   "includes": ["sketch.js"],
   "gist": {
@@ -37,6 +38,7 @@ my-sketch/
 | Field | Description |
 |-------|-------------|
 | `version` | p5.js version to use (only v2.x is supported) |
+| `mode` | `global` or `instance` sketch template |
 | `libs` | Contributor libraries to install (`{ "name": "version" }`) |
 | `includes` | Files to include in Gist uploads |
 | `gist` | Optional Gist metadata for sync |
@@ -47,7 +49,9 @@ my-sketch/
 :P5 create my-sketch
 ```
 
-Without arguments, prompts for a name.
+Without arguments, prompts for a name. Always prompts for sketch mode unless
+`sketch.mode` is set in plugin setup. Opens `sketch.js` immediately; runtime
+assets hydrate from `~/.cache/p5.nvim/versions` or the CDN.
 
 ## Lifecycle
 

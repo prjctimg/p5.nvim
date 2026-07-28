@@ -10,6 +10,7 @@ local cdp = require("p5.cdp")
 Cm.setup = function(opts)
 	local require_sketchspace = opts.require_sketchspace
 	local config = opts.config
+	Cm._config = config
 
 	local handlers = {}
 
@@ -59,21 +60,11 @@ Cm.setup = function(opts)
 			function(next_step)
 				local sketch_file = cwd .. "/sketch.js"
 				if not core.is_file(sketch_file) then
-					local sketch_js = [[const sketch = (p) => {
-  p.setup = () => {
-    p.createCanvas(400, 400);
-  };
-
-  p.draw = () => {
-    p.background(220);
-    p.circle(p.mouseX, p.mouseY, 50);
-  };
-};
-
-new p5(sketch);
-]]
-					vim.fn.writefile(vim.split(sketch_js, "\n"), sketch_file)
-					core.notify("Created default sketch.js", "info")
+					local mode = (config and config.mode)
+						or (Cm._config and Cm._config.sketch and Cm._config.sketch.mode)
+						or "instance"
+					vim.fn.writefile(vim.split(project.sketch_template(mode), "\n"), sketch_file)
+					core.notify("Created default sketch.js (" .. mode .. ")", "info")
 				end
 				next_step()
 			end,
@@ -174,10 +165,7 @@ new p5(sketch);
 	end
 
 	handlers.sync = function(_)
-		core.notify(
-			"P5 sync is deprecated. Use 'P5 gist sync' to sync gists or 'P5 update' to update libraries.",
-			"error"
-		)
+		core.notify("P5 sync is deprecated. Use 'P5 gist sync' to sync gists or 'P5 update' to update libraries.", "error")
 	end
 
 	handlers.gist = function(args)
@@ -286,17 +274,39 @@ new p5(sketch);
 			"Download sketchbook",
 		}
 		local menu_dispatch = {
-			["Create new sketchspace"] = function() handlers.create({}) end,
-			["Open recent sketchspace"] = function() handlers.list() end,
-			["Setup sketchspace"] = function() handlers.setup() end,
-			["Install library"] = function() handlers.install({}) end,
-			["Uninstall library"] = function() handlers.uninstall({}) end,
-			["Start server"] = function() handlers.server({}) end,
-			["Stop server"] = function() handlers.server({}) end,
-			["Open docs"] = function() handlers.docs() end,
-			["Update libraries"] = function() handlers.update({}) end,
-			["Create gist"] = function() handlers.gist({}) end,
-			["Download sketchbook"] = function() handlers.skchbk({}) end,
+			["Create new sketchspace"] = function()
+				handlers.create({})
+			end,
+			["Open recent sketchspace"] = function()
+				handlers.list()
+			end,
+			["Setup sketchspace"] = function()
+				handlers.setup()
+			end,
+			["Install library"] = function()
+				handlers.install({})
+			end,
+			["Uninstall library"] = function()
+				handlers.uninstall({})
+			end,
+			["Start server"] = function()
+				handlers.server({})
+			end,
+			["Stop server"] = function()
+				handlers.server({})
+			end,
+			["Open docs"] = function()
+				handlers.docs()
+			end,
+			["Update libraries"] = function()
+				handlers.update({})
+			end,
+			["Create gist"] = function()
+				handlers.gist({})
+			end,
+			["Download sketchbook"] = function()
+				handlers.skchbk({})
+			end,
 		}
 		vim.ui.select(menu_options, { prompt = "p5.nvim:" }, function(choice)
 			if choice and menu_dispatch[choice] then
@@ -318,7 +328,9 @@ new p5(sketch);
 		end)
 	end
 
-	local subcommands = vim.tbl_filter(function(k) return k ~= "sync" and k ~= "console" end, vim.tbl_keys(handlers))
+	local subcommands = vim.tbl_filter(function(k)
+		return k ~= "sync" and k ~= "console"
+	end, vim.tbl_keys(handlers))
 
 	local function get_completion(line)
 		local args = vim.split(line, "%s+")
@@ -335,20 +347,36 @@ new p5(sketch);
 		local subcmd = args[subcmd_pos]
 		if subcmd == "install" or subcmd == "uninstall" then
 			local libs = libraries.get_available_libs()
-			return vim.tbl_map(function(l) return l.name end, libs or {})
+			return vim.tbl_map(function(l)
+				return l.name
+			end, libs or {})
 		elseif subcmd == "server" then
 			return { "8000", "8001", "8002", "8003" }
 		elseif subcmd == "gist" then
 			return { "sync", "edit" }
 		elseif subcmd == "update" then
 			local libs = libraries.get_available_libs()
-			return vim.tbl_map(function(l) return l.name end, libs or {})
+			return vim.tbl_map(function(l)
+				return l.name
+			end, libs or {})
 		elseif subcmd == "skchbk" then
 			return { "list" }
 		elseif subcmd == "cdp" then
 			local sub = args[subcmd_pos + 1]
 			if not sub then
-				return { "connect", "disconnect", "status", "eval", "break", "continue", "step", "stepIn", "stepOut", "perf", "network_clear" }
+				return {
+					"connect",
+					"disconnect",
+					"status",
+					"eval",
+					"break",
+					"continue",
+					"step",
+					"stepIn",
+					"stepOut",
+					"perf",
+					"network_clear",
+				}
 			end
 		end
 		return {}

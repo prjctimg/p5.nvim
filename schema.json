@@ -8,7 +8,13 @@
     "version": {
       "description": "p5.js version to use",
       "type": "string",
-      "examples": ["2.3.0"]
+      "examples": ["2.3.1"]
+    },
+    "mode": {
+      "description": "Sketch mode: global (setup/draw) or instance (new p5(sketch))",
+      "type": "string",
+      "enum": ["global", "instance"],
+      "default": "instance"
     },
     "libs": {
       "description": "Installed contributor libraries with versions",

@@ -175,3 +175,48 @@ describe("slugify roundtrip", function()
 		assert.are.equal(slug, C.slugify(C.deslugify(slug)))
 	end)
 end)
+
+describe("cmp_version", function()
+	it("compares semver numbers", function()
+		assert.are.equal(-1, C.cmp_version("2.3.0", "2.3.1"))
+		assert.are.equal(1, C.cmp_version("2.4.0", "2.3.1"))
+		assert.are.equal(0, C.cmp_version("2.3.1", "2.3.1"))
+	end)
+end)
+
+describe("meta version cache", function()
+	local tmp = vim.fn.tempname()
+	local orig_cache_dir = C.cache_dir
+
+	before_each(function()
+		vim.fn.mkdir(tmp, "p")
+		C.cache_dir = function()
+			return tmp
+		end
+	end)
+
+	after_each(function()
+		C.cache_dir = orig_cache_dir
+		vim.fn.delete(tmp, "rf")
+	end)
+
+	it("round-trips latest version via meta.json", function()
+		C.write_meta({ latest = "2.3.1", checked_at = 123 })
+		local meta = C.read_meta()
+		assert.are.equal("2.3.1", meta.latest)
+		assert.are.equal(123, meta.checked_at)
+	end)
+
+	it("migrates legacy plain string cache", function()
+		vim.fn.writefile({ '"2.2.0"' }, tmp .. "/p5_version")
+		local meta = C.read_meta()
+		assert.are.equal("2.2.0", meta.latest)
+	end)
+end)
+
+describe("versioned_p5_path", function()
+	it("nests under versions dir", function()
+		local p = C.versioned_p5_path("2.3.1")
+		assert.matches("versions/2%.3%.1/p5%.js$", p)
+	end)
+end)

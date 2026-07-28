@@ -24,6 +24,17 @@ require("p5").setup({
     auto_update = false,
   },
 
+  -- Sketch template (nil = prompt on :P5 create)
+  sketch = {
+    mode = nil, -- "global" | "instance"
+  },
+
+  -- p5.js runtime defaults
+  p5 = {
+    version = nil,
+    check_update = true,
+  },
+
   -- GitHub sketchbook
   sketchbook = {
     user = "your-github-username",

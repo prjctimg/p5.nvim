@@ -126,17 +126,20 @@ running vs "Start server" when it's not).
 
 ### :P5 create [name]
 
-Create a new sketchspace.
+Create a new sketchspace. Scaffold + `sketch.js` open immediately; p5.js downloads in
+the background from cache/CDN. You are prompted for **global** vs **instance** mode
+unless `sketch.mode` is set in setup. If a newer p5.js exists online, you are prompted
+to upgrade (create/setup only). Offline uses the versioned cache when available.
 
 ```vim
 :P5 create my-sketch
 :P5 create
 ```
 
-p5.js ships its own TypeScript declarations since v2.x. Both `p5.d.ts` (instance mode)
-and `global.d.ts` (global mode) are downloaded from the CDN and placed in `assets/types/`.
-The generated `tsconfig.json` includes these types and enables `checkJs` for type-checking
-your JavaScript files. Create `.ts` files alongside `.js` for full TypeScript support.
+Type definitions ship with the plugin (`assets/types/`, produced by
+[automata](https://github.com/prjctimg/automata)) and are copied into the sketchspace.
+The generated `tsconfig.json` enables `checkJs`. Create `.ts` files alongside `.js`
+for full TypeScript support. Refresh types by updating the plugin.
 
 ---
 
@@ -425,11 +428,15 @@ require("p5").setup({
     }
   },
 
-  -- Console settings
-  console = {
-    enabled = true,                 -- Enable console integration
-    position = "below",             -- Window position: below, above, left, right
-    height = 10,                    -- Window height (lines)
+  -- Default sketch template mode: nil = prompt on :P5 create
+  sketch = {
+    mode = nil,                    -- "global" | "instance" | nil
+  },
+
+  -- Runtime p5.js version defaults
+  p5 = {
+    version = nil,                 -- pin default for new projects (nil = plugin default/cache)
+    check_update = true,           -- prompt on create/setup when a newer version exists
   },
 
   -- Library settings
@@ -455,6 +462,11 @@ require("p5").setup({
       "--enable-precise-memory-info",
       "--disable-software-rasterizer",
     },
+  },
+
+  view = {
+    position = "below",
+    height = 10,
   },
 })
 ```
@@ -630,40 +642,12 @@ Library installation fails or downloads timeout.
 
 ## Doc Generation 📚
 
-The p5.js API reference docs (`doc/p5-*.txt`) are generated from the
-[p5.js source](https://github.com/processing/p5.js) using
-[documentation](https://github.com/documentationjs/documentation) +
-[pandoc](https://pandoc.org).
+Plugin help (`doc/p5-nvim.txt`) is maintained in this repository.
 
-### Setup
-
-```bash
-# Install pandoc (required)
-sudo apt install pandoc        # Debian/Ubuntu
-brew install pandoc            # macOS
-
-# Enable the pre-push hook
-git config core.hooksPath .githooks
-```
-
-### Generating docs manually
-
-```bash
-./scripts/gen-docs.sh
-```
-
-The script:
-1. Shallow-clones the p5.js repository to `.cache/p5-src/`
-2. Runs `documentation` to extract JSDoc annotations as JSON
-3. Converts JSON to per-module markdown
-4. Uses pandoc with a Lua writer to produce Vim help files in `doc/`
-5. Regenerates `doc/tags` for help navigation
-
-Use `--force` to regenerate even if the p5.js version hasn't changed:
-
-```bash
-./scripts/gen-docs.sh --force
-```
+p5.js API reference pages (`doc/p5-*.txt`, `doc/tags`) and bundled TypeScript
+definitions (`assets/types/`) are produced by
+[prjctimg/automata](https://github.com/prjctimg/automata) (`p5-sync` workflow)
+and synced into this repo. Do not regenerate them locally.
 
 ---
 

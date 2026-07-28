@@ -28,7 +28,9 @@ C.is_dir = function(path)
 end
 
 C.mkdir = function(path)
-	if vim.uv.fs_stat(path) then return end
+	if vim.uv.fs_stat(path) then
+		return
+	end
 	local parent = vim.fs.dirname(path)
 	if parent and parent ~= path then
 		C.mkdir(parent)
@@ -38,13 +40,17 @@ end
 
 C.rmtree = function(path)
 	local stat = vim.uv.fs_stat(path)
-	if not stat then return end
+	if not stat then
+		return
+	end
 	if stat.type == "directory" then
 		local dir = vim.uv.fs_scandir(path)
 		if dir then
 			while true do
 				local name = vim.uv.fs_scandir_next(dir)
-				if not name then break end
+				if not name then
+					break
+				end
 				C.rmtree(path .. "/" .. name)
 			end
 		end
@@ -59,7 +65,9 @@ C.read_json = function(path)
 		return nil, "File not found"
 	end
 	local fp = io.open(path, "r")
-	if not fp then return nil, "Cannot open file" end
+	if not fp then
+		return nil, "Cannot open file"
+	end
 	local content = fp:read("*a")
 	fp:close()
 	if not content or content == "" then
@@ -149,7 +157,8 @@ C.write_workspace_config = function(config, project_dir)
 	C.write_json(config_file, config)
 end
 
-C.DEFAULT_P5_VERSION = "2.3.0"
+C.DEFAULT_P5_VERSION = "2.3.1"
+C.CDN = "https://cdn.jsdelivr.net/npm/p5"
 
 C.notify = function(msg, level)
 	local level_map = {
@@ -170,6 +179,53 @@ C.cache_dir = function()
 	return dir
 end
 
+C.versions_dir = function()
+	local dir = C.cache_dir() .. "/versions"
+	fn.mkdir(dir, "p")
+	return dir
+end
+
+C.versioned_p5_path = function(version)
+	return C.versions_dir() .. "/" .. version .. "/p5.js"
+end
+
+C.meta_path = function()
+	return C.cache_path("meta.json")
+end
+
+C.read_meta = function()
+	local data = C.read_json(C.meta_path())
+	if type(data) == "table" then
+		return data
+	end
+	-- migrate legacy plain-string / invalid cache
+	local legacy = C.cached_p5_version_path()
+	if C.is_file(legacy) then
+		local fp = io.open(legacy, "r")
+		if fp then
+			local raw = fp:read("*a")
+			fp:close()
+			if raw then
+				local ok, decoded = pcall(vim.json.decode, raw)
+				if ok and type(decoded) == "string" and decoded ~= "" then
+					local meta = { latest = decoded, checked_at = 0 }
+					C.write_meta(meta)
+					return meta
+				elseif ok and type(decoded) == "table" and decoded.version then
+					local meta = { latest = decoded.version, checked_at = decoded.checked_at or 0 }
+					C.write_meta(meta)
+					return meta
+				end
+			end
+		end
+	end
+	return {}
+end
+
+C.write_meta = function(meta)
+	C.write_json(C.meta_path(), meta or {})
+end
+
 -- Generate cache key for URL
 C.cache_keygen = function(url)
 	return fn.sha256(url):sub(1, 16)
@@ -179,14 +235,15 @@ end
 C.fetch = function(url, dest, callback, options)
 	options = options or {}
 	local use_cache = options.cache ~= false
+	local timeout = tostring(options.timeout or 30)
 	local cache_file = nil
 
 	local function do_fetch()
 		local cmd
 		if C.is_cmd("curl") then
-			cmd = { "curl", "-sL", "--max-time", "30", url, "-o", dest }
+			cmd = { "curl", "-sL", "--max-time", timeout, url, "-o", dest }
 		elseif C.is_cmd("wget") then
-			cmd = { "wget", "-q", "-T", "30", "-O", dest, url }
+			cmd = { "wget", "-q", "-T", timeout, "-O", dest, url }
 		else
 			C.notify("Neither curl nor wget found. Cannot download: " .. url, "warn")
 			if callback then
@@ -200,15 +257,7 @@ C.fetch = function(url, dest, callback, options)
 				local ok = exit_code == 0
 
 				if ok and use_cache and cache_file then
-					local content = fn.readfile(dest)
-					if content then
-						local fp = io.open(cache_file, "w")
-						if fp then
-							fp:write(table.concat(content, "\n"))
-							fp:write("\n")
-							fp:close()
-						end
-					end
+					pcall(vim.uv.fs_copyfile, dest, cache_file)
 				end
 
 				if callback then
@@ -219,9 +268,8 @@ C.fetch = function(url, dest, callback, options)
 	end
 
 	if use_cache then
-		local cache_dir = C.cache_dir()
 		local cache_key = C.cache_keygen(url)
-		cache_file = cache_dir .. "/" .. cache_key
+		cache_file = C.cache_dir() .. "/" .. cache_key
 
 		if C.is_file(cache_file) then
 			local ok, err = vim.uv.fs_copyfile(cache_file, dest)
@@ -240,6 +288,32 @@ C.fetch = function(url, dest, callback, options)
 	return true
 end
 
+-- Compare semver-ish strings; returns -1, 0, 1
+C.cmp_version = function(a, b)
+	if not a or not b then
+		return 0
+	end
+	local function parts(v)
+		local t = {}
+		for n in tostring(v):gmatch("%d+") do
+			table.insert(t, tonumber(n) or 0)
+		end
+		return t
+	end
+	local pa, pb = parts(a), parts(b)
+	local n = math.max(#pa, #pb)
+	for i = 1, n do
+		local x, y = pa[i] or 0, pb[i] or 0
+		if x < y then
+			return -1
+		end
+		if x > y then
+			return 1
+		end
+	end
+	return 0
+end
+
 -- Fetch latest p5.js version from npm registry, with local cache fallback
 C.fetch_latest_p5_version = function(callback)
 	local url = "https://registry.npmjs.org/p5/latest"
@@ -249,27 +323,133 @@ C.fetch_latest_p5_version = function(callback)
 			local data, _ = C.read_json(tmp)
 			pcall(fn.delete, tmp)
 			if data and data.version then
-				C.write_json(C.cached_p5_version_path(), data.version)
-				if callback then callback(data.version) end
+				local meta = C.read_meta()
+				meta.latest = data.version
+				meta.checked_at = os.time()
+				C.write_meta(meta)
+				if callback then
+					callback(data.version, true)
+				end
 			else
-				if callback then callback(nil) end
+				if callback then
+					callback(C.read_meta().latest, false)
+				end
 			end
 		else
 			pcall(fn.delete, tmp)
-			local cached, _ = C.read_json(C.cached_p5_version_path())
-			if callback then callback(cached) end
+			if callback then
+				callback(C.read_meta().latest, false)
+			end
 		end
-	end, { cache = false })
+	end, { cache = false, timeout = 8 })
 end
 
--- Get p5 version (from override, project config, or fallback default)
+-- Get p5 version (from override, project config, plugin config, or fallback)
 C.p5_version = function(override_version)
-	if override_version then return override_version end
+	if override_version then
+		return override_version
+	end
 	local config = C.read_workspace_config()
 	if config and config.version then
 		return config.version
 	end
+	if C.config and C.config.p5 and C.config.p5.version then
+		return C.config.p5.version
+	end
+	local meta = C.read_meta()
+	if meta.latest then
+		return meta.latest
+	end
 	return C.DEFAULT_P5_VERSION
+end
+
+-- Resolve version for create/setup. opts: { preferred, prompt, on_done(version, online) }
+C.resolve_p5_version = function(opts)
+	opts = opts or {}
+	local preferred = opts.preferred or C.p5_version()
+	local do_prompt = opts.prompt
+	if do_prompt == nil then
+		do_prompt = not (C.config and C.config.p5 and C.config.p5.check_update == false)
+	end
+	local on_done = opts.on_done or function() end
+
+	local function finish(version, online)
+		on_done(version or preferred or C.DEFAULT_P5_VERSION, online)
+	end
+
+	C.fetch_latest_p5_version(function(latest, online)
+		if not online or not latest then
+			finish(preferred, false)
+			return
+		end
+		if do_prompt and C.cmp_version(latest, preferred) > 0 then
+			vim.schedule(function()
+				vim.ui.select({
+					"Keep " .. preferred,
+					"Upgrade to " .. latest,
+				}, { prompt = "Newer p5.js available:" }, function(choice)
+					if choice and choice:find("Upgrade", 1, true) then
+						finish(latest, true)
+					else
+						finish(preferred, true)
+					end
+				end)
+			end)
+		else
+			finish(preferred, true)
+		end
+	end)
+end
+
+-- Ensure versioned p5.js is in cache and copied to dest. callback(ok, from_cache)
+C.ensure_cached_p5 = function(version, dest, callback)
+	version = version or C.DEFAULT_P5_VERSION
+	local cached = C.versioned_p5_path(version)
+	C.mkdir(vim.fs.dirname(cached))
+
+	local function copy_to_dest(ok)
+		if not ok then
+			if callback then
+				callback(false, false)
+			end
+			return
+		end
+		if dest then
+			C.mkdir(vim.fs.dirname(dest))
+			local coped = vim.uv.fs_copyfile(cached, dest)
+			if callback then
+				callback(coped and true or false, true)
+			end
+		else
+			if callback then
+				callback(true, true)
+			end
+		end
+	end
+
+	if C.is_file(cached) then
+		copy_to_dest(true)
+		return
+	end
+
+	local url = C.CDN .. "@" .. version .. "/lib/p5.min.js"
+	C.fetch(url, cached, function(ok)
+		if ok then
+			local libraries = require("p5.libraries")
+			if not libraries.validate_download(cached) then
+				pcall(fn.delete, cached)
+				if callback then
+					callback(false, false)
+				end
+				return
+			end
+			copy_to_dest(true)
+		else
+			if callback then
+				callback(false, false)
+			end
+		end
+	end, { cache = true })
 end
 
 -- Add recent sketchspaces
@@ -322,7 +502,9 @@ end
 C.find_chrome = function()
 	local candidates = { "chromium", "chromium-browser", "google-chrome", "chrome" }
 	for _, c in ipairs(candidates) do
-		if C.is_cmd(c) then return c end
+		if C.is_cmd(c) then
+			return c
+		end
 	end
 	return nil
 end

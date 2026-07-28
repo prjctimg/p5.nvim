@@ -78,7 +78,13 @@ H.check_plugin_env = function()
 	local asset_dir = core.asset_dir()
 	if core.is_dir(asset_dir) then
 		ok("Asset directory: " .. asset_dir)
-		ok("p5.js: downloaded dynamically on first project creation")
+		local types = asset_dir .. "/types"
+		if core.is_dir(types) and #(vim.fn.glob(types .. "/*.d.ts", false, true) or {}) > 0 then
+			ok("Type definitions: present in assets/types (synced via automata)")
+		else
+			warn("Type definitions: missing — update plugin or wait for automata sync")
+		end
+		ok("p5.js runtime: cached under ~/.cache/p5.nvim/versions on first download")
 	else
 		warn("Asset directory: not found at " .. asset_dir)
 	end
@@ -133,14 +139,16 @@ H.check_project_config = function()
 
 			if data.gist then
 				if type(data.gist) == "table" then
-					if data.gist.url then ok("Gist: linked to " .. data.gist.url) end
-					if data.gist.title and data.gist.title ~= "" then ok("Gist title: " .. data.gist.title) end
+					if data.gist.url then
+						ok("Gist: linked to " .. data.gist.url)
+					end
+					if data.gist.title and data.gist.title ~= "" then
+						ok("Gist title: " .. data.gist.title)
+					end
 				elseif type(data.gist) == "string" then
 					-- Legacy format
-
 				end
 			end
-
 		else
 			error("p5.json: invalid format")
 		end

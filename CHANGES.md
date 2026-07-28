@@ -4,6 +4,20 @@ All notable changes since v0.5.0.
 
 ---
 
+## v0.7.11
+
+### Changed
+- **Fast create** — scaffold + open `sketch.js` immediately; p5.js hydrates from versioned cache/CDN in the background
+- **Sketch mode** — prompt for global vs instance on create (configurable via `sketch.mode`); stored in `p5.json`
+- **Version cache** — `~/.cache/p5.nvim/meta.json` + `versions/<ver>/p5.js`; offline uses cache; newer version prompts on create/setup
+- **Types** — copy plugin-shipped `assets/types` (automata) instead of downloading raw CDN `.d.ts` files
+- **Docs** — p5 API vim help owned by automata; removed local `scripts/gen-docs.sh` pipeline
+
+### Fixed
+- **Version meta round-trip** — legacy `write_json(string)` cache could not be read back offline
+
+---
+
 ## v0.7.0-alpha.3
 
 > Tag: `v0.7.0-alpha.3` — fix: eliminate all E5560 fast-event-context errors in async callbacks, consolidate CDN URLs, remove dead library references

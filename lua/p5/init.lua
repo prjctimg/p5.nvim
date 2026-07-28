@@ -28,6 +28,14 @@ I.config = {
 	sketchbook = {
 		user = "",
 	},
+	-- nil mode => prompt on :P5 create; set "global" | "instance" to skip
+	sketch = {
+		mode = nil,
+	},
+	p5 = {
+		version = nil, -- default pin for new projects (nil => DEFAULT_P5_VERSION / cache)
+		check_update = true, -- prompt on create/setup when a newer p5.js exists
+	},
 	cdp = {
 		enabled = false,
 		remote_debugging_port = 9222,
@@ -149,21 +157,27 @@ I.setup = function(opts)
 		vim.api.nvim_create_autocmd("BufEnter", {
 			group = augroups.server_on_enter,
 			pattern = "sketch.js",
-			callback = function() vim.cmd("P5 server") end,
+			callback = function()
+				vim.cmd("P5 server")
+			end,
 		})
 	end
 	if ac.cdp_on_server_start then
 		vim.api.nvim_create_autocmd("User", {
 			group = augroups.cdp_on_server_start,
 			pattern = "P5ServerStarted",
-			callback = function() vim.cmd("P5 cdp") end,
+			callback = function()
+				vim.cmd("P5 cdp")
+			end,
 		})
 	end
 	if ac.save_on_focus_lost then
 		vim.api.nvim_create_autocmd("FocusLost", {
 			group = augroups.save_on_focus_lost,
 			pattern = "*.js",
-			callback = function() pcall(vim.cmd, "silent! wall") end,
+			callback = function()
+				pcall(vim.cmd, "silent! wall")
+			end,
 		})
 	end
 	if ac.refresh_on_save then
@@ -171,7 +185,9 @@ I.setup = function(opts)
 			group = augroups.refresh_on_save,
 			pattern = "sketch.js",
 			callback = function()
-				if not cdp.config.enabled then return end
+				if not cdp.config.enabled then
+					return
+				end
 				local s = cdp.state
 				if s.buf and vim.api.nvim_buf_is_valid(s.buf) then
 					cdp._fetch_lsp_symbols()
