@@ -1,6 +1,6 @@
 // Generated p5.js Type Definitions
-// Bundled from npm package p5@2.3.1
-// Generated: 2026-07-28T14:33:05.463Z
+// Bundled from npm package p5@2.3.2
+// Generated: 2026-08-02T05:29:34.060Z
 // Source: https://www.npmjs.com/package/p5
 
 
@@ -1292,6 +1292,10 @@ declare const TRIANGLE_FAN: 6;
 
 declare const __TRIANGLE_FAN: typeof TRIANGLE_FAN;
 
+declare const TRIANGLE_STRIP: 5;
+
+declare const __TRIANGLE_STRIP: typeof TRIANGLE_STRIP;
+
 /**
  * Turns off the parts of the Friendly Error System (FES) that impact performance.
  * 
@@ -1304,10 +1308,6 @@ declare const __TRIANGLE_FAN: typeof TRIANGLE_FAN;
 declare let disableFriendlyErrors: boolean;
 
 declare let __disableFriendlyErrors: typeof disableFriendlyErrors;
-
-declare const TRIANGLE_STRIP: 5;
-
-declare const __TRIANGLE_STRIP: typeof TRIANGLE_STRIP;
 
 declare const QUADS: 'quads';
 
@@ -1812,6 +1812,15 @@ declare class p5 {
    * @param node ID or reference to the HTML element that will contain the sketch.
    */
   p5(sketch: object, node: string | HTMLElement): void;
+
+  /**
+   * Creates a loading indicator when the sketch's setup() function is running.
+   * It is called and removed automatically using the presetup and postsetup lifecycles hooks.
+   * @param p5 The p5 constructor
+   * @param fn The p5 prototype object
+   * @param lifecycles Lifecycle hooks for the sketch
+   */
+  loading(p5: any, fn: any, lifecycles: any): void;
 
   /**
    * Returns a Quaternion for the
@@ -15649,8 +15658,8 @@ declare class p5 {
   readonly LINE_LOOP: typeof LINE_LOOP;
   readonly TRIANGLES: typeof TRIANGLES;
   readonly TRIANGLE_FAN: typeof TRIANGLE_FAN;
-  disableFriendlyErrors: typeof disableFriendlyErrors;
   readonly TRIANGLE_STRIP: typeof TRIANGLE_STRIP;
+  disableFriendlyErrors: typeof disableFriendlyErrors;
   readonly QUADS: typeof QUADS;
   readonly QUAD_STRIP: typeof QUAD_STRIP;
   readonly TESS: typeof TESS;
@@ -15848,8 +15857,8 @@ const LINE_STRIP: typeof __LINE_STRIP;
 const LINE_LOOP: typeof __LINE_LOOP;
 const TRIANGLES: typeof __TRIANGLES;
 const TRIANGLE_FAN: typeof __TRIANGLE_FAN;
-let disableFriendlyErrors: typeof __disableFriendlyErrors;
 const TRIANGLE_STRIP: typeof __TRIANGLE_STRIP;
+let disableFriendlyErrors: typeof __disableFriendlyErrors;
 const QUADS: typeof __QUADS;
 const QUAD_STRIP: typeof __QUAD_STRIP;
 const TESS: typeof __TESS;
@@ -21348,6 +21357,8 @@ TRIANGLES: typeof TRIANGLES;
 
 TRIANGLE_FAN: typeof TRIANGLE_FAN;
 
+TRIANGLE_STRIP: typeof TRIANGLE_STRIP;
+
 /**
  * Turns off the parts of the Friendly Error System (FES) that impact performance.
  * 
@@ -21358,8 +21369,6 @@ TRIANGLE_FAN: typeof TRIANGLE_FAN;
  * performance by turning off these checks.
  */
 disableFriendlyErrors: typeof disableFriendlyErrors;
-
-TRIANGLE_STRIP: typeof TRIANGLE_STRIP;
 
 QUADS: typeof QUADS;
 
@@ -21626,6 +21635,15 @@ index: typeof index;
   remove(): void;
   remove(): void;
   remove(): void;
+
+  /**
+   * Creates a loading indicator when the sketch's setup() function is running.
+   * It is called and removed automatically using the presetup and postsetup lifecycles hooks.
+   * @param p5 The p5 constructor
+   * @param fn The p5 prototype object
+   * @param lifecycles Lifecycle hooks for the sketch
+   */
+  loading(p5: any, fn: any, lifecycles: any): void;
 
   /**
    * Returns a Quaternion for the
@@ -35461,8 +35479,8 @@ namespace p5 {
   const LINE_LOOP: typeof LINE_LOOP;
   const TRIANGLES: typeof TRIANGLES;
   const TRIANGLE_FAN: typeof TRIANGLE_FAN;
-  let disableFriendlyErrors: typeof disableFriendlyErrors;
   const TRIANGLE_STRIP: typeof TRIANGLE_STRIP;
+  let disableFriendlyErrors: typeof disableFriendlyErrors;
   const QUADS: typeof QUADS;
   const QUAD_STRIP: typeof QUAD_STRIP;
   const TESS: typeof TESS;
@@ -36773,6 +36791,8 @@ const TRIANGLES: typeof TRIANGLES;
 
 const TRIANGLE_FAN: typeof TRIANGLE_FAN;
 
+const TRIANGLE_STRIP: typeof TRIANGLE_STRIP;
+
 /**
  * Turns off the parts of the Friendly Error System (FES) that impact performance.
  * 
@@ -36783,8 +36803,6 @@ const TRIANGLE_FAN: typeof TRIANGLE_FAN;
  * performance by turning off these checks.
  */
 const disableFriendlyErrors: typeof disableFriendlyErrors;
-
-const TRIANGLE_STRIP: typeof TRIANGLE_STRIP;
 
 const QUADS: typeof QUADS;
 
@@ -37051,6 +37069,15 @@ function remove(): void;
 function remove(): void;
 function remove(): void;
 function remove(): void;
+
+/**
+ * Creates a loading indicator when the sketch's setup() function is running.
+ * It is called and removed automatically using the presetup and postsetup lifecycles hooks.
+ * @param p5 The p5 constructor
+ * @param fn The p5 prototype object
+ * @param lifecycles Lifecycle hooks for the sketch
+ */
+function loading(p5: any, fn: any, lifecycles: any): void;
 
 /**
  * Returns a Quaternion for the

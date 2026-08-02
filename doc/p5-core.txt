@@ -19,6 +19,7 @@ Table of Contents                           *p5-core-table-of-contents*
   - slice()              |p5-core-slice|
   - subArray()              |p5-core-subArray|
   - ensureLength()              |p5-core-ensureLength|
+  - loading()              |p5-core-loading|
   - fromAxisAngle()              |p5-core-fromAxisAngle|
   - constructor()              |p5-core-constructor|
   - setOperation()              |p5-core-setOperation|
@@ -267,13 +268,13 @@ Table of Contents                           *p5-core-table-of-contents*
   - loadImage()              |p5-core-loadImage|
   - createVector()              |p5-core-createVector|
   - minute()              |p5-core-minute|
+  - noLoop()              |p5-core-noLoop|
   - version()              |p5-core-version|
   - inspectHooks()              |p5-core-inspectHooks|
   - modify()              |p5-core-modify|
   - modify()              |p5-core-modify|
   - copyToContext()              |p5-core-copyToContext|
   - setUniform()              |p5-core-setUniform|
-  - noLoop()              |p5-core-noLoop|
   - describe()              |p5-core-describe|
   - storeItem()              |p5-core-storeItem|
   - play()              |p5-core-play|
@@ -358,18 +359,6 @@ Table of Contents                           *p5-core-table-of-contents*
   - copy()              |p5-core-copy|
   - copy()              |p5-core-copy|
   - loop()              |p5-core-loop|
-  - instanceID()              |p5-core-instanceID|
-  - smoothstep()              |p5-core-smoothstep|
-  - uniformStorage()              |p5-core-uniformStorage|
-  - uniformStorage()              |p5-core-uniformStorage|
-  - getTexture()              |p5-core-getTexture|
-  - getWorldInputs()              |p5-core-getWorldInputs|
-  - getPixelInputs()              |p5-core-getPixelInputs|
-  - getFinalColor()              |p5-core-getFinalColor|
-  - getColor()              |p5-core-getColor|
-  - getObjectInputs()              |p5-core-getObjectInputs|
-  - getCameraInputs()              |p5-core-getCameraInputs|
-  - mix()              |p5-core-mix|
   - applyMatrix()              |p5-core-applyMatrix|
   - applyMatrix()              |p5-core-applyMatrix|
   - applyMatrix()              |p5-core-applyMatrix|
@@ -402,22 +391,34 @@ Table of Contents                           *p5-core-table-of-contents*
   - noCanvas()              |p5-core-noCanvas|
   - createElement()              |p5-core-createElement|
   - asin()              |p5-core-asin|
+  - dist()              |p5-core-dist|
+  - dist()              |p5-core-dist|
+  - cursor()              |p5-core-cursor|
+  - cursor()              |p5-core-cursor|
   - resize()              |p5-core-resize|
-  - dist()              |p5-core-dist|
-  - dist()              |p5-core-dist|
-  - cursor()              |p5-core-cursor|
-  - cursor()              |p5-core-cursor|
   - str()              |p5-core-str|
   - second()              |p5-core-second|
   - buildGeometry()              |p5-core-buildGeometry|
   - byte()              |p5-core-byte|
   - byte()              |p5-core-byte|
+  - set()              |p5-core-set|
+  - set()              |p5-core-set|
   - bezierPoint()              |p5-core-bezierPoint|
-  - set()              |p5-core-set|
-  - set()              |p5-core-set|
   - loadModel()              |p5-core-loadModel|
   - loadModel()              |p5-core-loadModel|
   - loadModel()              |p5-core-loadModel|
+  - instanceID()              |p5-core-instanceID|
+  - smoothstep()              |p5-core-smoothstep|
+  - uniformStorage()              |p5-core-uniformStorage|
+  - uniformStorage()              |p5-core-uniformStorage|
+  - getTexture()              |p5-core-getTexture|
+  - getWorldInputs()              |p5-core-getWorldInputs|
+  - getPixelInputs()              |p5-core-getPixelInputs|
+  - getFinalColor()              |p5-core-getFinalColor|
+  - getColor()              |p5-core-getColor|
+  - getObjectInputs()              |p5-core-getObjectInputs|
+  - getCameraInputs()              |p5-core-getCameraInputs|
+  - mix()              |p5-core-mix|
   - redraw()              |p5-core-redraw|
   - year()              |p5-core-year|
   - nfp()              |p5-core-nfp|
@@ -540,8 +541,8 @@ Table of Contents                           *p5-core-table-of-contents*
   - get()              |p5-core-get|
   - get()              |p5-core-get|
   - get()              |p5-core-get|
-  - log()              |p5-core-log|
   - clearDepth()              |p5-core-clearDepth|
+  - log()              |p5-core-log|
   - shuffle()              |p5-core-shuffle|
   - green()              |p5-core-green|
   - windowResized()              |p5-core-windowResized|
@@ -635,8 +636,8 @@ Table of Contents                           *p5-core-table-of-contents*
   - cone()              |p5-core-cone|
   - norm()              |p5-core-norm|
   - worldToScreen()              |p5-core-worldToScreen|
-  - vertexProperty()              |p5-core-vertexProperty|
   - square()              |p5-core-square|
+  - vertexProperty()              |p5-core-vertexProperty|
   - screenToWorld()              |p5-core-screenToWorld|
   - createModel()              |p5-core-createModel|
   - createModel()              |p5-core-createModel|
@@ -758,10 +759,10 @@ Table of Contents                           *p5-core-table-of-contents*
   - saveTable()              |p5-core-saveTable|
   - loadColorShader()              |p5-core-loadColorShader|
   - baseColorShader()              |p5-core-baseColorShader|
-  - setAttributes()              |p5-core-setAttributes|
-  - setAttributes()              |p5-core-setAttributes|
   - bezierOrder()              |p5-core-bezierOrder|
   - bezierOrder()              |p5-core-bezierOrder|
+  - setAttributes()              |p5-core-setAttributes|
+  - setAttributes()              |p5-core-setAttributes|
   - blendMode()              |p5-core-blendMode|
   - blendMode()              |p5-core-blendMode|
   - camera()              |p5-core-camera|
@@ -772,8 +773,8 @@ Table of Contents                           *p5-core-table-of-contents*
   - loadStrokeShader()              |p5-core-loadStrokeShader|
   - perspective()              |p5-core-perspective|
   - baseStrokeShader()              |p5-core-baseStrokeShader|
-  - resetShader()              |p5-core-resetShader|
   - buildComputeShader()              |p5-core-buildComputeShader|
+  - resetShader()              |p5-core-resetShader|
   - linePerspective()              |p5-core-linePerspective|
   - linePerspective()              |p5-core-linePerspective|
   - splineVertex()              |p5-core-splineVertex|
@@ -785,6 +786,7 @@ Table of Contents                           *p5-core-table-of-contents*
   - compute()              |p5-core-compute|
   - curveDetail()              |p5-core-curveDetail|
   - frustum()              |p5-core-frustum|
+  - instances()              |p5-core-instances|
   - createCamera()              |p5-core-createCamera|
   - splineProperty()              |p5-core-splineProperty|
   - splineProperty()              |p5-core-splineProperty|
@@ -815,7 +817,7 @@ Table of Contents                           *p5-core-table-of-contents*
 ⚙️ Core module for p5.js
 
 📦 p5.js Version: 2.3.1~
-⏰ Last Updated: 2026-07-28 14:33:20Z~
+⏰ Last Updated: 2026-08-02 05:29:45Z~
 
 ==============================================================================
 2. Functions                                                |p5-core-functions|
@@ -1042,6 +1044,27 @@ index to , exclusive
 `ensureLength()`                                            |p5-core-ensureLength|
 
 Expand capacity of the internal storage until it can fit a target size
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`loading()`                                            |p5-core-loading|
+
+Creates a loading indicator when the sketch's setup() function is running. It
+is called and removed automatically using the presetup and postsetup
+lifecycles hooks.
+
+#### Parameters:
+
+    p5  The p5 constructor
+    fn  The p5 prototype object
+    lifecycles  Lifecycle hooks for the sketch
 
 #### Returns:
 
@@ -5842,6 +5865,26 @@ Returns the current minute as a number from 0–59.
 ---
 
 
+`noLoop()`                                            |p5-core-noLoop|
+
+Stops the code in <a href="#/p5/draw"> draw() </a> from running repeatedly. By
+default, <a href="#/p5/draw"> draw() </a> tries to run 60 times per second.
+Calling noLoop() stops <a href="#/p5/draw"> draw() </a> from repeating. The
+draw loop can be restarted by calling <a href="#/p5/loop"> loop() </a> . <a
+href="#/p5/draw"> draw() </a> can be run once by calling <a
+href="#/p5/redraw"> redraw() </a> . The <a href="#/p5/isLooping"> isLooping()
+</a> function can be used to check whether a sketch is looping, as in
+isLooping() === true .
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
 `version()`                                            |p5-core-version|
 
 Shaders are written in <a
@@ -6059,26 +6102,6 @@ setUniform() .
 
     uniformName  name of the uniform. Must match the name used in the vertex and fragment shaders.
     data  value to assign to the uniform. Must match the uniform’s data type.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`noLoop()`                                            |p5-core-noLoop|
-
-Stops the code in <a href="#/p5/draw"> draw() </a> from running repeatedly. By
-default, <a href="#/p5/draw"> draw() </a> tries to run 60 times per second.
-Calling noLoop() stops <a href="#/p5/draw"> draw() </a> from repeating. The
-draw loop can be restarted by calling <a href="#/p5/loop"> loop() </a> . <a
-href="#/p5/draw"> draw() </a> can be run once by calling <a
-href="#/p5/redraw"> redraw() </a> . The <a href="#/p5/isLooping"> isLooping()
-</a> function can be used to check whether a sketch is looping, as in
-isLooping() === true .
 
 #### Returns:
 
@@ -6515,24 +6538,23 @@ descriptions </a> to learn more about making sketches accessible.
 Updates the data in the buffer with new values. The new data must be in the
 same format as the data originally passed to <a href="#/p5/createStorage">
 createStorage() </a> . let particles; let computeShader; let displayShader;
-let instance; const numParticles = 100; async function setup() { await
-createCanvas(100, 100, WEBGPU); particles = createStorage(makeParticles(width
-/ 2, height / 2)); computeShader = buildComputeShader(simulate); displayShader
-= buildMaterialShader(display); instance = buildGeometry(drawParticle);
-describe('100 orange particles shooting outward.'); } function
-makeParticles(x, y) { let data = []; for (let i = 0; i < numParticles; i++) {
-let angle = (i / numParticles) * TWO_PI; let speed = random(0.5, 2);
-data.push({ position: createVector(x, y), velocity: createVector(cos(angle) *
-speed, sin(angle) * speed), }); } return data; } function drawParticle() {
-sphere(2); } function simulate() { let data = uniformStorage(particles); let
-idx = index.x; data[idx].position = data[idx].position + data[idx].velocity; }
-function display() { let data = uniformStorage(particles);
-worldInputs.begin(); let pos = data[instanceID()].position;
-worldInputs.position.xy += pos - [width / 2, height / 2]; worldInputs.end(); }
-function draw() { background(30); if (frameCount % 60 === 0) {
-particles.update(makeParticles(random(width), random(height))); }
-compute(computeShader, numParticles); noStroke(); fill(255, 200, 50);
-shader(displayShader); model(instance, numParticles); }
+const numParticles = 100; async function setup() { await createCanvas(100,
+100, WEBGPU); particles = createStorage(makeParticles(width / 2, height / 2));
+computeShader = buildComputeShader(simulate); displayShader =
+buildMaterialShader(display); describe('100 orange particles shooting
+outward.'); } function makeParticles(x, y) { let data = []; for (let i = 0; i
+< numParticles; i++) { let angle = (i / numParticles) * TWO_PI; let speed =
+random(0.5, 2); data.push({ position: createVector(x, y), velocity:
+createVector(cos(angle) * speed, sin(angle) * speed), }); } return data; }
+function simulate() { let data = uniformStorage(particles); let idx = index.x;
+data[idx].position = data[idx].position + data[idx].velocity; } function
+display() { let data = uniformStorage(particles); worldInputs.begin(); let pos
+= data[instanceIndex].position; worldInputs.position.xy += pos - [width / 2,
+height / 2]; worldInputs.end(); } function draw() { background(30); if
+(frameCount % 60 === 0) { particles.update(makeParticles(random(width),
+random(height))); } compute(computeShader, numParticles); noStroke();
+fill(255, 200, 50); shader(displayShader); instances(numParticles).sphere(2);
+}
 
 #### Parameters:
 
@@ -8098,242 +8120,6 @@ can be used to check whether a sketch is looping, as in isLooping() === true .
 ---
 
 
-`instanceID()`                                            |p5-core-instanceID|
-
-A function alias for <a href="#/p5/instanceIndex"> instanceIndex </a> , kept
-for compatibility. Prefer using <a href="#/p5/instanceIndex"> instanceIndex
-</a> directly as a value instead. Returns the index of the current instance
-when drawing multiple copies of a shape with <a href="#/p5/model">
-model(count) </a> . instanceID() can only be used inside a p5.strands shader
-callback.
-
-#### Returns:
-
-    The index of the current instance.
-
-📂 *Sub-module: main*
-
----
-
-
-`smoothstep()`                                            |p5-core-smoothstep|
-
-A shader function that performs smooth Hermite interpolation between 0.0 and
-1.0 . This function is equivalent to the GLSL built-in smoothstep(edge0,
-edge1, x) and is available inside p5.strands shader callbacks. It is commonly
-used to create soft transitions, smooth edges, fades, and anti-aliased
-effects. Smoothstep is useful when a threshold or cutoff is needed, but with a
-gradual transition instead of a hard edge. Returns 0.0 when x is less than or
-equal to edge0 Returns 1.0 when x is greater than or equal to edge1 Smoothly
-interpolates between 0.0 and 1.0 when x is between them
-
-#### Parameters:
-
-    edge0  Lower edge of the transition
-    edge1  Upper edge of the transition
-    x  Input value to interpolate
-
-#### Returns:
-
-    A value between `0.0` and `1.0`
-
-📂 *Sub-module: main*
-
----
-
-
-`uniformStorage()`                                            |p5-core-uniformStorage|
-
-Declares a storage buffer uniform inside a <a href="#/p5.Shader/modify">
-modify() </a> callback, making a <a href="#/p5/createStorage"> createStorage()
-</a> buffer accessible in the shader. Pass a p5.StorageBuffer (or a function
-returning one) as the second argument to set it as the default value, applied
-automatically each frame. Pass a plain object with the same field layout as
-the buffer's struct elements to declare the schema without binding a specific
-buffer. When called without a name, p5.strands automatically uses the name of
-the variable it is assigned to as the uniform name. Note: uniformStorage is
-only available when using p5.strands.
-
-#### Parameters:
-
-    name  The name of the storage buffer uniform in the shader.
-    bufferOrSchema  A storage buffer to bind, a function returning a storage buffer (called each frame), or a plain object describing the struct field layout.
-
-#### Returns:
-
-    A strands node representing the storage buffer.
-
-📂 *Sub-module: main*
-
----
-
-
-`uniformStorage()`                                            |p5-core-uniformStorage|
-
-
-
-#### Parameters:
-
-    bufferOrSchema  
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`getTexture()`                                            |p5-core-getTexture|
-
-
-
-#### Parameters:
-
-    texture  The texture to sample from. (e.g. a p5.Image, p5.Graphics, or p5.Framebuffer).
-    coords  The 2D coordinates to sample from. This should be between [0,0] (the top-left) and [1,1] (the bottom-right) of the texture. It should be compatible with a vec2.
-
-#### Returns:
-
-    The color of the given texture at the given coordinates. This will behave as a vec4 holding components r, g, b, and a (alpha), with each component being in the range 0.0 to 1.0.
-
-📂 *Sub-module: main*
-
----
-
-
-`getWorldInputs()`                                            |p5-core-getWorldInputs|
-
-
-
-#### Parameters:
-
-    callback  
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`getPixelInputs()`                                            |p5-core-getPixelInputs|
-
-
-
-#### Parameters:
-
-    callback  
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`getFinalColor()`                                            |p5-core-getFinalColor|
-
-
-
-#### Parameters:
-
-    callback  
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`getColor()`                                            |p5-core-getColor|
-
-
-
-#### Parameters:
-
-    callback  
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`getObjectInputs()`                                            |p5-core-getObjectInputs|
-
-
-
-#### Parameters:
-
-    callback  
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`getCameraInputs()`                                            |p5-core-getCameraInputs|
-
-
-
-#### Parameters:
-
-    callback  
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`mix()`                                            |p5-core-mix|
-
-Performs linear interpolation between two values. The mix() function linearly
-interpolates between two values based on a third parameter. It's a GLSL
-built-in function available in p5.strands shaders. The function computes: x *
-(1 - a) + y * a When a is 0.0, the function returns x . When a is 1.0, it
-returns y . Values between 0.0 and 1.0 produce a linear blend between the two
-values. This function works with scalars, vectors (vec2, vec3, vec4), and can
-also accept a boolean for the third parameter to select between the two
-values. Note: This function is only available inside shader code created with
-<a href="#/p5/buildMaterialShader"> buildMaterialShader() </a> , <a
-href="#/p5/buildColorShader"> buildColorShader() </a> , or similar functions.
-For regular p5.js code, use <a href="#/p5/lerp"> lerp() </a> instead.
-
-#### Parameters:
-
-    x  first value to interpolate from.
-    y  second value to interpolate to.
-    a  interpolation amount (0.0-1.0) or boolean selector.
-
-#### Returns:
-
-    interpolated value.
-
-📂 *Sub-module: main*
-
----
-
-
 `applyMatrix()`                                            |p5-core-applyMatrix|
 
 Applies a transformation matrix to the coordinate system. Transformations such
@@ -9353,19 +9139,6 @@ finalColor.set(mix(green, purple, value)); finalColor.end(); } function draw()
 ---
 
 
-`resize()`                                            |p5-core-resize|
-
-Resize our canvas element.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `dist()`                                            |p5-core-dist|
 
 Calculates the distance between two points. The version of dist() with four
@@ -9451,6 +9224,19 @@ type as a string.
 #### Returns:
 
     the current cursor type
+
+📂 *Sub-module: main*
+
+---
+
+
+`resize()`                                            |p5-core-resize|
+
+Resize our canvas element.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: main*
 
@@ -9562,38 +9348,6 @@ in byte('giraffe') , then the value NaN (not a number) will be returned.
 ---
 
 
-`bezierPoint()`                                            |p5-core-bezierPoint|
-
-Calculates coordinates along a Bézier curve using interpolation. bezierPoint()
-calculates coordinates along a Bézier curve using the anchor and control
-points. It expects points in the same order as the <a href="#/p5/bezier">
-bezier() </a> function. bezierPoint() works one axis at a time. Passing the
-anchor and control points' x-coordinates will calculate the x-coordinate of a
-point on the curve. Passing the anchor and control points' y-coordinates will
-calculate the y-coordinate of a point on the curve. The first parameter, a ,
-is the coordinate of the first anchor point. The second and third parameters,
-b and c , are the coordinates of the control points. The fourth parameter, d ,
-is the coordinate of the last anchor point. The fifth parameter, t , is the
-amount to interpolate along the curve. 0 is the first anchor point, 1 is the
-second anchor point, and 0.5 is halfway between them.
-
-#### Parameters:
-
-    a  coordinate of first anchor point.
-    b  coordinate of first control point.
-    c  coordinate of second control point.
-    d  coordinate of second anchor point.
-    t  amount to interpolate between 0 and 1.
-
-#### Returns:
-
-    coordinate of the point on the curve.
-
-📂 *Sub-module: main*
-
----
-
-
 `set()`                                            |p5-core-set|
 
 Updates a single element in the buffer at a given index. Use this when only a
@@ -9650,6 +9404,38 @@ called after using set() for changes to appear.
 #### Returns:
 
     void
+
+📂 *Sub-module: main*
+
+---
+
+
+`bezierPoint()`                                            |p5-core-bezierPoint|
+
+Calculates coordinates along a Bézier curve using interpolation. bezierPoint()
+calculates coordinates along a Bézier curve using the anchor and control
+points. It expects points in the same order as the <a href="#/p5/bezier">
+bezier() </a> function. bezierPoint() works one axis at a time. Passing the
+anchor and control points' x-coordinates will calculate the x-coordinate of a
+point on the curve. Passing the anchor and control points' y-coordinates will
+calculate the y-coordinate of a point on the curve. The first parameter, a ,
+is the coordinate of the first anchor point. The second and third parameters,
+b and c , are the coordinates of the control points. The fourth parameter, d ,
+is the coordinate of the last anchor point. The fifth parameter, t , is the
+amount to interpolate along the curve. 0 is the first anchor point, 1 is the
+second anchor point, and 0.5 is halfway between them.
+
+#### Parameters:
+
+    a  coordinate of first anchor point.
+    b  coordinate of first control point.
+    c  coordinate of second control point.
+    d  coordinate of second anchor point.
+    t  amount to interpolate between 0 and 1.
+
+#### Returns:
+
+    coordinate of the point on the curve.
 
 📂 *Sub-module: main*
 
@@ -9754,6 +9540,242 @@ for colored STL files. STL files with color will be rendered without color.
 #### Returns:
 
     new <a href="#/p5.Geometry">p5.Geometry</a> object.
+
+📂 *Sub-module: main*
+
+---
+
+
+`instanceID()`                                            |p5-core-instanceID|
+
+A function alias for <a href="#/p5/instanceIndex"> instanceIndex </a> , kept
+for compatibility. Prefer using <a href="#/p5/instanceIndex"> instanceIndex
+</a> directly as a value instead. Returns the index of the current instance
+when drawing multiple copies of a shape with <a href="#/p5/model">
+model(count) </a> . instanceID() can only be used inside a p5.strands shader
+callback.
+
+#### Returns:
+
+    The index of the current instance.
+
+📂 *Sub-module: main*
+
+---
+
+
+`smoothstep()`                                            |p5-core-smoothstep|
+
+A shader function that performs smooth Hermite interpolation between 0.0 and
+1.0 . This function is equivalent to the GLSL built-in smoothstep(edge0,
+edge1, x) and is available inside p5.strands shader callbacks. It is commonly
+used to create soft transitions, smooth edges, fades, and anti-aliased
+effects. Smoothstep is useful when a threshold or cutoff is needed, but with a
+gradual transition instead of a hard edge. Returns 0.0 when x is less than or
+equal to edge0 Returns 1.0 when x is greater than or equal to edge1 Smoothly
+interpolates between 0.0 and 1.0 when x is between them
+
+#### Parameters:
+
+    edge0  Lower edge of the transition
+    edge1  Upper edge of the transition
+    x  Input value to interpolate
+
+#### Returns:
+
+    A value between `0.0` and `1.0`
+
+📂 *Sub-module: main*
+
+---
+
+
+`uniformStorage()`                                            |p5-core-uniformStorage|
+
+Declares a storage buffer uniform inside a <a href="#/p5.Shader/modify">
+modify() </a> callback, making a <a href="#/p5/createStorage"> createStorage()
+</a> buffer accessible in the shader. Pass a p5.StorageBuffer (or a function
+returning one) as the second argument to set it as the default value, applied
+automatically each frame. Pass a plain object with the same field layout as
+the buffer's struct elements to declare the schema without binding a specific
+buffer. When called without a name, p5.strands automatically uses the name of
+the variable it is assigned to as the uniform name. Note: uniformStorage is
+only available when using p5.strands.
+
+#### Parameters:
+
+    name  The name of the storage buffer uniform in the shader.
+    bufferOrSchema  A storage buffer to bind, a function returning a storage buffer (called each frame), or a plain object describing the struct field layout.
+
+#### Returns:
+
+    A strands node representing the storage buffer.
+
+📂 *Sub-module: main*
+
+---
+
+
+`uniformStorage()`                                            |p5-core-uniformStorage|
+
+
+
+#### Parameters:
+
+    bufferOrSchema  
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`getTexture()`                                            |p5-core-getTexture|
+
+
+
+#### Parameters:
+
+    texture  The texture to sample from. (e.g. a p5.Image, p5.Graphics, or p5.Framebuffer).
+    coords  The 2D coordinates to sample from. This should be between [0,0] (the top-left) and [1,1] (the bottom-right) of the texture. It should be compatible with a vec2.
+
+#### Returns:
+
+    The color of the given texture at the given coordinates. This will behave as a vec4 holding components r, g, b, and a (alpha), with each component being in the range 0.0 to 1.0.
+
+📂 *Sub-module: main*
+
+---
+
+
+`getWorldInputs()`                                            |p5-core-getWorldInputs|
+
+
+
+#### Parameters:
+
+    callback  
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`getPixelInputs()`                                            |p5-core-getPixelInputs|
+
+
+
+#### Parameters:
+
+    callback  
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`getFinalColor()`                                            |p5-core-getFinalColor|
+
+
+
+#### Parameters:
+
+    callback  
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`getColor()`                                            |p5-core-getColor|
+
+
+
+#### Parameters:
+
+    callback  
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`getObjectInputs()`                                            |p5-core-getObjectInputs|
+
+
+
+#### Parameters:
+
+    callback  
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`getCameraInputs()`                                            |p5-core-getCameraInputs|
+
+
+
+#### Parameters:
+
+    callback  
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`mix()`                                            |p5-core-mix|
+
+Performs linear interpolation between two values. The mix() function linearly
+interpolates between two values based on a third parameter. It's a GLSL
+built-in function available in p5.strands shaders. The function computes: x *
+(1 - a) + y * a When a is 0.0, the function returns x . When a is 1.0, it
+returns y . Values between 0.0 and 1.0 produce a linear blend between the two
+values. This function works with scalars, vectors (vec2, vec3, vec4), and can
+also accept a boolean for the third parameter to select between the two
+values. Note: This function is only available inside shader code created with
+<a href="#/p5/buildMaterialShader"> buildMaterialShader() </a> , <a
+href="#/p5/buildColorShader"> buildColorShader() </a> , or similar functions.
+For regular p5.js code, use <a href="#/p5/lerp"> lerp() </a> instead.
+
+#### Parameters:
+
+    x  first value to interpolate from.
+    y  second value to interpolate to.
+    a  interpolation amount (0.0-1.0) or boolean selector.
+
+#### Returns:
+
+    interpolated value.
 
 📂 *Sub-module: main*
 
@@ -13010,6 +13032,20 @@ with <a href="#/p5.Image"> p5.Image </a> objects.
 ---
 
 
+`clearDepth()`                                            |p5-core-clearDepth|
+
+Resets all depth information so that nothing previously drawn will occlude
+anything subsequently drawn.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
 `log()`                                            |p5-core-log|
 
 Calculates the natural logarithm (the base-e logarithm) of a number. log()
@@ -13045,20 +13081,6 @@ draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 #### Returns:
 
     natural logarithm of n.
-
-📂 *Sub-module: main*
-
----
-
-
-`clearDepth()`                                            |p5-core-clearDepth|
-
-Resets all depth information so that nothing previously drawn will occlude
-anything subsequently drawn.
-
-#### Returns:
-
-    void
 
 📂 *Sub-module: main*
 
@@ -15547,19 +15569,17 @@ shape = await loadModel('assets/octahedron.obj'); createCanvas(100, 100,
 WEBGL); describe('A white octahedron drawn against a gray background.'); }
 function draw() { background(200); // Enable orbiting with the mouse.
 orbitControl(); // Draw the shape. model(shape); } Multiple instances can be
-drawn at once with model(geometry, count) . On its own, all the instances get
-drawn to the same spot, but you can use <a href="#/p5/instanceID">
-instanceID() </a> inside of a shader to handle each instance. At large counts,
-this often runs faster than using a for loop. let instancesShader; let
-instance; let count = 5; function drawInstance() { sphere(15); } function
-setup() { createCanvas(200, 200, WEBGL); instance =
-buildGeometry(drawInstance); instancesShader =
+drawn at once with instances(count) . On its own, all the instances get drawn
+to the same spot, but you can use <a href="#/p5/instanceIndex"> instanceIndex
+</a> inside of a shader to handle each instance. At large counts, this often
+runs faster than using a for loop. let instancesShader; let count = 5;
+function setup() { createCanvas(200, 200, WEBGL); instancesShader =
 buildMaterialShader(drawSpaced); } function drawSpaced() {
 worldInputs.begin(); // Spread spheres evenly across the canvas based on their
-index let spacing = width / count; worldInputs.position.x += (instanceID() -
+index let spacing = width / count; worldInputs.position.x += (instanceIndex -
 (count - 1) / 2) * spacing; worldInputs.end(); } function draw() {
 background(220); lights(); noStroke(); fill('red'); shader(instancesShader);
-model(instance, count); }
+instances(count).sphere(15); }
 
 #### Parameters:
 
@@ -15755,6 +15775,39 @@ the screen position of 3D objects.
 ---
 
 
+`square()`                                            |p5-core-square|
+
+Draws a square. A square is a four-sided shape defined by the x , y , and s
+parameters. x and y set the location of its top-left corner. s sets its width
+and height. Every angle in the square measures 90˚ and all its sides are the
+same length. See <a href="#/p5/rectMode"> rectMode() </a> for other ways to
+define squares. The version of square() with four parameters creates a rounded
+square. The fourth parameter sets the radius for all four corners. The version
+of square() with seven parameters also creates a rounded square. Each of the
+last four parameters set the radius of a corner. The radii start with the
+top-left corner and move clockwise around the square. If any of these
+parameters are omitted, they are set to the value of the last radius that was
+set.
+
+#### Parameters:
+
+    x  x-coordinate of the square.
+    y  y-coordinate of the square.
+    s  side size of the square.
+    tl  optional radius of top-left corner.
+    tr  optional radius of top-right corner.
+    br  optional radius of bottom-right corner.
+    bl  optional radius of bottom-left corner.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
 `vertexProperty()`                                            |p5-core-vertexProperty|
 
 Sets the shader's vertex property or attribute variables. A vertex property,
@@ -15779,39 +15832,6 @@ href="#/p5/Geometry"> Geometry </a> objects.
 
     attributeName  the name of the vertex attribute.
     data  the data tied to the vertex attribute.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`square()`                                            |p5-core-square|
-
-Draws a square. A square is a four-sided shape defined by the x , y , and s
-parameters. x and y set the location of its top-left corner. s sets its width
-and height. Every angle in the square measures 90˚ and all its sides are the
-same length. See <a href="#/p5/rectMode"> rectMode() </a> for other ways to
-define squares. The version of square() with four parameters creates a rounded
-square. The fourth parameter sets the radius for all four corners. The version
-of square() with seven parameters also creates a rounded square. Each of the
-last four parameters set the radius of a corner. The radii start with the
-top-left corner and move clockwise around the square. If any of these
-parameters are omitted, they are set to the value of the last radius that was
-set.
-
-#### Parameters:
-
-    x  x-coordinate of the square.
-    y  y-coordinate of the square.
-    s  side size of the square.
-    tl  optional radius of top-left corner.
-    tr  optional radius of top-right corner.
-    br  optional radius of bottom-right corner.
-    bl  optional radius of bottom-left corner.
 
 #### Returns:
 
@@ -19031,6 +19051,52 @@ the base color shader.
 ---
 
 
+`bezierOrder()`                                            |p5-core-bezierOrder|
+
+Influences the shape of the Bézier curve segment in a custom shape. By
+default, this is 3; the other possible parameter is 2. This results in
+quadratic Bézier curves. bezierVertex() adds a curved segment to custom
+shapes. The Bézier curves it creates are defined like those made by the <a
+href="#/p5/bezier"> bezier() </a> function. bezierVertex() must be called
+between the <a href="#/p5/beginShape"> beginShape() </a> and <a
+href="#/p5/endShape"> endShape() </a> functions. There must be at least one
+call to <a href="#/p5/vertex"> bezierVertex() </a> , before a number of
+bezierVertex() calls that is a multiple of the parameter set by <a
+href="#/p5/bezierOrder"> bezierOrder(...) </a> (default 3). Each curve of
+order 3 requires three calls to bezierVertex , so 2 curves would need 7 calls
+to bezierVertex() : (1 one initial anchor point, two sets of 3 curves
+describing the curves) With bezierOrder(2) , two curves would need 5 calls: 1
++ 2 + 2. Bézier curves can also be drawn in 3D using WebGL mode. Note:
+bezierVertex() won’t work when an argument is passed to <a
+href="#/p5/beginShape"> beginShape() </a> . Calling bezierOrder() without an
+argument returns the current Bézier order.
+
+#### Parameters:
+
+    order  The new order to set. Can be either 2 or 3, by default 3
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`bezierOrder()`                                            |p5-core-bezierOrder|
+
+
+
+#### Returns:
+
+    The current Bézier order.
+
+📂 *Sub-module: main*
+
+---
+
+
 `setAttributes()`                                            |p5-core-setAttributes|
 
 Set attributes for the WebGL Drawing context. This is a way of adjusting how
@@ -19079,52 +19145,6 @@ global webglVersion property.
 #### Returns:
 
     void
-
-📂 *Sub-module: main*
-
----
-
-
-`bezierOrder()`                                            |p5-core-bezierOrder|
-
-Influences the shape of the Bézier curve segment in a custom shape. By
-default, this is 3; the other possible parameter is 2. This results in
-quadratic Bézier curves. bezierVertex() adds a curved segment to custom
-shapes. The Bézier curves it creates are defined like those made by the <a
-href="#/p5/bezier"> bezier() </a> function. bezierVertex() must be called
-between the <a href="#/p5/beginShape"> beginShape() </a> and <a
-href="#/p5/endShape"> endShape() </a> functions. There must be at least one
-call to <a href="#/p5/vertex"> bezierVertex() </a> , before a number of
-bezierVertex() calls that is a multiple of the parameter set by <a
-href="#/p5/bezierOrder"> bezierOrder(...) </a> (default 3). Each curve of
-order 3 requires three calls to bezierVertex , so 2 curves would need 7 calls
-to bezierVertex() : (1 one initial anchor point, two sets of 3 curves
-describing the curves) With bezierOrder(2) , two curves would need 5 calls: 1
-+ 2 + 2. Bézier curves can also be drawn in 3D using WebGL mode. Note:
-bezierVertex() won’t work when an argument is passed to <a
-href="#/p5/beginShape"> beginShape() </a> . Calling bezierOrder() without an
-argument returns the current Bézier order.
-
-#### Parameters:
-
-    order  The new order to set. Can be either 2 or 3, by default 3
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`bezierOrder()`                                            |p5-core-bezierOrder|
-
-
-
-#### Returns:
-
-    The current Bézier order.
 
 📂 *Sub-module: main*
 
@@ -19245,44 +19265,43 @@ a list of items, each with named properties. The properties can be numbers,
 arrays of numbers, vectors created with <a href="#/p5/createVector">
 createVector() </a> , or colors created with <a href="#/p5/color"> color()
 </a> . Inside the shader, each item is accessed by index, and its properties
-are available by name. let instanceData; let instancesShader; let instance;
-let count = 5; async function setup() { await createCanvas(200, 200, WEBGPU);
-let data = []; for (let i = 0; i < count; i++) { data.push({ position:
-createVector( random(-1, 1) * width / 2, random(-1, 1) * height / 2, 0, ),
-color: color( random(255), random(255), random(255) ) }); } instanceData =
-createStorage(data); instance = buildGeometry(drawInstance); instancesShader =
-buildMaterialShader(drawInstances); describe('Five spheres at random
-positions, each a different random color.'); } function drawInstance() {
-sphere(15); } function drawInstances() { let data =
-uniformStorage(instanceData); let itemColor = sharedVec4();
-worldInputs.begin(); let item = data[instanceID()]; itemColor = item.color;
-worldInputs.position += item.position; worldInputs.end(); finalColor.begin();
-finalColor.set(itemColor); finalColor.end(); } function draw() {
-background(220); lights(); noStroke(); shader(instancesShader);
-model(instance, count); } You can also store a plain list of numbers by
-passing an array of numbers. Inside the shader, each number is accessed by
-index directly. To create an empty list to be filled in by a compute shader,
-pass a count instead. let cells; let nextCells; let gameShader; let
-displayShader; const W = 100; const H = 100; async function setup() { await
-createCanvas(100, 100, WEBGPU); let initial = new Float32Array(W * H); for
-(let i = 0; i < initial.length; i++) { initial[i] = random() > 0.7 ? 1 : 0; }
-cells = createStorage(initial); nextCells = createStorage(W * H); gameShader =
-buildComputeShader(simulate); displayShader = buildFilterShader(display);
-describe('An animated Game of Life simulation displayed as black and white
-pixels.'); } function simulate() { let current = uniformStorage(() => cells);
-let next = uniformStorage(() => nextCells); let w = uniformInt(() => W); let h
-= uniformInt(() => H); let x = index.x; let y = index.y; let n = 0; for (let
-dy = -1; dy <= 1; dy++) { for (let dx = -1; dx <= 1; dx++) { if (dx != 0 || dy
-!= 0) { let nx = (x + dx + w) % w; let ny = (y + dy + h) % h; n += current[ny
-* w + nx]; } } } let alive = current[y * w + x]; let nextOutput = 0; if (alive
-== 1) { if (abs(n - 2) < 0.1 || abs(n - 3) < 0.1) { nextOutput = 1; } } else {
-if (abs(n - 3) < 0.1) { nextOutput = 1; } } next[y * w + x] = nextOutput; }
-function display() { let data = uniformStorage(() => cells); let w =
-uniformInt(() => W); let h = uniformInt(() => H); filterColor.begin(); let x =
-floor(filterColor.texCoord.x * w); let y = floor(filterColor.texCoord.y * h);
-let alive = data[y * w + x]; filterColor.set([alive, alive, alive, 1]);
-filterColor.end(); } function draw() { compute(gameShader, W, H); [nextCells,
-cells] = [cells, nextCells]; filter(displayShader); }
+are available by name. let instanceData; let instancesShader; let count = 5;
+async function setup() { await createCanvas(200, 200, WEBGPU); let data = [];
+for (let i = 0; i < count; i++) { data.push({ position: createVector(
+random(-1, 1) * width / 2, random(-1, 1) * height / 2, 0, ), color: color(
+random(255), random(255), random(255) ) }); } instanceData =
+createStorage(data); instancesShader = buildMaterialShader(drawInstances);
+describe('Five spheres at random positions, each a different random color.');
+} function drawInstances() { let data = uniformStorage(instanceData); let
+itemColor = sharedVec4(); worldInputs.begin(); let item = data[instanceIndex];
+itemColor = item.color; worldInputs.position += item.position;
+worldInputs.end(); finalColor.begin(); finalColor.set(itemColor);
+finalColor.end(); } function draw() { background(220); lights(); noStroke();
+shader(instancesShader); instances(count).sphere(15); } You can also store a
+plain list of numbers by passing an array of numbers. Inside the shader, each
+number is accessed by index directly. To create an empty list to be filled in
+by a compute shader, pass a count instead. let cells; let nextCells; let
+gameShader; let displayShader; const W = 100; const H = 100; async function
+setup() { await createCanvas(100, 100, WEBGPU); let initial = new
+Float32Array(W * H); for (let i = 0; i < initial.length; i++) { initial[i] =
+random() > 0.7 ? 1 : 0; } cells = createStorage(initial); nextCells =
+createStorage(W * H); gameShader = buildComputeShader(simulate); displayShader
+= buildFilterShader(display); describe('An animated Game of Life simulation
+displayed as black and white pixels.'); } function simulate() { let current =
+uniformStorage(() => cells); let next = uniformStorage(() => nextCells); let w
+= uniformInt(() => W); let h = uniformInt(() => H); let x = index.x; let y =
+index.y; let n = 0; for (let dy = -1; dy <= 1; dy++) { for (let dx = -1; dx <=
+1; dx++) { if (dx != 0 || dy != 0) { let nx = (x + dx + w) % w; let ny = (y +
+dy + h) % h; n += current[ny * w + nx]; } } } let alive = current[y * w + x];
+let nextOutput = 0; if (alive == 1) { if (abs(n - 2) < 0.1 || abs(n - 3) <
+0.1) { nextOutput = 1; } } else { if (abs(n - 3) < 0.1) { nextOutput = 1; } }
+next[y * w + x] = nextOutput; } function display() { let data =
+uniformStorage(() => cells); let w = uniformInt(() => W); let h =
+uniformInt(() => H); filterColor.begin(); let x = floor(filterColor.texCoord.x
+* w); let y = floor(filterColor.texCoord.y * h); let alive = data[y * w + x];
+filterColor.set([alive, alive, alive, 1]); filterColor.end(); } function
+draw() { compute(gameShader, W, H); [nextCells, cells] = [cells, nextCells];
+filter(displayShader); }
 
 #### Parameters:
 
@@ -19511,22 +19530,6 @@ the base material shader.
 ---
 
 
-`resetShader()`                                            |p5-core-resetShader|
-
-Restores the default shaders. resetShader() deactivates any shaders previously
-applied by <a href="#/p5/shader"> shader() </a> , <a href="#/p5/strokeShader">
-strokeShader() </a> , or <a href="#/p5/imageShader"> imageShader() </a> .
-Note: Shaders can only be used in WebGL mode.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `buildComputeShader()`                                            |p5-core-buildComputeShader|
 
 Create a new compute shader using p5.strands. A compute shader lets you run
@@ -19545,47 +19548,45 @@ compute shader will read from and write to storage, which is often an array of
 numbers or objects. Use <a href="#/p5/createStorage"> createStorage </a> to
 construct initial data. Connect your iteration function to the storage by
 passing the storage into <a href="#/p5/uniformStorage"> uniformStorage </a> .
-Often, compute shaders are paired with <a href="#/p5/model"> model(myGeometry,
-count) </a> to draw one instance per object in the storage, and a shader that
-uses <a href="#/p5/instanceID"> instanceID() </a> to position each instance.
-let particles; let computeShader; let displayShader; let instance; const
+Often, compute shaders are paired with <a href="#/p5/instances">
+instances(count) </a> to draw one instance per object in the storage, and a
+shader that uses <a href="#/p5/instanceIndex"> instanceIndex </a> to position
+each instance. let particles; let computeShader; let displayShader; const
 numParticles = 100; async function setup() { await createCanvas(100, 100,
 WEBGPU); particles = createStorage(makeParticles(width / 2, height / 2));
 computeShader = buildComputeShader(simulate); displayShader =
-buildMaterialShader(display); instance = buildGeometry(drawParticle);
-describe('100 orange particles shooting outward.'); } function
-makeParticles(x, y) { let data = []; for (let i = 0; i < numParticles; i++) {
-let angle = (i / numParticles) * TWO_PI; let speed = random(0.5, 2);
-data.push({ position: createVector(x, y), velocity: createVector(cos(angle) *
-speed, sin(angle) * speed), }); } return data; } function drawParticle() {
-sphere(2); } function simulate() { let data = uniformStorage(particles); let
-idx = index.x; data[idx].position = data[idx].position + data[idx].velocity; }
-function display() { let data = uniformStorage(particles);
-worldInputs.begin(); let pos = data[instanceID()].position;
-worldInputs.position.xy += pos - [width / 2, height / 2]; worldInputs.end(); }
-function draw() { background(30); if (frameCount % 60 === 0) {
-particles.update(makeParticles(random(width), random(height))); }
-compute(computeShader, numParticles); noStroke(); fill(255, 200, 50);
-shader(displayShader); model(instance, numParticles); } let particles; let
-computeShader; let displayShader; let instance; const numParticles = 50; async
-function setup() { await createCanvas(100, 100, WEBGPU); let data = []; for
-(let i = 0; i < numParticles; i++) { data.push({ position: createVector(
-random(-40, 40), random(-40, 40) ), velocity: createVector( random(-1, 1),
-random(-1, 1) ), }); } particles = createStorage(data); computeShader =
-buildComputeShader(simulate); displayShader = buildMaterialShader(display);
-instance = buildGeometry(drawParticle); describe('50 white spheres bouncing
-around the canvas.'); } function drawParticle() { sphere(3); } function
-simulate() { let r = 3; let data = uniformStorage(particles); let idx =
-index.x; let pos = data[idx].position; let vel = data[idx].velocity; pos = pos
-+ vel; if (pos.x > width/2 - r || pos.x < -height/2 + r) { vel.x = -vel.x;
-pos.x = clamp(pos.x, -width/2 + r, width/2 - r); } if (pos.y > height/2 - r ||
-pos.y < -height/2 + r) { vel.y = -vel.y; pos.y = clamp(pos.y, -height/2 + r,
-height/2 - r); } data[idx].position = pos; data[idx].velocity = vel; }
-function display() { let data = uniformStorage(particles);
-worldInputs.begin(); let pos = data[instanceID()].position;
-worldInputs.position.xy += pos; worldInputs.end(); } function draw() {
-background(30); compute(computeShader, numParticles); noStroke(); fill(255);
-lights(); shader(displayShader); model(instance, numParticles); }
+buildMaterialShader(display); describe('100 orange particles shooting
+outward.'); } function makeParticles(x, y) { let data = []; for (let i = 0; i
+< numParticles; i++) { let angle = (i / numParticles) * TWO_PI; let speed =
+random(0.5, 2); data.push({ position: createVector(x, y), velocity:
+createVector(cos(angle) * speed, sin(angle) * speed), }); } return data; }
+function simulate() { let data = uniformStorage(particles); let idx = index.x;
+data[idx].position = data[idx].position + data[idx].velocity; } function
+display() { let data = uniformStorage(particles); worldInputs.begin(); let pos
+= data[instanceIndex].position; worldInputs.position.xy += pos - [width / 2,
+height / 2]; worldInputs.end(); } function draw() { background(30); if
+(frameCount % 60 === 0) { particles.update(makeParticles(random(width),
+random(height))); } compute(computeShader, numParticles); noStroke();
+fill(255, 200, 50); shader(displayShader); instances(numParticles).sphere(2);
+} let particles; let computeShader; let displayShader; const numParticles =
+50; async function setup() { await createCanvas(100, 100, WEBGPU); let data =
+[]; for (let i = 0; i < numParticles; i++) { data.push({ position:
+createVector( random(-40, 40), random(-40, 40) ), velocity: createVector(
+random(-1, 1), random(-1, 1) ), }); } particles = createStorage(data);
+computeShader = buildComputeShader(simulate); displayShader =
+buildMaterialShader(display); describe('50 white spheres bouncing around the
+canvas.'); } function simulate() { let r = 3; let data =
+uniformStorage(particles); let idx = index.x; let pos = data[idx].position;
+let vel = data[idx].velocity; pos = pos + vel; if (pos.x > width/2 - r ||
+pos.x < -height/2 + r) { vel.x = -vel.x; pos.x = clamp(pos.x, -width/2 + r,
+width/2 - r); } if (pos.y > height/2 - r || pos.y < -height/2 + r) { vel.y =
+-vel.y; pos.y = clamp(pos.y, -height/2 + r, height/2 - r); }
+data[idx].position = pos; data[idx].velocity = vel; } function display() { let
+data = uniformStorage(particles); worldInputs.begin(); let pos =
+data[instanceIndex].position; worldInputs.position.xy += pos;
+worldInputs.end(); } function draw() { background(30); compute(computeShader,
+numParticles); noStroke(); fill(255); lights(); shader(displayShader);
+instances(numParticles).sphere(3); }
 
 #### Parameters:
 
@@ -19594,6 +19595,22 @@ lights(); shader(displayShader); model(instance, numParticles); }
 #### Returns:
 
     The compute shader.
+
+📂 *Sub-module: main*
+
+---
+
+
+`resetShader()`                                            |p5-core-resetShader|
+
+Restores the default shaders. resetShader() deactivates any shaders previously
+applied by <a href="#/p5/shader"> shader() </a> , <a href="#/p5/strokeShader">
+strokeShader() </a> , or <a href="#/p5/imageShader"> imageShader() </a> .
+Note: Shaders can only be used in WebGL mode.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: main*
 
@@ -19825,32 +19842,31 @@ is a compute shader created with <a href="#/p5/buildComputeShader">
 buildComputeShader </a> . Pass a number for x to run a simple loop. Inside the
 shader's iteration function, <a href="#/p5/index"> index.x </a> will count up
 from 0 to that number. let particles; let computeShader; let displayShader;
-let instance; const numParticles = 50; async function setup() { await
-createCanvas(100, 100, WEBGPU); let data = []; for (let i = 0; i <
-numParticles; i++) { data.push({ position: createVector( random(-40, 40),
-random(-40, 40) ), velocity: createVector( random(-1, 1), random(-1, 1) ), });
-} particles = createStorage(data); computeShader =
-buildComputeShader(simulate); displayShader = buildMaterialShader(display);
-instance = buildGeometry(drawParticle); describe('50 white spheres bouncing
-around the canvas.'); } function drawParticle() { sphere(3); } function
-simulate() { let r = 3; let data = uniformStorage(particles); let idx =
-index.x; let pos = data[idx].position; let vel = data[idx].velocity; pos = pos
-+ vel; if (pos.x > width/2 - r || pos.x < -height/2 + r) { vel.x = -vel.x;
-pos.x = clamp(pos.x, -width/2 + r, width/2 - r); } if (pos.y > height/2 - r ||
-pos.y < -height/2 + r) { vel.y = -vel.y; pos.y = clamp(pos.y, -height/2 + r,
-height/2 - r); } data[idx].position = pos; data[idx].velocity = vel; }
-function display() { let data = uniformStorage(particles);
-worldInputs.begin(); let pos = data[instanceID()].position;
-worldInputs.position.xy += pos; worldInputs.end(); } function draw() {
-background(30); compute(computeShader, numParticles); noStroke(); fill(255);
-lights(); shader(displayShader); model(instance, numParticles); } You can also
-pass y and z to loop in up to three dimensions, using index.y and index.z to
-get the position in each. This is useful for working with 2D grids, like in
-the Game of Life example below. let cells; let nextCells; let gameShader; let
-displayShader; const W = 100; const H = 100; async function setup() { await
-createCanvas(100, 100, WEBGPU); let initial = new Float32Array(W * H); for
-(let i = 0; i < initial.length; i++) { initial[i] = random() > 0.7 ? 1 : 0; }
-cells = createStorage(initial); nextCells = createStorage(W * H); gameShader =
+const numParticles = 50; async function setup() { await createCanvas(100, 100,
+WEBGPU); let data = []; for (let i = 0; i < numParticles; i++) { data.push({
+position: createVector( random(-40, 40), random(-40, 40) ), velocity:
+createVector( random(-1, 1), random(-1, 1) ), }); } particles =
+createStorage(data); computeShader = buildComputeShader(simulate);
+displayShader = buildMaterialShader(display); describe('50 white spheres
+bouncing around the canvas.'); } function simulate() { let r = 3; let data =
+uniformStorage(particles); let idx = index.x; let pos = data[idx].position;
+let vel = data[idx].velocity; pos = pos + vel; if (pos.x > width/2 - r ||
+pos.x < -height/2 + r) { vel.x = -vel.x; pos.x = clamp(pos.x, -width/2 + r,
+width/2 - r); } if (pos.y > height/2 - r || pos.y < -height/2 + r) { vel.y =
+-vel.y; pos.y = clamp(pos.y, -height/2 + r, height/2 - r); }
+data[idx].position = pos; data[idx].velocity = vel; } function display() { let
+data = uniformStorage(particles); worldInputs.begin(); let pos =
+data[instanceIndex].position; worldInputs.position.xy += pos;
+worldInputs.end(); } function draw() { background(30); compute(computeShader,
+numParticles); noStroke(); fill(255); lights(); shader(displayShader);
+instances(numParticles).sphere(3); } You can also pass y and z to loop in up
+to three dimensions, using index.y and index.z to get the position in each.
+This is useful for working with 2D grids, like in the Game of Life example
+below. let cells; let nextCells; let gameShader; let displayShader; const W =
+100; const H = 100; async function setup() { await createCanvas(100, 100,
+WEBGPU); let initial = new Float32Array(W * H); for (let i = 0; i <
+initial.length; i++) { initial[i] = random() > 0.7 ? 1 : 0; } cells =
+createStorage(initial); nextCells = createStorage(W * H); gameShader =
 buildComputeShader(simulate); displayShader = buildFilterShader(display);
 describe('An animated Game of Life simulation displayed as black and white
 pixels.'); } function simulate() { let current = uniformStorage(() => cells);
@@ -19941,6 +19957,27 @@ in WebGL mode.
 #### Returns:
 
     void
+
+📂 *Sub-module: main*
+
+---
+
+
+`instances()`                                            |p5-core-instances|
+
+Draws count instances of the next 3D primitive or model using WebGL instanced
+rendering. Call a draw method on the returned object to render that primitive
+count times in a single draw call. Instance-specific transforms and attributes
+(position, color, etc.) are supplied through a custom shader that reads
+per-instance data from an instanced attribute buffer.
+
+#### Parameters:
+
+    count  number of instances to draw. Must be a positive integer.
+
+#### Returns:
+
+    an object with methods `sphere`, `box`, `plane`, `ellipsoid`, `cylinder`, `cone`, `torus`, `triangle`, `rect`, `quad`, `ellipse`, `arc`, `model`, `line`, `point`, `bezier`, and `spline`. Call one of these to draw `count` instances of that primitive.
 
 📂 *Sub-module: main*
 
