@@ -242,6 +242,14 @@ Cm.setup = function(opts)
 			cdp.set_breakpoint(loc)
 		elseif sub == "continue" then
 			cdp.continue()
+		elseif sub == "pause" then
+			cdp.pause()
+		elseif sub == "pauseExceptions" then
+			cdp.pause_exceptions(args[2])
+		elseif sub == "reload" then
+			cdp.reload()
+		elseif sub == "screenshot" then
+			cdp.screenshot(args[2])
 		elseif sub == "step" then
 			cdp.step()
 		elseif sub == "stepIn" then
@@ -252,10 +260,7 @@ Cm.setup = function(opts)
 			cdp.switch_tab(5)
 			cdp.toggle()
 		elseif sub == "network_clear" then
-			cdp.tab_data.network = {}
-			if cdp.state.buf and vim.api.nvim_buf_is_valid(cdp.state.buf) then
-				cdp.render_all()
-			end
+			cdp.clear_network()
 		end
 	end
 
@@ -371,6 +376,10 @@ Cm.setup = function(opts)
 					"eval",
 					"break",
 					"continue",
+					"pause",
+					"pauseExceptions",
+					"reload",
+					"screenshot",
 					"step",
 					"stepIn",
 					"stepOut",

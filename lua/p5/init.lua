@@ -39,9 +39,9 @@ I.config = {
 	cdp = {
 		enabled = false,
 		remote_debugging_port = 9222,
+		keymaps = true, -- HUD keymaps (1-6 tabs, s/i/o/x/p/P/R/S, ...); set false to disable
+		close_browser_on_close = true, -- kill the CDP Chrome instance and remove its temp profile on close
 		browser_flags = {
-			"--no-first-run",
-			"--no-default-browser-check",
 			"--enable-gpu-rasterization",
 			"--disable-frame-rate-limit",
 			"--disable-gpu-driver-bug-workarounds",
