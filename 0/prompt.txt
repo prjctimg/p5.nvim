@@ -1,0 +1,1 @@
+Currently the tests are launching multiple browser tabs and instances and this is making my machine lag a lot. Use sane testing methods that respect resources or at least clean up the tabs after you use them
