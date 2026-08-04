@@ -89,6 +89,13 @@ S.start = function(port)
 
 	-- Validate environment asynchronously before starting server
 	local validation_cancelled = false
+	local watchdog = vim.uv.new_timer()
+	watchdog:start(15000, 0, function()
+		vim.schedule(function()
+			server_starting = false
+			watchdog:close()
+		end)
+	end)
 	local validation_steps = {
 		function(next_step)
 			vim.fn.jobstart({ "python3", "-c", "import websockets" }, {
@@ -102,16 +109,31 @@ S.start = function(port)
 			})
 		end,
 		function(next_step)
-			if validation_cancelled then next_step() return end
+			if validation_cancelled then
+				next_step()
+				return
+			end
 			if port < 1024 then
+				local advanced = false
+				local function advance(uid_ok)
+					if advanced then
+						return
+					end
+					advanced = true
+					if not uid_ok then
+						validation_cancelled = true
+						notify("Server validation failed: Port " .. port .. " requires root privileges", "warn")
+					end
+					next_step()
+				end
 				vim.fn.jobstart({ "id", "-u" }, {
 					on_stdout = function(_, data)
-						local user_id = vim.trim(table.concat(data or {}, ""))
-						if user_id ~= "0" then
-							validation_cancelled = true
-							notify("Server validation failed: Port " .. port .. " requires root privileges", "warn")
+						advance(vim.trim(table.concat(data or {}, "")) == "0")
+					end,
+					on_exit = function(_, code)
+						if code ~= 0 then
+							advance(false)
 						end
-						next_step()
 					end,
 				})
 			else
@@ -119,8 +141,13 @@ S.start = function(port)
 			end
 		end,
 		function(next_step)
-			if validation_cancelled then server_starting = false return end
+			if validation_cancelled then
+				watchdog:close()
+				server_starting = false
+				return
+			end
 			-- All validations passed, start server
+			watchdog:close()
 			S.port = port
 			S.type = type
 
