@@ -55,6 +55,9 @@ def _parse_config(args=None):
         elif args[i] == "--lr-disabled":
             cfg['live_reload']['enabled'] = False
             i += 1
+        elif args[i] == "--cdp-port" and i + 1 < len(args):
+            cfg['cdp']['remote_debugging_port'] = int(args[i + 1])
+            i += 2
         elif args[i].startswith('--'):
             i += 1
         else:
@@ -179,8 +182,8 @@ class CDPClient:
         self.pending_requests = {}
         self.completed_requests = deque(maxlen=500)
         self._scripts = {}
-        self._perf_task: Optional[asyncio.Task] = None
-        self._perf_metrics = deque(maxlen=300)
+        self._paused_frame_id = None
+        self._perf_prev = {}  # previous Performance.metrics snapshot for deltas
 
     def _next_id(self):
         self._msg_id += 1
@@ -225,49 +228,13 @@ class CDPClient:
         await self.send_command('Network.enable')
         await self.send_command('Debugger.enable')
         await self.send_command('Performance.enable')
-        self._perf_task = asyncio.create_task(self._perf_loop())
+        await self.send_command('Page.enable')
         self._emit('status', {'state': 'connected', 'url': self.page_url})
-
-    async def _perf_loop(self):
-        """Sample performance metrics every second via CDP."""
-        try:
-            while self.connected:
-                await asyncio.sleep(1)
-                if not self.connected:
-                    break
-                try:
-                    result = await self.send_command('Runtime.evaluate', {
-                        'expression': 'Math.round(performance.now())',
-                        'returnByValue': True,
-                    })
-                    perf_data = {'fps': 60}
-                    mem_result = await self.send_command('Runtime.evaluate', {
-                        'expression': '(performance.memory && performance.memory.usedJSHeapSize) || 0',
-                        'returnByValue': True,
-                    })
-                    if mem_result and 'result' in mem_result:
-                        val = mem_result['result'].get('value', 0)
-                        perf_data['heap'] = val
-                    nodes_result = await self.send_command('Runtime.evaluate', {
-                        'expression': 'document.querySelectorAll("*").length',
-                        'returnByValue': True,
-                    })
-                    if nodes_result and 'result' in nodes_result:
-                        perf_data['nodes'] = nodes_result['result'].get('value', 0)
-                    self._emit('perf', perf_data)
-                except Exception:
-                    pass
-        except asyncio.CancelledError:
-            pass
 
     async def disconnect(self):
         self.connected = False
-        if self._perf_task:
-            self._perf_task.cancel()
-            try:
-                await self._perf_task
-            except asyncio.CancelledError:
-                pass
+        self._paused_frame_id = None
+        self.pending_requests.clear()
         if self._recv_task:
             self._recv_task.cancel()
             try:
@@ -296,31 +263,50 @@ class CDPClient:
             self._pending.pop(msg_id, None)
             raise TimeoutError(f"CDP command {method} timed out")
 
+    def _resolve_script(self, name):
+        """Find scriptId for a bare filename (exact match or URL basename)."""
+        if not name:
+            return None
+        if name in self._scripts:
+            return self._scripts[name]
+        tail = name.rsplit('/', 1)[-1]
+        for url, sid in self._scripts.items():
+            if url.rsplit('/', 1)[-1] == tail:
+                return sid
+        return None
+
     async def evaluate(self, expression: str):
-        result = await self.send_command('Runtime.evaluate', {
+        if self._paused_frame_id:
+            return await self.send_command('Debugger.evaluateOnCallFrame', {
+                'callFrameId': self._paused_frame_id,
+                'expression': expression,
+                'returnByValue': True,
+                'includeCommandLineAPI': True,
+            })
+        return await self.send_command('Runtime.evaluate', {
             'expression': expression,
             'returnByValue': True,
             'includeCommandLineAPI': True,
         })
-        return result
 
     async def set_breakpoint(self, location: str):
         parts = location.rsplit(':', 1)
         if len(parts) != 2:
             raise ValueError("Use format: file.js:line")
         url, line = parts[0], int(parts[1])
-        try:
-            return await self.send_command('Debugger.setBreakpointByUrl', {
-                'url': url,
-                'lineNumber': line - 1,
+        sid = self._resolve_script(url)
+        if sid:
+            result = await self.send_command('Debugger.setBreakpoint', {
+                'location': {'scriptId': sid, 'lineNumber': line - 1},
             })
-        except Exception:
-            sid = self._scripts.get(url)
-            if sid:
-                return await self.send_command('Debugger.setBreakpoint', {
-                    'location': {'scriptId': sid, 'lineNumber': line - 1},
-                })
-            raise
+            result['resolved'] = 1 if result.get('actualLocation') else 0
+            return result
+        result = await self.send_command('Debugger.setBreakpointByUrl', {
+            'url': url,
+            'lineNumber': line - 1,
+        })
+        result['resolved'] = len(result.get('locations', []))
+        return result
 
     async def resume(self):
         await self.send_command('Debugger.resume')
@@ -333,6 +319,18 @@ class CDPClient:
 
     async def step_out(self):
         await self.send_command('Debugger.stepOut')
+
+    async def pause(self):
+        await self.send_command('Debugger.pause')
+
+    async def set_pause_on_exceptions(self, state: str):
+        await self.send_command('Debugger.setPauseOnExceptions', {'state': state})
+
+    async def reload_page(self):
+        await self.send_command('Page.reload')
+
+    async def capture_screenshot(self):
+        return await self.send_command('Page.captureScreenshot', {'format': 'png'})
 
     async def _message_loop(self):
         assert self.ws is not None
@@ -377,11 +375,10 @@ class CDPClient:
         elif method == 'Debugger.paused':
             await self._handle_paused(params)
         elif method == 'Debugger.resumed':
+            self._paused_frame_id = None
             self._emit('debugger', {'event': 'resumed'})
         elif method == 'Performance.metrics':
             self._handle_perf(params)
-        elif method == 'Timeline.eventRecorded':
-            pass
 
     async def _handle_console_api(self, params: dict):
         level_map = {
@@ -482,7 +479,7 @@ class CDPClient:
 
     def _handle_perf(self, params: dict):
         metrics = params.get('metrics', [])
-        data = {'fps': 60, 'heap': 0, 'nodes': 0, 'listeners': 0}
+        data = {'fps': 0, 'heap': 0, 'nodes': 0, 'listeners': 0}
         for m in metrics:
             name = m.get('name', '')
             value = m.get('value', 0)
@@ -490,25 +487,31 @@ class CDPClient:
                 data['heap'] = int(value)
             elif name == 'JSHeapTotalSize':
                 data['heap'] = max(data.get('heap', 0), int(value))
-            elif name == 'DOMNodes':
+            elif name == 'Nodes':
                 data['nodes'] = int(value)
-            elif name == 'EventListeners':
+            elif name == 'JSEventListeners':
                 data['listeners'] = int(value)
-            elif name == 'FPS':
-                data['fps'] = int(round(value))
-        self._perf_metrics.append(data)
+            elif name == 'Frames':
+                # Frames is a cumulative counter; delta per ~1s event = real FPS.
+                prev = self._perf_prev.get('Frames')
+                if prev is not None:
+                    data['fps'] = max(0, min(1000, int(round(value - prev))))
+                self._perf_prev['Frames'] = value
         self._emit('perf', data)
 
     async def _handle_paused(self, params: dict):
         frames = []
-        for f in params.get('callFrames', []):
+        frames_raw = params.get('callFrames', [])
+        for f in frames_raw:
             loc = f.get('location', {})
             frames.append({
                 'function': f.get('functionName', '<anon>'),
                 'url': f.get('url', ''),
                 'line': loc.get('lineNumber', 0) + 1,
                 'column': loc.get('columnNumber', 0) + 1,
+                'scriptId': loc.get('scriptId', ''),
             })
+        self._paused_frame_id = frames_raw[0].get('callFrameId') if frames_raw else None
         self._emit('debugger', {
             'event': 'paused',
             'reason': params.get('reason', 'other'),
@@ -862,6 +865,7 @@ class HTTPServer:
         writer.write(json.dumps({
             "status": "ok",
             "server": "p5.nvim asyncio",
+            "port": self.port,
             "console_buffer_size": len(self.console_buffer),
         }).encode())
         await writer.drain()
@@ -883,12 +887,22 @@ class HTTPServer:
             await self.handle_cdp_debug_break(reader, writer, headers)
         elif method == 'POST' and path == '/api/cdp/debug/continue':
             await self.handle_cdp_debug_continue(writer)
+        elif method == 'POST' and path == '/api/cdp/debug/pause':
+            await self.handle_cdp_debug_pause(writer)
+        elif method == 'POST' and path == '/api/cdp/debug/pauseExceptions':
+            await self.handle_cdp_debug_pause_exceptions(reader, writer, headers)
         elif method == 'POST' and path == '/api/cdp/debug/step':
             await self.handle_cdp_debug_step(writer)
         elif method == 'POST' and path == '/api/cdp/debug/stepIn':
             await self.handle_cdp_debug_step_in(writer)
         elif method == 'POST' and path == '/api/cdp/debug/stepOut':
             await self.handle_cdp_debug_step_out(writer)
+        elif method == 'DELETE' and path == '/api/cdp/network':
+            await self.handle_cdp_network_clear(writer)
+        elif method == 'POST' and path == '/api/cdp/page/reload':
+            await self.handle_cdp_page_reload(writer)
+        elif method == 'GET' and path == '/api/cdp/page/screenshot':
+            await self.handle_cdp_page_screenshot(writer)
         else:
             await self._json_error(writer, 404, 'Unknown CDP endpoint')
 
@@ -1069,6 +1083,50 @@ class HTTPServer:
         except Exception as e:
             await self._json_error(writer, 400, str(e))
 
+    async def handle_cdp_debug_pause(self, writer: asyncio.StreamWriter):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        try:
+            await self.cdp_client.pause()
+            await self._json_response(writer, {'status': 'pausing'})
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_debug_pause_exceptions(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        content_length = int(headers.get('content-length', 0))
+        body = await reader.read(content_length)
+        try:
+            data = json.loads(body.decode())
+            state = data.get('state', 'none')
+            await self.cdp_client.set_pause_on_exceptions(state)
+            await self._json_response(writer, {'status': 'pause_on_exceptions=' + state})
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_page_reload(self, writer: asyncio.StreamWriter):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        try:
+            await self.cdp_client.reload_page()
+            await self._json_response(writer, {'status': 'reloading'})
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_page_screenshot(self, writer: asyncio.StreamWriter):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        try:
+            result = await self.cdp_client.capture_screenshot()
+            await self._json_response(writer, result)
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
     async def handle_cdp_network_clear(self, writer: asyncio.StreamWriter):
         if self.cdp_client:
             self.cdp_client.clear_network_log()
@@ -1245,7 +1303,9 @@ function draw() {
             except Exception:
                 pass
 
-        cs = "<script>" + INJECT_CONSOLE + "</script>"
+        cdp_active = 'true' if (self.cdp_client and self.cdp_client.connected) else 'false'
+        cs = "<script>window.__P5_CDP_ACTIVE = " + cdp_active + ";</script>"
+        cs += "<script>" + INJECT_CONSOLE + "</script>"
         scripts = cs
         if CONFIG['live_reload']['enabled'] and INJECT_LIVERELOAD:
             lr = "<script>" + INJECT_LIVERELOAD.replace("__LR_PORT__", str(self.live_reload_server.port)) + "</script>"

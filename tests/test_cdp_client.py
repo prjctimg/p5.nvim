@@ -193,6 +193,46 @@ class TestCDPClientHandleMessage(unittest.TestCase):
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0][1]['event'], 'resumed')
 
+    def test_debugger_resumed_clears_paused_frame(self):
+        self.c._paused_frame_id = 'frame-1'
+        asyncio.run(self.c._handle_message({'method': 'Debugger.resumed', 'params': {}}))
+        self.assertIsNone(self.c._paused_frame_id)
+
+    def test_debugger_paused_tracks_frame_id(self):
+        params = {
+            'callFrames': [
+                {'callFrameId': 'frame-1', 'functionName': 'draw',
+                 'url': 'sketch.js', 'location': {'lineNumber': 3, 'columnNumber': 0}},
+            ],
+            'reason': 'breakpoint',
+        }
+        asyncio.run(self.c._handle_message({'method': 'Debugger.paused', 'params': params}))
+        self.assertEqual(self.c._paused_frame_id, 'frame-1')
+
+    def test_perf_metrics_real_names_and_fps_delta(self):
+        def metrics_event(frames, nodes, listeners, heap):
+            return {
+                'method': 'Performance.metrics',
+                'params': {'metrics': [
+                    {'name': 'Frames', 'value': frames},
+                    {'name': 'Nodes', 'value': nodes},
+                    {'name': 'JSEventListeners', 'value': listeners},
+                    {'name': 'JSHeapUsedSize', 'value': heap},
+                ]},
+            }
+        asyncio.run(self.c._handle_message(metrics_event(1000, 42, 7, 1048576)))
+        events = self.c.drain_events()
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0][1]['fps'], 0, "first sample has no Frames delta")
+        asyncio.run(self.c._handle_message(metrics_event(1060, 44, 8, 2097152)))
+        events = self.c.drain_events()
+        etype, data = events[0]
+        self.assertEqual(etype, 'perf')
+        self.assertEqual(data['fps'], 60)
+        self.assertEqual(data['nodes'], 44)
+        self.assertEqual(data['listeners'], 8)
+        self.assertEqual(data['heap'], 2097152)
+
     def test_unknown_method_is_ignored(self):
         asyncio.run(self.c._handle_message({'method': 'Unknown.method', 'params': {}}))
         self.assertEqual(len(self.c.drain_events()), 0)
@@ -202,15 +242,46 @@ class TestCDPClientSetBreakpoint(unittest.TestCase):
     def setUp(self):
         self.c = CDPClient(9222)
 
-    def test_set_breakpoint_parses_location(self):
+    def test_set_breakpoint_unmatched_url(self):
+        self.c._scripts = {}
         with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
-            mock_send.return_value = {'breakpointId': '1'}
+            mock_send.return_value = {'breakpointId': '1', 'locations': []}
             result = asyncio.run(self.c.set_breakpoint('sketch.js:42'))
             mock_send.assert_called_once_with(
                 'Debugger.setBreakpointByUrl',
                 {'url': 'sketch.js', 'lineNumber': 41},
             )
-            self.assertEqual(result, {'breakpointId': '1'})
+            self.assertEqual(result['resolved'], 0)
+
+    def test_set_breakpoint_resolves_exact_script(self):
+        self.c._scripts = {'http://localhost:8000/sketch.js': 'script-1'}
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
+            mock_send.return_value = {'breakpointId': '1', 'actualLocation': {'lineNumber': 41}}
+            result = asyncio.run(self.c.set_breakpoint('http://localhost:8000/sketch.js:42'))
+            mock_send.assert_called_once_with(
+                'Debugger.setBreakpoint',
+                {'location': {'scriptId': 'script-1', 'lineNumber': 41}},
+            )
+            self.assertEqual(result['resolved'], 1)
+
+    def test_set_breakpoint_resolves_by_basename(self):
+        self.c._scripts = {'http://localhost:8000/sketch.js': 'script-1'}
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
+            mock_send.return_value = {'breakpointId': '1', 'actualLocation': {'lineNumber': 41}}
+            asyncio.run(self.c.set_breakpoint('sketch.js:42'))
+            mock_send.assert_called_once_with(
+                'Debugger.setBreakpoint',
+                {'location': {'scriptId': 'script-1', 'lineNumber': 41}},
+            )
+
+    def test_resolve_script_matches_basename(self):
+        self.c._scripts = {
+            'http://localhost:8000/sketch.js': 's1',
+            'http://localhost:8000/assets/libs/p5.js': 's2',
+        }
+        self.assertEqual(self.c._resolve_script('sketch.js'), 's1')
+        self.assertEqual(self.c._resolve_script('p5.js'), 's2')
+        self.assertIsNone(self.c._resolve_script('missing.js'))
 
     def test_set_breakpoint_raises_on_bad_format(self):
         with self.assertRaises(ValueError):
@@ -275,6 +346,29 @@ class TestCDPClientEvaluate(unittest.TestCase):
             self.assertEqual(result, {'result': {'type': 'number', 'value': 42}})
 
 
+class TestCDPClientEvaluateRouting(unittest.TestCase):
+    def setUp(self):
+        self.c = CDPClient(9222)
+
+    def test_evaluate_uses_runtime_when_not_paused(self):
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
+            asyncio.run(self.c.evaluate('2 + 2'))
+            mock_send.assert_called_once_with(
+                'Runtime.evaluate',
+                {'expression': '2 + 2', 'returnByValue': True, 'includeCommandLineAPI': True},
+            )
+
+    def test_evaluate_uses_call_frame_when_paused(self):
+        self.c._paused_frame_id = 'frame-1'
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
+            asyncio.run(self.c.evaluate('x'))
+            mock_send.assert_called_once_with(
+                'Debugger.evaluateOnCallFrame',
+                {'callFrameId': 'frame-1', 'expression': 'x',
+                 'returnByValue': True, 'includeCommandLineAPI': True},
+            )
+
+
 class TestCDPClientStepCommands(unittest.TestCase):
     def setUp(self):
         self.c = CDPClient(9222)
@@ -295,6 +389,25 @@ class TestCDPClientStepCommands(unittest.TestCase):
 
     def test_step_out(self):
         self._test_step(self.c.step_out, 'Debugger.stepOut')
+
+    def test_pause(self):
+        self._test_step(self.c.pause, 'Debugger.pause')
+
+    def test_reload_page(self):
+        self._test_step(self.c.reload_page, 'Page.reload')
+
+    def test_set_pause_on_exceptions(self):
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
+            asyncio.run(self.c.set_pause_on_exceptions('uncaught'))
+            mock_send.assert_called_once_with(
+                'Debugger.setPauseOnExceptions', {'state': 'uncaught'})
+
+    def test_capture_screenshot(self):
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
+            mock_send.return_value = {'data': 'aGVsbG8='}
+            result = asyncio.run(self.c.capture_screenshot())
+            mock_send.assert_called_once_with('Page.captureScreenshot', {'format': 'png'})
+            self.assertEqual(result, {'data': 'aGVsbG8='})
 
 
 class TestCDPClientHandleConsoleApi(unittest.TestCase):
@@ -510,6 +623,85 @@ class TestCDPHTTPServerEvalAndDebugHandlers(unittest.TestCase):
         asyncio.run(self.server.handle_cdp_debug_step_out(w))
         written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
         self.assertIn(b'503', written)
+
+    def test_handle_cdp_debug_pause_no_client(self):
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_pause(w))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_debug_pause_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.pause = AsyncMock()
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_debug_pause(w))
+        self.server.cdp_client.pause.assert_called_once()
+
+    def test_handle_cdp_debug_pause_exceptions_no_client(self):
+        w = self._make_writer()
+        reader = AsyncMock()
+        asyncio.run(self.server.handle_cdp_debug_pause_exceptions(reader, w, {'content-length': '0'}))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_debug_pause_exceptions_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.set_pause_on_exceptions = AsyncMock()
+        w = self._make_writer()
+        body = json.dumps({'state': 'uncaught'})
+        headers = {'content-length': str(len(body))}
+        reader = AsyncMock()
+        reader.read.return_value = body.encode()
+        asyncio.run(self.server.handle_cdp_debug_pause_exceptions(reader, w, headers))
+        self.server.cdp_client.set_pause_on_exceptions.assert_called_once_with('uncaught')
+
+    def test_handle_cdp_page_reload_no_client(self):
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_page_reload(w))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_page_reload_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.reload_page = AsyncMock()
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_page_reload(w))
+        self.server.cdp_client.reload_page.assert_called_once()
+
+    def test_handle_cdp_page_screenshot_no_client(self):
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_page_screenshot(w))
+        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+        self.assertIn(b'503', written)
+
+    def test_handle_cdp_page_screenshot_with_client(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.capture_screenshot = AsyncMock(return_value={'data': 'aGVsbG8='})
+        w = self._make_writer()
+        asyncio.run(self.server.handle_cdp_page_screenshot(w))
+        self.server.cdp_client.capture_screenshot.assert_called_once()
+
+    def test_handle_cdp_routes_network_clear(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.clear_network_log = MagicMock()
+        w = self._make_writer()
+        reader = AsyncMock()
+        asyncio.run(self.server.handle_cdp('DELETE', '/api/cdp/network', reader, w, {}))
+        self.server.cdp_client.clear_network_log.assert_called_once()
+
+    def test_handle_cdp_routes_pause(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.pause = AsyncMock()
+        w = self._make_writer()
+        reader = AsyncMock()
+        asyncio.run(self.server.handle_cdp('POST', '/api/cdp/debug/pause', reader, w, {}))
+        self.server.cdp_client.pause.assert_called_once()
 
     def test_handle_cdp_evaluate_with_client(self):
         self.server.cdp_client = MagicMock()
@@ -789,6 +981,14 @@ class TestParseConfig(unittest.TestCase):
     def test_lr_disabled_flag(self):
         cfg = _parse_config(['8000', '--lr-disabled'])
         self.assertFalse(cfg['live_reload']['enabled'])
+
+    def test_cdp_port_flag(self):
+        cfg = _parse_config(['8000', '--cdp-port', '9333'])
+        self.assertEqual(cfg['cdp']['remote_debugging_port'], 9333)
+
+    def test_cdp_port_default(self):
+        cfg = _parse_config(['8000'])
+        self.assertEqual(cfg['cdp']['remote_debugging_port'], 9222)
 
     def test_multiple_flags(self):
         cfg = _parse_config([
