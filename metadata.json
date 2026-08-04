@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "01KZ68XZ6X7NH8ZAHY9KEB32Z2",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "lua/p5/server.lua",
+    "tests/p5/server_spec.lua"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 409457,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 10559232,
+    "output_tokens": 41310,
+    "api_call_count": 142
+  }
+}
