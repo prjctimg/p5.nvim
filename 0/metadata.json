@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "01KZ6EETWVTTPPT1J8K3YCA36Y",
+  "session_id": "ses_03397af14ffe2BcZza0EtXFQgW",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-04T13:12:52.002556574Z",
+  "branch": "main",
+  "checkpoints_count": 8,
+  "save_step_count": 1,
+  "files_touched": [
+    "tests/test_cdp_client.py"
+  ],
+  "agent": "OpenCode",
+  "model": "big-pickle",
+  "turn_id": "51798599fccc",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 446109,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 14651136,
+    "output_tokens": 49110,
+    "api_call_count": 181
+  },
+  "session_metrics": {
+    "turn_count": 9
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-04T13:12:51.457841001Z",
+    "agent_lines": 13,
+    "agent_removed": 0,
+    "human_added": 50,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 63,
+    "total_lines_changed": 64,
+    "agent_percentage": 20.3125,
+    "metric_version": 2
+  }
+}
