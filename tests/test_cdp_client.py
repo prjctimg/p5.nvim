@@ -913,6 +913,19 @@ class TestInjectScripts(unittest.TestCase):
         self.assertIn('console.log', result)
         self.assertIn('fetch', result)
 
+    def test_injects_cdp_active_flag_disconnected(self):
+        self.server.cdp_client = None
+        html = b'<html><body></body></html>'
+        result = self.server.inject_scripts(html).decode()
+        self.assertIn('window.__P5_CDP_ACTIVE = false', result)
+
+    def test_injects_cdp_active_flag_connected(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        html = b'<html><body></body></html>'
+        result = self.server.inject_scripts(html).decode()
+        self.assertIn('window.__P5_CDP_ACTIVE = true', result)
+
     def test_injects_both_scripts(self):
         html = b'<html><body></body></html>'
         result = self.server.inject_scripts(html).decode()
