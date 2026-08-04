@@ -18,6 +18,8 @@ C.config = {
 	enabled = false,
 	remote_debugging_port = 9222,
 	browser_flags = {},
+	keymaps = true,
+	close_browser_on_close = true,
 	view = { position = "below", height = 10 },
 }
 
@@ -63,6 +65,7 @@ C.state = {
 	search = "",
 	mode = nil,
 	browser_launched = false,
+	chrome_temp_dir = nil,
 	sse_buffer = "",
 	terminal = {
 		timer = nil,
@@ -107,9 +110,18 @@ local function launch_browser()
 		return
 	end
 	local server = require("p5.server")
-	_ = server.port or C.config.remote_debugging_port
 	local url = server.port and string.format("http://localhost:%d", server.port) or nil
-	local args = { chrome_cmd, "--remote-debugging-port=" .. C.config.remote_debugging_port }
+	local temp_dir = vim.fn.tempname()
+	vim.fn.mkdir(temp_dir, "p")
+	C.state.chrome_temp_dir = temp_dir
+	local args = {
+		chrome_cmd,
+		"--remote-debugging-port=" .. C.config.remote_debugging_port,
+		"--remote-debugging-address=127.0.0.1",
+		"--user-data-dir=" .. temp_dir,
+		"--no-first-run",
+		"--no-default-browser-check",
+	}
 	local flags = C.config.browser_flags or {}
 	for _, flag in ipairs(flags) do
 		table.insert(args, flag)
@@ -119,6 +131,15 @@ local function launch_browser()
 	end
 	vim.fn.jobstart(args, { detach = true })
 	notify("CDP: launched " .. chrome_cmd .. " with remote debugging on port " .. C.config.remote_debugging_port, "info")
+end
+
+local function close_browser()
+	local temp_dir = C.state.chrome_temp_dir
+	C.state.chrome_temp_dir = nil
+	if C.config.close_browser_on_close and temp_dir then
+		vim.fn.system({ "pkill", "-f", "--", temp_dir })
+		vim.fn.delete(temp_dir, "rf")
+	end
 end
 
 C.connect = function(attempt)
@@ -298,6 +319,18 @@ C.eval = function(expr)
 				end
 			end)
 		end,
+		on_exit = function()
+			vim.schedule(function()
+				local last = C.tab_data.eval[#C.tab_data.eval]
+				if last and last.status == "pending" then
+					last.status = "error"
+					last.result = "request failed (server unavailable?)"
+					if C.state.active_tab == 3 then
+						C.render_all()
+					end
+				end
+			end)
+		end,
 	})
 end
 
@@ -339,6 +372,85 @@ C.set_breakpoint = function(location)
 			end)
 		end,
 	})
+end
+
+C.pause = function()
+	local port = C.state.port
+	if not port or not check_curl() then
+		return
+	end
+	http_request("POST", string.format("http://localhost:%d/api/cdp/debug/pause", port), { timeout = 5 })
+end
+
+C.pause_exceptions = function(state)
+	if not state then
+		vim.ui.input({ prompt = "Pause on exceptions (none/uncaught/all): " }, function(input)
+			if input and input ~= "" then
+				C.pause_exceptions(input)
+			end
+		end)
+		return
+	end
+	local port = C.state.port
+	if not port or not check_curl() then
+		return
+	end
+	http_request("POST", string.format("http://localhost:%d/api/cdp/debug/pauseExceptions", port), {
+		timeout = 5,
+		body = { state = state },
+	})
+end
+
+C.reload = function()
+	local port = C.state.port
+	if not port or not check_curl() then
+		return
+	end
+	http_request("POST", string.format("http://localhost:%d/api/cdp/page/reload", port), { timeout = 5 })
+end
+
+C.screenshot = function(path)
+	if not path then
+		vim.ui.input({ prompt = "Save screenshot to: " }, function(input)
+			if input and input ~= "" then
+				C.screenshot(input)
+			end
+		end)
+		return
+	end
+	local port = C.state.port
+	if not port or not check_curl() then
+		return
+	end
+	http_request("GET", string.format("http://localhost:%d/api/cdp/page/screenshot", port), {
+		timeout = 10,
+		on_stdout = function(_, data)
+			if not data or #data == 0 then
+				return
+			end
+			local text = table.concat(data, "")
+			local ok, result = pcall(vim.json.decode, text)
+			vim.schedule(function()
+				if ok and type(result) == "table" and result.data then
+					vim.fn.writefile({ result.data }, path, "b")
+					notify("Screenshot saved to " .. path, "info")
+				else
+					notify("CDP: screenshot failed", "warn")
+				end
+			end)
+		end,
+	})
+end
+
+C.clear_network = function()
+	local port = C.state.port
+	C.tab_data.network = {}
+	if C.state.active_tab == 2 then
+		C.render_all()
+	end
+	if port and check_curl() then
+		http_request("DELETE", string.format("http://localhost:%d/api/cdp/network", port), { timeout = 5 })
+	end
 end
 
 C.continue = function()
@@ -398,6 +510,10 @@ C.open = function()
 		notify("CDP: start server first with :P5 server", "info")
 		return
 	end
+	if C.state.win and is_win(C.state.win) then
+		vim.api.nvim_set_current_win(C.state.win)
+		return
+	end
 	C.state.port = server.port
 
 	if not core.find_chrome() then
@@ -434,7 +550,9 @@ C.open = function()
 	set_opt("wrap", false, { scope = "local", win = C.state.win })
 	set_opt("cursorline", true, { scope = "local", win = C.state.win })
 	C.state.buf = buf
-	C._set_keymaps(buf)
+	if C.config.keymaps ~= false then
+		C._set_keymaps(buf)
+	end
 	C.render_all()
 	C._start_sse_job()
 	if not C.state.connected then
@@ -481,6 +599,7 @@ C.close = function()
 	C.state.info_cursor = 1
 	C.state.browser_launched = false
 	C.state.sse_buffer = ""
+	close_browser()
 	if C.state.terminal then
 		C.state.terminal.connected = false
 		C.state.terminal.attempts = 0
@@ -605,10 +724,25 @@ C._set_keymaps = function(buf)
 			C.continue()
 		end
 	end, { buffer = buf, desc = "Continue" })
+	km("n", "p", function()
+		if tab() == 4 then
+			C.pause()
+		end
+	end, { buffer = buf, desc = "Pause" })
+	km("n", "P", function()
+		if tab() == 4 then
+			C.pause_exceptions()
+		end
+	end, { buffer = buf, desc = "Pause on exceptions" })
+	km("n", "R", function()
+		C.reload()
+	end, { buffer = buf, desc = "Reload page" })
+	km("n", "S", function()
+		C.screenshot()
+	end, { buffer = buf, desc = "Screenshot" })
 	km("n", "D", function()
 		if tab() == 2 then
-			C.tab_data.network = {}
-			C.render_all()
+			C.clear_network()
 		end
 	end, { buffer = buf, desc = "Clear network" })
 	km("n", "g", function()
@@ -741,20 +875,22 @@ C._on_event = function(data)
 		end
 	elseif t == "perf" then
 		local pd = C.tab_data.perf
-		if data.fps then
-			table.insert(pd.fps, data.fps)
-			if #pd.fps > 100 then
-				table.remove(pd.fps, 1)
+		if pd.recording then
+			if data.fps then
+				table.insert(pd.fps, data.fps)
+				if #pd.fps > 100 then
+					table.remove(pd.fps, 1)
+				end
 			end
-		end
-		if data.heap then
-			pd.heap = data.heap
-		end
-		if data.nodes then
-			pd.nodes = data.nodes
-		end
-		if data.listeners then
-			pd.listeners = data.listeners
+			if data.heap then
+				pd.heap = data.heap
+			end
+			if data.nodes then
+				pd.nodes = data.nodes
+			end
+			if data.listeners then
+				pd.listeners = data.listeners
+			end
 		end
 		if C.state.active_tab == 5 then
 			C.render_all()
@@ -785,11 +921,16 @@ C._highlight_paused = function(url, line)
 		return
 	end
 	local project_root = vim.fn.getcwd()
-	local url_path = (url:match("://[^/]+(/.*)") or "/") .. (vim.fn.fnamemodify(url, ":t") or "")
-	local abs_path = project_root .. url_path:gsub("/$", "")
+	local path = url:match("^%a+://[^/]+(/.*)$") or url
+	if path == url then
+		path = "/" .. vim.fn.fnamemodify(url, ":t")
+	end
+	path = path:gsub("/$", "")
+	local abs_path = project_root .. path
+	local basename = vim.fn.fnamemodify(url, ":t")
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 		local name = vim.api.nvim_buf_get_name(buf)
-		if name == abs_path then
+		if name == abs_path or vim.fn.fnamemodify(name, ":t") == basename then
 			pcall(vim.api.nvim_buf_set_extmark, buf, ns.debug, line - 1, 0, {
 				sign_text = "●",
 				sign_hl_group = "P5CDPDebugSign",
@@ -1176,11 +1317,15 @@ C._render_debugger = function()
 	table.insert(lines, "")
 	table.insert(lines, " Keymaps:")
 	table.insert(lines, "   <CR>  set breakpoint")
+	table.insert(lines, "   p     pause")
+	table.insert(lines, "   P     pause on exceptions")
 	table.insert(lines, "   s     step over")
 	table.insert(lines, "   i     step into")
 	table.insert(lines, "   o     step out")
 	table.insert(lines, "   x     continue")
 	table.insert(lines, "   c     clear tab")
+	table.insert(lines, "   R     reload page")
+	table.insert(lines, "   S     screenshot")
 	return lines
 end
 
@@ -1277,12 +1422,14 @@ C._render_info = function()
 	return lines
 end
 
-C._open_terminal = function()
+C._open_terminal = function(reconnecting)
 	local has_snacks, snacks = pcall(require, "snacks")
 	C.state.mode = "terminal"
 	local t = C.state.terminal
 	t.connected = false
-	t.attempts = 0
+	if not reconnecting then
+		t.attempts = 0
+	end
 
 	local url = string.format("http://localhost:%d/api/console/stream", C.state.port)
 	local pos = C.config.view.position or "below"
@@ -1331,10 +1478,12 @@ C._open_terminal = function()
 	C.state.job_id = vim.fn.termopen({ "curl", "-s", "-N", url }, {
 		on_exit = function(_, exit_code, _)
 			vim.schedule(function()
-				if exit_code ~= 0 and C.state.win and is_win(C.state.win) then
-					notify("Console connection lost", "warn")
-				end
 				C.state.job_id = nil
+				if exit_code ~= 0 and C.state.mode == "terminal" then
+					t.last_error = os.time()
+					notify("Console connection lost", "warn")
+					C._terminal_reconnect()
+				end
 			end)
 		end,
 	})
@@ -1369,7 +1518,7 @@ C._terminal_reconnect = function()
 	vim.defer_fn(function()
 		if C.state.win and is_win(C.state.win) and C.state.mode == "terminal" then
 			notify(string.format("Reconnecting to console (attempt %d)...", t.attempts), "info")
-			C._open_terminal()
+			C._open_terminal(true)
 		end
 	end, delay)
 end

@@ -7,6 +7,7 @@ describe("cdp", function()
   local orig_server_job = server.server_job
   local orig_server_port = server.port
   local orig_find_chrome = core.find_chrome
+  local orig_jobstart = vim.fn.jobstart
 
   before_each(function()
     cdp.config.enabled = true
@@ -33,18 +34,19 @@ describe("cdp", function()
     server.server_job = 1
     server.port = 9999
     core.find_chrome = function() return "google-chrome" end
+    -- Never spawn real Chrome/curl processes from tests (open/toggle defer
+    -- launch_browser, connect/eval/SSE use http_request).
+    vim.fn.jobstart = function()
+      return 12345
+    end
   end)
 
   after_each(function()
     if cdp.state.win and vim.api.nvim_win_is_valid(cdp.state.win) then
       vim.api.nvim_win_close(cdp.state.win, true)
     end
-    if cdp.state.job_id then
-      vim.fn.jobstop(cdp.state.job_id)
-    end
-    cdp.state.buf = nil
-    cdp.state.win = nil
     cdp.state.job_id = nil
+    vim.fn.jobstart = orig_jobstart
     core.find_chrome = orig_find_chrome
   end)
 
@@ -122,6 +124,21 @@ describe("cdp", function()
         cdp._on_event({ type = "network", method = "GET", url = "/" .. i })
       end
       assert.equals(500, #cdp.tab_data.network)
+    end)
+
+    it("ignores perf samples while recording is off", function()
+      cdp.tab_data.perf.recording = false
+      cdp._on_event({ type = "perf", fps = 60, heap = 1048576, nodes = 42, listeners = 5 })
+      assert.equals(0, #cdp.tab_data.perf.fps)
+      assert.equals(0, cdp.tab_data.perf.heap)
+      cdp.tab_data.perf.recording = true
+    end)
+
+    it("records perf samples while recording is on", function()
+      cdp.tab_data.perf.recording = true
+      cdp._on_event({ type = "perf", fps = 60, heap = 1048576, nodes = 42, listeners = 5 })
+      assert.equals(1, #cdp.tab_data.perf.fps)
+      assert.equals(1048576, cdp.tab_data.perf.heap)
     end)
   end)
 
@@ -264,6 +281,67 @@ describe("cdp", function()
       cdp.state.port = nil
       local ok, err = pcall(cdp.set_breakpoint, "test.js:10")
       assert.is_true(ok, "set_breakpoint without port: " .. tostring(err))
+    end)
+  end)
+
+  describe("debug commands", function()
+    it("pause does not crash without a port", function()
+      cdp.state.port = nil
+      local ok, err = pcall(cdp.pause)
+      assert.is_true(ok, "pause without port: " .. tostring(err))
+    end)
+
+    it("pause_exceptions does not crash without a port", function()
+      cdp.state.port = nil
+      local ok, err = pcall(cdp.pause_exceptions, "uncaught")
+      assert.is_true(ok, "pause_exceptions without port: " .. tostring(err))
+    end)
+
+    it("reload does not crash without a port", function()
+      cdp.state.port = nil
+      local ok, err = pcall(cdp.reload)
+      assert.is_true(ok, "reload without port: " .. tostring(err))
+    end)
+
+    it("screenshot does not crash without a port", function()
+      cdp.state.port = nil
+      local ok, err = pcall(cdp.screenshot, "/tmp/shot.png")
+      assert.is_true(ok, "screenshot without port: " .. tostring(err))
+    end)
+  end)
+
+  describe("clear_network", function()
+    it("clears local network tab", function()
+      cdp.tab_data.network = { { url = "/test.js" }, { url = "/x.js" } }
+      cdp.state.port = nil
+      cdp.clear_network()
+      assert.equals(0, #cdp.tab_data.network)
+    end)
+
+    it("does not crash with an active port", function()
+      cdp.tab_data.network = { { url = "/test.js" } }
+      cdp.state.port = 9999
+      local ok, err = pcall(cdp.clear_network)
+      assert.is_true(ok, "clear_network with port: " .. tostring(err))
+    end)
+  end)
+
+  describe("_highlight_paused", function()
+    it("matches buffer by basename when URL has a host", function()
+      local orig_cwd = vim.fn.getcwd()
+      local tmp = vim.fn.tempname()
+      vim.fn.mkdir(tmp, "p")
+      vim.fn.chdir(tmp)
+      local buf = vim.api.nvim_create_buf(true, false)
+      vim.api.nvim_buf_set_name(buf, tmp .. "/sketch.js")
+      vim.fn.writefile({ "function setup() {}", "function draw() {}" }, tmp .. "/sketch.js")
+      vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "function setup() {}", "function draw() {}" })
+      cdp._highlight_paused("http://localhost:8000/sketch.js", 2)
+      local marks = vim.api.nvim_buf_get_extmarks(buf, -1, 0, -1, { details = false })
+      assert.is_true(#marks > 0, "expected a highlight extmark on the paused line")
+      vim.api.nvim_buf_delete(buf, { force = true })
+      vim.fn.chdir(orig_cwd)
+      vim.fn.delete(tmp, "rf")
     end)
   end)
 
