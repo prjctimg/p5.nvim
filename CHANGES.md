@@ -4,6 +4,28 @@ All notable changes since v0.5.0.
 
 ---
 
+## v0.7.12
+
+### Changed
+- **Honest FPS** — Perf tab FPS is computed from Chrome's `Performance.metrics` `Frames` counter deltas (plus `JSHeapUsedSize`, `Nodes`, `JSEventListeners`) instead of a fabricated `fps: 60`
+- **Chrome isolation** — CDP launches Chrome with a temp `--user-data-dir` + `--remote-debugging-address=127.0.0.1`, so the debug port is bound even when a regular Chrome instance is already running; the temp profile is removed on close (`cdp.close_browser_on_close`)
+- **Console dedupe** — the injectable `console.js` fallback now unhooks while CDP is connected, so messages aren't double-captured
+- **HUD keymaps opt-out** — `cdp.keymaps = false` disables the HUD keymap table (it remains HUD-only)
+
+### Fixed
+- **Breakpoints** — resolve against the served script URL (`scriptParsed` scriptId map, exact URL or basename) instead of a bare filename that V8's `setBreakpointByUrl` never matched
+- **Pause eval** — expressions evaluate on the current call frame while paused via `Debugger.evaluateOnCallFrame`
+- **Paused highlight** — `_highlight_paused` no longer double-appends the basename (`sketch.jssketch.js`)
+- **Missing inject scripts** — `assets/inject/console.js`/`livereload.js` were gitignored by an ineffective pattern and never shipped; now tracked
+
+### Added
+- CDP commands `pause`, `pauseExceptions [none|uncaught|all]`, `reload`, `screenshot [path]`, `network_clear` (server-side) with HUD keymaps `p`/`P`/`R`/`S`
+- `/api/cdp/debug/pause`, `/api/cdp/debug/pauseExceptions`, `/api/cdp/page/reload`, `/api/cdp/page/screenshot` endpoints; `DELETE /api/cdp/network` now routed; `Page.enable` on connect
+- `--cdp-port` CLI flag for the dev server
+- Server `server_starting` watchdog so a failed validation can no longer permanently block restarts
+
+---
+
 ## v0.7.11
 
 ### Changed
