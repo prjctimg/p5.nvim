@@ -1,0 +1,9 @@
+Assess the codebase and study how the ChromeDevTools protocol integration is handled and compare against the official specification. Also do the following:
+
+- Identify any loopholes and impracticalities in the current implementation
+- Figure out the unusable/redundant features currently implemented or suggest more useful ones when we're debugging sketches
+- Verify that the keybindings used to access the features are intuitive and respect Neovim defaults
+- Suggest working fixes and make the code more robust and have graceful fallback
+
+
+Feel free to argue and have an opinion on the matter. Don't be a 'yes man'
