@@ -212,6 +212,30 @@ require("p5.cdp").close()                            *p5.cdp.close()*
 require("p5.cdp").toggle()                          *p5.cdp.toggle()*
    Toggle the CDP panel/terminal console visibility.
 
+require("p5.cdp").eval({expr})                        *p5.cdp.eval()*
+   Evaluate a JS expression in the page context (current call frame while paused).
+
+require("p5.cdp").set_breakpoint({loc})          *p5.cdp.set_breakpoint()*
+   Set a breakpoint at file.js:line.
+
+require("p5.cdp").continue()                      *p5.cdp.continue()*
+   Resume execution after a pause.
+
+require("p5.cdp").pause()                            *p5.cdp.pause()*
+   Pause execution at the next script statement.
+
+require("p5.cdp").pause_exceptions({state})   *p5.cdp.pause_exceptions()*
+   Pause on exceptions: "none" | "uncaught" | "all".
+
+require("p5.cdp").reload()                          *p5.cdp.reload()*
+   Reload the page over CDP.
+
+require("p5.cdp").screenshot({path})             *p5.cdp.screenshot()*
+   Save a PNG screenshot of the page to {path}.
+
+require("p5.cdp").clear_network()              *p5.cdp.clear_network()*
+   Clear the network log (also clears the server-side CDP log).
+
 require("p5.project").create_project({name})        *p5.project.create_project()*
    Create a new p5.js project.
 
@@ -246,6 +270,12 @@ A: Check that Python 3 and the websockets module are installed:
 Q: CDP panel or terminal console shows no logs
 A: Ensure the browser page is loaded and you've called console.log()
    in your sketch. The server must be running. Use :P5 cdp to open.
+
+Q: CDP connects to the wrong page or the debugging port is not exposed
+A: Chrome ignores --remote-debugging-port when an existing instance is
+   already running. Let p5.nvim launch its own isolated instance with a
+   temp --user-data-dir (the default), or quit all Chrome processes
+   before connecting.
 
 Q: Library installation fails
 A: Check your internet connection. Ensure curl is installed.

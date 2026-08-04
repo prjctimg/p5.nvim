@@ -209,13 +209,19 @@ for your p5.js sketch with 6 tabs:
 :P5 cdp eval <expr>    # Evaluate JS expression
 :P5 cdp break <loc>    # Set breakpoint (e.g., sketch.js:12)
 :P5 cdp continue       # Resume execution
+:P5 cdp pause          # Pause execution
+:P5 cdp pauseExceptions [none|uncaught|all]  # Pause on exceptions
+:P5 cdp reload         # Reload the page
+:P5 cdp screenshot [path]  # Save a screenshot of the page
 :P5 cdp step           # Step over
 :P5 cdp stepIn         # Step into
 :P5 cdp stepOut        # Step out
 :P5 cdp perf           # Open Performance tab
+:P5 cdp network_clear  # Clear the network log
 ```
 
-**CDP panel keymaps** (context-aware per tab):
+**CDP panel keymaps** (context-aware per tab, HUD only — set
+`cdp.keymaps = false` to disable):
 
 | Key | Console | Network | Eval | Debug | Perf | Info |
 |-----|---------|---------|------|-------|------|------|
@@ -226,12 +232,16 @@ for your p5.js sketch with 6 tabs:
 | `<CR>` | — | — | Enter expr | Set BP | — | Jump to sym |
 | `f` | Filter | — | — | — | — | — |
 | `/` | Search | Search | — | — | — | — |
+| `p` | — | — | — | Pause | — | — |
+| `P` | — | — | — | Pause on exc. | — | — |
 | `s` | — | — | — | Step over | — | — |
 | `i` | — | — | — | Step into | — | — |
 | `o` | — | — | — | Step out | — | — |
 | `x` | — | — | — | Continue | — | — |
 | `b` | — | — | — | Breakpoint | — | — |
 | `D` | — | Clear all | — | — | — | — |
+| `R` | Reload | Reload | Reload | Reload | Reload | Reload |
+| `S` | Screenshot | Screenshot | Screenshot | Screenshot | Screenshot | Screenshot |
 | `K`/`J` | — | — | — | — | — | Nav symbols |
 | `g`/`G` | Top/Bot | Top/Bot | Top/Bot | Top/Bot | Top/Bot | Top/Bot |
 
@@ -244,6 +254,22 @@ vim.keymap.set("n", "<leader>pd", ":P5 cdp<CR>", { desc = "Toggle CDP DevTools" 
 **Browser flags:** When CDP is enabled, Chrome launches with graphics-debugging flags:
 `--enable-gpu-rasterization`, `--disable-frame-rate-limit`, `--enable-precise-memory-info`,
 and more. Configure via `setup({ cdp = { browser_flags = { ... } } })`.
+
+**Isolation:** The CDP Chrome instance always runs with its own temp
+`--user-data-dir` (cleaned up on close when `cdp.close_browser_on_close = true`), so
+the debugging port is bound even when a regular Chrome/Chromium is already running.
+
+**Troubleshooting — port not exposed:** If you launched Chrome manually with
+`--remote-debugging-port` and nothing appears on that port, a pre-existing Chrome
+instance likely ignored the flag. Quit all Chrome processes, or let p5.nvim launch
+its own isolated instance (the default).
+
+---
+
+**Performance metrics are real:** the Perf tab reports FPS computed from Chrome's
+`Performance.metrics` `Frames` counter, plus `JSHeapUsedSize`, DOM `Nodes`, and
+`JSEventListeners` — no fabricated values. Breakpoints resolve against the actual
+served script URLs, and evaluation runs on the current call frame while paused.
 
 ---
 
@@ -453,9 +479,9 @@ require("p5").setup({
   cdp = {
     enabled = false,               -- Enable CDP (auto-enabled when panel opens)
     remote_debugging_port = 9222,  -- Chrome remote debugging port
+    keymaps = true,                -- HUD keymaps (1-6 tabs, p/P/R/S, ...); false to disable
+    close_browser_on_close = true, -- Kill the CDP Chrome instance and remove its temp profile on close
     browser_flags = {              -- Extra Chrome flags for graphics debugging
-      "--no-first-run",
-      "--no-default-browser-check",
       "--enable-gpu-rasterization",
       "--disable-frame-rate-limit",
       "--disable-gpu-driver-bug-workarounds",
