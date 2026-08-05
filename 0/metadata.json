@@ -1,0 +1,50 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "01KZ8WN27Z9RR3WQZH9KQHTKHP",
+  "session_id": "ses_03397af14ffe2BcZza0EtXFQgW",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-05T11:59:19.297354743Z",
+  "branch": "main",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "tests/p5/cdp_spec.lua",
+    "tests/init.lua",
+    "tests/p5/no_spawn_spec.lua",
+    "tests/p5/gist_integration_spec.lua"
+  ],
+  "agent": "OpenCode",
+  "model": "big-pickle",
+  "turn_id": "352bb3127f00",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 787671,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 21226752,
+    "output_tokens": 69746,
+    "api_call_count": 265
+  },
+  "session_metrics": {
+    "turn_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-05T11:59:18.685459275Z",
+    "agent_lines": 142,
+    "agent_removed": 1,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 142,
+    "total_lines_changed": 143,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
+}
