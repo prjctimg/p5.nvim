@@ -203,7 +203,7 @@ class CDPClient:
     def clear_network_log(self):
         self.completed_requests.clear()
 
-    async def connect(self):
+    async def connect(self, origin: Optional[str] = None):
         for attempt in range(10):
             body = await http_get('localhost', self.cdp_port, '/json')
             if body is not None:
@@ -219,6 +219,13 @@ class CDPClient:
         if not pages:
             raise ConnectionError("No debuggable pages found")
         page = pages[0]
+        # Prefer the tab serving this project so eval/breakpoints target the
+        # right document even when Chrome has multiple tabs open.
+        if origin:
+            for p in pages:
+                if p.get('url', '').startswith(origin):
+                    page = p
+                    break
         ws_url = page['webSocketDebuggerUrl']
         self.page_url = page.get('url', '')
         self.ws = await websockets.connect(ws_url, max_size=2 ** 24)
@@ -275,6 +282,17 @@ class CDPClient:
                 return sid
         return None
 
+    def _absolute_url(self, name: str) -> str:
+        """Resolve a bare filename to an absolute URL against the page origin."""
+        if '://' in name:
+            return name
+        page = self.page_url or 'http://localhost:8000/'
+        scheme, _, rest = page.partition('://')
+        if scheme and rest:
+            host = rest.split('/', 1)[0]
+            return f'{scheme}://{host}/{name.lstrip("/")}'
+        return name
+
     async def evaluate(self, expression: str):
         if self._paused_frame_id:
             return await self.send_command('Debugger.evaluateOnCallFrame', {
@@ -301,6 +319,10 @@ class CDPClient:
             })
             result['resolved'] = 1 if result.get('actualLocation') else 0
             return result
+        url = parts[0]
+        # V8 matches setBreakpointByUrl url against sourceURL exactly, so
+        # resolve bare filenames against the page origin before falling back.
+        url = self._absolute_url(url)
         result = await self.send_command('Debugger.setBreakpointByUrl', {
             'url': url,
             'lineNumber': line - 1,
@@ -327,7 +349,7 @@ class CDPClient:
         await self.send_command('Debugger.setPauseOnExceptions', {'state': state})
 
     async def reload_page(self):
-        await self.send_command('Page.reload')
+        await self.send_command('Page.reload', {'ignoreCache': True})
 
     async def capture_screenshot(self):
         return await self.send_command('Page.captureScreenshot', {'format': 'png'})
@@ -479,20 +501,21 @@ class CDPClient:
 
     def _handle_perf(self, params: dict):
         metrics = params.get('metrics', [])
-        data = {'fps': 0, 'heap': 0, 'nodes': 0, 'listeners': 0}
+        data = {'heap': 0, 'heap_total': 0, 'nodes': 0, 'listeners': 0}
         for m in metrics:
             name = m.get('name', '')
             value = m.get('value', 0)
             if name == 'JSHeapUsedSize':
                 data['heap'] = int(value)
             elif name == 'JSHeapTotalSize':
-                data['heap'] = max(data.get('heap', 0), int(value))
+                data['heap_total'] = int(value)
             elif name == 'Nodes':
                 data['nodes'] = int(value)
             elif name == 'JSEventListeners':
                 data['listeners'] = int(value)
             elif name == 'Frames':
                 # Frames is a cumulative counter; delta per ~1s event = real FPS.
+                # Omit fps on the first sample so the panel never shows a false 0.
                 prev = self._perf_prev.get('Frames')
                 if prev is not None:
                     data['fps'] = max(0, min(1000, int(round(value - prev))))
@@ -928,7 +951,7 @@ class HTTPServer:
         port = CONFIG['cdp']['remote_debugging_port']
         self.cdp_client = CDPClient(port)
         try:
-            await self.cdp_client.connect()
+            await self.cdp_client.connect(f'http://localhost:{self.port}')
             await self._json_response(writer, {
                 'status': 'connected',
                 'url': self.cdp_client.page_url,
@@ -1102,6 +1125,9 @@ class HTTPServer:
         try:
             data = json.loads(body.decode())
             state = data.get('state', 'none')
+            if state not in ('none', 'uncaught', 'all'):
+                await self._json_error(writer, 400, 'state must be one of: none, uncaught, all')
+                return
             await self.cdp_client.set_pause_on_exceptions(state)
             await self._json_response(writer, {'status': 'pause_on_exceptions=' + state})
         except Exception as e:

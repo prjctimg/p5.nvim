@@ -267,9 +267,13 @@ its own isolated instance (the default).
 ---
 
 **Performance metrics are real:** the Perf tab reports FPS computed from Chrome's
-`Performance.metrics` `Frames` counter, plus `JSHeapUsedSize`, DOM `Nodes`, and
-`JSEventListeners` — no fabricated values. Breakpoints resolve against the actual
-served script URLs, and evaluation runs on the current call frame while paused.
+`Performance.metrics` `Frames` counter, plus used/total JS heap (`JSHeapUsedSize` /
+`JSHeapTotalSize`), DOM `Nodes`, and `JSEventListeners` — no fabricated values.
+Breakpoints resolve against the actual served script URLs, evaluation runs on the
+current call frame while paused, the Info tab's canvas state is populated from the
+live page, and `screenshot` writes a valid PNG. When CDP connects, the page served
+from the dev server's origin is selected instead of the first tab, and reloads
+bypass the cache.
 
 ---
 

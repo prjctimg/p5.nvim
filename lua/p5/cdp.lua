@@ -87,6 +87,7 @@ C.tab_data = {
 	perf = {
 		fps = {},
 		heap = 0,
+		heap_total = 0,
 		nodes = 0,
 		listeners = 0,
 		recording = true,
@@ -177,6 +178,7 @@ C.connect = function(attempt)
 						C.state.page_url = result.url or ""
 						C.state.port = port
 						notify("CDP connected to " .. (result.url or "browser"), "info")
+						vim.defer_fn(C._fetch_canvas_state, 300)
 						if C.state.buf and is_buf(C.state.buf) then
 							C.render_all()
 						end
@@ -409,6 +411,17 @@ C.reload = function()
 	http_request("POST", string.format("http://localhost:%d/api/cdp/page/reload", port), { timeout = 5 })
 end
 
+C._decode_screenshot = function(b64)
+	if type(b64) ~= "string" or b64 == "" then
+		return nil
+	end
+	local ok, raw = pcall(vim.base64.decode, b64)
+	if not ok then
+		return nil
+	end
+	return raw
+end
+
 C.screenshot = function(path)
 	if not path then
 		vim.ui.input({ prompt = "Save screenshot to: " }, function(input)
@@ -432,10 +445,83 @@ C.screenshot = function(path)
 			local ok, result = pcall(vim.json.decode, text)
 			vim.schedule(function()
 				if ok and type(result) == "table" and result.data then
-					vim.fn.writefile({ result.data }, path, "b")
-					notify("Screenshot saved to " .. path, "info")
+					local raw = C._decode_screenshot(result.data)
+					if raw then
+						local f = io.open(path, "wb")
+						if f then
+							f:write(raw)
+							f:close()
+							notify("Screenshot saved to " .. path, "info")
+						else
+							notify("CDP: cannot write " .. path, "warn")
+						end
+					else
+						notify("CDP: screenshot decode failed", "warn")
+					end
 				else
 					notify("CDP: screenshot failed", "warn")
+				end
+			end)
+		end,
+	})
+end
+
+C._format_canvas_state = function(v)
+	if type(v) ~= "table" then
+		return nil
+	end
+	local parts = { "p5 " .. tostring(v.mode or "?") }
+	if v.w and v.h then
+		table.insert(parts, string.format("canvas %dx%d", v.w, v.h))
+	end
+	if v.frameRate then
+		table.insert(parts, string.format("~%d fps", math.floor(v.frameRate)))
+	end
+	if v.frameCount then
+		table.insert(parts, string.format("frame %d", v.frameCount))
+	end
+	return table.concat(parts, " | ")
+end
+
+C._fetch_canvas_state = function()
+	local port = C.state.port
+	if not port or not C.state.connected or not check_curl() then
+		return
+	end
+	http_request("POST", string.format("http://localhost:%d/api/cdp/evaluate", port), {
+		timeout = 10,
+		body = {
+			expression = [[(function () {
+  var c = document.querySelector('canvas');
+  var isP5Global = typeof window.setup === 'function' && typeof window.draw === 'function';
+  var fr = null;
+  try { if (typeof window.frameRate === 'function') { fr = window.frameRate(); } } catch (e) {}
+  var fc = null;
+  try { if (typeof window.frameCount === 'number') { fc = window.frameCount; } } catch (e) {}
+  return {
+    mode: isP5Global ? 'global' : (c ? 'instance' : 'none'),
+    w: c ? c.width : null,
+    h: c ? c.height : null,
+    frameRate: fr,
+    frameCount: fc
+  };
+})()]],
+		},
+		on_stdout = function(_, data)
+			if not data or #data == 0 then
+				return
+			end
+			local text = table.concat(data, "")
+			local ok, result = pcall(vim.json.decode, text)
+			vim.schedule(function()
+				if ok and type(result) == "table" and result.result then
+					local fmt = C._format_canvas_state(result.result.value)
+					if fmt then
+						C.tab_data.info.canvas_state = fmt
+						if C.state.active_tab == 6 then
+							C.render_all()
+						end
+					end
 				end
 			end)
 		end,
@@ -492,6 +578,7 @@ C.switch_tab = function(n)
 	C.state.active_tab = n
 	if n == 6 then
 		C._fetch_lsp_symbols()
+		C._fetch_canvas_state()
 	end
 	C.render_all()
 end
@@ -649,7 +736,7 @@ C._set_keymaps = function(buf)
 		elseif dk == "eval" then
 			C.tab_data.eval = {}
 		elseif dk == "perf" then
-			C.tab_data.perf = { fps = {}, heap = 0, nodes = 0, listeners = 0, recording = true }
+			C.tab_data.perf = { fps = {}, heap = 0, heap_total = 0, nodes = 0, listeners = 0, recording = true }
 		elseif dk == "info" then
 			-- no-op, info is ephemeral
 		else
@@ -884,6 +971,9 @@ C._on_event = function(data)
 			end
 			if data.heap then
 				pd.heap = data.heap
+			end
+			if data.heap_total then
+				pd.heap_total = data.heap_total
 			end
 			if data.nodes then
 				pd.nodes = data.nodes
@@ -1373,7 +1463,7 @@ C._render_performance = function()
 		table.insert(lines, " FPS trend: " .. table.concat(spark, ""))
 	end
 	table.insert(lines, "")
-	table.insert(lines, string.format(" JS Heap:  %.1f MB", pd.heap / 1048576))
+	table.insert(lines, string.format(" JS Heap:  %.1f / %.1f MB", pd.heap / 1048576, pd.heap_total / 1048576))
 	table.insert(lines, string.format(" DOM nodes: %d", pd.nodes))
 	table.insert(lines, string.format(" Listeners: %d", pd.listeners))
 	table.insert(lines, "")

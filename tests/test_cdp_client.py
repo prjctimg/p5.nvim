@@ -210,7 +210,7 @@ class TestCDPClientHandleMessage(unittest.TestCase):
         self.assertEqual(self.c._paused_frame_id, 'frame-1')
 
     def test_perf_metrics_real_names_and_fps_delta(self):
-        def metrics_event(frames, nodes, listeners, heap):
+        def metrics_event(frames, nodes, listeners, heap, heap_total):
             return {
                 'method': 'Performance.metrics',
                 'params': {'metrics': [
@@ -218,13 +218,16 @@ class TestCDPClientHandleMessage(unittest.TestCase):
                     {'name': 'Nodes', 'value': nodes},
                     {'name': 'JSEventListeners', 'value': listeners},
                     {'name': 'JSHeapUsedSize', 'value': heap},
+                    {'name': 'JSHeapTotalSize', 'value': heap_total},
                 ]},
             }
-        asyncio.run(self.c._handle_message(metrics_event(1000, 42, 7, 1048576)))
+        asyncio.run(self.c._handle_message(metrics_event(1000, 42, 7, 1048576, 4194304)))
         events = self.c.drain_events()
         self.assertEqual(len(events), 1)
-        self.assertEqual(events[0][1]['fps'], 0, "first sample has no Frames delta")
-        asyncio.run(self.c._handle_message(metrics_event(1060, 44, 8, 2097152)))
+        self.assertNotIn('fps', events[0][1], "first sample seeds the Frames baseline")
+        self.assertEqual(events[0][1]['heap'], 1048576)
+        self.assertEqual(events[0][1]['heap_total'], 4194304)
+        asyncio.run(self.c._handle_message(metrics_event(1060, 44, 8, 2097152, 6291456)))
         events = self.c.drain_events()
         etype, data = events[0]
         self.assertEqual(etype, 'perf')
@@ -232,6 +235,7 @@ class TestCDPClientHandleMessage(unittest.TestCase):
         self.assertEqual(data['nodes'], 44)
         self.assertEqual(data['listeners'], 8)
         self.assertEqual(data['heap'], 2097152)
+        self.assertEqual(data['heap_total'], 6291456)
 
     def test_unknown_method_is_ignored(self):
         asyncio.run(self.c._handle_message({'method': 'Unknown.method', 'params': {}}))
@@ -249,9 +253,45 @@ class TestCDPClientSetBreakpoint(unittest.TestCase):
             result = asyncio.run(self.c.set_breakpoint('sketch.js:42'))
             mock_send.assert_called_once_with(
                 'Debugger.setBreakpointByUrl',
-                {'url': 'sketch.js', 'lineNumber': 41},
+                {'url': 'http://localhost:8000/sketch.js', 'lineNumber': 41},
             )
             self.assertEqual(result['resolved'], 0)
+
+    def test_set_breakpoint_fallback_resolves_bare_filename_against_page_origin(self):
+        self.c._scripts = {}
+        self.c.page_url = 'http://127.0.0.1:8123/sketch.html'
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
+            mock_send.return_value = {'breakpointId': '1', 'locations': []}
+            asyncio.run(self.c.set_breakpoint('sketch.js:42'))
+            mock_send.assert_called_once_with(
+                'Debugger.setBreakpointByUrl',
+                {'url': 'http://127.0.0.1:8123/sketch.js', 'lineNumber': 41},
+            )
+
+    def test_set_breakpoint_fallback_keeps_absolute_url(self):
+        self.c._scripts = {}
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
+            mock_send.return_value = {'breakpointId': '1', 'locations': []}
+            asyncio.run(self.c.set_breakpoint('http://localhost:8000/sketch.js:42'))
+            mock_send.assert_called_once_with(
+                'Debugger.setBreakpointByUrl',
+                {'url': 'http://localhost:8000/sketch.js', 'lineNumber': 41},
+            )
+
+    def test_absolute_url(self):
+        self.c.page_url = 'http://localhost:8000/sketch.html'
+        self.assertEqual(
+            self.c._absolute_url('sketch.js'),
+            'http://localhost:8000/sketch.js',
+        )
+        self.assertEqual(
+            self.c._absolute_url('/assets/libs/p5.js'),
+            'http://localhost:8000/assets/libs/p5.js',
+        )
+        self.assertEqual(
+            self.c._absolute_url('http://other/thing.js'),
+            'http://other/thing.js',
+        )
 
     def test_set_breakpoint_resolves_exact_script(self):
         self.c._scripts = {'http://localhost:8000/sketch.js': 'script-1'}
@@ -326,6 +366,36 @@ class TestCDPClientConnect(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(ConnectionError):
             await self.c.connect()
 
+    @patch('server.http_get', new_callable=AsyncMock)
+    @patch('server.websockets.connect', new_callable=AsyncMock)
+    async def test_connect_prefers_page_matching_origin(self, mock_ws_connect, mock_http_get):
+        mock_http_get.return_value = json.dumps([
+            {'type': 'page', 'url': 'chrome://newtab/', 'webSocketDebuggerUrl': 'ws://localhost:9222/newtab'},
+            {'type': 'page', 'url': 'http://localhost:8000/sketch.html', 'webSocketDebuggerUrl': 'ws://localhost:9222/sketch'},
+        ])
+        mock_ws = AsyncMock()
+        mock_ws.__aiter__.return_value = iter([])
+        mock_ws_connect.return_value = mock_ws
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock):
+            await self.c.connect(origin='http://localhost:8000')
+            self.assertEqual(self.c.page_url, 'http://localhost:8000/sketch.html')
+            mock_ws_connect.assert_called_once_with(
+                'ws://localhost:9222/sketch', max_size=2 ** 24
+            )
+
+    @patch('server.http_get', new_callable=AsyncMock)
+    @patch('server.websockets.connect', new_callable=AsyncMock)
+    async def test_connect_falls_back_to_first_page_when_origin_unmatched(self, mock_ws_connect, mock_http_get):
+        mock_http_get.return_value = json.dumps([
+            {'type': 'page', 'url': 'about:blank', 'webSocketDebuggerUrl': 'ws://localhost:9222/blank'},
+        ])
+        mock_ws = AsyncMock()
+        mock_ws.__aiter__.return_value = iter([])
+        mock_ws_connect.return_value = mock_ws
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock):
+            await self.c.connect(origin='http://localhost:9999')
+            self.assertEqual(self.c.page_url, 'about:blank')
+
     async def test_send_command_not_connected(self):
         with self.assertRaises(RuntimeError):
             await self.c.send_command('Runtime.evaluate')
@@ -393,8 +463,10 @@ class TestCDPClientStepCommands(unittest.TestCase):
     def test_pause(self):
         self._test_step(self.c.pause, 'Debugger.pause')
 
-    def test_reload_page(self):
-        self._test_step(self.c.reload_page, 'Page.reload')
+    def test_reload_page_ignores_cache(self):
+        with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
+            asyncio.run(self.c.reload_page())
+            mock_send.assert_called_once_with('Page.reload', {'ignoreCache': True})
 
     def test_set_pause_on_exceptions(self):
         with patch.object(self.c, 'send_command', new_callable=AsyncMock) as mock_send:
@@ -656,6 +728,21 @@ class TestCDPHTTPServerEvalAndDebugHandlers(unittest.TestCase):
         reader.read.return_value = body.encode()
         asyncio.run(self.server.handle_cdp_debug_pause_exceptions(reader, w, headers))
         self.server.cdp_client.set_pause_on_exceptions.assert_called_once_with('uncaught')
+
+    def test_handle_cdp_debug_pause_exceptions_rejects_invalid_state(self):
+        self.server.cdp_client = MagicMock()
+        self.server.cdp_client.connected = True
+        self.server.cdp_client.set_pause_on_exceptions = AsyncMock()
+        for state in ('sometimes', 'ALL', '', '0'):
+            w = self._make_writer()
+            body = json.dumps({'state': state})
+            headers = {'content-length': str(len(body))}
+            reader = AsyncMock()
+            reader.read.return_value = body.encode()
+            asyncio.run(self.server.handle_cdp_debug_pause_exceptions(reader, w, headers))
+            written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+            self.assertIn(b'400', written, f"state {state!r} should be rejected")
+            self.server.cdp_client.set_pause_on_exceptions.assert_not_called()
 
     def test_handle_cdp_page_reload_no_client(self):
         w = self._make_writer()

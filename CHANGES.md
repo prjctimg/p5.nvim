@@ -11,12 +11,19 @@ All notable changes since v0.5.0.
 - **Chrome isolation** — CDP launches Chrome with a temp `--user-data-dir` + `--remote-debugging-address=127.0.0.1`, so the debug port is bound even when a regular Chrome instance is already running; the temp profile is removed on close (`cdp.close_browser_on_close`)
 - **Console dedupe** — the injectable `console.js` fallback now unhooks while CDP is connected, so messages aren't double-captured
 - **HUD keymaps opt-out** — `cdp.keymaps = false` disables the HUD keymap table (it remains HUD-only)
+- **Heap split** — the Perf tab reports used/total heap (`JSHeapUsedSize` / `JSHeapTotalSize`) instead of always showing the total
+- **First-sample FPS** — the first perf sample no longer shows a fabricated `0 fps` while the Frames baseline is seeded
+- **Live canvas state** — the Info tab now populates p5 mode, canvas size, frame rate, and frame count by evaluating in the page on connect and tab switch
 
 ### Fixed
 - **Breakpoints** — resolve against the served script URL (`scriptParsed` scriptId map, exact URL or basename) instead of a bare filename that V8's `setBreakpointByUrl` never matched
 - **Pause eval** — expressions evaluate on the current call frame while paused via `Debugger.evaluateOnCallFrame`
 - **Paused highlight** — `_highlight_paused` no longer double-appends the basename (`sketch.jssketch.js`)
 - **Missing inject scripts** — `assets/inject/console.js`/`livereload.js` were gitignored by an ineffective pattern and never shipped; now tracked
+- **Screenshots** — `screenshot` decodes Chrome's base64 PNG (via `vim.base64.decode`) instead of writing the base64 text to the file, producing a valid image
+- **Page selection** — CDP connect prefers the page served from the dev server's origin instead of always targeting the first tab
+- **Reload without cache** — `Page.reload` now sends `ignoreCache` so p5 asset/sketch changes are actually picked up
+- **Pause exceptions validation** — the `pauseExceptions` endpoint rejects invalid states (`none`/`uncaught`/`all` only) instead of passing them through to CDP
 
 ### Added
 - CDP commands `pause`, `pauseExceptions [none|uncaught|all]`, `reload`, `screenshot [path]`, `network_clear` (server-side) with HUD keymaps `p`/`P`/`R`/`S`
