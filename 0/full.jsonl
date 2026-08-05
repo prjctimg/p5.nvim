@@ -19,17 +19,17 @@
     },
     "cost": 0,
     "tokens": {
-      "input": 961934,
-      "output": 101650,
-      "reasoning": 117710,
+      "input": 965577,
+      "output": 103593,
+      "reasoning": 119615,
       "cache": {
-        "read": 29994880,
+        "read": 31154816,
         "write": 0
       }
     },
     "time": {
       "created": 1785840816364,
-      "updated": 1785933938332
+      "updated": 1785934257432
     }
   },
   "messages": [
@@ -196841,19 +196841,22 @@
         },
         "cost": 0,
         "tokens": {
-          "input": 0,
-          "output": 0,
-          "reasoning": 0,
+          "total": 87546,
+          "input": 124,
+          "output": 182,
+          "reasoning": 840,
           "cache": {
-            "read": 0,
-            "write": 0
+            "write": 0,
+            "read": 86400
           }
         },
         "modelID": "big-pickle",
         "providerID": "opencode",
         "time": {
-          "created": 1785933938247
+          "created": 1785933938247,
+          "completed": 1785934003332
         },
+        "finish": "tool-calls",
         "id": "msg_fd1f53e47001QUBXsIYgWrJXJp",
         "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
       },
@@ -196892,22 +196895,1232 @@
           "tool": "bash",
           "callID": "call_00_8evYb776LTf5MFgOzx9I8656",
           "state": {
-            "metadata": {
-              "output": "",
-              "description": "Commit release workflow"
-            },
-            "status": "running",
+            "status": "completed",
             "input": {
               "command": "git add .github/workflows/release.yml && git commit -m \"ci: restore release workflow with guarded tests\n\nRe-add .github/workflows/release.yml after its removal in 845d4d3. Tag\npushes (v*) run the Lua suite via PlenaryBustedDirectory with the spawn\nguard injected through the init option, plus the Python pytest suite,\nthen auto-create the release from generated notes.\n\nSigned-off-by: prjctimg\" 2>&1 | tail -2 && git log --oneline -3",
               "description": "Commit release workflow"
             },
+            "output": " 1 file changed, 67 insertions(+)\n create mode 100644 .github/workflows/release.yml\nf625d38 ci: restore release workflow with guarded tests\n374b518 docs: move wiki content out of the main repo\n3b0e839 fix(cdp): harden client and server against p5.js reality\n",
+            "metadata": {
+              "output": " 1 file changed, 67 insertions(+)\n create mode 100644 .github/workflows/release.yml\nf625d38 ci: restore release workflow with guarded tests\n374b518 docs: move wiki content out of the main repo\n3b0e839 fix(cdp): harden client and server against p5.js reality\n",
+              "exit": 0,
+              "description": "Commit release workflow",
+              "truncated": false
+            },
+            "title": "Commit release workflow",
             "time": {
-              "start": 1785933956436
+              "start": 1785934002009,
+              "end": 1785934002145
             }
           },
           "id": "prt_fd1f57e01001e1vy9T2F6o5lJC",
           "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
           "messageID": "msg_fd1f53e47001QUBXsIYgWrJXJp"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 87546,
+            "input": 124,
+            "output": 182,
+            "reasoning": 840,
+            "cache": {
+              "write": 0,
+              "read": 86400
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f63a17001BvTcxm8ZjZ7WD6",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f53e47001QUBXsIYgWrJXJp"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 87704,
+          "input": 205,
+          "output": 75,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 87424
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934003842,
+          "completed": 1785934037784
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f63e7d001FP5cKXV1jQoANC",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f65906001jONGjJHZwo15K7",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f63e7d001FP5cKXV1jQoANC"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_ET_fn203biP9fDGPimXQE397691",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "git push origin main 2>&1 | tail -3",
+              "description": "Push main with all new commits"
+            },
+            "output": "[entire] Pushing 4 checkpoint ref(s) to origin................. done\nTo github.com:prjctimg/p5.nvim.git\n   dae7278..f625d38  main -> main\n",
+            "metadata": {
+              "output": "[entire] Pushing 4 checkpoint ref(s) to origin................. done\nTo github.com:prjctimg/p5.nvim.git\n   dae7278..f625d38  main -> main\n",
+              "exit": 0,
+              "description": "Push main with all new commits",
+              "truncated": false
+            },
+            "title": "Push main with all new commits",
+            "time": {
+              "start": 1785934036862,
+              "end": 1785934036968
+            }
+          },
+          "id": "prt_fd1f65c37001yHKZXV6BgWLD5J",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f63e7d001FP5cKXV1jQoANC"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 87704,
+            "input": 205,
+            "output": 75,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 87424
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f6c1ca001Y3tciTZsRZPHIm",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f63e7d001FP5cKXV1jQoANC"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 87894,
+          "input": 82,
+          "output": 104,
+          "reasoning": 28,
+          "cache": {
+            "write": 0,
+            "read": 87680
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934038340,
+          "completed": 1785934057978
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f6c543001zTnmkzoGPG7rHx",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f6d5d2001wX7oBfYQmvHzRd",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f6c543001zTnmkzoGPG7rHx"
+        },
+        {
+          "type": "reasoning",
+          "text": "Pushed. Now tag v0.7.12 and push the tag. The tag should point to HEAD (f625d38).",
+          "time": {
+            "start": 1785934043381,
+            "end": 1785934044140
+          },
+          "id": "prt_fd1f6d8f5001Vtmz9xgX57jBbE",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f6c543001zTnmkzoGPG7rHx"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_lOqo4clOVsyGtrntiTly6870",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "git tag -a v0.7.12 -m \"v0.7.12\" && git push origin v0.7.12 2>&1 | tail -3",
+              "description": "Tag and push v0.7.12"
+            },
+            "output": "To github.com:prjctimg/p5.nvim.git\n * [new tag]         v0.7.12 -> v0.7.12\n",
+            "metadata": {
+              "output": "To github.com:prjctimg/p5.nvim.git\n * [new tag]         v0.7.12 -> v0.7.12\n",
+              "exit": 0,
+              "description": "Tag and push v0.7.12",
+              "truncated": false
+            },
+            "title": "Tag and push v0.7.12",
+            "time": {
+              "start": 1785934056630,
+              "end": 1785934056728
+            }
+          },
+          "id": "prt_fd1f6dc14001pCknFcT6uXQcUS",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f6c543001zTnmkzoGPG7rHx"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 87894,
+            "input": 82,
+            "output": 104,
+            "reasoning": 28,
+            "cache": {
+              "write": 0,
+              "read": 87680
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f70fc5001sm4elETcCqkxSh",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f6c543001zTnmkzoGPG7rHx"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 88297,
+          "input": 132,
+          "output": 111,
+          "reasoning": 246,
+          "cache": {
+            "write": 0,
+            "read": 87808
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934058429,
+          "completed": 1785934076049
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f713bd001KmH9UHoYZcPqI6",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f726fc001edHlyeqqf8zuV9",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f713bd001KmH9UHoYZcPqI6"
+        },
+        {
+          "type": "reasoning",
+          "text": "Tag pushed. The release workflow should now trigger. Let me verify the workflow run started, and also create the v0.7.11 backfill release.\n\nLet me create v0.7.11 release first (backfill) and check the v0.7.12 workflow run.\n\nFor v0.7.11: `gh release create v0.7.11 --title \"v0.7.11\" --notes \"...\" --target <commit>`. Which commit was v0.7.11 tagged at? The tag v0.7.11 exists. Let me create the release from that tag. `gh release create v0.7.11` creates a release for tag v0.7.11 (must exist as a tag — it does). Use `--generate-notes`? GitHub can generate notes from previous tag. Since v0.7.11 tag exists, `gh release create v0.7.11 --generate-notes` will generate release notes between v0.7.10 and v0.7.11.\n\nLet me do both: check workflow run status for v0.7.12 and create v0.7.11 release.",
+          "time": {
+            "start": 1785934063966,
+            "end": 1785934066162
+          },
+          "id": "prt_fd1f7295d0015iZJqoy2Hg5D95",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f713bd001KmH9UHoYZcPqI6"
+        },
+        {
+          "type": "text",
+          "text": "Tag pushed. Now verify the workflow triggered and create the v0.7.11 backfill release:",
+          "time": {
+            "start": 1785934066229,
+            "end": 1785934067105
+          },
+          "id": "prt_fd1f73235001iHrHcQKIAGC8g4",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f713bd001KmH9UHoYZcPqI6"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_YPHrZF9qaFIJ3SYSKN6S1098",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "sleep 5; gh release create v0.7.11 --generate-notes 2>&1 | tail -3",
+              "description": "Backfill v0.7.11 release"
+            },
+            "output": "https://github.com/prjctimg/p5.nvim/releases/tag/v0.7.11\n",
+            "metadata": {
+              "output": "https://github.com/prjctimg/p5.nvim/releases/tag/v0.7.11\n",
+              "exit": 0,
+              "description": "Backfill v0.7.11 release",
+              "truncated": false
+            },
+            "title": "Backfill v0.7.11 release",
+            "time": {
+              "start": 1785934074860,
+              "end": 1785934074977
+            }
+          },
+          "id": "prt_fd1f73317001MYv7jHn5EMwxJO",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f713bd001KmH9UHoYZcPqI6"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 88297,
+            "input": 132,
+            "output": 111,
+            "reasoning": 246,
+            "cache": {
+              "write": 0,
+              "read": 87808
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f756da001WqDbuR34vufBXR",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f713bd001KmH9UHoYZcPqI6"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 88428,
+          "input": 140,
+          "output": 96,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 88192
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934076442,
+          "completed": 1785934097556
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f75a1a001COmUmZIVJlxLjq",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f76c40001qreT0TbqAn0bU7",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f75a1a001COmUmZIVJlxLjq"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_ET_I5mBpULfomTOT0sBnZhX9408",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "sleep 8; gh run list --limit 3 2>&1; echo \"---releases---\"; gh release list 2>&1 | head -8",
+              "description": "Check workflow runs and releases"
+            },
+            "output": "in_progress\t\tci: restore release workflow with guarded tests\tRelease\tv0.7.12\tpush\t31007197674\t32s\t2026-08-05T12:47:39Z\ncompleted\tfailure\tRelease\tRelease\tv0.7.2\tpush\t26979368804\t4s\t2026-06-04T21:01:49Z\ncompleted\tfailure\tVHS\tVHS\tv0.7.2\tpush\t26979368459\t4s\t2026-06-04T21:01:49Z\n---releases---\nv0.7.12\tDraft\tv0.7.12\t2026-08-05T12:47:25Z\nv0.7.11\tLatest\tv0.7.11\t2026-08-05T12:47:55Z\nv0.7.1\t\tv0.7.1\t2026-05-31T15:01:35Z\nv0.7.0-alpha.1\tPre-release\tv0.7.0-alpha.1\t2026-05-30T18:15:40Z\nv0.6.1-alpha.1\tPre-release\tv0.6.1-alpha.1\t2026-05-28T10:48:51Z\nv0.6.0\t\tv0.6.0\t2026-05-21T10:42:35Z\np5.nvim v0.5.0\t\tv0.5.0\t2026-04-21T04:43:41Z\n",
+            "metadata": {
+              "output": "in_progress\t\tci: restore release workflow with guarded tests\tRelease\tv0.7.12\tpush\t31007197674\t32s\t2026-08-05T12:47:39Z\ncompleted\tfailure\tRelease\tRelease\tv0.7.2\tpush\t26979368804\t4s\t2026-06-04T21:01:49Z\ncompleted\tfailure\tVHS\tVHS\tv0.7.2\tpush\t26979368459\t4s\t2026-06-04T21:01:49Z\n---releases---\nv0.7.12\tDraft\tv0.7.12\t2026-08-05T12:47:25Z\nv0.7.11\tLatest\tv0.7.11\t2026-08-05T12:47:55Z\nv0.7.1\t\tv0.7.1\t2026-05-31T15:01:35Z\nv0.7.0-alpha.1\tPre-release\tv0.7.0-alpha.1\t2026-05-30T18:15:40Z\nv0.6.1-alpha.1\tPre-release\tv0.6.1-alpha.1\t2026-05-28T10:48:51Z\nv0.6.0\t\tv0.6.0\t2026-05-21T10:42:35Z\np5.nvim v0.5.0\t\tv0.5.0\t2026-04-21T04:43:41Z\n",
+              "exit": 0,
+              "description": "Check workflow runs and releases",
+              "truncated": false
+            },
+            "title": "Check workflow runs and releases",
+            "time": {
+              "start": 1785934096355,
+              "end": 1785934096441
+            }
+          },
+          "id": "prt_fd1f76ee9001wHZV6U7uTh76nK",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f75a1a001COmUmZIVJlxLjq"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 88428,
+            "input": 140,
+            "output": 96,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 88192
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f7aab8001yzg4XgN1IfrZXK",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f75a1a001COmUmZIVJlxLjq"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 89349,
+          "input": 466,
+          "output": 155,
+          "reasoning": 408,
+          "cache": {
+            "write": 0,
+            "read": 88320
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934098092,
+          "completed": 1785934172658
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f7aeab001wgZqT9WLnFeKQs",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f7c37b001knjM0sLm2bQdUQ",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f7aeab001wgZqT9WLnFeKQs"
+        },
+        {
+          "type": "reasoning",
+          "text": "Interesting observations:\n1. The v0.7.12 workflow run is `in_progress` (the \"Release\" workflow on tag push).\n2. v0.7.12 release shows as \"Draft\" — that's from the workflow's softprops step running (it created a draft, or it's mid-process). Actually the softprops action with `generate_release_notes` creates the release. But it shows \"Draft\" — softprops creates the release as draft? No, by default it publishes. Wait, it might be that the workflow run has reached the release step but not finished. Or the release shows Draft because the workflow is still running and created a draft first.\n\nActually softprops/action-gh-release creates the release, and the \"draft\" state... by default `draft: false`. Hmm, but GitHub shows it as Draft. Possibly because the release is created mid-run and there's some state. Let me wait for the workflow to complete and check the release status again.\n\n3. Note: \"Release v0.7.2\" and \"VHS v0.7.2\" workflow runs are `failure` from June 4 — the old workflows. And there's a release `p5.nvim v0.5.0` (name differs). And v0.7.0-alpha.1, v0.6.1-alpha.1 pre-releases.\n\n4. v0.7.11 is now \"Latest\". Good. Previously \"Latest\" was v0.7.1. Now v0.7.11 is Latest — since we created it. Once v0.7.12 releases, it should become Latest (softprops sets latest by default). But v0.7.12 is currently Draft, so v0.7.11 is Latest.\n\nLet me wait for the workflow to finish and then verify v0.7.12 release is published (not draft). Let me check run status.",
+          "time": {
+            "start": 1785934103700,
+            "end": 1785934107655
+          },
+          "id": "prt_fd1f7c494001hIwUye3657C7fs",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f7aeab001wgZqT9WLnFeKQs"
+        },
+        {
+          "type": "text",
+          "text": "v0.7.11 is now Latest. The v0.7.12 workflow is running (release currently Draft while CI runs). Waiting for it:",
+          "time": {
+            "start": 1785934107705,
+            "end": 1785934108938
+          },
+          "id": "prt_fd1f7d439001I4yT6o8SIY15A8",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f7aeab001wgZqT9WLnFeKQs"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_DorsjiNaKEr0m0UXdqKc6734",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "sleep 60; gh run list --limit 1 2>&1; echo \"---\"; gh release view v0.7.12 --json state,isDraft -q '{state: .state, isDraft: .isDraft}' 2>&1",
+              "description": "Wait for v0.7.12 workflow run"
+            },
+            "output": "completed\tsuccess\tci: restore release workflow with guarded tests\tRelease\tv0.7.12\tpush\t31007197674\t40s\t2026-08-05T12:47:39Z\n---\nUnknown JSON field: \"state\"\nAvailable fields:\n  apiUrl\n  assets\n  author\n  body\n  createdAt\n  databaseId\n  id\n  isDraft\n  isImmutable\n  isPrerelease\n  name\n  publishedAt\n  tagName\n  tarballUrl\n  targetCommitish\n  uploadUrl\n  url\n  zipballUrl\n",
+            "metadata": {
+              "output": "completed\tsuccess\tci: restore release workflow with guarded tests\tRelease\tv0.7.12\tpush\t31007197674\t40s\t2026-08-05T12:47:39Z\n---\nUnknown JSON field: \"state\"\nAvailable fields:\n  apiUrl\n  assets\n  author\n  body\n  createdAt\n  databaseId\n  id\n  isDraft\n  isImmutable\n  isPrerelease\n  name\n  publishedAt\n  tagName\n  tarballUrl\n  targetCommitish\n  uploadUrl\n  url\n  zipballUrl\n",
+              "exit": 1,
+              "description": "Wait for v0.7.12 workflow run",
+              "truncated": false
+            },
+            "title": "Wait for v0.7.12 workflow run",
+            "time": {
+              "start": 1785934171320,
+              "end": 1785934171410
+            }
+          },
+          "id": "prt_fd1f7d541001gxkC0ULVmUMpuP",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f7aeab001wgZqT9WLnFeKQs"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 89349,
+            "input": 466,
+            "output": 155,
+            "reasoning": 408,
+            "cache": {
+              "write": 0,
+              "read": 88320
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f8cff4001w16TlP30sgupgK",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f7aeab001wgZqT9WLnFeKQs"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 89638,
+          "input": 146,
+          "output": 148,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 89344
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934173272,
+          "completed": 1785934194315
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f8d458001H5G44JIinloRmE",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f8fa42001IAWntt8dFrnW3c",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f8d458001H5G44JIinloRmE"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_ET_t9GFuuoCjOxhmqC7P0Ja3782",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "gh release view v0.7.12 --json isDraft,isPrerelease,isImmutable,tagName -q '{draft: .isDraft, prerelease: .isPrerelease, tag: .tagName}'; echo \"---runs detail---\"; gh run view 31007197674 --log-failed 2>&1 | tail -15",
+              "description": "Check v0.7.12 release draft state"
+            },
+            "output": "{\"draft\":false,\"prerelease\":false,\"tag\":\"v0.7.12\"}\n---runs detail---\n",
+            "metadata": {
+              "output": "{\"draft\":false,\"prerelease\":false,\"tag\":\"v0.7.12\"}\n---runs detail---\n",
+              "exit": 0,
+              "description": "Check v0.7.12 release draft state",
+              "truncated": false
+            },
+            "title": "Check v0.7.12 release draft state",
+            "time": {
+              "start": 1785934186506,
+              "end": 1785934192762
+            }
+          },
+          "id": "prt_fd1f8fc33001BYIT5D1FY8lSCm",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f8d458001H5G44JIinloRmE"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 89638,
+            "input": 146,
+            "output": 148,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 89344
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f924040019zRD9eGQQQt30i",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f8d458001H5G44JIinloRmE"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 89855,
+          "input": 76,
+          "output": 98,
+          "reasoning": 81,
+          "cache": {
+            "write": 0,
+            "read": 89600
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934194817,
+          "completed": 1785934209360
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f92881001f5WY3zRvQVTafj",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f938f6001os0MZ04lZ15pGW",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f92881001f5WY3zRvQVTafj"
+        },
+        {
+          "type": "reasoning",
+          "text": "v0.7.12 release is published (not draft), workflow succeeded with no failed logs. Let me verify the full release list one more time to confirm v0.7.12 is now Latest, and that v0.7.11 release exists with notes.\n\nAlso I should verify the workflow run's test jobs actually passed (the Python + Lua tests). Let me check the run jobs.",
+          "time": {
+            "start": 1785934199510,
+            "end": 1785934200471
+          },
+          "id": "prt_fd1f93ad6001Gse9EdYaiQ2MJx",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f92881001f5WY3zRvQVTafj"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_LeNgwriJMzCqkK5yF9Gq9694",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "gh run view 31007197674 2>&1 | head -30; echo \"---releases---\"; gh release list 2>&1 | head -4",
+              "description": "Verify workflow jobs and release list"
+            },
+            "output": "\n✓ v0.7.12 Release · 31007197674\nTriggered via push about 2 minutes ago\n\nJOBS\n✓ test in 21s (ID 92309936350)\n✓ release in 8s (ID 92310032996)\n\nANNOTATIONS\n! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\ntest: .github#2\n\n! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, softprops/action-gh-release@v2. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\nrelease: .github#2\n\n\nFor more information about a job, try: gh run view --job=<job-id>\nView this run on GitHub: https://github.com/prjctimg/p5.nvim/actions/runs/31007197674\n---releases---\nv0.7.12\tLatest\tv0.7.12\t2026-08-05T12:48:17Z\nv0.7.11\t\tv0.7.11\t2026-08-05T12:47:55Z\nv0.7.1\t\tv0.7.1\t2026-05-31T15:01:35Z\nv0.7.0-alpha.1\tPre-release\tv0.7.0-alpha.1\t2026-05-30T18:15:40Z\n",
+            "metadata": {
+              "output": "\n✓ v0.7.12 Release · 31007197674\nTriggered via push about 2 minutes ago\n\nJOBS\n✓ test in 21s (ID 92309936350)\n✓ release in 8s (ID 92310032996)\n\nANNOTATIONS\n! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\ntest: .github#2\n\n! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, softprops/action-gh-release@v2. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\nrelease: .github#2\n\n\nFor more information about a job, try: gh run view --job=<job-id>\nView this run on GitHub: https://github.com/prjctimg/p5.nvim/actions/runs/31007197674\n---releases---\nv0.7.12\tLatest\tv0.7.12\t2026-08-05T12:48:17Z\nv0.7.11\t\tv0.7.11\t2026-08-05T12:47:55Z\nv0.7.1\t\tv0.7.1\t2026-05-31T15:01:35Z\nv0.7.0-alpha.1\tPre-release\tv0.7.0-alpha.1\t2026-05-30T18:15:40Z\n",
+              "exit": 0,
+              "description": "Verify workflow jobs and release list",
+              "truncated": false
+            },
+            "title": "Verify workflow jobs and release list",
+            "time": {
+              "start": 1785934208361,
+              "end": 1785934208427
+            }
+          },
+          "id": "prt_fd1f93eb6001pHPYwuE09LohK9",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f92881001f5WY3zRvQVTafj"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 89855,
+            "input": 76,
+            "output": 98,
+            "reasoning": 81,
+            "cache": {
+              "write": 0,
+              "read": 89600
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f95fad0017I2jDRYC4M9A7i",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f92881001f5WY3zRvQVTafj"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 90593,
+          "input": 545,
+          "output": 94,
+          "reasoning": 226,
+          "cache": {
+            "write": 0,
+            "read": 89728
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934209762,
+          "completed": 1785934222610
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f962e2001Zi4J5uBK7OQgqk",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f9729a001pkzm3qzKUDPFVV",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f962e2001Zi4J5uBK7OQgqk"
+        },
+        {
+          "type": "reasoning",
+          "text": "Everything worked:\n- `test` job passed in 21s (both Lua guarded tests + Python tests ran in CI)\n- `release` job passed in 8s\n- v0.7.12 is now Latest (release published)\n- v0.7.11 release created (backfill)\n\nThe Node.js 20 deprecation annotations are just warnings (GitHub auto-forces to Node 24).\n\nLet me verify the test job actually ran the Lua tests and Python tests (didn't fail silently). Let me check the job log for the test steps to confirm the Lua suite ran (not just \"skipped\"). Quick check: gh run view --job=92309936350.\n\nAlso let me clean up: remove the /tmp/opencode/wiki-bootstrap and wiki-repo temp dirs? They're in /tmp/opencode (pre-approved temp). I can leave them, but cleanup is polite. Actually the workspace wiki/ now has a .git — it's a proper wiki checkout (gitignored from main repo). Good.\n\nLet me verify the test job steps.",
+          "time": {
+            "start": 1785934213936,
+            "end": 1785934216089
+          },
+          "id": "prt_fd1f9732f001ZiAMt3fsNz2uOy",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f962e2001Zi4J5uBK7OQgqk"
+        },
+        {
+          "type": "text",
+          "text": "All green. Let me confirm the CI test job actually ran both suites:",
+          "time": {
+            "start": 1785934216110,
+            "end": 1785934216940
+          },
+          "id": "prt_fd1f97bae001s7AdQyXEIoEaNy",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f962e2001Zi4J5uBK7OQgqk"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_VrGxHTi5orN0I6UfZmuz0907",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "gh run view --job=92309936350 2>&1 | head -40",
+              "description": "Show test job step details"
+            },
+            "output": "\n✓ v0.7.12 Release · 31007197674\nTriggered via push about 2 minutes ago\n\n✓ test in 21s (ID 92309936350)\n  ✓ Set up job\n  ✓ Run actions/checkout@v4\n  ✓ Run rhysd/action-setup-vim@v1\n  ✓ Install plenary.nvim\n  ✓ Run Lua tests (spawn-guarded)\n  ✓ Run actions/setup-python@v5\n  ✓ Install Python test deps\n  ✓ Run Python tests\n  ✓ Post Run actions/setup-python@v5\n  ✓ Post Run actions/checkout@v4\n  ✓ Complete job\n\nANNOTATIONS\n! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\ntest: .github#2\n\n\nTo see the full job log, try: gh run view --log --job=92309936350\nView this run on GitHub: https://github.com/prjctimg/p5.nvim/actions/runs/31007197674\n",
+            "metadata": {
+              "output": "\n✓ v0.7.12 Release · 31007197674\nTriggered via push about 2 minutes ago\n\n✓ test in 21s (ID 92309936350)\n  ✓ Set up job\n  ✓ Run actions/checkout@v4\n  ✓ Run rhysd/action-setup-vim@v1\n  ✓ Install plenary.nvim\n  ✓ Run Lua tests (spawn-guarded)\n  ✓ Run actions/setup-python@v5\n  ✓ Install Python test deps\n  ✓ Run Python tests\n  ✓ Post Run actions/setup-python@v5\n  ✓ Post Run actions/checkout@v4\n  ✓ Complete job\n\nANNOTATIONS\n! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/\ntest: .github#2\n\n\nTo see the full job log, try: gh run view --log --job=92309936350\nView this run on GitHub: https://github.com/prjctimg/p5.nvim/actions/runs/31007197674\n",
+              "exit": 0,
+              "description": "Show test job step details",
+              "truncated": false
+            },
+            "title": "Show test job step details",
+            "time": {
+              "start": 1785934221771,
+              "end": 1785934221817
+            }
+          },
+          "id": "prt_fd1f97cf6001X0aa9catxv1tXN",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f962e2001Zi4J5uBK7OQgqk"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 90593,
+            "input": 545,
+            "output": 94,
+            "reasoning": 226,
+            "cache": {
+              "write": 0,
+              "read": 89728
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f993b1001j6vATLCo7Exocp",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f962e2001Zi4J5uBK7OQgqk"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 90997,
+          "input": 399,
+          "output": 102,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 90496
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934222937,
+          "completed": 1785934231182
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f99659001QsXdjBEH8JRnug",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f9a4f600170KdJjv2jXUDnG",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f99659001QsXdjBEH8JRnug"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_ET_1j11qjT5mWHFSuEXWzMO1405",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "gh run view --log --job=92309936350 2>&1 | rg -i \"Success: |Failed :|passed|PlenaryBustedDirectory\" | head -15",
+              "description": "Confirm test counts in CI log"
+            },
+            "output": "test\tRun Lua tests (spawn-guarded)\t﻿2026-08-05T12:47:46.3396137Z ##[group]Run nvim --headless -u tests/init.lua -c \"PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}\" -c \"qa!\"\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.3397246Z ^[[36;1mnvim --headless -u tests/init.lua -c \"PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}\" -c \"qa!\"^[[0m\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4003725Z ^[[32mSuccess: ^[[0m\t20\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4004260Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4268323Z ^[[32mSuccess: ^[[0m\t33\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4268840Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4529814Z ^[[32mSuccess: ^[[0m\t4\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4530318Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4714915Z ^[[32mSuccess: ^[[0m\t5\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4715424Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4907463Z ^[[32mSuccess: ^[[0m\t1\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4907796Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.5182461Z ^[[32mSuccess: ^[[0m\t10\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.5183983Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.5353204Z ^[[32mSuccess: ^[[0m\t1\t\n",
+            "metadata": {
+              "output": "test\tRun Lua tests (spawn-guarded)\t﻿2026-08-05T12:47:46.3396137Z ##[group]Run nvim --headless -u tests/init.lua -c \"PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}\" -c \"qa!\"\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.3397246Z ^[[36;1mnvim --headless -u tests/init.lua -c \"PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}\" -c \"qa!\"^[[0m\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4003725Z ^[[32mSuccess: ^[[0m\t20\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4004260Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4268323Z ^[[32mSuccess: ^[[0m\t33\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4268840Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4529814Z ^[[32mSuccess: ^[[0m\t4\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4530318Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4714915Z ^[[32mSuccess: ^[[0m\t5\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4715424Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4907463Z ^[[32mSuccess: ^[[0m\t1\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.4907796Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.5182461Z ^[[32mSuccess: ^[[0m\t10\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.5183983Z ^[[31mFailed : ^[[0m\t0\t\ntest\tRun Lua tests (spawn-guarded)\t2026-08-05T12:47:46.5353204Z ^[[32mSuccess: ^[[0m\t1\t\n",
+              "exit": 0,
+              "description": "Confirm test counts in CI log",
+              "truncated": false
+            },
+            "title": "Confirm test counts in CI log",
+            "time": {
+              "start": 1785934230442,
+              "end": 1785934230484
+            }
+          },
+          "id": "prt_fd1f9a7f6001gJp4HUdqvn5vXe",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f99659001QsXdjBEH8JRnug"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 90997,
+            "input": 399,
+            "output": 102,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 90496
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f9b5240010JOuAwiAGQwrOS",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f99659001QsXdjBEH8JRnug"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 91907,
+          "input": 831,
+          "output": 120,
+          "reasoning": 76,
+          "cache": {
+            "write": 0,
+            "read": 90880
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934231644,
+          "completed": 1785934246700
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f9b85c0018lwBa25mc5OGrN",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1f9cc8e0018RgUrqrKnHcQ7M",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f9b85c0018lwBa25mc5OGrN"
+        },
+        {
+          "type": "reasoning",
+          "text": "CI ran the Lua suite successfully (per-spec Success counts, 0 failed) and the Python tests. Everything is verified.\n\nNow clean up the temp dirs in /tmp/opencode. And update todos to completed.\n\nAlso, I should verify the git state is clean and the local repo is in sync.\n\nLet me finish up: clean temp, check git status.",
+          "time": {
+            "start": 1785934237434,
+            "end": 1785934238459
+          },
+          "id": "prt_fd1f9cef9001B5oZewaIQPei7w",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f9b85c0018lwBa25mc5OGrN"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_00_B5Qei9efmUhX7ULLe3ep5658",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "rm -rf /tmp/opencode/wiki-bootstrap /tmp/opencode/wiki-repo /tmp/opencode/Home-authored.md; git status --short; git log --oneline -2; git fetch origin -q && git status -sb | head -1",
+              "description": "Cleanup temp and verify repo state"
+            },
+            "output": "f625d38 ci: restore release workflow with guarded tests\n374b518 docs: move wiki content out of the main repo\n## main...origin/main\n",
+            "metadata": {
+              "output": "f625d38 ci: restore release workflow with guarded tests\n374b518 docs: move wiki content out of the main repo\n## main...origin/main\n",
+              "exit": 0,
+              "description": "Cleanup temp and verify repo state",
+              "truncated": false
+            },
+            "title": "Cleanup temp and verify repo state",
+            "time": {
+              "start": 1785934246041,
+              "end": 1785934246117
+            }
+          },
+          "id": "prt_fd1f9d324001ayatL0qXZCf5GU",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f9b85c0018lwBa25mc5OGrN"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 91907,
+            "input": 831,
+            "output": 120,
+            "reasoning": 76,
+            "cache": {
+              "write": 0,
+              "read": 90880
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1f9f26d0010B7BVYtIIZBj7y",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f9b85c0018lwBa25mc5OGrN"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 92276,
+          "input": 48,
+          "output": 324,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 91904
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934246988,
+          "completed": 1785934256751
+        },
+        "finish": "tool-calls",
+        "id": "msg_fd1f9f44c001XldvWuTQHC3Iob",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1fa097b001uRkExQvgoEjSY3",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f9f44c001XldvWuTQHC3Iob"
+        },
+        {
+          "type": "tool",
+          "tool": "todowrite",
+          "callID": "call_00_ET_AKJg8hulJyRDz9UghREP8193",
+          "state": {
+            "status": "completed",
+            "input": {
+              "todos": [
+                {
+                  "content": "Phase 1: test spawn guard + no_spawn spec (commit 116a7c6)",
+                  "priority": "high",
+                  "status": "completed"
+                },
+                {
+                  "content": "Phase 2: CDP verification fixes (server.py + cdp.lua + tests) (commit 3b0e839)",
+                  "priority": "high",
+                  "status": "completed"
+                },
+                {
+                  "content": "Phase 3: author wiki docs locally in ./wiki (Home, Architecture, Server-and-API, CDP-Integration, LiveReload, Sketchspaces-and-Gists, Testing) with mermaid",
+                  "priority": "high",
+                  "status": "completed"
+                },
+                {
+                  "content": "Phase 3: user bootstrap wiki via web UI, then clone to ./wiki, push docs",
+                  "priority": "high",
+                  "status": "completed"
+                },
+                {
+                  "content": "Phase 3: .gitignore wiki/ + git rm -r --cached wiki + commit",
+                  "priority": "medium",
+                  "status": "completed"
+                },
+                {
+                  "content": "Phase 4: add .github/workflows/release.yml, push main incl. 116a7c6+3b0e839, tag v0.7.12, release v0.7.11, verify",
+                  "priority": "high",
+                  "status": "completed"
+                }
+              ]
+            },
+            "output": "[\n  {\n    \"content\": \"Phase 1: test spawn guard + no_spawn spec (commit 116a7c6)\",\n    \"status\": \"completed\",\n    \"priority\": \"high\"\n  },\n  {\n    \"content\": \"Phase 2: CDP verification fixes (server.py + cdp.lua + tests) (commit 3b0e839)\",\n    \"status\": \"completed\",\n    \"priority\": \"high\"\n  },\n  {\n    \"content\": \"Phase 3: author wiki docs locally in ./wiki (Home, Architecture, Server-and-API, CDP-Integration, LiveReload, Sketchspaces-and-Gists, Testing) with mermaid\",\n    \"status\": \"completed\",\n    \"priority\": \"high\"\n  },\n  {\n    \"content\": \"Phase 3: user bootstrap wiki via web UI, then clone to ./wiki, push docs\",\n    \"status\": \"completed\",\n    \"priority\": \"high\"\n  },\n  {\n    \"content\": \"Phase 3: .gitignore wiki/ + git rm -r --cached wiki + commit\",\n    \"status\": \"completed\",\n    \"priority\": \"medium\"\n  },\n  {\n    \"content\": \"Phase 4: add .github/workflows/release.yml, push main incl. 116a7c6+3b0e839, tag v0.7.12, release v0.7.11, verify\",\n    \"status\": \"completed\",\n    \"priority\": \"high\"\n  }\n]",
+            "metadata": {
+              "todos": [
+                {
+                  "content": "Phase 1: test spawn guard + no_spawn spec (commit 116a7c6)",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "Phase 2: CDP verification fixes (server.py + cdp.lua + tests) (commit 3b0e839)",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "Phase 3: author wiki docs locally in ./wiki (Home, Architecture, Server-and-API, CDP-Integration, LiveReload, Sketchspaces-and-Gists, Testing) with mermaid",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "Phase 3: user bootstrap wiki via web UI, then clone to ./wiki, push docs",
+                  "status": "completed",
+                  "priority": "high"
+                },
+                {
+                  "content": "Phase 3: .gitignore wiki/ + git rm -r --cached wiki + commit",
+                  "status": "completed",
+                  "priority": "medium"
+                },
+                {
+                  "content": "Phase 4: add .github/workflows/release.yml, push main incl. 116a7c6+3b0e839, tag v0.7.12, release v0.7.11, verify",
+                  "status": "completed",
+                  "priority": "high"
+                }
+              ],
+              "truncated": false
+            },
+            "title": "0 todos",
+            "time": {
+              "start": 1785934255854,
+              "end": 1785934255900
+            }
+          },
+          "id": "prt_fd1fa0c38001h01ddiWdhqRO1O",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f9f44c001XldvWuTQHC3Iob"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 92276,
+            "input": 48,
+            "output": 324,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 91904
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1fa1896001KXOuD6cD4DB52E",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1f9f44c001XldvWuTQHC3Iob"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_fd1e02b53001CgwZttrCiI8Qyi",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 92943,
+          "input": 449,
+          "output": 334,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 92160
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1785934257354,
+          "completed": 1785934266608
+        },
+        "finish": "stop",
+        "id": "msg_fd1fa1cca001nyZbWJUIvZwlcx",
+        "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW"
+      },
+      "parts": [
+        {
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-start",
+          "id": "prt_fd1fa2de8001KGpz18w4SP59NU",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1fa1cca001nyZbWJUIvZwlcx"
+        },
+        {
+          "type": "text",
+          "text": "All four tasks are complete and verified.\n\n**Phase 1 — tests (`116a7c6`):** spawn guard in `tests/init.lua` blocks browsers/curl/server spawns; `no_spawn_spec.lua` (5 tests); gist integration gated behind `P5_NETWORK_TESTS=1`; verified 164 Lua tests + 118 Python tests pass locally.\n\n**Phase 2 — CDP fixes (`3b0e839`):** perf heap used/total + no fake first-sample FPS; screenshot base64 decoded to a valid PNG; live canvas state; origin-aware page selection; `ignoreCache` reload; pause-exceptions validation; breakpoint URL resolution. Specs added for the new helpers.\n\n**Phase 3 — wiki:** 8 pages authored with mermaid in `wiki/` and pushed to `prjctimg/p5.nvim.wiki` (all 200). Legacy copies untracked + `/wiki/` gitignored (`374b518`).\n\n**Phase 4 — releases:** `release.yml` restored with guarded Lua + pytest jobs (`f625d38`); pushed main, tagged `v0.7.12`; CI passed (test 21s, release 8s); **v0.7.12** published as Latest, **v0.7.11** backfilled. Working tree clean, `main` in sync.\n\nReleases: https://github.com/prjctimg/p5.nvim/releases · Wiki: https://github.com/prjctimg/p5.nvim/wiki",
+          "time": {
+            "start": 1785934262326,
+            "end": 1785934265410
+          },
+          "id": "prt_fd1fa3036001PIG6C2l8G7iFC0",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1fa1cca001nyZbWJUIvZwlcx"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "de1848c1f9eeae7d68d495259d4c6cd61d02f18c",
+          "type": "step-finish",
+          "tokens": {
+            "total": 92943,
+            "input": 449,
+            "output": 334,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 92160
+            }
+          },
+          "cost": 0,
+          "id": "prt_fd1fa3f000016bhEUrmB0wB0mI",
+          "sessionID": "ses_03397af14ffe2BcZza0EtXFQgW",
+          "messageID": "msg_fd1fa1cca001nyZbWJUIvZwlcx"
         }
       ]
     }
