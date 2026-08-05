@@ -14,3 +14,6 @@ Thumbs.db
 *.swp
 *.swo
 *.tmp
+
+# Ignore the cloned GitHub wiki checkout (hosted at prjctimg/p5.nvim.wiki)
+/wiki/
