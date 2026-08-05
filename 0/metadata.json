@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "01KZ8YVVRGARNEGMYHA3HMNK1W",
+  "session_id": "ses_03397af14ffe2BcZza0EtXFQgW",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-05T12:38:11.087686093Z",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "save_step_count": 1,
+  "files_touched": [
+    ".gitignore"
+  ],
+  "agent": "OpenCode",
+  "model": "big-pickle",
+  "turn_id": "9f22f122fabb",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 958106,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 28546560,
+    "output_tokens": 98562,
+    "api_call_count": 365
+  },
+  "session_metrics": {
+    "turn_count": 7
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-08-05T12:38:10.107004062Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 3,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 3,
+    "total_lines_changed": 277,
+    "agent_percentage": 0,
+    "metric_version": 2
+  }
+}
