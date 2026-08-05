@@ -46,6 +46,15 @@ describe("cdp", function()
       vim.api.nvim_win_close(cdp.state.win, true)
     end
     cdp.state.job_id = nil
+    cdp.state.browser_launched = false
+    -- Remove any temp Chrome profile dir from a deferred launch_browser.
+    if cdp.state.chrome_temp_dir then
+      local d = cdp.state.chrome_temp_dir
+      cdp.state.chrome_temp_dir = nil
+      if vim.fn.isdirectory(d) == 1 then
+        pcall(vim.fn.delete, d, "rf")
+      end
+    end
     vim.fn.jobstart = orig_jobstart
     core.find_chrome = orig_find_chrome
   end)

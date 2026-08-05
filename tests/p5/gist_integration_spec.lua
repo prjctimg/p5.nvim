@@ -2,7 +2,19 @@
 -- Requires authenticated `gh` CLI with `gist` scope.
 -- Gists are created and deleted for each test.
 --
--- Run: nvim --headless -c "PlenaryBustedDirectory tests/p5/gist_integration_spec.lua {sequential=true}" -c "qa!"
+-- Gated behind P5_NETWORK_TESTS=1 so the suite never touches the network
+-- (and never spawns real processes) by default.
+--
+-- Run: P5_NETWORK_TESTS=1 nvim --headless --clean -u tests/init.lua -c "PlenaryBustedFile tests/p5/gist_integration_spec.lua" -c "qa!"
+
+if os.getenv("P5_NETWORK_TESTS") ~= "1" then
+	describe("gist integration (real API)", function()
+		it("skipped (set P5_NETWORK_TESTS=1 to run)", function()
+			assert.is_true(true)
+		end)
+	end)
+	return
+end
 
 local C = require("p5.core")
 local orig_is_cmd = C.is_cmd
