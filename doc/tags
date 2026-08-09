@@ -35,8 +35,16 @@ p5-utilities	p5-utilities.txt	/*p5-utilities*
 p5-utilities-table-of-contents	p5-utilities.txt	/*p5-utilities-table-of-contents*
 p5-webgl	p5-webgl.txt	/*p5-webgl*
 p5-webgl-table-of-contents	p5-webgl.txt	/*p5-webgl-table-of-contents*
+p5.cdp.clear_network()	p5-nvim.txt	/*p5.cdp.clear_network()*
 p5.cdp.close()	p5-nvim.txt	/*p5.cdp.close()*
+p5.cdp.continue()	p5-nvim.txt	/*p5.cdp.continue()*
+p5.cdp.eval()	p5-nvim.txt	/*p5.cdp.eval()*
 p5.cdp.open()	p5-nvim.txt	/*p5.cdp.open()*
+p5.cdp.pause()	p5-nvim.txt	/*p5.cdp.pause()*
+p5.cdp.pause_exceptions()	p5-nvim.txt	/*p5.cdp.pause_exceptions()*
+p5.cdp.reload()	p5-nvim.txt	/*p5.cdp.reload()*
+p5.cdp.screenshot()	p5-nvim.txt	/*p5.cdp.screenshot()*
+p5.cdp.set_breakpoint()	p5-nvim.txt	/*p5.cdp.set_breakpoint()*
 p5.cdp.toggle()	p5-nvim.txt	/*p5.cdp.toggle()*
 p5.gist.create()	p5-nvim.txt	/*p5.gist.create()*
 p5.gist.edit()	p5-nvim.txt	/*p5.gist.edit()*

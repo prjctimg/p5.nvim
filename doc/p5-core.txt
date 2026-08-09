@@ -311,14 +311,6 @@ Table of Contents                           *p5-core-table-of-contents*
   - createImage()              |p5-core-createImage|
   - orbitControl()              |p5-core-orbitControl|
   - noSmooth()              |p5-core-noSmooth|
-  - calculateBoundingBox()              |p5-core-calculateBoundingBox|
-  - clearColors()              |p5-core-clearColors|
-  - flipU()              |p5-core-flipU|
-  - computeFaces()              |p5-core-computeFaces|
-  - computeNormals()              |p5-core-computeNormals|
-  - makeEdgesFromFaces()              |p5-core-makeEdgesFromFaces|
-  - normalize()              |p5-core-normalize|
-  - vertexProperty()              |p5-core-vertexProperty|
   - beginClip()              |p5-core-beginClip|
   - ceil()              |p5-core-ceil|
   - ambientLight()              |p5-core-ambientLight|
@@ -350,6 +342,14 @@ Table of Contents                           *p5-core-table-of-contents*
   - setPosition()              |p5-core-setPosition|
   - set()              |p5-core-set|
   - slerp()              |p5-core-slerp|
+  - calculateBoundingBox()              |p5-core-calculateBoundingBox|
+  - clearColors()              |p5-core-clearColors|
+  - flipU()              |p5-core-flipU|
+  - computeFaces()              |p5-core-computeFaces|
+  - computeNormals()              |p5-core-computeNormals|
+  - makeEdgesFromFaces()              |p5-core-makeEdgesFromFaces|
+  - normalize()              |p5-core-normalize|
+  - vertexProperty()              |p5-core-vertexProperty|
   - bezier()              |p5-core-bezier|
   - bezier()              |p5-core-bezier|
   - acos()              |p5-core-acos|
@@ -404,9 +404,6 @@ Table of Contents                           *p5-core-table-of-contents*
   - set()              |p5-core-set|
   - set()              |p5-core-set|
   - bezierPoint()              |p5-core-bezierPoint|
-  - loadModel()              |p5-core-loadModel|
-  - loadModel()              |p5-core-loadModel|
-  - loadModel()              |p5-core-loadModel|
   - instanceID()              |p5-core-instanceID|
   - smoothstep()              |p5-core-smoothstep|
   - uniformStorage()              |p5-core-uniformStorage|
@@ -427,11 +424,11 @@ Table of Contents                           *p5-core-table-of-contents*
   - clearStorage()              |p5-core-clearStorage|
   - removeElements()              |p5-core-removeElements|
   - beginShape()              |p5-core-beginShape|
-  - saveObj()              |p5-core-saveObj|
   - randomGaussian()              |p5-core-randomGaussian|
   - addElement()              |p5-core-addElement|
   - addElement()              |p5-core-addElement|
   - clip()              |p5-core-clip|
+  - saveObj()              |p5-core-saveObj|
   - atan()              |p5-core-atan|
   - createGraphics()              |p5-core-createGraphics|
   - createGraphics()              |p5-core-createGraphics|
@@ -473,11 +470,14 @@ Table of Contents                           *p5-core-table-of-contents*
   - getTargetFrameRate()              |p5-core-getTargetFrameRate|
   - setShakeThreshold()              |p5-core-setShakeThreshold|
   - noiseSeed()              |p5-core-noiseSeed|
-  - saveStl()              |p5-core-saveStl|
   - circle()              |p5-core-circle|
+  - loadModel()              |p5-core-loadModel|
+  - loadModel()              |p5-core-loadModel|
+  - loadModel()              |p5-core-loadModel|
   - floor()              |p5-core-floor|
   - noCursor()              |p5-core-noCursor|
   - loadTable()              |p5-core-loadTable|
+  - saveStl()              |p5-core-saveStl|
   - plane()              |p5-core-plane|
   - strokeJoin()              |p5-core-strokeJoin|
   - strokeJoin()              |p5-core-strokeJoin|
@@ -537,12 +537,12 @@ Table of Contents                           *p5-core-table-of-contents*
   - spline()              |p5-core-spline|
   - sin()              |p5-core-sin|
   - loadXML()              |p5-core-loadXML|
-  - flipV()              |p5-core-flipV|
   - get()              |p5-core-get|
   - get()              |p5-core-get|
   - get()              |p5-core-get|
   - clearDepth()              |p5-core-clearDepth|
   - log()              |p5-core-log|
+  - flipV()              |p5-core-flipV|
   - shuffle()              |p5-core-shuffle|
   - green()              |p5-core-green|
   - windowResized()              |p5-core-windowResized|
@@ -629,7 +629,6 @@ Table of Contents                           *p5-core-table-of-contents*
   - min()              |p5-core-min|
   - httpDo()              |p5-core-httpDo|
   - httpDo()              |p5-core-httpDo|
-  - model()              |p5-core-model|
   - hue()              |p5-core-hue|
   - createSelect()              |p5-core-createSelect|
   - createSelect()              |p5-core-createSelect|
@@ -639,12 +638,10 @@ Table of Contents                           *p5-core-table-of-contents*
   - square()              |p5-core-square|
   - vertexProperty()              |p5-core-vertexProperty|
   - screenToWorld()              |p5-core-screenToWorld|
-  - createModel()              |p5-core-createModel|
-  - createModel()              |p5-core-createModel|
-  - createModel()              |p5-core-createModel|
   - strokeShader()              |p5-core-strokeShader|
   - mousePressed()              |p5-core-mousePressed|
   - pow()              |p5-core-pow|
+  - model()              |p5-core-model|
   - translate()              |p5-core-translate|
   - translate()              |p5-core-translate|
   - tint()              |p5-core-tint|
@@ -697,6 +694,9 @@ Table of Contents                           *p5-core-table-of-contents*
   - textWeight()              |p5-core-textWeight|
   - noTint()              |p5-core-noTint|
   - ellipsoid()              |p5-core-ellipsoid|
+  - createModel()              |p5-core-createModel|
+  - createModel()              |p5-core-createModel|
+  - createModel()              |p5-core-createModel|
   - round()              |p5-core-round|
   - noFill()              |p5-core-noFill|
   - saturation()              |p5-core-saturation|
@@ -766,14 +766,13 @@ Table of Contents                           *p5-core-table-of-contents*
   - blendMode()              |p5-core-blendMode|
   - blendMode()              |p5-core-blendMode|
   - camera()              |p5-core-camera|
+  - buildStrokeShader()              |p5-core-buildStrokeShader|
+  - buildStrokeShader()              |p5-core-buildStrokeShader|
   - createStorage()              |p5-core-createStorage|
-  - buildStrokeShader()              |p5-core-buildStrokeShader|
-  - buildStrokeShader()              |p5-core-buildStrokeShader|
   - baseComputeShader()              |p5-core-baseComputeShader|
   - loadStrokeShader()              |p5-core-loadStrokeShader|
   - perspective()              |p5-core-perspective|
   - baseStrokeShader()              |p5-core-baseStrokeShader|
-  - buildComputeShader()              |p5-core-buildComputeShader|
   - resetShader()              |p5-core-resetShader|
   - linePerspective()              |p5-core-linePerspective|
   - linePerspective()              |p5-core-linePerspective|
@@ -781,10 +780,11 @@ Table of Contents                           *p5-core-table-of-contents*
   - splineVertex()              |p5-core-splineVertex|
   - splineVertex()              |p5-core-splineVertex|
   - splineVertex()              |p5-core-splineVertex|
+  - buildComputeShader()              |p5-core-buildComputeShader|
   - ortho()              |p5-core-ortho|
   - texture()              |p5-core-texture|
-  - compute()              |p5-core-compute|
   - curveDetail()              |p5-core-curveDetail|
+  - compute()              |p5-core-compute|
   - frustum()              |p5-core-frustum|
   - instances()              |p5-core-instances|
   - createCamera()              |p5-core-createCamera|
@@ -817,7 +817,7 @@ Table of Contents                           *p5-core-table-of-contents*
 ⚙️ Core module for p5.js
 
 📦 p5.js Version: 2.3.1~
-⏰ Last Updated: 2026-08-02 05:29:45Z~
+⏰ Last Updated: 2026-08-09 03:44:27Z~
 
 ==============================================================================
 2. Functions                                                |p5-core-functions|
@@ -6889,217 +6889,6 @@ mode, you must await this function.
 ---
 
 
-`calculateBoundingBox()`                                            |p5-core-calculateBoundingBox|
-
-Calculates the position and size of the smallest box that contains the
-geometry. A bounding box is the smallest rectangular prism that contains the
-entire geometry. It's defined by the box's minimum and maximum coordinates
-along each axis, as well as the size (length) and offset (center). Calling
-myGeometry.calculateBoundingBox() returns an object with four properties that
-describe the bounding box: // Get myGeometry's bounding box. let bbox =
-myGeometry.calculateBoundingBox(); // Print the bounding box to the console.
-console.log(bbox); // { // // The minimum coordinate along each axis. // min:
-{ x: -1, y: -2, z: -3 }, // // // The maximum coordinate along each axis. //
-max: { x: 1, y: 2, z: 3}, // // // The size (length) along each axis. // size:
-{ x: 2, y: 4, z: 6}, // // // The offset (center) along each axis. // offset:
-{ x: 0, y: 0, z: 0} // }
-
-#### Returns:
-
-    bounding box of the geometry.
-
-📂 *Sub-module: main*
-
----
-
-
-`clearColors()`                                            |p5-core-clearColors|
-
-Removes the geometry’s internal colors. p5.Geometry objects can be created
-with "internal colors" assigned to vertices or the entire shape. When a
-geometry has internal colors, <a href="#/p5/fill"> fill() </a> has no effect.
-Calling myGeometry.clearColors() allows the <a href="#/p5/fill"> fill() </a>
-function to apply color to the geometry.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`flipU()`                                            |p5-core-flipU|
-
-Flips the geometry’s texture u-coordinates. In order for <a
-href="#/p5/texture"> texture() </a> to work, the geometry needs a way to map
-the points on its surface to the pixels in a rectangular image that's used as
-a texture. The geometry's vertex at coordinates (x, y, z) maps to the texture
-image's pixel at coordinates (u, v) . The <a href="#/p5.Geometry/uvs">
-myGeometry.uvs </a> array stores the (u, v) coordinates for each vertex in the
-order it was added to the geometry. Calling myGeometry.flipU() flips a
-geometry's u-coordinates so that the texture appears mirrored horizontally.
-For example, a plane's four vertices are added clockwise starting from the
-top-left corner. Here's how calling myGeometry.flipU() would change a plane's
-texture coordinates: // Print the original texture coordinates. // Output: [0,
-0, 1, 0, 0, 1, 1, 1] console.log(myGeometry.uvs); // Flip the u-coordinates.
-myGeometry.flipU(); // Print the flipped texture coordinates. // Output: [1,
-0, 0, 0, 1, 1, 0, 1] console.log(myGeometry.uvs); // Notice the swaps: // Top
-vertices: [0, 0, 1, 0] --> [1, 0, 0, 0] // Bottom vertices: [0, 1, 1, 1] -->
-[1, 1, 0, 1]
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`computeFaces()`                                            |p5-core-computeFaces|
-
-Computes the geometry's faces using its vertices. All 3D shapes are made by
-connecting sets of points called vertices . A geometry's surface is formed by
-connecting vertices to form triangles that are stitched together. Each
-triangular patch on the geometry's surface is called a face .
-myGeometry.computeFaces() performs the math needed to define each face based
-on the distances between vertices. The geometry's vertices are stored as <a
-href="#/p5.Vector"> p5.Vector </a> objects in the <a
-href="#/p5.Geometry/vertices"> myGeometry.vertices </a> array. The geometry's
-first vertex is the <a href="#/p5.Vector"> p5.Vector </a> object at
-myGeometry.vertices[0] , its second vertex is myGeometry.vertices[1] , its
-third vertex is myGeometry.vertices[2] , and so on. Calling
-myGeometry.computeFaces() fills the <a href="#/p5.Geometry/faces">
-myGeometry.faces </a> array with three-element arrays that list the vertices
-that form each face. For example, a geometry made from a rectangle has two
-faces because a rectangle is made by joining two triangles. <a
-href="#/p5.Geometry/faces"> myGeometry.faces </a> for a rectangle would be the
-two-dimensional array [[0, 1, 2], [2, 1, 3]] . The first face,
-myGeometry.faces[0] , is the array [0, 1, 2] because it's formed by connecting
-myGeometry.vertices[0] , myGeometry.vertices[1] ,and myGeometry.vertices[2] .
-The second face, myGeometry.faces[1] , is the array [2, 1, 3] because it's
-formed by connecting myGeometry.vertices[2] , myGeometry.vertices[1] , and
-myGeometry.vertices[3] . Note: myGeometry.computeFaces() only works when
-geometries have four or more vertices.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`computeNormals()`                                            |p5-core-computeNormals|
-
-Calculates the normal vector for each vertex on the geometry. All 3D shapes
-are made by connecting sets of points called vertices . A geometry's surface
-is formed by connecting vertices to create triangles that are stitched
-together. Each triangular patch on the geometry's surface is called a face .
-myGeometry.computeNormals() performs the math needed to orient each face.
-Orientation is important for lighting and other effects. A face's orientation
-is defined by its normal vector which points out of the face and is normal
-(perpendicular) to the surface. Calling myGeometry.computeNormals() first
-calculates each face's normal vector. Then it calculates the normal vector for
-each vertex by averaging the normal vectors of the faces surrounding the
-vertex. The vertex normals are stored as <a href="#/p5.Vector"> p5.Vector </a>
-objects in the <a href="#/p5.Geometry/vertexNormals"> myGeometry.vertexNormals
-</a> array. The first parameter, shadingType , is optional. Passing the
-constant FLAT , as in myGeometry.computeNormals(FLAT) , provides neighboring
-faces with their own copies of the vertices they share. Surfaces appear tiled
-with flat shading. Passing the constant SMOOTH , as in
-myGeometry.computeNormals(SMOOTH) , makes neighboring faces reuse their shared
-vertices. Surfaces appear smoother with smooth shading. By default,
-shadingType is FLAT . The second parameter, options , is also optional. If an
-object with a roundToPrecision property is passed, as in
-myGeometry.computeNormals(SMOOTH, { roundToPrecision: 5 }) , it sets the
-number of decimal places to use for calculations. By default, roundToPrecision
-uses 3 decimal places.
-
-#### Parameters:
-
-    shadingType  shading type. either FLAT or SMOOTH. Defaults to `FLAT`.
-    options  shading options.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`makeEdgesFromFaces()`                                            |p5-core-makeEdgesFromFaces|
-
-
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`normalize()`                                            |p5-core-normalize|
-
-Transforms the geometry's vertices to fit snugly within a 100×100×100 box
-centered at the origin. Calling myGeometry.normalize() translates the
-geometry's vertices so that they're centered at the origin (0, 0, 0) . Then it
-scales the vertices so that they fill a 100×100×100 box. As a result, small
-geometries will grow and large geometries will shrink. Note:
-myGeometry.normalize() only works when called in the <a href="#/p5/setup">
-setup() </a> function.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`vertexProperty()`                                            |p5-core-vertexProperty|
-
-Sets the shader's vertex property or attribute variables. A vertex property,
-or vertex attribute, is a variable belonging to a vertex in a shader. p5.js
-provides some default properties, such as aPosition , aNormal , aVertexColor ,
-etc. These are set using <a href="#/p5/vertex"> vertex() </a> , <a
-href="#/p5/normal"> normal() </a> and <a href="#/p5/fill"> fill() </a>
-respectively. Custom properties can also be defined within <a
-href="#/p5/beginShape"> beginShape() </a> and <a href="#/p5/endShape">
-endShape() </a> . The first parameter, propertyName , is a string with the
-property's name. This is the same variable name which should be declared in
-the shader, as in in vec3 aProperty , similar to . setUniform() . The second
-parameter, data , is the value assigned to the shader variable. This value
-will be pushed directly onto the Geometry object. There should be the same
-number of custom property values as vertices, this method should be invoked
-once for each vertex. The data can be a Number or an array of numbers. Tn the
-shader program the type can be declared according to the WebGL specification.
-Common types include float , vec2 , vec3 , vec4 or matrices. See also the
-global <a href="#/p5/vertexProperty"> vertexProperty() </a> function.
-
-#### Parameters:
-
-    propertyName  the name of the vertex property.
-    data  the data tied to the vertex property.
-    size  optional size of each unit of data.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `beginClip()`                                            |p5-core-beginClip|
 
 Starts defining a shape that will mask any shapes drawn afterward. Any shapes
@@ -7871,6 +7660,217 @@ use the same projection.
     cam0  first camera.
     cam1  second camera.
     amt  amount of interpolation between 0.0 (`cam0`) and 1.0 (`cam1`).
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`calculateBoundingBox()`                                            |p5-core-calculateBoundingBox|
+
+Calculates the position and size of the smallest box that contains the
+geometry. A bounding box is the smallest rectangular prism that contains the
+entire geometry. It's defined by the box's minimum and maximum coordinates
+along each axis, as well as the size (length) and offset (center). Calling
+myGeometry.calculateBoundingBox() returns an object with four properties that
+describe the bounding box: // Get myGeometry's bounding box. let bbox =
+myGeometry.calculateBoundingBox(); // Print the bounding box to the console.
+console.log(bbox); // { // // The minimum coordinate along each axis. // min:
+{ x: -1, y: -2, z: -3 }, // // // The maximum coordinate along each axis. //
+max: { x: 1, y: 2, z: 3}, // // // The size (length) along each axis. // size:
+{ x: 2, y: 4, z: 6}, // // // The offset (center) along each axis. // offset:
+{ x: 0, y: 0, z: 0} // }
+
+#### Returns:
+
+    bounding box of the geometry.
+
+📂 *Sub-module: main*
+
+---
+
+
+`clearColors()`                                            |p5-core-clearColors|
+
+Removes the geometry’s internal colors. p5.Geometry objects can be created
+with "internal colors" assigned to vertices or the entire shape. When a
+geometry has internal colors, <a href="#/p5/fill"> fill() </a> has no effect.
+Calling myGeometry.clearColors() allows the <a href="#/p5/fill"> fill() </a>
+function to apply color to the geometry.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`flipU()`                                            |p5-core-flipU|
+
+Flips the geometry’s texture u-coordinates. In order for <a
+href="#/p5/texture"> texture() </a> to work, the geometry needs a way to map
+the points on its surface to the pixels in a rectangular image that's used as
+a texture. The geometry's vertex at coordinates (x, y, z) maps to the texture
+image's pixel at coordinates (u, v) . The <a href="#/p5.Geometry/uvs">
+myGeometry.uvs </a> array stores the (u, v) coordinates for each vertex in the
+order it was added to the geometry. Calling myGeometry.flipU() flips a
+geometry's u-coordinates so that the texture appears mirrored horizontally.
+For example, a plane's four vertices are added clockwise starting from the
+top-left corner. Here's how calling myGeometry.flipU() would change a plane's
+texture coordinates: // Print the original texture coordinates. // Output: [0,
+0, 1, 0, 0, 1, 1, 1] console.log(myGeometry.uvs); // Flip the u-coordinates.
+myGeometry.flipU(); // Print the flipped texture coordinates. // Output: [1,
+0, 0, 0, 1, 1, 0, 1] console.log(myGeometry.uvs); // Notice the swaps: // Top
+vertices: [0, 0, 1, 0] --> [1, 0, 0, 0] // Bottom vertices: [0, 1, 1, 1] -->
+[1, 1, 0, 1]
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`computeFaces()`                                            |p5-core-computeFaces|
+
+Computes the geometry's faces using its vertices. All 3D shapes are made by
+connecting sets of points called vertices . A geometry's surface is formed by
+connecting vertices to form triangles that are stitched together. Each
+triangular patch on the geometry's surface is called a face .
+myGeometry.computeFaces() performs the math needed to define each face based
+on the distances between vertices. The geometry's vertices are stored as <a
+href="#/p5.Vector"> p5.Vector </a> objects in the <a
+href="#/p5.Geometry/vertices"> myGeometry.vertices </a> array. The geometry's
+first vertex is the <a href="#/p5.Vector"> p5.Vector </a> object at
+myGeometry.vertices[0] , its second vertex is myGeometry.vertices[1] , its
+third vertex is myGeometry.vertices[2] , and so on. Calling
+myGeometry.computeFaces() fills the <a href="#/p5.Geometry/faces">
+myGeometry.faces </a> array with three-element arrays that list the vertices
+that form each face. For example, a geometry made from a rectangle has two
+faces because a rectangle is made by joining two triangles. <a
+href="#/p5.Geometry/faces"> myGeometry.faces </a> for a rectangle would be the
+two-dimensional array [[0, 1, 2], [2, 1, 3]] . The first face,
+myGeometry.faces[0] , is the array [0, 1, 2] because it's formed by connecting
+myGeometry.vertices[0] , myGeometry.vertices[1] ,and myGeometry.vertices[2] .
+The second face, myGeometry.faces[1] , is the array [2, 1, 3] because it's
+formed by connecting myGeometry.vertices[2] , myGeometry.vertices[1] , and
+myGeometry.vertices[3] . Note: myGeometry.computeFaces() only works when
+geometries have four or more vertices.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`computeNormals()`                                            |p5-core-computeNormals|
+
+Calculates the normal vector for each vertex on the geometry. All 3D shapes
+are made by connecting sets of points called vertices . A geometry's surface
+is formed by connecting vertices to create triangles that are stitched
+together. Each triangular patch on the geometry's surface is called a face .
+myGeometry.computeNormals() performs the math needed to orient each face.
+Orientation is important for lighting and other effects. A face's orientation
+is defined by its normal vector which points out of the face and is normal
+(perpendicular) to the surface. Calling myGeometry.computeNormals() first
+calculates each face's normal vector. Then it calculates the normal vector for
+each vertex by averaging the normal vectors of the faces surrounding the
+vertex. The vertex normals are stored as <a href="#/p5.Vector"> p5.Vector </a>
+objects in the <a href="#/p5.Geometry/vertexNormals"> myGeometry.vertexNormals
+</a> array. The first parameter, shadingType , is optional. Passing the
+constant FLAT , as in myGeometry.computeNormals(FLAT) , provides neighboring
+faces with their own copies of the vertices they share. Surfaces appear tiled
+with flat shading. Passing the constant SMOOTH , as in
+myGeometry.computeNormals(SMOOTH) , makes neighboring faces reuse their shared
+vertices. Surfaces appear smoother with smooth shading. By default,
+shadingType is FLAT . The second parameter, options , is also optional. If an
+object with a roundToPrecision property is passed, as in
+myGeometry.computeNormals(SMOOTH, { roundToPrecision: 5 }) , it sets the
+number of decimal places to use for calculations. By default, roundToPrecision
+uses 3 decimal places.
+
+#### Parameters:
+
+    shadingType  shading type. either FLAT or SMOOTH. Defaults to `FLAT`.
+    options  shading options.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`makeEdgesFromFaces()`                                            |p5-core-makeEdgesFromFaces|
+
+
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`normalize()`                                            |p5-core-normalize|
+
+Transforms the geometry's vertices to fit snugly within a 100×100×100 box
+centered at the origin. Calling myGeometry.normalize() translates the
+geometry's vertices so that they're centered at the origin (0, 0, 0) . Then it
+scales the vertices so that they fill a 100×100×100 box. As a result, small
+geometries will grow and large geometries will shrink. Note:
+myGeometry.normalize() only works when called in the <a href="#/p5/setup">
+setup() </a> function.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`vertexProperty()`                                            |p5-core-vertexProperty|
+
+Sets the shader's vertex property or attribute variables. A vertex property,
+or vertex attribute, is a variable belonging to a vertex in a shader. p5.js
+provides some default properties, such as aPosition , aNormal , aVertexColor ,
+etc. These are set using <a href="#/p5/vertex"> vertex() </a> , <a
+href="#/p5/normal"> normal() </a> and <a href="#/p5/fill"> fill() </a>
+respectively. Custom properties can also be defined within <a
+href="#/p5/beginShape"> beginShape() </a> and <a href="#/p5/endShape">
+endShape() </a> . The first parameter, propertyName , is a string with the
+property's name. This is the same variable name which should be declared in
+the shader, as in in vec3 aProperty , similar to . setUniform() . The second
+parameter, data , is the value assigned to the shader variable. This value
+will be pushed directly onto the Geometry object. There should be the same
+number of custom property values as vertices, this method should be invoked
+once for each vertex. The data can be a Number or an array of numbers. Tn the
+shader program the type can be declared according to the WebGL specification.
+Common types include float , vec2 , vec3 , vec4 or matrices. See also the
+global <a href="#/p5/vertexProperty"> vertexProperty() </a> function.
+
+#### Parameters:
+
+    propertyName  the name of the vertex property.
+    data  the data tied to the vertex property.
+    size  optional size of each unit of data.
 
 #### Returns:
 
@@ -9442,110 +9442,6 @@ second anchor point, and 0.5 is halfway between them.
 ---
 
 
-`loadModel()`                                            |p5-core-loadModel|
-
-Loads a 3D model to create a <a href="#/p5.Geometry"> p5.Geometry </a> object.
-loadModel() can load 3D models from OBJ and STL files. Once the model is
-loaded, it can be displayed with the <a href="#/p5/model"> model() </a>
-function, as in model(shape) . There are three ways to call loadModel() with
-optional parameters to help process the model. The first parameter, path , is
-a String with the path to the file. Paths to local files should be relative,
-as in loadModel('assets/model.obj') . URLs such as
-'https://example.com/model.obj' may be blocked due to browser security. The
-path parameter can also be defined as a Request object for more advanced
-usage. Note: When loading a .obj file that references materials stored in .mtl
-files, p5.js will attempt to load and apply those materials. To ensure that
-the .obj file reads the .mtl file correctly include the .mtl file alongside
-it. The first way to call loadModel() has three optional parameters after the
-file path. The first optional parameter, successCallback , is a function to
-call once the model loads. For example, loadModel('assets/model.obj',
-handleModel) will call the handleModel() function once the model loads. The
-second optional parameter, failureCallback , is a function to call if the
-model fails to load. For example, loadModel('assets/model.obj', handleModel,
-handleFailure) will call the handleFailure() function if an error occurs while
-loading. The third optional parameter, fileType , is the model’s file
-extension as a string. For example, loadModel('assets/model', handleModel,
-handleFailure, '.obj') will try to load the file model as a .obj file. The
-second way to call loadModel() has four optional parameters after the file
-path. The first optional parameter is a Boolean value. If true is passed, as
-in loadModel('assets/model.obj', true) , then the model will be resized to
-ensure it fits the canvas. The next three parameters are successCallback ,
-failureCallback , and fileType as described above. The third way to call
-loadModel() has one optional parameter after the file path. The optional
-parameter, options , is an Object with options, as in
-loadModel('assets/model.obj', options) . The options object can have the
-following properties: let options = { // Enables standardized size scaling
-during loading if set to true. normalize: true, // Function to call once the
-model loads. successCallback: handleModel, // Function to call if an error
-occurs while loading. failureCallback: handleError, // Model's file extension.
-fileType: '.stl', // Flips the U texture coordinates of the model. flipU:
-false, // Flips the V texture coordinates of the model. flipV: false }; //
-Pass the options object to loadModel(). loadModel('assets/model.obj',
-options); This function returns a Promise and should be used in an async setup
-with await . See the examples for the usage syntax. Note: There’s no support
-for colored STL files. STL files with color will be rendered without color.
-
-#### Parameters:
-
-    path  path of the model to be loaded.
-    fileType  model’s file extension. Either `'.obj'` or `'.stl'`.
-    normalize  if `true`, scale the model to fit the canvas.
-    successCallback  function to call once the model is loaded. Will be passed the <a href="#/p5.Geometry">p5.Geometry</a> object.
-    failureCallback  function to call if the model fails to load. Will be passed an `Error` event object.
-
-#### Returns:
-
-    the <a href="#/p5.Geometry">p5.Geometry</a> object
-
-📂 *Sub-module: main*
-
----
-
-
-`loadModel()`                                            |p5-core-loadModel|
-
-
-
-#### Parameters:
-
-    path  
-    fileType  
-    successCallback  
-    failureCallback  
-
-#### Returns:
-
-    new <a href="#/p5.Geometry">p5.Geometry</a> object.
-
-📂 *Sub-module: main*
-
----
-
-
-`loadModel()`                                            |p5-core-loadModel|
-
-
-
-#### Parameters:
-
-    path  
-    options  loading options.
-    options.fileType  
-    options.successCallback  
-    options.failureCallback  
-    options.normalize  
-    options.flipU  
-    options.flipV  
-
-#### Returns:
-
-    new <a href="#/p5.Geometry">p5.Geometry</a> object.
-
-📂 *Sub-module: main*
-
----
-
-
 `instanceID()`                                            |p5-core-instanceID|
 
 A function alias for <a href="#/p5/instanceIndex"> instanceIndex </a> , kept
@@ -9968,27 +9864,6 @@ rect() </a> , between beginShape() and <a href="#/p5/endShape"> endShape()
 ---
 
 
-`saveObj()`                                            |p5-core-saveObj|
-
-The saveObj() function exports p5.Geometry objects as 3D models in the
-Wavefront .obj file format. This way, you can use the 3D shapes you create in
-p5.js in other software for rendering, animation, 3D printing, or more. The
-exported .obj file will include the faces and vertices of the p5.Geometry , as
-well as its texture coordinates and normals, if it has them.
-
-#### Parameters:
-
-    fileName  The name of the file to save the model as. If not specified, the default file name will be 'model.obj'.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `randomGaussian()`                                            |p5-core-randomGaussian|
 
 Returns a random number fitting a Gaussian, or normal, distribution. Normal
@@ -10066,6 +9941,27 @@ href="#/p5/beginClip"> beginClip() </a> and <a href="#/p5/endClip"> endClip()
     callback  a function that draws the mask shape.
     options  an object containing clip settings.
     options.invert  Whether or not to invert the mask.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`saveObj()`                                            |p5-core-saveObj|
+
+The saveObj() function exports p5.Geometry objects as 3D models in the
+Wavefront .obj file format. This way, you can use the 3D shapes you create in
+p5.js in other software for rendering, animation, 3D printing, or more. The
+exported .obj file will include the faces and vertices of the p5.Geometry , as
+well as its texture coordinates and normals, if it has them.
+
+#### Parameters:
+
+    fileName  The name of the file to save the model as. If not specified, the default file name will be 'model.obj'.
 
 #### Returns:
 
@@ -11217,31 +11113,6 @@ results each time a sketch is run.
 ---
 
 
-`saveStl()`                                            |p5-core-saveStl|
-
-The saveStl() function exports p5.Geometry objects as 3D models in the STL
-stereolithography file format. This way, you can use the 3D shapes you create
-in p5.js in other software for rendering, animation, 3D printing, or more. The
-exported .stl file will include the faces, vertices, and normals of the
-p5.Geometry . By default, this method saves a text-based .stl file.
-Alternatively, you can save a more compact but less human-readable binary .stl
-file by passing { binary: true } as a second parameter.
-
-#### Parameters:
-
-    fileName  The name of the file to save the model as. If not specified, the default file name will be 'model.stl'.
-    options  Optional settings.
-    options.binary  Whether or not a binary .stl file is saved.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `circle()`                                            |p5-core-circle|
 
 Draws a circle. A circle is a round shape defined by the x , y , and d
@@ -11260,6 +11131,110 @@ position.
 #### Returns:
 
     void
+
+📂 *Sub-module: main*
+
+---
+
+
+`loadModel()`                                            |p5-core-loadModel|
+
+Loads a 3D model to create a <a href="#/p5.Geometry"> p5.Geometry </a> object.
+loadModel() can load 3D models from OBJ and STL files. Once the model is
+loaded, it can be displayed with the <a href="#/p5/model"> model() </a>
+function, as in model(shape) . There are three ways to call loadModel() with
+optional parameters to help process the model. The first parameter, path , is
+a String with the path to the file. Paths to local files should be relative,
+as in loadModel('assets/model.obj') . URLs such as
+'https://example.com/model.obj' may be blocked due to browser security. The
+path parameter can also be defined as a Request object for more advanced
+usage. Note: When loading a .obj file that references materials stored in .mtl
+files, p5.js will attempt to load and apply those materials. To ensure that
+the .obj file reads the .mtl file correctly include the .mtl file alongside
+it. The first way to call loadModel() has three optional parameters after the
+file path. The first optional parameter, successCallback , is a function to
+call once the model loads. For example, loadModel('assets/model.obj',
+handleModel) will call the handleModel() function once the model loads. The
+second optional parameter, failureCallback , is a function to call if the
+model fails to load. For example, loadModel('assets/model.obj', handleModel,
+handleFailure) will call the handleFailure() function if an error occurs while
+loading. The third optional parameter, fileType , is the model’s file
+extension as a string. For example, loadModel('assets/model', handleModel,
+handleFailure, '.obj') will try to load the file model as a .obj file. The
+second way to call loadModel() has four optional parameters after the file
+path. The first optional parameter is a Boolean value. If true is passed, as
+in loadModel('assets/model.obj', true) , then the model will be resized to
+ensure it fits the canvas. The next three parameters are successCallback ,
+failureCallback , and fileType as described above. The third way to call
+loadModel() has one optional parameter after the file path. The optional
+parameter, options , is an Object with options, as in
+loadModel('assets/model.obj', options) . The options object can have the
+following properties: let options = { // Enables standardized size scaling
+during loading if set to true. normalize: true, // Function to call once the
+model loads. successCallback: handleModel, // Function to call if an error
+occurs while loading. failureCallback: handleError, // Model's file extension.
+fileType: '.stl', // Flips the U texture coordinates of the model. flipU:
+false, // Flips the V texture coordinates of the model. flipV: false }; //
+Pass the options object to loadModel(). loadModel('assets/model.obj',
+options); This function returns a Promise and should be used in an async setup
+with await . See the examples for the usage syntax. Note: There’s no support
+for colored STL files. STL files with color will be rendered without color.
+
+#### Parameters:
+
+    path  path of the model to be loaded.
+    fileType  model’s file extension. Either `'.obj'` or `'.stl'`.
+    normalize  if `true`, scale the model to fit the canvas.
+    successCallback  function to call once the model is loaded. Will be passed the <a href="#/p5.Geometry">p5.Geometry</a> object.
+    failureCallback  function to call if the model fails to load. Will be passed an `Error` event object.
+
+#### Returns:
+
+    the <a href="#/p5.Geometry">p5.Geometry</a> object
+
+📂 *Sub-module: main*
+
+---
+
+
+`loadModel()`                                            |p5-core-loadModel|
+
+
+
+#### Parameters:
+
+    path  
+    fileType  
+    successCallback  
+    failureCallback  
+
+#### Returns:
+
+    new <a href="#/p5.Geometry">p5.Geometry</a> object.
+
+📂 *Sub-module: main*
+
+---
+
+
+`loadModel()`                                            |p5-core-loadModel|
+
+
+
+#### Parameters:
+
+    path  
+    options  loading options.
+    options.fileType  
+    options.successCallback  
+    options.failureCallback  
+    options.normalize  
+    options.flipU  
+    options.flipV  
+
+#### Returns:
+
+    new <a href="#/p5.Geometry">p5.Geometry</a> object.
 
 📂 *Sub-module: main*
 
@@ -11341,6 +11316,31 @@ fetching files up to size of 64MB.
 #### Returns:
 
     <a href="#/p5.Table">Table</a> object containing data
+
+📂 *Sub-module: main*
+
+---
+
+
+`saveStl()`                                            |p5-core-saveStl|
+
+The saveStl() function exports p5.Geometry objects as 3D models in the STL
+stereolithography file format. This way, you can use the 3D shapes you create
+in p5.js in other software for rendering, animation, 3D printing, or more. The
+exported .stl file will include the faces, vertices, and normals of the
+p5.Geometry . By default, this method saves a text-based .stl file.
+Alternatively, you can save a more compact but less human-readable binary .stl
+file by passing { binary: true } as a second parameter.
+
+#### Parameters:
+
+    fileName  The name of the file to save the model as. If not specified, the default file name will be 'model.stl'.
+    options  Optional settings.
+    options.binary  Whether or not a binary .stl file is saved.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: main*
 
@@ -12943,33 +12943,6 @@ examples for the usage syntax.
 ---
 
 
-`flipV()`                                            |p5-core-flipV|
-
-Flips the geometry’s texture v-coordinates. In order for <a
-href="#/p5/texture"> texture() </a> to work, the geometry needs a way to map
-the points on its surface to the pixels in a rectangular image that's used as
-a texture. The geometry's vertex at coordinates (x, y, z) maps to the texture
-image's pixel at coordinates (u, v) . The <a href="#/p5.Geometry/uvs">
-myGeometry.uvs </a> array stores the (u, v) coordinates for each vertex in the
-order it was added to the geometry. Calling myGeometry.flipV() flips a
-geometry's v-coordinates so that the texture appears mirrored vertically. For
-example, a plane's four vertices are added clockwise starting from the
-top-left corner. Here's how calling myGeometry.flipV() would change a plane's
-texture coordinates: // Print the original texture coordinates. // Output: [0,
-0, 1, 0, 0, 1, 1, 1] console.log(myGeometry.uvs); // Flip the v-coordinates.
-myGeometry.flipV(); // Print the flipped texture coordinates. // Output: [0,
-1, 1, 1, 0, 0, 1, 0] console.log(myGeometry.uvs); // Notice the swaps: // Left
-vertices: [0, 0] <--> [1, 0] // Right vertices: [1, 0] <--> [1, 1]
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `get()`                                            |p5-core-get|
 
 Gets a pixel or a region of pixels from the canvas. get() is easy to use but
@@ -13081,6 +13054,33 @@ draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 #### Returns:
 
     natural logarithm of n.
+
+📂 *Sub-module: main*
+
+---
+
+
+`flipV()`                                            |p5-core-flipV|
+
+Flips the geometry’s texture v-coordinates. In order for <a
+href="#/p5/texture"> texture() </a> to work, the geometry needs a way to map
+the points on its surface to the pixels in a rectangular image that's used as
+a texture. The geometry's vertex at coordinates (x, y, z) maps to the texture
+image's pixel at coordinates (u, v) . The <a href="#/p5.Geometry/uvs">
+myGeometry.uvs </a> array stores the (u, v) coordinates for each vertex in the
+order it was added to the geometry. Calling myGeometry.flipV() flips a
+geometry's v-coordinates so that the texture appears mirrored vertically. For
+example, a plane's four vertices are added clockwise starting from the
+top-left corner. Here's how calling myGeometry.flipV() would change a plane's
+texture coordinates: // Print the original texture coordinates. // Output: [0,
+0, 1, 0, 0, 1, 1, 1] console.log(myGeometry.uvs); // Flip the v-coordinates.
+myGeometry.flipV(); // Print the flipped texture coordinates. // Output: [0,
+1, 1, 1, 0, 0, 1, 0] console.log(myGeometry.uvs); // Notice the swaps: // Left
+vertices: [0, 0] <--> [1, 0] // Right vertices: [1, 0] <--> [1, 1]
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: main*
 
@@ -15539,62 +15539,6 @@ parameter. This method is suitable for fetching files up to size of 64MB when
 ---
 
 
-`model()`                                            |p5-core-model|
-
-Draws a <a href="#/p5.Geometry"> p5.Geometry </a> object to the canvas. The
-first parameter, model , is the <a href="#/p5.Geometry"> p5.Geometry </a>
-object to draw. <a href="#/p5.Geometry"> p5.Geometry </a> objects can be built
-with <a href="#/p5/buildGeometry"> buildGeometry() </a> . They can also be
-loaded from a file with <a href="#/p5/loadGeometry"> loadGeometry() </a> .
-Note: model() can only be used in WebGL mode. // Click and drag the mouse to
-view the scene from different angles. let shape; function setup() {
-createCanvas(100, 100, WEBGL); // Create the p5.Geometry object. shape =
-buildGeometry(createShape); describe('A white cone drawn on a gray
-background.'); } function draw() { background(200); // Enable orbiting with
-the mouse. orbitControl(); // Draw the p5.Geometry object. model(shape); } //
-Create p5.Geometry object from a single cone. function createShape() { cone();
-} // Click and drag the mouse to view the scene from different angles. let
-shape; function setup() { createCanvas(100, 100, WEBGL); // Create the
-p5.Geometry object. shape = buildGeometry(createArrow); describe('Two white
-arrows drawn on a gray background. The arrow on the right rotates slowly.'); }
-function draw() { background(50); // Enable orbiting with the mouse.
-orbitControl(); // Turn on the lights. lights(); // Style the arrows.
-noStroke(); // Draw the p5.Geometry object. model(shape); // Translate and
-rotate the coordinate system. translate(30, 0, 0); rotateZ(frameCount * 0.01);
-// Draw the p5.Geometry object again. model(shape); } function createArrow() {
-// Add shapes to the p5.Geometry object. push(); rotateX(PI); cone(10);
-translate(0, -10, 0); cylinder(3, 20); pop(); } // Click and drag the mouse to
-view the scene from different angles. let shape; async function setup() {
-shape = await loadModel('assets/octahedron.obj'); createCanvas(100, 100,
-WEBGL); describe('A white octahedron drawn against a gray background.'); }
-function draw() { background(200); // Enable orbiting with the mouse.
-orbitControl(); // Draw the shape. model(shape); } Multiple instances can be
-drawn at once with instances(count) . On its own, all the instances get drawn
-to the same spot, but you can use <a href="#/p5/instanceIndex"> instanceIndex
-</a> inside of a shader to handle each instance. At large counts, this often
-runs faster than using a for loop. let instancesShader; let count = 5;
-function setup() { createCanvas(200, 200, WEBGL); instancesShader =
-buildMaterialShader(drawSpaced); } function drawSpaced() {
-worldInputs.begin(); // Spread spheres evenly across the canvas based on their
-index let spacing = width / count; worldInputs.position.x += (instanceIndex -
-(count - 1) / 2) * spacing; worldInputs.end(); } function draw() {
-background(220); lights(); noStroke(); fill('red'); shader(instancesShader);
-instances(count).sphere(15); }
-
-#### Parameters:
-
-    model  3D shape to be drawn.
-    count  number of instances to draw.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `hue()`                                            |p5-core-hue|
 
 Gets the hue value of a color. hue() extracts the hue value from a <a
@@ -15865,83 +15809,6 @@ the input coordinates is treated as "depth", or distance from the camera.
 ---
 
 
-`createModel()`                                            |p5-core-createModel|
-
-Load a 3d model from an OBJ or STL string. OBJ and STL files lack a built-in
-sense of scale, causing models exported from different programs to vary in
-size. If your model doesn't display correctly, consider using loadModel() with
-normalize set to true to standardize its size. Further adjustments can be made
-using the scale() function. Also, the support for colored STL files is not
-present. STL files with color will be rendered without color properties.
-Options can include: modelString : Specifies the plain text string of either
-an stl or obj file to be loaded. fileType : Defines the file extension of the
-model. normalize : Enables standardized size scaling during loading if set to
-true. successCallback : Callback for post-loading actions with the 3D model
-object. failureCallback : Handles errors if model loading fails, receiving an
-event error. flipU : Flips the U texture coordinates of the model. flipV :
-Flips the V texture coordinates of the model.
-
-#### Parameters:
-
-    modelString  String of the object to be loaded
-    fileType  The file extension of the model (<code>.stl</code>, <code>.obj</code>).
-    normalize  If true, scale the model to a standardized size when loading
-    successCallback  Function to be called once the model is loaded. Will be passed the 3D model object.
-    failureCallback  called with event error if the model fails to load.
-
-#### Returns:
-
-    the <a href="#/p5.Geometry">p5.Geometry</a> object
-
-📂 *Sub-module: main*
-
----
-
-
-`createModel()`                                            |p5-core-createModel|
-
-
-
-#### Parameters:
-
-    modelString  
-    fileType  
-    successCallback  
-    failureCallback  
-
-#### Returns:
-
-    the <a href="#/p5.Geometry">p5.Geometry</a> object
-
-📂 *Sub-module: main*
-
----
-
-
-`createModel()`                                            |p5-core-createModel|
-
-
-
-#### Parameters:
-
-    modelString  
-    fileType  
-    options  
-    options.successCallback  
-    options.failureCallback  
-    options.normalize  
-    options.flipU  
-    options.flipV  
-
-#### Returns:
-
-    the <a href="#/p5.Geometry">p5.Geometry</a> object
-
-📂 *Sub-module: main*
-
----
-
-
 `strokeShader()`                                            |p5-core-strokeShader|
 
 Sets the <a href="#/p5.Shader"> p5.Shader </a> object to apply for strokes.
@@ -16038,6 +15905,62 @@ draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 #### Returns:
 
     n^e.
+
+📂 *Sub-module: main*
+
+---
+
+
+`model()`                                            |p5-core-model|
+
+Draws a <a href="#/p5.Geometry"> p5.Geometry </a> object to the canvas. The
+first parameter, model , is the <a href="#/p5.Geometry"> p5.Geometry </a>
+object to draw. <a href="#/p5.Geometry"> p5.Geometry </a> objects can be built
+with <a href="#/p5/buildGeometry"> buildGeometry() </a> . They can also be
+loaded from a file with <a href="#/p5/loadGeometry"> loadGeometry() </a> .
+Note: model() can only be used in WebGL mode. // Click and drag the mouse to
+view the scene from different angles. let shape; function setup() {
+createCanvas(100, 100, WEBGL); // Create the p5.Geometry object. shape =
+buildGeometry(createShape); describe('A white cone drawn on a gray
+background.'); } function draw() { background(200); // Enable orbiting with
+the mouse. orbitControl(); // Draw the p5.Geometry object. model(shape); } //
+Create p5.Geometry object from a single cone. function createShape() { cone();
+} // Click and drag the mouse to view the scene from different angles. let
+shape; function setup() { createCanvas(100, 100, WEBGL); // Create the
+p5.Geometry object. shape = buildGeometry(createArrow); describe('Two white
+arrows drawn on a gray background. The arrow on the right rotates slowly.'); }
+function draw() { background(50); // Enable orbiting with the mouse.
+orbitControl(); // Turn on the lights. lights(); // Style the arrows.
+noStroke(); // Draw the p5.Geometry object. model(shape); // Translate and
+rotate the coordinate system. translate(30, 0, 0); rotateZ(frameCount * 0.01);
+// Draw the p5.Geometry object again. model(shape); } function createArrow() {
+// Add shapes to the p5.Geometry object. push(); rotateX(PI); cone(10);
+translate(0, -10, 0); cylinder(3, 20); pop(); } // Click and drag the mouse to
+view the scene from different angles. let shape; async function setup() {
+shape = await loadModel('assets/octahedron.obj'); createCanvas(100, 100,
+WEBGL); describe('A white octahedron drawn against a gray background.'); }
+function draw() { background(200); // Enable orbiting with the mouse.
+orbitControl(); // Draw the shape. model(shape); } Multiple instances can be
+drawn at once with instances(count) . On its own, all the instances get drawn
+to the same spot, but you can use <a href="#/p5/instanceIndex"> instanceIndex
+</a> inside of a shader to handle each instance. At large counts, this often
+runs faster than using a for loop. let instancesShader; let count = 5;
+function setup() { createCanvas(200, 200, WEBGL); instancesShader =
+buildMaterialShader(drawSpaced); } function drawSpaced() {
+worldInputs.begin(); // Spread spheres evenly across the canvas based on their
+index let spacing = width / count; worldInputs.position.x += (instanceIndex -
+(count - 1) / 2) * spacing; worldInputs.end(); } function draw() {
+background(220); lights(); noStroke(); fill('red'); shader(instancesShader);
+instances(count).sphere(15); }
+
+#### Parameters:
+
+    model  3D shape to be drawn.
+    count  number of instances to draw.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: main*
 
@@ -17185,6 +17108,83 @@ can only be used in WebGL mode.
 #### Returns:
 
     void
+
+📂 *Sub-module: main*
+
+---
+
+
+`createModel()`                                            |p5-core-createModel|
+
+Load a 3d model from an OBJ or STL string. OBJ and STL files lack a built-in
+sense of scale, causing models exported from different programs to vary in
+size. If your model doesn't display correctly, consider using loadModel() with
+normalize set to true to standardize its size. Further adjustments can be made
+using the scale() function. Also, the support for colored STL files is not
+present. STL files with color will be rendered without color properties.
+Options can include: modelString : Specifies the plain text string of either
+an stl or obj file to be loaded. fileType : Defines the file extension of the
+model. normalize : Enables standardized size scaling during loading if set to
+true. successCallback : Callback for post-loading actions with the 3D model
+object. failureCallback : Handles errors if model loading fails, receiving an
+event error. flipU : Flips the U texture coordinates of the model. flipV :
+Flips the V texture coordinates of the model.
+
+#### Parameters:
+
+    modelString  String of the object to be loaded
+    fileType  The file extension of the model (<code>.stl</code>, <code>.obj</code>).
+    normalize  If true, scale the model to a standardized size when loading
+    successCallback  Function to be called once the model is loaded. Will be passed the 3D model object.
+    failureCallback  called with event error if the model fails to load.
+
+#### Returns:
+
+    the <a href="#/p5.Geometry">p5.Geometry</a> object
+
+📂 *Sub-module: main*
+
+---
+
+
+`createModel()`                                            |p5-core-createModel|
+
+
+
+#### Parameters:
+
+    modelString  
+    fileType  
+    successCallback  
+    failureCallback  
+
+#### Returns:
+
+    the <a href="#/p5.Geometry">p5.Geometry</a> object
+
+📂 *Sub-module: main*
+
+---
+
+
+`createModel()`                                            |p5-core-createModel|
+
+
+
+#### Parameters:
+
+    modelString  
+    fileType  
+    options  
+    options.successCallback  
+    options.failureCallback  
+    options.normalize  
+    options.flipU  
+    options.flipV  
+
+#### Returns:
+
+    the <a href="#/p5.Geometry">p5.Geometry</a> object
 
 📂 *Sub-module: main*
 
@@ -19253,69 +19253,6 @@ which is like holding it upside-down. By default, the "up" vector is (0, 1, 0)
 ---
 
 
-`createStorage()`                                            |p5-core-createStorage|
-
-Creates a <a href="#/p5/p5.StorageBuffer"> p5.StorageBuffer </a> , which is a
-block of data that shaders can read from, and compute shaders can also write
-to. This is only available in WebGPU mode. To read or write the data inside a
-shader, use <a href="#/p5/uniformStorage"> uniformStorage() </a> . To update
-its contents from JavaScript, call <a href="#/p5.StorageBuffer/update">
-.update() </a> on the result with new data. Pass an array of objects to store
-a list of items, each with named properties. The properties can be numbers,
-arrays of numbers, vectors created with <a href="#/p5/createVector">
-createVector() </a> , or colors created with <a href="#/p5/color"> color()
-</a> . Inside the shader, each item is accessed by index, and its properties
-are available by name. let instanceData; let instancesShader; let count = 5;
-async function setup() { await createCanvas(200, 200, WEBGPU); let data = [];
-for (let i = 0; i < count; i++) { data.push({ position: createVector(
-random(-1, 1) * width / 2, random(-1, 1) * height / 2, 0, ), color: color(
-random(255), random(255), random(255) ) }); } instanceData =
-createStorage(data); instancesShader = buildMaterialShader(drawInstances);
-describe('Five spheres at random positions, each a different random color.');
-} function drawInstances() { let data = uniformStorage(instanceData); let
-itemColor = sharedVec4(); worldInputs.begin(); let item = data[instanceIndex];
-itemColor = item.color; worldInputs.position += item.position;
-worldInputs.end(); finalColor.begin(); finalColor.set(itemColor);
-finalColor.end(); } function draw() { background(220); lights(); noStroke();
-shader(instancesShader); instances(count).sphere(15); } You can also store a
-plain list of numbers by passing an array of numbers. Inside the shader, each
-number is accessed by index directly. To create an empty list to be filled in
-by a compute shader, pass a count instead. let cells; let nextCells; let
-gameShader; let displayShader; const W = 100; const H = 100; async function
-setup() { await createCanvas(100, 100, WEBGPU); let initial = new
-Float32Array(W * H); for (let i = 0; i < initial.length; i++) { initial[i] =
-random() > 0.7 ? 1 : 0; } cells = createStorage(initial); nextCells =
-createStorage(W * H); gameShader = buildComputeShader(simulate); displayShader
-= buildFilterShader(display); describe('An animated Game of Life simulation
-displayed as black and white pixels.'); } function simulate() { let current =
-uniformStorage(() => cells); let next = uniformStorage(() => nextCells); let w
-= uniformInt(() => W); let h = uniformInt(() => H); let x = index.x; let y =
-index.y; let n = 0; for (let dy = -1; dy <= 1; dy++) { for (let dx = -1; dx <=
-1; dx++) { if (dx != 0 || dy != 0) { let nx = (x + dx + w) % w; let ny = (y +
-dy + h) % h; n += current[ny * w + nx]; } } } let alive = current[y * w + x];
-let nextOutput = 0; if (alive == 1) { if (abs(n - 2) < 0.1 || abs(n - 3) <
-0.1) { nextOutput = 1; } } else { if (abs(n - 3) < 0.1) { nextOutput = 1; } }
-next[y * w + x] = nextOutput; } function display() { let data =
-uniformStorage(() => cells); let w = uniformInt(() => W); let h =
-uniformInt(() => H); filterColor.begin(); let x = floor(filterColor.texCoord.x
-* w); let y = floor(filterColor.texCoord.y * h); let alive = data[y * w + x];
-filterColor.set([alive, alive, alive, 1]); filterColor.end(); } function
-draw() { compute(gameShader, W, H); [nextCells, cells] = [cells, nextCells];
-filter(displayShader); }
-
-#### Parameters:
-
-    dataOrCount  Either a number specifying the count of floats, an array/Float32Array of floats, or an array of objects describing struct elements.
-
-#### Returns:
-
-    A storage buffer.
-
-📂 *Sub-module: main*
-
----
-
-
 `buildStrokeShader()`                                            |p5-core-buildStrokeShader|
 
 Create a new shader that can change how strokes are drawn, based on the
@@ -19397,6 +19334,69 @@ href="#/p5.Shader/modify"> reference entry for modify() </a> for more info.
 #### Returns:
 
     The stroke shader.
+
+📂 *Sub-module: main*
+
+---
+
+
+`createStorage()`                                            |p5-core-createStorage|
+
+Creates a <a href="#/p5/p5.StorageBuffer"> p5.StorageBuffer </a> , which is a
+block of data that shaders can read from, and compute shaders can also write
+to. This is only available in WebGPU mode. To read or write the data inside a
+shader, use <a href="#/p5/uniformStorage"> uniformStorage() </a> . To update
+its contents from JavaScript, call <a href="#/p5.StorageBuffer/update">
+.update() </a> on the result with new data. Pass an array of objects to store
+a list of items, each with named properties. The properties can be numbers,
+arrays of numbers, vectors created with <a href="#/p5/createVector">
+createVector() </a> , or colors created with <a href="#/p5/color"> color()
+</a> . Inside the shader, each item is accessed by index, and its properties
+are available by name. let instanceData; let instancesShader; let count = 5;
+async function setup() { await createCanvas(200, 200, WEBGPU); let data = [];
+for (let i = 0; i < count; i++) { data.push({ position: createVector(
+random(-1, 1) * width / 2, random(-1, 1) * height / 2, 0, ), color: color(
+random(255), random(255), random(255) ) }); } instanceData =
+createStorage(data); instancesShader = buildMaterialShader(drawInstances);
+describe('Five spheres at random positions, each a different random color.');
+} function drawInstances() { let data = uniformStorage(instanceData); let
+itemColor = sharedVec4(); worldInputs.begin(); let item = data[instanceIndex];
+itemColor = item.color; worldInputs.position += item.position;
+worldInputs.end(); finalColor.begin(); finalColor.set(itemColor);
+finalColor.end(); } function draw() { background(220); lights(); noStroke();
+shader(instancesShader); instances(count).sphere(15); } You can also store a
+plain list of numbers by passing an array of numbers. Inside the shader, each
+number is accessed by index directly. To create an empty list to be filled in
+by a compute shader, pass a count instead. let cells; let nextCells; let
+gameShader; let displayShader; const W = 100; const H = 100; async function
+setup() { await createCanvas(100, 100, WEBGPU); let initial = new
+Float32Array(W * H); for (let i = 0; i < initial.length; i++) { initial[i] =
+random() > 0.7 ? 1 : 0; } cells = createStorage(initial); nextCells =
+createStorage(W * H); gameShader = buildComputeShader(simulate); displayShader
+= buildFilterShader(display); describe('An animated Game of Life simulation
+displayed as black and white pixels.'); } function simulate() { let current =
+uniformStorage(() => cells); let next = uniformStorage(() => nextCells); let w
+= uniformInt(() => W); let h = uniformInt(() => H); let x = index.x; let y =
+index.y; let n = 0; for (let dy = -1; dy <= 1; dy++) { for (let dx = -1; dx <=
+1; dx++) { if (dx != 0 || dy != 0) { let nx = (x + dx + w) % w; let ny = (y +
+dy + h) % h; n += current[ny * w + nx]; } } } let alive = current[y * w + x];
+let nextOutput = 0; if (alive == 1) { if (abs(n - 2) < 0.1 || abs(n - 3) <
+0.1) { nextOutput = 1; } } else { if (abs(n - 3) < 0.1) { nextOutput = 1; } }
+next[y * w + x] = nextOutput; } function display() { let data =
+uniformStorage(() => cells); let w = uniformInt(() => W); let h =
+uniformInt(() => H); filterColor.begin(); let x = floor(filterColor.texCoord.x
+* w); let y = floor(filterColor.texCoord.y * h); let alive = data[y * w + x];
+filterColor.set([alive, alive, alive, 1]); filterColor.end(); } function
+draw() { compute(gameShader, W, H); [nextCells, cells] = [cells, nextCells];
+filter(displayShader); }
+
+#### Parameters:
+
+    dataOrCount  Either a number specifying the count of floats, an array/Float32Array of floats, or an array of objects describing struct elements.
+
+#### Returns:
+
+    A storage buffer.
 
 📂 *Sub-module: main*
 
@@ -19524,77 +19524,6 @@ the base material shader.
 #### Returns:
 
     The base material shader.
-
-📂 *Sub-module: main*
-
----
-
-
-`buildComputeShader()`                                            |p5-core-buildComputeShader|
-
-Create a new compute shader using p5.strands. A compute shader lets you run
-many calculations all at once on your GPU. They are similar to a <a
-href="#/p5/for> for loop, </a> but each iteration of the loop happens in
-parallel on the GPU rather than running one after the other. This makes them
-ideal for calculations or simulations involving many items. You create a
-compute shader by passing a function to buildComputeShader . The function
-represents one iteration of a loop. The compute shader can be run by calling
-<a href="#/p5/compute"> compute() </a> and passing the shader in, along with
-the number of iterations in up to three dimensions. Use the <a
-href="#/p5/index"> index </a> vector inside of your iteration function to
-refer to the current iteration of the loop. The x , y , and z properties will
-count up from zero to the count in each dimension passed into compute . A
-compute shader will read from and write to storage, which is often an array of
-numbers or objects. Use <a href="#/p5/createStorage"> createStorage </a> to
-construct initial data. Connect your iteration function to the storage by
-passing the storage into <a href="#/p5/uniformStorage"> uniformStorage </a> .
-Often, compute shaders are paired with <a href="#/p5/instances">
-instances(count) </a> to draw one instance per object in the storage, and a
-shader that uses <a href="#/p5/instanceIndex"> instanceIndex </a> to position
-each instance. let particles; let computeShader; let displayShader; const
-numParticles = 100; async function setup() { await createCanvas(100, 100,
-WEBGPU); particles = createStorage(makeParticles(width / 2, height / 2));
-computeShader = buildComputeShader(simulate); displayShader =
-buildMaterialShader(display); describe('100 orange particles shooting
-outward.'); } function makeParticles(x, y) { let data = []; for (let i = 0; i
-< numParticles; i++) { let angle = (i / numParticles) * TWO_PI; let speed =
-random(0.5, 2); data.push({ position: createVector(x, y), velocity:
-createVector(cos(angle) * speed, sin(angle) * speed), }); } return data; }
-function simulate() { let data = uniformStorage(particles); let idx = index.x;
-data[idx].position = data[idx].position + data[idx].velocity; } function
-display() { let data = uniformStorage(particles); worldInputs.begin(); let pos
-= data[instanceIndex].position; worldInputs.position.xy += pos - [width / 2,
-height / 2]; worldInputs.end(); } function draw() { background(30); if
-(frameCount % 60 === 0) { particles.update(makeParticles(random(width),
-random(height))); } compute(computeShader, numParticles); noStroke();
-fill(255, 200, 50); shader(displayShader); instances(numParticles).sphere(2);
-} let particles; let computeShader; let displayShader; const numParticles =
-50; async function setup() { await createCanvas(100, 100, WEBGPU); let data =
-[]; for (let i = 0; i < numParticles; i++) { data.push({ position:
-createVector( random(-40, 40), random(-40, 40) ), velocity: createVector(
-random(-1, 1), random(-1, 1) ), }); } particles = createStorage(data);
-computeShader = buildComputeShader(simulate); displayShader =
-buildMaterialShader(display); describe('50 white spheres bouncing around the
-canvas.'); } function simulate() { let r = 3; let data =
-uniformStorage(particles); let idx = index.x; let pos = data[idx].position;
-let vel = data[idx].velocity; pos = pos + vel; if (pos.x > width/2 - r ||
-pos.x < -height/2 + r) { vel.x = -vel.x; pos.x = clamp(pos.x, -width/2 + r,
-width/2 - r); } if (pos.y > height/2 - r || pos.y < -height/2 + r) { vel.y =
--vel.y; pos.y = clamp(pos.y, -height/2 + r, height/2 - r); }
-data[idx].position = pos; data[idx].velocity = vel; } function display() { let
-data = uniformStorage(particles); worldInputs.begin(); let pos =
-data[instanceIndex].position; worldInputs.position.xy += pos;
-worldInputs.end(); } function draw() { background(30); compute(computeShader,
-numParticles); noStroke(); fill(255); lights(); shader(displayShader);
-instances(numParticles).sphere(3); }
-
-#### Parameters:
-
-    callback  A function building a p5.strands compute shader.
-
-#### Returns:
-
-    The compute shader.
 
 📂 *Sub-module: main*
 
@@ -19767,6 +19696,77 @@ href="#/p5/beginShape"> beginShape() </a> .
 ---
 
 
+`buildComputeShader()`                                            |p5-core-buildComputeShader|
+
+Create a new compute shader using p5.strands. A compute shader lets you run
+many calculations all at once on your GPU. They are similar to a <a
+href="#/p5/for> for loop, </a> but each iteration of the loop happens in
+parallel on the GPU rather than running one after the other. This makes them
+ideal for calculations or simulations involving many items. You create a
+compute shader by passing a function to buildComputeShader . The function
+represents one iteration of a loop. The compute shader can be run by calling
+<a href="#/p5/compute"> compute() </a> and passing the shader in, along with
+the number of iterations in up to three dimensions. Use the <a
+href="#/p5/index"> index </a> vector inside of your iteration function to
+refer to the current iteration of the loop. The x , y , and z properties will
+count up from zero to the count in each dimension passed into compute . A
+compute shader will read from and write to storage, which is often an array of
+numbers or objects. Use <a href="#/p5/createStorage"> createStorage </a> to
+construct initial data. Connect your iteration function to the storage by
+passing the storage into <a href="#/p5/uniformStorage"> uniformStorage </a> .
+Often, compute shaders are paired with <a href="#/p5/instances">
+instances(count) </a> to draw one instance per object in the storage, and a
+shader that uses <a href="#/p5/instanceIndex"> instanceIndex </a> to position
+each instance. let particles; let computeShader; let displayShader; const
+numParticles = 100; async function setup() { await createCanvas(100, 100,
+WEBGPU); particles = createStorage(makeParticles(width / 2, height / 2));
+computeShader = buildComputeShader(simulate); displayShader =
+buildMaterialShader(display); describe('100 orange particles shooting
+outward.'); } function makeParticles(x, y) { let data = []; for (let i = 0; i
+< numParticles; i++) { let angle = (i / numParticles) * TWO_PI; let speed =
+random(0.5, 2); data.push({ position: createVector(x, y), velocity:
+createVector(cos(angle) * speed, sin(angle) * speed), }); } return data; }
+function simulate() { let data = uniformStorage(particles); let idx = index.x;
+data[idx].position = data[idx].position + data[idx].velocity; } function
+display() { let data = uniformStorage(particles); worldInputs.begin(); let pos
+= data[instanceIndex].position; worldInputs.position.xy += pos - [width / 2,
+height / 2]; worldInputs.end(); } function draw() { background(30); if
+(frameCount % 60 === 0) { particles.update(makeParticles(random(width),
+random(height))); } compute(computeShader, numParticles); noStroke();
+fill(255, 200, 50); shader(displayShader); instances(numParticles).sphere(2);
+} let particles; let computeShader; let displayShader; const numParticles =
+50; async function setup() { await createCanvas(100, 100, WEBGPU); let data =
+[]; for (let i = 0; i < numParticles; i++) { data.push({ position:
+createVector( random(-40, 40), random(-40, 40) ), velocity: createVector(
+random(-1, 1), random(-1, 1) ), }); } particles = createStorage(data);
+computeShader = buildComputeShader(simulate); displayShader =
+buildMaterialShader(display); describe('50 white spheres bouncing around the
+canvas.'); } function simulate() { let r = 3; let data =
+uniformStorage(particles); let idx = index.x; let pos = data[idx].position;
+let vel = data[idx].velocity; pos = pos + vel; if (pos.x > width/2 - r ||
+pos.x < -height/2 + r) { vel.x = -vel.x; pos.x = clamp(pos.x, -width/2 + r,
+width/2 - r); } if (pos.y > height/2 - r || pos.y < -height/2 + r) { vel.y =
+-vel.y; pos.y = clamp(pos.y, -height/2 + r, height/2 - r); }
+data[idx].position = pos; data[idx].velocity = vel; } function display() { let
+data = uniformStorage(particles); worldInputs.begin(); let pos =
+data[instanceIndex].position; worldInputs.position.xy += pos;
+worldInputs.end(); } function draw() { background(30); compute(computeShader,
+numParticles); noStroke(); fill(255); lights(); shader(displayShader);
+instances(numParticles).sphere(3); }
+
+#### Parameters:
+
+    callback  A function building a p5.strands compute shader.
+
+#### Returns:
+
+    The compute shader.
+
+📂 *Sub-module: main*
+
+---
+
+
 `ortho()`                                            |p5-core-ortho|
 
 Sets an orthographic projection for the current camera in a 3D sketch. In an
@@ -19835,6 +19835,27 @@ texture() can only be used in WebGL mode.
 ---
 
 
+`curveDetail()`                                            |p5-core-curveDetail|
+
+Sets the number of segments used to draw spline curves in WebGL mode. In WebGL
+mode, smooth shapes are drawn using many flat segments. Adding more flat
+segments makes shapes appear smoother. The parameter, detail , is the density
+of segments to use while drawing a spline curve. Note: curveDetail() has no
+effect in 2D mode.
+
+#### Parameters:
+
+    resolution  number of segments to use. Default is 1/4
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
 `compute()`                                            |p5-core-compute|
 
 Dispatches a compute shader to run on the GPU. The first parameter, shader ,
@@ -19890,27 +19911,6 @@ cells] = [cells, nextCells]; filter(displayShader); }
     x  Number of invocations in the X dimension.
     y  Number of invocations in the Y dimension.
     z  Number of invocations in the Z dimension.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`curveDetail()`                                            |p5-core-curveDetail|
-
-Sets the number of segments used to draw spline curves in WebGL mode. In WebGL
-mode, smooth shapes are drawn using many flat segments. Adding more flat
-segments makes shapes appear smoother. The parameter, detail , is the density
-of segments to use while drawing a spline curve. Note: curveDetail() has no
-effect in 2D mode.
-
-#### Parameters:
-
-    resolution  number of segments to use. Default is 1/4
 
 #### Returns:
 
