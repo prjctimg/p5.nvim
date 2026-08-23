@@ -483,10 +483,10 @@ Table of Contents                           *p5-core-table-of-contents*
   - createSpan()              |p5-core-createSpan|
   - saveStl()              |p5-core-saveStl|
   - loadFilterShader()              |p5-core-loadFilterShader|
-  - loadModel()              |p5-core-loadModel|
-  - loadModel()              |p5-core-loadModel|
-  - loadModel()              |p5-core-loadModel|
   - rotateX()              |p5-core-rotateX|
+  - loadModel()              |p5-core-loadModel|
+  - loadModel()              |p5-core-loadModel|
+  - loadModel()              |p5-core-loadModel|
   - createFramebuffer()              |p5-core-createFramebuffer|
   - createImg()              |p5-core-createImg|
   - createImg()              |p5-core-createImg|
@@ -706,12 +706,12 @@ Table of Contents                           *p5-core-table-of-contents*
   - createRadio()              |p5-core-createRadio|
   - write()              |p5-core-write|
   - sq()              |p5-core-sq|
-  - createModel()              |p5-core-createModel|
-  - createModel()              |p5-core-createModel|
-  - createModel()              |p5-core-createModel|
   - createVideo()              |p5-core-createVideo|
   - imageMode()              |p5-core-imageMode|
   - imageMode()              |p5-core-imageMode|
+  - createModel()              |p5-core-createModel|
+  - createModel()              |p5-core-createModel|
+  - createModel()              |p5-core-createModel|
   - loadFont()              |p5-core-loadFont|
   - loadFont()              |p5-core-loadFont|
   - createAudio()              |p5-core-createAudio|
@@ -786,27 +786,28 @@ Table of Contents                           *p5-core-table-of-contents*
   - ortho()              |p5-core-ortho|
   - curveDetail()              |p5-core-curveDetail|
   - normalTexture()              |p5-core-normalTexture|
-  - specularTexture()              |p5-core-specularTexture|
-  - ambientTexture()              |p5-core-ambientTexture|
-  - shininessTexture()              |p5-core-shininessTexture|
   - frustum()              |p5-core-frustum|
   - instances()              |p5-core-instances|
   - compute()              |p5-core-compute|
+  - bumpTexture()              |p5-core-bumpTexture|
   - createCamera()              |p5-core-createCamera|
   - splineProperty()              |p5-core-splineProperty|
   - splineProperty()              |p5-core-splineProperty|
   - setCamera()              |p5-core-setCamera|
-  - textureMode()              |p5-core-textureMode|
-  - textureMode()              |p5-core-textureMode|
+  - specularTexture()              |p5-core-specularTexture|
   - splineProperties()              |p5-core-splineProperties|
+  - ambientTexture()              |p5-core-ambientTexture|
+  - shininessTexture()              |p5-core-shininessTexture|
   - vertex()              |p5-core-vertex|
   - vertex()              |p5-core-vertex|
   - vertex()              |p5-core-vertex|
+  - textureMode()              |p5-core-textureMode|
+  - textureMode()              |p5-core-textureMode|
+  - beginContour()              |p5-core-beginContour|
+  - endContour()              |p5-core-endContour|
   - textureWrap()              |p5-core-textureWrap|
   - textureWrap()              |p5-core-textureWrap|
   - normalMaterial()              |p5-core-normalMaterial|
-  - beginContour()              |p5-core-beginContour|
-  - endContour()              |p5-core-endContour|
   - ambientMaterial()              |p5-core-ambientMaterial|
   - ambientMaterial()              |p5-core-ambientMaterial|
   - ambientMaterial()              |p5-core-ambientMaterial|
@@ -822,7 +823,7 @@ Table of Contents                           *p5-core-table-of-contents*
 ⚙️ Core module for p5.js
 
 📦 p5.js Version: 2.3.1~
-⏰ Last Updated: 2026-08-16 03:01:24Z~
+⏰ Last Updated: 2026-08-23 03:04:10Z~
 
 ==============================================================================
 2. Functions                                                |p5-core-functions|
@@ -11451,6 +11452,32 @@ loadFilterShader('myShader.js', onLoaded) .
 ---
 
 
+`rotateX()`                                            |p5-core-rotateX|
+
+Rotates the coordinate system about the x-axis in WebGL mode. The parameter,
+angle , is the amount to rotate. For example, calling rotateX(1) rotates the
+coordinate system about the x-axis by 1 radian. rotateX() interprets angle
+values using the current <a href="#/p5/angleMode"> angleMode() </a> . By
+default, transformations accumulate. For example, calling rotateX(1) twice has
+the same effect as calling rotateX(2) once. The <a href="#/p5/push"> push()
+</a> and <a href="#/p5/pop"> pop() </a> functions can be used to isolate
+transformations within distinct drawing groups. Note: Transformations are
+reset at the beginning of the draw loop. Calling rotateX(1) inside the <a
+href="#/p5/draw"> draw() </a> function won't cause shapes to spin.
+
+#### Parameters:
+
+    angle  angle of rotation in the current <a href="#/p5/angleMode">angleMode()</a>.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
 `loadModel()`                                            |p5-core-loadModel|
 
 Loads a 3D model to create a <a href="#/p5.Geometry"> p5.Geometry </a> object.
@@ -11462,34 +11489,38 @@ a String with the path to the file. Paths to local files should be relative,
 as in loadModel('assets/model.obj') . URLs such as
 'https://example.com/model.obj' may be blocked due to browser security. The
 path parameter can also be defined as a Request object for more advanced
-usage. Note: When loading a .obj file that references materials stored in .mtl
-files, p5.js will attempt to load and apply those materials. To ensure that
-the .obj file reads the .mtl file correctly include the .mtl file alongside
-it. The first way to call loadModel() has three optional parameters after the
-file path. The first optional parameter, successCallback , is a function to
-call once the model loads. For example, loadModel('assets/model.obj',
-handleModel) will call the handleModel() function once the model loads. The
-second optional parameter, failureCallback , is a function to call if the
-model fails to load. For example, loadModel('assets/model.obj', handleModel,
-handleFailure) will call the handleFailure() function if an error occurs while
-loading. The third optional parameter, fileType , is the model’s file
-extension as a string. For example, loadModel('assets/model', handleModel,
-handleFailure, '.obj') will try to load the file model as a .obj file. The
-second way to call loadModel() has four optional parameters after the file
-path. The first optional parameter is a Boolean value. If true is passed, as
-in loadModel('assets/model.obj', true) , then the model will be resized to
-ensure it fits the canvas. The next three parameters are successCallback ,
-failureCallback , and fileType as described above. The third way to call
-loadModel() has one optional parameter after the file path. The optional
-parameter, options , is an Object with options, as in
-loadModel('assets/model.obj', options) . The options object can have the
-following properties: let options = { // Enables standardized size scaling
-during loading if set to true. normalize: true, // Function to call once the
-model loads. successCallback: handleModel, // Function to call if an error
-occurs while loading. failureCallback: handleError, // Model's file extension.
-fileType: '.stl', // Flips the U texture coordinates of the model. flipU:
-false, // Flips the V texture coordinates of the model. flipV: false }; //
-Pass the options object to loadModel(). loadModel('assets/model.obj',
+usage. Note: When a .obj file references materials stored in a .mtl file,
+p5.js loads and applies them, so a model with several materials appears the
+way it was exported. Each material can use diffuse ( map_Kd ), specular (
+map_Ks ), ambient ( map_Ka ), shininess ( map_Ns ), bump ( map_Bump ), and
+normal ( norm ) texture maps. A bump map is read as a height map, while norm
+is read as a tangent-space normal map. Keep the .mtl file and its images
+alongside the .obj file so their paths resolve. A texture that fails to load
+is skipped with a warning instead of failing the whole model. The first way to
+call loadModel() has three optional parameters after the file path. The first
+optional parameter, successCallback , is a function to call once the model
+loads. For example, loadModel('assets/model.obj', handleModel) will call the
+handleModel() function once the model loads. The second optional parameter,
+failureCallback , is a function to call if the model fails to load. For
+example, loadModel('assets/model.obj', handleModel, handleFailure) will call
+the handleFailure() function if an error occurs while loading. The third
+optional parameter, fileType , is the model’s file extension as a string. For
+example, loadModel('assets/model', handleModel, handleFailure, '.obj') will
+try to load the file model as a .obj file. The second way to call loadModel()
+has four optional parameters after the file path. The first optional parameter
+is a Boolean value. If true is passed, as in loadModel('assets/model.obj',
+true) , then the model will be resized to ensure it fits the canvas. The next
+three parameters are successCallback , failureCallback , and fileType as
+described above. The third way to call loadModel() has one optional parameter
+after the file path. The optional parameter, options , is an Object with
+options, as in loadModel('assets/model.obj', options) . The options object can
+have the following properties: let options = { // Enables standardized size
+scaling during loading if set to true. normalize: true, // Function to call
+once the model loads. successCallback: handleModel, // Function to call if an
+error occurs while loading. failureCallback: handleError, // Model's file
+extension. fileType: '.stl', // Flips the U texture coordinates of the model.
+flipU: false, // Flips the V texture coordinates of the model. flipV: false };
+// Pass the options object to loadModel(). loadModel('assets/model.obj',
 options); This function returns a Promise and should be used in an async setup
 with await . See the examples for the usage syntax. Note: There’s no support
 for colored STL files. STL files with color will be rendered without color.
@@ -11499,12 +11530,12 @@ for colored STL files. STL files with color will be rendered without color.
     path  path of the model to be loaded.
     fileType  model’s file extension. Either `'.obj'` or `'.stl'`.
     normalize  if `true`, scale the model to fit the canvas.
-    successCallback  function to call once the model is loaded. Will be passed the <a href="#/p5.Geometry">p5.Geometry</a> object.
+    successCallback  function to call once the model is loaded. Will be passed the <a href="#/p5.Geometry">`p5.Geometry`</a> object.
     failureCallback  function to call if the model fails to load. Will be passed an `Error` event object.
 
 #### Returns:
 
-    the <a href="#/p5.Geometry">p5.Geometry</a> object
+    the <a href="#/p5.Geometry">`p5.Geometry`</a> object
 
 📂 *Sub-module: main*
 
@@ -11549,32 +11580,6 @@ for colored STL files. STL files with color will be rendered without color.
 #### Returns:
 
     new <a href="#/p5.Geometry">p5.Geometry</a> object.
-
-📂 *Sub-module: main*
-
----
-
-
-`rotateX()`                                            |p5-core-rotateX|
-
-Rotates the coordinate system about the x-axis in WebGL mode. The parameter,
-angle , is the amount to rotate. For example, calling rotateX(1) rotates the
-coordinate system about the x-axis by 1 radian. rotateX() interprets angle
-values using the current <a href="#/p5/angleMode"> angleMode() </a> . By
-default, transformations accumulate. For example, calling rotateX(1) twice has
-the same effect as calling rotateX(2) once. The <a href="#/p5/push"> push()
-</a> and <a href="#/p5/pop"> pop() </a> functions can be used to isolate
-transformations within distinct drawing groups. Note: Transformations are
-reset at the beginning of the draw loop. Calling rotateX(1) inside the <a
-href="#/p5/draw"> draw() </a> function won't cause shapes to spin.
-
-#### Parameters:
-
-    angle  angle of rotation in the current <a href="#/p5/angleMode">angleMode()</a>.
-
-#### Returns:
-
-    void
 
 📂 *Sub-module: main*
 
@@ -17070,8 +17075,12 @@ first parameter, model , is the <a href="#/p5.Geometry"> p5.Geometry </a>
 object to draw. <a href="#/p5.Geometry"> p5.Geometry </a> objects can be built
 with <a href="#/p5/buildGeometry"> buildGeometry() </a> . They can also be
 loaded from a file with <a href="#/p5/loadGeometry"> loadGeometry() </a> .
-Note: model() can only be used in WebGL mode. // Click and drag the mouse to
-view the scene from different angles. let shape; function setup() {
+Note: model() can only be used in WebGL mode. A model with several materials,
+such as a character with separate skin, shirt, and shoe materials, keeps each
+material's own colors and textures. The call to model() is the same whether
+the model has one material or many, so a model made in software such as
+Blender appears the way it was exported. // Click and drag the mouse to view
+the scene from different angles. let shape; function setup() {
 createCanvas(100, 100, WEBGL); // Create the p5.Geometry object. shape =
 buildGeometry(createShape); describe('A white cone drawn on a gray
 background.'); } function draw() { background(200); // Enable orbiting with
@@ -17442,6 +17451,78 @@ positive number. The value returned by sq() is always positive.
 ---
 
 
+`createVideo()`                                            |p5-core-createVideo|
+
+Creates a <video> element for simple audio/video playback. createVideo()
+returns a new <a href="#/p5.MediaElement"> p5.MediaElement </a> object. Videos
+are shown by default. They can be hidden by calling video.hide() and drawn to
+the canvas using <a href="#/p5/image"> image() </a> . The first parameter, src
+, is the path the video. If a single string is passed, as in
+'assets/topsecret.mp4' , a single video is loaded. An array of strings can be
+used to load the same video in different formats. For example,
+['assets/topsecret.mp4', 'assets/topsecret.ogv', 'assets/topsecret.webm'] .
+This is useful for ensuring that the video can play across different browsers
+with different capabilities. See <a
+href='https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats'>
+MDN </a> for more information about supported formats. The second parameter,
+callback , is optional. It's a function to call once the video is ready to
+play.
+
+#### Parameters:
+
+    src  path to a video file, or an array of paths for supporting different browsers.
+    callback  function to call once the video is ready to play.
+
+#### Returns:
+
+    new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
+
+📂 *Sub-module: main*
+
+---
+
+
+`imageMode()`                                            |p5-core-imageMode|
+
+Changes the location from which images are drawn when <a href="#/p5/image">
+image() </a> is called. By default, the first two parameters of <a
+href="#/p5/image"> image() </a> are the x- and y-coordinates of the image's
+upper-left corner. The next parameters are its width and height. This is the
+same as calling imageMode(CORNER) . imageMode(CORNERS) also uses the first two
+parameters of <a href="#/p5/image"> image() </a> as the x- and y-coordinates
+of the image's top-left corner. The third and fourth parameters are the
+coordinates of its bottom-right corner. imageMode(CENTER) uses the first two
+parameters of <a href="#/p5/image"> image() </a> as the x- and y-coordinates
+of the image's center. The next parameters are its width and height. Calling
+imageMode() without an argument returns the current image mode, either CORNER
+, CORNERS , or CENTER .
+
+#### Parameters:
+
+    mode  either CORNER, CORNERS, or CENTER.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`imageMode()`                                            |p5-core-imageMode|
+
+
+
+#### Returns:
+
+    the current image mode
+
+📂 *Sub-module: main*
+
+---
+
+
 `createModel()`                                            |p5-core-createModel|
 
 Load a 3d model from an OBJ or STL string. OBJ and STL files lack a built-in
@@ -17513,78 +17594,6 @@ Flips the V texture coordinates of the model.
 #### Returns:
 
     the <a href="#/p5.Geometry">p5.Geometry</a> object
-
-📂 *Sub-module: main*
-
----
-
-
-`createVideo()`                                            |p5-core-createVideo|
-
-Creates a <video> element for simple audio/video playback. createVideo()
-returns a new <a href="#/p5.MediaElement"> p5.MediaElement </a> object. Videos
-are shown by default. They can be hidden by calling video.hide() and drawn to
-the canvas using <a href="#/p5/image"> image() </a> . The first parameter, src
-, is the path the video. If a single string is passed, as in
-'assets/topsecret.mp4' , a single video is loaded. An array of strings can be
-used to load the same video in different formats. For example,
-['assets/topsecret.mp4', 'assets/topsecret.ogv', 'assets/topsecret.webm'] .
-This is useful for ensuring that the video can play across different browsers
-with different capabilities. See <a
-href='https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats'>
-MDN </a> for more information about supported formats. The second parameter,
-callback , is optional. It's a function to call once the video is ready to
-play.
-
-#### Parameters:
-
-    src  path to a video file, or an array of paths for supporting different browsers.
-    callback  function to call once the video is ready to play.
-
-#### Returns:
-
-    new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
-
-📂 *Sub-module: main*
-
----
-
-
-`imageMode()`                                            |p5-core-imageMode|
-
-Changes the location from which images are drawn when <a href="#/p5/image">
-image() </a> is called. By default, the first two parameters of <a
-href="#/p5/image"> image() </a> are the x- and y-coordinates of the image's
-upper-left corner. The next parameters are its width and height. This is the
-same as calling imageMode(CORNER) . imageMode(CORNERS) also uses the first two
-parameters of <a href="#/p5/image"> image() </a> as the x- and y-coordinates
-of the image's top-left corner. The third and fourth parameters are the
-coordinates of its bottom-right corner. imageMode(CENTER) uses the first two
-parameters of <a href="#/p5/image"> image() </a> as the x- and y-coordinates
-of the image's center. The next parameters are its width and height. Calling
-imageMode() without an argument returns the current image mode, either CORNER
-, CORNERS , or CENTER .
-
-#### Parameters:
-
-    mode  either CORNER, CORNERS, or CENTER.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`imageMode()`                                            |p5-core-imageMode|
-
-
-
-#### Returns:
-
-    the current image mode
 
 📂 *Sub-module: main*
 
@@ -19910,72 +19919,20 @@ shape and its surface normals get perturbed by the map, so lights react to
 detail that isn't actually in the geometry. This is the same kind of map glTF
 models use. Pass an optional scale to tune the strength. Call
 normalTexture(null) to turn it off, or scope it between <a href="#/p5/push">
-push() </a> and <a href="#/p5/pop"> pop() </a> .
+push() </a> and <a href="#/p5/pop"> pop() </a> . <a href="#/p5/bumpTexture">
+bumpTexture() </a> creates a similar effect from a grayscale height map
+instead. The two are easy to mix up because they produce similar results, but
+they expect different images: a normal map is the blue-tinted kind that stores
+directions, while a bump map is grayscale and stores height. Only one can be
+active at a time, so setting one replaces the other. A light source is needed
+to see the effect. Models loaded with <a href="#/p5/loadModel"> loadModel()
+</a> apply their own normal map from the .mtl file's map_Bump . Note:
+normalTexture() can only be used in WebGL mode.
 
 #### Parameters:
 
     tex  normal map, or `null` to clear it.
     scale  strength multiplier for the surface detail.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`specularTexture()`                                            |p5-core-specularTexture|
-
-Sets a specular map to vary the specular highlight across a shape's surface.
-Works like <a href="#/p5/texture"> texture() </a> but for the specular colour,
-modulating <a href="#/p5/specularMaterial"> specularMaterial() </a> per pixel.
-Call specularTexture(null) to clear it, or scope it with push()/pop().
-
-#### Parameters:
-
-    tex  specular map, or `null` to clear it.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`ambientTexture()`                                            |p5-core-ambientTexture|
-
-Sets an ambient map to vary the ambient colour across a shape's surface. Works
-like <a href="#/p5/texture"> texture() </a> but for the ambient colour,
-modulating <a href="#/p5/ambientMaterial"> ambientMaterial() </a> per pixel.
-Call ambientTexture(null) to clear it, or scope it with push()/pop().
-
-#### Parameters:
-
-    tex  ambient map, or `null` to clear it.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`shininessTexture()`                                            |p5-core-shininessTexture|
-
-Sets a shininess map to vary the shininess across a shape's surface. Works
-like <a href="#/p5/texture"> texture() </a> but for shininess: the map's red
-channel scales the base <a href="#/p5/shininess"> shininess() </a> value per
-pixel. Call shininessTexture(null) to clear it, or scope it with push()/pop().
-
-#### Parameters:
-
-    tex  shininess map, or `null` to clear it.
 
 #### Returns:
 
@@ -20114,6 +20071,39 @@ cells] = [cells, nextCells]; filter(displayShader); }
 ---
 
 
+`bumpTexture()`                                            |p5-core-bumpTexture|
+
+Sets a grayscale image that adds bumps and dents to a shape's surface. A bump
+map is a height map: the brightness of the image at each point is read as how
+high the surface is there, and p5.js works out which way the surface tilts
+from how quickly that height changes. Bright areas rise and dark areas sink,
+so lights react to detail that isn't in the geometry. bumpTexture() works like
+<a href="#/p5/texture"> texture() </a> , but sets the bump map instead of the
+base color. The parameter, tex , is the image to use. Passing null clears it,
+as in bumpTexture(null) . The optional second parameter, scale , tunes how
+pronounced the bumps are. The map can also be scoped between <a
+href="#/p5/push"> push() </a> and <a href="#/p5/pop"> pop() </a> . <a
+href="#/p5/normalTexture"> normalTexture() </a> creates a similar effect from
+a tangent-space normal map, the blue-tinted kind that stores directions rather
+than height. A bump map is usually easier to make by hand, since it's just a
+grayscale picture of where the surface is high and low. Only one can be active
+at a time, so setting one replaces the other. A light source is needed to see
+the effect. Note: bumpTexture() can only be used in WebGL mode.
+
+#### Parameters:
+
+    tex  grayscale image to use as the bump map, or `null` to clear it.
+    scale  strength multiplier for the bumps.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
 `createCamera()`                                            |p5-core-createCamera|
 
 Creates a new <a href="#/p5.Camera"> p5.Camera </a> object. The new camera is
@@ -20219,62 +20209,28 @@ createCamera() </a> . Note: setCamera() can only be used in WebGL mode.
 ---
 
 
-`textureMode()`                                            |p5-core-textureMode|
+`specularTexture()`                                            |p5-core-specularTexture|
 
-Changes the coordinate system used for textures when they’re applied to custom
-shapes. In order for <a href="#/p5/texture"> texture() </a> to work, a shape
-needs a way to map the points on its surface to the pixels in an image.
-Built-in shapes such as <a href="#/p5/rect"> rect() </a> and <a
-href="#/p5/box"> box() </a> already have these texture mappings based on their
-vertices. Custom shapes created with <a href="#/p5/vertex"> vertex() </a>
-require texture mappings to be passed as uv coordinates. Each call to <a
-href="#/p5/vertex"> vertex() </a> must include 5 arguments, as in vertex(x, y,
-z, u, v) , to map the vertex at coordinates (x, y, z) to the pixel at
-coordinates (u, v) within an image. For example, the corners of a rectangular
-image are mapped to the corners of a rectangle by default: // Apply the image
-as a texture. texture(img); // Draw the rectangle. rect(0, 0, 30, 50); If the
-image in the code snippet above has dimensions of 300 x 500 pixels, the same
-result could be achieved as follows: // Apply the image as a texture.
-texture(img); // Draw the rectangle. beginShape(); // Top-left. // u: 0, v: 0
-vertex(0, 0, 0, 0, 0); // Top-right. // u: 300, v: 0 vertex(30, 0, 0, 300, 0);
-// Bottom-right. // u: 300, v: 500 vertex(30, 50, 0, 300, 500); //
-Bottom-left. // u: 0, v: 500 vertex(0, 50, 0, 0, 500); endShape();
-textureMode() changes the coordinate system for uv coordinates. The parameter,
-mode , accepts two possible constants. If NORMAL is passed, as in
-textureMode(NORMAL) , then the texture’s uv coordinates can be provided in the
-range 0 to 1 instead of the image’s dimensions. This can be helpful for using
-the same code for multiple images of different sizes. For example, the code
-snippet above could be rewritten as follows: // Set the texture mode to use
-normalized coordinates. textureMode(NORMAL); // Apply the image as a texture.
-texture(img); // Draw the rectangle. beginShape(); // Top-left. // u: 0, v: 0
-vertex(0, 0, 0, 0, 0); // Top-right. // u: 1, v: 0 vertex(30, 0, 0, 1, 0); //
-Bottom-right. // u: 1, v: 1 vertex(30, 50, 0, 1, 1); // Bottom-left. // u: 0,
-v: 1 vertex(0, 50, 0, 0, 1); endShape(); By default, mode is IMAGE , which
-scales uv coordinates to the dimensions of the image. Calling
-textureMode(IMAGE) applies the default. Note: textureMode() can only be used
-in WebGL mode. Calling textureMode() with no arguments returns the current
-texture mode.
+Sets an image that controls where a shape looks glossy. A specular map lets
+one shape mix polished and worn surfaces. It works like <a
+href="#/p5/texture"> texture() </a> , but instead of setting the base color,
+the map's color at each point scales the highlight set by <a
+href="#/p5/specularMaterial"> specularMaterial() </a> . Bright parts of the
+map stay shiny and dark parts look matte. The parameter, tex , is the image to
+use as the specular map. Passing null clears it, as in specularTexture(null) .
+The map can also be scoped between <a href="#/p5/push"> push() </a> and <a
+href="#/p5/pop"> pop() </a> . A light source is needed to see the effect.
+Models loaded with <a href="#/p5/loadModel"> loadModel() </a> apply their own
+specular map from the .mtl file's map_Ks . Note: specularTexture() can only be
+used in WebGL mode.
 
 #### Parameters:
 
-    mode  either IMAGE or NORMAL.
+    tex  image to use as the specular map, or `null` to clear it.
 
 #### Returns:
 
     void
-
-📂 *Sub-module: main*
-
----
-
-
-`textureMode()`                                            |p5-core-textureMode|
-
-
-
-#### Returns:
-
-    The current texture mode, either IMAGE or NORMAL.
 
 📂 *Sub-module: main*
 
@@ -20304,6 +20260,62 @@ splineProperties() or <a href="#/p5/splineProperty"> splineProperty() </a> .
 #### Parameters:
 
     values  an object containing spline property key-value pairs
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`ambientTexture()`                                            |p5-core-ambientTexture|
+
+Sets an image that controls the color a shape reflects from ambient light. An
+ambient map varies the color set by <a href="#/p5/ambientMaterial">
+ambientMaterial() </a> across a surface, so different parts of one shape can
+pick up ambient light differently. It works like <a href="#/p5/texture">
+texture() </a> , but the map's color is applied to the ambient term rather
+than the base color. The parameter, tex , is the image to use as the ambient
+map. Passing null clears it, as in ambientTexture(null) . The map can also be
+scoped between <a href="#/p5/push"> push() </a> and <a href="#/p5/pop"> pop()
+</a> . An <a href="#/p5/ambientLight"> ambientLight() </a> is needed to see
+the effect. Models loaded with <a href="#/p5/loadModel"> loadModel() </a>
+apply their own ambient map from the .mtl file's map_Ka . Note:
+ambientTexture() can only be used in WebGL mode.
+
+#### Parameters:
+
+    tex  image to use as the ambient map, or `null` to clear it.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`shininessTexture()`                                            |p5-core-shininessTexture|
+
+Sets an image that controls how tight a shape's highlights are. A shininess
+map varies the value set by <a href="#/p5/shininess"> shininess() </a> across
+a surface. Only the map's red channel is read, and it scales the base
+shininess, so bright areas get a small, sharp highlight and dark areas get a
+broad, soft one. This lets a single shape look polished in some places and
+dull in others. The parameter, tex , is the image to use as the shininess map.
+Passing null clears it, as in shininessTexture(null) . The map can also be
+scoped between <a href="#/p5/push"> push() </a> and <a href="#/p5/pop"> pop()
+</a> . A light source and <a href="#/p5/specularMaterial"> specularMaterial()
+</a> are needed to see the effect. Models loaded with <a
+href="#/p5/loadModel"> loadModel() </a> apply their own shininess map from the
+.mtl file's map_Ns . Note: shininessTexture() can only be used in WebGL mode.
+
+#### Parameters:
+
+    tex  image to use as the shininess map, or `null` to clear it.
 
 #### Returns:
 
@@ -20370,6 +20382,131 @@ href="#/p5/endShape"> endShape() </a> . By default, u and v are both 0.
     z  
     u  u-coordinate of the vertex's texture.
     v  v-coordinate of the vertex's texture.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`textureMode()`                                            |p5-core-textureMode|
+
+Changes the coordinate system used for textures when they’re applied to custom
+shapes. In order for <a href="#/p5/texture"> texture() </a> to work, a shape
+needs a way to map the points on its surface to the pixels in an image.
+Built-in shapes such as <a href="#/p5/rect"> rect() </a> and <a
+href="#/p5/box"> box() </a> already have these texture mappings based on their
+vertices. Custom shapes created with <a href="#/p5/vertex"> vertex() </a>
+require texture mappings to be passed as uv coordinates. Each call to <a
+href="#/p5/vertex"> vertex() </a> must include 5 arguments, as in vertex(x, y,
+z, u, v) , to map the vertex at coordinates (x, y, z) to the pixel at
+coordinates (u, v) within an image. For example, the corners of a rectangular
+image are mapped to the corners of a rectangle by default: // Apply the image
+as a texture. texture(img); // Draw the rectangle. rect(0, 0, 30, 50); If the
+image in the code snippet above has dimensions of 300 x 500 pixels, the same
+result could be achieved as follows: // Apply the image as a texture.
+texture(img); // Draw the rectangle. beginShape(); // Top-left. // u: 0, v: 0
+vertex(0, 0, 0, 0, 0); // Top-right. // u: 300, v: 0 vertex(30, 0, 0, 300, 0);
+// Bottom-right. // u: 300, v: 500 vertex(30, 50, 0, 300, 500); //
+Bottom-left. // u: 0, v: 500 vertex(0, 50, 0, 0, 500); endShape();
+textureMode() changes the coordinate system for uv coordinates. The parameter,
+mode , accepts two possible constants. If NORMAL is passed, as in
+textureMode(NORMAL) , then the texture’s uv coordinates can be provided in the
+range 0 to 1 instead of the image’s dimensions. This can be helpful for using
+the same code for multiple images of different sizes. For example, the code
+snippet above could be rewritten as follows: // Set the texture mode to use
+normalized coordinates. textureMode(NORMAL); // Apply the image as a texture.
+texture(img); // Draw the rectangle. beginShape(); // Top-left. // u: 0, v: 0
+vertex(0, 0, 0, 0, 0); // Top-right. // u: 1, v: 0 vertex(30, 0, 0, 1, 0); //
+Bottom-right. // u: 1, v: 1 vertex(30, 50, 0, 1, 1); // Bottom-left. // u: 0,
+v: 1 vertex(0, 50, 0, 0, 1); endShape(); By default, mode is IMAGE , which
+scales uv coordinates to the dimensions of the image. Calling
+textureMode(IMAGE) applies the default. Note: textureMode() can only be used
+in WebGL mode. Calling textureMode() with no arguments returns the current
+texture mode.
+
+#### Parameters:
+
+    mode  either IMAGE or NORMAL.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`textureMode()`                                            |p5-core-textureMode|
+
+
+
+#### Returns:
+
+    The current texture mode, either IMAGE or NORMAL.
+
+📂 *Sub-module: main*
+
+---
+
+
+`beginContour()`                                            |p5-core-beginContour|
+
+Begins creating a hole within a flat shape. The beginContour() and <a
+href="#/p5/endContour"> endContour() </a> functions allow for creating
+negative space within custom shapes that are flat. beginContour() begins
+adding vertices to a negative space and <a href="#/p5/endContour">
+endContour() </a> stops adding them. beginContour() and <a
+href="#/p5/endContour"> endContour() </a> must be called between <a
+href="#/p5/beginShape"> beginShape() </a> and <a href="#/p5/endShape">
+endShape() </a> . Transformations such as <a href="#/p5/translate">
+translate() </a> , <a href="#/p5/rotate"> rotate() </a> , and <a
+href="#/p5/scale"> scale() </a> don't work between beginContour() and <a
+href="#/p5/endContour"> endContour() </a> . It's also not possible to use
+other shapes, such as <a href="#/p5/ellipse"> ellipse() </a> or <a
+href="#/p5/rect"> rect() </a> , between beginContour() and <a
+href="#/p5/endContour"> endContour() </a> . Note: The vertices that define a
+negative space must "wind" in the opposite direction from the outer shape.
+First, draw vertices for the outer shape clockwise order. Then, draw vertices
+for the negative space in counter-clockwise order.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`endContour()`                                            |p5-core-endContour|
+
+Stops creating a hole within a flat shape. The <a href="#/p5/beginContour">
+beginContour() </a> and endContour() functions allow for creating negative
+space within custom shapes that are flat. <a href="#/p5/beginContour">
+beginContour() </a> begins adding vertices to a negative space and
+endContour() stops adding them. <a href="#/p5/beginContour"> beginContour()
+</a> and endContour() must be called between <a href="#/p5/beginShape">
+beginShape() </a> and <a href="#/p5/endShape"> endShape() </a> . By default,
+the controur has an OPEN end, and to close it, call endContour(CLOSE) . The
+CLOSE contour mode closes splines smoothly. Transformations such as <a
+href="#/p5/translate"> translate() </a> , <a href="#/p5/rotate"> rotate() </a>
+, and <a href="#/p5/scale"> scale() </a> don't work between <a
+href="#/p5/beginContour"> beginContour() </a> and endContour() . It's also not
+possible to use other shapes, such as <a href="#/p5/ellipse"> ellipse() </a>
+or <a href="#/p5/rect"> rect() </a> , between <a href="#/p5/beginContour">
+beginContour() </a> and endContour() . Note: The vertices that define a
+negative space must "wind" in the opposite direction from the outer shape.
+First, draw vertices for the outer shape clockwise order. Then, draw vertices
+for the negative space in counter-clockwise order.
+
+#### Parameters:
+
+    mode  By default, the value is OPEN
 
 #### Returns:
 
@@ -20457,69 +20594,6 @@ surfaces facing the x-axis to red, those facing the y-axis to green, and those
 facing the z-axis to blue. Normal material isn't affected by light. It’s often
 used as a placeholder material when debugging. Note: normalMaterial() can only
 be used in WebGL mode.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`beginContour()`                                            |p5-core-beginContour|
-
-Begins creating a hole within a flat shape. The beginContour() and <a
-href="#/p5/endContour"> endContour() </a> functions allow for creating
-negative space within custom shapes that are flat. beginContour() begins
-adding vertices to a negative space and <a href="#/p5/endContour">
-endContour() </a> stops adding them. beginContour() and <a
-href="#/p5/endContour"> endContour() </a> must be called between <a
-href="#/p5/beginShape"> beginShape() </a> and <a href="#/p5/endShape">
-endShape() </a> . Transformations such as <a href="#/p5/translate">
-translate() </a> , <a href="#/p5/rotate"> rotate() </a> , and <a
-href="#/p5/scale"> scale() </a> don't work between beginContour() and <a
-href="#/p5/endContour"> endContour() </a> . It's also not possible to use
-other shapes, such as <a href="#/p5/ellipse"> ellipse() </a> or <a
-href="#/p5/rect"> rect() </a> , between beginContour() and <a
-href="#/p5/endContour"> endContour() </a> . Note: The vertices that define a
-negative space must "wind" in the opposite direction from the outer shape.
-First, draw vertices for the outer shape clockwise order. Then, draw vertices
-for the negative space in counter-clockwise order.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`endContour()`                                            |p5-core-endContour|
-
-Stops creating a hole within a flat shape. The <a href="#/p5/beginContour">
-beginContour() </a> and endContour() functions allow for creating negative
-space within custom shapes that are flat. <a href="#/p5/beginContour">
-beginContour() </a> begins adding vertices to a negative space and
-endContour() stops adding them. <a href="#/p5/beginContour"> beginContour()
-</a> and endContour() must be called between <a href="#/p5/beginShape">
-beginShape() </a> and <a href="#/p5/endShape"> endShape() </a> . By default,
-the controur has an OPEN end, and to close it, call endContour(CLOSE) . The
-CLOSE contour mode closes splines smoothly. Transformations such as <a
-href="#/p5/translate"> translate() </a> , <a href="#/p5/rotate"> rotate() </a>
-, and <a href="#/p5/scale"> scale() </a> don't work between <a
-href="#/p5/beginContour"> beginContour() </a> and endContour() . It's also not
-possible to use other shapes, such as <a href="#/p5/ellipse"> ellipse() </a>
-or <a href="#/p5/rect"> rect() </a> , between <a href="#/p5/beginContour">
-beginContour() </a> and endContour() . Note: The vertices that define a
-negative space must "wind" in the opposite direction from the outer shape.
-First, draw vertices for the outer shape clockwise order. Then, draw vertices
-for the negative space in counter-clockwise order.
-
-#### Parameters:
-
-    mode  By default, the value is OPEN
 
 #### Returns:
 
