@@ -1,0 +1,4 @@
+- Look at the current implementation of the chrome devtools protocol and ensure that it matches the specification and delivers what it promises. 
+- Also look at some missing/stubbed features in the codebase
+
+Look for LLM patterns in the codebase and clean it up
