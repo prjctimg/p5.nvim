@@ -22,3 +22,5 @@ jobs:
 
       - name: Trigger release job
         run: gh workflow run release.yml --ref main -f tag=nightly
+        env:
+          GH_TOKEN: ${{ github.token }}
