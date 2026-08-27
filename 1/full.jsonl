@@ -20,17 +20,17 @@
     },
     "cost": 0,
     "tokens": {
-      "input": 1166865,
-      "output": 105566,
+      "input": 1167814,
+      "output": 106166,
       "reasoning": 0,
       "cache": {
-        "read": 16094464,
+        "read": 16295168,
         "write": 0
       }
     },
     "time": {
       "created": 1787828345159,
-      "updated": 1787834097008
+      "updated": 1787834233839
     }
   },
   "messages": [
@@ -249188,19 +249188,22 @@
         },
         "cost": 0,
         "tokens": {
-          "input": 0,
-          "output": 0,
+          "total": 50113,
+          "input": 90,
+          "output": 103,
           "reasoning": 0,
           "cache": {
-            "read": 0,
-            "write": 0
+            "write": 0,
+            "read": 49920
           }
         },
         "modelID": "big-pickle",
         "providerID": "opencode",
         "time": {
-          "created": 1787834096999
+          "created": 1787834096999,
+          "completed": 1787834141678
         },
+        "finish": "tool-calls",
         "id": "msg_043375d67002iEzlk4QJs7POaR",
         "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
       },
@@ -249217,21 +249220,321 @@
           "tool": "bash",
           "callID": "call_3c94f5abd889409d912da685",
           "state": {
-            "metadata": {
-              "output": ""
-            },
-            "status": "running",
+            "status": "completed",
             "input": {
               "command": "git add .github/workflows/nightly.yml && git commit -m \"ci: grant actions:write for nightly dispatch\" && git push origin main",
               "workdir": "/home/prjctimg/workspace/p5.nvim"
             },
+            "output": "[main ac0864e] ci: grant actions:write for nightly dispatch\n 1 file changed, 1 insertion(+)\n[entire] Pushing 1 checkpoint ref(s) to origin......... done\nTo github.com:prjctimg/p5.nvim.git\n   ebc5432..ac0864e  main -> main\n",
+            "metadata": {
+              "output": "[main ac0864e] ci: grant actions:write for nightly dispatch\n 1 file changed, 1 insertion(+)\n[entire] Pushing 1 checkpoint ref(s) to origin......... done\nTo github.com:prjctimg/p5.nvim.git\n   ebc5432..ac0864e  main -> main\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "git add .github/workflows/nightly.yml && git commit -m \"ci: grant actions:write for nightly dispatch\" && git push origin main",
             "time": {
-              "start": 1787834099965
+              "start": 1787834141467,
+              "end": 1787834141487
             }
           },
           "id": "prt_0433766ee001ifMK61T9Bs8UA6",
           "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
           "messageID": "msg_043375d67002iEzlk4QJs7POaR"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-finish",
+          "tokens": {
+            "total": 50113,
+            "input": 90,
+            "output": 103,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 49920
+            }
+          },
+          "cost": 0,
+          "id": "prt_043380b84001piRtpkcE6YKabT",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043375d67002iEzlk4QJs7POaR"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 50279,
+          "input": 276,
+          "output": 83,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 49920
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834141881,
+          "completed": 1787834219142
+        },
+        "finish": "tool-calls",
+        "id": "msg_043380cb9001YjrVRzzbt60WW1",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-start",
+          "id": "prt_043389374001S9yqnRPG8321Sn",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043380cb9001YjrVRzzbt60WW1"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_57e41f91cc884914b8b5ec3d",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "sleep 40 && gh run list --limit 6",
+              "workdir": "/home/prjctimg/workspace/p5.nvim"
+            },
+            "output": "completed\tsuccess\tRelease\tRelease\tmain\tworkflow_dispatch\t33072624691\t30s\t2026-08-27T12:35:51Z\ncompleted\tsuccess\tci: grant actions:write for nightly dispatch\tNightly\tmain\tpush\t33072614436\t11s\t2026-08-27T12:35:44Z\ncompleted\tfailure\tci: pass GH_TOKEN to release trigger\tNightly\tmain\tpush\t33072448226\t8s\t2026-08-27T12:33:42Z\ncompleted\tfailure\tci: set git identity for nightly tag\tNightly\tmain\tpush\t33072247974\t7s\t2026-08-27T12:31:15Z\ncompleted\tfailure\tci: trigger nightly release via workflow_dispatch\tNightly\tmain\tpush\t33072124205\t8s\t2026-08-27T12:29:46Z\ncompleted\tfailure\tci: add nightly release on push to main\tNightly\tmain\tpush\t33071524698\t6s\t2026-08-27T12:22:05Z\n",
+            "metadata": {
+              "output": "completed\tsuccess\tRelease\tRelease\tmain\tworkflow_dispatch\t33072624691\t30s\t2026-08-27T12:35:51Z\ncompleted\tsuccess\tci: grant actions:write for nightly dispatch\tNightly\tmain\tpush\t33072614436\t11s\t2026-08-27T12:35:44Z\ncompleted\tfailure\tci: pass GH_TOKEN to release trigger\tNightly\tmain\tpush\t33072448226\t8s\t2026-08-27T12:33:42Z\ncompleted\tfailure\tci: set git identity for nightly tag\tNightly\tmain\tpush\t33072247974\t7s\t2026-08-27T12:31:15Z\ncompleted\tfailure\tci: trigger nightly release via workflow_dispatch\tNightly\tmain\tpush\t33072124205\t8s\t2026-08-27T12:29:46Z\ncompleted\tfailure\tci: add nightly release on push to main\tNightly\tmain\tpush\t33071524698\t6s\t2026-08-27T12:22:05Z\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "sleep 40 && gh run list --limit 6",
+            "time": {
+              "start": 1787834218879,
+              "end": 1787834218899
+            }
+          },
+          "id": "prt_04338937e001zbao7sPyEAv1CQ",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043380cb9001YjrVRzzbt60WW1"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-finish",
+          "tokens": {
+            "total": 50279,
+            "input": 276,
+            "output": 83,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 49920
+            }
+          },
+          "cost": 0,
+          "id": "prt_043393a5d001eVJQT3TLHQ1BJi",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043380cb9001YjrVRzzbt60WW1"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 50717,
+          "input": 364,
+          "output": 177,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 50176
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834219316,
+          "completed": 1787834233670
+        },
+        "finish": "tool-calls",
+        "id": "msg_043393b34001qKfiTbIwHgUJsS",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-start",
+          "id": "prt_04339556b001Gcq095417RPC35",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        },
+        {
+          "type": "reasoning",
+          "text": "Both runs succeeded:\n- Nightly (33072614436): success — pushed the tag, dispatched release.yml.\n- Release (33072624691): success via workflow_dispatch — tests ran and release created.\n\nLet me verify the release was actually created on the `nightly` tag and check it's a prerelease.",
+          "time": {
+            "start": 1787834226036,
+            "end": 1787834226746
+          },
+          "id": "prt_043395574001eADndt30ZgXbWS",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        },
+        {
+          "type": "text",
+          "text": "Both succeeded. Verifying the release was created on the `nightly` tag:",
+          "time": {
+            "start": 1787834226754,
+            "end": 1787834227355
+          },
+          "id": "prt_043395842001PmY2qBFD4noVPE",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_9d6953e5e1b949e6b9310712",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "gh release list --limit 5 && echo \"--- tag ---\" && git ls-remote --tags origin nightly",
+              "workdir": "/home/prjctimg/workspace/p5.nvim"
+            },
+            "output": "nightly\tPre-release\tnightly\t2026-08-27T12:36:18Z\nv0.7.12\tLatest\tv0.7.12\t2026-08-05T12:48:17Z\nv0.7.11\t\tv0.7.11\t2026-08-05T12:47:55Z\nv0.7.1\t\tv0.7.1\t2026-05-31T15:01:35Z\nv0.7.0-alpha.1\tPre-release\tv0.7.0-alpha.1\t2026-05-30T18:15:40Z\n--- tag ---\n741b886949c7c931e42cc6108b615eb0984c7d43\trefs/tags/nightly\n",
+            "metadata": {
+              "output": "nightly\tPre-release\tnightly\t2026-08-27T12:36:18Z\nv0.7.12\tLatest\tv0.7.12\t2026-08-05T12:48:17Z\nv0.7.11\t\tv0.7.11\t2026-08-05T12:47:55Z\nv0.7.1\t\tv0.7.1\t2026-05-31T15:01:35Z\nv0.7.0-alpha.1\tPre-release\tv0.7.0-alpha.1\t2026-05-30T18:15:40Z\n--- tag ---\n741b886949c7c931e42cc6108b615eb0984c7d43\trefs/tags/nightly\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "gh release list --limit 5 && echo \"--- tag ---\" && git ls-remote --tags origin nightly",
+            "time": {
+              "start": 1787834233318,
+              "end": 1787834233364
+            }
+          },
+          "id": "prt_04339584f001uf0hUofKmOO1Ht",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-finish",
+          "tokens": {
+            "total": 50717,
+            "input": 364,
+            "output": 177,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 50176
+            }
+          },
+          "cost": 0,
+          "id": "prt_043397308001Elg0bB4ktJQz57",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 51144,
+          "input": 219,
+          "output": 237,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 50688
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834233833,
+          "completed": 1787834240120
+        },
+        "finish": "stop",
+        "id": "msg_0433973e9002IL4dUgb67YjXmw",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-start",
+          "id": "prt_0433982b2001oGePvtsR43Y8Zi",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_0433973e9002IL4dUgb67YjXmw"
+        },
+        {
+          "type": "reasoning",
+          "text": "Everything works:\n- Nightly workflow: success\n- Release workflow (triggered by workflow_dispatch): success — ran tests, created release on `nightly` tag.\n- `nightly` release is a Pre-release (correct — doesn't displace v0.7.12 Latest).\n- `nightly` tag moved to the new commit.\n\nLet me check the `after: true`? No. All done. Let me summarize tersely.\n\nCheck git status for the whole chain of commits pushed. Give summary.",
+          "time": {
+            "start": 1787834237650,
+            "end": 1787834238673
+          },
+          "id": "prt_0433982d2001St0U8BeYmt4B3I",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_0433973e9002IL4dUgb67YjXmw"
+        },
+        {
+          "type": "text",
+          "text": "Fixed. The flow now works end-to-end on every push to `main`:\n\n- **Nightly** (push to main): force-moves the `nightly` tag → dispatches `release.yml`\n- **Release** (via `workflow_dispatch`): runs test suite → creates the release for the `nightly` tag (marked pre-release, so `v0.7.12` stays \"Latest\")\n\nAll stale failures are history; the `nightly` release and tag both exist at the newest commit. No PAT secret needed — `GITHUB_TOKEN` works since dispatching is the sanctioned exception.",
+          "time": {
+            "start": 1787834238681,
+            "end": 1787834239931
+          },
+          "id": "prt_0433986d9001faSFICMg3Mu8P2",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_0433973e9002IL4dUgb67YjXmw"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-finish",
+          "tokens": {
+            "total": 51144,
+            "input": 219,
+            "output": 237,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 50688
+            }
+          },
+          "cost": 0,
+          "id": "prt_043398c3e001QvxtSDze5vmfGo",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_0433973e9002IL4dUgb67YjXmw"
         }
       ]
     }
