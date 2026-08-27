@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "01M11JEQ5V5JST44Y0R7EQ02MB",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 11,
+  "files_touched": [
+    "CHANGES.md",
+    "README.md",
+    "lua/p5/cdp.lua",
+    "lua/p5/commands.lua",
+    "lua/p5/core.lua",
+    "lua/p5/health.lua",
+    "lua/p5/init.lua",
+    "lua/p5/server.lua",
+    "server.py",
+    "tests/p5/cdp_spec.lua",
+    "tests/p5/server_spec.lua",
+    "tests/test_cdp_client.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1113873,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 14733568,
+    "output_tokens": 93859,
+    "api_call_count": 205
+  }
+}
