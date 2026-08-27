@@ -59,7 +59,6 @@ C.state = {
 	active_tab = 1,
 	port = nil,
 	connected = false,
-	connect_attempts = 0,
 	page_url = "",
 	console_filter = "all",
 	search = "",
@@ -67,12 +66,16 @@ C.state = {
 	browser_launched = false,
 	chrome_temp_dir = nil,
 	sse_buffer = "",
+	sse = {
+		attempts = 0,
+		max_attempts = 5,
+		delay = 1000,
+	},
 	terminal = {
 		timer = nil,
 		attempts = 0,
 		max_attempts = 5,
 		delay = 1000,
-		connected = false,
 		last_error = 0,
 		clear_interval = 30000,
 	},
@@ -688,9 +691,9 @@ C.close = function()
 	C.state.sse_buffer = ""
 	close_browser()
 	if C.state.terminal then
-		C.state.terminal.connected = false
 		C.state.terminal.attempts = 0
 	end
+	C.state.sse.attempts = 0
 end
 
 C._set_keymaps = function(buf)
@@ -916,15 +919,31 @@ C._start_sse_job = function()
 			vim.schedule(function()
 				C.state.job_id = nil
 				C.state.sse_buffer = ""
-				if C.state.buf and is_buf(C.state.buf) and C.state.connected then
-					notify("CDP stream disconnected, reconnecting...", "info")
-					vim.defer_fn(function()
-						C._start_sse_job()
-					end, 1000)
-				end
+				C._sse_reconnect()
 			end)
 		end,
 	})
+	if C.state.job_id > 0 then
+		C.state.sse.attempts = 0
+	end
+end
+
+C._sse_reconnect = function()
+	if not C.state.buf or not is_buf(C.state.buf) or not C.state.connected then
+		return false
+	end
+	local s = C.state.sse
+	s.attempts = s.attempts + 1
+	if s.attempts > s.max_attempts then
+		notify("CDP stream reconnection failed: max attempts reached", "warn")
+		return false
+	end
+	local delay = s.delay * (2 ^ (s.attempts - 1))
+	notify("CDP stream disconnected, reconnecting...", "info")
+	vim.defer_fn(function()
+		C._start_sse_job()
+	end, delay)
+	return true
 end
 
 C._on_event = function(data)

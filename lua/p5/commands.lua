@@ -334,7 +334,7 @@ Cm.setup = function(opts)
 	end
 
 	local subcommands = vim.tbl_filter(function(k)
-		return k ~= "sync" and k ~= "console"
+		return k ~= "sync"
 	end, vim.tbl_keys(handlers))
 
 	local function get_completion(line)

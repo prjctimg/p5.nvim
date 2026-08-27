@@ -7,11 +7,7 @@ C.split_cmd = {
 	right = "belowright vsplit",
 }
 
-C.server_cfg = {
-	check = "python3",
-	script = "server.py",
-	cmd = "python3",
-}
+C.server_cfg = "python3"
 
 local fn = vim.fn
 

@@ -11,7 +11,6 @@ local commands = require("p5.commands")
 I.config = {
 	server = {
 		port = 8000,
-		auto_start = false,
 		auto_open_browser = true,
 		live_reload = {
 			enabled = true,
@@ -72,7 +71,11 @@ I.setup = function(opts)
 
 	core.config = I.config
 	project.config = I.config
-	server.config = vim.tbl_deep_extend("force", server.config, I.config)
+	server.config = vim.tbl_deep_extend(
+		"force",
+		server.config,
+		vim.tbl_extend("force", I.config.server or {}, { cdp = I.config.cdp or {} })
+	)
 	libraries.config = vim.tbl_deep_extend("force", libraries.config, I.config)
 	gist.config = I.config
 	cdp.config = vim.tbl_deep_extend("force", cdp.config, I.config.cdp or {})

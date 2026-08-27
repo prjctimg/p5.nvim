@@ -87,7 +87,7 @@ class TestCDPClientHandleMessage(unittest.TestCase):
 
     def test_console_api_event(self):
         params = {
-            'level': 'warning',
+            'type': 'warning',
             'args': [{'type': 'string', 'value': 'hello'}],
         }
         asyncio.run(self.c._handle_message({'method': 'Runtime.consoleAPICalled', 'params': params}))
@@ -100,7 +100,7 @@ class TestCDPClientHandleMessage(unittest.TestCase):
 
     def test_console_api_with_stack(self):
         params = {
-            'level': 'error',
+            'type': 'error',
             'args': [{'type': 'string', 'value': 'fail'}],
             'stackTrace': {
                 'callFrames': [
@@ -490,21 +490,29 @@ class TestCDPClientHandleConsoleApi(unittest.TestCase):
         cases = [
             ('warning', 'warn'),
             ('error', 'error'),
+            ('assert', 'error'),
             ('debug', 'log'),
             ('info', 'info'),
             ('log', 'log'),
             ('unknown', 'log'),
+            ('', 'log'),
         ]
-        for cdp_level, expected in cases:
-            with self.subTest(level=cdp_level):
-                params = {'level': cdp_level, 'args': [{'type': 'string', 'value': 'test'}]}
+        for cdp_type, expected in cases:
+            with self.subTest(type=cdp_type):
+                params = {'type': cdp_type, 'args': [{'type': 'string', 'value': 'test'}]}
                 asyncio.run(self.c._handle_console_api(params))
                 events = self.c.drain_events()
                 self.assertEqual(events[0][1]['level'], expected)
 
+    def test_level_field_is_ignored(self):
+        params = {'level': 'error', 'args': [{'type': 'string', 'value': 'test'}]}
+        asyncio.run(self.c._handle_console_api(params))
+        events = self.c.drain_events()
+        self.assertEqual(events[0][1]['level'], 'log')
+
     def test_multiple_args(self):
         params = {
-            'level': 'log',
+            'type': 'log',
             'args': [
                 {'type': 'string', 'value': 'count:'},
                 {'type': 'number', 'value': 42},
@@ -929,13 +937,13 @@ class TestLiveReloadServerIntegration(unittest.IsolatedAsyncioTestCase):
             await self.server.close()
 
     async def test_start_and_close(self):
-        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        self.server = LiveReloadServer(port=0, directory='/tmp')
         await self.server.start()
         self.assertIsNotNone(self.server.server)
         self.assertGreater(self.server.port, 0)
 
     async def test_client_connects_and_receives_message(self):
-        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        self.server = LiveReloadServer(port=0, directory='/tmp')
         await self.server.start()
         async with websockets.connect(f'ws://localhost:{self.server.port}') as ws:
             msg = await asyncio.wait_for(ws.recv(), timeout=5.0)
@@ -943,7 +951,7 @@ class TestLiveReloadServerIntegration(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(data['type'], 'connected')
 
     async def test_broadcast_to_connected_client(self):
-        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        self.server = LiveReloadServer(port=0, directory='/tmp')
         await self.server.start()
         async with websockets.connect(f'ws://localhost:{self.server.port}') as ws:
             # Consume the 'connected' message first
@@ -956,7 +964,7 @@ class TestLiveReloadServerIntegration(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(data['file'], 'test.js')
 
     async def test_broadcast_to_multiple_clients(self):
-        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        self.server = LiveReloadServer(port=0, directory='/tmp')
         await self.server.start()
         async with websockets.connect(f'ws://localhost:{self.server.port}') as ws1, \
                     websockets.connect(f'ws://localhost:{self.server.port}') as ws2:
@@ -970,7 +978,7 @@ class TestLiveReloadServerIntegration(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(json.loads(msg2)['type'], 'reload')
 
     async def test_disconnected_client_is_removed(self):
-        self.server = LiveReloadServer(port=0, directory='/tmp', file_watcher=None)
+        self.server = LiveReloadServer(port=0, directory='/tmp')
         await self.server.start()
         async with websockets.connect(f'ws://localhost:{self.server.port}') as ws:
             await asyncio.sleep(0.1)

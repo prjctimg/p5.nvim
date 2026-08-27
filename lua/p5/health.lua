@@ -16,14 +16,14 @@ H.check_dependencies = function()
 	if snacks then
 		ok("snacks.nvim: available")
 	else
-		error("snacks.nvim: not found - required for UI components")
+		warn("snacks.nvim: not found - optional, the HUD falls back to a plain terminal console")
 	end
 
-	local plenary_ok, _ = pcall(require, "plenary")
-	if plenary_ok then
+	local plenary, _ = pcall(require, "plenary")
+	if plenary then
 		ok("plenary.nvim: available")
 	else
-		error("plenary.nvim: not found - required for async operations")
+		warn("plenary.nvim: not found - only required for running the test suite")
 	end
 end
 

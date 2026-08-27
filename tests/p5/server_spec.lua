@@ -178,6 +178,61 @@ describe("server.start live_reload CLI args", function()
     assert.truthy(joined:match("9999"))
     S.config.live_reload.port = 12002
   end)
+
+  it("forwards --cdp-port from config", function()
+    S.config.cdp = { remote_debugging_port = 9333, enabled = true }
+    S.start(8000)
+    assert.truthy(captured_cmd[1])
+    local joined = table.concat(captured_cmd[1], " ")
+    assert.truthy(joined:match("%-%-cdp%-port"))
+    assert.truthy(joined:match("9333"))
+    S.config.cdp = nil
+  end)
+
+  it("does not pass --cdp-port when cdp config is absent", function()
+    S.config.cdp = nil
+    S.start(8000)
+    assert.truthy(captured_cmd[1])
+    local joined = table.concat(captured_cmd[1], " ")
+    assert.falsy(joined:match("%-%-cdp%-port"))
+  end)
+end)
+
+describe("server config wiring", function()
+  local S = require("p5.server")
+  local I = require("p5.init")
+
+  local function merged(user)
+    local base = vim.deepcopy(I.config)
+    if user then
+      base = vim.tbl_deep_extend("force", base, user)
+    end
+    return vim.tbl_deep_extend(
+      "force",
+      vim.deepcopy(S.config),
+      vim.tbl_extend("force", base.server or {}, { cdp = base.cdp or {} })
+    )
+  end
+
+  it("places server.* options at top level", function()
+    local m = merged()
+    assert.equals(m.port, 8000)
+    assert.is_true(m.auto_open_browser)
+    assert.is_table(m.live_reload)
+    assert.equals(m.live_reload.port, 12002)
+    assert.equals(m.cdp.remote_debugging_port, 9222)
+  end)
+
+  it("propagates user server and cdp overrides", function()
+    local m = merged({
+      server = { port = 8123, auto_open_browser = false },
+      cdp = { remote_debugging_port = 9333 },
+    })
+    assert.equals(m.port, 8123)
+    assert.is_false(m.auto_open_browser)
+    assert.equals(m.live_reload.port, 12002)
+    assert.equals(m.cdp.remote_debugging_port, 9333)
+  end)
 end)
 
 describe("server.stop_server", function()

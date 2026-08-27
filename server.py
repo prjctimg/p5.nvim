@@ -91,13 +91,13 @@ def format_log_entry(level: str, message: str, source: str = "browser") -> str:
     """Format a log entry with ANSI colors and emojis for terminal display."""
     timestamp = datetime.now().strftime("%H:%M:%S")
     level = level.lower()
-    
+
     emoji = EMOJI_MAP.get(level, '📝')
     level_color = ANSI_COLORS.get(level.lower(), ANSI_COLORS['log'])
     time_color = ANSI_COLORS['timestamp']
     source_color = ANSI_COLORS['source']
     reset = ANSI_COLORS['reset']
-    
+
     return (
         f"{time_color}[{timestamp}]{reset} "
         f"{emoji} "
@@ -129,21 +129,19 @@ INJECT_LIVERELOAD = read_inject_script("livereload.js")
 
 class ConsoleBuffer:
     """Ring buffer for console logs with configurable size."""
-    
+
     def __init__(self, max_size: int = 1000):
         self.buffer = deque(maxlen=max_size)
         self.max_size = max_size
-    
+
     def append(self, entry: dict):
-        """Add entry to buffer."""
         self.buffer.append(entry)
-    
+
     def get_all(self) -> list:
-        """Get all entries and clear buffer."""
         entries = list(self.buffer)
         self.buffer.clear()
         return entries
-    
+
     def __len__(self):
         return len(self.buffer)
 
@@ -241,6 +239,7 @@ class CDPClient:
     async def disconnect(self):
         self.connected = False
         self._paused_frame_id = None
+        self._perf_prev.clear()
         self.pending_requests.clear()
         if self._recv_task:
             self._recv_task.cancel()
@@ -404,10 +403,10 @@ class CDPClient:
 
     async def _handle_console_api(self, params: dict):
         level_map = {
-            'warning': 'warn', 'error': 'error',
+            'warning': 'warn', 'error': 'error', 'assert': 'error',
             'debug': 'log', 'info': 'info', 'log': 'log',
         }
-        level = level_map.get(params.get('level', 'log'), 'log')
+        level = level_map.get(params.get('type', 'log'), 'log')
         args = params.get('args', [])
         messages = []
         for a in args:
@@ -544,16 +543,14 @@ class CDPClient:
 
 class LiveReloadServer:
     """WebSocket server for live reload using asyncio."""
-    
-    def __init__(self, port: int, directory: str, file_watcher):
+
+    def __init__(self, port: int, directory: str):
         self.port = port
         self.directory = directory
-        self.file_watcher = file_watcher
         self.clients = set()
         self.server = None
-    
+
     async def handler(self, websocket):
-        """Handle WebSocket client connection."""
         self.clients.add(websocket)
         try:
             await websocket.send(json.dumps({"type": "connected", "message": "Live reload connected"}))
@@ -562,9 +559,8 @@ class LiveReloadServer:
             pass
         finally:
             self.clients.discard(websocket)
-    
+
     async def start(self):
-        """Start the WebSocket server."""
         for offset in range(10):
             try:
                 self.server = await websockets.serve(
@@ -577,15 +573,13 @@ class LiveReloadServer:
             except OSError:
                 continue
         print("Warning: Could not start live reload server")
-    
+
     async def broadcast(self, message: dict):
-        """Broadcast message to all connected clients."""
         data = json.dumps(message)
-        
         # Take a snapshot to avoid concurrent modification during iteration
         clients_snapshot = set(self.clients)
         disconnected = set()
-        
+
         for client in clients_snapshot:
             try:
                 await client.send(data)
@@ -593,16 +587,15 @@ class LiveReloadServer:
                 disconnected.add(client)
             except Exception:
                 disconnected.add(client)
-        
+
         for client in disconnected:
             self.clients.discard(client)
             try:
                 await client.close()
             except Exception:
                 pass
-    
+
     async def close(self):
-        """Close the server and all connections."""
         for client in list(self.clients):
             try:
                 await client.close()
@@ -616,7 +609,7 @@ class LiveReloadServer:
 
 class FileWatcher:
     """Async file watcher using asyncio."""
-    
+
     def __init__(self, directory: str, extensions: list, exclude_dirs: list, debounce_ms: int):
         self.directory = directory
         self.extensions = extensions
@@ -625,31 +618,28 @@ class FileWatcher:
         self.last_trigger = 0
         self.running = False
         self._task: Optional[asyncio.Task] = None
-    
+
     def should_watch(self, path: str) -> bool:
-        """Check if file should be watched."""
         path_obj = Path(path)
-        
-        # Check exclusion dirs
+
         for part in path_obj.parts:
             if part in self.exclude_dirs:
                 return False
-        
-        # Check extensions
+
         return any(str(path).endswith(ext) for ext in self.extensions)
-    
+
     async def watch(self):
         """Watch for file changes - only trigger on actual file saves."""
         self.running = True
         last_mtimes = {}
         pending_changes = {}  # Track files that have changed but not yet stable
-        
+
         while self.running:
             try:
                 current_mtimes = {}
                 for root, dirs, files in os.walk(self.directory):
                     dirs[:] = [d for d in dirs if d not in self.exclude_dirs]
-                    
+
                     for file in files:
                         path = os.path.join(root, file)
                         if self.should_watch(path):
@@ -657,57 +647,54 @@ class FileWatcher:
                                 current_mtimes[path] = os.path.getmtime(path)
                             except OSError:
                                 continue
-                
+
                 now = datetime.now().timestamp()
-                
+
                 # Check for actual file changes (mtime differs from last known)
                 for path, mtime in current_mtimes.items():
                     last_mtime = last_mtimes.get(path)
-                    
+
                     if last_mtime is None:
                         # First time seeing this file - skip
                         continue
-                    
+
                     if mtime != last_mtime:
                         # File has changed - mark as pending
                         if path not in pending_changes:
                             pending_changes[path] = now
-                
+
                 # Check pending changes for stability
                 for path, change_time in list(pending_changes.items()):
                     current_mtime = current_mtimes.get(path)
                     last_mtime = last_mtimes.get(path)
-                    
+
                     if current_mtime is None:
                         # File was deleted
                         del pending_changes[path]
                         continue
-                    
+
                     if current_mtime == last_mtime and (now - change_time) >= self.debounce_ms:
                         # File is stable (not changing) and has been stable long enough
                         del pending_changes[path]
                         if now - self.last_trigger > self.debounce_ms:
                             self.last_trigger = now
                             yield path
-                
+
                 last_mtimes = current_mtimes
                 await asyncio.sleep(0.3)
-                
+
             except Exception as e:
                 print(f"File watcher error: {e}")
                 await asyncio.sleep(1)
-    
+
     def start(self, callback):
-        """Start the file watcher."""
         self._task = asyncio.create_task(self._run_watcher(callback))
-    
+
     async def _run_watcher(self, callback):
-        """Run the watcher loop."""
         async for path in self.watch():
             await callback(path)
-    
+
     async def stop(self):
-        """Stop the file watcher."""
         self.running = False
         if self._task:
             self._task.cancel()
@@ -719,7 +706,7 @@ class FileWatcher:
 
 class HTTPServer:
     """Async HTTP server with SSE console streaming."""
-    
+
     def __init__(self, port: int, directory: str, console_buffer: ConsoleBuffer, live_reload_server: LiveReloadServer):
         self.port = port
         self.directory = directory
@@ -728,30 +715,26 @@ class HTTPServer:
         self.server: Optional[asyncio.Server] = None
         self.running = True
         self.cdp_client: Optional[CDPClient] = None
-    
+
     async def handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-        """Handle incoming HTTP client request."""
         try:
-            # Read request line
             request_line = await reader.readline()
             if not request_line:
                 writer.close()
                 await writer.wait_closed()
                 return
-            
+
             request_line = request_line.decode().strip()
-            
-            # Parse request
+
             parts = request_line.split()
             if len(parts) < 2:
                 writer.close()
                 await writer.wait_closed()
                 return
-            
+
             method = parts[0]
             path = parts[1]
-            
-            # Read headers
+
             headers = {}
             while True:
                 line = await reader.readline()
@@ -761,8 +744,7 @@ class HTTPServer:
                 if ':' in header:
                     key, value = header.split(':', 1)
                     headers[key.strip().lower()] = value.strip()
-            
-            # Route request
+
             if method == 'POST' and path == '/api/console/log':
                 await self.handle_console_log(reader, writer, headers)
             elif method == 'GET' and path == '/api/console/stream':
@@ -773,7 +755,7 @@ class HTTPServer:
                 await self.handle_cdp(method, path, reader, writer, headers)
             else:
                 await self.handle_static(method, path, reader, writer, headers)
-                
+
         except Exception as e:
             print(f"Error handling client: {e}")
         finally:
@@ -782,15 +764,15 @@ class HTTPServer:
                 await writer.wait_closed()
             except Exception:
                 pass
-    
+
     async def handle_console_log(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
         """Handle POST /api/console/log - receive logs from browser."""
         content_length = int(headers.get('content-length', 0))
         body = await reader.read(content_length)
-        
+
         try:
             log_data = json.loads(body.decode('utf-8'))
-            
+
             # Handle batch logs
             if log_data.get('type') == 'console_batch' and 'logs' in log_data:
                 for entry in log_data['logs']:
@@ -798,12 +780,10 @@ class HTTPServer:
                         entry['timestamp'] = datetime.now().isoformat()
                     self.console_buffer.append(entry)
             else:
-                # Individual log
                 if 'timestamp' not in log_data:
                     log_data['timestamp'] = datetime.now().isoformat()
                 self.console_buffer.append(log_data)
-            
-            # Send response
+
             writer.write(b'HTTP/1.1 200 OK\r\n')
             writer.write(b'Content-Type: application/json\r\n')
             writer.write(b'Access-Control-Allow-Origin: *\r\n')
@@ -811,7 +791,7 @@ class HTTPServer:
             writer.write(b'\r\n')
             writer.write(json.dumps({"status": "received"}).encode())
             await writer.drain()
-            
+
         except Exception as e:
             writer.write(b'HTTP/1.1 400 Bad Request\r\n')
             writer.write(b'Content-Type: application/json\r\n')
@@ -820,10 +800,9 @@ class HTTPServer:
             writer.write(b'\r\n')
             writer.write(json.dumps({"error": "Invalid request"}).encode())
             await writer.drain()
-    
+
     async def handle_console_stream(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
         """Handle GET /api/console/stream - SSE streaming endpoint."""
-        # Send SSE headers
         writer.write(b'HTTP/1.1 200 OK\r\n')
         writer.write(b'Content-Type: text/plain; charset=utf-8\r\n')
         writer.write(b'Cache-Control: no-cache\r\n')
@@ -832,23 +811,22 @@ class HTTPServer:
         writer.write(b'X-Accel-Buffering: no\r\n')
         writer.write(b'\r\n')
         await writer.drain()
-        
+
         # Exponential backoff: 15s → 30s → 60s → 120s → max 300s
         base_interval = 15
         current_interval = base_interval
         max_interval = 300
         heartbeat_count = 0
-        
+
         try:
             while self.running:
-                # Get buffered logs
                 logs = self.console_buffer.get_all()
-                
+
                 # Send buffered logs and reset exponential backoff
                 if logs:
                     current_interval = base_interval  # Reset to 15s
                     heartbeat_count = 0
-                    
+
                     for log_entry in logs:
                         level = log_entry.get('level', 'log')
                         message = log_entry.get('message', '')
@@ -856,19 +834,17 @@ class HTTPServer:
                         formatted = format_log_entry(level, message, source)
                         writer.write(f"data: {formatted}\n\n".encode())
                         await writer.drain()
-                
+
                 # Send silent keepalive (SSE comment) to prevent connection timeout
                 heartbeat_count += 1
                 if heartbeat_count >= current_interval:
                     heartbeat_count = 0
                     writer.write(b': heartbeat\n\n')
                     await writer.drain()
-                    # Exponential backoff
                     current_interval = min(current_interval * 2, max_interval)
-                
-                # Wait before next check
+
                 await asyncio.sleep(1)
-                
+
         except (BrokenPipeError, ConnectionResetError, asyncio.CancelledError):
             pass
         finally:
@@ -877,9 +853,8 @@ class HTTPServer:
                 await writer.wait_closed()
             except Exception:
                 pass
-    
+
     async def handle_health(self, writer: asyncio.StreamWriter):
-        """Handle GET /api/health - health check endpoint."""
         writer.write(b'HTTP/1.1 200 OK\r\n')
         writer.write(b'Content-Type: application/json\r\n')
         writer.write(b'Access-Control-Allow-Origin: *\r\n')
@@ -1159,18 +1134,16 @@ class HTTPServer:
         await self._json_response(writer, {'status': 'cleared'})
 
     async def handle_static(self, method: str, path: str, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
-        """Handle static file serving."""
         if method != 'GET':
             writer.write(b'HTTP/1.1 405 Method Not Allowed\r\n')
             writer.write(b'Connection: close\r\n')
             writer.write(b'\r\n')
             await writer.drain()
             return
-        
-        # Handle root path
+
         if path == '/':
             path = '/index.html'
-        
+
         # Prevent directory traversal - check resolved path stays within allowed directory
         try:
             resolved = Path(self.directory, path.lstrip('/')).resolve()
@@ -1187,10 +1160,9 @@ class HTTPServer:
             writer.write(b'\r\n')
             await writer.drain()
             return
-        
-        # Build file path
+
         file_path = os.path.join(self.directory, path.lstrip('/'))
-        
+
         # Generate index.html on-the-fly if it doesn't exist
         if path == '/index.html' and not os.path.isfile(file_path):
             content = self.generate_index_html()
@@ -1204,7 +1176,7 @@ class HTTPServer:
             writer.write(content)
             await writer.drain()
             return
-        
+
         if not os.path.isfile(file_path):
             writer.write(b'HTTP/1.1 404 Not Found\r\n')
             writer.write(b'Content-Type: text/plain\r\n')
@@ -1214,8 +1186,7 @@ class HTTPServer:
             writer.write(b'File not found')
             await writer.drain()
             return
-        
-        # Determine content type
+
         ext = os.path.splitext(file_path)[1].lower()
         mime_types = {
             '.html': 'text/html',
@@ -1230,17 +1201,15 @@ class HTTPServer:
             '.ttf': 'application/font-ttf',
         }
         content_type = mime_types.get(ext, 'application/octet-stream')
-        
-        # Read file
+
         try:
             with open(file_path, 'rb') as f:
                 content = f.read()
-            
+
             # Inject scripts for HTML files
             if ext == '.html':
                 content = self.inject_scripts(content)
-            
-            # Send response
+
             writer.write(b'HTTP/1.1 200 OK\r\n')
             writer.write(f'Content-Type: {content_type}\r\n'.encode())
             writer.write(f'Content-Length: {len(content)}\r\n'.encode())
@@ -1249,14 +1218,14 @@ class HTTPServer:
             writer.write(b'\r\n')
             writer.write(content)
             await writer.drain()
-            
+
         except Exception as e:
             writer.write(b'HTTP/1.1 500 Internal Server Error\r\n')
             writer.write(b'Connection: close\r\n')
             writer.write(b'\r\n')
             writer.write(b'An error occurred while processing your request')
             await writer.drain()
-    
+
     def generate_index_html(self) -> str:
         """Generate index.html on-the-fly based on p5.json libs."""
         p5_json_path = os.path.join(self.directory, 'p5.json')
@@ -1265,13 +1234,13 @@ class HTTPServer:
             try:
                 with open(p5_json_path, 'r') as f:
                     config = json.load(f)
-            except:
+            except Exception:
                 pass
-        
+
         libs = config.get('libs', {})
         version = config.get('version', '2.0.0')
         title = config.get('gist', {}).get('title', 'p5.js Sketch')
-        
+
         # Auto-create sketch.js if missing
         sketch_js_path = os.path.join(self.directory, 'sketch.js')
         if not os.path.isfile(sketch_js_path):
@@ -1285,17 +1254,17 @@ function draw() {
 }'''
             with open(sketch_js_path, 'w') as f:
                 f.write(default_sketch)
-        
+
         # Build script tags for core and contrib libs
         scripts = []
         scripts.append('  <script src="assets/libs/p5.js"></script>')
-        
+
         for lib_name in libs.keys():
             lib_version = libs[lib_name]
             scripts.append(f'  <script src="assets/libs/{lib_name}.js"></script>')
-        
+
         scripts.append('  <script src="assets/libs/libs.js"></script>')
-        
+
         html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1312,7 +1281,7 @@ function draw() {
 </body>
 </html>'''
         return html
-    
+
     def inject_scripts(self, html_content: bytes) -> bytes:
         """Inject console and live reload scripts into HTML."""
         content = html_content.decode('utf-8', errors='ignore')
@@ -1343,9 +1312,8 @@ function draw() {
             content += scripts
 
         return content.encode('utf-8')
-    
+
     async def start(self):
-        """Start the HTTP server."""
         try:
             self.server, self.port = await try_start_server(
                 self.handle_client, 'localhost', self.port
@@ -1354,9 +1322,8 @@ function draw() {
         except OSError:
             print(f"Error starting server on port {self.port}")
             raise
-    
+
     async def close(self):
-        """Close the HTTP server."""
         self.running = False
         if self.server:
             self.server.close()
@@ -1364,20 +1331,18 @@ function draw() {
 
 
 async def main():
-    """Main entry point."""
     directory = os.getcwd()
-    
+
     # Create components
     console_buffer = ConsoleBuffer(max_size=CONFIG['console']['buffer_size'])
-    
+
     lr_config = CONFIG['live_reload']
-    
+
     live_reload_server = LiveReloadServer(
         port=lr_config['port'],
         directory=directory,
-        file_watcher=None,
     )
-    
+
     file_watcher = None
     if lr_config['enabled']:
         file_watcher = FileWatcher(
@@ -1386,25 +1351,22 @@ async def main():
             exclude_dirs=lr_config['exclude_dirs'],
             debounce_ms=lr_config['debounce_ms']
         )
-        live_reload_server.file_watcher = file_watcher
-    
+
     http_server = HTTPServer(
         port=CONFIG['port'],
         directory=directory,
         console_buffer=console_buffer,
         live_reload_server=live_reload_server
     )
-    
-    # Start servers
+
     if lr_config['enabled']:
         await live_reload_server.start()
     await http_server.start()
-    
+
     # Update live reload port in config if it changed
     if live_reload_server.server:
         lr_config['port'] = live_reload_server.port
-    
-    # Start file watcher
+
     if file_watcher and lr_config['enabled']:
         async def on_file_change(path: str):
             message = {
@@ -1417,27 +1379,24 @@ async def main():
                 print(f"Reload triggered for: {path}")
             except Exception:
                 pass
-        
+
         file_watcher.start(on_file_change)
-    
-    # Handle shutdown
+
     shutdown_event = asyncio.Event()
-    
+
     def signal_handler():
         print("\nShutting down server...")
         shutdown_event.set()
-    
+
     loop = asyncio.get_event_loop()
     for sig in (signal.SIGTERM, signal.SIGINT):
         try:
             loop.add_signal_handler(sig, signal_handler)
         except NotImplementedError:
             pass
-    
-    # Wait for shutdown
+
     await shutdown_event.wait()
-    
-    # Cleanup
+
     print("Closing connections...")
     if file_watcher:
         await file_watcher.stop()

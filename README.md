@@ -79,8 +79,7 @@ A directory that has a `p5.json` file is called a `sketchspace`. The file looks 
   "includes": ["sketch.js"],
   "gist": {
     "url": "username/gistId",
-    "title": "My Sketch",
-    "description": "Description from gist comment"
+    "title": "My Sketch"
   }
 }
 ```
@@ -88,7 +87,7 @@ A directory that has a `p5.json` file is called a `sketchspace`. The file looks 
 - `version`: p5.js version to use
 - `libs`: Object with library names as keys and their versions as values
 - `includes`: Files to include in the Gist (default: `["sketch.js"]`)
-- `gist`: Gist metadata object (optional) with `url` (`"user/gistId"`), `title`, and `description`
+- `gist`: Gist metadata object (optional) with `url` (`"user/gistId"`) and `title`
 
 > [!important]
 >
@@ -288,11 +287,11 @@ Create, sync, or edit a GitHub Gist from your sketchspace.
 :P5 gist edit                    # Edit gist title or first comment
 ```
 
-On creation, stores `gist` as an object in `p5.json` with `url`, `title`,
-and `description` (from the gist's first comment).
+On creation, stores `gist` as an object in `p5.json` with `url` and `title`
+(from the gist's description).
 
 When syncing, compares remote vs local state and prompts per difference:
-title, description (first comment), and each source file. Files existing on
+title (the gist description) and each source file. Files existing on
 only one side are auto-accepted.
 
 Use `:P5 gist edit` to change the title or first comment — changes sync
@@ -445,7 +444,6 @@ require("p5").setup({
   -- Server settings
   server = {
     port = 8000,                    -- Server port
-    auto_start = false,             -- Auto start server when opening sketch.js
     auto_open_browser = true,      -- Open browser automatically
 
     -- Live reload settings
@@ -556,7 +554,7 @@ vim.keymap.set("n", "<leader>psd", ":P5 cdp<CR>", { desc = "Toggle CDP DevTools"
 -- Libraries
 vim.keymap.set("n", "<leader>pi", ":P5 install ", { desc = "Install library" })
 vim.keymap.set("n", "<leader>pu", ":P5 uninstall ", { desc = "Uninstall library" })
-vim.keymap.set("n", "<leader>pU", ":P5 sync libs<CR>", { desc = "Update libraries" })
+vim.keymap.set("n", "<leader>pU", ":P5 update<CR>", { desc = "Update libraries" })
 
 -- Gist
 vim.keymap.set("n", "<leader>pg", ":P5 gist ", { desc = "Create gist" })
@@ -620,7 +618,7 @@ Library installation fails or downloads timeout.
 
 ### Gist Upload/Sync Fails
 
-`:P5 gist` or `:P5 sync gist` shows an error.
+`:P5 gist` or `:P5 gist sync` shows an error.
 
 **Solutions:**
 

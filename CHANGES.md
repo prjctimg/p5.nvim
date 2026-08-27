@@ -4,6 +4,21 @@ All notable changes since v0.5.0.
 
 ---
 
+## Unreleased
+
+### Fixed
+- **Console levels** — CDP console entries read the real `Runtime.consoleAPICalled` `type` field (previously read a non-existent `level`, so every Captured message showed as `log` and Console-tab filtering never worked); `console.assert` failures now show as errors
+- **`cdp.remote_debugging_port`** — the dev server now forwards the port to `server.py` (`--cdp-port`) so a non-default debug port actually connects to Chrome
+- **Server config wiring** — `server.port` / `server.auto_open_browser` / `server.live_reload.*` are merged into the server config at the top level (`setup()` was nesting them under `server.config.server.*`, so they were silently ignored)
+- **Bounded stream reconnect** — the CDP SSE stream reconnect is capped at 5 attempts with exponential backoff instead of retrying forever
+- **Perf baseline** — the FPS `Frames` baseline is reset on disconnect so reconnect/reload can't show a bogus delta
+
+### Changed
+- Removed the undocumented `server.auto_start` option (`autocmds.server_on_enter` is the supported way to auto-start the server)
+- Docs corrected: dropped non-existent `:P5 create --1.x`, fixed `:P5 sync libs`/`:P5 gist` references and the gist `description` claim in `p5.json`
+
+---
+
 ## v0.7.12
 
 ### Changed

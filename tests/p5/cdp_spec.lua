@@ -19,9 +19,8 @@ describe("cdp", function()
 		cdp.state.port = nil
 		cdp.state.mode = nil
 		cdp.state.browser_launched = false
-		cdp.state.connect_attempts = 0
+		cdp.state.sse.attempts = 0
 		cdp.state.terminal.attempts = 0
-		cdp.state.terminal.connected = false
 		cdp.state.terminal.timer = nil
 		cdp.tab_data = {
 			console = {},
@@ -449,6 +448,48 @@ describe("cdp", function()
 				cdp.state.win = nil
 				local ok, err = pcall(cdp._terminal_reconnect)
 				assert.is_true(ok, "reconnect with no win: " .. tostring(err))
+			end)
+		end)
+
+		describe("_sse_reconnect", function()
+			local orig_defer = vim.defer_fn
+			local orig_job = cdp._start_sse_job
+			local delays = {}
+
+			before_each(function()
+				delays = {}
+				cdp.state.sse.attempts = 0
+				cdp.state.buf = vim.api.nvim_create_buf(false, true)
+				cdp.state.connected = true
+				cdp._start_sse_job = function() end
+				vim.defer_fn = function(fn, ms)
+					table.insert(delays, ms)
+				end
+			end)
+
+			after_each(function()
+				vim.defer_fn = orig_defer
+				cdp._start_sse_job = orig_job
+			end)
+
+			it("reconnects with exponential backoff up to max attempts", function()
+				for i = 1, cdp.state.sse.max_attempts do
+					assert.is_true(cdp._sse_reconnect(), "attempt " .. i .. " should reconnect")
+				end
+				assert.is_false(cdp._sse_reconnect(), "past max attempts should stop")
+				local expected = {}
+				for i = 0, cdp.state.sse.max_attempts - 1 do
+					table.insert(expected, 1000 * (2 ^ i))
+				end
+				assert.same(delays, expected)
+			end)
+
+			it("does not reconnect when disconnected or buffer gone", function()
+				cdp.state.connected = false
+				assert.is_false(cdp._sse_reconnect())
+				cdp.state.connected = true
+				cdp.state.buf = nil
+				assert.is_false(cdp._sse_reconnect())
 			end)
 		end)
 

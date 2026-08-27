@@ -10,7 +10,7 @@ local server_starting = false
 
 S.config = {
 	port = 8000,
-	auto_start = false,
+	auto_open_browser = true,
 	live_reload = {
 		enabled = true,
 		port = 12002,
@@ -66,8 +66,7 @@ S.start = function(port)
 	vim.api.nvim_set_current_dir(buffer_dir)
 
 	local type
-	local cfg = core.server_cfg
-	if core.is_cmd(cfg.check) then
+	if core.is_cmd(core.server_cfg) then
 		local server_script = core.plugin_root() .. "/server.py"
 		if core.is_file(server_script) then
 			type = "python"
@@ -170,6 +169,11 @@ S.start = function(port)
 				if lr.enabled == false then
 					table.insert(cmd, "--lr-disabled")
 				end
+			end
+
+			if S.config.cdp then
+				table.insert(cmd, "--cdp-port")
+				table.insert(cmd, tostring(S.config.cdp.remote_debugging_port or 9222))
 			end
 
 			S.server_job = vim.fn.jobstart(cmd, {
