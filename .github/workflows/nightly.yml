@@ -1,0 +1,20 @@
+name: Nightly
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+      - name: Move nightly tag
+        run: |
+          git tag -fa nightly -m "Nightly release"
+          git push -f origin nightly
