@@ -6,6 +6,11 @@ on:
       - 'v*'
       - 'nightly'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag to release
+        type: string
+        required: false
 
 jobs:
   test:
@@ -64,7 +69,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ inputs.tag || github.ref_name }}
           generate_release_notes: true
-          prerelease: ${{ startsWith(github.ref_name, 'nightly') }}
+          prerelease: ${{ startsWith(inputs.tag || github.ref_name, 'nightly') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
