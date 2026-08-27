@@ -20,17 +20,17 @@
     },
     "cost": 0,
     "tokens": {
-      "input": 1165569,
-      "output": 104968,
+      "input": 1167814,
+      "output": 106166,
       "reasoning": 0,
       "cache": {
-        "read": 15899136,
+        "read": 16295168,
         "write": 0
       }
     },
     "time": {
       "created": 1787828345159,
-      "updated": 1787833969618
+      "updated": 1787834233839
     }
   },
   "messages": [
@@ -225432,8 +225432,8 @@
           "diffs": [
             {
               "file": ".github/workflows/nightly.yml",
-              "patch": "Index: .github/workflows/nightly.yml\n===================================================================\n--- .github/workflows/nightly.yml\t\n+++ .github/workflows/nightly.yml\t\n@@ -1,20 +1,26 @@\n name: Nightly\n \n on:\n   push:\n     branches: [main]\n \n permissions:\n   contents: write\n \n jobs:\n   nightly:\n     runs-on: ubuntu-latest\n     steps:\n       - uses: actions/checkout@v4\n-        with:\n-          token: ${{ secrets.GH_PAT }}\n+\n       - name: Move nightly tag\n         run: |\n+          git config user.name \"github-actions[bot]\"\n+          git config user.email \"github-actions[bot]@users.noreply.github.com\"\n           git tag -fa nightly -m \"Nightly release\"\n-          git push -f origin nightly\n\\ No newline at end of file\n+          git push -f origin nightly\n+\n+      - name: Trigger release job\n+        run: gh workflow run release.yml --ref main -f tag=nightly\n+        env:\n+          GH_TOKEN: ${{ github.token }}\n\\ No newline at end of file\n",
-              "additions": 9,
+              "patch": "Index: .github/workflows/nightly.yml\n===================================================================\n--- .github/workflows/nightly.yml\t\n+++ .github/workflows/nightly.yml\t\n@@ -1,20 +1,27 @@\n name: Nightly\n \n on:\n   push:\n     branches: [main]\n \n permissions:\n   contents: write\n+  actions: write\n \n jobs:\n   nightly:\n     runs-on: ubuntu-latest\n     steps:\n       - uses: actions/checkout@v4\n-        with:\n-          token: ${{ secrets.GH_PAT }}\n+\n       - name: Move nightly tag\n         run: |\n+          git config user.name \"github-actions[bot]\"\n+          git config user.email \"github-actions[bot]@users.noreply.github.com\"\n           git tag -fa nightly -m \"Nightly release\"\n-          git push -f origin nightly\n\\ No newline at end of file\n+          git push -f origin nightly\n+\n+      - name: Trigger release job\n+        run: gh workflow run release.yml --ref main -f tag=nightly\n+        env:\n+          GH_TOKEN: ${{ github.token }}\n\\ No newline at end of file\n",
+              "additions": 10,
               "deletions": 3,
               "status": "modified"
             },
@@ -245150,19 +245150,22 @@
         },
         "cost": 0,
         "tokens": {
-          "input": 0,
-          "output": 0,
+          "total": 48858,
+          "input": 116,
+          "output": 102,
           "reasoning": 0,
           "cache": {
-            "read": 0,
-            "write": 0
+            "write": 0,
+            "read": 48640
           }
         },
         "modelID": "big-pickle",
         "providerID": "opencode",
         "time": {
-          "created": 1787833969607
+          "created": 1787833969607,
+          "completed": 1787834020005
         },
+        "finish": "tool-calls",
         "id": "msg_043356bc7002xgVcVKc6lfOJmG",
         "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
       },
@@ -245179,21 +245182,4359 @@
           "tool": "bash",
           "callID": "call_1553bfc87bef42748723dc5e",
           "state": {
-            "metadata": {
-              "output": ""
-            },
-            "status": "running",
+            "status": "completed",
             "input": {
               "command": "git add .github/workflows/nightly.yml && git commit -m \"ci: pass GH_TOKEN to release trigger\" && git push origin main",
               "workdir": "/home/prjctimg/workspace/p5.nvim"
             },
+            "output": "[main ebc5432] ci: pass GH_TOKEN to release trigger\n 1 file changed, 3 insertions(+), 1 deletion(-)\n[entire] Pushing 1 checkpoint ref(s) to origin......... done\nTo github.com:prjctimg/p5.nvim.git\n   c217a84..ebc5432  main -> main\n",
+            "metadata": {
+              "output": "[main ebc5432] ci: pass GH_TOKEN to release trigger\n 1 file changed, 3 insertions(+), 1 deletion(-)\n[entire] Pushing 1 checkpoint ref(s) to origin......... done\nTo github.com:prjctimg/p5.nvim.git\n   c217a84..ebc5432  main -> main\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "git add .github/workflows/nightly.yml && git commit -m \"ci: pass GH_TOKEN to release trigger\" && git push origin main",
             "time": {
-              "start": 1787833975354
+              "start": 1787834019729,
+              "end": 1787834019745
             }
           },
           "id": "prt_043357f080012JH6ESZHR3DeJw",
           "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
           "messageID": "msg_043356bc7002xgVcVKc6lfOJmG"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "c7d2c11d05a3379cbe26a17a6bf54f17f3789059",
+          "type": "step-finish",
+          "tokens": {
+            "total": 48858,
+            "input": 116,
+            "output": 102,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 48640
+            }
+          },
+          "cost": 0,
+          "id": "prt_043363013001Tc8G3b9KsSJ6Js",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043356bc7002xgVcVKc6lfOJmG"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 49029,
+          "input": 306,
+          "output": 83,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 48640
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834020187,
+          "completed": 1787834063701
+        },
+        "finish": "tool-calls",
+        "id": "msg_04336315b001N4ylx51LS75IZa",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "c7d2c11d05a3379cbe26a17a6bf54f17f3789059",
+          "type": "step-start",
+          "id": "prt_0433657cd001u6Yc9V33TWLQyI",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04336315b001N4ylx51LS75IZa"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_684e888fe2c54b28a1d4730a",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "sleep 30 && gh run list --limit 5",
+              "workdir": "/home/prjctimg/workspace/p5.nvim"
+            },
+            "output": "completed\tfailure\tci: pass GH_TOKEN to release trigger\tNightly\tmain\tpush\t33072448226\t8s\t2026-08-27T12:33:42Z\ncompleted\tfailure\tci: set git identity for nightly tag\tNightly\tmain\tpush\t33072247974\t7s\t2026-08-27T12:31:15Z\ncompleted\tfailure\tci: trigger nightly release via workflow_dispatch\tNightly\tmain\tpush\t33072124205\t8s\t2026-08-27T12:29:46Z\ncompleted\tfailure\tci: add nightly release on push to main\tNightly\tmain\tpush\t33071524698\t6s\t2026-08-27T12:22:05Z\ncompleted\tsuccess\tci: restore release workflow with guarded tests\tRelease\tv0.7.12\tpush\t31007197674\t40s\t2026-08-05T12:47:39Z\n",
+            "metadata": {
+              "output": "completed\tfailure\tci: pass GH_TOKEN to release trigger\tNightly\tmain\tpush\t33072448226\t8s\t2026-08-27T12:33:42Z\ncompleted\tfailure\tci: set git identity for nightly tag\tNightly\tmain\tpush\t33072247974\t7s\t2026-08-27T12:31:15Z\ncompleted\tfailure\tci: trigger nightly release via workflow_dispatch\tNightly\tmain\tpush\t33072124205\t8s\t2026-08-27T12:29:46Z\ncompleted\tfailure\tci: add nightly release on push to main\tNightly\tmain\tpush\t33071524698\t6s\t2026-08-27T12:22:05Z\ncompleted\tsuccess\tci: restore release workflow with guarded tests\tRelease\tv0.7.12\tpush\t31007197674\t40s\t2026-08-05T12:47:39Z\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "sleep 30 && gh run list --limit 5",
+            "time": {
+              "start": 1787834063536,
+              "end": 1787834063553
+            }
+          },
+          "id": "prt_043365ca3001GLyedrErzeanUH",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04336315b001N4ylx51LS75IZa"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "c7d2c11d05a3379cbe26a17a6bf54f17f3789059",
+          "type": "step-finish",
+          "tokens": {
+            "total": 49029,
+            "input": 306,
+            "output": 83,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 48640
+            }
+          },
+          "cost": 0,
+          "id": "prt_04336daf9001K8610CvoRVx2aV",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04336315b001N4ylx51LS75IZa"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 49339,
+          "input": 359,
+          "output": 84,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 48896
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834063860,
+          "completed": 1787834083179
+        },
+        "finish": "tool-calls",
+        "id": "msg_04336dbf4002wvCYZ99cCg4G3F",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "c7d2c11d05a3379cbe26a17a6bf54f17f3789059",
+          "type": "step-start",
+          "id": "prt_0433706af0016Z7cBl9jmRFOZb",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04336dbf4002wvCYZ99cCg4G3F"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_18860614354a4fc587a17dc8",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "gh run view 33072448226 --log-failed",
+              "workdir": "/home/prjctimg/workspace/p5.nvim"
+            },
+            "output": "nightly\tTrigger release job\t﻿2026-08-27T12:33:47.8133000Z ##[group]Run gh workflow run release.yml --ref main -f tag=nightly\nnightly\tTrigger release job\t2026-08-27T12:33:47.8133595Z ^[[36;1mgh workflow run release.yml --ref main -f tag=nightly^[[0m\nnightly\tTrigger release job\t2026-08-27T12:33:47.8176780Z shell: /usr/bin/bash -e {0}\nnightly\tTrigger release job\t2026-08-27T12:33:47.8177099Z env:\nnightly\tTrigger release job\t2026-08-27T12:33:47.8179943Z   GH_TOKEN: ***\nnightly\tTrigger release job\t2026-08-27T12:33:47.8180217Z ##[endgroup]\nnightly\tTrigger release job\t2026-08-27T12:33:48.1754576Z could not create workflow dispatch event: HTTP 403: Resource not accessible by integration (https://api.github.com/repos/prjctimg/p5.nvim/actions/workflows/221484074/dispatches)\nnightly\tTrigger release job\t2026-08-27T12:33:48.1786143Z ##[error]Process completed with exit code 1.\n",
+            "metadata": {
+              "output": "nightly\tTrigger release job\t﻿2026-08-27T12:33:47.8133000Z ##[group]Run gh workflow run release.yml --ref main -f tag=nightly\nnightly\tTrigger release job\t2026-08-27T12:33:47.8133595Z ^[[36;1mgh workflow run release.yml --ref main -f tag=nightly^[[0m\nnightly\tTrigger release job\t2026-08-27T12:33:47.8176780Z shell: /usr/bin/bash -e {0}\nnightly\tTrigger release job\t2026-08-27T12:33:47.8177099Z env:\nnightly\tTrigger release job\t2026-08-27T12:33:47.8179943Z   GH_TOKEN: ***\nnightly\tTrigger release job\t2026-08-27T12:33:47.8180217Z ##[endgroup]\nnightly\tTrigger release job\t2026-08-27T12:33:48.1754576Z could not create workflow dispatch event: HTTP 403: Resource not accessible by integration (https://api.github.com/repos/prjctimg/p5.nvim/actions/workflows/221484074/dispatches)\nnightly\tTrigger release job\t2026-08-27T12:33:48.1786143Z ##[error]Process completed with exit code 1.\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "gh run view 33072448226 --log-failed",
+            "time": {
+              "start": 1787834081354,
+              "end": 1787834081400
+            }
+          },
+          "id": "prt_04337091f001kwibhv4R402FKs",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04336dbf4002wvCYZ99cCg4G3F"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "c7d2c11d05a3379cbe26a17a6bf54f17f3789059",
+          "type": "step-finish",
+          "tokens": {
+            "total": 49339,
+            "input": 359,
+            "output": 84,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 48896
+            }
+          },
+          "cost": 0,
+          "id": "prt_0433726950011MaT6IhvUfyvOK",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04336dbf4002wvCYZ99cCg4G3F"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 49996,
+          "input": 515,
+          "output": 329,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 49152
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834083340,
+          "completed": 1787834096887
+        },
+        "finish": "tool-calls",
+        "id": "msg_04337280c001mmeba2hwQaqEUN",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "c7d2c11d05a3379cbe26a17a6bf54f17f3789059",
+          "type": "step-start",
+          "id": "prt_043374f0e0015iz05LsrhzVESo",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04337280c001mmeba2hwQaqEUN"
+        },
+        {
+          "type": "reasoning",
+          "text": "Now: `could not create workflow dispatch event: HTTP 403: Resource not accessible by integration`. \n\nThe GITHUB_TOKEN lacks permission to dispatch the workflow. `workflow_dispatch` trigger requires the `actions: write` permission (Actions: read/write) on the token. The nightly job declares `permissions: contents: write` but NOT `actions: write`. To dispatch a workflow via API, the token needs `actions: write` (or `actions: read/write`). Let me add `actions: write` to the job permissions.\n\nAlso confirm the recursive-dispatch exception: GITHUB_TOKEN-triggered workflow_dispatch does create a run (it's the sanctioned exception). The 403 here is because permissions lack `actions: write`. Fix: add `actions: write`.\n\nLet me update nightly.yml permissions:\n```yaml\npermissions:\n  contents: write\n  actions: write\n```\n\nThat should fix it.",
+          "time": {
+            "start": 1787834093349,
+            "end": 1787834094860
+          },
+          "id": "prt_043374f25001JBv4Sw5qk4xQFh",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04337280c001mmeba2hwQaqEUN"
+        },
+        {
+          "type": "text",
+          "text": "`workflow_dispatch` requires `actions: write` permission on the token:",
+          "time": {
+            "start": 1787834094869,
+            "end": 1787834096021
+          },
+          "id": "prt_043375515001wWtApEw120J74R",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04337280c001mmeba2hwQaqEUN"
+        },
+        {
+          "type": "tool",
+          "tool": "edit",
+          "callID": "call_07b3d4cc33fa44af94e4fefc",
+          "state": {
+            "status": "completed",
+            "input": {
+              "filePath": "/home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml",
+              "newString": "permissions:\n  contents: write\n  actions: write",
+              "oldString": "permissions:\n  contents: write"
+            },
+            "output": "Edit applied successfully.",
+            "metadata": {
+              "diagnostics": {
+                "/home/prjctimg/workspace/p5.nvim/lua/p5/cdp.lua": [
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `close`.",
+                    "range": {
+                      "end": {
+                        "character": 30,
+                        "line": 676
+                      },
+                      "start": {
+                        "character": 25,
+                        "line": 676
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `close`.",
+                    "range": {
+                      "end": {
+                        "character": 15,
+                        "line": 1637
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 1637
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `start`.",
+                    "range": {
+                      "end": {
+                        "character": 15,
+                        "line": 1641
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 1641
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/lua/p5/commands.lua": [
+                  {
+                    "code": "redefined-local",
+                    "message": "Redefined local `config`.",
+                    "range": {
+                      "end": {
+                        "character": 14,
+                        "line": 39
+                      },
+                      "start": {
+                        "character": 8,
+                        "line": 39
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 13,
+                              "line": 11
+                            },
+                            "start": {
+                              "character": 7,
+                              "line": 11
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/commands.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 4,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/lua/p5/libraries.lua": [
+                  {
+                    "code": "redefined-local",
+                    "message": "Redefined local `cwd`.",
+                    "range": {
+                      "end": {
+                        "character": 10,
+                        "line": 210
+                      },
+                      "start": {
+                        "character": 7,
+                        "line": 210
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 9,
+                              "line": 10
+                            },
+                            "start": {
+                              "character": 6,
+                              "line": 10
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/libraries.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 4,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/lua/p5/server.lua": [
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `next_step`.",
+                    "range": {
+                      "end": {
+                        "character": 20,
+                        "line": 141
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 141
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/lua/p5/core.lua": [
+                  {
+                    "code": "redundant-parameter",
+                    "message": "This function expects a maximum of 0 argument(s) but instead it is receiving 2.",
+                    "range": {
+                      "end": {
+                        "character": 54,
+                        "line": 372
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 372
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "redundant-parameter",
+                    "message": "This function expects a maximum of 0 argument(s) but instead it is receiving 2.",
+                    "range": {
+                      "end": {
+                        "character": 62,
+                        "line": 372
+                      },
+                      "start": {
+                        "character": 56,
+                        "line": 372
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/lua/p5/health.lua": [
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `ws_result`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 49
+                      },
+                      "start": {
+                        "character": 8,
+                        "line": 49
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/lua/p5/gist.lua": [
+                  {
+                    "code": "redefined-local",
+                    "message": "Redefined local `choice`.",
+                    "range": {
+                      "end": {
+                        "character": 24,
+                        "line": 626
+                      },
+                      "start": {
+                        "character": 18,
+                        "line": 626
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 80,
+                              "line": 560
+                            },
+                            "start": {
+                              "character": 74,
+                              "line": 560
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/gist.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 4,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/tests/p5/gist_integration_spec.lua": [
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_cmd`.",
+                    "range": {
+                      "end": {
+                        "character": 8,
+                        "line": 20
+                      },
+                      "start": {
+                        "character": 0,
+                        "line": 20
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 8,
+                              "line": 17
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 17
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "need-check-nil",
+                    "message": "Need check nil.",
+                    "range": {
+                      "end": {
+                        "character": 52,
+                        "line": 160
+                      },
+                      "start": {
+                        "character": 50,
+                        "line": 160
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 87
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 87
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 117
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 117
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 142
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 142
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 15,
+                        "line": 148
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 148
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 168
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 168
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 188
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 188
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 201
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 201
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 225
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 225
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `are`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 105
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 105
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `are`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 133
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 133
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `are`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 154
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 154
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `are`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 160
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 160
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `body`.",
+                    "range": {
+                      "end": {
+                        "character": 57,
+                        "line": 160
+                      },
+                      "start": {
+                        "character": 53,
+                        "line": 160
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `are`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 180
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 180
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `are`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 214
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 214
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 12
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 12
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/tests/init.lua": [
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `jobstart`.",
+                    "range": {
+                      "end": {
+                        "character": 15,
+                        "line": 56
+                      },
+                      "start": {
+                        "character": 0,
+                        "line": 56
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 17,
+                              "line": 11
+                            },
+                            "start": {
+                              "character": 2,
+                              "line": 11
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/tests/p5/server_spec.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `system`.",
+                    "range": {
+                      "end": {
+                        "character": 13,
+                        "line": 71
+                      },
+                      "start": {
+                        "character": 0,
+                        "line": 71
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 17,
+                              "line": 174
+                            },
+                            "start": {
+                              "character": 4,
+                              "line": 174
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/tests/p5/gist_spec.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `system`.",
+                    "range": {
+                      "end": {
+                        "character": 11,
+                        "line": 81
+                      },
+                      "start": {
+                        "character": 1,
+                        "line": 81
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 14,
+                              "line": 55
+                            },
+                            "start": {
+                              "character": 4,
+                              "line": 55
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/tests/p5/gist_spec.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `orig_jobstart`.",
+                    "range": {
+                      "end": {
+                        "character": 19,
+                        "line": 55
+                      },
+                      "start": {
+                        "character": 6,
+                        "line": 55
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/tests/p5/docs_spec.lua": [
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 6
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 6
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `matches`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 8
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 8
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `matches`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 9
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 9
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 13
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 13
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 15
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 15
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 19
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 19
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 20
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 20
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 21
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 21
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `matches`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 39
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 39
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/tests/p5/cdp_spec.lua": [
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `orig_connected`.",
+                    "range": {
+                      "end": {
+                        "character": 21,
+                        "line": 4
+                      },
+                      "start": {
+                        "character": 7,
+                        "line": 4
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  },
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `orig_port`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 5
+                      },
+                      "start": {
+                        "character": 7,
+                        "line": 5
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  },
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `orig_server_job`.",
+                    "range": {
+                      "end": {
+                        "character": 22,
+                        "line": 6
+                      },
+                      "start": {
+                        "character": 7,
+                        "line": 6
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  },
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `orig_server_port`.",
+                    "range": {
+                      "end": {
+                        "character": 23,
+                        "line": 7
+                      },
+                      "start": {
+                        "character": 7,
+                        "line": 7
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  },
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `called`.",
+                    "range": {
+                      "end": {
+                        "character": 15,
+                        "line": 398
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 398
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  },
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `notify`.",
+                    "range": {
+                      "end": {
+                        "character": 15,
+                        "line": 399
+                      },
+                      "start": {
+                        "character": 9,
+                        "line": 399
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  },
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `err`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 413
+                      },
+                      "start": {
+                        "character": 13,
+                        "line": 413
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  },
+                  {
+                    "code": "unused-local",
+                    "message": "Unused local `fn`.",
+                    "range": {
+                      "end": {
+                        "character": 30,
+                        "line": 464
+                      },
+                      "start": {
+                        "character": 28,
+                        "line": 464
+                      }
+                    },
+                    "severity": 4,
+                    "source": "Lua Diagnostics.",
+                    "tags": [
+                      1
+                    ]
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `find_chrome`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 34
+                      },
+                      "start": {
+                        "character": 2,
+                        "line": 34
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 13,
+                              "line": 501
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 501
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `jobstart`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 39
+                      },
+                      "start": {
+                        "character": 2,
+                        "line": 39
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 17,
+                              "line": 11
+                            },
+                            "start": {
+                              "character": 2,
+                              "line": 11
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/tests/p5/server_spec.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `_start_sse_job`.",
+                    "range": {
+                      "end": {
+                        "character": 22,
+                        "line": 463
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 463
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 16,
+                              "line": 887
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 887
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/cdp.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `find_chrome`.",
+                    "range": {
+                      "end": {
+                        "character": 20,
+                        "line": 497
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 497
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 13,
+                              "line": 501
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 501
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `find_chrome`.",
+                    "range": {
+                      "end": {
+                        "character": 20,
+                        "line": 507
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 507
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 13,
+                              "line": 501
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 501
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `find_chrome`.",
+                    "range": {
+                      "end": {
+                        "character": 20,
+                        "line": 517
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 517
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 13,
+                              "line": 501
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 501
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 65
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 65
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 70
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 70
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 75
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 75
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 80
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 80
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 87
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 87
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 88
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 88
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 93
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 93
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 94
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 94
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 99
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 99
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 104
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 104
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 109
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 109
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 114
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 114
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 119
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 119
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 120
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 120
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 121
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 121
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 128
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 128
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 135
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 135
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 141
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 141
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 142
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 142
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 149
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 149
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 150
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 150
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `matches`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 158
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 158
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `not_matches`.",
+                    "range": {
+                      "end": {
+                        "character": 21,
+                        "line": 159
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 159
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `matches`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 165
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 165
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `matches`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 171
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 171
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 20,
+                        "line": 178
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 178
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 20,
+                        "line": 179
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 179
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 180
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 180
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 20,
+                        "line": 185
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 185
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 187
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 187
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 188
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 188
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 195
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 195
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 204
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 204
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 211
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 211
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 219
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 219
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 227
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 227
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 228
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 228
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 229
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 229
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 238
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 238
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 244
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 244
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 250
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 250
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 256
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 256
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `matches`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 264
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 264
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `matches`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 272
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 272
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 278
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 278
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 284
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 284
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 292
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 292
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 300
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 300
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 306
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 306
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 312
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 312
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 318
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 318
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 325
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 325
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 329
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 329
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 330
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 330
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 331
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 331
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 338
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 338
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 343
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 343
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 347
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 347
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 348
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 348
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 357
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 357
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 364
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 364
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 380
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 380
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 393
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 393
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 401
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 401
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 20,
+                        "line": 407
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 407
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 414
+                      },
+                      "start": {
+                        "character": 10,
+                        "line": 414
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 421
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 421
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_not_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 21,
+                        "line": 423
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 423
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 433
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 433
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 442
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 442
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 449
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 449
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 19,
+                        "line": 478
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 478
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `same`.",
+                    "range": {
+                      "end": {
+                        "character": 15,
+                        "line": 483
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 483
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 19,
+                        "line": 488
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 488
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 19,
+                        "line": 491
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 491
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 501
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 501
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 502
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 502
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 511
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 511
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 512
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 512
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 522
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 522
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 523
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 523
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_nil`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 524
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 524
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 19,
+                        "line": 525
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 525
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 19,
+                        "line": 476
+                      },
+                      "start": {
+                        "character": 12,
+                        "line": 476
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `close`.",
+                    "range": {
+                      "end": {
+                        "character": 34,
+                        "line": 424
+                      },
+                      "start": {
+                        "character": 29,
+                        "line": 424
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/tests/p5/server_spec.lua": [
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `jobstart`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 11
+                      },
+                      "start": {
+                        "character": 2,
+                        "line": 11
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 17,
+                              "line": 40
+                            },
+                            "start": {
+                              "character": 2,
+                              "line": 40
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/tests/p5/cdp_spec.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_cmd`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 42
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 42
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 8,
+                              "line": 17
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 17
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_file`.",
+                    "range": {
+                      "end": {
+                        "character": 13,
+                        "line": 47
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 47
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 9,
+                              "line": 21
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 21
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_dir`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 48
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 48
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 8,
+                              "line": 25
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 25
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `plugin_root`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 49
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 49
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 13,
+                              "line": 117
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 117
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_p5_project`.",
+                    "range": {
+                      "end": {
+                        "character": 25,
+                        "line": 50
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 50
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 15,
+                              "line": 296
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 296
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/project.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `select`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 51
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 51
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 17,
+                              "line": 194
+                            },
+                            "start": {
+                              "character": 4,
+                              "line": 194
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/tests/p5/gist_spec.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_p5_project`.",
+                    "range": {
+                      "end": {
+                        "character": 25,
+                        "line": 69
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 69
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 15,
+                              "line": 296
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 296
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/project.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_cmd`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 75
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 75
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 8,
+                              "line": 17
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 17
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_cmd`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 103
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 103
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 8,
+                              "line": 17
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 17
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_file`.",
+                    "range": {
+                      "end": {
+                        "character": 13,
+                        "line": 107
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 107
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 9,
+                              "line": 21
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 21
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_dir`.",
+                    "range": {
+                      "end": {
+                        "character": 12,
+                        "line": 108
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 108
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 8,
+                              "line": 25
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 25
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `plugin_root`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 109
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 109
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 13,
+                              "line": 117
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 117
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/core.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `is_p5_project`.",
+                    "range": {
+                      "end": {
+                        "character": 25,
+                        "line": 110
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 110
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 15,
+                              "line": 296
+                            },
+                            "start": {
+                              "character": 0,
+                              "line": 296
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/lua/p5/project.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "duplicate-set-field",
+                    "message": "Duplicate field `select`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 111
+                      },
+                      "start": {
+                        "character": 4,
+                        "line": 111
+                      }
+                    },
+                    "relatedInformation": [
+                      {
+                        "location": {
+                          "range": {
+                            "end": {
+                              "character": 17,
+                              "line": 194
+                            },
+                            "start": {
+                              "character": 4,
+                              "line": 194
+                            }
+                          },
+                          "uri": "file:///home/prjctimg/workspace/p5.nvim/tests/p5/gist_spec.lua"
+                        },
+                        "message": ""
+                      }
+                    ],
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 71
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 71
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 80
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 80
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 85
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 85
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 87
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 87
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 131
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 131
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 133
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 133
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 134
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 134
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 139
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 139
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 141
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 141
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 142
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 142
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 143
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 143
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 148
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 148
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 150
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 150
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 151
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 151
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 152
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 152
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 157
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 157
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `falsy`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 159
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 159
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 165
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 165
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 167
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 167
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 174
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 174
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 176
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 176
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 177
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 177
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 184
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 184
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 186
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 186
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 187
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 187
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `truthy`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 194
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 194
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `falsy`.",
+                    "range": {
+                      "end": {
+                        "character": 16,
+                        "line": 196
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 196
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 218
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 218
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 219
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 219
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_table`.",
+                    "range": {
+                      "end": {
+                        "character": 19,
+                        "line": 220
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 220
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 221
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 221
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 222
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 222
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 230
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 230
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_false`.",
+                    "range": {
+                      "end": {
+                        "character": 19,
+                        "line": 231
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 231
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 232
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 232
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `equals`.",
+                    "range": {
+                      "end": {
+                        "character": 17,
+                        "line": 233
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 233
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  },
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 18,
+                        "line": 247
+                      },
+                      "start": {
+                        "character": 11,
+                        "line": 247
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/tests/p5/health_spec.lua": [
+                  {
+                    "code": "undefined-field",
+                    "message": "Undefined field `is_true`.",
+                    "range": {
+                      "end": {
+                        "character": 20,
+                        "line": 32
+                      },
+                      "start": {
+                        "character": 13,
+                        "line": 32
+                      }
+                    },
+                    "severity": 2,
+                    "source": "Lua Diagnostics."
+                  }
+                ],
+                "/home/prjctimg/workspace/p5.nvim/server.py": [],
+                "/home/prjctimg/workspace/p5.nvim/.github/workflows/release.yml": [],
+                "/home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml": []
+              },
+              "diff": "Index: /home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml\n===================================================================\n--- /home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml\n+++ /home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml\n@@ -5,8 +5,9 @@\n     branches: [main]\n \n permissions:\n   contents: write\n+  actions: write\n \n jobs:\n   nightly:\n     runs-on: ubuntu-latest\n",
+              "filediff": {
+                "file": "/home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml",
+                "patch": "Index: /home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml\n===================================================================\n--- /home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml\n+++ /home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml\n@@ -5,8 +5,9 @@\n     branches: [main]\n \n permissions:\n   contents: write\n+  actions: write\n \n jobs:\n   nightly:\n     runs-on: ubuntu-latest\n",
+                "additions": 1,
+                "deletions": 0
+              },
+              "truncated": false
+            },
+            "title": ".github/workflows/nightly.yml",
+            "time": {
+              "start": 1787834095563,
+              "end": 1787834096222
+            }
+          },
+          "id": "prt_043375524001AnYBtPz2oYgGVq",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04337280c001mmeba2hwQaqEUN"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-finish",
+          "tokens": {
+            "total": 49996,
+            "input": 515,
+            "output": 329,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 49152
+            }
+          },
+          "cost": 0,
+          "id": "prt_043375c0d001xoLcyCscVPc6fT",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04337280c001mmeba2hwQaqEUN"
+        },
+        {
+          "type": "patch",
+          "hash": "c7d2c11d05a3379cbe26a17a6bf54f17f3789059",
+          "files": [
+            "/home/prjctimg/workspace/p5.nvim/.github/workflows/nightly.yml"
+          ],
+          "id": "prt_043375cc8001kJLCmhz4tkHX77",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_04337280c001mmeba2hwQaqEUN"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 50113,
+          "input": 90,
+          "output": 103,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 49920
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834096999,
+          "completed": 1787834141678
+        },
+        "finish": "tool-calls",
+        "id": "msg_043375d67002iEzlk4QJs7POaR",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-start",
+          "id": "prt_043376637001CEgWHHIdgkEwGx",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043375d67002iEzlk4QJs7POaR"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_3c94f5abd889409d912da685",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "git add .github/workflows/nightly.yml && git commit -m \"ci: grant actions:write for nightly dispatch\" && git push origin main",
+              "workdir": "/home/prjctimg/workspace/p5.nvim"
+            },
+            "output": "[main ac0864e] ci: grant actions:write for nightly dispatch\n 1 file changed, 1 insertion(+)\n[entire] Pushing 1 checkpoint ref(s) to origin......... done\nTo github.com:prjctimg/p5.nvim.git\n   ebc5432..ac0864e  main -> main\n",
+            "metadata": {
+              "output": "[main ac0864e] ci: grant actions:write for nightly dispatch\n 1 file changed, 1 insertion(+)\n[entire] Pushing 1 checkpoint ref(s) to origin......... done\nTo github.com:prjctimg/p5.nvim.git\n   ebc5432..ac0864e  main -> main\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "git add .github/workflows/nightly.yml && git commit -m \"ci: grant actions:write for nightly dispatch\" && git push origin main",
+            "time": {
+              "start": 1787834141467,
+              "end": 1787834141487
+            }
+          },
+          "id": "prt_0433766ee001ifMK61T9Bs8UA6",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043375d67002iEzlk4QJs7POaR"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-finish",
+          "tokens": {
+            "total": 50113,
+            "input": 90,
+            "output": 103,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 49920
+            }
+          },
+          "cost": 0,
+          "id": "prt_043380b84001piRtpkcE6YKabT",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043375d67002iEzlk4QJs7POaR"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 50279,
+          "input": 276,
+          "output": 83,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 49920
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834141881,
+          "completed": 1787834219142
+        },
+        "finish": "tool-calls",
+        "id": "msg_043380cb9001YjrVRzzbt60WW1",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-start",
+          "id": "prt_043389374001S9yqnRPG8321Sn",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043380cb9001YjrVRzzbt60WW1"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_57e41f91cc884914b8b5ec3d",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "sleep 40 && gh run list --limit 6",
+              "workdir": "/home/prjctimg/workspace/p5.nvim"
+            },
+            "output": "completed\tsuccess\tRelease\tRelease\tmain\tworkflow_dispatch\t33072624691\t30s\t2026-08-27T12:35:51Z\ncompleted\tsuccess\tci: grant actions:write for nightly dispatch\tNightly\tmain\tpush\t33072614436\t11s\t2026-08-27T12:35:44Z\ncompleted\tfailure\tci: pass GH_TOKEN to release trigger\tNightly\tmain\tpush\t33072448226\t8s\t2026-08-27T12:33:42Z\ncompleted\tfailure\tci: set git identity for nightly tag\tNightly\tmain\tpush\t33072247974\t7s\t2026-08-27T12:31:15Z\ncompleted\tfailure\tci: trigger nightly release via workflow_dispatch\tNightly\tmain\tpush\t33072124205\t8s\t2026-08-27T12:29:46Z\ncompleted\tfailure\tci: add nightly release on push to main\tNightly\tmain\tpush\t33071524698\t6s\t2026-08-27T12:22:05Z\n",
+            "metadata": {
+              "output": "completed\tsuccess\tRelease\tRelease\tmain\tworkflow_dispatch\t33072624691\t30s\t2026-08-27T12:35:51Z\ncompleted\tsuccess\tci: grant actions:write for nightly dispatch\tNightly\tmain\tpush\t33072614436\t11s\t2026-08-27T12:35:44Z\ncompleted\tfailure\tci: pass GH_TOKEN to release trigger\tNightly\tmain\tpush\t33072448226\t8s\t2026-08-27T12:33:42Z\ncompleted\tfailure\tci: set git identity for nightly tag\tNightly\tmain\tpush\t33072247974\t7s\t2026-08-27T12:31:15Z\ncompleted\tfailure\tci: trigger nightly release via workflow_dispatch\tNightly\tmain\tpush\t33072124205\t8s\t2026-08-27T12:29:46Z\ncompleted\tfailure\tci: add nightly release on push to main\tNightly\tmain\tpush\t33071524698\t6s\t2026-08-27T12:22:05Z\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "sleep 40 && gh run list --limit 6",
+            "time": {
+              "start": 1787834218879,
+              "end": 1787834218899
+            }
+          },
+          "id": "prt_04338937e001zbao7sPyEAv1CQ",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043380cb9001YjrVRzzbt60WW1"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-finish",
+          "tokens": {
+            "total": 50279,
+            "input": 276,
+            "output": 83,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 49920
+            }
+          },
+          "cost": 0,
+          "id": "prt_043393a5d001eVJQT3TLHQ1BJi",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043380cb9001YjrVRzzbt60WW1"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 50717,
+          "input": 364,
+          "output": 177,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 50176
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834219316,
+          "completed": 1787834233670
+        },
+        "finish": "tool-calls",
+        "id": "msg_043393b34001qKfiTbIwHgUJsS",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-start",
+          "id": "prt_04339556b001Gcq095417RPC35",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        },
+        {
+          "type": "reasoning",
+          "text": "Both runs succeeded:\n- Nightly (33072614436): success — pushed the tag, dispatched release.yml.\n- Release (33072624691): success via workflow_dispatch — tests ran and release created.\n\nLet me verify the release was actually created on the `nightly` tag and check it's a prerelease.",
+          "time": {
+            "start": 1787834226036,
+            "end": 1787834226746
+          },
+          "id": "prt_043395574001eADndt30ZgXbWS",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        },
+        {
+          "type": "text",
+          "text": "Both succeeded. Verifying the release was created on the `nightly` tag:",
+          "time": {
+            "start": 1787834226754,
+            "end": 1787834227355
+          },
+          "id": "prt_043395842001PmY2qBFD4noVPE",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        },
+        {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_9d6953e5e1b949e6b9310712",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "gh release list --limit 5 && echo \"--- tag ---\" && git ls-remote --tags origin nightly",
+              "workdir": "/home/prjctimg/workspace/p5.nvim"
+            },
+            "output": "nightly\tPre-release\tnightly\t2026-08-27T12:36:18Z\nv0.7.12\tLatest\tv0.7.12\t2026-08-05T12:48:17Z\nv0.7.11\t\tv0.7.11\t2026-08-05T12:47:55Z\nv0.7.1\t\tv0.7.1\t2026-05-31T15:01:35Z\nv0.7.0-alpha.1\tPre-release\tv0.7.0-alpha.1\t2026-05-30T18:15:40Z\n--- tag ---\n741b886949c7c931e42cc6108b615eb0984c7d43\trefs/tags/nightly\n",
+            "metadata": {
+              "output": "nightly\tPre-release\tnightly\t2026-08-27T12:36:18Z\nv0.7.12\tLatest\tv0.7.12\t2026-08-05T12:48:17Z\nv0.7.11\t\tv0.7.11\t2026-08-05T12:47:55Z\nv0.7.1\t\tv0.7.1\t2026-05-31T15:01:35Z\nv0.7.0-alpha.1\tPre-release\tv0.7.0-alpha.1\t2026-05-30T18:15:40Z\n--- tag ---\n741b886949c7c931e42cc6108b615eb0984c7d43\trefs/tags/nightly\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "gh release list --limit 5 && echo \"--- tag ---\" && git ls-remote --tags origin nightly",
+            "time": {
+              "start": 1787834233318,
+              "end": 1787834233364
+            }
+          },
+          "id": "prt_04339584f001uf0hUofKmOO1Ht",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-finish",
+          "tokens": {
+            "total": 50717,
+            "input": 364,
+            "output": 177,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 50176
+            }
+          },
+          "cost": 0,
+          "id": "prt_043397308001Elg0bB4ktJQz57",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_043393b34001qKfiTbIwHgUJsS"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_0432f4a0f001wkVT0kH2n8CmaQ",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "/home/prjctimg/workspace/p5.nvim",
+          "root": "/home/prjctimg/workspace/p5.nvim"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 51144,
+          "input": 219,
+          "output": 237,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 50688
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1787834233833,
+          "completed": 1787834240120
+        },
+        "finish": "stop",
+        "id": "msg_0433973e9002IL4dUgb67YjXmw",
+        "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e"
+      },
+      "parts": [
+        {
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-start",
+          "id": "prt_0433982b2001oGePvtsR43Y8Zi",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_0433973e9002IL4dUgb67YjXmw"
+        },
+        {
+          "type": "reasoning",
+          "text": "Everything works:\n- Nightly workflow: success\n- Release workflow (triggered by workflow_dispatch): success — ran tests, created release on `nightly` tag.\n- `nightly` release is a Pre-release (correct — doesn't displace v0.7.12 Latest).\n- `nightly` tag moved to the new commit.\n\nLet me check the `after: true`? No. All done. Let me summarize tersely.\n\nCheck git status for the whole chain of commits pushed. Give summary.",
+          "time": {
+            "start": 1787834237650,
+            "end": 1787834238673
+          },
+          "id": "prt_0433982d2001St0U8BeYmt4B3I",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_0433973e9002IL4dUgb67YjXmw"
+        },
+        {
+          "type": "text",
+          "text": "Fixed. The flow now works end-to-end on every push to `main`:\n\n- **Nightly** (push to main): force-moves the `nightly` tag → dispatches `release.yml`\n- **Release** (via `workflow_dispatch`): runs test suite → creates the release for the `nightly` tag (marked pre-release, so `v0.7.12` stays \"Latest\")\n\nAll stale failures are history; the `nightly` release and tag both exist at the newest commit. No PAT secret needed — `GITHUB_TOKEN` works since dispatching is the sanctioned exception.",
+          "time": {
+            "start": 1787834238681,
+            "end": 1787834239931
+          },
+          "id": "prt_0433986d9001faSFICMg3Mu8P2",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_0433973e9002IL4dUgb67YjXmw"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "a396be62b500a53f9017dde455fe92602cfea9fd",
+          "type": "step-finish",
+          "tokens": {
+            "total": 51144,
+            "input": 219,
+            "output": 237,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 50688
+            }
+          },
+          "cost": 0,
+          "id": "prt_043398c3e001QvxtSDze5vmfGo",
+          "sessionID": "ses_fbd2066b9ffeMG74Jaor9MIU6e",
+          "messageID": "msg_0433973e9002IL4dUgb67YjXmw"
         }
       ]
     }
