@@ -1,0 +1,9 @@
+Search the repository at /home/prjctimg/workspace/p5.nvim for missing, stubbed, or incomplete features. Specifically:
+
+1. Grep for TODO, FIXME, HACK, XXX, WIP, STUB, placeholder, not implemented, unimplemented, break, "no-op", "noop", "no response", "coming soon", "nic" across all files including .lua, .py, .md files (in lua/, server.py, plugin/, tests/, docs/, wiki/, README.md, CHANGES.md).
+
+2. Look for functions/methods that are declared but return nothing or trivially empty (e.g., Lua functions with empty bodies, Python functions with `pass` or `raise NotImplementedError`).
+
+3. Look for code paths that silently swallow errors (bare `except Exception: pass`, `pcall` wrapping without handling, `if not ... return` patterns that silently do nothing).
+
+Report back a structured list of findings: file path, line number, the stub/issue description, and whether it appears intentional or a genuine gap. Be thorough but concise. This is research only - do NOT modify any files.
