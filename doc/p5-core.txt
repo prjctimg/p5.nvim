@@ -298,7 +298,6 @@ Table of Contents                           *p5-core-table-of-contents*
   - removeCue()              |p5-core-removeCue|
   - clearCues()              |p5-core-clearCues|
   - textOutput()              |p5-core-textOutput|
-  - update()              |p5-core-update|
   - blend()              |p5-core-blend|
   - blend()              |p5-core-blend|
   - createCanvas()              |p5-core-createCanvas|
@@ -309,6 +308,7 @@ Table of Contents                           *p5-core-table-of-contents*
   - clearDepth()              |p5-core-clearDepth|
   - loadShader()              |p5-core-loadShader|
   - createImage()              |p5-core-createImage|
+  - update()              |p5-core-update|
   - orbitControl()              |p5-core-orbitControl|
   - noSmooth()              |p5-core-noSmooth|
   - ceil()              |p5-core-ceil|
@@ -364,7 +364,6 @@ Table of Contents                           *p5-core-table-of-contents*
   - applyMatrix()              |p5-core-applyMatrix|
   - nfc()              |p5-core-nfc|
   - nfc()              |p5-core-nfc|
-  - read()              |p5-core-read|
   - constrain()              |p5-core-constrain|
   - push()              |p5-core-push|
   - describeElement()              |p5-core-describeElement|
@@ -388,6 +387,7 @@ Table of Contents                           *p5-core-table-of-contents*
   - random()              |p5-core-random|
   - random()              |p5-core-random|
   - loadJSON()              |p5-core-loadJSON|
+  - read()              |p5-core-read|
   - noCanvas()              |p5-core-noCanvas|
   - createElement()              |p5-core-createElement|
   - asin()              |p5-core-asin|
@@ -402,8 +402,6 @@ Table of Contents                           *p5-core-table-of-contents*
   - byte()              |p5-core-byte|
   - byte()              |p5-core-byte|
   - bezierPoint()              |p5-core-bezierPoint|
-  - set()              |p5-core-set|
-  - set()              |p5-core-set|
   - redraw()              |p5-core-redraw|
   - instanceID()              |p5-core-instanceID|
   - smoothstep()              |p5-core-smoothstep|
@@ -428,6 +426,8 @@ Table of Contents                           *p5-core-table-of-contents*
   - addElement()              |p5-core-addElement|
   - addElement()              |p5-core-addElement|
   - clip()              |p5-core-clip|
+  - set()              |p5-core-set|
+  - set()              |p5-core-set|
   - atan()              |p5-core-atan|
   - createGraphics()              |p5-core-createGraphics|
   - createGraphics()              |p5-core-createGraphics|
@@ -461,13 +461,13 @@ Table of Contents                           *p5-core-table-of-contents*
   - createP()              |p5-core-createP|
   - createShader()              |p5-core-createShader|
   - atan2()              |p5-core-atan2|
+  - nfs()              |p5-core-nfs|
+  - nfs()              |p5-core-nfs|
+  - getTargetFrameRate()              |p5-core-getTargetFrameRate|
   - buildGeometry()              |p5-core-buildGeometry|
   - getWorldToScreenMatrix()              |p5-core-getWorldToScreenMatrix|
   - fill()              |p5-core-fill|
   - stroke()              |p5-core-stroke|
-  - nfs()              |p5-core-nfs|
-  - nfs()              |p5-core-nfs|
-  - getTargetFrameRate()              |p5-core-getTargetFrameRate|
   - setShakeThreshold()              |p5-core-setShakeThreshold|
   - noiseSeed()              |p5-core-noiseSeed|
   - circle()              |p5-core-circle|
@@ -484,10 +484,10 @@ Table of Contents                           *p5-core-table-of-contents*
   - saveStl()              |p5-core-saveStl|
   - loadFilterShader()              |p5-core-loadFilterShader|
   - rotateX()              |p5-core-rotateX|
-  - loadModel()              |p5-core-loadModel|
-  - loadModel()              |p5-core-loadModel|
-  - loadModel()              |p5-core-loadModel|
   - createFramebuffer()              |p5-core-createFramebuffer|
+  - loadModel()              |p5-core-loadModel|
+  - loadModel()              |p5-core-loadModel|
+  - loadModel()              |p5-core-loadModel|
   - createImg()              |p5-core-createImg|
   - createImg()              |p5-core-createImg|
   - red()              |p5-core-red|
@@ -547,7 +547,6 @@ Table of Contents                           *p5-core-table-of-contents*
   - loadPixels()              |p5-core-loadPixels|
   - flipV()              |p5-core-flipV|
   - sphere()              |p5-core-sphere|
-  - clearDepth()              |p5-core-clearDepth|
   - unchar()              |p5-core-unchar|
   - unchar()              |p5-core-unchar|
   - noDebugMode()              |p5-core-noDebugMode|
@@ -559,6 +558,7 @@ Table of Contents                           *p5-core-table-of-contents*
   - tan()              |p5-core-tan|
   - keyReleased()              |p5-core-keyReleased|
   - rotateZ()              |p5-core-rotateZ|
+  - clearDepth()              |p5-core-clearDepth|
   - loadBlob()              |p5-core-loadBlob|
   - fullscreen()              |p5-core-fullscreen|
   - point()              |p5-core-point|
@@ -693,10 +693,10 @@ Table of Contents                           *p5-core-table-of-contents*
   - triangle()              |p5-core-triangle|
   - ellipsoid()              |p5-core-ellipsoid|
   - noTint()              |p5-core-noTint|
-  - model()              |p5-core-model|
   - round()              |p5-core-round|
   - noFill()              |p5-core-noFill|
   - saturation()              |p5-core-saturation|
+  - model()              |p5-core-model|
   - noLights()              |p5-core-noLights|
   - imageShader()              |p5-core-imageShader|
   - mouseReleased()              |p5-core-mouseReleased|
@@ -709,11 +709,11 @@ Table of Contents                           *p5-core-table-of-contents*
   - createVideo()              |p5-core-createVideo|
   - imageMode()              |p5-core-imageMode|
   - imageMode()              |p5-core-imageMode|
-  - createModel()              |p5-core-createModel|
-  - createModel()              |p5-core-createModel|
-  - createModel()              |p5-core-createModel|
   - loadFont()              |p5-core-loadFont|
   - loadFont()              |p5-core-loadFont|
+  - createModel()              |p5-core-createModel|
+  - createModel()              |p5-core-createModel|
+  - createModel()              |p5-core-createModel|
   - createAudio()              |p5-core-createAudio|
   - torus()              |p5-core-torus|
   - sqrt()              |p5-core-sqrt|
@@ -733,11 +733,11 @@ Table of Contents                           *p5-core-table-of-contents*
   - stroke()              |p5-core-stroke|
   - loadMaterialShader()              |p5-core-loadMaterialShader|
   - save()              |p5-core-save|
-  - baseMaterialShader()              |p5-core-baseMaterialShader|
   - lightness()              |p5-core-lightness|
+  - baseMaterialShader()              |p5-core-baseMaterialShader|
   - doubleClicked()              |p5-core-doubleClicked|
-  - baseFilterShader()              |p5-core-baseFilterShader|
   - erase()              |p5-core-erase|
+  - baseFilterShader()              |p5-core-baseFilterShader|
   - createInput()              |p5-core-createInput|
   - createInput()              |p5-core-createInput|
   - noErase()              |p5-core-noErase|
@@ -789,8 +789,8 @@ Table of Contents                           *p5-core-table-of-contents*
   - frustum()              |p5-core-frustum|
   - instances()              |p5-core-instances|
   - compute()              |p5-core-compute|
-  - bumpTexture()              |p5-core-bumpTexture|
   - createCamera()              |p5-core-createCamera|
+  - bumpTexture()              |p5-core-bumpTexture|
   - splineProperty()              |p5-core-splineProperty|
   - splineProperty()              |p5-core-splineProperty|
   - setCamera()              |p5-core-setCamera|
@@ -823,7 +823,7 @@ Table of Contents                           *p5-core-table-of-contents*
 ⚙️ Core module for p5.js
 
 📦 p5.js Version: 2.3.1~
-⏰ Last Updated: 2026-08-23 03:04:10Z~
+⏰ Last Updated: 2026-08-30 08:00:07Z~
 
 ==============================================================================
 2. Functions                                                |p5-core-functions|
@@ -6539,42 +6539,6 @@ descriptions </a> to learn more about making sketches accessible.
 ---
 
 
-`update()`                                            |p5-core-update|
-
-Updates the data in the buffer with new values. The new data must be in the
-same format as the data originally passed to <a href="#/p5/createStorage">
-createStorage() </a> . let particles; let computeShader; let displayShader;
-const numParticles = 100; async function setup() { await createCanvas(100,
-100, WEBGPU); particles = createStorage(makeParticles(width / 2, height / 2));
-computeShader = buildComputeShader(simulate); displayShader =
-buildMaterialShader(display); describe('100 orange particles shooting
-outward.'); } function makeParticles(x, y) { let data = []; for (let i = 0; i
-< numParticles; i++) { let angle = (i / numParticles) * TWO_PI; let speed =
-random(0.5, 2); data.push({ position: createVector(x, y), velocity:
-createVector(cos(angle) * speed, sin(angle) * speed), }); } return data; }
-function simulate() { let data = uniformStorage(particles); let idx = index.x;
-data[idx].position = data[idx].position + data[idx].velocity; } function
-display() { let data = uniformStorage(particles); worldInputs.begin(); let pos
-= data[instanceIndex].position; worldInputs.position.xy += pos - [width / 2,
-height / 2]; worldInputs.end(); } function draw() { background(30); if
-(frameCount % 60 === 0) { particles.update(makeParticles(random(width),
-random(height))); } compute(computeShader, numParticles); noStroke();
-fill(255, 200, 50); shader(displayShader); instances(numParticles).sphere(2);
-}
-
-#### Parameters:
-
-    data  The new data to write into the buffer.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `blend()`                                            |p5-core-blend|
 
 Copies a region of pixels from one image to another. The first parameter,
@@ -6826,6 +6790,42 @@ The new <a href="#/p5.Image"> p5.Image </a> object is transparent by default.
 #### Returns:
 
     new <a href="#/p5.Image">p5.Image</a> object.
+
+📂 *Sub-module: main*
+
+---
+
+
+`update()`                                            |p5-core-update|
+
+Updates the data in the buffer with new values. The new data must be in the
+same format as the data originally passed to <a href="#/p5/createStorage">
+createStorage() </a> . let particles; let computeShader; let displayShader;
+const numParticles = 100; async function setup() { await createCanvas(100,
+100, WEBGPU); particles = createStorage(makeParticles(width / 2, height / 2));
+computeShader = buildComputeShader(simulate); displayShader =
+buildMaterialShader(display); describe('100 orange particles shooting
+outward.'); } function makeParticles(x, y) { let data = []; for (let i = 0; i
+< numParticles; i++) { let angle = (i / numParticles) * TWO_PI; let speed =
+random(0.5, 2); data.push({ position: createVector(x, y), velocity:
+createVector(cos(angle) * speed, sin(angle) * speed), }); } return data; }
+function simulate() { let data = uniformStorage(particles); let idx = index.x;
+data[idx].position = data[idx].position + data[idx].velocity; } function
+display() { let data = uniformStorage(particles); worldInputs.begin(); let pos
+= data[instanceIndex].position; worldInputs.position.xy += pos - [width / 2,
+height / 2]; worldInputs.end(); } function draw() { background(30); if
+(frameCount % 60 === 0) { particles.update(makeParticles(random(width),
+random(height))); } compute(computeShader, numParticles); noStroke();
+fill(255, 200, 50); shader(displayShader); instances(numParticles).sphere(2);
+}
+
+#### Parameters:
+
+    data  The new data to write into the buffer.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: main*
 
@@ -8273,30 +8273,6 @@ the string '12,345.670' .
 ---
 
 
-`read()`                                            |p5-core-read|
-
-Reads data from a storage buffer back into JavaScript. Copies data from the
-GPU to the CPU using a temporary buffer, so it must be awaited. Returns a
-Float32Array for number buffers, or an array of plain objects for struct
-buffers. Note: This is a GPU -> CPU read, so calling it often (like every
-frame) can be slow. let data; let computeShader; async function setup() {
-await createCanvas(100, 100, WEBGPU); data = createStorage(new
-Float32Array([1, 2, 3, 4])); computeShader = buildComputeShader(doubleValues);
-compute(computeShader, 4); let result = await data.read(); // result is
-Float32Array [2, 4, 6, 8] for (let i = 0; i < result.length; i++) {
-print(result[i]); } describe('Prints the values 2, 4, 6, 8 to the console.');
-} function doubleValues() { let d = uniformStorage(data); let idx = index.x;
-d[idx] = d[idx] * 2; }
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `constrain()`                                            |p5-core-constrain|
 
 Constrains a number between a minimum and maximum value.
@@ -9065,6 +9041,37 @@ See the examples for the usage syntax.
 ---
 
 
+`read()`                                            |p5-core-read|
+
+Reads data from a storage buffer back into JavaScript. Copies data from the
+GPU to the CPU using a temporary buffer, so it must be awaited. Returns a
+typed array (such as Float32Array or Uint32Array ) for number buffers, or an
+array of plain objects for struct buffers. Note: This is a GPU -> CPU read, so
+calling it often (like every frame) can be slow. let data; let computeShader;
+async function setup() { await createCanvas(100, 100, WEBGPU); data =
+createStorage(new Float32Array([1, 2, 3, 4])); computeShader =
+buildComputeShader(doubleValues); compute(computeShader, 4); let result =
+await data.read(); // result is Float32Array [2, 4, 6, 8] for (let i = 0; i <
+result.length; i++) { print(result[i]); } describe('Prints the values 2, 4, 6,
+8 to the console.'); } function doubleValues() { let d = uniformStorage(data);
+let idx = index.x; d[idx] = d[idx] * 2; } While p5.strands is still growing,
+there may be WGSL features it doesn't cover yet. You can still reach for them
+by writing WGSL directly, and the buffer will read back as the right kind of
+typed array. Atomics are one example: WGSL only allows them on u32 and i32 ,
+so a buffer used as array<atomic<u32>> should be created with a Uint32Array .
+let data; let computeShader; async function setup() { await createCanvas(100,
+100, WEBGPU); data = createStorage(new Uint32Array([10, 20, 30, 40]));
+computeShader = buildComputeShader({ computeDeclarations: `
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
 `noCanvas()`                                            |p5-core-noCanvas|
 
 Removes the default canvas. By default, a 100×100 pixels canvas is created
@@ -9380,68 +9387,6 @@ second anchor point, and 0.5 is halfway between them.
 #### Returns:
 
     coordinate of the point on the curve.
-
-📂 *Sub-module: main*
-
----
-
-
-`set()`                                            |p5-core-set|
-
-Updates a single element in the buffer at a given index. Use this when only a
-small number of elements need to change. If you need to replace all the data
-at once, use <a href="#/p5.StorageBuffer/update"> update() </a> instead. let
-buf; async function setup() { await createCanvas(100, 100, WEBGPU); // Float
-buffer: update one value by index buf = createStorage(new Float32Array([1, 2,
-3, 4])); buf.set(2, 9.5); // only index 2 changes → [1, 2, 9.5, 4] let result
-= await buf.read(); print(result[2]); // 9.5 describe('Prints 9.5 to the
-console.'); } let particles; const numParticles = 100; async function setup()
-{ await createCanvas(100, 100, WEBGPU); particles =
-createStorage(makeParticles()); // Replace particle 42 without touching the
-others particles.set(42, { position: createVector(0, 0), velocity:
-createVector(1, 0), }); // Read back to confirm the update let result = await
-particles.read(); print(result[42].position.x, result[42].position.y); // 0, 0
-describe('Prints the position of particle 42 after updating it.'); } function
-makeParticles() { let data = []; for (let i = 0; i < numParticles; i++) {
-data.push({ position: createVector(random(width), random(height)), velocity:
-createVector(random(-1, 1), random(-1, 1)), }); } return data; }
-
-#### Parameters:
-
-    index  The zero-based index of the element to update.
-    value  The new value. Pass a number for float buffers, or a plain object matching the original struct layout for struct buffers.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
-`set()`                                            |p5-core-set|
-
-Sets the color of a pixel or draws an image to the canvas. set() is easy to
-use but it's not as fast as <a href="#/p5/pixels"> pixels </a> . Use <a
-href="#/p5/pixels"> pixels </a> to set many pixel values. set() interprets the
-first two parameters as x- and y-coordinates. It interprets the last parameter
-as a grayscale value, a [R, G, B, A] pixel array, a <a href="#/p5.Color">
-p5.Color </a> object, or a <a href="#/p5.Image"> p5.Image </a> object. If an
-image is passed, the first two parameters set the coordinates for the image's
-upper-left corner, regardless of the current <a href="#/p5/imageMode">
-imageMode() </a> . <a href="#/p5/updatePixels"> updatePixels() </a> must be
-called after using set() for changes to appear.
-
-#### Parameters:
-
-    x  x-coordinate of the pixel.
-    y  y-coordinate of the pixel.
-    c  grayscale value | pixel array | <a href="#/p5.Color">p5.Color</a> object | <a href="#/p5.Image">p5.Image</a> to copy.
-
-#### Returns:
-
-    void
 
 📂 *Sub-module: main*
 
@@ -9947,6 +9892,68 @@ href="#/p5/beginClip"> beginClip() </a> and <a href="#/p5/endClip"> endClip()
     callback  a function that draws the mask shape.
     options  an object containing clip settings.
     options.invert  Whether or not to invert the mask.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`set()`                                            |p5-core-set|
+
+Updates a single element in the buffer at a given index. Use this when only a
+small number of elements need to change. If you need to replace all the data
+at once, use <a href="#/p5.StorageBuffer/update"> update() </a> instead. let
+buf; async function setup() { await createCanvas(100, 100, WEBGPU); // Float
+buffer: update one value by index buf = createStorage(new Float32Array([1, 2,
+3, 4])); buf.set(2, 9.5); // only index 2 changes → [1, 2, 9.5, 4] let result
+= await buf.read(); print(result[2]); // 9.5 describe('Prints 9.5 to the
+console.'); } let particles; const numParticles = 100; async function setup()
+{ await createCanvas(100, 100, WEBGPU); particles =
+createStorage(makeParticles()); // Replace particle 42 without touching the
+others particles.set(42, { position: createVector(0, 0), velocity:
+createVector(1, 0), }); // Read back to confirm the update let result = await
+particles.read(); print(result[42].position.x, result[42].position.y); // 0, 0
+describe('Prints the position of particle 42 after updating it.'); } function
+makeParticles() { let data = []; for (let i = 0; i < numParticles; i++) {
+data.push({ position: createVector(random(width), random(height)), velocity:
+createVector(random(-1, 1), random(-1, 1)), }); } return data; }
+
+#### Parameters:
+
+    index  The zero-based index of the element to update.
+    value  The new value. Pass a number for float buffers, or a plain object matching the original struct layout for struct buffers.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`set()`                                            |p5-core-set|
+
+Sets the color of a pixel or draws an image to the canvas. set() is easy to
+use but it's not as fast as <a href="#/p5/pixels"> pixels </a> . Use <a
+href="#/p5/pixels"> pixels </a> to set many pixel values. set() interprets the
+first two parameters as x- and y-coordinates. It interprets the last parameter
+as a grayscale value, a [R, G, B, A] pixel array, a <a href="#/p5.Color">
+p5.Color </a> object, or a <a href="#/p5.Image"> p5.Image </a> object. If an
+image is passed, the first two parameters set the coordinates for the image's
+upper-left corner, regardless of the current <a href="#/p5/imageMode">
+imageMode() </a> . <a href="#/p5/updatePixels"> updatePixels() </a> must be
+called after using set() for changes to appear.
+
+#### Parameters:
+
+    x  x-coordinate of the pixel.
+    y  y-coordinate of the pixel.
+    c  grayscale value | pixel array | <a href="#/p5.Color">p5.Color</a> object | <a href="#/p5.Image">p5.Image</a> to copy.
 
 #### Returns:
 
@@ -10936,6 +10943,74 @@ angleMode() </a> is DEGREES , then values are returned in the range -180 to
 ---
 
 
+`nfs()`                                            |p5-core-nfs|
+
+Converts a positive Number into a String with an extra space in front. nfs()
+converts positive numbers such as 123.45 into strings formatted with an extra
+space in front, as in ' 123.45'. Doing so can be helpful for aligning positive
+and negative numbers. The first parameter, num , is the number to convert to a
+string. For example, calling nfs(123.45) returns the string ' 123.45' . The
+second parameter, left , is optional. If a number is passed, as in nfs(123.45,
+4) , it sets the minimum number of digits to include to the left of the
+decimal place. If left is larger than the number of digits in num , then
+unused digits will be set to 0. For example, calling nfs(123.45, 4) returns
+the string ' 0123.45' . The third parameter, right , is also optional. If a
+number is passed, as in nfs(123.45, 4, 1) , it sets the minimum number of
+digits to include to the right of the decimal place. If right is smaller than
+the number of decimal places in num , then num will be rounded to the given
+number of decimal places. For example, calling nfs(123.45, 4, 1) returns the
+string ' 0123.5' . If right is larger than the number of decimal places in num
+, then unused decimal places will be set to 0. For example, calling
+nfs(123.45, 4, 3) returns the string ' 0123.450' .
+
+#### Parameters:
+
+    num  number to format.
+    left  number of digits to include to the left of the decimal point.
+    right  number of digits to include to the right of the decimal point.
+
+#### Returns:
+
+    formatted string.
+
+📂 *Sub-module: main*
+
+---
+
+
+`nfs()`                                            |p5-core-nfs|
+
+
+
+#### Parameters:
+
+    nums  numbers to format.
+    left  
+    right  
+
+#### Returns:
+
+    formatted strings.
+
+📂 *Sub-module: main*
+
+---
+
+
+`getTargetFrameRate()`                                            |p5-core-getTargetFrameRate|
+
+Returns the target frame rate. The value is either the system frame rate or
+the last value passed to <a href="#/p5/frameRate"> frameRate() </a> .
+
+#### Returns:
+
+    _targetFrameRate
+
+📂 *Sub-module: main*
+
+---
+
+
 `buildGeometry()`                                            |p5-core-buildGeometry|
 
 Creates a new <a href="#/p5.Geometry"> p5.Geometry </a> that contains all the
@@ -11005,74 +11080,6 @@ Basic stroke material for geometry with a given color
 #### Returns:
 
     void
-
-📂 *Sub-module: main*
-
----
-
-
-`nfs()`                                            |p5-core-nfs|
-
-Converts a positive Number into a String with an extra space in front. nfs()
-converts positive numbers such as 123.45 into strings formatted with an extra
-space in front, as in ' 123.45'. Doing so can be helpful for aligning positive
-and negative numbers. The first parameter, num , is the number to convert to a
-string. For example, calling nfs(123.45) returns the string ' 123.45' . The
-second parameter, left , is optional. If a number is passed, as in nfs(123.45,
-4) , it sets the minimum number of digits to include to the left of the
-decimal place. If left is larger than the number of digits in num , then
-unused digits will be set to 0. For example, calling nfs(123.45, 4) returns
-the string ' 0123.45' . The third parameter, right , is also optional. If a
-number is passed, as in nfs(123.45, 4, 1) , it sets the minimum number of
-digits to include to the right of the decimal place. If right is smaller than
-the number of decimal places in num , then num will be rounded to the given
-number of decimal places. For example, calling nfs(123.45, 4, 1) returns the
-string ' 0123.5' . If right is larger than the number of decimal places in num
-, then unused decimal places will be set to 0. For example, calling
-nfs(123.45, 4, 3) returns the string ' 0123.450' .
-
-#### Parameters:
-
-    num  number to format.
-    left  number of digits to include to the left of the decimal point.
-    right  number of digits to include to the right of the decimal point.
-
-#### Returns:
-
-    formatted string.
-
-📂 *Sub-module: main*
-
----
-
-
-`nfs()`                                            |p5-core-nfs|
-
-
-
-#### Parameters:
-
-    nums  numbers to format.
-    left  
-    right  
-
-#### Returns:
-
-    formatted strings.
-
-📂 *Sub-module: main*
-
----
-
-
-`getTargetFrameRate()`                                            |p5-core-getTargetFrameRate|
-
-Returns the target frame rate. The value is either the system frame rate or
-the last value passed to <a href="#/p5/frameRate"> frameRate() </a> .
-
-#### Returns:
-
-    _targetFrameRate
 
 📂 *Sub-module: main*
 
@@ -11478,6 +11485,62 @@ href="#/p5/draw"> draw() </a> function won't cause shapes to spin.
 ---
 
 
+`createFramebuffer()`                                            |p5-core-createFramebuffer|
+
+Creates and a new <a href="#/p5.Framebuffer"> p5.Framebuffer </a> object. <a
+href="#/p5.Framebuffer"> p5.Framebuffer </a> objects are separate drawing
+surfaces that can be used as textures in WebGL mode. They're similar to <a
+href="#/p5.Graphics"> p5.Graphics </a> objects and generally run much faster
+when used as textures. The parameter, options , is optional. An object can be
+passed to configure the <a href="#/p5.Framebuffer"> p5.Framebuffer </a>
+object. The available properties are: format : data format of the texture,
+either UNSIGNED_BYTE , FLOAT , or HALF_FLOAT . Default is UNSIGNED_BYTE .
+channels : whether to store RGB or RGBA color channels. Default is to match
+the main canvas which is RGBA . depth : whether to include a depth buffer.
+Default is true . depthFormat : data format of depth information, either
+UNSIGNED_INT or FLOAT . Default is FLOAT . stencil : whether to include a
+stencil buffer for masking. depth must be true for this feature to work.
+Defaults to the value of depth which is true . antialias : whether to perform
+anti-aliasing. If set to true , as in { antialias: true } , 2 samples will be
+used by default. The number of samples can also be set, as in { antialias: 4 }
+. Default is to match <a href="#/p5/setAttributes"> setAttributes() </a> which
+is false ( true in Safari). width : width of the <a href="#/p5.Framebuffer">
+p5.Framebuffer </a> object. Default is to always match the main canvas width.
+height : height of the <a href="#/p5.Framebuffer"> p5.Framebuffer </a> object.
+Default is to always match the main canvas height. density : pixel density of
+the <a href="#/p5.Framebuffer"> p5.Framebuffer </a> object. Default is to
+always match the main canvas pixel density. textureFiltering : how to read
+values from the <a href="#/p5.Framebuffer"> p5.Framebuffer </a> object. Either
+LINEAR (nearby pixels will be interpolated) or NEAREST (no interpolation).
+Generally, use LINEAR when using the texture as an image and NEAREST if
+reading the texture as data. Default is LINEAR . If the width , height , or
+density attributes are set, they won't automatically match the main canvas and
+must be changed manually. Note: createFramebuffer() can only be used in WebGL
+mode.
+
+#### Parameters:
+
+    options  configuration options.
+    options.format  The data format of the texture.
+    options.channels  What color channels to include in the texture.
+    options.depth  Whether to store depth information in the framebuffer.
+    options.depthFormat  The format to store depth values in.
+    options.stencil  Whether to include a stencil buffer (required for clipping.)
+    options.antialias  Whether to antialias when drawing to this framebuffer. Either a boolean, or the number of antialias samples to use.
+    options.width  The width of the framebuffer. By default, it will match the main canvas.
+    options.height  The height of the framebuffer. By default, it will match the main canvas.
+    options.density  The pixel density of the framebuffer. By default, it will match the main canvas.
+    options.textureFiltering  The strategy used when reading values in the framebuffer in between pixels.
+
+#### Returns:
+
+    new framebuffer.
+
+📂 *Sub-module: main*
+
+---
+
+
 `loadModel()`                                            |p5-core-loadModel|
 
 Loads a 3D model to create a <a href="#/p5.Geometry"> p5.Geometry </a> object.
@@ -11580,62 +11643,6 @@ for colored STL files. STL files with color will be rendered without color.
 #### Returns:
 
     new <a href="#/p5.Geometry">p5.Geometry</a> object.
-
-📂 *Sub-module: main*
-
----
-
-
-`createFramebuffer()`                                            |p5-core-createFramebuffer|
-
-Creates and a new <a href="#/p5.Framebuffer"> p5.Framebuffer </a> object. <a
-href="#/p5.Framebuffer"> p5.Framebuffer </a> objects are separate drawing
-surfaces that can be used as textures in WebGL mode. They're similar to <a
-href="#/p5.Graphics"> p5.Graphics </a> objects and generally run much faster
-when used as textures. The parameter, options , is optional. An object can be
-passed to configure the <a href="#/p5.Framebuffer"> p5.Framebuffer </a>
-object. The available properties are: format : data format of the texture,
-either UNSIGNED_BYTE , FLOAT , or HALF_FLOAT . Default is UNSIGNED_BYTE .
-channels : whether to store RGB or RGBA color channels. Default is to match
-the main canvas which is RGBA . depth : whether to include a depth buffer.
-Default is true . depthFormat : data format of depth information, either
-UNSIGNED_INT or FLOAT . Default is FLOAT . stencil : whether to include a
-stencil buffer for masking. depth must be true for this feature to work.
-Defaults to the value of depth which is true . antialias : whether to perform
-anti-aliasing. If set to true , as in { antialias: true } , 2 samples will be
-used by default. The number of samples can also be set, as in { antialias: 4 }
-. Default is to match <a href="#/p5/setAttributes"> setAttributes() </a> which
-is false ( true in Safari). width : width of the <a href="#/p5.Framebuffer">
-p5.Framebuffer </a> object. Default is to always match the main canvas width.
-height : height of the <a href="#/p5.Framebuffer"> p5.Framebuffer </a> object.
-Default is to always match the main canvas height. density : pixel density of
-the <a href="#/p5.Framebuffer"> p5.Framebuffer </a> object. Default is to
-always match the main canvas pixel density. textureFiltering : how to read
-values from the <a href="#/p5.Framebuffer"> p5.Framebuffer </a> object. Either
-LINEAR (nearby pixels will be interpolated) or NEAREST (no interpolation).
-Generally, use LINEAR when using the texture as an image and NEAREST if
-reading the texture as data. Default is LINEAR . If the width , height , or
-density attributes are set, they won't automatically match the main canvas and
-must be changed manually. Note: createFramebuffer() can only be used in WebGL
-mode.
-
-#### Parameters:
-
-    options  configuration options.
-    options.format  The data format of the texture.
-    options.channels  What color channels to include in the texture.
-    options.depth  Whether to store depth information in the framebuffer.
-    options.depthFormat  The format to store depth values in.
-    options.stencil  Whether to include a stencil buffer (required for clipping.)
-    options.antialias  Whether to antialias when drawing to this framebuffer. Either a boolean, or the number of antialias samples to use.
-    options.width  The width of the framebuffer. By default, it will match the main canvas.
-    options.height  The height of the framebuffer. By default, it will match the main canvas.
-    options.density  The pixel density of the framebuffer. By default, it will match the main canvas.
-    options.textureFiltering  The strategy used when reading values in the framebuffer in between pixels.
-
-#### Returns:
-
-    new framebuffer.
 
 📂 *Sub-module: main*
 
@@ -13227,20 +13234,6 @@ mode.
 ---
 
 
-`clearDepth()`                                            |p5-core-clearDepth|
-
-Resets all depth information so that nothing previously drawn will occlude
-anything subsequently drawn.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `unchar()`                                            |p5-core-unchar|
 
 Converts a single-character String to a Number . unchar() converts
@@ -13554,6 +13547,20 @@ href="#/p5/draw"> draw() </a> function won't cause shapes to spin.
 #### Parameters:
 
     angle  angle of rotation in the current <a href="#/p5/angleMode">angleMode()</a>.
+
+#### Returns:
+
+    void
+
+📂 *Sub-module: main*
+
+---
+
+
+`clearDepth()`                                            |p5-core-clearDepth|
+
+Resets all depth information so that nothing previously drawn will occlude
+anything subsequently drawn.
 
 #### Returns:
 
@@ -17068,66 +17075,6 @@ restores images to their original colors.
 ---
 
 
-`model()`                                            |p5-core-model|
-
-Draws a <a href="#/p5.Geometry"> p5.Geometry </a> object to the canvas. The
-first parameter, model , is the <a href="#/p5.Geometry"> p5.Geometry </a>
-object to draw. <a href="#/p5.Geometry"> p5.Geometry </a> objects can be built
-with <a href="#/p5/buildGeometry"> buildGeometry() </a> . They can also be
-loaded from a file with <a href="#/p5/loadGeometry"> loadGeometry() </a> .
-Note: model() can only be used in WebGL mode. A model with several materials,
-such as a character with separate skin, shirt, and shoe materials, keeps each
-material's own colors and textures. The call to model() is the same whether
-the model has one material or many, so a model made in software such as
-Blender appears the way it was exported. // Click and drag the mouse to view
-the scene from different angles. let shape; function setup() {
-createCanvas(100, 100, WEBGL); // Create the p5.Geometry object. shape =
-buildGeometry(createShape); describe('A white cone drawn on a gray
-background.'); } function draw() { background(200); // Enable orbiting with
-the mouse. orbitControl(); // Draw the p5.Geometry object. model(shape); } //
-Create p5.Geometry object from a single cone. function createShape() { cone();
-} // Click and drag the mouse to view the scene from different angles. let
-shape; function setup() { createCanvas(100, 100, WEBGL); // Create the
-p5.Geometry object. shape = buildGeometry(createArrow); describe('Two white
-arrows drawn on a gray background. The arrow on the right rotates slowly.'); }
-function draw() { background(50); // Enable orbiting with the mouse.
-orbitControl(); // Turn on the lights. lights(); // Style the arrows.
-noStroke(); // Draw the p5.Geometry object. model(shape); // Translate and
-rotate the coordinate system. translate(30, 0, 0); rotateZ(frameCount * 0.01);
-// Draw the p5.Geometry object again. model(shape); } function createArrow() {
-// Add shapes to the p5.Geometry object. push(); rotateX(PI); cone(10);
-translate(0, -10, 0); cylinder(3, 20); pop(); } // Click and drag the mouse to
-view the scene from different angles. let shape; async function setup() {
-shape = await loadModel('assets/octahedron.obj'); createCanvas(100, 100,
-WEBGL); describe('A white octahedron drawn against a gray background.'); }
-function draw() { background(200); // Enable orbiting with the mouse.
-orbitControl(); // Draw the shape. model(shape); } Multiple instances can be
-drawn at once with instances(count) . On its own, all the instances get drawn
-to the same spot, but you can use <a href="#/p5/instanceIndex"> instanceIndex
-</a> inside of a shader to handle each instance. At large counts, this often
-runs faster than using a for loop. let instancesShader; let count = 5;
-function setup() { createCanvas(200, 200, WEBGL); instancesShader =
-buildMaterialShader(drawSpaced); } function drawSpaced() {
-worldInputs.begin(); // Spread spheres evenly across the canvas based on their
-index let spacing = width / count; worldInputs.position.x += (instanceIndex -
-(count - 1) / 2) * spacing; worldInputs.end(); } function draw() {
-background(220); lights(); noStroke(); fill('red'); shader(instancesShader);
-instances(count).sphere(15); }
-
-#### Parameters:
-
-    model  3D shape to be drawn.
-    count  number of instances to draw.
-
-#### Returns:
-
-    void
-
-📂 *Sub-module: main*
-
----
-
-
 `round()`                                            |p5-core-round|
 
 Calculates the integer closest to a number. For example, round(133.8) returns
@@ -17242,6 +17189,66 @@ grayscale based on saturation.'); }
 #### Returns:
 
     the saturation value
+
+📂 *Sub-module: main*
+
+---
+
+
+`model()`                                            |p5-core-model|
+
+Draws a <a href="#/p5.Geometry"> p5.Geometry </a> object to the canvas. The
+first parameter, model , is the <a href="#/p5.Geometry"> p5.Geometry </a>
+object to draw. <a href="#/p5.Geometry"> p5.Geometry </a> objects can be built
+with <a href="#/p5/buildGeometry"> buildGeometry() </a> . They can also be
+loaded from a file with <a href="#/p5/loadGeometry"> loadGeometry() </a> .
+Note: model() can only be used in WebGL mode. A model with several materials,
+such as a character with separate skin, shirt, and shoe materials, keeps each
+material's own colors and textures. The call to model() is the same whether
+the model has one material or many, so a model made in software such as
+Blender appears the way it was exported. // Click and drag the mouse to view
+the scene from different angles. let shape; function setup() {
+createCanvas(100, 100, WEBGL); // Create the p5.Geometry object. shape =
+buildGeometry(createShape); describe('A white cone drawn on a gray
+background.'); } function draw() { background(200); // Enable orbiting with
+the mouse. orbitControl(); // Draw the p5.Geometry object. model(shape); } //
+Create p5.Geometry object from a single cone. function createShape() { cone();
+} // Click and drag the mouse to view the scene from different angles. let
+shape; function setup() { createCanvas(100, 100, WEBGL); // Create the
+p5.Geometry object. shape = buildGeometry(createArrow); describe('Two white
+arrows drawn on a gray background. The arrow on the right rotates slowly.'); }
+function draw() { background(50); // Enable orbiting with the mouse.
+orbitControl(); // Turn on the lights. lights(); // Style the arrows.
+noStroke(); // Draw the p5.Geometry object. model(shape); // Translate and
+rotate the coordinate system. translate(30, 0, 0); rotateZ(frameCount * 0.01);
+// Draw the p5.Geometry object again. model(shape); } function createArrow() {
+// Add shapes to the p5.Geometry object. push(); rotateX(PI); cone(10);
+translate(0, -10, 0); cylinder(3, 20); pop(); } // Click and drag the mouse to
+view the scene from different angles. let shape; async function setup() {
+shape = await loadModel('assets/octahedron.obj'); createCanvas(100, 100,
+WEBGL); describe('A white octahedron drawn against a gray background.'); }
+function draw() { background(200); // Enable orbiting with the mouse.
+orbitControl(); // Draw the shape. model(shape); } Multiple instances can be
+drawn at once with instances(count) . On its own, all the instances get drawn
+to the same spot, but you can use <a href="#/p5/instanceIndex"> instanceIndex
+</a> inside of a shader to handle each instance. At large counts, this often
+runs faster than using a for loop. let instancesShader; let count = 5;
+function setup() { createCanvas(200, 200, WEBGL); instancesShader =
+buildMaterialShader(drawSpaced); } function drawSpaced() {
+worldInputs.begin(); // Spread spheres evenly across the canvas based on their
+index let spacing = width / count; worldInputs.position.x += (instanceIndex -
+(count - 1) / 2) * spacing; worldInputs.end(); } function draw() {
+background(220); lights(); noStroke(); fill('red'); shader(instancesShader);
+instances(count).sphere(15); }
+
+#### Parameters:
+
+    model  3D shape to be drawn.
+    count  number of instances to draw.
+
+#### Returns:
+
+    void
 
 📂 *Sub-module: main*
 
@@ -17523,6 +17530,68 @@ imageMode() without an argument returns the current image mode, either CORNER
 ---
 
 
+`loadFont()`                                            |p5-core-loadFont|
+
+Loads a font and creates a <a href="#/p5.Font"> p5.Font </a> object.
+loadFont() can load fonts in either .otf or .ttf format. Loaded fonts can be
+used to style text on the canvas and in HTML elements. The first parameter,
+path , is the path to a font file. Paths to local files should be relative.
+For example, 'assets/inconsolata.otf' . The Inconsolata font used in the
+following examples can be downloaded for free <a
+href="https://www.fontsquirrel.com/fonts/inconsolata" target="_blank"> here
+</a> . Paths to remote files should be URLs. For example,
+'https://example.com/inconsolata.otf' . URLs may be blocked due to browser
+security. In 2D mode, path can take on a few other forms. It could be a path
+to a CSS file, such as one from <a href="https://fonts.google.com/"> Google
+Fonts. </a> It could also be a string with a <a
+href="https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face"> CSS
+@font-face declaration. </a> The second parameter, successCallback , is
+optional. If a function is passed, it will be called once the font has loaded.
+The callback function may use the new <a href="#/p5.Font"> p5.Font </a> object
+if needed. The third parameter, failureCallback , is also optional. If a
+function is passed, it will be called if the font fails to load. The callback
+function may use the error <a
+href="https://developer.mozilla.org/en-US/docs/Web/API/Event" target="_blank">
+Event </a> object if needed. Fonts can take time to load. await the result of
+loadFont() in <a href="#/p5/setup"> setup() </a> before using the result.
+
+#### Parameters:
+
+    path  path of the font or CSS file to be loaded, or a CSS `@font-face` string.
+    name  An alias that can be used for this font in `textFont()`. Defaults to the name in the font's metadata.
+    options  An optional object with extra CSS font face descriptors, or p5.js font settings.
+    options.sets  (Experimental) An optional string of list of strings with Unicode character set names that should be included. When a CSS file is used as the font, it may contain multiple font files. The font best matching the requested character sets will be picked.
+    successCallback  function called with the <a href="#/p5.Font">p5.Font</a> object after it loads.
+    failureCallback  function called with the error <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event" target="_blank">Event</a> object if the font fails to load.
+
+#### Returns:
+
+    <a href="#/p5.Font">p5.Font</a> object.
+
+📂 *Sub-module: main*
+
+---
+
+
+`loadFont()`                                            |p5-core-loadFont|
+
+
+
+#### Parameters:
+
+    path  path of the font to be loaded.
+    successCallback  function called with the <a href="#/p5.Font">p5.Font</a> object after it loads.
+    failureCallback  function called with the error <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event" target="_blank">Event</a> object if the font fails to load.
+
+#### Returns:
+
+    The font.
+
+📂 *Sub-module: main*
+
+---
+
+
 `createModel()`                                            |p5-core-createModel|
 
 Load a 3d model from an OBJ or STL string. OBJ and STL files lack a built-in
@@ -17594,68 +17663,6 @@ Flips the V texture coordinates of the model.
 #### Returns:
 
     the <a href="#/p5.Geometry">p5.Geometry</a> object
-
-📂 *Sub-module: main*
-
----
-
-
-`loadFont()`                                            |p5-core-loadFont|
-
-Loads a font and creates a <a href="#/p5.Font"> p5.Font </a> object.
-loadFont() can load fonts in either .otf or .ttf format. Loaded fonts can be
-used to style text on the canvas and in HTML elements. The first parameter,
-path , is the path to a font file. Paths to local files should be relative.
-For example, 'assets/inconsolata.otf' . The Inconsolata font used in the
-following examples can be downloaded for free <a
-href="https://www.fontsquirrel.com/fonts/inconsolata" target="_blank"> here
-</a> . Paths to remote files should be URLs. For example,
-'https://example.com/inconsolata.otf' . URLs may be blocked due to browser
-security. In 2D mode, path can take on a few other forms. It could be a path
-to a CSS file, such as one from <a href="https://fonts.google.com/"> Google
-Fonts. </a> It could also be a string with a <a
-href="https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face"> CSS
-@font-face declaration. </a> The second parameter, successCallback , is
-optional. If a function is passed, it will be called once the font has loaded.
-The callback function may use the new <a href="#/p5.Font"> p5.Font </a> object
-if needed. The third parameter, failureCallback , is also optional. If a
-function is passed, it will be called if the font fails to load. The callback
-function may use the error <a
-href="https://developer.mozilla.org/en-US/docs/Web/API/Event" target="_blank">
-Event </a> object if needed. Fonts can take time to load. await the result of
-loadFont() in <a href="#/p5/setup"> setup() </a> before using the result.
-
-#### Parameters:
-
-    path  path of the font or CSS file to be loaded, or a CSS `@font-face` string.
-    name  An alias that can be used for this font in `textFont()`. Defaults to the name in the font's metadata.
-    options  An optional object with extra CSS font face descriptors, or p5.js font settings.
-    options.sets  (Experimental) An optional string of list of strings with Unicode character set names that should be included. When a CSS file is used as the font, it may contain multiple font files. The font best matching the requested character sets will be picked.
-    successCallback  function called with the <a href="#/p5.Font">p5.Font</a> object after it loads.
-    failureCallback  function called with the error <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event" target="_blank">Event</a> object if the font fails to load.
-
-#### Returns:
-
-    <a href="#/p5.Font">p5.Font</a> object.
-
-📂 *Sub-module: main*
-
----
-
-
-`loadFont()`                                            |p5-core-loadFont|
-
-
-
-#### Parameters:
-
-    path  path of the font to be loaded.
-    successCallback  function called with the <a href="#/p5.Font">p5.Font</a> object after it loads.
-    failureCallback  function called with the error <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event" target="_blank">Event</a> object if the font fails to load.
-
-#### Returns:
-
-    The font.
 
 📂 *Sub-module: main*
 
@@ -18267,25 +18274,6 @@ save dialog on every render.
 ---
 
 
-`baseMaterialShader()`                                            |p5-core-baseMaterialShader|
-
-Returns the default shader used for fills when lights or textures are used.
-Calling <a href="#/p5/buildMaterialShader">
-buildMaterialShader(shaderFunction) </a> is equivalent to calling
-baseMaterialShader().modify(shaderFunction) . Read <a
-href="#/p5/buildMaterialShader"> the buildMaterialShader reference </a> or
-call baseMaterialShader().inspectHooks() for more information on what you can
-do with the base material shader.
-
-#### Returns:
-
-    The base material shader.
-
-📂 *Sub-module: main*
-
----
-
-
 `lightness()`                                            |p5-core-lightness|
 
 Gets the lightness value of a color. lightness() extracts the HSL lightness
@@ -18340,6 +18328,25 @@ grayscale based on lightness.'); }
 ---
 
 
+`baseMaterialShader()`                                            |p5-core-baseMaterialShader|
+
+Returns the default shader used for fills when lights or textures are used.
+Calling <a href="#/p5/buildMaterialShader">
+buildMaterialShader(shaderFunction) </a> is equivalent to calling
+baseMaterialShader().modify(shaderFunction) . Read <a
+href="#/p5/buildMaterialShader"> the buildMaterialShader reference </a> or
+call baseMaterialShader().inspectHooks() for more information on what you can
+do with the base material shader.
+
+#### Returns:
+
+    The base material shader.
+
+📂 *Sub-module: main*
+
+---
+
+
 `doubleClicked()`                                            |p5-core-doubleClicked|
 
 A function that's called once when a mouse button is clicked twice quickly.
@@ -18374,24 +18381,6 @@ return false; to the end of the function.
 ---
 
 
-`baseFilterShader()`                                            |p5-core-baseFilterShader|
-
-Returns the base shader used for filters. Calling <a
-href="#/p5/buildFilterShader"> buildFilterShader(shaderFunction) </a> is
-equivalent to calling baseFilterShader().modify(shaderFunction) . Read <a
-href="#/p5/buildFilterShader"> the buildFilterShader reference </a> or call
-baseFilterShader().inspectHooks() for more information on what you can do with
-the base filter shader.
-
-#### Returns:
-
-    The base filter shader.
-
-📂 *Sub-module: main*
-
----
-
-
 `erase()`                                            |p5-core-erase|
 
 Starts using shapes to erase parts of the canvas. All drawing that follows
@@ -18419,6 +18408,24 @@ href="#/p5/background"> background() </a> functions.
 #### Returns:
 
     void
+
+📂 *Sub-module: main*
+
+---
+
+
+`baseFilterShader()`                                            |p5-core-baseFilterShader|
+
+Returns the base shader used for filters. Calling <a
+href="#/p5/buildFilterShader"> buildFilterShader(shaderFunction) </a> is
+equivalent to calling baseFilterShader().modify(shaderFunction) . Read <a
+href="#/p5/buildFilterShader"> the buildFilterShader reference </a> or call
+baseFilterShader().inspectHooks() for more information on what you can do with
+the base filter shader.
+
+#### Returns:
+
+    The base filter shader.
 
 📂 *Sub-module: main*
 
@@ -19503,7 +19510,7 @@ filter(displayShader); }
 
 #### Parameters:
 
-    dataOrCount  Either a number specifying the count of floats, an array/Float32Array of floats, or an array of objects describing struct elements.
+    dataOrCount  Either a number specifying the count of elements, an array/TypedArray of values, or an array of objects describing struct elements.
 
 #### Returns:
 
@@ -19926,7 +19933,10 @@ they expect different images: a normal map is the blue-tinted kind that stores
 directions, while a bump map is grayscale and stores height. Only one can be
 active at a time, so setting one replaces the other. A light source is needed
 to see the effect. Models loaded with <a href="#/p5/loadModel"> loadModel()
-</a> apply their own normal map from the .mtl file's map_Bump . Note:
+</a> apply their own normal map from the .mtl file's map_Bump . Note: On a
+shape whose texture coordinates wrap all the way around, such as <a
+href="#/p5/sphere"> sphere() </a> , the two edges of the image meet. The image
+has to tile for them to line up, otherwise a seam shows where they join. Note:
 normalTexture() can only be used in WebGL mode.
 
 #### Parameters:
@@ -20071,6 +20081,27 @@ cells] = [cells, nextCells]; filter(displayShader); }
 ---
 
 
+`createCamera()`                                            |p5-core-createCamera|
+
+Creates a new <a href="#/p5.Camera"> p5.Camera </a> object. The new camera is
+initialized with a default position (0, 0, 800) and a default perspective
+projection. Its properties can be controlled with <a href="#/p5.Camera">
+p5.Camera </a> methods such as myCamera.lookAt(0, 0, 0) . Note: Every 3D
+sketch starts with a default camera initialized. This camera can be controlled
+with the functions <a href="#/p5/camera"> camera() </a> , <a
+href="#/p5/perspective"> perspective() </a> , <a href="#/p5/ortho"> ortho()
+</a> , and <a href="#/p5/frustum"> frustum() </a> if it's the only camera in
+the scene. Note: createCamera() can only be used in WebGL mode.
+
+#### Returns:
+
+    the new camera.
+
+📂 *Sub-module: main*
+
+---
+
+
 `bumpTexture()`                                            |p5-core-bumpTexture|
 
 Sets a grayscale image that adds bumps and dents to a shape's surface. A bump
@@ -20088,7 +20119,12 @@ a tangent-space normal map, the blue-tinted kind that stores directions rather
 than height. A bump map is usually easier to make by hand, since it's just a
 grayscale picture of where the surface is high and low. Only one can be active
 at a time, so setting one replaces the other. A light source is needed to see
-the effect. Note: bumpTexture() can only be used in WebGL mode.
+the effect. Note: On a shape whose texture coordinates wrap all the way
+around, such as <a href="#/p5/sphere"> sphere() </a> , the two edges of the
+image meet. The image has to tile for them to line up. Because a bump map is
+read by comparing neighbouring pixels, also call <a href="#/p5/textureWrap">
+textureWrap(REPEAT) </a> so those comparisons carry across the join instead of
+stopping at the edge. Note: bumpTexture() can only be used in WebGL mode.
 
 #### Parameters:
 
@@ -20098,27 +20134,6 @@ the effect. Note: bumpTexture() can only be used in WebGL mode.
 #### Returns:
 
     void
-
-📂 *Sub-module: main*
-
----
-
-
-`createCamera()`                                            |p5-core-createCamera|
-
-Creates a new <a href="#/p5.Camera"> p5.Camera </a> object. The new camera is
-initialized with a default position (0, 0, 800) and a default perspective
-projection. Its properties can be controlled with <a href="#/p5.Camera">
-p5.Camera </a> methods such as myCamera.lookAt(0, 0, 0) . Note: Every 3D
-sketch starts with a default camera initialized. This camera can be controlled
-with the functions <a href="#/p5/camera"> camera() </a> , <a
-href="#/p5/perspective"> perspective() </a> , <a href="#/p5/ortho"> ortho()
-</a> , and <a href="#/p5/frustum"> frustum() </a> if it's the only camera in
-the scene. Note: createCamera() can only be used in WebGL mode.
-
-#### Returns:
-
-    the new camera.
 
 📂 *Sub-module: main*
 
