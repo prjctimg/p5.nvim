@@ -1,6 +1,6 @@
 // Generated p5.js Type Definitions
 // Bundled from npm package p5@2.3.2
-// Generated: 2026-08-30T07:59:56.376Z
+// Generated: 2026-09-06T06:55:38.436Z
 // Source: https://www.npmjs.com/package/p5
 
 
