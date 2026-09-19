@@ -17,3 +17,7 @@ Thumbs.db
 
 # Ignore the cloned GitHub wiki checkout (hosted at prjctimg/p5.nvim.wiki)
 /wiki/
+opencode.json
+.opencode/
+.entire/
+.agents/opencode/node_modules
