@@ -1,8 +1,27 @@
 // Generated p5.js Type Definitions
-// Bundled from npm package p5@2.3.2
-// Generated: 2026-09-06T06:55:38.436Z
+// Bundled from npm package p5@2.3.4
+// Generated: 2026-09-27T07:42:56.387Z
 // Source: https://www.npmjs.com/package/p5
 
+
+/**
+ * The largest possible number of pixels a gif frame can contain.
+ * 
+ * This static property defines how large, in terms of dimension, a gif image
+ * is allowed to be loaded into a p5 sketch. The default value is
+ * 16,000,000. This means an image's width multiplied by its height must not
+ * exceed 100,000,000. For example, an image with width 10,000 and height
+ * 10,000 is just enough, as well as an image with width 5000 and height
+ * 20,000. An image with width 20,000 and height 20,000 is not allowed and
+ * will cause an error when it is loaded.
+ * 
+ * To avoid this error, you should try to reduce the image dimension of the
+ * gif. If that is not possible or not desirable, you can set
+ * `MAX_GIF_PIXELS` to a higher value instead.
+ */
+declare const MAX_GIF_PIXELS: boolean;
+
+declare const __MAX_GIF_PIXELS: typeof MAX_GIF_PIXELS;
 
 declare const VIDEO: 'video';
 
@@ -1842,7 +1861,7 @@ declare class p5 {
    * Multiplies a quaternion with other quaternion.
    * @param quat quaternion to multiply with the quaternion calling the method.
    */
-  mult(quat?: p5.Quat): void;
+  multiply(quat?: p5.Quat): void;
 
   /**
    * Displays text in the web browser's console.
@@ -2084,40 +2103,6 @@ declare class p5 {
   select(selectors: string, container?: string | p5.Element | HTMLElement): p5.Element | null;
 
   /**
-   * Loads an image to create a <a href="#/p5.Image">p5.Image</a> object.
-   * 
-   * `loadImage()` interprets the first parameter one of three ways. If the path
-   * to an image file is provided, `loadImage()` will load it. Paths to local
-   * files should be relative, such as `'assets/thundercat.jpg'`. URLs such as
-   * `'https://example.com/thundercat.jpg'` may be blocked due to browser
-   * security. Raw image data can also be passed as a base64 encoded image in
-   * the form `'data:image/png;base64,arandomsequenceofcharacters'`. The `path`
-   * parameter can also be defined as a `Request`
-   * object for more advanced usage.
-   * 
-   * The second parameter is optional. If a function is passed, it will be
-   * called once the image has loaded. The callback function can optionally use
-   * the new <a href="#/p5.Image">p5.Image</a> object. The return value of the
-   * function will be used as the final return value of `loadImage()`.
-   * 
-   * The third parameter is also optional. If a function is passed, it will be
-   * called if the image fails to load. The callback function can optionally use
-   * the event error. The return value of the function will be used as the final
-   * return value of `loadImage()`.
-   * 
-   * This function returns a `Promise` and should be used in an `async` setup with
-   * `await`. See the examples for the usage syntax.
-   * @param path path of the image to be loaded or base64 encoded image.
-   * @param successCallback function called with
-   * <a href="#/p5.Image">p5.Image</a> once it
-   * loads.
-   * @param failureCallback function called with event
-   * error if the image fails to load.
-   * @returns the <a href="#/p5.Image">p5.Image</a> object.
-   */
-  loadImage(path: string | Request, successCallback?: (arg0: p5.Image) => void, failureCallback?: (arg0: Event) => void): Promise<p5.Image>;
-
-  /**
    * Creates a new <a href="#/p5.Vector">p5.Vector</a> object.
    * 
    * A vector can be thought of in different ways. In one view, a vector is like
@@ -2326,6 +2311,40 @@ declare class p5 {
   createCanvas(width?: number, height?: number, renderer?: typeof p5.P2D | typeof p5.WEBGL | typeof p5.P2DP3, canvas?: HTMLCanvasElement): p5.Renderer;
   createCanvas(width: number, height: number, renderer: Symbol, canvas?: HTMLCanvasElement): Promise<p5.Renderer>;
   createCanvas(width?: number, height?: number, canvas?: HTMLCanvasElement): p5.Renderer;
+
+  /**
+   * Loads an image to create a <a href="#/p5.Image">p5.Image</a> object.
+   * 
+   * `loadImage()` interprets the first parameter one of three ways. If the path
+   * to an image file is provided, `loadImage()` will load it. Paths to local
+   * files should be relative, such as `'assets/thundercat.jpg'`. URLs such as
+   * `'https://example.com/thundercat.jpg'` may be blocked due to browser
+   * security. Raw image data can also be passed as a base64 encoded image in
+   * the form `'data:image/png;base64,arandomsequenceofcharacters'`. The `path`
+   * parameter can also be defined as a `Request`
+   * object for more advanced usage.
+   * 
+   * The second parameter is optional. If a function is passed, it will be
+   * called once the image has loaded. The callback function can optionally use
+   * the new <a href="#/p5.Image">p5.Image</a> object. The return value of the
+   * function will be used as the final return value of `loadImage()`.
+   * 
+   * The third parameter is also optional. If a function is passed, it will be
+   * called if the image fails to load. The callback function can optionally use
+   * the event error. The return value of the function will be used as the final
+   * return value of `loadImage()`.
+   * 
+   * This function returns a `Promise` and should be used in an `async` setup with
+   * `await`. See the examples for the usage syntax.
+   * @param path path of the image to be loaded or base64 encoded image.
+   * @param successCallback function called with
+   * <a href="#/p5.Image">p5.Image</a> once it
+   * loads.
+   * @param failureCallback function called with event
+   * error if the image fails to load.
+   * @returns the <a href="#/p5.Image">p5.Image</a> object.
+   */
+  loadImage(path: string | Request, successCallback?: (arg0: p5.Image) => void, failureCallback?: (arg0: Event) => void): Promise<p5.Image>;
 
   /**
    * Loads vertex and fragment shaders to create a
@@ -3384,26 +3403,6 @@ declare class p5 {
   resizeCanvas(width: number, height: number, noRedraw?: boolean): void;
 
   /**
-   * Generates a gif from a sketch and saves it to a file.
-   * 
-   * `saveGif()` may be called in <a href="#/p5/setup">setup()</a> or at any
-   * point while a sketch is running.
-   * 
-   * The first parameter, `fileName`, sets the gif's file name.
-   * 
-   * The second parameter, `duration`, sets the gif's duration in seconds.
-   * 
-   * The third parameter, `options`, is optional. If an object is passed,
-   * `saveGif()` will use its properties to customize the gif. `saveGif()`
-   * recognizes the properties `delay`, `units`, `silent`,
-   * `notificationDuration`, and `notificationID`.
-   * @param filename file name of gif.
-   * @param duration duration in seconds to capture from the sketch.
-   * @param options an object that can contain five more properties:
-   */
-  saveGif(filename: string, duration: number, options?: { delay?: number; units?: 'seconds' | 'frames'; silent?: boolean; notificationDuration?: number; notificationID?: string }): void;
-
-  /**
    * Saves the current canvas as an image.
    * 
    * By default, `saveCanvas()` saves the canvas as a PNG image called
@@ -3964,6 +3963,26 @@ declare class p5 {
    * @returns new <a href="#/p5.Element">p5.Element</a> object.
    */
   createElement(tag: string, content?: string): p5.Element;
+
+  /**
+   * Generates a gif from a sketch and saves it to a file.
+   * 
+   * `saveGif()` may be called in <a href="#/p5/setup">setup()</a> or at any
+   * point while a sketch is running.
+   * 
+   * The first parameter, `fileName`, sets the gif's file name.
+   * 
+   * The second parameter, `duration`, sets the gif's duration in seconds.
+   * 
+   * The third parameter, `options`, is optional. If an object is passed,
+   * `saveGif()` will use its properties to customize the gif. `saveGif()`
+   * recognizes the properties `delay`, `units`, `silent`,
+   * `notificationDuration`, and `notificationID`.
+   * @param filename file name of gif.
+   * @param duration duration in seconds to capture from the sketch.
+   * @param options an object that can contain five more properties:
+   */
+  saveGif(filename: string, duration: number, options?: { delay?: number; units?: 'seconds' | 'frames'; silent?: boolean; notificationDuration?: number; notificationID?: string }): void;
 
   /**
    * Calculates the arc sine of a number.
@@ -8769,9 +8788,10 @@ declare class p5 {
    * }`
    * @param n0 first number to compare.
    * @param n1 second number to compare.
+   * @param rest additional numbers to compare.
    * @returns maximum number.
    */
-  max(n0: number, n1: number): number;
+  max(n0: number, n1: number, ...rest: number[]): number;
   max(nums: number[]): number;
 
   /**
@@ -9097,78 +9117,6 @@ declare class p5 {
   getURLParams(): object;
 
   /**
-   * Draws an image to the canvas.
-   * 
-   * The first parameter, `img`, is the source image to be drawn. `img` can be
-   * any of the following objects:
-   * 
-   * - <a href="#/p5.Image">p5.Image</a>
-   * 
-   * - <a href="#/p5.Element">p5.Element</a>
-   * 
-   * - <a href="#/p5.Texture">p5.Texture</a>
-   * 
-   * - <a href="#/p5.Framebuffer">p5.Framebuffer</a>
-   * 
-   * - <a href="#/p5.FramebufferTexture">p5.FramebufferTexture</a>
-   * 
-   * The second and third parameters, `dx` and `dy`, set the coordinates of the
-   * destination image's top left corner. See
-   * <a href="#/p5/imageMode">imageMode()</a> for other ways to position images.
-   * 
-   * `let img;
-   * 
-   * async function setup() {
-   * // Load the image.
-   * img = await loadImage('assets/laDefense.jpg');
-   * 
-   * createCanvas(100, 100);
-   * 
-   * background(50);
-   * 
-   * // Draw the image.
-   * image(img, 0, 0);
-   * 
-   * describe('An image of the underside of a white umbrella with a gridded ceiling above.');
-   * }`Here's a diagram that explains how optional parameters work in `image()`:
-   * 
-   * <img src="assets/drawImage.png"></img>
-   * 
-   * The fourth and fifth parameters, `dw` and `dh`, are optional. They set the
-   * the width and height to draw the destination image. By default, `image()`
-   * draws the full source image at its original size.
-   * 
-   * The sixth and seventh parameters, `sx` and `sy`, are also optional.
-   * These coordinates define the top left corner of a subsection to draw from
-   * the source image.
-   * 
-   * The eighth and ninth parameters, `sw` and `sh`, are also optional.
-   * They define the width and height of a subsection to draw from the source
-   * image. By default, `image()` draws the full subsection that begins at
-   * `(sx, sy)` and extends to the edges of the source image.
-   * 
-   * The ninth parameter, `fit`, is also optional. It enables a subsection of
-   * the source image to be drawn without affecting its aspect ratio. If
-   * `CONTAIN` is passed, the full subsection will appear within the destination
-   * rectangle. If `COVER` is passed, the subsection will completely cover the
-   * destination rectangle. This may have the effect of zooming into the
-   * subsection.
-   * 
-   * The tenth and eleventh paremeters, `xAlign` and `yAlign`, are also
-   * optional. They determine how to align the fitted subsection. `xAlign` can
-   * be set to either `LEFT`, `RIGHT`, or `CENTER`. `yAlign` can be set to
-   * either `TOP`, `BOTTOM`, or `CENTER`. By default, both `xAlign` and `yAlign`
-   * are set to `CENTER`.
-   * @param img image to display.
-   * @param x x-coordinate of the top-left corner of the image.
-   * @param y y-coordinate of the top-left corner of the image.
-   * @param width width to draw the image.
-   * @param height height to draw the image.
-   */
-  image(img: p5.Image | p5.Element | p5.Texture | p5.Framebuffer | p5.FramebufferTexture | p5.Renderer | p5.Graphics, x: number, y: number, width?: number, height?: number): void;
-  image(img: p5.Image | p5.Element | p5.Texture | p5.Framebuffer | p5.FramebufferTexture, dx: number, dy: number, dWidth: number, dHeight: number, sx: number, sy: number, sWidth?: number, sHeight?: number, fit?: typeof p5.CONTAIN | typeof p5.COVER, xAlign?: typeof p5.LEFT | typeof p5.RIGHT | typeof p5.CENTER, yAlign?: typeof p5.TOP | typeof p5.BOTTOM | typeof p5.CENTER): void;
-
-  /**
    * Sets the falloff rate for <a href="#/p5/pointLight">pointLight()</a>
    * and <a href="#/p5/spotLight">spotLight()</a>.
    * 
@@ -9451,6 +9399,78 @@ declare class p5 {
   keyIsDown(code: number | string): boolean;
 
   /**
+   * Draws an image to the canvas.
+   * 
+   * The first parameter, `img`, is the source image to be drawn. `img` can be
+   * any of the following objects:
+   * 
+   * - <a href="#/p5.Image">p5.Image</a>
+   * 
+   * - <a href="#/p5.Element">p5.Element</a>
+   * 
+   * - <a href="#/p5.Texture">p5.Texture</a>
+   * 
+   * - <a href="#/p5.Framebuffer">p5.Framebuffer</a>
+   * 
+   * - <a href="#/p5.FramebufferTexture">p5.FramebufferTexture</a>
+   * 
+   * The second and third parameters, `dx` and `dy`, set the coordinates of the
+   * destination image's top left corner. See
+   * <a href="#/p5/imageMode">imageMode()</a> for other ways to position images.
+   * 
+   * `let img;
+   * 
+   * async function setup() {
+   * // Load the image.
+   * img = await loadImage('assets/laDefense.jpg');
+   * 
+   * createCanvas(100, 100);
+   * 
+   * background(50);
+   * 
+   * // Draw the image.
+   * image(img, 0, 0);
+   * 
+   * describe('An image of the underside of a white umbrella with a gridded ceiling above.');
+   * }`Here's a diagram that explains how optional parameters work in `image()`:
+   * 
+   * <img src="assets/drawImage.png"></img>
+   * 
+   * The fourth and fifth parameters, `dw` and `dh`, are optional. They set the
+   * the width and height to draw the destination image. By default, `image()`
+   * draws the full source image at its original size.
+   * 
+   * The sixth and seventh parameters, `sx` and `sy`, are also optional.
+   * These coordinates define the top left corner of a subsection to draw from
+   * the source image.
+   * 
+   * The eighth and ninth parameters, `sw` and `sh`, are also optional.
+   * They define the width and height of a subsection to draw from the source
+   * image. By default, `image()` draws the full subsection that begins at
+   * `(sx, sy)` and extends to the edges of the source image.
+   * 
+   * The ninth parameter, `fit`, is also optional. It enables a subsection of
+   * the source image to be drawn without affecting its aspect ratio. If
+   * `CONTAIN` is passed, the full subsection will appear within the destination
+   * rectangle. If `COVER` is passed, the subsection will completely cover the
+   * destination rectangle. This may have the effect of zooming into the
+   * subsection.
+   * 
+   * The tenth and eleventh paremeters, `xAlign` and `yAlign`, are also
+   * optional. They determine how to align the fitted subsection. `xAlign` can
+   * be set to either `LEFT`, `RIGHT`, or `CENTER`. `yAlign` can be set to
+   * either `TOP`, `BOTTOM`, or `CENTER`. By default, both `xAlign` and `yAlign`
+   * are set to `CENTER`.
+   * @param img image to display.
+   * @param x x-coordinate of the top-left corner of the image.
+   * @param y y-coordinate of the top-left corner of the image.
+   * @param width width to draw the image.
+   * @param height height to draw the image.
+   */
+  image(img: p5.Image | p5.Element | p5.Texture | p5.Framebuffer | p5.FramebufferTexture | p5.Renderer | p5.Graphics, x: number, y: number, width?: number, height?: number): void;
+  image(img: p5.Image | p5.Element | p5.Texture | p5.Framebuffer | p5.FramebufferTexture, dx: number, dy: number, dWidth: number, dHeight: number, sx: number, sy: number, sWidth?: number, sHeight?: number, fit?: typeof p5.CONTAIN | typeof p5.COVER, xAlign?: typeof p5.LEFT | typeof p5.RIGHT | typeof p5.CENTER, yAlign?: typeof p5.TOP | typeof p5.BOTTOM | typeof p5.CENTER): void;
+
+  /**
    * Sets the element's content.
    * 
    * An element's content is the text between its tags. For example, the element
@@ -9618,9 +9638,10 @@ declare class p5 {
    * }`
    * @param n0 first number to compare.
    * @param n1 second number to compare.
+   * @param rest additional numbers to compare.
    * @returns minimum number.
    */
-  min(n0: number, n1: number): number;
+  min(n0: number, n1: number, ...rest: number[]): number;
   min(nums: number[]): number;
 
   /**
@@ -10308,39 +10329,6 @@ declare class p5 {
   translate(vector: p5.Vector): void;
 
   /**
-   * Tints images using a color.
-   * 
-   * The version of `tint()` with one parameter interprets it one of four ways.
-   * If the parameter is a number, it's interpreted as a grayscale value. If the
-   * parameter is a string, it's interpreted as a CSS color string. An array of
-   * `[R, G, B, A]` values or a <a href="#/p5.Color">p5.Color</a> object can
-   * also be used to set the tint color.
-   * 
-   * The version of `tint()` with two parameters uses the first one as a
-   * grayscale value and the second as an alpha value. For example, calling
-   * `tint(255, 128)` will make an image 50% transparent.
-   * 
-   * The version of `tint()` with three parameters interprets them as RGB or
-   * HSB values, depending on the current
-   * <a href="#/p5/colorMode">colorMode()</a>. The optional fourth parameter
-   * sets the alpha value. For example, `tint(255, 0, 0, 100)` will give images
-   * a red tint and make them transparent.
-   * 
-   * Calling `tint()` without an argument returns the current tint as a
-   * <a href="#/p5.Color">p5.Color</a> object.
-   * @param v1 red or hue value.
-   * @param v2 green or saturation value.
-   * @param v3 blue or brightness.
-   * @returns the current tint color
-   */
-  tint(v1: number, v2: number, v3: number, alpha?: number): p5.Color;
-  tint(value: string): p5.Color;
-  tint(gray: number, alpha?: number): p5.Color;
-  tint(values: number[]): p5.Color;
-  tint(color: p5.Color): p5.Color;
-  tint(): p5.Color;
-
-  /**
    * Creates a new <a href="#/p5.PrintWriter">p5.PrintWriter</a> object.
    * 
    * <a href="#/p5.PrintWriter">p5.PrintWriter</a> objects provide a way to
@@ -10799,11 +10787,37 @@ declare class p5 {
   textWeight(): number;
 
   /**
-   * Removes the current tint set by <a href="#/p5/tint">tint()</a>.
+   * Tints images using a color.
    * 
-   * `noTint()` restores images to their original colors.
+   * The version of `tint()` with one parameter interprets it one of four ways.
+   * If the parameter is a number, it's interpreted as a grayscale value. If the
+   * parameter is a string, it's interpreted as a CSS color string. An array of
+   * `[R, G, B, A]` values or a <a href="#/p5.Color">p5.Color</a> object can
+   * also be used to set the tint color.
+   * 
+   * The version of `tint()` with two parameters uses the first one as a
+   * grayscale value and the second as an alpha value. For example, calling
+   * `tint(255, 128)` will make an image 50% transparent.
+   * 
+   * The version of `tint()` with three parameters interprets them as RGB or
+   * HSB values, depending on the current
+   * <a href="#/p5/colorMode">colorMode()</a>. The optional fourth parameter
+   * sets the alpha value. For example, `tint(255, 0, 0, 100)` will give images
+   * a red tint and make them transparent.
+   * 
+   * Calling `tint()` without an argument returns the current tint as a
+   * <a href="#/p5.Color">p5.Color</a> object.
+   * @param v1 red or hue value.
+   * @param v2 green or saturation value.
+   * @param v3 blue or brightness.
+   * @returns the current tint color
    */
-  noTint(): void;
+  tint(v1: number, v2: number, v3: number, alpha?: number): p5.Color;
+  tint(value: string): p5.Color;
+  tint(gray: number, alpha?: number): p5.Color;
+  tint(values: number[]): p5.Color;
+  tint(color: p5.Color): p5.Color;
+  tint(): p5.Color;
 
   /**
    * Draws an ellipsoid.
@@ -11108,6 +11122,13 @@ declare class p5 {
   saturation(color: p5.Color | number[] | string): number;
 
   /**
+   * Removes the current tint set by <a href="#/p5/tint">tint()</a>.
+   * 
+   * `noTint()` restores images to their original colors.
+   */
+  noTint(): void;
+
+  /**
    * Removes all lights from the sketch.
    * 
    * Calling `noLights()` removes any lights created with
@@ -11276,31 +11297,6 @@ declare class p5 {
   createVideo(src?: string | string[], callback?: (video: p5.MediaElement<HTMLVideoElement>) => any): p5.MediaElement<HTMLVideoElement>;
 
   /**
-   * Changes the location from which images are drawn when
-   * <a href="#/p5/image">image()</a> is called.
-   * 
-   * By default, the first
-   * two parameters of <a href="#/p5/image">image()</a> are the x- and
-   * y-coordinates of the image's upper-left corner. The next parameters are
-   * its width and height. This is the same as calling `imageMode(CORNER)`.
-   * 
-   * `imageMode(CORNERS)` also uses the first two parameters of
-   * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
-   * top-left corner. The third and fourth parameters are the coordinates of its
-   * bottom-right corner.
-   * 
-   * `imageMode(CENTER)` uses the first two parameters of
-   * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
-   * center. The next parameters are its width and height.
-   * 
-   * Calling `imageMode()` without an argument returns the current image mode, either `CORNER`, `CORNERS`, or `CENTER`.
-   * @param mode either CORNER, CORNERS, or CENTER.
-   * @returns the current image mode
-   */
-  imageMode(mode: typeof p5.CORNER | typeof p5.CORNERS | typeof p5.CENTER): typeof p5.CORNER | typeof p5.CORNERS | typeof p5.CENTER;
-  imageMode(): typeof p5.CORNER | typeof p5.CORNERS | typeof p5.CENTER;
-
-  /**
    * Loads a font and creates a <a href="#/p5.Font">p5.Font</a> object.
    * `loadFont()` can load fonts in either .otf or .ttf format. Loaded fonts can
    * be used to style text on the canvas and in HTML elements.
@@ -11367,6 +11363,31 @@ declare class p5 {
    * @returns new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
    */
   createAudio(src?: string | string[], callback?: (video: p5.MediaElement<HTMLAudioElement>) => any): p5.MediaElement<HTMLAudioElement>;
+
+  /**
+   * Changes the location from which images are drawn when
+   * <a href="#/p5/image">image()</a> is called.
+   * 
+   * By default, the first
+   * two parameters of <a href="#/p5/image">image()</a> are the x- and
+   * y-coordinates of the image's upper-left corner. The next parameters are
+   * its width and height. This is the same as calling `imageMode(CORNER)`.
+   * 
+   * `imageMode(CORNERS)` also uses the first two parameters of
+   * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
+   * top-left corner. The third and fourth parameters are the coordinates of its
+   * bottom-right corner.
+   * 
+   * `imageMode(CENTER)` uses the first two parameters of
+   * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
+   * center. The next parameters are its width and height.
+   * 
+   * Calling `imageMode()` without an argument returns the current image mode, either `CORNER`, `CORNERS`, or `CENTER`.
+   * @param mode either CORNER, CORNERS, or CENTER.
+   * @returns the current image mode
+   */
+  imageMode(mode: typeof p5.CORNER | typeof p5.CORNERS | typeof p5.CENTER): typeof p5.CORNER | typeof p5.CORNERS | typeof p5.CENTER;
+  imageMode(): typeof p5.CORNER | typeof p5.CORNERS | typeof p5.CENTER;
 
   /**
    * Draws a torus.
@@ -15560,6 +15581,7 @@ declare class p5 {
    */
   sampler(value: any): any;
 
+  readonly MAX_GIF_PIXELS: typeof MAX_GIF_PIXELS;
   readonly VIDEO: typeof VIDEO;
   readonly RGB: typeof RGB;
   readonly VERSION: typeof VERSION;
@@ -15759,6 +15781,7 @@ declare const __p5: typeof p5;
 declare namespace p5 {
   const p5: typeof __p5;
 
+const MAX_GIF_PIXELS: typeof __MAX_GIF_PIXELS;
 const VIDEO: typeof __VIDEO;
 const RGB: typeof __RGB;
 const VERSION: typeof __VERSION;
@@ -20261,10 +20284,29 @@ export as namespace p5;
 
 
 
+import P5 from './p5.js';
+
 declare global {
 interface Window {
 
 p5: p5;
+/**
+ * The largest possible number of pixels a gif frame can contain.
+ * 
+ * This static property defines how large, in terms of dimension, a gif image
+ * is allowed to be loaded into a p5 sketch. The default value is
+ * 16,000,000. This means an image's width multiplied by its height must not
+ * exceed 100,000,000. For example, an image with width 10,000 and height
+ * 10,000 is just enough, as well as an image with width 5000 and height
+ * 20,000. An image with width 20,000 and height 20,000 is not allowed and
+ * will cause an error when it is loaded.
+ * 
+ * To avoid this error, you should try to reduce the image dimension of the
+ * gif. If that is not possible or not desirable, you can set
+ * `MAX_GIF_PIXELS` to a higher value instead.
+ */
+MAX_GIF_PIXELS: typeof MAX_GIF_PIXELS;
+
 VIDEO: typeof VIDEO;
 
 RGB: typeof RGB;
@@ -21665,7 +21707,7 @@ index: typeof index;
    * Multiplies a quaternion with other quaternion.
    * @param quat quaternion to multiply with the quaternion calling the method.
    */
-  mult(quat?: P5.Quat): void;
+  multiply(quat?: P5.Quat): void;
 
   /**
    * Displays text in the web browser's console.
@@ -21907,40 +21949,6 @@ index: typeof index;
   select(selectors: string, container?: string | P5.Element | HTMLElement): P5.Element | null;
 
   /**
-   * Loads an image to create a <a href="#/p5.Image">p5.Image</a> object.
-   * 
-   * `loadImage()` interprets the first parameter one of three ways. If the path
-   * to an image file is provided, `loadImage()` will load it. Paths to local
-   * files should be relative, such as `'assets/thundercat.jpg'`. URLs such as
-   * `'https://example.com/thundercat.jpg'` may be blocked due to browser
-   * security. Raw image data can also be passed as a base64 encoded image in
-   * the form `'data:image/png;base64,arandomsequenceofcharacters'`. The `path`
-   * parameter can also be defined as a `Request`
-   * object for more advanced usage.
-   * 
-   * The second parameter is optional. If a function is passed, it will be
-   * called once the image has loaded. The callback function can optionally use
-   * the new <a href="#/p5.Image">p5.Image</a> object. The return value of the
-   * function will be used as the final return value of `loadImage()`.
-   * 
-   * The third parameter is also optional. If a function is passed, it will be
-   * called if the image fails to load. The callback function can optionally use
-   * the event error. The return value of the function will be used as the final
-   * return value of `loadImage()`.
-   * 
-   * This function returns a `Promise` and should be used in an `async` setup with
-   * `await`. See the examples for the usage syntax.
-   * @param path path of the image to be loaded or base64 encoded image.
-   * @param successCallback function called with
-   * <a href="#/p5.Image">p5.Image</a> once it
-   * loads.
-   * @param failureCallback function called with event
-   * error if the image fails to load.
-   * @returns the <a href="#/p5.Image">p5.Image</a> object.
-   */
-  loadImage(path: string | Request, successCallback?: (arg0: P5.Image) => void, failureCallback?: (arg0: Event) => void): Promise<P5.Image>;
-
-  /**
    * Creates a new <a href="#/p5.Vector">p5.Vector</a> object.
    * 
    * A vector can be thought of in different ways. In one view, a vector is like
@@ -22149,6 +22157,40 @@ index: typeof index;
   createCanvas(width?: number, height?: number, renderer?: typeof P2D | typeof WEBGL | typeof P2DP3, canvas?: HTMLCanvasElement): P5.Renderer;
   createCanvas(width: number, height: number, renderer: typeof WEBGPU, canvas?: HTMLCanvasElement): Promise<P5.Renderer>;
   createCanvas(width?: number, height?: number, canvas?: HTMLCanvasElement): P5.Renderer;
+
+  /**
+   * Loads an image to create a <a href="#/p5.Image">p5.Image</a> object.
+   * 
+   * `loadImage()` interprets the first parameter one of three ways. If the path
+   * to an image file is provided, `loadImage()` will load it. Paths to local
+   * files should be relative, such as `'assets/thundercat.jpg'`. URLs such as
+   * `'https://example.com/thundercat.jpg'` may be blocked due to browser
+   * security. Raw image data can also be passed as a base64 encoded image in
+   * the form `'data:image/png;base64,arandomsequenceofcharacters'`. The `path`
+   * parameter can also be defined as a `Request`
+   * object for more advanced usage.
+   * 
+   * The second parameter is optional. If a function is passed, it will be
+   * called once the image has loaded. The callback function can optionally use
+   * the new <a href="#/p5.Image">p5.Image</a> object. The return value of the
+   * function will be used as the final return value of `loadImage()`.
+   * 
+   * The third parameter is also optional. If a function is passed, it will be
+   * called if the image fails to load. The callback function can optionally use
+   * the event error. The return value of the function will be used as the final
+   * return value of `loadImage()`.
+   * 
+   * This function returns a `Promise` and should be used in an `async` setup with
+   * `await`. See the examples for the usage syntax.
+   * @param path path of the image to be loaded or base64 encoded image.
+   * @param successCallback function called with
+   * <a href="#/p5.Image">p5.Image</a> once it
+   * loads.
+   * @param failureCallback function called with event
+   * error if the image fails to load.
+   * @returns the <a href="#/p5.Image">p5.Image</a> object.
+   */
+  loadImage(path: string | Request, successCallback?: (arg0: P5.Image) => void, failureCallback?: (arg0: Event) => void): Promise<P5.Image>;
 
   /**
    * Loads vertex and fragment shaders to create a
@@ -23207,26 +23249,6 @@ index: typeof index;
   resizeCanvas(width: number, height: number, noRedraw?: boolean): void;
 
   /**
-   * Generates a gif from a sketch and saves it to a file.
-   * 
-   * `saveGif()` may be called in <a href="#/p5/setup">setup()</a> or at any
-   * point while a sketch is running.
-   * 
-   * The first parameter, `fileName`, sets the gif's file name.
-   * 
-   * The second parameter, `duration`, sets the gif's duration in seconds.
-   * 
-   * The third parameter, `options`, is optional. If an object is passed,
-   * `saveGif()` will use its properties to customize the gif. `saveGif()`
-   * recognizes the properties `delay`, `units`, `silent`,
-   * `notificationDuration`, and `notificationID`.
-   * @param filename file name of gif.
-   * @param duration duration in seconds to capture from the sketch.
-   * @param options an object that can contain five more properties:
-   */
-  saveGif(filename: string, duration: number, options?: { delay?: number; units?: 'seconds' | 'frames'; silent?: boolean; notificationDuration?: number; notificationID?: string }): void;
-
-  /**
    * Saves the current canvas as an image.
    * 
    * By default, `saveCanvas()` saves the canvas as a PNG image called
@@ -23787,6 +23809,26 @@ index: typeof index;
    * @returns new <a href="#/p5.Element">p5.Element</a> object.
    */
   createElement(tag: string, content?: string): P5.Element;
+
+  /**
+   * Generates a gif from a sketch and saves it to a file.
+   * 
+   * `saveGif()` may be called in <a href="#/p5/setup">setup()</a> or at any
+   * point while a sketch is running.
+   * 
+   * The first parameter, `fileName`, sets the gif's file name.
+   * 
+   * The second parameter, `duration`, sets the gif's duration in seconds.
+   * 
+   * The third parameter, `options`, is optional. If an object is passed,
+   * `saveGif()` will use its properties to customize the gif. `saveGif()`
+   * recognizes the properties `delay`, `units`, `silent`,
+   * `notificationDuration`, and `notificationID`.
+   * @param filename file name of gif.
+   * @param duration duration in seconds to capture from the sketch.
+   * @param options an object that can contain five more properties:
+   */
+  saveGif(filename: string, duration: number, options?: { delay?: number; units?: 'seconds' | 'frames'; silent?: boolean; notificationDuration?: number; notificationID?: string }): void;
 
   /**
    * Calculates the arc sine of a number.
@@ -28592,9 +28634,10 @@ index: typeof index;
    * }`
    * @param n0 first number to compare.
    * @param n1 second number to compare.
+   * @param rest additional numbers to compare.
    * @returns maximum number.
    */
-  max(n0: number, n1: number): number;
+  max(n0: number, n1: number, ...rest: number[]): number;
   max(nums: number[]): number;
 
   /**
@@ -28920,78 +28963,6 @@ index: typeof index;
   getURLParams(): object;
 
   /**
-   * Draws an image to the canvas.
-   * 
-   * The first parameter, `img`, is the source image to be drawn. `img` can be
-   * any of the following objects:
-   * 
-   * - <a href="#/p5.Image">p5.Image</a>
-   * 
-   * - <a href="#/p5.Element">p5.Element</a>
-   * 
-   * - <a href="#/p5.Texture">p5.Texture</a>
-   * 
-   * - <a href="#/p5.Framebuffer">p5.Framebuffer</a>
-   * 
-   * - <a href="#/p5.FramebufferTexture">p5.FramebufferTexture</a>
-   * 
-   * The second and third parameters, `dx` and `dy`, set the coordinates of the
-   * destination image's top left corner. See
-   * <a href="#/p5/imageMode">imageMode()</a> for other ways to position images.
-   * 
-   * `let img;
-   * 
-   * async function setup() {
-   * // Load the image.
-   * img = await loadImage('assets/laDefense.jpg');
-   * 
-   * createCanvas(100, 100);
-   * 
-   * background(50);
-   * 
-   * // Draw the image.
-   * image(img, 0, 0);
-   * 
-   * describe('An image of the underside of a white umbrella with a gridded ceiling above.');
-   * }`Here's a diagram that explains how optional parameters work in `image()`:
-   * 
-   * <img src="assets/drawImage.png"></img>
-   * 
-   * The fourth and fifth parameters, `dw` and `dh`, are optional. They set the
-   * the width and height to draw the destination image. By default, `image()`
-   * draws the full source image at its original size.
-   * 
-   * The sixth and seventh parameters, `sx` and `sy`, are also optional.
-   * These coordinates define the top left corner of a subsection to draw from
-   * the source image.
-   * 
-   * The eighth and ninth parameters, `sw` and `sh`, are also optional.
-   * They define the width and height of a subsection to draw from the source
-   * image. By default, `image()` draws the full subsection that begins at
-   * `(sx, sy)` and extends to the edges of the source image.
-   * 
-   * The ninth parameter, `fit`, is also optional. It enables a subsection of
-   * the source image to be drawn without affecting its aspect ratio. If
-   * `CONTAIN` is passed, the full subsection will appear within the destination
-   * rectangle. If `COVER` is passed, the subsection will completely cover the
-   * destination rectangle. This may have the effect of zooming into the
-   * subsection.
-   * 
-   * The tenth and eleventh paremeters, `xAlign` and `yAlign`, are also
-   * optional. They determine how to align the fitted subsection. `xAlign` can
-   * be set to either `LEFT`, `RIGHT`, or `CENTER`. `yAlign` can be set to
-   * either `TOP`, `BOTTOM`, or `CENTER`. By default, both `xAlign` and `yAlign`
-   * are set to `CENTER`.
-   * @param img image to display.
-   * @param x x-coordinate of the top-left corner of the image.
-   * @param y y-coordinate of the top-left corner of the image.
-   * @param width width to draw the image.
-   * @param height height to draw the image.
-   */
-  image(img: P5.Image | P5.Element | P5.Texture | P5.Framebuffer | P5.FramebufferTexture | P5.Renderer | P5.Graphics, x: number, y: number, width?: number, height?: number): void;
-  image(img: P5.Image | P5.Element | P5.Texture | P5.Framebuffer | P5.FramebufferTexture, dx: number, dy: number, dWidth: number, dHeight: number, sx: number, sy: number, sWidth?: number, sHeight?: number, fit?: typeof CONTAIN | typeof COVER, xAlign?: typeof LEFT | typeof RIGHT | typeof CENTER, yAlign?: typeof TOP | typeof BOTTOM | typeof CENTER): void;
-
-  /**
    * Sets the falloff rate for <a href="#/p5/pointLight">pointLight()</a>
    * and <a href="#/p5/spotLight">spotLight()</a>.
    * 
@@ -29274,6 +29245,78 @@ index: typeof index;
   keyIsDown(code: number | string): boolean;
 
   /**
+   * Draws an image to the canvas.
+   * 
+   * The first parameter, `img`, is the source image to be drawn. `img` can be
+   * any of the following objects:
+   * 
+   * - <a href="#/p5.Image">p5.Image</a>
+   * 
+   * - <a href="#/p5.Element">p5.Element</a>
+   * 
+   * - <a href="#/p5.Texture">p5.Texture</a>
+   * 
+   * - <a href="#/p5.Framebuffer">p5.Framebuffer</a>
+   * 
+   * - <a href="#/p5.FramebufferTexture">p5.FramebufferTexture</a>
+   * 
+   * The second and third parameters, `dx` and `dy`, set the coordinates of the
+   * destination image's top left corner. See
+   * <a href="#/p5/imageMode">imageMode()</a> for other ways to position images.
+   * 
+   * `let img;
+   * 
+   * async function setup() {
+   * // Load the image.
+   * img = await loadImage('assets/laDefense.jpg');
+   * 
+   * createCanvas(100, 100);
+   * 
+   * background(50);
+   * 
+   * // Draw the image.
+   * image(img, 0, 0);
+   * 
+   * describe('An image of the underside of a white umbrella with a gridded ceiling above.');
+   * }`Here's a diagram that explains how optional parameters work in `image()`:
+   * 
+   * <img src="assets/drawImage.png"></img>
+   * 
+   * The fourth and fifth parameters, `dw` and `dh`, are optional. They set the
+   * the width and height to draw the destination image. By default, `image()`
+   * draws the full source image at its original size.
+   * 
+   * The sixth and seventh parameters, `sx` and `sy`, are also optional.
+   * These coordinates define the top left corner of a subsection to draw from
+   * the source image.
+   * 
+   * The eighth and ninth parameters, `sw` and `sh`, are also optional.
+   * They define the width and height of a subsection to draw from the source
+   * image. By default, `image()` draws the full subsection that begins at
+   * `(sx, sy)` and extends to the edges of the source image.
+   * 
+   * The ninth parameter, `fit`, is also optional. It enables a subsection of
+   * the source image to be drawn without affecting its aspect ratio. If
+   * `CONTAIN` is passed, the full subsection will appear within the destination
+   * rectangle. If `COVER` is passed, the subsection will completely cover the
+   * destination rectangle. This may have the effect of zooming into the
+   * subsection.
+   * 
+   * The tenth and eleventh paremeters, `xAlign` and `yAlign`, are also
+   * optional. They determine how to align the fitted subsection. `xAlign` can
+   * be set to either `LEFT`, `RIGHT`, or `CENTER`. `yAlign` can be set to
+   * either `TOP`, `BOTTOM`, or `CENTER`. By default, both `xAlign` and `yAlign`
+   * are set to `CENTER`.
+   * @param img image to display.
+   * @param x x-coordinate of the top-left corner of the image.
+   * @param y y-coordinate of the top-left corner of the image.
+   * @param width width to draw the image.
+   * @param height height to draw the image.
+   */
+  image(img: P5.Image | P5.Element | P5.Texture | P5.Framebuffer | P5.FramebufferTexture | P5.Renderer | P5.Graphics, x: number, y: number, width?: number, height?: number): void;
+  image(img: P5.Image | P5.Element | P5.Texture | P5.Framebuffer | P5.FramebufferTexture, dx: number, dy: number, dWidth: number, dHeight: number, sx: number, sy: number, sWidth?: number, sHeight?: number, fit?: typeof CONTAIN | typeof COVER, xAlign?: typeof LEFT | typeof RIGHT | typeof CENTER, yAlign?: typeof TOP | typeof BOTTOM | typeof CENTER): void;
+
+  /**
    * Sets the element's content.
    * 
    * An element's content is the text between its tags. For example, the element
@@ -29441,9 +29484,10 @@ index: typeof index;
    * }`
    * @param n0 first number to compare.
    * @param n1 second number to compare.
+   * @param rest additional numbers to compare.
    * @returns minimum number.
    */
-  min(n0: number, n1: number): number;
+  min(n0: number, n1: number, ...rest: number[]): number;
   min(nums: number[]): number;
 
   /**
@@ -30131,39 +30175,6 @@ index: typeof index;
   translate(vector: P5.Vector): void;
 
   /**
-   * Tints images using a color.
-   * 
-   * The version of `tint()` with one parameter interprets it one of four ways.
-   * If the parameter is a number, it's interpreted as a grayscale value. If the
-   * parameter is a string, it's interpreted as a CSS color string. An array of
-   * `[R, G, B, A]` values or a <a href="#/p5.Color">p5.Color</a> object can
-   * also be used to set the tint color.
-   * 
-   * The version of `tint()` with two parameters uses the first one as a
-   * grayscale value and the second as an alpha value. For example, calling
-   * `tint(255, 128)` will make an image 50% transparent.
-   * 
-   * The version of `tint()` with three parameters interprets them as RGB or
-   * HSB values, depending on the current
-   * <a href="#/p5/colorMode">colorMode()</a>. The optional fourth parameter
-   * sets the alpha value. For example, `tint(255, 0, 0, 100)` will give images
-   * a red tint and make them transparent.
-   * 
-   * Calling `tint()` without an argument returns the current tint as a
-   * <a href="#/p5.Color">p5.Color</a> object.
-   * @param v1 red or hue value.
-   * @param v2 green or saturation value.
-   * @param v3 blue or brightness.
-   * @returns the current tint color
-   */
-  tint(v1: number, v2: number, v3: number, alpha?: number): P5.Color;
-  tint(value: string): P5.Color;
-  tint(gray: number, alpha?: number): P5.Color;
-  tint(values: number[]): P5.Color;
-  tint(color: P5.Color): P5.Color;
-  tint(): P5.Color;
-
-  /**
    * Creates a new <a href="#/p5.PrintWriter">p5.PrintWriter</a> object.
    * 
    * <a href="#/p5.PrintWriter">p5.PrintWriter</a> objects provide a way to
@@ -30622,11 +30633,37 @@ index: typeof index;
   textWeight(): number;
 
   /**
-   * Removes the current tint set by <a href="#/p5/tint">tint()</a>.
+   * Tints images using a color.
    * 
-   * `noTint()` restores images to their original colors.
+   * The version of `tint()` with one parameter interprets it one of four ways.
+   * If the parameter is a number, it's interpreted as a grayscale value. If the
+   * parameter is a string, it's interpreted as a CSS color string. An array of
+   * `[R, G, B, A]` values or a <a href="#/p5.Color">p5.Color</a> object can
+   * also be used to set the tint color.
+   * 
+   * The version of `tint()` with two parameters uses the first one as a
+   * grayscale value and the second as an alpha value. For example, calling
+   * `tint(255, 128)` will make an image 50% transparent.
+   * 
+   * The version of `tint()` with three parameters interprets them as RGB or
+   * HSB values, depending on the current
+   * <a href="#/p5/colorMode">colorMode()</a>. The optional fourth parameter
+   * sets the alpha value. For example, `tint(255, 0, 0, 100)` will give images
+   * a red tint and make them transparent.
+   * 
+   * Calling `tint()` without an argument returns the current tint as a
+   * <a href="#/p5.Color">p5.Color</a> object.
+   * @param v1 red or hue value.
+   * @param v2 green or saturation value.
+   * @param v3 blue or brightness.
+   * @returns the current tint color
    */
-  noTint(): void;
+  tint(v1: number, v2: number, v3: number, alpha?: number): P5.Color;
+  tint(value: string): P5.Color;
+  tint(gray: number, alpha?: number): P5.Color;
+  tint(values: number[]): P5.Color;
+  tint(color: P5.Color): P5.Color;
+  tint(): P5.Color;
 
   /**
    * Draws an ellipsoid.
@@ -30931,6 +30968,13 @@ index: typeof index;
   saturation(color: P5.Color | number[] | string): number;
 
   /**
+   * Removes the current tint set by <a href="#/p5/tint">tint()</a>.
+   * 
+   * `noTint()` restores images to their original colors.
+   */
+  noTint(): void;
+
+  /**
    * Removes all lights from the sketch.
    * 
    * Calling `noLights()` removes any lights created with
@@ -31099,31 +31143,6 @@ index: typeof index;
   createVideo(src?: string | string[], callback?: (video: P5.MediaElement<HTMLVideoElement>) => any): P5.MediaElement<HTMLVideoElement>;
 
   /**
-   * Changes the location from which images are drawn when
-   * <a href="#/p5/image">image()</a> is called.
-   * 
-   * By default, the first
-   * two parameters of <a href="#/p5/image">image()</a> are the x- and
-   * y-coordinates of the image's upper-left corner. The next parameters are
-   * its width and height. This is the same as calling `imageMode(CORNER)`.
-   * 
-   * `imageMode(CORNERS)` also uses the first two parameters of
-   * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
-   * top-left corner. The third and fourth parameters are the coordinates of its
-   * bottom-right corner.
-   * 
-   * `imageMode(CENTER)` uses the first two parameters of
-   * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
-   * center. The next parameters are its width and height.
-   * 
-   * Calling `imageMode()` without an argument returns the current image mode, either `CORNER`, `CORNERS`, or `CENTER`.
-   * @param mode either CORNER, CORNERS, or CENTER.
-   * @returns the current image mode
-   */
-  imageMode(mode: typeof CORNER | typeof CORNERS | typeof CENTER): typeof CORNER | typeof CORNERS | typeof CENTER;
-  imageMode(): typeof CORNER | typeof CORNERS | typeof CENTER;
-
-  /**
    * Loads a font and creates a <a href="#/p5.Font">p5.Font</a> object.
    * `loadFont()` can load fonts in either .otf or .ttf format. Loaded fonts can
    * be used to style text on the canvas and in HTML elements.
@@ -31190,6 +31209,31 @@ index: typeof index;
    * @returns new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
    */
   createAudio(src?: string | string[], callback?: (video: P5.MediaElement<HTMLAudioElement>) => any): P5.MediaElement<HTMLAudioElement>;
+
+  /**
+   * Changes the location from which images are drawn when
+   * <a href="#/p5/image">image()</a> is called.
+   * 
+   * By default, the first
+   * two parameters of <a href="#/p5/image">image()</a> are the x- and
+   * y-coordinates of the image's upper-left corner. The next parameters are
+   * its width and height. This is the same as calling `imageMode(CORNER)`.
+   * 
+   * `imageMode(CORNERS)` also uses the first two parameters of
+   * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
+   * top-left corner. The third and fourth parameters are the coordinates of its
+   * bottom-right corner.
+   * 
+   * `imageMode(CENTER)` uses the first two parameters of
+   * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
+   * center. The next parameters are its width and height.
+   * 
+   * Calling `imageMode()` without an argument returns the current image mode, either `CORNER`, `CORNERS`, or `CENTER`.
+   * @param mode either CORNER, CORNERS, or CENTER.
+   * @returns the current image mode
+   */
+  imageMode(mode: typeof CORNER | typeof CORNERS | typeof CENTER): typeof CORNER | typeof CORNERS | typeof CENTER;
+  imageMode(): typeof CORNER | typeof CORNERS | typeof CENTER;
 
   /**
    * Draws a torus.
@@ -35381,6 +35425,7 @@ index: typeof index;
 }
 
 namespace p5 {
+  const MAX_GIF_PIXELS: typeof MAX_GIF_PIXELS;
   const VIDEO: typeof VIDEO;
   const RGB: typeof RGB;
   const VERSION: typeof VERSION;
@@ -35698,6 +35743,23 @@ namespace p5 {
   type Quat = P5.Quat;
   const Quat: typeof Quat;
 }
+
+/**
+ * The largest possible number of pixels a gif frame can contain.
+ * 
+ * This static property defines how large, in terms of dimension, a gif image
+ * is allowed to be loaded into a p5 sketch. The default value is
+ * 16,000,000. This means an image's width multiplied by its height must not
+ * exceed 100,000,000. For example, an image with width 10,000 and height
+ * 10,000 is just enough, as well as an image with width 5000 and height
+ * 20,000. An image with width 20,000 and height 20,000 is not allowed and
+ * will cause an error when it is loaded.
+ * 
+ * To avoid this error, you should try to reduce the image dimension of the
+ * gif. If that is not possible or not desirable, you can set
+ * `MAX_GIF_PIXELS` to a higher value instead.
+ */
+const MAX_GIF_PIXELS: typeof MAX_GIF_PIXELS;
 
 const VIDEO: typeof VIDEO;
 
@@ -37099,7 +37161,7 @@ function day(): number;
  * Multiplies a quaternion with other quaternion.
  * @param quat quaternion to multiply with the quaternion calling the method.
  */
-function mult(quat?: P5.Quat): void;
+function multiply(quat?: P5.Quat): void;
 
 /**
  * Displays text in the web browser's console.
@@ -37341,40 +37403,6 @@ function strokeMode(mode: string): void;
 function select(selectors: string, container?: string | P5.Element | HTMLElement): P5.Element | null;
 
 /**
- * Loads an image to create a <a href="#/p5.Image">p5.Image</a> object.
- * 
- * `loadImage()` interprets the first parameter one of three ways. If the path
- * to an image file is provided, `loadImage()` will load it. Paths to local
- * files should be relative, such as `'assets/thundercat.jpg'`. URLs such as
- * `'https://example.com/thundercat.jpg'` may be blocked due to browser
- * security. Raw image data can also be passed as a base64 encoded image in
- * the form `'data:image/png;base64,arandomsequenceofcharacters'`. The `path`
- * parameter can also be defined as a `Request`
- * object for more advanced usage.
- * 
- * The second parameter is optional. If a function is passed, it will be
- * called once the image has loaded. The callback function can optionally use
- * the new <a href="#/p5.Image">p5.Image</a> object. The return value of the
- * function will be used as the final return value of `loadImage()`.
- * 
- * The third parameter is also optional. If a function is passed, it will be
- * called if the image fails to load. The callback function can optionally use
- * the event error. The return value of the function will be used as the final
- * return value of `loadImage()`.
- * 
- * This function returns a `Promise` and should be used in an `async` setup with
- * `await`. See the examples for the usage syntax.
- * @param path path of the image to be loaded or base64 encoded image.
- * @param successCallback function called with
- * <a href="#/p5.Image">p5.Image</a> once it
- * loads.
- * @param failureCallback function called with event
- * error if the image fails to load.
- * @returns the <a href="#/p5.Image">p5.Image</a> object.
- */
-function loadImage(path: string | Request, successCallback?: (arg0: P5.Image) => void, failureCallback?: (arg0: Event) => void): Promise<P5.Image>;
-
-/**
  * Creates a new <a href="#/p5.Vector">p5.Vector</a> object.
  * 
  * A vector can be thought of in different ways. In one view, a vector is like
@@ -37583,6 +37611,40 @@ function blend(sx: number, sy: number, sw: number, sh: number, dx: number, dy: n
 function createCanvas(width?: number, height?: number, renderer?: typeof P2D | typeof WEBGL | typeof P2DP3, canvas?: HTMLCanvasElement): P5.Renderer;
 function createCanvas(width: number, height: number, renderer: typeof WEBGPU, canvas?: HTMLCanvasElement): Promise<P5.Renderer>;
 function createCanvas(width?: number, height?: number, canvas?: HTMLCanvasElement): P5.Renderer;
+
+/**
+ * Loads an image to create a <a href="#/p5.Image">p5.Image</a> object.
+ * 
+ * `loadImage()` interprets the first parameter one of three ways. If the path
+ * to an image file is provided, `loadImage()` will load it. Paths to local
+ * files should be relative, such as `'assets/thundercat.jpg'`. URLs such as
+ * `'https://example.com/thundercat.jpg'` may be blocked due to browser
+ * security. Raw image data can also be passed as a base64 encoded image in
+ * the form `'data:image/png;base64,arandomsequenceofcharacters'`. The `path`
+ * parameter can also be defined as a `Request`
+ * object for more advanced usage.
+ * 
+ * The second parameter is optional. If a function is passed, it will be
+ * called once the image has loaded. The callback function can optionally use
+ * the new <a href="#/p5.Image">p5.Image</a> object. The return value of the
+ * function will be used as the final return value of `loadImage()`.
+ * 
+ * The third parameter is also optional. If a function is passed, it will be
+ * called if the image fails to load. The callback function can optionally use
+ * the event error. The return value of the function will be used as the final
+ * return value of `loadImage()`.
+ * 
+ * This function returns a `Promise` and should be used in an `async` setup with
+ * `await`. See the examples for the usage syntax.
+ * @param path path of the image to be loaded or base64 encoded image.
+ * @param successCallback function called with
+ * <a href="#/p5.Image">p5.Image</a> once it
+ * loads.
+ * @param failureCallback function called with event
+ * error if the image fails to load.
+ * @returns the <a href="#/p5.Image">p5.Image</a> object.
+ */
+function loadImage(path: string | Request, successCallback?: (arg0: P5.Image) => void, failureCallback?: (arg0: Event) => void): Promise<P5.Image>;
 
 /**
  * Loads vertex and fragment shaders to create a
@@ -38641,26 +38703,6 @@ function gridOutput(display?: typeof FALLBACK | typeof LABEL): void;
 function resizeCanvas(width: number, height: number, noRedraw?: boolean): void;
 
 /**
- * Generates a gif from a sketch and saves it to a file.
- * 
- * `saveGif()` may be called in <a href="#/p5/setup">setup()</a> or at any
- * point while a sketch is running.
- * 
- * The first parameter, `fileName`, sets the gif's file name.
- * 
- * The second parameter, `duration`, sets the gif's duration in seconds.
- * 
- * The third parameter, `options`, is optional. If an object is passed,
- * `saveGif()` will use its properties to customize the gif. `saveGif()`
- * recognizes the properties `delay`, `units`, `silent`,
- * `notificationDuration`, and `notificationID`.
- * @param filename file name of gif.
- * @param duration duration in seconds to capture from the sketch.
- * @param options an object that can contain five more properties:
- */
-function saveGif(filename: string, duration: number, options?: { delay?: number; units?: 'seconds' | 'frames'; silent?: boolean; notificationDuration?: number; notificationID?: string }): void;
-
-/**
  * Saves the current canvas as an image.
  * 
  * By default, `saveCanvas()` saves the canvas as a PNG image called
@@ -39221,6 +39263,26 @@ function noCanvas(): void;
  * @returns new <a href="#/p5.Element">p5.Element</a> object.
  */
 function createElement(tag: string, content?: string): P5.Element;
+
+/**
+ * Generates a gif from a sketch and saves it to a file.
+ * 
+ * `saveGif()` may be called in <a href="#/p5/setup">setup()</a> or at any
+ * point while a sketch is running.
+ * 
+ * The first parameter, `fileName`, sets the gif's file name.
+ * 
+ * The second parameter, `duration`, sets the gif's duration in seconds.
+ * 
+ * The third parameter, `options`, is optional. If an object is passed,
+ * `saveGif()` will use its properties to customize the gif. `saveGif()`
+ * recognizes the properties `delay`, `units`, `silent`,
+ * `notificationDuration`, and `notificationID`.
+ * @param filename file name of gif.
+ * @param duration duration in seconds to capture from the sketch.
+ * @param options an object that can contain five more properties:
+ */
+function saveGif(filename: string, duration: number, options?: { delay?: number; units?: 'seconds' | 'frames'; silent?: boolean; notificationDuration?: number; notificationID?: string }): void;
 
 /**
  * Calculates the arc sine of a number.
@@ -44026,9 +44088,10 @@ function getURL(): string;
  * }`
  * @param n0 first number to compare.
  * @param n1 second number to compare.
+ * @param rest additional numbers to compare.
  * @returns maximum number.
  */
-function max(n0: number, n1: number): number;
+function max(n0: number, n1: number, ...rest: number[]): number;
 function max(nums: number[]): number;
 
 /**
@@ -44354,78 +44417,6 @@ function colorMode(): typeof RGB | typeof HSB | typeof HSL | typeof RGBP3 | type
 function getURLParams(): object;
 
 /**
- * Draws an image to the canvas.
- * 
- * The first parameter, `img`, is the source image to be drawn. `img` can be
- * any of the following objects:
- * 
- * - <a href="#/p5.Image">p5.Image</a>
- * 
- * - <a href="#/p5.Element">p5.Element</a>
- * 
- * - <a href="#/p5.Texture">p5.Texture</a>
- * 
- * - <a href="#/p5.Framebuffer">p5.Framebuffer</a>
- * 
- * - <a href="#/p5.FramebufferTexture">p5.FramebufferTexture</a>
- * 
- * The second and third parameters, `dx` and `dy`, set the coordinates of the
- * destination image's top left corner. See
- * <a href="#/p5/imageMode">imageMode()</a> for other ways to position images.
- * 
- * `let img;
- * 
- * async function setup() {
- * // Load the image.
- * img = await loadImage('assets/laDefense.jpg');
- * 
- * createCanvas(100, 100);
- * 
- * background(50);
- * 
- * // Draw the image.
- * image(img, 0, 0);
- * 
- * describe('An image of the underside of a white umbrella with a gridded ceiling above.');
- * }`Here's a diagram that explains how optional parameters work in `image()`:
- * 
- * <img src="assets/drawImage.png"></img>
- * 
- * The fourth and fifth parameters, `dw` and `dh`, are optional. They set the
- * the width and height to draw the destination image. By default, `image()`
- * draws the full source image at its original size.
- * 
- * The sixth and seventh parameters, `sx` and `sy`, are also optional.
- * These coordinates define the top left corner of a subsection to draw from
- * the source image.
- * 
- * The eighth and ninth parameters, `sw` and `sh`, are also optional.
- * They define the width and height of a subsection to draw from the source
- * image. By default, `image()` draws the full subsection that begins at
- * `(sx, sy)` and extends to the edges of the source image.
- * 
- * The ninth parameter, `fit`, is also optional. It enables a subsection of
- * the source image to be drawn without affecting its aspect ratio. If
- * `CONTAIN` is passed, the full subsection will appear within the destination
- * rectangle. If `COVER` is passed, the subsection will completely cover the
- * destination rectangle. This may have the effect of zooming into the
- * subsection.
- * 
- * The tenth and eleventh paremeters, `xAlign` and `yAlign`, are also
- * optional. They determine how to align the fitted subsection. `xAlign` can
- * be set to either `LEFT`, `RIGHT`, or `CENTER`. `yAlign` can be set to
- * either `TOP`, `BOTTOM`, or `CENTER`. By default, both `xAlign` and `yAlign`
- * are set to `CENTER`.
- * @param img image to display.
- * @param x x-coordinate of the top-left corner of the image.
- * @param y y-coordinate of the top-left corner of the image.
- * @param width width to draw the image.
- * @param height height to draw the image.
- */
-function image(img: P5.Image | P5.Element | P5.Texture | P5.Framebuffer | P5.FramebufferTexture | P5.Renderer | P5.Graphics, x: number, y: number, width?: number, height?: number): void;
-function image(img: P5.Image | P5.Element | P5.Texture | P5.Framebuffer | P5.FramebufferTexture, dx: number, dy: number, dWidth: number, dHeight: number, sx: number, sy: number, sWidth?: number, sHeight?: number, fit?: typeof CONTAIN | typeof COVER, xAlign?: typeof LEFT | typeof RIGHT | typeof CENTER, yAlign?: typeof TOP | typeof BOTTOM | typeof CENTER): void;
-
-/**
  * Sets the falloff rate for <a href="#/p5/pointLight">pointLight()</a>
  * and <a href="#/p5/spotLight">spotLight()</a>.
  * 
@@ -44708,6 +44699,78 @@ function mouseDragged(event?: MouseEvent): void;
 function keyIsDown(code: number | string): boolean;
 
 /**
+ * Draws an image to the canvas.
+ * 
+ * The first parameter, `img`, is the source image to be drawn. `img` can be
+ * any of the following objects:
+ * 
+ * - <a href="#/p5.Image">p5.Image</a>
+ * 
+ * - <a href="#/p5.Element">p5.Element</a>
+ * 
+ * - <a href="#/p5.Texture">p5.Texture</a>
+ * 
+ * - <a href="#/p5.Framebuffer">p5.Framebuffer</a>
+ * 
+ * - <a href="#/p5.FramebufferTexture">p5.FramebufferTexture</a>
+ * 
+ * The second and third parameters, `dx` and `dy`, set the coordinates of the
+ * destination image's top left corner. See
+ * <a href="#/p5/imageMode">imageMode()</a> for other ways to position images.
+ * 
+ * `let img;
+ * 
+ * async function setup() {
+ * // Load the image.
+ * img = await loadImage('assets/laDefense.jpg');
+ * 
+ * createCanvas(100, 100);
+ * 
+ * background(50);
+ * 
+ * // Draw the image.
+ * image(img, 0, 0);
+ * 
+ * describe('An image of the underside of a white umbrella with a gridded ceiling above.');
+ * }`Here's a diagram that explains how optional parameters work in `image()`:
+ * 
+ * <img src="assets/drawImage.png"></img>
+ * 
+ * The fourth and fifth parameters, `dw` and `dh`, are optional. They set the
+ * the width and height to draw the destination image. By default, `image()`
+ * draws the full source image at its original size.
+ * 
+ * The sixth and seventh parameters, `sx` and `sy`, are also optional.
+ * These coordinates define the top left corner of a subsection to draw from
+ * the source image.
+ * 
+ * The eighth and ninth parameters, `sw` and `sh`, are also optional.
+ * They define the width and height of a subsection to draw from the source
+ * image. By default, `image()` draws the full subsection that begins at
+ * `(sx, sy)` and extends to the edges of the source image.
+ * 
+ * The ninth parameter, `fit`, is also optional. It enables a subsection of
+ * the source image to be drawn without affecting its aspect ratio. If
+ * `CONTAIN` is passed, the full subsection will appear within the destination
+ * rectangle. If `COVER` is passed, the subsection will completely cover the
+ * destination rectangle. This may have the effect of zooming into the
+ * subsection.
+ * 
+ * The tenth and eleventh paremeters, `xAlign` and `yAlign`, are also
+ * optional. They determine how to align the fitted subsection. `xAlign` can
+ * be set to either `LEFT`, `RIGHT`, or `CENTER`. `yAlign` can be set to
+ * either `TOP`, `BOTTOM`, or `CENTER`. By default, both `xAlign` and `yAlign`
+ * are set to `CENTER`.
+ * @param img image to display.
+ * @param x x-coordinate of the top-left corner of the image.
+ * @param y y-coordinate of the top-left corner of the image.
+ * @param width width to draw the image.
+ * @param height height to draw the image.
+ */
+function image(img: P5.Image | P5.Element | P5.Texture | P5.Framebuffer | P5.FramebufferTexture | P5.Renderer | P5.Graphics, x: number, y: number, width?: number, height?: number): void;
+function image(img: P5.Image | P5.Element | P5.Texture | P5.Framebuffer | P5.FramebufferTexture, dx: number, dy: number, dWidth: number, dHeight: number, sx: number, sy: number, sWidth?: number, sHeight?: number, fit?: typeof CONTAIN | typeof COVER, xAlign?: typeof LEFT | typeof RIGHT | typeof CENTER, yAlign?: typeof TOP | typeof BOTTOM | typeof CENTER): void;
+
+/**
  * Sets the element's content.
  * 
  * An element's content is the text between its tags. For example, the element
@@ -44875,9 +44938,10 @@ function shearY(angle: number): void;
  * }`
  * @param n0 first number to compare.
  * @param n1 second number to compare.
+ * @param rest additional numbers to compare.
  * @returns minimum number.
  */
-function min(n0: number, n1: number): number;
+function min(n0: number, n1: number, ...rest: number[]): number;
 function min(nums: number[]): number;
 
 /**
@@ -45565,39 +45629,6 @@ function translate(x: number, y: number, z?: number): void;
 function translate(vector: P5.Vector): void;
 
 /**
- * Tints images using a color.
- * 
- * The version of `tint()` with one parameter interprets it one of four ways.
- * If the parameter is a number, it's interpreted as a grayscale value. If the
- * parameter is a string, it's interpreted as a CSS color string. An array of
- * `[R, G, B, A]` values or a <a href="#/p5.Color">p5.Color</a> object can
- * also be used to set the tint color.
- * 
- * The version of `tint()` with two parameters uses the first one as a
- * grayscale value and the second as an alpha value. For example, calling
- * `tint(255, 128)` will make an image 50% transparent.
- * 
- * The version of `tint()` with three parameters interprets them as RGB or
- * HSB values, depending on the current
- * <a href="#/p5/colorMode">colorMode()</a>. The optional fourth parameter
- * sets the alpha value. For example, `tint(255, 0, 0, 100)` will give images
- * a red tint and make them transparent.
- * 
- * Calling `tint()` without an argument returns the current tint as a
- * <a href="#/p5.Color">p5.Color</a> object.
- * @param v1 red or hue value.
- * @param v2 green or saturation value.
- * @param v3 blue or brightness.
- * @returns the current tint color
- */
-function tint(v1: number, v2: number, v3: number, alpha?: number): P5.Color;
-function tint(value: string): P5.Color;
-function tint(gray: number, alpha?: number): P5.Color;
-function tint(values: number[]): P5.Color;
-function tint(color: P5.Color): P5.Color;
-function tint(): P5.Color;
-
-/**
  * Creates a new <a href="#/p5.PrintWriter">p5.PrintWriter</a> object.
  * 
  * <a href="#/p5.PrintWriter">p5.PrintWriter</a> objects provide a way to
@@ -46056,11 +46087,37 @@ function textWeight(weight: number): number;
 function textWeight(): number;
 
 /**
- * Removes the current tint set by <a href="#/p5/tint">tint()</a>.
+ * Tints images using a color.
  * 
- * `noTint()` restores images to their original colors.
+ * The version of `tint()` with one parameter interprets it one of four ways.
+ * If the parameter is a number, it's interpreted as a grayscale value. If the
+ * parameter is a string, it's interpreted as a CSS color string. An array of
+ * `[R, G, B, A]` values or a <a href="#/p5.Color">p5.Color</a> object can
+ * also be used to set the tint color.
+ * 
+ * The version of `tint()` with two parameters uses the first one as a
+ * grayscale value and the second as an alpha value. For example, calling
+ * `tint(255, 128)` will make an image 50% transparent.
+ * 
+ * The version of `tint()` with three parameters interprets them as RGB or
+ * HSB values, depending on the current
+ * <a href="#/p5/colorMode">colorMode()</a>. The optional fourth parameter
+ * sets the alpha value. For example, `tint(255, 0, 0, 100)` will give images
+ * a red tint and make them transparent.
+ * 
+ * Calling `tint()` without an argument returns the current tint as a
+ * <a href="#/p5.Color">p5.Color</a> object.
+ * @param v1 red or hue value.
+ * @param v2 green or saturation value.
+ * @param v3 blue or brightness.
+ * @returns the current tint color
  */
-function noTint(): void;
+function tint(v1: number, v2: number, v3: number, alpha?: number): P5.Color;
+function tint(value: string): P5.Color;
+function tint(gray: number, alpha?: number): P5.Color;
+function tint(values: number[]): P5.Color;
+function tint(color: P5.Color): P5.Color;
+function tint(): P5.Color;
 
 /**
  * Draws an ellipsoid.
@@ -46365,6 +46422,13 @@ function noFill(): void;
 function saturation(color: P5.Color | number[] | string): number;
 
 /**
+ * Removes the current tint set by <a href="#/p5/tint">tint()</a>.
+ * 
+ * `noTint()` restores images to their original colors.
+ */
+function noTint(): void;
+
+/**
  * Removes all lights from the sketch.
  * 
  * Calling `noLights()` removes any lights created with
@@ -46533,31 +46597,6 @@ function sq(n: number): number;
 function createVideo(src?: string | string[], callback?: (video: P5.MediaElement<HTMLVideoElement>) => any): P5.MediaElement<HTMLVideoElement>;
 
 /**
- * Changes the location from which images are drawn when
- * <a href="#/p5/image">image()</a> is called.
- * 
- * By default, the first
- * two parameters of <a href="#/p5/image">image()</a> are the x- and
- * y-coordinates of the image's upper-left corner. The next parameters are
- * its width and height. This is the same as calling `imageMode(CORNER)`.
- * 
- * `imageMode(CORNERS)` also uses the first two parameters of
- * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
- * top-left corner. The third and fourth parameters are the coordinates of its
- * bottom-right corner.
- * 
- * `imageMode(CENTER)` uses the first two parameters of
- * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
- * center. The next parameters are its width and height.
- * 
- * Calling `imageMode()` without an argument returns the current image mode, either `CORNER`, `CORNERS`, or `CENTER`.
- * @param mode either CORNER, CORNERS, or CENTER.
- * @returns the current image mode
- */
-function imageMode(mode: typeof CORNER | typeof CORNERS | typeof CENTER): typeof CORNER | typeof CORNERS | typeof CENTER;
-function imageMode(): typeof CORNER | typeof CORNERS | typeof CENTER;
-
-/**
  * Loads a font and creates a <a href="#/p5.Font">p5.Font</a> object.
  * `loadFont()` can load fonts in either .otf or .ttf format. Loaded fonts can
  * be used to style text on the canvas and in HTML elements.
@@ -46624,6 +46663,31 @@ function loadFont(path: string, successCallback?: (font: P5.Font) => any, failur
  * @returns new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
  */
 function createAudio(src?: string | string[], callback?: (video: P5.MediaElement<HTMLAudioElement>) => any): P5.MediaElement<HTMLAudioElement>;
+
+/**
+ * Changes the location from which images are drawn when
+ * <a href="#/p5/image">image()</a> is called.
+ * 
+ * By default, the first
+ * two parameters of <a href="#/p5/image">image()</a> are the x- and
+ * y-coordinates of the image's upper-left corner. The next parameters are
+ * its width and height. This is the same as calling `imageMode(CORNER)`.
+ * 
+ * `imageMode(CORNERS)` also uses the first two parameters of
+ * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
+ * top-left corner. The third and fourth parameters are the coordinates of its
+ * bottom-right corner.
+ * 
+ * `imageMode(CENTER)` uses the first two parameters of
+ * <a href="#/p5/image">image()</a> as the x- and y-coordinates of the image's
+ * center. The next parameters are its width and height.
+ * 
+ * Calling `imageMode()` without an argument returns the current image mode, either `CORNER`, `CORNERS`, or `CENTER`.
+ * @param mode either CORNER, CORNERS, or CENTER.
+ * @returns the current image mode
+ */
+function imageMode(mode: typeof CORNER | typeof CORNERS | typeof CENTER): typeof CORNER | typeof CORNERS | typeof CENTER;
+function imageMode(): typeof CORNER | typeof CORNERS | typeof CENTER;
 
 /**
  * Draws a torus.
