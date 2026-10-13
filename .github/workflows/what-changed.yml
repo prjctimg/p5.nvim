@@ -1,0 +1,67 @@
+name: What changed
+
+# Weekly scan for changes to a project's important surface -- public APIs,
+# language and toolchain features, and dependencies. Opens (or updates) a dated
+# issue containing the findings, potential issues, and verification
+# instructions for another agent to reproduce and confirm.
+#
+# Runs every Monday at 06:00 UTC, or on demand with an optional window.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      since:
+        description: "Window start (git date, e.g. '14 days ago'). Defaults to 7 days ago."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  what-changed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Generate report
+        id: report
+        env:
+          SINCE: ${{ github.event.inputs.since }}
+        run: |
+          set -euo pipefail
+          python3 scripts/what-changed.py --since "${SINCE:-7 days ago}" --out what-changed.md
+
+      - name: Publish job summary
+        if: always()
+        run: |
+          if [ -f what-changed.md ]; then
+            cat what-changed.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Open or update issue
+        if: steps.report.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh label create what-changed --color 0E8A16 \
+            --description "Automated weekly change report" 2>/dev/null || true
+          title="What changed: week of $(date -u +%Y-%m-%d)"
+          existing="$(gh issue list --label what-changed --state open \
+            --json number,title \
+            --jq ".[] | select(.title == \"$title\") | .number" | head -n1)"
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --body-file what-changed.md
+            echo "updated issue #$existing"
+          else
+            gh issue create --title "$title" --label what-changed --body-file what-changed.md
+          fi
+
+      - name: No significant changes
+        if: steps.report.outputs.has_changes != 'true'
+        run: echo "No significant API/language/dependency changes this week -- no issue opened."
