@@ -63,5 +63,5 @@ jobs:
           fi
 
       - name: No significant changes
-        if: steps.report.outputs.has_changes != 'true'
+        if: success() && steps.report.outputs.has_changes != 'true'
         run: echo "No significant API/language/dependency changes this week -- no issue opened."
