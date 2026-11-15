@@ -26,7 +26,7 @@ describe("cdp", function()
 			console = {},
 			network = {},
 			eval = {},
-			debugger = { event = "resumed", callFrames = {}, reason = "" },
+			debugger = { event = "resumed", callFrames = {}, reason = "", scopes = {}, this_value = "", breakpoints = {} },
 			perf = { fps = {}, heap = 0, heap_total = 0, nodes = 0, listeners = 0, recording = true },
 			info = { symbols = {}, canvas_state = "" },
 		}

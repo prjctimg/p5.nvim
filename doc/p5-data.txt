@@ -39,7 +39,7 @@ Table of Contents                           *p5-data-table-of-contents*
 2. Functions                                                |p5-data-functions|
 
 
-`storeItem()`                                            |p5-data-storeItem|
+`storeItem()`                                            *p5-data-storeItem*
 
 Stores a value in local storage under the key name. Local storage is saved in
 the browser and persists between browsing sessions and page reloads. The key
@@ -56,7 +56,7 @@ should not be stored in local storage.
 ---
 
 
-`getItem()`                                            |p5-data-getItem|
+`getItem()`                                            *p5-data-getItem*
 
 Returns the value of an item that was stored in local storage using
 storeItem()
@@ -74,7 +74,7 @@ storeItem()
 ---
 
 
-`clearStorage()`                                            |p5-data-clearStorage|
+`clearStorage()`                                            *p5-data-clearStorage*
 
 Clears all local storage items set with storeItem() for the current domain.
 
@@ -87,7 +87,7 @@ Clears all local storage items set with storeItem() for the current domain.
 ---
 
 
-`removeItem()`                                            |p5-data-removeItem|
+`removeItem()`                                            *p5-data-removeItem*
 
 Removes an item that was stored with storeItem()
 
@@ -100,7 +100,7 @@ Removes an item that was stored with storeItem()
 ---
 
 
-`constructor()`                                            |p5-data-constructor|
+`constructor()`                                            *p5-data-constructor*
 
 Base class for all p5.Dictionary types. Specifically typed Dictionary classes
 inherit from this class.
@@ -114,7 +114,7 @@ inherit from this class.
 ---
 
 
-`size()`                                            |p5-data-size|
+`size()`                                            *p5-data-size*
 
 Returns the number of key-value pairs currently stored in the Dictionary.
 
@@ -127,7 +127,7 @@ Returns the number of key-value pairs currently stored in the Dictionary.
 ---
 
 
-`hasKey()`                                            |p5-data-hasKey|
+`hasKey()`                                            *p5-data-hasKey*
 
 Returns true if the given key exists in the Dictionary, otherwise returns
 false.
@@ -145,7 +145,7 @@ false.
 ---
 
 
-`get()`                                            |p5-data-get|
+`get()`                                            *p5-data-get*
 
 Returns the value stored at the given key.
 
@@ -162,7 +162,7 @@ Returns the value stored at the given key.
 ---
 
 
-`set()`                                            |p5-data-set|
+`set()`                                            *p5-data-set*
 
 Updates the value associated with the given key in case it already exists in
 the Dictionary. Otherwise a new key-value pair is added.
@@ -176,7 +176,7 @@ the Dictionary. Otherwise a new key-value pair is added.
 ---
 
 
-`create()`                                            |p5-data-create|
+`create()`                                            *p5-data-create*
 
 Creates a new key-value pair in the Dictionary.
 
@@ -189,7 +189,7 @@ Creates a new key-value pair in the Dictionary.
 ---
 
 
-`clear()`                                            |p5-data-clear|
+`clear()`                                            *p5-data-clear*
 
 Removes all previously stored key-value pairs from the Dictionary.
 
@@ -202,7 +202,7 @@ Removes all previously stored key-value pairs from the Dictionary.
 ---
 
 
-`remove()`                                            |p5-data-remove|
+`remove()`                                            *p5-data-remove*
 
 Removes the key-value pair stored at the given key from the Dictionary.
 
@@ -215,7 +215,7 @@ Removes the key-value pair stored at the given key from the Dictionary.
 ---
 
 
-`print()`                                            |p5-data-print|
+`print()`                                            *p5-data-print*
 
 Logs the set of items currently stored in the Dictionary to the console.
 
@@ -228,7 +228,7 @@ Logs the set of items currently stored in the Dictionary to the console.
 ---
 
 
-`saveTable()`                                            |p5-data-saveTable|
+`saveTable()`                                            *p5-data-saveTable*
 
 Converts the Dictionary into a CSV file for local download.
 
@@ -241,7 +241,7 @@ Converts the Dictionary into a CSV file for local download.
 ---
 
 
-`saveJSON()`                                            |p5-data-saveJSON|
+`saveJSON()`                                            *p5-data-saveJSON*
 
 Converts the Dictionary into a JSON file for local download.
 
@@ -254,7 +254,7 @@ Converts the Dictionary into a JSON file for local download.
 ---
 
 
-`add()`                                            |p5-data-add|
+`add()`                                            *p5-data-add*
 
 Add the given number to the value currently stored at the given key. The sum
 then replaces the value previously stored in the Dictionary.
@@ -272,7 +272,7 @@ then replaces the value previously stored in the Dictionary.
 ---
 
 
-`sub()`                                            |p5-data-sub|
+`sub()`                                            *p5-data-sub*
 
 Subtract the given number from the value currently stored at the given key.
 The difference then replaces the value previously stored in the Dictionary.
@@ -290,7 +290,7 @@ The difference then replaces the value previously stored in the Dictionary.
 ---
 
 
-`mult()`                                            |p5-data-mult|
+`mult()`                                            *p5-data-mult*
 
 Multiply the given number with the value currently stored at the given key.
 The product then replaces the value previously stored in the Dictionary.
@@ -308,7 +308,7 @@ The product then replaces the value previously stored in the Dictionary.
 ---
 
 
-`div()`                                            |p5-data-div|
+`div()`                                            *p5-data-div*
 
 Divide the given number with the value currently stored at the given key. The
 quotient then replaces the value previously stored in the Dictionary.
@@ -326,7 +326,7 @@ quotient then replaces the value previously stored in the Dictionary.
 ---
 
 
-`minValue()`                                            |p5-data-minValue|
+`minValue()`                                            *p5-data-minValue*
 
 Return the lowest number currently stored in the Dictionary.
 
@@ -339,7 +339,7 @@ Return the lowest number currently stored in the Dictionary.
 ---
 
 
-`maxValue()`                                            |p5-data-maxValue|
+`maxValue()`                                            *p5-data-maxValue*
 
 Return the highest number currently stored in the Dictionary.
 
@@ -352,7 +352,7 @@ Return the highest number currently stored in the Dictionary.
 ---
 
 
-`minKey()`                                            |p5-data-minKey|
+`minKey()`                                            *p5-data-minKey*
 
 Return the lowest key currently used in the Dictionary.
 
@@ -365,7 +365,7 @@ Return the lowest key currently used in the Dictionary.
 ---
 
 
-`maxKey()`                                            |p5-data-maxKey|
+`maxKey()`                                            *p5-data-maxKey*
 
 Return the highest key currently used in the Dictionary.
 
@@ -378,7 +378,7 @@ Return the highest key currently used in the Dictionary.
 ---
 
 
-`createStringDict()`                                            |p5-data-createStringDict|
+`createStringDict()`                                            *p5-data-createStringDict*
 
 Creates a new instance of p5.StringDict using the key-value pair or the object
 you provide.
@@ -392,7 +392,7 @@ you provide.
 ---
 
 
-`createNumberDict()`                                            |p5-data-createNumberDict|
+`createNumberDict()`                                            *p5-data-createNumberDict*
 
 Creates a new instance of p5.NumberDict using the key-value pair or object you
 provide.

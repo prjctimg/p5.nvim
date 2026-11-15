@@ -6,14 +6,39 @@ All notable changes since v0.5.0.
 
 ## Unreleased
 
+_No unreleased changes._
+
+---
+
+## v0.7.13
+
+### Added
+- **Debugger watches** — add/remove watch expressions in the Debug tab (`w`/`W`, `:P5 cdp watch <expr>`), auto-evaluated when paused
+- **Object expansion for watches** — expandable one-level property inspection for object watch results (`e` in Debug tab, via `Runtime.getProperties`)
+- **Breakpoint management** — breakpoints are tracked and can be removed from the Debug tab (`d`) and via server API (`POST /api/cdp/debug/remove`, `GET /api/cdp/debug/breakpoints`)
+- **Paused scope inspection** — Debug tab shows `this` and local/closure/block/catch scope values for the top paused frame
+- **Network log details** — request log now includes type/MIME and size (when available)
+- `:P5 cdp stats` alias for the runtime stats tab
+
+### Changed
+- **CDP panel naming/docs** — panel described as a lightweight CDP debug panel (not a full Chrome DevTools UI); tab 5 labeled **Stats** (sampled `Performance.metrics`, not a trace/profiler)
+- **Eval behavior** — removed server-side substring "dangerous pattern" filter (browser-context eval; previous filter was not real security)
+- README and `doc/p5-nvim.txt` updated to reflect actual capabilities and limits
+
 ### Fixed
+- Vim help manpages: converted heading link tags to target tags so Table of Contents entries jump to headings
+
+### Docs/Assets
+- Bundled `assets/types/p5.d.ts` updated to p5 `2.4.0` (`assets/types/.p5-version` updated). p5 API help pages (`doc/p5-*.txt`) remain automata-generated/synced artifacts; TOC jump targets fixed in-repo.
+
+### Fixed (previously unreleased)
 - **Console levels** — CDP console entries read the real `Runtime.consoleAPICalled` `type` field (previously read a non-existent `level`, so every Captured message showed as `log` and Console-tab filtering never worked); `console.assert` failures now show as errors
 - **`cdp.remote_debugging_port`** — the dev server now forwards the port to `server.py` (`--cdp-port`) so a non-default debug port actually connects to Chrome
 - **Server config wiring** — `server.port` / `server.auto_open_browser` / `server.live_reload.*` are merged into the server config at the top level (`setup()` was nesting them under `server.config.server.*`, so they were silently ignored)
 - **Bounded stream reconnect** — the CDP SSE stream reconnect is capped at 5 attempts with exponential backoff instead of retrying forever
 - **Perf baseline** — the FPS `Frames` baseline is reset on disconnect so reconnect/reload can't show a bogus delta
 
-### Changed
+### Changed (previously unreleased)
 - Removed the undocumented `server.auto_start` option (`autocmds.server_on_enter` is the supported way to auto-start the server)
 - Docs corrected: dropped non-existent `:P5 create --1.x`, fixed `:P5 sync libs`/`:P5 gist` references and the gist `description` claim in `p5.json`
 

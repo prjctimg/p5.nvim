@@ -240,6 +240,9 @@ Cm.setup = function(opts)
 		elseif sub == "break" then
 			local loc = args[2]
 			cdp.set_breakpoint(loc)
+		elseif sub == "watch" then
+			local expr = table.concat(args, " ", 2)
+			cdp.add_watch(expr ~= "" and expr or nil)
 		elseif sub == "continue" then
 			cdp.continue()
 		elseif sub == "pause" then
@@ -256,7 +259,7 @@ Cm.setup = function(opts)
 			cdp.step_in()
 		elseif sub == "stepOut" then
 			cdp.step_out()
-		elseif sub == "perf" then
+		elseif sub == "perf" or sub == "stats" then
 			cdp.switch_tab(5)
 			cdp.toggle()
 		elseif sub == "network_clear" then
@@ -375,6 +378,7 @@ Cm.setup = function(opts)
 					"status",
 					"eval",
 					"break",
+					"watch",
 					"continue",
 					"pause",
 					"pauseExceptions",
@@ -383,6 +387,7 @@ Cm.setup = function(opts)
 					"step",
 					"stepIn",
 					"stepOut",
+					"stats",
 					"perf",
 					"network_clear",
 				}

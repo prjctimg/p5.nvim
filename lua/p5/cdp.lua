@@ -86,7 +86,7 @@ C.tab_data = {
 	console = {},
 	network = {},
 	eval = {},
-	debugger = { event = "resumed", callFrames = {}, reason = "" },
+	debugger = { event = "resumed", callFrames = {}, reason = "", scopes = {}, this_value = "", breakpoints = {}, watches = {} },
 	perf = {
 		fps = {},
 		heap = 0,
@@ -103,7 +103,7 @@ local tabs = {
 	{ key = 2, name = "Network", data_key = "network" },
 	{ key = 3, name = "Eval", data_key = "eval" },
 	{ key = 4, name = "Debug", data_key = "debugger" },
-	{ key = 5, name = "Perf", data_key = "perf" },
+	{ key = 5, name = "Stats", data_key = "perf" },
 	{ key = 6, name = "Info", data_key = "info" },
 }
 
@@ -367,7 +367,13 @@ C.set_breakpoint = function(location)
 			local ok, result = pcall(vim.json.decode, text)
 			vim.schedule(function()
 				if ok and type(result) == "table" then
-					notify("Breakpoint set at " .. location, "info")
+					local bp = { id = result.breakpointId, location = result.location or location }
+					if bp.id then
+						local bps = C.tab_data.debugger.breakpoints or {}
+						bps[#bps + 1] = bp
+						C.tab_data.debugger.breakpoints = bps
+					end
+					notify("Breakpoint set at " .. (bp.location or location), "info")
 					if C.state.buf and is_buf(C.state.buf) then
 						C.render_all()
 					end
@@ -486,6 +492,179 @@ C._format_canvas_state = function(v)
 	return table.concat(parts, " | ")
 end
 
+C._fmt_remote = function(obj)
+	if type(obj) ~= "table" then
+		return tostring(obj)
+	end
+	local t = obj.type or "undefined"
+	if obj.value ~= nil then
+		local v = obj.value
+		if t == "string" then
+			return string.format('%q', tostring(v))
+		end
+		return tostring(v)
+	end
+	if obj.unserializableValue ~= nil then
+		return tostring(obj.unserializableValue)
+	end
+	return obj.description or ("[" .. t .. "]")
+end
+
+C._eval_watch = function(idx)
+	local port = C.state.port
+	local w = (C.tab_data.debugger.watches or {})[idx]
+	if not port or not w or not check_curl() then
+		return
+	end
+	http_request("POST", string.format("http://localhost:%d/api/cdp/evaluate", port), {
+		timeout = 10,
+		body = { expression = w.expr, returnByValue = false },
+		on_stdout = function(_, data)
+			if not data or #data == 0 then
+				return
+			end
+			local text = table.concat(data, "")
+			local ok, result = pcall(vim.json.decode, text)
+			vim.schedule(function()
+				local ww = (C.tab_data.debugger.watches or {})[idx]
+				if not ww then return end
+				if ok and type(result) == "table" and result.result then
+					ww.value = C._fmt_remote(result.result)
+					ww.objectId = result.result.objectId
+					ww.error = nil
+					if ww.expanded and ww.objectId then
+						C._expand_watch(idx)
+						return
+					end
+					if not ww.objectId then
+						ww.expanded = false
+						ww.props = nil
+					end
+				elseif ok and type(result) == "table" and result.exceptionDetails then
+					ww.value = (result.exceptionDetails.text or "Error")
+					ww.error = true
+					ww.objectId = nil
+					ww.expanded = false
+					ww.props = nil
+				else
+					ww.value = "(unavailable)"
+					ww.objectId = nil
+				end
+				if C.state.active_tab == 4 then C.render_all() end
+			end)
+		end,
+	})
+end
+
+C._refresh_watches = function()
+	for i, _ in ipairs(C.tab_data.debugger.watches or {}) do
+		C._eval_watch(i)
+	end
+end
+
+C.add_watch = function(expr)
+	if not expr then
+		vim.ui.input({ prompt = "Watch expression: " }, function(input)
+			if input and input ~= "" then
+				C.add_watch(input)
+			end
+		end)
+		return
+	end
+	local watches = C.tab_data.debugger.watches or {}
+	table.insert(watches, { expr = expr, value = "(not evaluated)", objectId = nil, expanded = false, props = nil })
+	C.tab_data.debugger.watches = watches
+	if C.state.connected then
+		C._eval_watch(#watches)
+	else
+		if C.state.active_tab == 4 then C.render_all() end
+	end
+end
+
+C.remove_watch = function()
+	local watches = C.tab_data.debugger.watches or {}
+	if #watches == 0 then
+		notify("CDP: no watches", "info")
+		return
+	end
+	local items = {}
+	for _, w in ipairs(watches) do
+		table.insert(items, w.expr)
+	end
+	vim.ui.select(items, { prompt = "Remove watch:" }, function(_, idx)
+		if idx then
+			table.remove(watches, idx)
+			C.tab_data.debugger.watches = watches
+			if C.state.active_tab == 4 then C.render_all() end
+		end
+	end)
+end
+
+C._expand_watch = function(idx)
+	local port = C.state.port
+	local w = (C.tab_data.debugger.watches or {})[idx]
+	if not port or not w or not w.objectId or not check_curl() then
+		if w then w.expanded = not w.expanded end
+		if C.state.active_tab == 4 then C.render_all() end
+		return
+	end
+	if w.expanded and w.props then
+		w.expanded = false
+		if C.state.active_tab == 4 then C.render_all() end
+		return
+	end
+	http_request("POST", string.format("http://localhost:%d/api/cdp/properties", port), {
+		timeout = 10,
+		body = { objectId = w.objectId },
+		on_stdout = function(_, data)
+			if not data or #data == 0 then return end
+			local text = table.concat(data, "")
+			local ok, result = pcall(vim.json.decode, text)
+			vim.schedule(function()
+				local ww = (C.tab_data.debugger.watches or {})[idx]
+				if not ww then return end
+				if ok and type(result) == "table" and result.result then
+					local props = {}
+					for _, p in ipairs(result.result) do
+						if p.name ~= "__proto__" then
+							table.insert(props, { name = p.name, value = C._fmt_remote(p.value or {}), objectId = (p.value or {}).objectId })
+						end
+						if #props >= 30 then break end
+					end
+					ww.props = props
+					ww.expanded = true
+				else
+					ww.props = { { name = "(error)", value = "could not fetch properties" } }
+					ww.expanded = true
+				end
+				if C.state.active_tab == 4 then C.render_all() end
+			end)
+		end,
+	})
+end
+
+C.toggle_watch_expand = function()
+	local watches = C.tab_data.debugger.watches or {}
+	if #watches == 0 then
+		notify("CDP: no watches to expand", "info")
+		return
+	end
+	local items = {}
+	for _, w in ipairs(watches) do
+		local mark = w.objectId and (w.expanded and "[-]" or "[+]") or "   "
+		table.insert(items, mark .. " " .. w.expr .. " = " .. (w.value or ""))
+	end
+	vim.ui.select(items, { prompt = "Expand/collapse watch:" }, function(_, idx)
+		if idx and watches[idx] then
+			if watches[idx].objectId then
+				C._expand_watch(idx)
+			else
+				notify("CDP: value is not expandable", "info")
+			end
+		end
+	end)
+end
+
 C._fetch_canvas_state = function()
 	local port = C.state.port
 	if not port or not C.state.connected or not check_curl() then
@@ -541,6 +720,54 @@ C.clear_network = function()
 		http_request("DELETE", string.format("http://localhost:%d/api/cdp/network", port), { timeout = 5 })
 	end
 end
+
+C.remove_breakpoint = function(id)
+	local port = C.state.port
+	if not port then
+		notify("CDP: not connected", "warn")
+		return
+	end
+	if not id then
+		local bps = C.tab_data.debugger.breakpoints or {}
+		if #bps == 0 then
+			notify("CDP: no breakpoints", "info")
+			return
+		end
+		local items = {}
+		for _, bp in ipairs(bps) do
+			table.insert(items, (bp.location or "?") .. "  [" .. (bp.id or "") .. "]")
+		end
+		vim.ui.select(items, { prompt = "Remove breakpoint:" }, function(choice, idx)
+			if choice and idx and bps[idx] and bps[idx].id then
+				C.remove_breakpoint(bps[idx].id)
+			end
+		end)
+		return
+	end
+	if not check_curl() then
+		return
+	end
+	http_request("POST", string.format("http://localhost:%d/api/cdp/debug/remove", port), {
+		timeout = 10,
+		body = { breakpointId = id },
+		on_stdout = function(_, data)
+			vim.schedule(function()
+				local bps = {}
+				for _, bp in ipairs(C.tab_data.debugger.breakpoints or {}) do
+					if bp.id ~= id then
+						table.insert(bps, bp)
+					end
+				end
+				C.tab_data.debugger.breakpoints = bps
+				notify("Breakpoint removed", "info")
+				if C.state.buf and is_buf(C.state.buf) then
+					C.render_all()
+				end
+			end)
+		end,
+	})
+end
+
 
 C.continue = function()
 	local port = C.state.port
@@ -715,7 +942,7 @@ C._set_keymaps = function(buf)
 	end, { buffer = buf, desc = "Debug tab" })
 	km("n", "5", function()
 		C.switch_tab(5)
-	end, { buffer = buf, desc = "Perf tab" })
+	end, { buffer = buf, desc = "Stats tab" })
 	km("n", "6", function()
 		C.switch_tab(6)
 	end, { buffer = buf, desc = "Info tab" })
@@ -735,7 +962,7 @@ C._set_keymaps = function(buf)
 		local keys = { "console", "network", "eval", "debugger", "perf", "info" }
 		local dk = keys[k]
 		if dk == "debugger" then
-			C.tab_data.debugger = { event = "resumed", callFrames = {}, reason = "" }
+			C.tab_data.debugger = { event = "resumed", callFrames = {}, reason = "", scopes = {}, this_value = "", breakpoints = C.tab_data.debugger.breakpoints or {}, watches = C.tab_data.debugger.watches or {} }
 		elseif dk == "eval" then
 			C.tab_data.eval = {}
 		elseif dk == "perf" then
@@ -794,6 +1021,26 @@ C._set_keymaps = function(buf)
 			C.set_breakpoint()
 		end
 	end, { buffer = buf, desc = "Set breakpoint" })
+	km("n", "d", function()
+		if tab() == 4 then
+			C.remove_breakpoint()
+		end
+	end, { buffer = buf, desc = "Remove breakpoint" })
+	km("n", "w", function()
+		if tab() == 4 then
+			C.add_watch()
+		end
+	end, { buffer = buf, desc = "Add watch" })
+	km("n", "W", function()
+		if tab() == 4 then
+			C.remove_watch()
+		end
+	end, { buffer = buf, desc = "Remove watch" })
+	km("n", "e", function()
+		if tab() == 4 then
+			C.toggle_watch_expand()
+		end
+	end, { buffer = buf, desc = "Expand/collapse watch" })
 	km("n", "s", function()
 		if tab() == 4 then
 			C.step()
@@ -967,13 +1214,22 @@ C._on_event = function(data)
 			C.render_all()
 		end
 	elseif t == "debugger" then
+		local bps = C.tab_data.debugger.breakpoints or {}
+		local watches = C.tab_data.debugger.watches or {}
 		C.tab_data.debugger = data
+		C.tab_data.debugger.breakpoints = bps
+		C.tab_data.debugger.watches = watches
 		if data.event == "paused" then
+			C.tab_data.debugger.scopes = data.scopes or {}
+			C.tab_data.debugger.this_value = data.this or ""
 			local frames = data.callFrames or {}
 			if #frames > 0 then
 				C._highlight_paused(frames[1].url, frames[1].line)
 			end
+			C._refresh_watches()
 		elseif data.event == "resumed" then
+			C.tab_data.debugger.scopes = {}
+			C.tab_data.debugger.this_value = ""
 			C._clear_debug_highlights()
 		end
 		if C.state.active_tab == 4 then
@@ -1345,14 +1601,21 @@ C._render_network = function()
 		return { " No network requests yet" }
 	end
 	local lines = {}
-	table.insert(lines, " Method  Status  Duration  URL")
-	table.insert(lines, " ──────  ──────  ────────  ───")
+	table.insert(lines, " Method  Status  Time      Type/MIME           URL")
+	table.insert(lines, " ──────  ──────  ────────  ─────────────────  ───")
 	for _, entry in ipairs(data) do
 		local method = entry.method or "GET"
 		local status = entry.error and "FAIL" or (entry.status and tostring(entry.status) or "?")
 		local dur = entry.duration ~= nil and string.format("%.1fms", entry.duration) or "?"
+		local info = entry.mime or entry.type or ""
+		if entry.size and entry.size > 0 then
+			local kb = entry.size / 1024
+			local size_s = kb >= 1024 and string.format("%.1fMB", kb / 1024) or string.format("%.1fKB", kb)
+			info = (info ~= "" and (info .. " ") or "") .. size_s
+		end
+		if info == "" then info = "-" end
 		local url = entry.url or ""
-		local label = string.format(" %-6s  %-6s  %-8s  %s", method, status, dur, url)
+		local label = string.format(" %-6s  %-6s  %-8s  %-17s  %s", method, status, dur, info:sub(1, 17), url)
 		table.insert(lines, label)
 		if entry.error then
 			table.insert(lines, "   Error: " .. entry.error)
@@ -1420,21 +1683,67 @@ C._render_debugger = function()
 		else
 			table.insert(lines, "   (no frames)")
 		end
+		table.insert(lines, "")
+		table.insert(lines, " Scope:")
+		if d.this_value and d.this_value ~= "" then
+			table.insert(lines, "   this = " .. tostring(d.this_value))
+		end
+		local scopes = d.scopes or {}
+		if #scopes == 0 then
+			table.insert(lines, "   (no scope data)")
+		else
+			for _, sc in ipairs(scopes) do
+				table.insert(lines, "   [" .. tostring(sc.type or "scope") .. "]")
+				for _, p in ipairs(sc.props or {}) do
+					table.insert(lines, string.format("     %s = %s", tostring(p.name), tostring(p.value)))
+				end
+			end
+		end
 	else
 		table.insert(lines, " Status: ▶ Running")
 	end
+	local watches = d.watches or {}
+	table.insert(lines, "")
+	table.insert(lines, string.format(" Watches (%d):", #watches))
+	if #watches == 0 then
+		table.insert(lines, "   (none) — press w to add")
+	else
+		for _, w in ipairs(watches) do
+			local mark = w.objectId and (w.expanded and "[-]" or "[+]") or "   "
+			table.insert(lines, string.format("   %s %s = %s", mark, tostring(w.expr), tostring(w.value or "")))
+			if w.expanded and w.props then
+				for _, p in ipairs(w.props) do
+					table.insert(lines, string.format("       %s: %s", tostring(p.name), tostring(p.value)))
+				end
+			end
+		end
+	end
+	local bps = d.breakpoints or {}
+	table.insert(lines, "")
+	table.insert(lines, string.format(" Breakpoints (%d):", #bps))
+	if #bps == 0 then
+		table.insert(lines, "   (none)")
+	else
+		for _, bp in ipairs(bps) do
+			table.insert(lines, "   • " .. (bp.location or "?"))
+		end
+	end
 	table.insert(lines, "")
 	table.insert(lines, " Keymaps:")
-	table.insert(lines, "   <CR>  set breakpoint")
-	table.insert(lines, "   p     pause")
-	table.insert(lines, "   P     pause on exceptions")
-	table.insert(lines, "   s     step over")
-	table.insert(lines, "   i     step into")
-	table.insert(lines, "   o     step out")
-	table.insert(lines, "   x     continue")
-	table.insert(lines, "   c     clear tab")
-	table.insert(lines, "   R     reload page")
-	table.insert(lines, "   S     screenshot")
+	table.insert(lines, "   <CR>/b  set breakpoint")
+	table.insert(lines, "   d       remove breakpoint")
+	table.insert(lines, "   w       add watch")
+	table.insert(lines, "   W       remove watch")
+	table.insert(lines, "   e       expand/collapse watch")
+	table.insert(lines, "   p       pause")
+	table.insert(lines, "   P       pause on exceptions")
+	table.insert(lines, "   s       step over")
+	table.insert(lines, "   i       step into")
+	table.insert(lines, "   o       step out")
+	table.insert(lines, "   x       continue")
+	table.insert(lines, "   c       clear tab")
+	table.insert(lines, "   R       reload page")
+	table.insert(lines, "   S       screenshot")
 	return lines
 end
 
@@ -1442,7 +1751,8 @@ C._render_performance = function()
 	local pd = C.tab_data.perf
 	local lines = {}
 	local rec = pd.recording
-	table.insert(lines, string.format(" Recording: %s", rec and "● ON" or "○ OFF"))
+	table.insert(lines, " Runtime stats (from CDP Performance.metrics)")
+	table.insert(lines, string.format(" Sampling: %s", rec and "● ON" or "○ OFF"))
 	table.insert(lines, string.rep("─", 30))
 	local fps = pd.fps
 	local avg1 = 0

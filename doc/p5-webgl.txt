@@ -74,7 +74,7 @@ Table of Contents                           *p5-webgl-table-of-contents*
 2. Functions                                                |p5-webgl-functions|
 
 
-`plane()`                                            |p5-webgl-plane|
+`plane()`                                            *p5-webgl-plane*
 
 Draw a plane with given a width and height
 
@@ -87,7 +87,7 @@ Draw a plane with given a width and height
 ---
 
 
-`box()`                                            |p5-webgl-box|
+`box()`                                            *p5-webgl-box*
 
 Draw a box with given width, height and depth
 
@@ -100,7 +100,7 @@ Draw a box with given width, height and depth
 ---
 
 
-`sphere()`                                            |p5-webgl-sphere|
+`sphere()`                                            *p5-webgl-sphere*
 
 Draw a sphere with given radius. DetailX and detailY determines the number of
 subdivisions in the x-dimension and the y-dimension of a sphere. More
@@ -117,7 +117,7 @@ browser.
 ---
 
 
-`cylinder()`                                            |p5-webgl-cylinder|
+`cylinder()`                                            *p5-webgl-cylinder*
 
 Draw a cylinder with given radius and height DetailX and detailY determines
 the number of subdivisions in the x-dimension and the y-dimension of a
@@ -134,7 +134,7 @@ warning or slow down the browser.
 ---
 
 
-`cone()`                                            |p5-webgl-cone|
+`cone()`                                            *p5-webgl-cone*
 
 Draw a cone with given radius and height DetailX and detailY determine the
 number of subdivisions in the x-dimension and the y-dimension of a cone. More
@@ -151,7 +151,7 @@ the browser.
 ---
 
 
-`ellipsoid()`                                            |p5-webgl-ellipsoid|
+`ellipsoid()`                                            *p5-webgl-ellipsoid*
 
 Draw an ellipsoid with given radius DetailX and detailY determine the number
 of subdivisions in the x-dimension and the y-dimension of a cone. More
@@ -167,7 +167,7 @@ above 150, it may crash the browser.
 ---
 
 
-`torus()`                                            |p5-webgl-torus|
+`torus()`                                            *p5-webgl-torus*
 
 Draw a torus with given radius and tube radius DetailX and detailY determine
 the number of subdivisions in the x-dimension and the y-dimension of a torus.
@@ -185,7 +185,7 @@ other than a torus.
 ---
 
 
-`orbitControl()`                                            |p5-webgl-orbitControl|
+`orbitControl()`                                            *p5-webgl-orbitControl*
 
 Allows movement around a 3D sketch using a mouse or trackpad or touch.
 Left-clicking and dragging or swipe motion will rotate the camera position
@@ -207,7 +207,7 @@ sensitivity.
 ---
 
 
-`debugMode()`                                            |p5-webgl-debugMode|
+`debugMode()`                                            *p5-webgl-debugMode*
 
 debugMode() helps visualize 3D space by adding a grid to indicate where the
 ‘ground’ is in a sketch and an axes icon which indicates the +X, +Y, and +Z
@@ -232,7 +232,7 @@ full view of the grid.
 ---
 
 
-`noDebugMode()`                                            |p5-webgl-noDebugMode|
+`noDebugMode()`                                            *p5-webgl-noDebugMode*
 
 Turns off debugMode() in a 3D sketch.
 
@@ -245,7 +245,7 @@ Turns off debugMode() in a 3D sketch.
 ---
 
 
-`ambientLight()`                                            |p5-webgl-ambientLight|
+`ambientLight()`                                            *p5-webgl-ambientLight*
 
 Creates an ambient light with the given color. Ambient light does not come
 from a specific direction. Objects are evenly lit from all sides. Ambient
@@ -269,7 +269,7 @@ them to only have an effect the first time through the loop.
 ---
 
 
-`specularColor()`                                            |p5-webgl-specularColor|
+`specularColor()`                                            *p5-webgl-specularColor*
 
 Sets the color of the specular highlight of a non-ambient light (i.e. all
 lights except ambientLight()). specularColor() affects only the lights which
@@ -293,7 +293,7 @@ is equivalent to the Processing function lightSpecular.
 ---
 
 
-`directionalLight()`                                            |p5-webgl-directionalLight|
+`directionalLight()`                                            *p5-webgl-directionalLight*
 
 Creates a directional light with the given color and direction. Directional
 light comes from one direction. The direction is specified as numbers
@@ -325,7 +325,7 @@ effect the first time through the loop.
 ---
 
 
-`pointLight()`                                            |p5-webgl-pointLight|
+`pointLight()`                                            *p5-webgl-pointLight*
 
 Creates a point light with the given color and position. A point light emits
 light from a single point in all directions. Because the light is emitted from
@@ -352,7 +352,7 @@ cause them to only have an effect the first time through the loop.
 ---
 
 
-`lights()`                                            |p5-webgl-lights|
+`lights()`                                            *p5-webgl-lights*
 
 Places an ambient and directional light in the scene. The lights are set to
 ambientLight(128, 128, 128) and directionalLight(128, 128, 128, 0, 0, -1).
@@ -369,7 +369,7 @@ them to only have an effect the first time through the loop. @chainable
 ---
 
 
-`lightFalloff()`                                            |p5-webgl-lightFalloff|
+`lightFalloff()`                                            *p5-webgl-lightFalloff*
 
 Sets the falloff rate for pointLight() and spotLight(). lightFalloff() affects
 only the lights which are created after it in the code. The constant, linear,
@@ -391,7 +391,7 @@ from light position to vertex position falloff = 1 / (CONSTANT + d * LINEAR +
 ---
 
 
-`spotLight()`                                            |p5-webgl-spotLight|
+`spotLight()`                                            *p5-webgl-spotLight*
 
 Creates a spot light with the given color, position, light direction, angle,
 and concentration. Like a pointLight(), a spotLight() emits light from a
@@ -429,7 +429,7 @@ the loop.
 ---
 
 
-`noLights()`                                            |p5-webgl-noLights|
+`noLights()`                                            *p5-webgl-noLights*
 
 Removes all lights present in a sketch. All subsequent geometry is rendered
 without lighting (until a new light is created with a call to one of the
@@ -445,7 +445,7 @@ pointLight(), spotLight()). @chainable
 ---
 
 
-`model()`                                            |p5-webgl-model|
+`model()`                                            *p5-webgl-model*
 
 Load a 3d model from an OBJ or STL file. loadModel() should be placed inside
 of preload(). This allows the model to load fully before the rest of your code
@@ -473,7 +473,7 @@ rendered without color properties.
 ---
 
 
-`createShader()`                                            |p5-webgl-createShader|
+`createShader()`                                            *p5-webgl-createShader*
 
 Creates a new p5.Shader object from the provided vertex and fragment shader
 files. The shader files are loaded asynchronously in the background, so this
@@ -496,7 +496,7 @@ mode.
 ---
 
 
-`shader()`                                            |p5-webgl-shader|
+`shader()`                                            *p5-webgl-shader*
 
 Sets the p5.Shader object to be used to render subsequent shapes. Custom
 shaders can be created using the createShader() and loadShader() functions.
@@ -512,7 +512,7 @@ used in WEBGL mode.
 ---
 
 
-`resetShader()`                                            |p5-webgl-resetShader|
+`resetShader()`                                            *p5-webgl-resetShader*
 
 Restores the default shaders. Code that runs after resetShader() will not be
 affected by the shader previously set by shader() @chainable
@@ -526,7 +526,7 @@ affected by the shader previously set by shader() @chainable
 ---
 
 
-`texture()`                                            |p5-webgl-texture|
+`texture()`                                            *p5-webgl-texture*
 
 Sets the texture that will be used to render subsequent shapes. A texture is
 like a "skin" that wraps around a 3D geometry. Currently supported textures
@@ -544,7 +544,7 @@ example.
 ---
 
 
-`textureMode()`                                            |p5-webgl-textureMode|
+`textureMode()`                                            *p5-webgl-textureMode*
 
 Sets the coordinate space for texture mapping. The default mode is IMAGE which
 refers to the actual coordinates of the image. NORMAL refers to a normalized
@@ -562,7 +562,7 @@ points (0,0) (100, 0) (100,200) (0,200). The same mapping in NORMAL is (0,0)
 ---
 
 
-`textureWrap()`                                            |p5-webgl-textureWrap|
+`textureWrap()`                                            *p5-webgl-textureWrap*
 
 Sets the global texture wrapping mode. This controls how textures behave when
 their uv's go outside of the 0 to 1 range. There are three options: CLAMP,
@@ -588,7 +588,7 @@ vertical axes.
 ---
 
 
-`normalMaterial()`                                            |p5-webgl-normalMaterial|
+`normalMaterial()`                                            *p5-webgl-normalMaterial*
 
 Sets the current material as a normal material. A normal material is not
 affected by light. It is often used as a placeholder material when debugging.
@@ -605,7 +605,7 @@ example. @chainable
 ---
 
 
-`ambientMaterial()`                                            |p5-webgl-ambientMaterial|
+`ambientMaterial()`                                            *p5-webgl-ambientMaterial*
 
 Sets the ambient color of the material. The ambientMaterial() color represents
 the components of the ambientLight() color that the object reflects. Consider
@@ -632,7 +632,7 @@ more materials in this example.
 ---
 
 
-`emissiveMaterial()`                                            |p5-webgl-emissiveMaterial|
+`emissiveMaterial()`                                            *p5-webgl-emissiveMaterial*
 
 Sets the emissive color of the material. An emissive material will display the
 emissive color at full strength regardless of lighting. This can give the
@@ -655,7 +655,7 @@ surrounding objects. You can view more materials in this example.
 ---
 
 
-`specularMaterial()`                                            |p5-webgl-specularMaterial|
+`specularMaterial()`                                            *p5-webgl-specularMaterial*
 
 Sets the specular color of the material. A specular material is reflective
 (shiny). The shininess can be controlled by the shininess() function. Like
@@ -678,7 +678,7 @@ material will reflect the color of the light source. This is what gives it its
 ---
 
 
-`shininess()`                                            |p5-webgl-shininess|
+`shininess()`                                            *p5-webgl-shininess*
 
 Sets the amount of gloss ("shininess") of a specularMaterial(). The default
 and minimum value is 1.
@@ -692,7 +692,7 @@ and minimum value is 1.
 ---
 
 
-`perspective()`                                            |p5-webgl-perspective|
+`perspective()`                                            *p5-webgl-perspective*
 
 Sets a perspective projection. Accepts the same parameters as the global
 perspective(). More information on this function can be found there.
@@ -706,7 +706,7 @@ perspective(). More information on this function can be found there.
 ---
 
 
-`ortho()`                                            |p5-webgl-ortho|
+`ortho()`                                            *p5-webgl-ortho*
 
 Sets an orthographic projection. Accepts the same parameters as the global
 ortho(). More information on this function can be found there.
@@ -720,7 +720,7 @@ ortho(). More information on this function can be found there.
 ---
 
 
-`frustum()`                                            |p5-webgl-frustum|
+`frustum()`                                            *p5-webgl-frustum*
 
 Sets the camera's frustum. Accepts the same parameters as the global
 frustum(). More information on this function can be found there.
@@ -734,7 +734,7 @@ frustum(). More information on this function can be found there.
 ---
 
 
-`pan()`                                            |p5-webgl-pan|
+`pan()`                                            *p5-webgl-pan*
 
 Panning rotates the camera view to the left and right.
 
@@ -747,7 +747,7 @@ Panning rotates the camera view to the left and right.
 ---
 
 
-`tilt()`                                            |p5-webgl-tilt|
+`tilt()`                                            *p5-webgl-tilt*
 
 Tilting rotates the camera view up and down.
 
@@ -760,7 +760,7 @@ Tilting rotates the camera view up and down.
 ---
 
 
-`lookAt()`                                            |p5-webgl-lookAt|
+`lookAt()`                                            *p5-webgl-lookAt*
 
 Reorients the camera to look at a position in world space.
 
@@ -778,7 +778,7 @@ Reorients the camera to look at a position in world space.
 ---
 
 
-`camera()`                                            |p5-webgl-camera|
+`camera()`                                            *p5-webgl-camera*
 
 Sets the camera's position and orientation. Accepts the same parameters as the
 global camera(). More information on this function can be found there.
@@ -792,7 +792,7 @@ global camera(). More information on this function can be found there.
 ---
 
 
-`move()`                                            |p5-webgl-move|
+`move()`                                            *p5-webgl-move*
 
 Move camera along its local axes while maintaining current camera orientation.
 
@@ -810,7 +810,7 @@ Move camera along its local axes while maintaining current camera orientation.
 ---
 
 
-`setPosition()`                                            |p5-webgl-setPosition|
+`setPosition()`                                            *p5-webgl-setPosition*
 
 Set camera position in world-space while maintaining current camera
 orientation.
@@ -829,7 +829,7 @@ orientation.
 ---
 
 
-`set()`                                            |p5-webgl-set|
+`set()`                                            *p5-webgl-set*
 
 Copies information about the argument camera's view and projection to the
 target camera. If the target camera is active, it will be reflected on the
@@ -844,7 +844,7 @@ screen.
 ---
 
 
-`slerp()`                                            |p5-webgl-slerp|
+`slerp()`                                            *p5-webgl-slerp*
 
 For the cameras cam0 and cam1 with the given arguments, their view are
 combined with the parameter amt that represents the quantity, and the obtained
@@ -873,7 +873,7 @@ orbitControl().
 ---
 
 
-`createCamera()`                                            |p5-webgl-createCamera|
+`createCamera()`                                            *p5-webgl-createCamera*
 
 Creates a new p5.Camera object and sets it as the current (active) camera. The
 new camera is initialized with a default position (see camera()) and a default
@@ -891,7 +891,7 @@ perspective(), ortho(), and frustum() if it is the only camera in the scene.
 ---
 
 
-`setCamera()`                                            |p5-webgl-setCamera|
+`setCamera()`                                            *p5-webgl-setCamera*
 
 Sets the current (active) camera of a 3D sketch. Allows for switching between
 multiple cameras.
@@ -905,7 +905,7 @@ multiple cameras.
 ---
 
 
-`vertexNormal()`                                            |p5-webgl-vertexNormal|
+`vertexNormal()`                                            *p5-webgl-vertexNormal*
 
 Sets the normal to use for subsequent vertices. @chainable
 
@@ -918,7 +918,7 @@ Sets the normal to use for subsequent vertices. @chainable
 ---
 
 
-`setAttributes()`                                            |p5-webgl-setAttributes|
+`setAttributes()`                                            *p5-webgl-setAttributes*
 
 Set attributes for the WebGL Drawing context. This is a way of adjusting how
 the WebGL renderer works to fine-tune the display and performance. Note that
@@ -954,7 +954,7 @@ global webglVersion property.
 ---
 
 
-`constructor()`                                            |p5-webgl-constructor|
+`constructor()`                                            *p5-webgl-constructor*
 
 An object that one can draw to and then read as a texture. While similar to a
 p5.Graphics, using a p5.Framebuffer as a texture will generally run much
@@ -974,7 +974,7 @@ on. It only works in WebGL mode.
 ---
 
 
-`resize()`                                            |p5-webgl-resize|
+`resize()`                                            *p5-webgl-resize*
 
 Resizes the framebuffer to the given width and height.
 
@@ -987,7 +987,7 @@ Resizes the framebuffer to the given width and height.
 ---
 
 
-`pixelDensity()`                                            |p5-webgl-pixelDensity|
+`pixelDensity()`                                            *p5-webgl-pixelDensity*
 
 Gets or sets the pixel scaling for high pixel density displays. By default,
 the density will match that of the canvas the framebuffer was created on,
@@ -1003,7 +1003,7 @@ get the current density, or pass in a number to set the density.
 ---
 
 
-`autoSized()`                                            |p5-webgl-autoSized|
+`autoSized()`                                            *p5-webgl-autoSized*
 
 Gets or sets whether or not this framebuffer will automatically resize along
 with the canvas it's attached to in order to match its size. Call this method
@@ -1019,7 +1019,7 @@ to set this property.
 ---
 
 
-`createCamera()`                                            |p5-webgl-createCamera|
+`createCamera()`                                            *p5-webgl-createCamera*
 
 Creates and returns a new p5.FramebufferCamera to be used while drawing to
 this framebuffer. The camera will be set as the currently active camera.
@@ -1033,7 +1033,7 @@ this framebuffer. The camera will be set as the currently active camera.
 ---
 
 
-`remove()`                                            |p5-webgl-remove|
+`remove()`                                            *p5-webgl-remove*
 
 Removes the framebuffer and frees its resources.
 
@@ -1046,7 +1046,7 @@ Removes the framebuffer and frees its resources.
 ---
 
 
-`begin()`                                            |p5-webgl-begin|
+`begin()`                                            *p5-webgl-begin*
 
 Begin drawing to this framebuffer. Subsequent drawing functions to the canvas
 the framebuffer is attached to will not be immediately visible, and will
@@ -1063,7 +1063,7 @@ contents of the framebuffer's texture.
 ---
 
 
-`end()`                                            |p5-webgl-end|
+`end()`                                            *p5-webgl-end*
 
 After having previously called begin(), this method stops drawing functions
 from going to the framebuffer's texture, allowing them to go right to the
@@ -1078,7 +1078,7 @@ canvas again. After this, one can read from the framebuffer's texture.
 ---
 
 
-`get()`                                            |p5-webgl-get|
+`get()`                                            *p5-webgl-get*
 
 Run a function while drawing to the framebuffer rather than to its canvas.
 This is equivalent to calling framebuffer.begin(), running the function, and
@@ -1102,7 +1102,7 @@ forgets begin or end.
 ---
 
 
-`computeFaces()`                                            |p5-webgl-computeFaces|
+`computeFaces()`                                            *p5-webgl-computeFaces*
 
 p5 Geometry class
 
@@ -1115,7 +1115,7 @@ p5 Geometry class
 ---
 
 
-`computeNormals()`                                            |p5-webgl-computeNormals|
+`computeNormals()`                                            *p5-webgl-computeNormals*
 
 computes smooth normals per vertex as an average of each face. @chainable
 
@@ -1128,7 +1128,7 @@ computes smooth normals per vertex as an average of each face. @chainable
 ---
 
 
-`averageNormals()`                                            |p5-webgl-averageNormals|
+`averageNormals()`                                            *p5-webgl-averageNormals*
 
 Averages the vertex normals. Used in curved surfaces @chainable
 
@@ -1141,7 +1141,7 @@ Averages the vertex normals. Used in curved surfaces @chainable
 ---
 
 
-`averagePoleNormals()`                                            |p5-webgl-averagePoleNormals|
+`averagePoleNormals()`                                            *p5-webgl-averagePoleNormals*
 
 Averages pole normals. Used in spherical primitives @chainable
 
@@ -1154,7 +1154,7 @@ Averages pole normals. Used in spherical primitives @chainable
 ---
 
 
-`normalize()`                                            |p5-webgl-normalize|
+`normalize()`                                            *p5-webgl-normalize*
 
 Modifies all vertices to be centered within the range -100 to 100. @chainable
 
@@ -1167,7 +1167,7 @@ Modifies all vertices to be centered within the range -100 to 100. @chainable
 ---
 
 
-`setUniform()`                                            |p5-webgl-setUniform|
+`setUniform()`                                            *p5-webgl-setUniform*
 
 Used to set the uniforms of a p5.Shader object. Uniforms are used as a way to
 provide shader programs (which run on the GPU) with values from a sketch

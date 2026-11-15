@@ -27,7 +27,7 @@ Table of Contents                           *p5-typography-table-of-contents*
 2. Functions                                                |p5-typography-functions|
 
 
-`textAlign()`                                            |p5-typography-textAlign|
+`textAlign()`                                            *p5-typography-textAlign*
 
 Sets the current alignment for drawing text. Accepts two arguments: horizAlign
 (LEFT, CENTER, or RIGHT) and vertAlign (TOP, BOTTOM, CENTER, or BASELINE). The
@@ -51,7 +51,7 @@ value.
 ---
 
 
-`textLeading()`                                            |p5-typography-textLeading|
+`textLeading()`                                            *p5-typography-textLeading*
 
 Sets/gets the spacing, in pixels, between lines of text. This setting will be
 used in all subsequent calls to the text() function.
@@ -65,7 +65,7 @@ used in all subsequent calls to the text() function.
 ---
 
 
-`textSize()`                                            |p5-typography-textSize|
+`textSize()`                                            *p5-typography-textSize*
 
 Sets/gets the current font size. This size will be used in all subsequent
 calls to the text() function. Font size is measured in pixels.
@@ -79,7 +79,7 @@ calls to the text() function. Font size is measured in pixels.
 ---
 
 
-`textStyle()`                                            |p5-typography-textStyle|
+`textStyle()`                                            *p5-typography-textStyle*
 
 Sets/gets the style of the text for system fonts to NORMAL, ITALIC, BOLD or
 BOLDITALIC. Note: this may be is overridden by CSS styling. For non-system
@@ -94,7 +94,7 @@ fonts (opentype, truetype, etc.) please load styled fonts instead.
 ---
 
 
-`textWidth()`                                            |p5-typography-textWidth|
+`textWidth()`                                            *p5-typography-textWidth*
 
 Calculates and returns the width of any character or text string.
 
@@ -111,7 +111,7 @@ Calculates and returns the width of any character or text string.
 ---
 
 
-`textAscent()`                                            |p5-typography-textAscent|
+`textAscent()`                                            *p5-typography-textAscent*
 
 Returns the ascent of the current font at its current size. The ascent
 represents the distance, in pixels, of the tallest character above the
@@ -126,7 +126,7 @@ baseline.
 ---
 
 
-`textDescent()`                                            |p5-typography-textDescent|
+`textDescent()`                                            *p5-typography-textDescent*
 
 Returns the descent of the current font at its current size. The descent
 represents the distance, in pixels, of the character with the longest
@@ -141,7 +141,7 @@ descender below the baseline.
 ---
 
 
-`textWrap()`                                            |p5-typography-textWrap|
+`textWrap()`                                            *p5-typography-textWrap*
 
 Specifies how lines of text are wrapped within a text box. This requires a
 max-width set on the text area, specified in text() as parameter x2. WORD wrap
@@ -167,7 +167,7 @@ within the text area will not be drawn to the screen.
 ---
 
 
-`text()`                                            |p5-typography-text|
+`text()`                                            *p5-typography-text*
 
 Loads an opentype font file (.otf, .ttf) from a file or a URL, and returns a
 p5.Font object. This function is asynchronous, meaning it may not finish
@@ -192,7 +192,7 @@ security.
 ---
 
 
-`textFont()`                                            |p5-typography-textFont|
+`textFont()`                                            *p5-typography-textFont*
 
 Sets the current font that will be drawn with the text() function. If
 textFont() is called without any argument, it will return the current font if
@@ -209,7 +209,7 @@ object. WEBGL: Only fonts loaded via loadFont() are supported.
 ---
 
 
-`constructor()`                                            |p5-typography-constructor|
+`constructor()`                                            *p5-typography-constructor*
 
 Base class for font handling
 
@@ -222,7 +222,7 @@ Base class for font handling
 ---
 
 
-`textBounds()`                                            |p5-typography-textBounds|
+`textBounds()`                                            *p5-typography-textBounds*
 
 Returns a tight bounding box for the given text string using this font
 
@@ -241,7 +241,7 @@ Returns a tight bounding box for the given text string using this font
 ---
 
 
-`textToPoints()`                                            |p5-typography-textToPoints|
+`textToPoints()`                                            *p5-typography-textToPoints*
 
 Computes an array of points following the path for specified text
 

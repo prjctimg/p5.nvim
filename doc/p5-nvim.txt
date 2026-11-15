@@ -204,7 +204,7 @@ require("p5.server").stop_server()                   *p5.server.stop_server()*
    Stop the running server.
 
 require("p5.cdp").open()                            *p5.cdp.open()*
-   Open the CDP DevTools panel (or terminal fallback when Chrome not found).
+   Open the CDP debug panel (or terminal fallback when Chrome not found).
 
 require("p5.cdp").close()                            *p5.cdp.close()*
    Close the CDP panel or terminal console.

@@ -63,7 +63,7 @@ Table of Contents                           *p5-dom-table-of-contents*
 2. Functions                                                |p5-dom-functions|
 
 
-`constructor()`                                            |p5-dom-constructor|
+`constructor()`                                            *p5-dom-constructor*
 
 Extends p5.Element to handle audio and video. In addition to the methods of
 p5.Element, it also contains methods for controlling media. It is not called
@@ -79,7 +79,7 @@ createAudio, and createCapture.
 ---
 
 
-`play()`                                            |p5-dom-play|
+`play()`                                            *p5-dom-play*
 
 Play an HTML5 media element. @chainable
 
@@ -92,7 +92,7 @@ Play an HTML5 media element. @chainable
 ---
 
 
-`stop()`                                            |p5-dom-stop|
+`stop()`                                            *p5-dom-stop*
 
 Stops an HTML5 media element (sets current time to zero). @chainable
 
@@ -105,7 +105,7 @@ Stops an HTML5 media element (sets current time to zero). @chainable
 ---
 
 
-`pause()`                                            |p5-dom-pause|
+`pause()`                                            *p5-dom-pause*
 
 Pauses an HTML5 media element. @chainable
 
@@ -118,7 +118,7 @@ Pauses an HTML5 media element. @chainable
 ---
 
 
-`loop()`                                            |p5-dom-loop|
+`loop()`                                            *p5-dom-loop*
 
 Set 'loop' to true for an HTML5 media element, and starts playing. @chainable
 
@@ -131,7 +131,7 @@ Set 'loop' to true for an HTML5 media element, and starts playing. @chainable
 ---
 
 
-`noLoop()`                                            |p5-dom-noLoop|
+`noLoop()`                                            *p5-dom-noLoop*
 
 Set 'loop' to false for an HTML5 media element. Element will stop when it
 reaches the end. @chainable
@@ -145,7 +145,7 @@ reaches the end. @chainable
 ---
 
 
-`autoplay()`                                            |p5-dom-autoplay|
+`autoplay()`                                            *p5-dom-autoplay*
 
 Set HTML5 media element to autoplay or not. If no argument is specified, by
 default it will autoplay.
@@ -159,7 +159,7 @@ default it will autoplay.
 ---
 
 
-`volume()`                                            |p5-dom-volume|
+`volume()`                                            *p5-dom-volume*
 
 Sets volume for this HTML5 media element. If no argument is given, returns the
 current volume.
@@ -173,7 +173,7 @@ current volume.
 ---
 
 
-`speed()`                                            |p5-dom-speed|
+`speed()`                                            *p5-dom-speed*
 
 If no arguments are given, returns the current playback speed of the element.
 The speed parameter sets the speed where 2.0 will play the element twice as
@@ -190,7 +190,7 @@ even if they do, playback might not be smooth.)
 ---
 
 
-`time()`                                            |p5-dom-time|
+`time()`                                            *p5-dom-time*
 
 If no arguments are given, returns the current time of the element. If an
 argument is given the current time of the element is set to it.
@@ -204,7 +204,7 @@ argument is given the current time of the element is set to it.
 ---
 
 
-`duration()`                                            |p5-dom-duration|
+`duration()`                                            *p5-dom-duration*
 
 Returns the duration of the HTML5 media element.
 
@@ -217,7 +217,7 @@ Returns the duration of the HTML5 media element.
 ---
 
 
-`connect()`                                            |p5-dom-connect|
+`connect()`                                            *p5-dom-connect*
 
 Schedule an event to be called when the audio or video element reaches the
 end. If the element is looping, this will not be called. The element is passed
@@ -236,7 +236,7 @@ in as the argument to the onended callback.
 ---
 
 
-`disconnect()`                                            |p5-dom-disconnect|
+`disconnect()`                                            *p5-dom-disconnect*
 
 Disconnect all Web Audio routing, including to main output. This is useful if
 you want to re-route the output through audio effects, for example.
@@ -250,7 +250,7 @@ you want to re-route the output through audio effects, for example.
 ---
 
 
-`showControls()`                                            |p5-dom-showControls|
+`showControls()`                                            *p5-dom-showControls*
 
 Show the default MediaElement controls, as determined by the web browser.
 
@@ -263,7 +263,7 @@ Show the default MediaElement controls, as determined by the web browser.
 ---
 
 
-`hideControls()`                                            |p5-dom-hideControls|
+`hideControls()`                                            *p5-dom-hideControls*
 
 Hide the default mediaElement controls.
 
@@ -276,7 +276,7 @@ Hide the default mediaElement controls.
 ---
 
 
-`removeCue()`                                            |p5-dom-removeCue|
+`removeCue()`                                            *p5-dom-removeCue*
 
 Schedule events to trigger every time a MediaElement (audio/video) reaches a
 playback cue point. Accepts a callback function, a time (in seconds) at which
@@ -298,7 +298,7 @@ the second parameter.
 ---
 
 
-`clearCues()`                                            |p5-dom-clearCues|
+`clearCues()`                                            *p5-dom-clearCues*
 
 Remove all of the callbacks that had originally been scheduled via the addCue
 method.
@@ -312,7 +312,7 @@ method.
 ---
 
 
-`select()`                                            |p5-dom-select|
+`select()`                                            *p5-dom-select*
 
 Underlying File object. All normal File methods can be called on this. / file:
 any; /** File type (image, text, etc.) / type: any; /** File subtype (usually
@@ -338,7 +338,7 @@ specify a container to search within.
 ---
 
 
-`selectAll()`                                            |p5-dom-selectAll|
+`selectAll()`                                            *p5-dom-selectAll*
 
 Searches the page for elements that match the given CSS selector string (can
 be an ID a class, tag name or a combination) and returns them as p5.Elements
@@ -358,7 +358,7 @@ array if none found. You can also specify a container to search within.
 ---
 
 
-`removeElements()`                                            |p5-dom-removeElements|
+`removeElements()`                                            *p5-dom-removeElements*
 
 Removes all elements created by p5, except any canvas / graphics elements
 created by createCanvas or createGraphics. Event handlers are removed, and
@@ -373,7 +373,7 @@ element is removed from the DOM.
 ---
 
 
-`createDiv()`                                            |p5-dom-createDiv|
+`createDiv()`                                            *p5-dom-createDiv*
 
 The .changed() function is called when the value of an element changes. This
 can be used to attach an element specific event listener.
@@ -392,7 +392,7 @@ can be used to attach an element specific event listener.
 ---
 
 
-`createP()`                                            |p5-dom-createP|
+`createP()`                                            *p5-dom-createP*
 
 Creates a <p></p> element in the DOM with given inner HTML. Used for paragraph
 length text.
@@ -406,7 +406,7 @@ length text.
 ---
 
 
-`createSpan()`                                            |p5-dom-createSpan|
+`createSpan()`                                            *p5-dom-createSpan*
 
 Creates a <span></span> element in the DOM with given inner HTML.
 
@@ -419,7 +419,7 @@ Creates a <span></span> element in the DOM with given inner HTML.
 ---
 
 
-`createImg()`                                            |p5-dom-createImg|
+`createImg()`                                            *p5-dom-createImg*
 
 Creates an <img> element in the DOM with given src and alternate text.
 
@@ -437,7 +437,7 @@ Creates an <img> element in the DOM with given src and alternate text.
 ---
 
 
-`createA()`                                            |p5-dom-createA|
+`createA()`                                            *p5-dom-createA*
 
 Creates an <img> element in the DOM with given src and alternate text.
 
@@ -458,7 +458,7 @@ Creates an <img> element in the DOM with given src and alternate text.
 ---
 
 
-`createSlider()`                                            |p5-dom-createSlider|
+`createSlider()`                                            *p5-dom-createSlider*
 
 Creates a slider <input></input> element in the DOM. Use .size() to set the
 display length of the slider.
@@ -477,7 +477,7 @@ display length of the slider.
 ---
 
 
-`createButton()`                                            |p5-dom-createButton|
+`createButton()`                                            *p5-dom-createButton*
 
 Creates a <button></button> element in the DOM. Use .size() to set the display
 size of the button. Use .mousePressed() to specify behavior on press.
@@ -495,7 +495,7 @@ size of the button. Use .mousePressed() to specify behavior on press.
 ---
 
 
-`createCheckbox()`                                            |p5-dom-createCheckbox|
+`createCheckbox()`                                            *p5-dom-createCheckbox*
 
 Creates a checkbox <input></input> element in the DOM. Calling .checked() on a
 checkbox returns a boolean indicating whether it is checked or not.
@@ -509,7 +509,7 @@ checkbox returns a boolean indicating whether it is checked or not.
 ---
 
 
-`createSelect()`                                            |p5-dom-createSelect|
+`createSelect()`                                            *p5-dom-createSelect*
 
 Creates a dropdown menu <select></select> element in the DOM. It also assigns
 select-related methods to p5.Element when selecting an existing select box.
@@ -534,7 +534,7 @@ option as enable if the initial option is disabled.
 ---
 
 
-`createRadio()`                                            |p5-dom-createRadio|
+`createRadio()`                                            *p5-dom-createRadio*
 
 Creates a radio button element in the DOM. It also helps existing radio
 buttons assign methods of p5.Element. - .option(value, [label]) can be used to
@@ -561,7 +561,7 @@ method will enable/disable the whole radio button element.
 ---
 
 
-`createColorPicker()`                                            |p5-dom-createColorPicker|
+`createColorPicker()`                                            *p5-dom-createColorPicker*
 
 Creates a colorPicker element in the DOM for color input. The .value() method
 will return a hex string (#rrggbb) of the color. The .color() method will
@@ -576,7 +576,7 @@ return a p5.Color object with the current chosen color.
 ---
 
 
-`createInput()`                                            |p5-dom-createInput|
+`createInput()`                                            *p5-dom-createInput*
 
 Creates an <input></input> element in the DOM for text input. Use .size() to
 set the display length of the box.
@@ -594,7 +594,7 @@ set the display length of the box.
 ---
 
 
-`createElement()`                                            |p5-dom-createElement|
+`createElement()`                                            *p5-dom-createElement*
 
 Creates an <input></input> element in the DOM of type 'file'. This allows
 users to select local files for use in a sketch.
@@ -615,7 +615,7 @@ users to select local files for use in a sketch.
 ---
 
 
-`addClass()`                                            |p5-dom-addClass|
+`addClass()`                                            *p5-dom-addClass*
 
 Adds specified class to the element.
 
@@ -628,7 +628,7 @@ Adds specified class to the element.
 ---
 
 
-`removeClass()`                                            |p5-dom-removeClass|
+`removeClass()`                                            *p5-dom-removeClass*
 
 Removes specified class from the element.
 
@@ -641,7 +641,7 @@ Removes specified class from the element.
 ---
 
 
-`hasClass()`                                            |p5-dom-hasClass|
+`hasClass()`                                            *p5-dom-hasClass*
 
 Checks if specified class is already applied to element.
 
@@ -658,7 +658,7 @@ Checks if specified class is already applied to element.
 ---
 
 
-`toggleClass()`                                            |p5-dom-toggleClass|
+`toggleClass()`                                            *p5-dom-toggleClass*
 
 Toggles element class.
 
@@ -671,7 +671,7 @@ Toggles element class.
 ---
 
 
-`child()`                                            |p5-dom-child|
+`child()`                                            *p5-dom-child*
 
 Attaches the element as a child to the parent specified. Accepts either a
 string ID, DOM node, or p5.Element. If no argument is specified, an array of
@@ -686,7 +686,7 @@ children DOM nodes is returned.
 ---
 
 
-`center()`                                            |p5-dom-center|
+`center()`                                            *p5-dom-center*
 
 Centers a p5.Element either vertically, horizontally, or both, relative to its
 parent or according to the body if the p5.Element has no parent. If no
@@ -701,7 +701,7 @@ argument is passed the p5.Element is aligned both vertically and horizontally.
 ---
 
 
-`html()`                                            |p5-dom-html|
+`html()`                                            *p5-dom-html*
 
 If an argument is given, sets the inner HTML of the element, replacing any
 existing HTML. If true is included as a second argument, HTML is appended
@@ -717,7 +717,7 @@ inner HTML of the element.
 ---
 
 
-`position()`                                            |p5-dom-position|
+`position()`                                            *p5-dom-position*
 
 Sets the position of the element. If no position type argument is given, the
 position will be relative to (0, 0) of the window. Essentially, this sets
@@ -737,7 +737,7 @@ https://stackoverflow.com/questions/14714314/how-do-i-comment-object-literals-in
 ---
 
 
-`style()`                                            |p5-dom-style|
+`style()`                                            *p5-dom-style*
 
 Sets the given style (CSS) property (1st arg) of the element with the given
 value (2nd arg). If a single argument is given, .style() returns the value of
@@ -757,7 +757,7 @@ the given property; however, if a single argument is given in CSS syntax
 ---
 
 
-`attribute()`                                            |p5-dom-attribute|
+`attribute()`                                            *p5-dom-attribute*
 
 Adds a new attribute or changes the value of an existing attribute on the
 specified element. If no value is specified, returns the value of the given
@@ -772,7 +772,7 @@ attribute, or null if the attribute is not set.
 ---
 
 
-`removeAttribute()`                                            |p5-dom-removeAttribute|
+`removeAttribute()`                                            *p5-dom-removeAttribute*
 
 Removes an attribute on the specified element.
 
@@ -785,7 +785,7 @@ Removes an attribute on the specified element.
 ---
 
 
-`value()`                                            |p5-dom-value|
+`value()`                                            *p5-dom-value*
 
 Either returns the value of the element if no arguments given, or sets the
 value of the element.
@@ -799,7 +799,7 @@ value of the element.
 ---
 
 
-`show()`                                            |p5-dom-show|
+`show()`                                            *p5-dom-show*
 
 Shows the current element. Essentially, setting display:block for the style.
 @chainable
@@ -813,7 +813,7 @@ Shows the current element. Essentially, setting display:block for the style.
 ---
 
 
-`hide()`                                            |p5-dom-hide|
+`hide()`                                            *p5-dom-hide*
 
 Hides the current element. Essentially, setting display:none for the style.
 @chainable
@@ -827,7 +827,7 @@ Hides the current element. Essentially, setting display:none for the style.
 ---
 
 
-`size()`                                            |p5-dom-size|
+`size()`                                            *p5-dom-size*
 
 Sets the width and height of the element. AUTO can be used to only adjust one
 dimension at a time. If no arguments are given, it returns the width and
@@ -844,7 +844,7 @@ element has finished loading.
 ---
 
 
-`remove()`                                            |p5-dom-remove|
+`remove()`                                            *p5-dom-remove*
 
 Removes the element, stops all media streams, and deregisters all listeners.
 

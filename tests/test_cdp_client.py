@@ -637,41 +637,20 @@ class TestCDPHTTPServerEvalAndDebugHandlers(unittest.TestCase):
         self.assertIn(b'"error"', written)
         self.assertIn(b'503', written)
 
-    def test_handle_cdp_evaluate_rejects_dangerous_patterns(self):
+    def test_handle_cdp_evaluate_forwards_expression(self):
         self.server.cdp_client = MagicMock()
         self.server.cdp_client.connected = True
-        w = self._make_writer()
-        body = json.dumps({'expression': 'file:///etc/passwd'})
-        headers = {'content-length': str(len(body))}
-        reader = AsyncMock()
-        reader.read.return_value = body.encode()
-        asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
-        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
-        self.assertIn(b'Rejected', written)
-
-    def test_handle_cdp_evaluate_rejects_require(self):
-        self.server.cdp_client = MagicMock()
-        self.server.cdp_client.connected = True
-        w = self._make_writer()
-        body = json.dumps({'expression': ' require("fs")'})
-        headers = {'content-length': str(len(body))}
-        reader = AsyncMock()
-        reader.read.return_value = body.encode()
-        asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
-        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
-        self.assertIn(b'Rejected', written)
-
-    def test_handle_cdp_evaluate_rejects_process_env(self):
-        self.server.cdp_client = MagicMock()
-        self.server.cdp_client.connected = True
-        w = self._make_writer()
-        body = json.dumps({'expression': 'process.env.HOME'})
-        headers = {'content-length': str(len(body))}
-        reader = AsyncMock()
-        reader.read.return_value = body.encode()
-        asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
-        written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
-        self.assertIn(b'Rejected', written)
+        self.server.cdp_client.evaluate = AsyncMock(return_value={'result': {'type': 'string', 'value': 'ok'}})
+        for expr in ('file:///etc/passwd', ' require("fs")', 'process.env.HOME'):
+            w = self._make_writer()
+            body = json.dumps({'expression': expr})
+            headers = {'content-length': str(len(body))}
+            reader = AsyncMock()
+            reader.read.return_value = body.encode()
+            asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
+            self.server.cdp_client.evaluate.assert_called_with(expr)
+            written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
+            self.assertIn(b'"result"', written)
 
     def test_handle_cdp_debug_break_no_client(self):
         w = self._make_writer()

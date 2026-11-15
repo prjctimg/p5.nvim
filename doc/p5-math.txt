@@ -75,7 +75,7 @@ Table of Contents                           *p5-math-table-of-contents*
 2. Functions                                                |p5-math-functions|
 
 
-`abs()`                                            |p5-math-abs|
+`abs()`                                            *p5-math-abs*
 
 Calculates the absolute value (magnitude) of a number. Maps to Math.abs(). The
 absolute value of a number is always positive.
@@ -93,7 +93,7 @@ absolute value of a number is always positive.
 ---
 
 
-`ceil()`                                            |p5-math-ceil|
+`ceil()`                                            *p5-math-ceil*
 
 Calculates the closest int value that is greater than or equal to the value of
 the parameter. Maps to Math.ceil(). For example, ceil(9.03) returns the value
@@ -112,7 +112,7 @@ the parameter. Maps to Math.ceil(). For example, ceil(9.03) returns the value
 ---
 
 
-`constrain()`                                            |p5-math-constrain|
+`constrain()`                                            *p5-math-constrain*
 
 Constrains a value between a minimum and maximum value.
 
@@ -131,7 +131,7 @@ Constrains a value between a minimum and maximum value.
 ---
 
 
-`dist()`                                            |p5-math-dist|
+`dist()`                                            *p5-math-dist*
 
 Calculates the distance between two points, in either two or three dimensions.
 If you looking for distance between two vectors see p5.Vector.dist()
@@ -152,7 +152,7 @@ If you looking for distance between two vectors see p5.Vector.dist()
 ---
 
 
-`exp()`                                            |p5-math-exp|
+`exp()`                                            *p5-math-exp*
 
 Returns Euler's number e (2.71828..) raised to the power of the n parameter.
 Maps to Math.exp().
@@ -170,7 +170,7 @@ Maps to Math.exp().
 ---
 
 
-`floor()`                                            |p5-math-floor|
+`floor()`                                            *p5-math-floor*
 
 Calculates the closest int value that is less than or equal to the value of
 the parameter. Maps to Math.floor().
@@ -188,7 +188,7 @@ the parameter. Maps to Math.floor().
 ---
 
 
-`lerp()`                                            |p5-math-lerp|
+`lerp()`                                            *p5-math-lerp*
 
 Calculates a number between two numbers at a specific increment. The amt
 parameter is the amount to interpolate between the two values where 0.0 is
@@ -213,7 +213,7 @@ motion along a straight path and for drawing dotted lines.
 ---
 
 
-`log()`                                            |p5-math-log|
+`log()`                                            *p5-math-log*
 
 Calculates the natural logarithm (the base-e logarithm) of a number. This
 function expects the n parameter to be a value greater than 0.0. Maps to
@@ -232,7 +232,7 @@ Math.log().
 ---
 
 
-`mag()`                                            |p5-math-mag|
+`mag()`                                            *p5-math-mag*
 
 Calculates the magnitude (or length) of a vector. A vector is a direction in
 space commonly used in computer graphics and linear algebra. Because it has no
@@ -254,7 +254,7 @@ writing dist(0, 0, x, y).
 ---
 
 
-`map()`                                            |p5-math-map|
+`map()`                                            *p5-math-map*
 
 Re-maps a number from one range to another. In the first example above, the
 number 25 is converted from a value in the range of 0 to 100 into a value that
@@ -277,7 +277,7 @@ ranges from the left edge of the window (0) to the right edge (width).
 ---
 
 
-`max()`                                            |p5-math-max|
+`max()`                                            *p5-math-max*
 
 Determines the largest value in a sequence of numbers, and then returns that
 value. max() accepts any number of Number parameters, or an Array of any
@@ -297,7 +297,7 @@ length.
 ---
 
 
-`min()`                                            |p5-math-min|
+`min()`                                            *p5-math-min*
 
 Determines the smallest value in a sequence of numbers, and then returns that
 value. min() accepts any number of Number parameters, or an Array of any
@@ -317,7 +317,7 @@ length.
 ---
 
 
-`norm()`                                            |p5-math-norm|
+`norm()`                                            *p5-math-norm*
 
 Normalizes a number from another range into a value between 0 and 1. Identical
 to map(value, low, high, 0, 1). Numbers outside of the range are not clamped
@@ -339,7 +339,7 @@ the example above.)
 ---
 
 
-`pow()`                                            |p5-math-pow|
+`pow()`                                            *p5-math-pow*
 
 Facilitates exponential expressions. The pow() function is an efficient way of
 multiplying numbers by themselves (or their reciprocals) in large quantities.
@@ -360,7 +360,7 @@ pow(3, -5) is equivalent to 1 / 3 × 3 × 3 × 3 × 3. Maps to Math.pow().
 ---
 
 
-`round()`                                            |p5-math-round|
+`round()`                                            *p5-math-round*
 
 Calculates the integer closest to the n parameter. For example, round(133.8)
 returns the value 134. Maps to Math.round().
@@ -378,7 +378,7 @@ returns the value 134. Maps to Math.round().
 ---
 
 
-`sq()`                                            |p5-math-sq|
+`sq()`                                            *p5-math-sq*
 
 Squares a number (multiplies a number by itself). The result is always a
 positive number, as multiplying two negative numbers always yields a positive
@@ -397,7 +397,7 @@ result. For example, -1 * -1 = 1.
 ---
 
 
-`sqrt()`                                            |p5-math-sqrt|
+`sqrt()`                                            *p5-math-sqrt*
 
 Calculates the square root of a number. The square root of a number is always
 positive, even though there may be a valid negative root. The square root s of
@@ -417,7 +417,7 @@ Math.sqrt().
 ---
 
 
-`fract()`                                            |p5-math-fract|
+`fract()`                                            *p5-math-fract*
 
 Calculates the fractional part of a number.
 
@@ -434,7 +434,7 @@ Calculates the fractional part of a number.
 ---
 
 
-`createVector()`                                            |p5-math-createVector|
+`createVector()`                                            *p5-math-createVector*
 
 Creates a new p5.Vector (the datatype for storing vectors). This provides a
 two or three-dimensional vector, specifically a Euclidean (also known as
@@ -450,7 +450,7 @@ direction.
 ---
 
 
-`noise()`                                            |p5-math-noise|
+`noise()`                                            *p5-math-noise*
 
 Returns the Perlin noise value at specified coordinates. Perlin noise is a
 random sequence generator producing a more naturally ordered, harmonic
@@ -489,7 +489,7 @@ depending on use.
 ---
 
 
-`noiseDetail()`                                            |p5-math-noiseDetail|
+`noiseDetail()`                                            *p5-math-noiseDetail*
 
 Adjusts the character and level of detail produced by the Perlin noise
 function. Similar to harmonics in physics, noise is computed over several
@@ -518,7 +518,7 @@ function can be adapted to fit very specific needs and characteristics.
 ---
 
 
-`noiseSeed()`                                            |p5-math-noiseSeed|
+`noiseSeed()`                                            *p5-math-noiseSeed*
 
 Sets the seed value for noise(). By default, noise() produces different
 results each time the program is run. Set the seed parameter to a constant to
@@ -533,7 +533,7 @@ return the same pseudo-random numbers each time the software is run.
 ---
 
 
-`randomSeed()`                                            |p5-math-randomSeed|
+`randomSeed()`                                            *p5-math-randomSeed*
 
 Sets the seed value for random(). By default, random() produces different
 results each time the program is run. Set the seed parameter to a constant to
@@ -548,7 +548,7 @@ return the same pseudo-random numbers each time the software is run.
 ---
 
 
-`random()`                                            |p5-math-random|
+`random()`                                            *p5-math-random*
 
 Return a random floating-point number. Takes either 0, 1 or 2 arguments. If no
 argument is given, returns a random number from 0 up to (but not including) 1.
@@ -567,7 +567,7 @@ second argument.
 ---
 
 
-`randomGaussian()`                                            |p5-math-randomGaussian|
+`randomGaussian()`                                            *p5-math-randomGaussian*
 
 Returns a random number fitting a Gaussian, or normal, distribution. There is
 theoretically no minimum or maximum value that randomGaussian() might return.
@@ -587,7 +587,7 @@ standard deviation.
 ---
 
 
-`acos()`                                            |p5-math-acos|
+`acos()`                                            *p5-math-acos*
 
 The inverse of cos(), returns the arc cosine of a value. This function expects
 the values in the range of -1 to 1 and values are returned in the range 0 to
@@ -607,7 +607,7 @@ DEGREES.
 ---
 
 
-`asin()`                                            |p5-math-asin|
+`asin()`                                            *p5-math-asin*
 
 The inverse of sin(), returns the arc sine of a value. This function expects
 the values in the range of -1 to 1 and values are returned in the range -PI/2
@@ -626,7 +626,7 @@ to PI/2 if the angleMode is RADIANS or -90 to 90 if the angle mode is DEGREES.
 ---
 
 
-`atan()`                                            |p5-math-atan|
+`atan()`                                            *p5-math-atan*
 
 The inverse of tan(), returns the arc tangent of a value. This function
 expects the values in the range of -Infinity to Infinity (exclusive) and
@@ -646,7 +646,7 @@ values are returned in the range -PI/2 to PI/2 if the angleMode is RADIANS or
 ---
 
 
-`atan2()`                                            |p5-math-atan2|
+`atan2()`                                            *p5-math-atan2*
 
 Calculates the angle (in radians) from a specified point to the coordinate
 origin as measured from the positive x-axis. Values are returned as a float in
@@ -670,7 +670,7 @@ structure of calculating the tangent.
 ---
 
 
-`cos()`                                            |p5-math-cos|
+`cos()`                                            *p5-math-cos*
 
 Calculates the cosine of an angle. This function takes into account the
 current angleMode. Values are returned in the range -1 to 1.
@@ -688,7 +688,7 @@ current angleMode. Values are returned in the range -1 to 1.
 ---
 
 
-`sin()`                                            |p5-math-sin|
+`sin()`                                            *p5-math-sin*
 
 Calculates the sine of an angle. This function takes into account the current
 angleMode. Values are returned in the range -1 to 1.
@@ -706,7 +706,7 @@ angleMode. Values are returned in the range -1 to 1.
 ---
 
 
-`tan()`                                            |p5-math-tan|
+`tan()`                                            *p5-math-tan*
 
 Calculates the tangent of an angle. This function takes into account the
 current angleMode. Values are returned in the range of all real numbers.
@@ -724,7 +724,7 @@ current angleMode. Values are returned in the range of all real numbers.
 ---
 
 
-`degrees()`                                            |p5-math-degrees|
+`degrees()`                                            *p5-math-degrees*
 
 Converts a radian measurement to its corresponding value in degrees. Radians
 and degrees are two ways of measuring the same thing. There are 360 degrees in
@@ -744,7 +744,7 @@ This function does not take into account the current angleMode().
 ---
 
 
-`radians()`                                            |p5-math-radians|
+`radians()`                                            *p5-math-radians*
 
 Converts a degree measurement to its corresponding value in radians. Radians
 and degrees are two ways of measuring the same thing. There are 360 degrees in
@@ -764,7 +764,7 @@ This function does not take into account the current angleMode.
 ---
 
 
-`angleMode()`                                            |p5-math-angleMode|
+`angleMode()`                                            *p5-math-angleMode*
 
 Sets the current mode of p5 to the given mode. Default mode is RADIANS.
 Calling angleMode() with no arguments returns current anglemode.
@@ -778,7 +778,7 @@ Calling angleMode() with no arguments returns current anglemode.
 ---
 
 
-`constructor()`                                            |p5-math-constructor|
+`constructor()`                                            *p5-math-constructor*
 
 A class to describe a two or three-dimensional vector, specifically a
 Euclidean (also known as geometric) vector. A vector is an entity that has
@@ -804,7 +804,7 @@ which is made easy by the methods inside the p5.Vector class.
 ---
 
 
-`toString()`                                            |p5-math-toString|
+`toString()`                                            *p5-math-toString*
 
 Gets a copy of the vector, returns a p5.Vector object.
 
@@ -868,7 +868,7 @@ Gets a copy of the vector, returns a p5.Vector object.
 ---
 
 
-`set()`                                            |p5-math-set|
+`set()`                                            *p5-math-set*
 
 Sets the x, y, and z components of the vector using two or three separate
 variables, the data from a p5.Vector, or the values from a float array.
@@ -882,7 +882,7 @@ variables, the data from a p5.Vector, or the values from a float array.
 ---
 
 
-`copy()`                                            |p5-math-copy|
+`copy()`                                            *p5-math-copy*
 
 Gets a copy of the vector, returns a p5.Vector object.
 
@@ -895,7 +895,7 @@ Gets a copy of the vector, returns a p5.Vector object.
 ---
 
 
-`add()`                                            |p5-math-add|
+`add()`                                            *p5-math-add*
 
 Adds x, y, and z components to a vector, adds one vector to another, or adds
 two independent vectors together. The version of the method that adds two
@@ -916,7 +916,7 @@ as an array. See the examples for more context.
 ---
 
 
-`rem()`                                            |p5-math-rem|
+`rem()`                                            *p5-math-rem*
 
 Gives the remainder of a vector when it is divided by another vector. See
 examples for more context.
@@ -935,7 +935,7 @@ examples for more context.
 ---
 
 
-`sub()`                                            |p5-math-sub|
+`sub()`                                            *p5-math-sub*
 
 Subtracts x, y, and z components from a vector, subtracts one vector from
 another, or subtracts two independent vectors. The version of the method that
@@ -956,7 +956,7 @@ method as an array. See the examples for more context.
 ---
 
 
-`mult()`                                            |p5-math-mult|
+`mult()`                                            *p5-math-mult*
 
 Multiplies the vector by a scalar, multiplies the x, y, and z components from
 a vector, or multiplies the x, y, and z components of two independent vectors.
@@ -977,7 +977,7 @@ to this function as an array. See the examples for more context.
 ---
 
 
-`div()`                                            |p5-math-div|
+`div()`                                            *p5-math-div*
 
 Divides the vector by a scalar, divides a vector by the x, y, and z arguments,
 or divides the x, y, and z components of two vectors against each other. When
@@ -1002,7 +1002,7 @@ examples for more context.
 ---
 
 
-`mag()`                                            |p5-math-mag|
+`mag()`                                            *p5-math-mag*
 
 Calculates the magnitude (length) of the vector and returns the result as a
 float. (This is simply the equation sqrt(x*x + y*y + z*z).)
@@ -1016,7 +1016,7 @@ float. (This is simply the equation sqrt(x*x + y*y + z*z).)
 ---
 
 
-`magSq()`                                            |p5-math-magSq|
+`magSq()`                                            *p5-math-magSq*
 
 Calculates the squared magnitude of the vector and returns the result as a
 float. (This is simply the equation x*x + y*y + z*z.) Faster if the real
@@ -1031,7 +1031,7 @@ length is not required in the case of comparing vectors, etc.
 ---
 
 
-`dot()`                                            |p5-math-dot|
+`dot()`                                            *p5-math-dot*
 
 Calculates the dot product of two vectors. The version of the method that
 computes the dot product of two independent vectors is a static method. See
@@ -1050,7 +1050,7 @@ the examples for more context.
 ---
 
 
-`cross()`                                            |p5-math-cross|
+`cross()`                                            *p5-math-cross*
 
 Calculates and returns a vector composed of the cross product between two
 vectors. Both the static and non-static methods return a new p5.Vector. See
@@ -1069,7 +1069,7 @@ the examples for more context.
 ---
 
 
-`dist()`                                            |p5-math-dist|
+`dist()`                                            *p5-math-dist*
 
 Calculates the Euclidean distance between two points (considering a point as a
 vector object). If you are looking to calculate distance between 2 points see
@@ -1088,7 +1088,7 @@ dist()
 ---
 
 
-`normalize()`                                            |p5-math-normalize|
+`normalize()`                                            *p5-math-normalize*
 
 Normalize the vector to length 1 (make it a unit vector).
 
@@ -1101,7 +1101,7 @@ Normalize the vector to length 1 (make it a unit vector).
 ---
 
 
-`limit()`                                            |p5-math-limit|
+`limit()`                                            *p5-math-limit*
 
 Limit the magnitude of this vector to the value used for the max parameter.
 
@@ -1114,7 +1114,7 @@ Limit the magnitude of this vector to the value used for the max parameter.
 ---
 
 
-`setMag()`                                            |p5-math-setMag|
+`setMag()`                                            *p5-math-setMag*
 
 Set the magnitude of this vector to the value used for the len parameter.
 
@@ -1127,7 +1127,7 @@ Set the magnitude of this vector to the value used for the len parameter.
 ---
 
 
-`heading()`                                            |p5-math-heading|
+`heading()`                                            *p5-math-heading*
 
 Calculate the angle of rotation for this vector (only 2D vectors). p5.Vectors
 created using createVector() will take the current angleMode() into
@@ -1142,7 +1142,7 @@ consideration, and give the angle in radians or degrees accordingly.
 ---
 
 
-`setHeading()`                                            |p5-math-setHeading|
+`setHeading()`                                            *p5-math-setHeading*
 
 Rotate the vector to a specific angle (only 2D vectors); magnitude remains the
 same.
@@ -1156,7 +1156,7 @@ same.
 ---
 
 
-`rotate()`                                            |p5-math-rotate|
+`rotate()`                                            *p5-math-rotate*
 
 Rotate the vector by an angle (only 2D vectors); magnitude remains the same.
 
@@ -1169,7 +1169,7 @@ Rotate the vector by an angle (only 2D vectors); magnitude remains the same.
 ---
 
 
-`angleBetween()`                                            |p5-math-angleBetween|
+`angleBetween()`                                            *p5-math-angleBetween*
 
 Calculates and returns the angle between two vectors. This method will take
 the current angleMode into consideration, and give the angle in radians or
@@ -1188,7 +1188,7 @@ degrees accordingly.
 ---
 
 
-`lerp()`                                            |p5-math-lerp|
+`lerp()`                                            *p5-math-lerp*
 
 Linear interpolate the vector to another vector.
 
@@ -1207,7 +1207,7 @@ Linear interpolate the vector to another vector.
 ---
 
 
-`slerp()`                                            |p5-math-slerp|
+`slerp()`                                            *p5-math-slerp*
 
 Performs spherical linear interpolation with the other vector and returns the
 resulting vector. This works in both 3D and 2D. As for 2D, the result of
@@ -1226,7 +1226,7 @@ slerping between 2D vectors is always a 2D vector.
 ---
 
 
-`reflect()`                                            |p5-math-reflect|
+`reflect()`                                            *p5-math-reflect*
 
 Reflect a vector about a normal to a line in 2D, or about a normal to a plane
 in 3D.
@@ -1240,7 +1240,7 @@ in 3D.
 ---
 
 
-`array()`                                            |p5-math-array|
+`array()`                                            *p5-math-array*
 
 Return a representation of this vector as a float array. This is only for
 temporary use. If used in any other fashion, the contents should be copied by
@@ -1255,7 +1255,7 @@ using the p5.Vector.copy() method to copy into your own vector.
 ---
 
 
-`equals()`                                            |p5-math-equals|
+`equals()`                                            *p5-math-equals*
 
 Equality check against a p5.Vector.
 

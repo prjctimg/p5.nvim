@@ -35,7 +35,7 @@ Table of Contents                           *p5-events-table-of-contents*
 2. Functions                                                |p5-events-functions|
 
 
-`setMoveThreshold()`                                            |p5-events-setMoveThreshold|
+`setMoveThreshold()`                                            *p5-events-setMoveThreshold*
 
 The setMoveThreshold() function is used to set the movement threshold for the
 deviceMoved() function. The default threshold is set to 0.5.
@@ -49,7 +49,7 @@ deviceMoved() function. The default threshold is set to 0.5.
 ---
 
 
-`setShakeThreshold()`                                            |p5-events-setShakeThreshold|
+`setShakeThreshold()`                                            *p5-events-setShakeThreshold*
 
 The setShakeThreshold() function is used to set the movement threshold for the
 deviceShaken() function. The default threshold is set to 30.
@@ -63,7 +63,7 @@ deviceShaken() function. The default threshold is set to 30.
 ---
 
 
-`deviceMoved()`                                            |p5-events-deviceMoved|
+`deviceMoved()`                                            *p5-events-deviceMoved*
 
 The deviceMoved() function is called when the device is moved by more than the
 threshold value along X, Y or Z axis. The default threshold is set to 0.5. The
@@ -78,7 +78,7 @@ threshold value can be changed using setMoveThreshold().
 ---
 
 
-`deviceTurned()`                                            |p5-events-deviceTurned|
+`deviceTurned()`                                            *p5-events-deviceTurned*
 
 The deviceTurned() function is called when the device rotates by more than 90
 degrees continuously. The axis that triggers the deviceTurned() method is
@@ -95,7 +95,7 @@ or 'Z'.
 ---
 
 
-`deviceShaken()`                                            |p5-events-deviceShaken|
+`deviceShaken()`                                            *p5-events-deviceShaken*
 
 The deviceShaken() function is called when the device total acceleration
 changes of accelerationX and accelerationY values is more than the threshold
@@ -111,7 +111,7 @@ using setShakeThreshold().
 ---
 
 
-`keyPressed()`                                            |p5-events-keyPressed|
+`keyPressed()`                                            *p5-events-keyPressed*
 
 The keyPressed() function is called once every time a key is pressed. The
 keyCode for the key that was pressed is stored in the keyCode variable. For
@@ -137,7 +137,7 @@ to the end of the method.
 ---
 
 
-`keyReleased()`                                            |p5-events-keyReleased|
+`keyReleased()`                                            *p5-events-keyReleased*
 
 The keyReleased() function is called once every time a key is released. See
 key and keyCode for more information. Browsers may have different default
@@ -153,7 +153,7 @@ this event, add "return false" to the end of the function.
 ---
 
 
-`keyTyped()`                                            |p5-events-keyTyped|
+`keyTyped()`                                            *p5-events-keyTyped*
 
 The keyTyped() function is called once every time a key is pressed, but action
 keys such as Backspace, Delete, Ctrl, Shift, and Alt are ignored. If you are
@@ -175,7 +175,7 @@ to the end of the function.
 ---
 
 
-`keyIsDown()`                                            |p5-events-keyIsDown|
+`keyIsDown()`                                            *p5-events-keyIsDown*
 
 The keyIsDown() function checks if the key is currently down, i.e. pressed. It
 can be used if you have an object that moves, and you want several keys to be
@@ -196,7 +196,7 @@ use any of the variable keyCode names listed here.
 ---
 
 
-`mouseMoved()`                                            |p5-events-mouseMoved|
+`mouseMoved()`                                            *p5-events-mouseMoved*
 
 The mouseMoved() function is called every time the mouse moves and a mouse
 button is not pressed. Browsers may have different default behaviors attached
@@ -212,7 +212,7 @@ to various mouse events. To prevent any default behavior for this event, add
 ---
 
 
-`mouseDragged()`                                            |p5-events-mouseDragged|
+`mouseDragged()`                                            *p5-events-mouseDragged*
 
 The mouseDragged() function is called once every time the mouse moves and a
 mouse button is pressed. If no mouseDragged() function is defined, the
@@ -230,7 +230,7 @@ function.
 ---
 
 
-`mousePressed()`                                            |p5-events-mousePressed|
+`mousePressed()`                                            *p5-events-mousePressed*
 
 The mousePressed() function is called once after every time a mouse button is
 pressed. The mouseButton variable (see the related reference entry) can be
@@ -249,7 +249,7 @@ false" to the end of the function.
 ---
 
 
-`mouseReleased()`                                            |p5-events-mouseReleased|
+`mouseReleased()`                                            *p5-events-mouseReleased*
 
 The mouseReleased() function is called every time a mouse button is released.
 If no mouseReleased() function is defined, the touchEnded() function will be
@@ -266,7 +266,7 @@ event, add "return false" to the end of the function.
 ---
 
 
-`mouseClicked()`                                            |p5-events-mouseClicked|
+`mouseClicked()`                                            *p5-events-mouseClicked*
 
 The mouseClicked() function is called once after a mouse button has been
 pressed and then released. Browsers handle clicks differently, so this
@@ -285,7 +285,7 @@ various mouse events. To prevent any default behavior for this event, add
 ---
 
 
-`doubleClicked()`                                            |p5-events-doubleClicked|
+`doubleClicked()`                                            *p5-events-doubleClicked*
 
 The doubleClicked() function is executed every time a event listener has
 detected a dblclick event which is a part of the DOM L3 specification. The
@@ -303,7 +303,7 @@ https://developer.mozilla.org/en-US/docs/Web/Events/dblclick
 ---
 
 
-`mouseWheel()`                                            |p5-events-mouseWheel|
+`mouseWheel()`                                            *p5-events-mouseWheel*
 
 The function mouseWheel() is executed every time a vertical mouse wheel event
 is detected either triggered by an actual mouse wheel or by a touchpad. The
@@ -324,7 +324,7 @@ only work as expected if "return false" is included while using Safari.
 ---
 
 
-`requestPointerLock()`                                            |p5-events-requestPointerLock|
+`requestPointerLock()`                                            *p5-events-requestPointerLock*
 
 The function requestPointerLock() locks the pointer to its current position
 and makes it invisible. Use movedX and movedY to get the difference the mouse
@@ -342,7 +342,7 @@ direction. For example, a first person perspective experience.
 ---
 
 
-`exitPointerLock()`                                            |p5-events-exitPointerLock|
+`exitPointerLock()`                                            *p5-events-exitPointerLock*
 
 The function exitPointerLock() exits a previously triggered pointer Lock for
 example to make ui elements usable etc
@@ -356,7 +356,7 @@ example to make ui elements usable etc
 ---
 
 
-`touchStarted()`                                            |p5-events-touchStarted|
+`touchStarted()`                                            *p5-events-touchStarted*
 
 The touchStarted() function is called once after every time a touch is
 registered. If no touchStarted() function is defined, the mousePressed()
@@ -373,7 +373,7 @@ behavior for this event, add "return false" to the end of the method.
 ---
 
 
-`touchMoved()`                                            |p5-events-touchMoved|
+`touchMoved()`                                            *p5-events-touchMoved*
 
 The touchMoved() function is called every time a touch move is registered. If
 no touchMoved() function is defined, the mouseDragged() function will be
@@ -390,7 +390,7 @@ event, add "return false" to the end of the method.
 ---
 
 
-`touchEnded()`                                            |p5-events-touchEnded|
+`touchEnded()`                                            *p5-events-touchEnded*
 
 The touchEnded() function is called every time a touch ends. If no
 touchEnded() function is defined, the mouseReleased() function will be called

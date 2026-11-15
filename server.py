@@ -182,6 +182,7 @@ class CDPClient:
         self._scripts = {}
         self._paused_frame_id = None
         self._perf_prev = {}  # previous Performance.metrics snapshot for deltas
+        self.breakpoints = {}  # breakpointId -> {location, id}
 
     def _next_id(self):
         self._msg_id += 1
@@ -241,6 +242,7 @@ class CDPClient:
         self._paused_frame_id = None
         self._perf_prev.clear()
         self.pending_requests.clear()
+        self.breakpoints.clear()
         if self._recv_task:
             self._recv_task.cancel()
             try:
@@ -292,18 +294,31 @@ class CDPClient:
             return f'{scheme}://{host}/{name.lstrip("/")}'
         return name
 
-    async def evaluate(self, expression: str):
+    async def evaluate(self, expression: str, return_by_value: bool = True):
+        params = {
+            'expression': expression,
+            'returnByValue': return_by_value,
+            'includeCommandLineAPI': True,
+        }
+        if not return_by_value:
+            params['generatePreview'] = True
         if self._paused_frame_id:
-            return await self.send_command('Debugger.evaluateOnCallFrame', {
+            params_cf = {
                 'callFrameId': self._paused_frame_id,
                 'expression': expression,
-                'returnByValue': True,
+                'returnByValue': return_by_value,
                 'includeCommandLineAPI': True,
-            })
-        return await self.send_command('Runtime.evaluate', {
-            'expression': expression,
-            'returnByValue': True,
-            'includeCommandLineAPI': True,
+            }
+            if not return_by_value:
+                params_cf['generatePreview'] = True
+            return await self.send_command('Debugger.evaluateOnCallFrame', params_cf)
+        return await self.send_command('Runtime.evaluate', params)
+
+    async def get_properties(self, object_id: str):
+        return await self.send_command('Runtime.getProperties', {
+            'objectId': object_id,
+            'ownProperties': True,
+            'generatePreview': True,
         })
 
     async def set_breakpoint(self, location: str):
@@ -317,6 +332,10 @@ class CDPClient:
                 'location': {'scriptId': sid, 'lineNumber': line - 1},
             })
             result['resolved'] = 1 if result.get('actualLocation') else 0
+            result['location'] = location
+            bid = result.get('breakpointId')
+            if bid:
+                self.breakpoints[bid] = {'id': bid, 'location': location}
             return result
         url = parts[0]
         # V8 matches setBreakpointByUrl url against sourceURL exactly, so
@@ -327,7 +346,19 @@ class CDPClient:
             'lineNumber': line - 1,
         })
         result['resolved'] = len(result.get('locations', []))
+        result['location'] = location
+        bid = result.get('breakpointId')
+        if bid:
+            self.breakpoints[bid] = {'id': bid, 'location': location}
         return result
+
+    async def remove_breakpoint(self, breakpoint_id: str):
+        await self.send_command('Debugger.removeBreakpoint', {'breakpointId': breakpoint_id})
+        self.breakpoints.pop(breakpoint_id, None)
+        return {'status': 'removed', 'breakpointId': breakpoint_id}
+
+    def get_breakpoints(self):
+        return list(self.breakpoints.values())
 
     async def resume(self):
         await self.send_command('Debugger.resume')
@@ -472,14 +503,18 @@ class CDPClient:
             return
         p['status'] = resp.get('status', 0)
         p['status_text'] = resp.get('statusText', '')
-        p['size'] = resp.get('transferSize', 0)
+        p['size'] = resp.get('encodedDataLength', resp.get('transferSize', 0))
+        p['mime'] = resp.get('mimeType', '')
+        p['type'] = params.get('type', '')
         p['end_time'] = datetime.now().timestamp()
         p['duration_ms'] = round((p['end_time'] - p['start_time']) * 1000, 1)
         self.completed_requests.append(dict(p))
         self._emit('network', {
             'method': p['method'], 'url': p['url'],
             'status': p['status'], 'duration': p['duration_ms'],
-            'size': p['size'],
+            'size': p.get('size'),
+            'mime': p.get('mime', ''),
+            'type': p.get('type', ''),
         })
 
     def _handle_load_failed(self, params: dict):
@@ -521,6 +556,50 @@ class CDPClient:
                 self._perf_prev['Frames'] = value
         self._emit('perf', data)
 
+    def _fmt_remote(self, obj):
+        if not isinstance(obj, dict):
+            return str(obj)
+        t = obj.get('type', 'undefined')
+        if 'value' in obj:
+            v = obj.get('value')
+            if t == 'string':
+                return repr(v)
+            return str(v)
+        if obj.get('unserializableValue') is not None:
+            return str(obj.get('unserializableValue'))
+        return obj.get('description') or ('[' + t + ']')
+
+    async def _collect_scopes(self, frame):
+        scopes_out = []
+        for scope in (frame.get('scopeChain') or []):
+            stype = scope.get('type', 'unknown')
+            if stype in ('global',):
+                continue
+            obj = scope.get('object') or {}
+            oid = obj.get('objectId')
+            props_out = []
+            if oid:
+                try:
+                    res = await self.send_command('Runtime.getProperties', {
+                        'objectId': oid,
+                        'ownProperties': True,
+                        'generatePreview': False,
+                    })
+                    for p in (res.get('result') or [])[:30]:
+                        if p.get('name') in ('__proto__',):
+                            continue
+                        val = self._fmt_remote(p.get('value') or {})
+                        props_out.append({'name': p.get('name', '?'), 'value': val})
+                except Exception:
+                    pass
+            if props_out or stype in ('local', 'closure', 'block', 'catch'):
+                scopes_out.append({'type': stype, 'props': props_out})
+        this_obj = frame.get('this') or {}
+        return {
+            'this': self._fmt_remote(this_obj),
+            'scopes': scopes_out,
+        }
+
     async def _handle_paused(self, params: dict):
         frames = []
         frames_raw = params.get('callFrames', [])
@@ -534,11 +613,19 @@ class CDPClient:
                 'scriptId': loc.get('scriptId', ''),
             })
         self._paused_frame_id = frames_raw[0].get('callFrameId') if frames_raw else None
-        self._emit('debugger', {
+        scope_info = {'this': 'undefined', 'scopes': []}
+        if frames_raw:
+            try:
+                scope_info = await self._collect_scopes(frames_raw[0])
+            except Exception:
+                scope_info = {'this': 'undefined', 'scopes': []}
+        ev = {
             'event': 'paused',
             'reason': params.get('reason', 'other'),
             'callFrames': frames,
-        })
+        }
+        ev.update(scope_info)
+        self._emit('debugger', ev)
 
 
 class LiveReloadServer:
@@ -881,8 +968,14 @@ class HTTPServer:
             await self.handle_cdp_stream(reader, writer, headers)
         elif method == 'POST' and path == '/api/cdp/evaluate':
             await self.handle_cdp_evaluate(reader, writer, headers)
+        elif method == 'POST' and path == '/api/cdp/properties':
+            await self.handle_cdp_properties(reader, writer, headers)
         elif method == 'POST' and path == '/api/cdp/debug/break':
             await self.handle_cdp_debug_break(reader, writer, headers)
+        elif method == 'POST' and path == '/api/cdp/debug/remove':
+            await self.handle_cdp_debug_remove(reader, writer, headers)
+        elif method == 'GET' and path == '/api/cdp/debug/breakpoints':
+            await self.handle_cdp_debug_breakpoints(writer)
         elif method == 'POST' and path == '/api/cdp/debug/continue':
             await self.handle_cdp_debug_continue(writer)
         elif method == 'POST' and path == '/api/cdp/debug/pause':
@@ -1017,12 +1110,22 @@ class HTTPServer:
         try:
             data = json.loads(body.decode())
             expr = data.get('expression', '')
-            dangerous = ['file://', ' require(', "require('", 'require("', 'process.env', 'global.', '__dirname']
-            for pat in dangerous:
-                if pat in expr:
-                    await self._json_error(writer, 400, f'Rejected: expression contains forbidden pattern "{pat}"')
-                    return
-            result = await self.cdp_client.evaluate(expr)
+            rbv = data.get('returnByValue', True)
+            result = await self.cdp_client.evaluate(expr, return_by_value=bool(rbv))
+            await self._json_response(writer, result)
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_properties(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        content_length = int(headers.get('content-length', 0))
+        body = await reader.read(content_length)
+        try:
+            data = json.loads(body.decode())
+            oid = data.get('objectId', '')
+            result = await self.cdp_client.get_properties(oid)
             await self._json_response(writer, result)
         except Exception as e:
             await self._json_error(writer, 400, str(e))
@@ -1040,6 +1143,26 @@ class HTTPServer:
             await self._json_response(writer, result)
         except Exception as e:
             await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_debug_remove(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, headers: dict):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        content_length = int(headers.get('content-length', 0))
+        body = await reader.read(content_length)
+        try:
+            data = json.loads(body.decode())
+            bid = data.get('breakpointId', '')
+            result = await self.cdp_client.remove_breakpoint(bid)
+            await self._json_response(writer, result)
+        except Exception as e:
+            await self._json_error(writer, 400, str(e))
+
+    async def handle_cdp_debug_breakpoints(self, writer: asyncio.StreamWriter):
+        if not self.cdp_client or not self.cdp_client.connected:
+            await self._json_error(writer, 503, 'CDP not connected')
+            return
+        await self._json_response(writer, {'breakpoints': self.cdp_client.get_breakpoints()})
 
     async def handle_cdp_debug_continue(self, writer: asyncio.StreamWriter):
         if not self.cdp_client or not self.cdp_client.connected:

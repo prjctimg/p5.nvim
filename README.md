@@ -34,7 +34,7 @@
 - **Package Management** 📦 - Install contributor libraries
 - **Sketchspace** 📁 - Minimal project setup
 - **GitHub Gist** 🔗 - Share sketches (synced to sketchspace)
-- **CDP DevTools** 🛠️ - Full Chrome DevTools Protocol panel: Console, Network, Eval, Debugger, Performance, Info tabs
+- **CDP debug panel** 🛠️ - Chrome DevTools Protocol-backed panel for sketches: Console logs, Network requests, JS eval, Debugger (breakpoints/stepping/scopes), runtime Stats, and project Info
 - **Console** 📺 - View browser logs in Neovim (deprecated — use CDP panel)
 - **p5.js Docs** 📖 - Built-in reference via snacks.picker
 - **Snippets** ✂️ - 100+ p5.js code snippets (VS Code JSON format, compatible with luasnip, blink.cmp, nvim-cmp)
@@ -188,17 +188,17 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 
 ### :P5 cdp [subcommand]
 
-Open the Chrome DevTools Protocol panel — a full-featured debugging dashboard
-for your p5.js sketch with 6 tabs:
+Open a Chrome DevTools Protocol (CDP) debug panel for your p5.js sketch with 6 tabs.
+It is a lightweight in-editor view (not a full Chrome DevTools UI).
 
 | Tab | Key | What it shows |
 |-----|-----|---------------|
-| Console | `1` | `console.log/warn/error/info` with stack traces, timestamps, and level filtering |
-| Network | `2` | HTTP requests: method, status, duration, URL with color-coded status codes |
-| Eval | `3` | Evaluate arbitrary JS expressions in the browser context |
-| Debug | `4` | Set breakpoints, step through code, inspect call stack |
-| Perf | `5` | Live FPS (instant/1s/10s avg), JS heap, DOM nodes, FPS sparkline |
-| Info | `6` | Project info, canvas state, LSP document symbols for current buffer |
+| Console | `1` | Browser console logs/errors and exception stack traces (with basic level filter/search) |
+| Network | `2` | Request log: method, status, time, type/MIME/size (when available), URL, and load errors |
+| Eval | `3` | Evaluate JS expressions in the page context (or current call frame while paused) |
+| Debug | `4` | Breakpoints (set/remove), pause/continue/step, call stack, and scope/`this` values when paused |
+| Stats | `5` | Runtime metrics sampled from CDP `Performance.metrics` (FPS delta, JS heap, DOM nodes, listeners) |
+| Info | `6` | Project info, live canvas state (via eval), and LSP document symbols for the current buffer |
 
 ```vim
 :P5 cdp                # Toggle CDP panel
@@ -215,19 +215,19 @@ for your p5.js sketch with 6 tabs:
 :P5 cdp step           # Step over
 :P5 cdp stepIn         # Step into
 :P5 cdp stepOut        # Step out
-:P5 cdp perf           # Open Performance tab
+:P5 cdp stats          # Open Stats tab
 :P5 cdp network_clear  # Clear the network log
 ```
 
 **CDP panel keymaps** (context-aware per tab, HUD only — set
 `cdp.keymaps = false` to disable):
 
-| Key | Console | Network | Eval | Debug | Perf | Info |
-|-----|---------|---------|------|-------|------|------|
+| Key | Console | Network | Eval | Debug | Stats | Info |
+|-----|---------|---------|------|-------|-------|------|
 | `1`-`6` | Switch tab | Switch tab | Switch tab | Switch tab | Switch tab | Switch tab |
 | `q`/`<Esc>` | Close | Close | Close | Close | Close | Close |
 | `c` | Clear | Clear | Clear | Clear | Clear | — |
-| `r` | Refresh | Refresh | — | — | Toggle rec | Refresh LSP |
+| `r` | Refresh | Refresh | — | — | Toggle sampling | Refresh LSP |
 | `<CR>` | — | — | Enter expr | Set BP | — | Jump to sym |
 | `f` | Filter | — | — | — | — | — |
 | `/` | Search | Search | — | — | — | — |
@@ -237,7 +237,8 @@ for your p5.js sketch with 6 tabs:
 | `i` | — | — | — | Step into | — | — |
 | `o` | — | — | — | Step out | — | — |
 | `x` | — | — | — | Continue | — | — |
-| `b` | — | — | — | Breakpoint | — | — |
+| `b` | — | — | — | Set breakpoint | — | — |
+| `d` | — | — | — | Remove breakpoint | — | — |
 | `D` | — | Clear all | — | — | — | — |
 | `R` | Reload | Reload | Reload | Reload | Reload | Reload |
 | `S` | Screenshot | Screenshot | Screenshot | Screenshot | Screenshot | Screenshot |
@@ -247,7 +248,7 @@ for your p5.js sketch with 6 tabs:
 **Keyboard shortcuts** example:
 
 ```lua
-vim.keymap.set("n", "<leader>pd", ":P5 cdp<CR>", { desc = "Toggle CDP DevTools" })
+vim.keymap.set("n", "<leader>pd", ":P5 cdp<CR>", { desc = "Toggle CDP debug panel" })
 ```
 
 **Browser flags:** When CDP is enabled, Chrome launches with graphics-debugging flags:
@@ -263,16 +264,10 @@ the debugging port is bound even when a regular Chrome/Chromium is already runni
 instance likely ignored the flag. Quit all Chrome processes, or let p5.nvim launch
 its own isolated instance (the default).
 
----
-
-**Performance metrics are real:** the Perf tab reports FPS computed from Chrome's
-`Performance.metrics` `Frames` counter, plus used/total JS heap (`JSHeapUsedSize` /
-`JSHeapTotalSize`), DOM `Nodes`, and `JSEventListeners` — no fabricated values.
-Breakpoints resolve against the actual served script URLs, evaluation runs on the
-current call frame while paused, the Info tab's canvas state is populated from the
-live page, and `screenshot` writes a valid PNG. When CDP connects, the page served
-from the dev server's origin is selected instead of the first tab, and reloads
-bypass the cache.
+**Notes:** Breakpoints resolve against served script URLs, evaluation runs on the
+current call frame while paused, `screenshot` saves a PNG, and reload bypasses the
+cache. The panel targets the page served from the dev server origin when connecting.
+Stats are sampled runtime metrics (not a Chrome Performance trace/profiler).
 
 ---
 
@@ -477,7 +472,7 @@ require("p5").setup({
     user = ""                      -- GitHub username whose gists form the sketchbook
   },
 
-  -- CDP DevTools settings
+  -- CDP debug panel settings
   cdp = {
     enabled = false,               -- Enable CDP (auto-enabled when panel opens)
     remote_debugging_port = 9222,  -- Chrome remote debugging port
@@ -549,7 +544,7 @@ vim.keymap.set("n", "<leader>ps", ":P5 setup<CR>", { desc = "Setup project" })
 
 -- Server
 vim.keymap.set("n", "<leader>pss", ":P5 server<CR>", { desc = "Toggle server" })
-vim.keymap.set("n", "<leader>psd", ":P5 cdp<CR>", { desc = "Toggle CDP DevTools" })
+vim.keymap.set("n", "<leader>psd", ":P5 cdp<CR>", { desc = "Toggle CDP debug panel" })
 
 -- Libraries
 vim.keymap.set("n", "<leader>pi", ":P5 install ", { desc = "Install library" })

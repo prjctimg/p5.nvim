@@ -49,7 +49,7 @@ Table of Contents                           *p5-utilities-table-of-contents*
 2. Functions                                                |p5-utilities-functions|
 
 
-`append()`                                            |p5-utilities-append|
+`append()`                                            *p5-utilities-append*
 
 Adds a value to the end of an array. Extends the length of the array by one.
 Maps to Array.push().
@@ -68,7 +68,7 @@ Maps to Array.push().
 ---
 
 
-`arrayCopy()`                                            |p5-utilities-arrayCopy|
+`arrayCopy()`                                            *p5-utilities-arrayCopy*
 
 Copies an array (or part of an array) to another array. The src array is
 copied to the dst array, beginning at the position specified by srcPosition
@@ -97,7 +97,7 @@ copying each element individually.
 ---
 
 
-`concat()`                                            |p5-utilities-concat|
+`concat()`                                            *p5-utilities-concat*
 
 Concatenates two arrays, maps to Array.concat(). Does not modify the input
 arrays.
@@ -116,7 +116,7 @@ arrays.
 ---
 
 
-`reverse()`                                            |p5-utilities-reverse|
+`reverse()`                                            *p5-utilities-reverse*
 
 Reverses the order of an array, maps to Array.reverse()
 
@@ -133,7 +133,7 @@ Reverses the order of an array, maps to Array.reverse()
 ---
 
 
-`shorten()`                                            |p5-utilities-shorten|
+`shorten()`                                            *p5-utilities-shorten*
 
 Decreases an array by one element and returns the shortened array, maps to
 Array.pop().
@@ -151,7 +151,7 @@ Array.pop().
 ---
 
 
-`shuffle()`                                            |p5-utilities-shuffle|
+`shuffle()`                                            *p5-utilities-shuffle*
 
 Randomizes the order of the elements of an array. Implements Fisher-Yates
 Shuffle Algorithm.
@@ -169,7 +169,7 @@ Shuffle Algorithm.
 ---
 
 
-`sort()`                                            |p5-utilities-sort|
+`sort()`                                            *p5-utilities-sort*
 
 Sorts an array of numbers from smallest to largest, or puts an array of words
 in alphabetical order. The original array is not modified; a re-ordered array
@@ -190,7 +190,7 @@ first 5 elements in the array will be sorted.
 ---
 
 
-`splice()`                                            |p5-utilities-splice|
+`splice()`                                            *p5-utilities-splice*
 
 Inserts a value or an array of values into an existing array. The first
 parameter specifies the initial array to be modified, and the second parameter
@@ -214,7 +214,7 @@ position is 1, and so on.)
 ---
 
 
-`subset()`                                            |p5-utilities-subset|
+`subset()`                                            *p5-utilities-subset*
 
 Extracts an array of elements from an existing array. The list parameter
 defines the array from which the elements will be copied, and the start and
@@ -237,7 +237,7 @@ function does not change the source array.
 ---
 
 
-`float()`                                            |p5-utilities-float|
+`float()`                                            *p5-utilities-float*
 
 Converts a string to its floating point representation. The contents of a
 string must resemble a number, or NaN (not a number) will be returned. For
@@ -258,7 +258,7 @@ the same length is returned.
 ---
 
 
-`int()`                                            |p5-utilities-int|
+`int()`                                            *p5-utilities-int*
 
 Converts a boolean, string, or float to its integer representation. When an
 array of values is passed in, then an int array of the same length is
@@ -277,7 +277,7 @@ returned.
 ---
 
 
-`str()`                                            |p5-utilities-str|
+`str()`                                            *p5-utilities-str*
 
 Converts a boolean, string or number to its string representation. When an
 array of values is passed in, then an array of strings of the same length is
@@ -296,7 +296,7 @@ returned.
 ---
 
 
-`boolean()`                                            |p5-utilities-boolean|
+`boolean()`                                            *p5-utilities-boolean*
 
 Converts a number or string to its boolean representation. For a number, any
 non-zero value (positive or negative) evaluates to true, while zero evaluates
@@ -317,7 +317,7 @@ in, then a array of booleans of the same length is returned.
 ---
 
 
-`byte()`                                            |p5-utilities-byte|
+`byte()`                                            *p5-utilities-byte*
 
 Converts a number, string representation of a number, or boolean to its byte
 representation. A byte can be only a whole number between -128 and 127, so
@@ -338,7 +338,7 @@ values is passed in, then an array of bytes the same length is returned.
 ---
 
 
-`char()`                                            |p5-utilities-char|
+`char()`                                            *p5-utilities-char*
 
 Converts a number or string to its corresponding single-character string
 representation. If a string parameter is provided, it is first parsed as an
@@ -359,7 +359,7 @@ strings of the same length is returned.
 ---
 
 
-`unchar()`                                            |p5-utilities-unchar|
+`unchar()`                                            *p5-utilities-unchar*
 
 Converts a single-character string to its corresponding integer
 representation. When an array of single-character string values is passed in,
@@ -378,7 +378,7 @@ then an array of integers of the same length is returned.
 ---
 
 
-`hex()`                                            |p5-utilities-hex|
+`hex()`                                            *p5-utilities-hex*
 
 Converts a number to a string in its equivalent hexadecimal notation. If a
 second parameter is passed, it is used to set the number of characters to
@@ -398,7 +398,7 @@ strings in hexadecimal notation of the same length is returned.
 ---
 
 
-`unhex()`                                            |p5-utilities-unhex|
+`unhex()`                                            *p5-utilities-unhex*
 
 Converts a string representation of a hexadecimal number to its equivalent
 integer value. When an array of strings in hexadecimal notation is passed in,
@@ -417,7 +417,7 @@ an array of integers of the same length is returned.
 ---
 
 
-`join()`                                            |p5-utilities-join|
+`join()`                                            *p5-utilities-join*
 
 Combines an array of Strings into one String, each separated by the
 character(s) used for the separator parameter. To join arrays of ints or
@@ -437,7 +437,7 @@ floats, it's necessary to first convert them to Strings using nf() or nfs().
 ---
 
 
-`match()`                                            |p5-utilities-match|
+`match()`                                            *p5-utilities-match*
 
 This function is used to apply a regular expression to a piece of text, and
 return matching groups (elements found inside parentheses) as a String array.
@@ -466,7 +466,7 @@ group is [1], the second [2], and so on).
 ---
 
 
-`matchAll()`                                            |p5-utilities-matchAll|
+`matchAll()`                                            *p5-utilities-matchAll*
 
 This function is used to apply a regular expression to a piece of text, and
 return a list of matching groups (elements found inside parentheses) as a
@@ -496,7 +496,7 @@ is [i][1], the second [i][2], and so on).
 ---
 
 
-`nf()`                                            |p5-utilities-nf|
+`nf()`                                            *p5-utilities-nf*
 
 Utility function for formatting numbers into strings. There are two versions:
 one for formatting floats, and one for formatting ints. The values for the
@@ -520,7 +520,7 @@ parameter i.e. if right is 3 than the result will be 123.200.
 ---
 
 
-`nfc()`                                            |p5-utilities-nfc|
+`nfc()`                                            *p5-utilities-nfc*
 
 Utility function for formatting numbers into strings and placing appropriate
 commas to mark units of 1000. There are two versions: one for formatting ints,
@@ -540,7 +540,7 @@ should always be a positive integer.
 ---
 
 
-`nfp()`                                            |p5-utilities-nfp|
+`nfp()`                                            *p5-utilities-nfp*
 
 Utility function for formatting numbers into strings. Similar to nf() but puts
 a "+" in front of positive numbers and a "-" in front of negative numbers.
@@ -561,7 +561,7 @@ integers.
 ---
 
 
-`nfs()`                                            |p5-utilities-nfs|
+`nfs()`                                            *p5-utilities-nfs*
 
 Utility function for formatting numbers into strings. Similar to nf() but puts
 an additional "_" (space) in front of positive numbers just in case to align
@@ -591,7 +591,7 @@ parameter i.e. if right is 3 than the result will be 123.200.
 ---
 
 
-`split()`                                            |p5-utilities-split|
+`split()`                                            *p5-utilities-split*
 
 The split() function maps to String.split(), it breaks a String into pieces
 using a character or string as the delimiter. The delim parameter specifies
@@ -614,7 +614,7 @@ characters instead of a specific character or sequence.
 ---
 
 
-`splitTokens()`                                            |p5-utilities-splitTokens|
+`splitTokens()`                                            *p5-utilities-splitTokens*
 
 The splitTokens() function splits a String at one or many character delimiters
 or "tokens." The delim parameter specifies the character or characters to be
@@ -635,7 +635,7 @@ character is used to split. Whitespace characters include tab (\t), line feed
 ---
 
 
-`trim()`                                            |p5-utilities-trim|
+`trim()`                                            *p5-utilities-trim*
 
 Removes whitespace characters from the beginning and end of a String. In
 addition to standard whitespace characters such as space, carriage return, and
@@ -654,7 +654,7 @@ tab, this function also removes the Unicode "nbsp" character.
 ---
 
 
-`day()`                                            |p5-utilities-day|
+`day()`                                            *p5-utilities-day*
 
 p5.js communicates with the clock on your computer. The day() function returns
 the current day as a value from 1 - 31.
@@ -668,7 +668,7 @@ the current day as a value from 1 - 31.
 ---
 
 
-`hour()`                                            |p5-utilities-hour|
+`hour()`                                            *p5-utilities-hour*
 
 p5.js communicates with the clock on your computer. The hour() function
 returns the current hour as a value from 0 - 23.
@@ -682,7 +682,7 @@ returns the current hour as a value from 0 - 23.
 ---
 
 
-`minute()`                                            |p5-utilities-minute|
+`minute()`                                            *p5-utilities-minute*
 
 p5.js communicates with the clock on your computer. The minute() function
 returns the current minute as a value from 0 - 59.
@@ -696,7 +696,7 @@ returns the current minute as a value from 0 - 59.
 ---
 
 
-`millis()`                                            |p5-utilities-millis|
+`millis()`                                            *p5-utilities-millis*
 
 Returns the number of milliseconds (thousandths of a second) since starting
 the sketch (when setup() is called). This information is often used for timing
@@ -711,7 +711,7 @@ events and animation sequences.
 ---
 
 
-`month()`                                            |p5-utilities-month|
+`month()`                                            *p5-utilities-month*
 
 p5.js communicates with the clock on your computer. The month() function
 returns the current month as a value from 1 - 12.
@@ -725,7 +725,7 @@ returns the current month as a value from 1 - 12.
 ---
 
 
-`second()`                                            |p5-utilities-second|
+`second()`                                            *p5-utilities-second*
 
 p5.js communicates with the clock on your computer. The second() function
 returns the current second as a value from 0 - 59.
@@ -739,7 +739,7 @@ returns the current second as a value from 0 - 59.
 ---
 
 
-`year()`                                            |p5-utilities-year|
+`year()`                                            *p5-utilities-year*
 
 p5.js communicates with the clock on your computer. The year() function
 returns the current year as an integer (2014, 2015, 2016, etc).

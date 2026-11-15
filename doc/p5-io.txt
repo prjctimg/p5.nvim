@@ -73,7 +73,7 @@ Table of Contents                           *p5-io-table-of-contents*
 2. Functions                                                |p5-io-functions|
 
 
-`write()`                                            |p5-io-write|
+`write()`                                            *p5-io-write*
 
 Writes data to the PrintWriter stream
 
@@ -86,7 +86,7 @@ Writes data to the PrintWriter stream
 ---
 
 
-`print()`                                            |p5-io-print|
+`print()`                                            *p5-io-print*
 
 Writes data to the PrintWriter stream, and adds a new line at the end
 
@@ -99,7 +99,7 @@ Writes data to the PrintWriter stream, and adds a new line at the end
 ---
 
 
-`clear()`                                            |p5-io-clear|
+`clear()`                                            *p5-io-clear*
 
 Clears the data already written to the PrintWriter object
 
@@ -112,7 +112,7 @@ Clears the data already written to the PrintWriter object
 ---
 
 
-`close()`                                            |p5-io-close|
+`close()`                                            *p5-io-close*
 
 Closes the PrintWriter
 
@@ -125,7 +125,7 @@ Closes the PrintWriter
 ---
 
 
-`save()`                                            |p5-io-save|
+`save()`                                            *p5-io-save*
 
 Loads a JSON file from a file or a URL, and returns an Object. Note that even
 if the JSON file contains an Array, an Object will be returned with index
@@ -169,7 +169,7 @@ fetching files up to size of 64MB.
 ---
 
 
-`saveJSON()`                                            |p5-io-saveJSON|
+`saveJSON()`                                            *p5-io-saveJSON*
 
 Writes the contents of an Array or a JSON object to a .json file. The file
 saving process and location of the saved file will vary between web browsers.
@@ -183,7 +183,7 @@ saving process and location of the saved file will vary between web browsers.
 ---
 
 
-`saveStrings()`                                            |p5-io-saveStrings|
+`saveStrings()`                                            *p5-io-saveStrings*
 
 Writes an array of Strings to a text file, one line per String. The file
 saving process and location of the saved file will vary between web browsers.
@@ -202,7 +202,7 @@ saving process and location of the saved file will vary between web browsers.
 ---
 
 
-`saveTable()`                                            |p5-io-saveTable|
+`saveTable()`                                            *p5-io-saveTable*
 
 Writes the contents of a Table object to a file. Defaults to a text file with
 comma-separated-values ('csv') but can also use tab separation ('tsv'), or
@@ -223,7 +223,7 @@ saved file will vary between web browsers.
 ---
 
 
-`constructor()`                                            |p5-io-constructor|
+`constructor()`                                            *p5-io-constructor*
 
 Table objects store data with multiple rows and columns, much like in a
 traditional spreadsheet. Tables can be generated from scratch, dynamically, or
@@ -238,7 +238,7 @@ using data from an existing file.
 ---
 
 
-`addRow()`                                            |p5-io-addRow|
+`addRow()`                                            *p5-io-addRow*
 
 Use addRow() to add a new row of data to a p5.Table object. By default, an
 empty row is created. Typically, you would store a reference to the new row in
@@ -255,7 +255,7 @@ that row is duplicated and added to the table.
 ---
 
 
-`removeRow()`                                            |p5-io-removeRow|
+`removeRow()`                                            *p5-io-removeRow*
 
 Removes a row from the table object.
 
@@ -268,7 +268,7 @@ Removes a row from the table object.
 ---
 
 
-`getRow()`                                            |p5-io-getRow|
+`getRow()`                                            *p5-io-getRow*
 
 Returns a reference to the specified p5.TableRow. The reference can then be
 used to get and set values of the selected row.
@@ -286,7 +286,7 @@ used to get and set values of the selected row.
 ---
 
 
-`getRows()`                                            |p5-io-getRows|
+`getRows()`                                            *p5-io-getRows*
 
 Gets all rows from the table. Returns an array of p5.TableRows.
 
@@ -299,7 +299,7 @@ Gets all rows from the table. Returns an array of p5.TableRows.
 ---
 
 
-`findRow()`                                            |p5-io-findRow|
+`findRow()`                                            *p5-io-findRow*
 
 Finds the first row in the Table that contains the value provided, and returns
 a reference to that row. Even if multiple rows are possible matches, only the
@@ -319,7 +319,7 @@ either its ID or title.
 ---
 
 
-`findRows()`                                            |p5-io-findRows|
+`findRows()`                                            *p5-io-findRows*
 
 Finds the rows in the Table that contain the value provided, and returns
 references to those rows. Returns an Array, so for must be used to iterate
@@ -340,7 +340,7 @@ be specified by either its ID or title.
 ---
 
 
-`matchRow()`                                            |p5-io-matchRow|
+`matchRow()`                                            *p5-io-matchRow*
 
 Finds the first row in the Table that matches the regular expression provided,
 and returns a reference to that row. Even if multiple rows are possible
@@ -361,7 +361,7 @@ specified by either its ID or title.
 ---
 
 
-`matchRows()`                                            |p5-io-matchRows|
+`matchRows()`                                            *p5-io-matchRows*
 
 Finds the rows in the Table that match the regular expression provided, and
 returns references to those rows. Returns an array, so for must be used to
@@ -381,7 +381,7 @@ may be specified by either its ID or title.
 ---
 
 
-`getColumn()`                                            |p5-io-getColumn|
+`getColumn()`                                            *p5-io-getColumn*
 
 Retrieves all values in the specified column, and returns them as an array.
 The column may be specified by either its ID or title.
@@ -399,7 +399,7 @@ The column may be specified by either its ID or title.
 ---
 
 
-`clearRows()`                                            |p5-io-clearRows|
+`clearRows()`                                            *p5-io-clearRows*
 
 Removes all rows from a Table. While all rows are removed, columns and column
 titles are maintained.
@@ -413,7 +413,7 @@ titles are maintained.
 ---
 
 
-`addColumn()`                                            |p5-io-addColumn|
+`addColumn()`                                            *p5-io-addColumn*
 
 Use addColumn() to add a new column to a Table object. Typically, you will
 want to specify a title, so the column may be easily referenced later by name.
@@ -428,7 +428,7 @@ want to specify a title, so the column may be easily referenced later by name.
 ---
 
 
-`getColumnCount()`                                            |p5-io-getColumnCount|
+`getColumnCount()`                                            *p5-io-getColumnCount*
 
 Returns the total number of columns in a Table.
 
@@ -441,7 +441,7 @@ Returns the total number of columns in a Table.
 ---
 
 
-`getRowCount()`                                            |p5-io-getRowCount|
+`getRowCount()`                                            *p5-io-getRowCount*
 
 Returns the total number of rows in a Table.
 
@@ -454,7 +454,7 @@ Returns the total number of rows in a Table.
 ---
 
 
-`removeTokens()`                                            |p5-io-removeTokens|
+`removeTokens()`                                            *p5-io-removeTokens*
 
 Removes any of the specified characters (or "tokens"). If no column is
 specified, then the values in all columns and rows are processed. A specific
@@ -473,7 +473,7 @@ column may be referenced by either its ID or title.
 ---
 
 
-`trim()`                                            |p5-io-trim|
+`trim()`                                            *p5-io-trim*
 
 Trims leading and trailing whitespace, such as spaces and tabs, from String
 table values. If no column is specified, then the values in all columns and
@@ -489,7 +489,7 @@ title.
 ---
 
 
-`removeColumn()`                                            |p5-io-removeColumn|
+`removeColumn()`                                            *p5-io-removeColumn*
 
 Use removeColumn() to remove an existing column from a Table object. The
 column to be removed may be identified by either its title (a String) or its
@@ -505,7 +505,7 @@ removeColumn(1) would remove the second column, and so on.
 ---
 
 
-`set()`                                            |p5-io-set|
+`set()`                                            *p5-io-set*
 
 Stores a value in the Table's specified row and column. The row is specified
 by its ID, while the column may be specified by either its ID or title.
@@ -524,7 +524,7 @@ by its ID, while the column may be specified by either its ID or title.
 ---
 
 
-`setNum()`                                            |p5-io-setNum|
+`setNum()`                                            *p5-io-setNum*
 
 Stores a Float value in the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -544,7 +544,7 @@ title.
 ---
 
 
-`setString()`                                            |p5-io-setString|
+`setString()`                                            *p5-io-setString*
 
 Stores a String value in the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -564,7 +564,7 @@ title.
 ---
 
 
-`get()`                                            |p5-io-get|
+`get()`                                            *p5-io-get*
 
 Retrieves a value from the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -583,7 +583,7 @@ title.
 ---
 
 
-`getNum()`                                            |p5-io-getNum|
+`getNum()`                                            *p5-io-getNum*
 
 Retrieves a Float value from the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -602,7 +602,7 @@ title.
 ---
 
 
-`getString()`                                            |p5-io-getString|
+`getString()`                                            *p5-io-getString*
 
 Retrieves a String value from the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -621,7 +621,7 @@ title.
 ---
 
 
-`getObject()`                                            |p5-io-getObject|
+`getObject()`                                            *p5-io-getObject*
 
 Retrieves all table data and returns as an object. If a column name is passed
 in, each row object will be stored with that attribute as its title.
@@ -635,7 +635,7 @@ in, each row object will be stored with that attribute as its title.
 ---
 
 
-`getArray()`                                            |p5-io-getArray|
+`getArray()`                                            *p5-io-getArray*
 
 Retrieves all table data and returns it as a multidimensional array.
 
@@ -648,7 +648,7 @@ Retrieves all table data and returns it as a multidimensional array.
 ---
 
 
-`constructor()`                                            |p5-io-constructor|
+`constructor()`                                            *p5-io-constructor*
 
 A TableRow object represents a single row of data values, stored in columns,
 from a table. A Table Row contains both an ordered array, and an unordered
@@ -663,7 +663,7 @@ JSON object.
 ---
 
 
-`set()`                                            |p5-io-set|
+`set()`                                            *p5-io-set*
 
 Stores a value in the TableRow's specified column. The column may be specified
 by either its ID or title.
@@ -681,7 +681,7 @@ by either its ID or title.
 ---
 
 
-`setNum()`                                            |p5-io-setNum|
+`setNum()`                                            *p5-io-setNum*
 
 Stores a Float value in the TableRow's specified column. The column may be
 specified by either its ID or title.
@@ -699,7 +699,7 @@ specified by either its ID or title.
 ---
 
 
-`setString()`                                            |p5-io-setString|
+`setString()`                                            *p5-io-setString*
 
 Stores a String value in the TableRow's specified column. The column may be
 specified by either its ID or title.
@@ -717,7 +717,7 @@ specified by either its ID or title.
 ---
 
 
-`get()`                                            |p5-io-get|
+`get()`                                            *p5-io-get*
 
 Retrieves a value from the TableRow's specified column. The column may be
 specified by either its ID or title.
@@ -731,7 +731,7 @@ specified by either its ID or title.
 ---
 
 
-`getNum()`                                            |p5-io-getNum|
+`getNum()`                                            *p5-io-getNum*
 
 Retrieves a Float value from the TableRow's specified column. The column may
 be specified by either its ID or title.
@@ -749,7 +749,7 @@ be specified by either its ID or title.
 ---
 
 
-`getString()`                                            |p5-io-getString|
+`getString()`                                            *p5-io-getString*
 
 Retrieves an String value from the TableRow's specified column. The column may
 be specified by either its ID or title.
@@ -767,7 +767,7 @@ be specified by either its ID or title.
 ---
 
 
-`constructor()`                                            |p5-io-constructor|
+`constructor()`                                            *p5-io-constructor*
 
 XML is a representation of an XML object, able to parse XML code. Use
 loadXML() to load external XML files and create XML objects.
@@ -781,7 +781,7 @@ loadXML() to load external XML files and create XML objects.
 ---
 
 
-`getParent()`                                            |p5-io-getParent|
+`getParent()`                                            *p5-io-getParent*
 
 Gets a copy of the element's parent. Returns the parent as another p5.XML
 object.
@@ -795,7 +795,7 @@ object.
 ---
 
 
-`getName()`                                            |p5-io-getName|
+`getName()`                                            *p5-io-getName*
 
 Gets the element's full name, which is returned as a String.
 
@@ -808,7 +808,7 @@ Gets the element's full name, which is returned as a String.
 ---
 
 
-`setName()`                                            |p5-io-setName|
+`setName()`                                            *p5-io-setName*
 
 Sets the element's name, which is specified as a String.
 
@@ -821,7 +821,7 @@ Sets the element's name, which is specified as a String.
 ---
 
 
-`hasChildren()`                                            |p5-io-hasChildren|
+`hasChildren()`                                            *p5-io-hasChildren*
 
 Checks whether or not the element has any children, and returns the result as
 a boolean.
@@ -835,7 +835,7 @@ a boolean.
 ---
 
 
-`listChildren()`                                            |p5-io-listChildren|
+`listChildren()`                                            *p5-io-listChildren*
 
 Get the names of all of the element's children, and returns the names as an
 array of Strings. This is the same as looping through and calling getName() on
@@ -850,7 +850,7 @@ each child element individually.
 ---
 
 
-`getChildren()`                                            |p5-io-getChildren|
+`getChildren()`                                            *p5-io-getChildren*
 
 Returns all of the element's children as an array of p5.XML objects. When the
 name parameter is specified, then it will return all children that match that
@@ -865,7 +865,7 @@ name.
 ---
 
 
-`getChild()`                                            |p5-io-getChild|
+`getChild()`                                            *p5-io-getChild*
 
 Returns the first of the element's children that matches the name parameter or
 the child of the given index.It returns undefined if no matching child is
@@ -880,7 +880,7 @@ found.
 ---
 
 
-`addChild()`                                            |p5-io-addChild|
+`addChild()`                                            *p5-io-addChild*
 
 Appends a new child to the element. The child can be specified with either a
 String, which will be used as the new tag's name, or as a reference to an
@@ -896,7 +896,7 @@ an p5.XML object.
 ---
 
 
-`removeChild()`                                            |p5-io-removeChild|
+`removeChild()`                                            *p5-io-removeChild*
 
 Removes the element specified by name or index.
 
@@ -909,7 +909,7 @@ Removes the element specified by name or index.
 ---
 
 
-`getAttributeCount()`                                            |p5-io-getAttributeCount|
+`getAttributeCount()`                                            *p5-io-getAttributeCount*
 
 Counts the specified element's number of attributes, returned as an Number.
 
@@ -922,7 +922,7 @@ Counts the specified element's number of attributes, returned as an Number.
 ---
 
 
-`listAttributes()`                                            |p5-io-listAttributes|
+`listAttributes()`                                            *p5-io-listAttributes*
 
 Gets all of the specified element's attributes, and returns them as an array
 of Strings.
@@ -936,7 +936,7 @@ of Strings.
 ---
 
 
-`hasAttribute()`                                            |p5-io-hasAttribute|
+`hasAttribute()`                                            *p5-io-hasAttribute*
 
 Checks whether or not an element has the specified attribute.
 
@@ -953,7 +953,7 @@ Checks whether or not an element has the specified attribute.
 ---
 
 
-`getNum()`                                            |p5-io-getNum|
+`getNum()`                                            *p5-io-getNum*
 
 Returns an attribute value of the element as an Number. If the defaultValue
 parameter is specified and the attribute doesn't exist, then defaultValue is
@@ -973,7 +973,7 @@ value 0 is returned.
 ---
 
 
-`getString()`                                            |p5-io-getString|
+`getString()`                                            *p5-io-getString*
 
 Returns an attribute value of the element as an String. If the defaultValue
 parameter is specified and the attribute doesn't exist, then defaultValue is
@@ -993,7 +993,7 @@ null is returned.
 ---
 
 
-`setAttribute()`                                            |p5-io-setAttribute|
+`setAttribute()`                                            *p5-io-setAttribute*
 
 Sets the content of an element's attribute. The first parameter specifies the
 attribute name, while the second specifies the new content.
@@ -1011,7 +1011,7 @@ attribute name, while the second specifies the new content.
 ---
 
 
-`getContent()`                                            |p5-io-getContent|
+`getContent()`                                            *p5-io-getContent*
 
 Returns the content of an element. If there is no such content, defaultValue
 is returned if specified, otherwise null is returned.
@@ -1025,7 +1025,7 @@ is returned if specified, otherwise null is returned.
 ---
 
 
-`setContent()`                                            |p5-io-setContent|
+`setContent()`                                            *p5-io-setContent*
 
 Sets the element's content.
 
@@ -1038,7 +1038,7 @@ Sets the element's content.
 ---
 
 
-`serialize()`                                            |p5-io-serialize|
+`serialize()`                                            *p5-io-serialize*
 
 Serializes the element into a string. This function is useful for preparing
 the content to be sent over a http request or saved to file.

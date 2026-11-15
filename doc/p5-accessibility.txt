@@ -18,7 +18,7 @@ Table of Contents                           *p5-accessibility-table-of-contents*
 2. Functions                                                |p5-accessibility-functions|
 
 
-`describe()`                                            |p5-accessibility-describe|
+`describe()`                                            *p5-accessibility-describe*
 
 Creates a screen reader accessible description for the canvas. The first
 parameter should be a string with a description of the canvas. The second
@@ -43,7 +43,7 @@ description will only be available to screen-reader users.
 ---
 
 
-`describeElement()`                                            |p5-accessibility-describeElement|
+`describeElement()`                                            *p5-accessibility-describeElement*
 
 This function creates a screen-reader accessible description for elements
 —shapes or groups of shapes that create meaning together— in the canvas. The
@@ -72,7 +72,7 @@ screen-reader users.
 ---
 
 
-`textOutput()`                                            |p5-accessibility-textOutput|
+`textOutput()`                                            *p5-accessibility-textOutput*
 
 textOutput() creates a screenreader accessible output that describes the
 shapes present on the canvas. The general description of the canvas includes
@@ -102,7 +102,7 @@ users.
 ---
 
 
-`gridOutput()`                                            |p5-accessibility-gridOutput|
+`gridOutput()`                                            *p5-accessibility-gridOutput*
 
 gridOutput() lays out the content of the canvas in the form of a grid (html
 table) based on the spatial location of each shape. A brief description of the
