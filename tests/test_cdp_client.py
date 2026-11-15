@@ -648,7 +648,7 @@ class TestCDPHTTPServerEvalAndDebugHandlers(unittest.TestCase):
             reader = AsyncMock()
             reader.read.return_value = body.encode()
             asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
-            self.server.cdp_client.evaluate.assert_called_with(expr)
+            self.server.cdp_client.evaluate.assert_called_with(expr, return_by_value=True)
             written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
             self.assertIn(b'"result"', written)
 
@@ -791,7 +791,7 @@ class TestCDPHTTPServerEvalAndDebugHandlers(unittest.TestCase):
         asyncio.run(self.server.handle_cdp_evaluate(reader, w, headers))
         written = b''.join(c[0][0] for c in w.write.call_args_list if isinstance(c[0][0], bytes))
         self.assertIn(b'"result"', written)
-        self.server.cdp_client.evaluate.assert_called_once_with('2 + 2')
+        self.server.cdp_client.evaluate.assert_called_once_with('2 + 2', return_by_value=True)
 
     def test_handle_cdp_debug_break_with_client(self):
         self.server.cdp_client = MagicMock()
