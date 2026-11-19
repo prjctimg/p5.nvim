@@ -18,7 +18,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: rhysd/action-setup-vim@v1
         with:
@@ -118,7 +118,7 @@ jobs:
           pacman -Syu --noconfirm
           pacman -S --noconfirm --needed base-devel rust cmake clang lld mold git
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Cache cargo dependencies
         uses: Swatinem/rust-cache@v2
@@ -186,7 +186,7 @@ jobs:
           tar czf "dist/p5d-${platform}.tar.gz" "p5d-${platform}"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: p5d-${{ matrix.platform }}
           path: dist/p5d-${{ matrix.platform }}.tar.gz
@@ -197,10 +197,10 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: artifacts
           merge-multiple: true
@@ -212,14 +212,21 @@ jobs:
           ls -lh
           cat checksums.txt
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ inputs.tag || github.ref_name }}
-          generate_release_notes: true
-          prerelease: ${{ contains(inputs.tag || github.ref_name, 'nightly') }}
-          files: |
-            artifacts/p5d-*.tar.gz
-            artifacts/checksums.txt
+      - name: Create or update release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=(artifacts/p5d-*.tar.gz artifacts/checksums.txt)
+          args=(--generate-notes)
+          if [[ "$TAG" == *nightly* ]]; then
+            args+=(--prerelease)
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${files[@]}" --clobber
+          else
+            gh release create "$TAG" "${files[@]}" "${args[@]}"
+          fi
