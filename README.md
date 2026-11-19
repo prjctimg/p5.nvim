@@ -44,7 +44,7 @@
 ## Requirements 📋
 
 - `nvim` >= 0.11.0
-- Rust toolchain (`cargo`) to build the bundled dev server, or a prebuilt `p5d` binary in the plugin root
+- Rust toolchain (`cargo`) to build the bundled dev server, or a prebuilt `p5d` binary in the plugin root / on your `PATH`
 - `curl` (used by CDP panel / console streaming integration)
 
 ---
@@ -58,14 +58,14 @@
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
-  build = "cd srv && cargo build --release && cp target/release/p5d ../p5d",
+  build = "cd srv && cargo build --release && cp target/release/p5d ../p5d && mkdir -p ~/.local/bin && cp target/release/p5d ~/.local/bin/p5d",
   config = function()
     require("p5").setup({})
   end
 }
 ```
 
-> Build once after install/update so `:P5 server` can find the `p5d` binary. The plugin also looks in `srv/target/release/p5d` and `srv/target/debug/p5d`. `p5d` is the dev server daemon (HTTP/live-reload/CDP bridge) that Neovim talks to for events.
+> Build once after install/update so `:P5 server` can find the `p5d` daemon. The plugin looks for `p5d` in the plugin root, `srv/target/{release,debug}/p5d`, and on your `PATH`. The build step above installs `p5d` to `~/.local/bin` (ensure it is in your `PATH`) and also copies it into the plugin root. Prebuilt binaries for the release matrix (excluding Termux/Android) are available on the [GitHub Releases](https://github.com/prjctimg/p5.nvim/releases) page.
 
 ---
 

@@ -56,10 +56,16 @@ H.check_external_tools = function()
 			break
 		end
 	end
+	local path_bin = vim.fn.exepath("p5d")
 	if server_bin then
 		ok("Server binary: " .. server_bin)
+	elseif path_bin ~= "" then
+		ok("Server binary (PATH): " .. path_bin)
 	else
-		warn("Server binary: not found - build with (cd srv && cargo build --release)")
+		warn("Server binary: not found - build/install p5d and ensure it is in PATH")
+	end
+	if server_bin and path_bin ~= "" and server_bin ~= path_bin then
+		ok("Server binary (PATH): " .. path_bin)
 	end
 end
 

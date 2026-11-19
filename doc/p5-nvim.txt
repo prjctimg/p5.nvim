@@ -48,7 +48,7 @@ Features:
 REQUIREMENTS                                    *p5-nvim-requirements*
 
 - Neovim 0.11.0 or later
-- Rust toolchain (cargo) to build the dev server, or a prebuilt `p5d` binary (dev server daemon)
+- Rust toolchain (cargo) to build the dev server, or a prebuilt `p5d` binary (dev server daemon) in the plugin root or on your PATH
 - curl (used by CDP panel / console streaming and downloads)
 - gh CLI (optional, for gist features)
 
@@ -261,10 +261,11 @@ No keymaps are set by default. You can create your own: >
 TROUBLESHOOTING                                  *p5-nvim-troubleshooting*
 
 Q: Server won't start
-A: Build the dev server binary: (cd srv && cargo build --release)
-   Try a different port:
-   :P5 server 8080
-   Run :P5Health to check the server binary and tools.
+A: Build/install the dev server daemon (`p5d`) and ensure it is discoverable:
+   (cd srv && cargo build --release && mkdir -p ~/.local/bin && cp target/release/p5d ~/.local/bin/p5d)
+   Make sure `~/.local/bin` is in your PATH (or place `p5d` in the plugin root).
+   Prebuilt binaries are available on GitHub Releases. Try a different port
+   with `:P5 server 8080` and run `:P5Health` to check the server binary/tools.
 
 Q: CDP panel or terminal console shows no logs
 A: Ensure the browser page is loaded and you've called console.log()

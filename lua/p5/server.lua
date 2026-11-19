@@ -37,6 +37,10 @@ local function server_bin()
 			return p
 		end
 	end
+	local in_path = vim.fn.exepath("p5d")
+	if in_path ~= "" then
+		return in_path
+	end
 	return nil
 end
 
@@ -84,7 +88,7 @@ S.start = function(port)
 	local bin = server_bin()
 	if not bin then
 		server_starting = false
-		notify("Server binary not found. Build it with: (cd srv && cargo build --release)", "warn")
+		notify("Server binary 'p5d' not found. Build/install it (e.g. cd srv && cargo build --release && mkdir -p ~/.local/bin && cp target/release/p5d ~/.local/bin/p5d) or ensure 'p5d' is in PATH.", "warn")
 		return
 	end
 
