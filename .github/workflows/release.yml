@@ -4,13 +4,15 @@ on:
   push:
     tags:
       - 'v*'
-      - 'nightly'
   workflow_dispatch:
     inputs:
       tag:
-        description: Tag to release
+        description: Tag to release (e.g. v0.8.0)
         type: string
         required: false
+
+permissions:
+  contents: write
 
 jobs:
   test:
@@ -29,48 +31,195 @@ jobs:
           git clone --depth 1 https://github.com/nvim-lua/plenary.nvim \
             ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
 
-      - name: Run Lua tests (spawn-guarded)
-        # The spawn guard in tests/init.lua must be injected through the
-        # `init` option because plenary runs each spec in a child nvim that
-        # does not inherit -u tests/init.lua.
+      - name: Run Lua tests
         run: nvim --headless -u tests/init.lua -c "PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}" -c "qa!"
 
-      - uses: actions/setup-python@v5
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Build server
+        run: cargo build --manifest-path srv/Cargo.toml --release
+
+      - name: Run Rust tests
+        run: cargo test --manifest-path srv/Cargo.toml --release
+
+  build:
+    needs: test
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    env:
+      RUSTFLAGS: >-
+        ${{ contains(matrix.platform, 'musl') && '-C target-feature=-crt-static' || '' }}
+        ${{ matrix.link_override }}
+        ${{ matrix.mold_arg }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: x86_64-linux
+            container: debian:12
+            family: debian
+            link_override: -C linker=gcc
+            mold_arg: -C link-arg=-fuse-ld=mold
+          - os: ubuntu-24.04-arm
+            platform: aarch64-linux
+            container: debian:12
+            family: debian
+            link_override: -C linker=gcc
+            mold_arg: -C link-arg=-fuse-ld=mold
+          - os: macos-latest
+            platform: aarch64-darwin
+            container: null
+            family: macos
+            link_override: null
+            mold_arg: null
+          - os: ubuntu-22.04
+            platform: x86_64-linux-arch
+            container: archlinux:latest
+            family: arch
+            link_override: -C linker=gcc
+            mold_arg: -C link-arg=-fuse-ld=mold
+          - os: ubuntu-24.04-arm
+            platform: aarch64-linux-arch
+            container: null
+            family: arch-arm
+            link_override: -C linker=gcc
+            mold_arg: -C link-arg=-fuse-ld=mold
+          - os: ubuntu-22.04
+            platform: x86_64-linux-musl
+            container: null
+            family: musl
+            link_override: -C linker=gcc
+            mold_arg: -C link-arg=-fuse-ld=mold
+          - os: ubuntu-24.04-arm
+            platform: aarch64-linux-musl
+            container: null
+            family: musl
+            link_override: -C linker=gcc
+            mold_arg: -C link-arg=-fuse-ld=mold
+    steps:
+      - name: Bootstrap tooling (Debian 12 container)
+        if: matrix.container == 'debian:12'
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            ca-certificates curl git pkg-config build-essential \
+            cmake clang lld mold
+
+      - name: Install Rust (Debian 12 container)
+        if: matrix.container == 'debian:12'
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Bootstrap tooling (Arch Linux container)
+        if: matrix.container == 'archlinux:latest'
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm --needed base-devel rust cmake clang lld mold git
+
+      - uses: actions/checkout@v4
+
+      - name: Cache cargo dependencies
+        uses: Swatinem/rust-cache@v2
         with:
-          python-version: '3.x'
+          key: release-${{ matrix.platform }}
+          workspaces: srv -> target
 
-      - name: Install Python test deps
-        run: python3 -m pip install pytest websockets
+      - name: Install system dependencies (macOS)
+        if: matrix.family == 'macos'
+        run: brew install cmake || true
 
-      - name: Run Python tests
-        run: python3 -m pytest tests/test_cdp_client.py -q
+      - name: Build release binary (native/container)
+        if: matrix.family != 'musl' && matrix.family != 'arch-arm'
+        run: cargo build --manifest-path srv/Cargo.toml --release
+
+      - name: Build musl binary (Alpine container)
+        if: matrix.family == 'musl'
+        run: |
+          set -euo pipefail
+          platform="${{ matrix.platform }}"
+          docker run --rm \
+            -v "$PWD":/work \
+            -w /work \
+            alpine:3.22 \
+            /bin/sh -ec '
+              apk add --no-cache bash curl build-base cmake pkgconfig clang lld mold git
+              curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+              export PATH="$HOME/.cargo/bin:$PATH"
+              export RUSTFLAGS="-C target-feature=-crt-static -C linker=gcc -C link-arg=-fuse-ld=mold"
+              cargo build --manifest-path srv/Cargo.toml --release
+            '
+
+      - name: Build Arch Linux arm binary (container)
+        if: matrix.family == 'arch-arm'
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            -v "$PWD":/work \
+            -w /work \
+            lfdevs/archlinuxarm:base-devel \
+            /bin/bash -ec '
+              set -euo pipefail
+              echo "DisableSandboxFilesystem" >> /etc/pacman.conf
+              pacman-key --init
+              pacman-key --populate archlinuxarm
+              for attempt in 1 2 3 4 5; do
+                pacman -Syu --noconfirm && break
+                [ "$attempt" -lt 5 ] || exit 1
+                sleep 10
+              done
+              pacman -S --noconfirm --needed rust cmake clang lld mold git
+              export RUSTFLAGS="-C linker=gcc -C link-arg=-fuse-ld=mold"
+              cargo build --manifest-path srv/Cargo.toml --release
+            '
+
+      - name: Package artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          platform="${{ matrix.platform }}"
+          mkdir -p dist "p5d-${platform}"
+          cp srv/target/release/p5d "p5d-${platform}/p5d"
+          chmod +x "p5d-${platform}/p5d"
+          cp LICENSE README.md "p5d-${platform}/" 2>/dev/null || true
+          tar czf "dist/p5d-${platform}.tar.gz" "p5d-${platform}"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: p5d-${{ matrix.platform }}
+          path: dist/p5d-${{ matrix.platform }}.tar.gz
+          if-no-files-found: error
 
   release:
-    needs: test
+    needs: [test, build]
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
 
-      - name: Update help file version
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Generate checksums
         run: |
-          TAG_NAME=${GITHUB_REF#refs/tags/}
-          DOC_FILE="doc/p5-nvim.txt"
-          if [ -f "$DOC_FILE" ]; then
-            sed -i "1s/^\(\*p5\.nvim\*\)/\1 (v${TAG_NAME#v})/" "$DOC_FILE"
-            git config --local user.name "github-actions[bot]"
-            git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git add "$DOC_FILE"
-            git commit -m "chore: bump version to ${TAG_NAME#v}" || true
-          fi
+          cd artifacts
+          sha256sum p5d-*.tar.gz > checksums.txt
+          ls -lh
+          cat checksums.txt
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag || github.ref_name }}
           generate_release_notes: true
-          prerelease: ${{ startsWith(inputs.tag || github.ref_name, 'nightly') }}
+          prerelease: ${{ contains(inputs.tag || github.ref_name, 'nightly') }}
+          files: |
+            artifacts/p5d-*.tar.gz
+            artifacts/checksums.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

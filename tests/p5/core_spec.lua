@@ -90,10 +90,10 @@ describe("is_cmd", function()
 
   it("returns true for available commands", function()
     vim.fn.executable = function(cmd)
-      if cmd == "python3" then return 1 end
+      if cmd == "p5d" then return 1 end
       return 0
     end
-    assert.is_true(C.is_cmd("python3"))
+    assert.is_true(C.is_cmd("p5d"))
   end)
 
   it("returns false for unavailable commands", function()

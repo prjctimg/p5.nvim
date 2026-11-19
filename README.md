@@ -44,10 +44,8 @@
 ## Requirements 📋
 
 - `nvim` >= 0.11.0
-- Python 3.7+ (for development server)
-- [websockets](https://pypi.org/project/websockets/) Python package (`python3-websockets` on Debian/Ubuntu, or `sudo pipx install websockets`)
-- `curl` (for console streaming)
-- `lsof` (checking ports)
+- Rust toolchain (`cargo`) to build the bundled dev server, or a prebuilt `p5d` binary in the plugin root
+- `curl` (used by CDP panel / console streaming integration)
 
 ---
 
@@ -60,11 +58,14 @@
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
+  build = "cd srv && cargo build --release && cp target/release/p5d ../p5d",
   config = function()
     require("p5").setup({})
   end
 }
 ```
+
+> Build once after install/update so `:P5 server` can find the `p5d` binary. The plugin also looks in `srv/target/release/p5d` and `srv/target/debug/p5d`. `p5d` is the dev server daemon (HTTP/live-reload/CDP bridge) that Neovim talks to for events.
 
 ---
 
@@ -569,10 +570,10 @@ vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
 
 **Solutions:**
 
-1. Ensure Python 3 is installed:
+1. Build the dev server binary:
 
    ```bash
-   python3 --version
+   cd srv && cargo build --release
    ```
 
 2. Check if the port is already in use:
@@ -587,7 +588,7 @@ vim.keymap.set("n", "<leader>pd", ":P5 docs<CR>", { desc = "Open p5.js docs" })
    :P5 server 8080
 ```
 
-1. Check Neovim notifications for specific error messages
+4. Check Neovim notifications for specific error messages (`:P5Health` can help diagnose missing binary/tools).
 
 ### Downloads Not Working
 

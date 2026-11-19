@@ -10,20 +10,12 @@ local orig_jobstart = vim.fn.jobstart
 
 local function mock_jobstart(S, captured_cmd)
   vim.fn.jobstart = function(cmd, opts)
-    if type(cmd) == "table" and cmd[1] == "python3" and cmd[3] == "-c" then
-      -- validation step 1: call on_exit synchronously so step runner continues
-      if opts and opts.on_exit then opts.on_exit(0, 0) end
-    elseif type(cmd) == "table" and cmd[1] == "python3" and type(cmd[3]) == "string" and cmd[3]:match("^%d+$") then
-      -- server start step 3: capture cmd
+    if type(cmd) == "table" and type(cmd[1]) == "string" and cmd[1]:match("p5d") then
       captured_cmd[1] = cmd
       S.server_job = 1
       if opts and opts.on_exit then opts.on_exit(0, 0, "exit") end
-    elseif type(cmd) == "table" and cmd[1] == "id" then
-      -- port privilege check: report a non-root uid synchronously
-      if opts and opts.on_stdout then opts.on_stdout(0, { "1000" }) end
-    else
-      -- any other job: just continue
-      if opts and opts.on_exit then opts.on_exit(0, 0) end
+    elseif opts and opts.on_exit then
+      opts.on_exit(0, 0)
     end
     return 1
   end
@@ -40,13 +32,12 @@ describe("server.start", function()
     S.server_job = nil
     S.port = nil
     S.type = nil
-    C.is_cmd = function(cmd)
-      if cmd == "python3" then return true end
-      if cmd == "lsof" then return true end
-      return orig_is_cmd(cmd)
+    C.is_cmd = orig_is_cmd
+    C.is_file = function(p)
+      if type(p) == "string" and p:match("p5d$") then return true end
+      return orig_is_file(p)
     end
-    C.is_file = function(_) return true end
-    C.is_dir = function(_) return true end
+    C.is_dir = function(p) return orig_is_dir(p) end
     C.plugin_root = function() return tmp end
     project.is_p5_project = function(_) return true end
     vim.ui.select = function(_, _, cb) if cb then cb() end end
@@ -72,11 +63,8 @@ describe("server.start", function()
     assert.is_true(ok, "start should not crash: " .. tostring(err))
   end)
 
-  it("does not crash when python3 is missing", function()
-    C.is_cmd = function(cmd)
-      if cmd == "python3" then return false end
-      return false
-    end
+  it("does not crash when server binary is missing", function()
+    C.is_file = function(_) return false end
     local ok, err = pcall(S.start, 8000)
     assert.is_true(ok, "start should not crash: " .. tostring(err))
   end)
@@ -89,7 +77,7 @@ describe("server.start", function()
   end)
 end)
 
-describe("server.start live_reload CLI args", function()
+describe("server.start CLI args", function()
   local S = require("p5.server")
   local tmp = vim.fn.tempname()
   local orig_cwd = vim.fn.getcwd()
@@ -101,12 +89,11 @@ describe("server.start live_reload CLI args", function()
     S.server_job = nil
     S.port = nil
     S.type = nil
-    C.is_cmd = function(cmd)
-      if cmd == "python3" then return true end
-      return false
+    C.is_file = function(p)
+      if type(p) == "string" and p:match("p5d$") then return true end
+      return orig_is_file(p)
     end
-    C.is_file = function(_) return true end
-    C.is_dir = function(_) return true end
+    C.is_dir = function(p) return orig_is_dir(p) end
     C.plugin_root = function() return tmp end
     project.is_p5_project = function(_) return true end
     vim.ui.select = function(_, _, cb) if cb then cb() end end
@@ -117,7 +104,6 @@ describe("server.start live_reload CLI args", function()
   after_each(function()
     vim.fn.chdir(orig_cwd)
     vim.fn.delete(tmp, "rf")
-    C.is_cmd = orig_is_cmd
     C.is_file = orig_is_file
     C.is_dir = orig_is_dir
     C.plugin_root = orig_plugin_root

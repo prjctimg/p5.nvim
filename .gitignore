@@ -15,6 +15,12 @@ Thumbs.db
 *.swo
 *.tmp
 
+# Rust server build artifacts
+/srv/target/
+/srv/Cargo.lock
+/p5d
+/p5d.exe
+
 # Ignore the cloned GitHub wiki checkout (hosted at prjctimg/p5.nvim.wiki)
 /wiki/
 opencode.json

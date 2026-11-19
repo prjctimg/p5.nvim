@@ -24,6 +24,22 @@ S.config = {
 	},
 }
 
+local function server_bin()
+	local root = core.plugin_root()
+	local candidates = {
+		root .. "/p5d",
+		root .. "/srv/target/release/p5d",
+		root .. "/srv/target/debug/p5d",
+		root .. "/srv/p5d",
+	}
+	for _, p in ipairs(candidates) do
+		if core.is_file(p) then
+			return p
+		end
+	end
+	return nil
+end
+
 S.start = function(port)
 	if S.server_job or server_starting then
 		return
@@ -65,223 +81,139 @@ S.start = function(port)
 
 	vim.api.nvim_set_current_dir(buffer_dir)
 
-	local type
-	if core.is_cmd(core.server_cfg) then
-		local server_script = core.plugin_root() .. "/server.py"
-		if core.is_file(server_script) then
-			type = "python"
-		else
-			notify("Server script not found: " .. server_script, "warn")
-		end
-	else
-		notify("python3 not found in PATH. Please install Python to use the development server.", "warn")
-	end
-
-	if not type then
+	local bin = server_bin()
+	if not bin then
 		server_starting = false
-		notify("No suitable server found (python3, bun, deno, or node)", "warn")
-		notify("Please install one of the supported runtimes", "info")
+		notify("Server binary not found. Build it with: (cd srv && cargo build --release)", "warn")
 		return
 	end
 
 	port = port or S.config.port or 8000
 
-	-- Validate environment asynchronously before starting server
-	local validation_cancelled = false
-	local watchdog = vim.uv.new_timer()
-	watchdog:start(15000, 0, function()
-		vim.schedule(function()
-			server_starting = false
-			watchdog:close()
-		end)
-	end)
-	local validation_steps = {
-		function(next_step)
-			vim.fn.jobstart({ "python3", "-c", "import websockets" }, {
-				on_exit = function(_, exit_code)
-					if exit_code ~= 0 then
-						validation_cancelled = true
-						notify("Server validation failed: websockets module not found. Install with: pip install websockets", "warn")
-					end
-					next_step()
-				end,
-			})
-		end,
-		function(next_step)
-			if validation_cancelled then
-				next_step()
-				return
-			end
-			if port < 1024 then
-				local advanced = false
-				local function advance(uid_ok)
-					if advanced then
-						return
-					end
-					advanced = true
-					if not uid_ok then
-						validation_cancelled = true
-						notify("Server validation failed: Port " .. port .. " requires root privileges", "warn")
-					end
-					next_step()
+	local cmd = { bin, tostring(port) }
+	if S.config.live_reload then
+		local lr = S.config.live_reload
+		table.insert(cmd, "--lr-port")
+		table.insert(cmd, tostring(lr.port or 12002))
+		table.insert(cmd, "--lr-debounce")
+		table.insert(cmd, tostring(lr.debounce_ms or 300))
+		if lr.watch_extensions then
+			table.insert(cmd, "--lr-extensions")
+			table.insert(cmd, table.concat(lr.watch_extensions, ","))
+		end
+		if lr.exclude_dirs then
+			table.insert(cmd, "--lr-exclude")
+			table.insert(cmd, table.concat(lr.exclude_dirs, ","))
+		end
+		if lr.enabled == false then
+			table.insert(cmd, "--lr-disabled")
+		end
+	end
+
+	if S.config.cdp then
+		table.insert(cmd, "--cdp-port")
+		table.insert(cmd, tostring(S.config.cdp.remote_debugging_port or 9222))
+	end
+
+	S.port = port
+	S.type = "native"
+
+	S.server_job = vim.fn.jobstart(cmd, {
+		detach = true,
+		cwd = buffer_dir,
+		on_stderr = function(_, data)
+			if data and #data > 0 and data[1] ~= "" then
+				local error_msg = table.concat(data, " ")
+				if error_msg:match("Address already in use") then
+					notify("Port " .. port .. " is already in use. Try a different port.", "warn")
+				elseif error_msg:match("Permission denied") or error_msg:match("EACCES") then
+					notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "warn")
+				else
+					notify("Server: " .. error_msg, "warn")
 				end
-				vim.fn.jobstart({ "id", "-u" }, {
-					on_stdout = function(_, data)
-						advance(vim.trim(table.concat(data or {}, "")) == "0")
-					end,
-					on_exit = function(_, code)
-						if code ~= 0 then
-							advance(false)
-						end
-					end,
-				})
-			else
-				next_step()
 			end
 		end,
-		function(next_step)
-			if validation_cancelled then
-				watchdog:close()
-				server_starting = false
-				return
-			end
-			-- All validations passed, start server
-			watchdog:close()
-			S.port = port
-			S.type = type
+		on_exit = function(_, exit_code, event)
+			pcall(cdp.close)
+			vim.api.nvim_exec_autocmds("User", { pattern = "P5ServerStopped" })
 
-			local plugin_root = core.plugin_root()
-			local cmd = { "python3", plugin_root .. "/server.py", tostring(port) }
-			if S.config.live_reload then
-				local lr = S.config.live_reload
-				table.insert(cmd, "--lr-port")
-				table.insert(cmd, tostring(lr.port or 12002))
-				table.insert(cmd, "--lr-debounce")
-				table.insert(cmd, tostring(lr.debounce_ms or 300))
-				if lr.watch_extensions then
-					table.insert(cmd, "--lr-extensions")
-					table.insert(cmd, table.concat(lr.watch_extensions, ","))
-				end
-				if lr.exclude_dirs then
-					table.insert(cmd, "--lr-exclude")
-					table.insert(cmd, table.concat(lr.exclude_dirs, ","))
-				end
-				if lr.enabled == false then
-					table.insert(cmd, "--lr-disabled")
-				end
-			end
-
-			if S.config.cdp then
-				table.insert(cmd, "--cdp-port")
-				table.insert(cmd, tostring(S.config.cdp.remote_debugging_port or 9222))
-			end
-
-			S.server_job = vim.fn.jobstart(cmd, {
-				detach = true,
-				on_stderr = function(_, data)
-					if data and #data > 0 and data[1] ~= "" then
-						local error_msg = table.concat(data, " ")
-
-						if error_msg:match("Address already in use") then
-							notify("Port " .. port .. " is already in use. Try a different port.", "warn")
-						elseif error_msg:match("Permission denied") or error_msg:match("EACCES") then
-							notify("Permission denied. Check if port " .. port .. " requires elevated privileges.", "warn")
-						elseif error_msg:match("ModuleNotFoundError") or error_msg:match("ImportError") then
-							notify("Server import error: " .. error_msg, "warn")
-						else
-							notify("Server warning: " .. error_msg, "warn")
-						end
+			if not user_stopped then
+				if exit_code == 0 then
+					notify("🛑 Server stopped", "info")
+				else
+					local reason = ""
+					if event == "exit" then
+						reason = " (exited normally)"
+					elseif event == "term" then
+						reason = " (terminated)"
+					else
+						reason = " (event: " .. (event or "unknown") .. ")"
 					end
-				end,
-				on_exit = function(_, exit_code, event)
-					pcall(cdp.close)
-					vim.api.nvim_exec_autocmds("User", { pattern = "P5ServerStopped" })
+					notify("Server stopped with code " .. exit_code .. reason, "warn")
+				end
+			end
+			user_stopped = false
 
-					if not user_stopped then
-						if exit_code == 0 then
-							notify("🛑 Server stopped", "info")
-						else
-							local reason = ""
-							if event == "exit" then
-								reason = " (exited normally)"
-							elseif event == "term" then
-								reason = " (terminated)"
-							else
-								reason = " (event: " .. (event or "unknown") .. ")"
+			S.server_job = nil
+			S.type = nil
+		end,
+	})
+
+	if S.server_job > 0 then
+		server_starting = false
+		local url = "http://localhost:" .. port
+		local cdp_enabled = S.config.cdp and S.config.cdp.enabled
+		local msg = "Server started (native) at " .. url
+		if cdp_enabled then
+			msg = msg .. " (CDP enabled)"
+		end
+		notify(msg, "ok")
+		vim.api.nvim_exec_autocmds("User", { pattern = "P5ServerStarted" })
+
+		vim.defer_fn(function()
+			pcall(cdp.open)
+		end, 500)
+
+		if S.config.auto_open_browser ~= false and not cdp_enabled then
+			vim.defer_fn(function()
+				local chrome_cmd = core.find_chrome()
+				if chrome_cmd then
+					vim.fn.jobstart({ chrome_cmd, url }, {
+						detach = true,
+						on_exit = function(_, exit_code)
+							if exit_code ~= 0 then
+								notify("Failed to launch Chrome. Open manually: " .. url, "warn")
 							end
-
-							notify("Server stopped with code " .. exit_code .. reason, "warn")
-						end
-					end
-					user_stopped = false
-
-					S.server_job = nil
-					S.type = nil
-				end,
-			})
-
-			if S.server_job > 0 then
-				server_starting = false
-				local url = "http://localhost:" .. port
-				local cdp_enabled = S.config.cdp and S.config.cdp.enabled
-				local msg = "Server started (" .. type .. ") at " .. url
-				if cdp_enabled then
-					msg = msg .. " (CDP enabled)"
-				end
-				notify(msg, "ok")
-				vim.api.nvim_exec_autocmds("User", { pattern = "P5ServerStarted" })
-
-				vim.defer_fn(function()
-					pcall(cdp.open)
-				end, 500)
-
-				-- Auto-open browser (skip when CDP enabled - CDP module handles it)
-				if S.config.auto_open_browser ~= false and not cdp_enabled then
-					vim.defer_fn(function()
-						local chrome_cmd = core.find_chrome()
-						if chrome_cmd then
-							local chrome_args = { chrome_cmd }
-							table.insert(chrome_args, url)
-							vim.fn.jobstart(chrome_args, {
-								detach = true,
-								on_exit = function(_, exit_code)
-									if exit_code ~= 0 then
-										notify("Failed to launch Chrome. Open manually: " .. url, "warn")
-									end
-								end,
-							})
+						end,
+					})
+				else
+					local open_cmd
+					if vim.fn.has("unix") == 1 then
+						if vim.fn.has("mac") == 1 then
+							open_cmd = { "open", url }
 						else
-							local open_cmd
-							if vim.fn.has("unix") == 1 then
-								if vim.fn.has("mac") == 1 then
-									open_cmd = { "open", url }
-								else
-									open_cmd = { "xdg-open", url }
-								end
-							elseif vim.fn.has("win32") == 1 then
-								open_cmd = { "cmd", "/c", "start", "", url }
-							else
-								open_cmd = { "xdg-open", url }
-							end
-
-							vim.fn.jobstart(open_cmd, {
-								detach = true,
-								on_exit = function(_, exit_code)
-									if exit_code ~= 0 then
-										notify("Please open manually: " .. url, "info")
-									end
-								end,
-							})
+							open_cmd = { "xdg-open", url }
 						end
-					end, 500)
-				end
-			else
-				server_starting = false
-			end
-		end,
-	}
+					elseif vim.fn.has("win32") == 1 then
+						open_cmd = { "cmd", "/c", "start", "", url }
+					else
+						open_cmd = { "xdg-open", url }
+					end
 
-	core.step_runner(validation_steps)
+					vim.fn.jobstart(open_cmd, {
+						detach = true,
+						on_exit = function(_, exit_code)
+							if exit_code ~= 0 then
+								notify("Please open manually: " .. url, "info")
+							end
+						end,
+					})
+				end
+			end, 500)
+		end
+	else
+		server_starting = false
+	end
 end
 
 S.stop_server = function()

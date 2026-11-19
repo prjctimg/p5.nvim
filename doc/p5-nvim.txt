@@ -48,9 +48,8 @@ Features:
 REQUIREMENTS                                    *p5-nvim-requirements*
 
 - Neovim 0.11.0 or later
-- Python 3.7+ (for development server)
-- websockets Python package (pip install websockets)
-- curl (for console streaming and downloads)
+- Rust toolchain (cargo) to build the dev server, or a prebuilt `p5d` binary (dev server daemon)
+- curl (used by CDP panel / console streaming and downloads)
 - gh CLI (optional, for gist features)
 
 ==============================================================================
@@ -262,10 +261,10 @@ No keymaps are set by default. You can create your own: >
 TROUBLESHOOTING                                  *p5-nvim-troubleshooting*
 
 Q: Server won't start
-A: Check that Python 3 and the websockets module are installed:
-   pip install websockets
+A: Build the dev server binary: (cd srv && cargo build --release)
    Try a different port:
    :P5 server 8080
+   Run :P5Health to check the server binary and tools.
 
 Q: CDP panel or terminal console shows no logs
 A: Ensure the browser page is loaded and you've called console.log()

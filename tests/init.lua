@@ -29,6 +29,7 @@ local blocked = {
 	curl = true,
 	wget = true,
 	python3 = "server.py",
+	["p5d"] = true,
 }
 
 local function spawn_kind(cmd)
@@ -42,7 +43,11 @@ local function spawn_kind(cmd)
 	if blocked[head] == true then
 		return head
 	end
-	if blocked[head] == "server.py" and table.concat(cmd, " "):match("server%.py") then
+	local flat = table.concat(cmd, " ")
+	if blocked[head] == "server.py" and flat:match("server%.py") then
+		return head
+	end
+	if type(head) == "string" and head:match("p5d") then
 		return head
 	end
 	return nil

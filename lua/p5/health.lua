@@ -44,17 +44,22 @@ H.check_external_tools = function()
 		warn("gh CLI: not found - gist features will be unavailable")
 	end
 
-	local python_cmd = core.is_cmd("python3") and "python3" or core.is_cmd("python") and "python" or nil
-	if python_cmd then
-		ok("Python: available (" .. python_cmd .. ")")
-		local ws_result = vim.fn.system(python_cmd .. " -c 'import websockets' 2>/dev/null")
-		if vim.v.shell_error == 0 then
-			ok("websockets module: available")
-		else
-			warn("websockets module: not found - live server will not work. Install with: pip install websockets")
+	local plugin_root = core.plugin_root()
+	local server_bin = nil
+	for _, p in ipairs({
+		plugin_root .. "/p5d",
+		plugin_root .. "/srv/target/release/p5d",
+		plugin_root .. "/srv/target/debug/p5d",
+	}) do
+		if core.is_file(p) then
+			server_bin = p
+			break
 		end
+	end
+	if server_bin then
+		ok("Server binary: " .. server_bin)
 	else
-		warn("Python: not found - live server will be unavailable")
+		warn("Server binary: not found - build with (cd srv && cargo build --release)")
 	end
 end
 
@@ -68,12 +73,7 @@ H.check_plugin_env = function()
 		error("Plugin root: not found at " .. plugin_root)
 	end
 
-	local server_script = plugin_root .. "/server.py"
-	if core.is_file(server_script) then
-		ok("Server script: found")
-	else
-		warn("Server script: not found at " .. server_script)
-	end
+	-- server binary checked in external tools section
 
 	local asset_dir = core.asset_dir()
 	if core.is_dir(asset_dir) then
