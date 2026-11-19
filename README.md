@@ -58,14 +58,14 @@
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
-  build = "cd srv && cargo build --release && cp target/release/p5d ../p5d && mkdir -p ~/.local/bin && cp target/release/p5d ~/.local/bin/p5d",
+  build = "./scripts/install-p5d.sh",
   config = function()
     require("p5").setup({})
   end
 }
 ```
 
-> Build once after install/update so `:P5 server` can find the `p5d` daemon. The plugin looks for `p5d` in the plugin root, `srv/target/{release,debug}/p5d`, and on your `PATH`. The build step above installs `p5d` to `~/.local/bin` (ensure it is in your `PATH`) and also copies it into the plugin root. Prebuilt binaries for the release matrix (excluding Termux/Android) are available on the [GitHub Releases](https://github.com/prjctimg/p5.nvim/releases) page.
+> The install step tries to download a prebuilt `p5d` binary for your platform from [GitHub Releases](https://github.com/prjctimg/p5.nvim/releases). If no matching prebuilt is available, it falls back to building locally with Cargo (`srv/`). The binary is installed to `~/.local/bin/p5d` (ensure it is in your `PATH`) and copied into the plugin root. The plugin looks for `p5d` in the plugin root, `srv/target/{release,debug}/p5d`, and on your `PATH`.
 
 ---
 

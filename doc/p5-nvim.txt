@@ -261,11 +261,12 @@ No keymaps are set by default. You can create your own: >
 TROUBLESHOOTING                                  *p5-nvim-troubleshooting*
 
 Q: Server won't start
-A: Build/install the dev server daemon (`p5d`) and ensure it is discoverable:
-   (cd srv && cargo build --release && mkdir -p ~/.local/bin && cp target/release/p5d ~/.local/bin/p5d)
-   Make sure `~/.local/bin` is in your PATH (or place `p5d` in the plugin root).
-   Prebuilt binaries are available on GitHub Releases. Try a different port
-   with `:P5 server 8080` and run `:P5Health` to check the server binary/tools.
+A: Install the dev server daemon (`p5d`) and ensure it is discoverable:
+   Run `./scripts/install-p5d.sh` from the plugin directory (downloads a
+   prebuilt binary from GitHub Releases when available, otherwise builds
+   locally with Cargo). This installs `p5d` to `~/.local/bin` and the plugin
+   root. Make sure `~/.local/bin` is in your PATH. Try a different port with
+   `:P5 server 8080` and run `:P5Health` to check the server binary/tools.
 
 Q: CDP panel or terminal console shows no logs
 A: Ensure the browser page is loaded and you've called console.log()

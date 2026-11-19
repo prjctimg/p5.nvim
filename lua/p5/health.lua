@@ -62,7 +62,7 @@ H.check_external_tools = function()
 	elseif path_bin ~= "" then
 		ok("Server binary (PATH): " .. path_bin)
 	else
-		warn("Server binary: not found - build/install p5d and ensure it is in PATH")
+		warn("Server binary: not found - run ./scripts/install-p5d.sh in the plugin directory and ensure p5d is in PATH")
 	end
 	if server_bin and path_bin ~= "" and server_bin ~= path_bin then
 		ok("Server binary (PATH): " .. path_bin)

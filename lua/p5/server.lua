@@ -88,7 +88,7 @@ S.start = function(port)
 	local bin = server_bin()
 	if not bin then
 		server_starting = false
-		notify("Server binary 'p5d' not found. Build/install it (e.g. cd srv && cargo build --release && mkdir -p ~/.local/bin && cp target/release/p5d ~/.local/bin/p5d) or ensure 'p5d' is in PATH.", "warn")
+		notify("Server binary 'p5d' not found. Run ./scripts/install-p5d.sh in the plugin directory (downloads prebuilt or builds locally) and ensure 'p5d' is in PATH.", "warn")
 		return
 	end
 
