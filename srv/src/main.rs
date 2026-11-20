@@ -30,6 +30,7 @@ use tokio_tungstenite::{connect_async, tungstenite::Message as WsMessage};
 #[derive(Clone, Debug)]
 struct Cfg {
     port: u16,
+    dir: Option<PathBuf>,
     lr_enabled: bool,
     lr_port: u16,
     lr_debounce: u64,
@@ -41,6 +42,7 @@ struct Cfg {
 fn parse_args() -> Cfg {
     let mut c = Cfg {
         port: 8000,
+        dir: None,
         lr_enabled: true,
         lr_port: 12002,
         lr_debounce: 300,
@@ -56,6 +58,11 @@ fn parse_args() -> Cfg {
     let mut a = std::env::args().skip(1);
     while let Some(x) = a.next() {
         match x.as_str() {
+            "--dir" | "--watch-dir" => {
+                if let Some(v) = a.next() {
+                    c.dir = Some(PathBuf::from(v));
+                }
+            }
             "--lr-port" => {
                 if let Some(v) = a.next() {
                     c.lr_port = v.parse().unwrap_or(c.lr_port);
@@ -207,7 +214,18 @@ fn plugin_root() -> PathBuf {
     std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."))
 }
 fn read_inject(root: &FsPath, name: &str) -> String {
-    std::fs::read_to_string(root.join("assets/inject").join(name)).unwrap_or_default()
+    // Prefer on-disk inject scripts from the plugin (for development), fall back to embedded.
+    let disk = root.join("assets/inject").join(name);
+    if let Ok(s) = std::fs::read_to_string(&disk) {
+        if !s.is_empty() {
+            return s;
+        }
+    }
+    match name {
+        "console.js" => include_str!("../../assets/inject/console.js").to_string(),
+        "livereload.js" => include_str!("../../assets/inject/livereload.js").to_string(),
+        _ => String::new(),
+    }
 }
 
 #[derive(Clone)]
@@ -2196,7 +2214,11 @@ async fn root(
 #[tokio::main]
 async fn main() {
     let cfg = parse_args();
-    let dir = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
+    let dir = if let Some(d) = cfg.dir.clone() {
+        d.canonicalize().unwrap_or(d)
+    } else {
+        std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."))
+    };
     let proot = plugin_root();
     let app = Arc::new(App {
         lr_port: Arc::new(RwLock::new(cfg.lr_port)),
@@ -2230,9 +2252,10 @@ async fn main() {
     app.cfg.write().await.port = p;
     println!("Server running at http://localhost:{}/", p);
     if cfg.lr_enabled {
+        let watch_dir = dir.clone();
         let a = app.clone();
         tokio::spawn(async move {
-            watch(a, dir).await;
+            watch(a, watch_dir).await;
         });
     }
     let router = Router::new().fallback(root).with_state(app.clone());

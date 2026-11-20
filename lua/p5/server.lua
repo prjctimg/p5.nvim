@@ -98,7 +98,7 @@ S.start = function(port)
 
 	port = port or S.config.port or 8000
 
-	local cmd = { bin, tostring(port) }
+	local cmd = { bin, tostring(port), "--dir", buffer_dir }
 	if S.config.live_reload then
 		local lr = S.config.live_reload
 		table.insert(cmd, "--lr-port")

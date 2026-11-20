@@ -399,7 +399,11 @@ end
 		end)
 	end
 
-	local clone_gist = function(id, target, gist_title, callback)
+	local clone_gist = function(id, target, gist_title, gist_owner, callback)
+		if type(gist_owner) == "function" then
+			callback = gist_owner
+			gist_owner = nil
+		end
 		vim.system({ "gh", "api", "/gists/" .. id }, nil, function(out)
 			if out.code ~= 0 then
 				callback(false)
@@ -415,20 +419,25 @@ end
 				local fp = io.open(target .. "/" .. fn, "w")
 				if fp then fp:write(fd.content or ""); fp:close() end
 			end
-			G.get_comment(id, function(cm)
-				local desc = cm and cm.body or ""
-				if desc ~= "" then
+			local owner = gd.owner and gd.owner.login or gist_owner or ""
+			G.get_comment(id, owner, function(cm)
+				local author_desc = cm and cm.body or ""
+				if author_desc ~= "" then
 					local fp = io.open(target .. "/README.md", "w")
-					if fp then fp:write(desc); fp:close() end
+					if fp then fp:write(author_desc); fp:close() end
+				end
+				local effective_title = gist_title
+				if not effective_title or vim.trim(effective_title) == "" then
+					effective_title = author_desc ~= "" and vim.split(author_desc, "\n")[1] or ""
+					effective_title = vim.trim(effective_title or "")
 				end
 				local p5_path = target .. "/p5.json"
 				if core.is_file(p5_path) then
 					local p5_data, _ = core.read_json(p5_path)
 					if p5_data then
-						local owner = gd.owner and gd.owner.login or "unknown"
 						p5_data.gist = {
-							url = owner .. "/" .. id,
-							title = gist_title or "",
+							url = (owner ~= "" and owner or "unknown") .. "/" .. id,
+							title = effective_title or "",
 						}
 						core.write_json(p5_path, p5_data)
 					end
@@ -447,13 +456,55 @@ end
 				return
 			end
 
+			-- Resolve sketch description: prefer gist description, else first comment by gist author.
+			local function resolved_desc(g)
+				local d = g.description
+				if d and vim.trim(d) ~= "" then
+					return vim.trim(d)
+				end
+				if g._author_desc and vim.trim(g._author_desc) ~= "" then
+					return vim.trim(g._author_desc)
+				end
+				return ""
+			end
+
+			local function enrich_missing(callback)
+				local need = {}
+				for _, g in ipairs(gists) do
+					local d = g.description
+					if not d or vim.trim(d) == "" then
+						table.insert(need, g)
+					end
+				end
+				if #need == 0 then
+					callback()
+					return
+				end
+				local pending = #need
+				for _, g in ipairs(need) do
+					local owner = g.owner and g.owner.login or username
+					G.get_comment(g.id, owner, function(cm)
+						if cm and cm.body and vim.trim(cm.body) ~= "" then
+							g._author_desc = vim.split(cm.body, "\n")[1]
+						end
+						pending = pending - 1
+						if pending == 0 then
+							callback()
+						end
+					end)
+				end
+			end
+
+			local function continue_clone()
 			if mode == "all" then
 				core.mkdir(skchbk_dir)
 				local results = { cloned = 0, skipped = 0, errors = 0 }
 				local pending = #gists
 				if pending == 0 then return end
 				for _, gist in ipairs(gists) do
-					local slug = core.slugify(gist.description or gist.id)
+					local desc = resolved_desc(gist)
+					local slug_src = desc ~= "" and desc or gist.id
+					local slug = core.slugify(slug_src)
 					local target = skchbk_dir .. "/" .. slug
 					if core.is_dir(target) then
 						results.skipped = results.skipped + 1
@@ -462,7 +513,8 @@ end
 							notify("Cloned: " .. results.cloned .. " | Skipped: " .. results.skipped .. " | Errors: " .. results.errors, "info")
 						end
 					else
-						clone_gist(gist.id, target, gist.description, function(ok)
+						local owner = gist.owner and gist.owner.login or username
+						clone_gist(gist.id, target, desc, owner, function(ok)
 							pending = pending - 1
 							if ok then
 								results.cloned = results.cloned + 1
@@ -480,21 +532,28 @@ end
 					end
 				end
 			else
-				local items, map, desc_map = {}, {}, {}
+				local items, map, desc_map, owner_map = {}, {}, {}, {}
+				local used = {}
 				for _, gist in ipairs(gists) do
-					local label = gist.description or ("untitled-" .. gist.id:sub(1, 7))
+					local desc = resolved_desc(gist)
+					local label = desc ~= "" and desc or ("untitled-" .. gist.id:sub(1, 7))
+					if used[label] then
+						label = label .. " (" .. gist.id:sub(1, 7) .. ")"
+					end
+					used[label] = true
 					table.insert(items, label)
 					map[label] = gist.id
-					desc_map[label] = gist.description
+					desc_map[label] = desc
+					owner_map[label] = gist.owner and gist.owner.login or username
 				end
 				table.sort(items)
 
 				vim.ui.select(items, { prompt = "Select a remote sketch to clone:" }, function(sel)
 					if not sel or not map[sel] then return end
 					core.mkdir(skchbk_dir)
-					local slug = core.slugify(sel)
+					local slug = core.slugify(desc_map[sel] ~= "" and desc_map[sel] or sel)
 					local target = skchbk_dir .. "/" .. slug
-					clone_gist(map[sel], target, desc_map[sel], function(ok)
+					clone_gist(map[sel], target, desc_map[sel], owner_map[sel], function(ok)
 						if ok then
 							notify("Cloned: " .. sel, "ok")
 							vim.api.nvim_set_current_dir(target)
@@ -505,10 +564,19 @@ end
 					end)
 				end)
 			end
+			end
+
+			enrich_missing(continue_clone)
 		end)
 	end
 
-	G.get_comment = function(gist_id, callback)
+	-- Returns the first comment by the gist author/owner (preferred as sketch description/details).
+	-- If owner_login is provided, prefers the first comment authored by that user; falls back to first comment.
+	G.get_comment = function(gist_id, owner_login, callback)
+		if type(owner_login) == "function" then
+			callback = owner_login
+			owner_login = nil
+		end
 		callback = callback or function() end
 		vim.system({ "gh", "api", "/gists/" .. gist_id .. "/comments" }, nil, function(out)
 			if out.code ~= 0 then
@@ -519,6 +587,15 @@ end
 			if not ok or type(comments) ~= "table" or #comments == 0 then
 				callback(nil)
 				return
+			end
+			if owner_login and owner_login ~= "" then
+				for _, c in ipairs(comments) do
+					local login = c.user and c.user.login or ""
+					if login ~= "" and login == owner_login then
+						callback(c)
+						return
+					end
+				end
 			end
 			callback(comments[1])
 		end)
@@ -588,7 +665,12 @@ end
 					end)
 				end)
 		elseif choice == "First comment (sketch details)" then
-			G.get_comment(gist_info.id, function(comment)
+			local owner_login = nil
+			if gist_info.url then
+				local o, gid = gist_info.url:match("^([^/]+)/([a-fA-F0-9]+)$")
+				if o and gid then owner_login = o end
+			end
+			G.get_comment(gist_info.id, owner_login, function(comment)
 				local body = comment and comment.body or ""
 				local st = { comment_id = comment and comment.id or nil }
 
