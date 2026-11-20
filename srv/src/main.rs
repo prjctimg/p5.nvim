@@ -799,10 +799,109 @@ fn mime(p: &str) -> &'static str {
         "jpg" | "jpeg" => "image/jpeg",
         "gif" => "image/gif",
         "svg" => "image/svg+xml",
+        "ico" => "image/x-icon",
         "woff" => "application/font-woff",
+        "woff2" => "font/woff2",
         "ttf" => "application/font-ttf",
         _ => "application/octet-stream",
     }
+}
+
+fn cache_dir() -> Option<PathBuf> {
+    if let Ok(xdg) = std::env::var("XDG_CACHE_HOME") {
+        if !xdg.is_empty() {
+            return Some(PathBuf::from(xdg).join("p5.nvim"));
+        }
+    }
+    std::env::var("HOME")
+        .ok()
+        .map(|h| PathBuf::from(h).join(".cache/p5.nvim"))
+}
+
+fn sketch_p5_version(dir: &FsPath) -> String {
+    if let Ok(s) = std::fs::read_to_string(dir.join("p5.json")) {
+        if let Ok(v) = serde_json::from_str::<Value>(&s) {
+            if let Some(ver) = v.get("version").and_then(|x| x.as_str()) {
+                if !ver.is_empty() {
+                    return ver.to_string();
+                }
+            }
+        }
+    }
+    "2.3.1".to_string()
+}
+
+fn libs_loader_js() -> &'static str {
+    r#"// Auto-generated - reads libraries from p5.json at runtime
+(function() {
+  function loadLibs() {
+    fetch('p5.json')
+      .then(function(response) { return response.json(); })
+      .then(function(config) {
+        var libsObj = config.libs || {};
+        var libs = Object.keys(libsObj);
+        return loadLibsSequential(libs, 0);
+      })
+      .catch(function(err) {
+        console.warn('Could not load p5.json:', err);
+      });
+  }
+
+  function loadLibsSequential(libs, index) {
+    if (index >= libs.length) return Promise.resolve();
+
+    var lib = libs[index];
+    if (lib === 'p5' || lib === 'p5.sound') {
+      return loadLibsSequential(libs, index + 1);
+    }
+
+    return new Promise(function(resolve) {
+      var script = document.createElement('script');
+      script.src = 'assets/libs/' + lib + '.js';
+      script.onload = function() {
+        console.log('Loaded: ' + lib);
+        resolve();
+      };
+      script.onerror = function() {
+        console.warn('Failed to load: ' + lib);
+        resolve();
+      };
+      document.head.appendChild(script);
+    }).then(function() {
+      return loadLibsSequential(libs, index + 1);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadLibs);
+  } else {
+    loadLibs();
+  }
+})();
+"#
+}
+
+fn asset_fallback_bytes(app: &App, req_path: &str) -> Option<(Vec<u8>, &'static str)> {
+    if req_path == "/assets/favicon.ico" || req_path == "/favicon.ico" {
+        let root = plugin_root();
+        let p = root.join("assets/favicon.ico");
+        if let Ok(b) = std::fs::read(p) {
+            return Some((b, "image/x-icon"));
+        }
+    }
+    if req_path == "/assets/libs/libs.js" {
+        return Some((libs_loader_js().as_bytes().to_vec(), "text/javascript"));
+    }
+    if req_path == "/assets/libs/p5.js" {
+        let ver = sketch_p5_version(&app.dir);
+        if let Some(cd) = cache_dir() {
+            let p = cd.join("versions").join(ver).join("p5.js");
+            if let Ok(b) = std::fs::read(p) {
+                return Some((b, "text/javascript"));
+            }
+        }
+    }
+    None
 }
 
 async fn gen_index(dir: &FsPath) -> String {
@@ -927,6 +1026,17 @@ async fn serve(app: Arc<App>, method: Method, uri: Uri) -> Response {
             .unwrap();
     }
     if !fp.is_file() {
+        if let Some((b, ct)) = asset_fallback_bytes(&app, &path) {
+            return Response::builder()
+                .status(200)
+                .header("Content-Type", ct)
+                .header("Content-Length", b.len())
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Cache-Control", "no-store")
+                .header("Connection", "close")
+                .body(Body::from(b))
+                .unwrap();
+        }
         return (
             StatusCode::NOT_FOUND,
             [
