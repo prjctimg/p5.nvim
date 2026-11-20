@@ -268,6 +268,31 @@ fn jerr(s: StatusCode, m: &str) -> Response {
     jstatus(s, json!({"error": m}))
 }
 
+fn cors_preflight() -> Response {
+    Response::builder()
+        .status(StatusCode::NO_CONTENT)
+        .header("Access-Control-Allow-Origin", "*")
+        .header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
+        .header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+        .header("Access-Control-Max-Age", "86400")
+        .header("Connection", "close")
+        .body(Body::empty())
+        .unwrap()
+}
+
+fn plain_status(status: StatusCode, body: &'static str) -> Response {
+    (
+        status,
+        [
+            ("Content-Type", "text/plain; charset=utf-8"),
+            ("Access-Control-Allow-Origin", "*"),
+            ("Connection", "close"),
+        ],
+        body,
+    )
+        .into_response()
+}
+
 async fn http_json(port: u16, path: &str) -> Option<String> {
     reqwest::get(format!("http://127.0.0.1:{}{}", port, path))
         .await
@@ -1000,6 +1025,52 @@ fn libs_loader_js() -> &'static str {
 "#
 }
 
+async fn download_p5_js_to_cache(version: &str, dest: &FsPath) -> bool {
+    if dest.is_file() && is_valid_p5_js(dest) {
+        return true;
+    }
+    let url = format!("https://cdn.jsdelivr.net/npm/p5@{}/lib/p5.js", version);
+    let client = match reqwest::Client::builder()
+        .timeout(Duration::from_secs(180))
+        .build()
+    {
+        Ok(c) => c,
+        Err(_) => return false,
+    };
+    let resp = match client.get(&url).send().await {
+        Ok(r) => r,
+        Err(_) => return false,
+    };
+    if !resp.status().is_success() {
+        return false;
+    }
+    let bytes = match resp.bytes().await {
+        Ok(b) => b,
+        Err(_) => return false,
+    };
+    if let Some(parent) = dest.parent() {
+        let _ = tokio::fs::create_dir_all(parent).await;
+    }
+    let tmp = dest.with_extension("js.download");
+    if tokio::fs::write(&tmp, &bytes).await.is_err() {
+        return false;
+    }
+    if !is_valid_p5_js(&tmp) {
+        let _ = tokio::fs::remove_file(&tmp).await;
+        return false;
+    }
+    // best-effort atomic-ish replace
+    let _ = tokio::fs::remove_file(dest).await;
+    match tokio::fs::rename(&tmp, dest).await {
+        Ok(_) => true,
+        Err(_) => {
+            let ok = tokio::fs::copy(&tmp, dest).await.is_ok();
+            let _ = tokio::fs::remove_file(&tmp).await;
+            ok
+        }
+    }
+}
+
 async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
     if req_path == "/p5.json" {
         let dest = app.dir.join("p5.json");
@@ -1011,12 +1082,28 @@ async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
             .is_ok();
     }
 
+    // Alias common p5 core paths to the versioned cached (unminified) p5.js.
+    let is_p5_alias = matches!(
+        req_path,
+        "/p5.js" | "/p5.min.js" | "/lib/p5.js" | "/lib/p5.min.js" | "/libraries/p5.js"
+    );
+
     let (dest, src, allow_rewrite_empty) = match req_path {
         "/assets/libs/p5.js" => {
             let ver = sketch_p5_version(&app.dir);
             let Some(cd) = cache_dir() else { return false; };
             (
                 app.dir.join("assets/libs/p5.js"),
+                Some(cd.join("versions").join(ver).join("p5.js")),
+                false,
+            )
+        }
+        p if is_p5_alias => {
+            let ver = sketch_p5_version(&app.dir);
+            let Some(cd) = cache_dir() else { return false; };
+            let rel = p.trim_start_matches('/');
+            (
+                app.dir.join(rel),
                 Some(cd.join("versions").join(ver).join("p5.js")),
                 false,
             )
@@ -1034,7 +1121,7 @@ async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
         _ => return false,
     };
 
-    let is_p5 = req_path == "/assets/libs/p5.js";
+    let is_p5 = req_path == "/assets/libs/p5.js" || is_p5_alias;
 
     let needs_write = if !dest.is_file() {
         true
@@ -1064,6 +1151,11 @@ async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
     }
     if let Some(src) = src {
         if is_p5 {
+            let ver = sketch_p5_version(&app.dir);
+            if !src.is_file() || !is_valid_p5_js(&src) {
+                // Fetch correct unminified release into cache if missing/invalid.
+                let _ = download_p5_js_to_cache(&ver, &src).await;
+            }
             if src.is_file() && is_valid_p5_js(&src) {
                 return tokio::fs::copy(&src, &dest).await.is_ok();
             }
@@ -1158,13 +1250,11 @@ async fn inject(app: &App, html: Vec<u8>) -> Vec<u8> {
 }
 
 async fn serve(app: Arc<App>, method: Method, uri: Uri) -> Response {
+    if method == Method::OPTIONS {
+        return cors_preflight();
+    }
     if method != Method::GET {
-        return (
-            StatusCode::METHOD_NOT_ALLOWED,
-            [("Connection", "close")],
-            "",
-        )
-            .into_response();
+        return plain_status(StatusCode::METHOD_NOT_ALLOWED, "Method not allowed");
     }
     let mut path = uri.path().to_string();
     if path == "/" {
@@ -1175,10 +1265,10 @@ async fn serve(app: Arc<App>, method: Method, uri: Uri) -> Response {
     let base = app.dir.canonicalize().unwrap_or(app.dir.clone());
     if let Ok(r) = joined.canonicalize() {
         if !r.starts_with(&base) {
-            return (StatusCode::FORBIDDEN, [("Connection", "close")], "").into_response();
+            return plain_status(StatusCode::FORBIDDEN, "Forbidden");
         }
     } else if path != "/index.html" && joined.exists() {
-        return (StatusCode::BAD_REQUEST, [("Connection", "close")], "").into_response();
+        return plain_status(StatusCode::BAD_REQUEST, "Bad request");
     }
     let fp = if path == "/index.html" {
         app.dir.join("index.html")
@@ -1204,6 +1294,11 @@ async fn serve(app: Arc<App>, method: Method, uri: Uri) -> Response {
             | "/assets/libs/libs.js"
             | "/assets/favicon.ico"
             | "/favicon.ico"
+            | "/p5.js"
+            | "/p5.min.js"
+            | "/lib/p5.js"
+            | "/lib/p5.min.js"
+            | "/libraries/p5.js"
     );
     if managed {
         let _ = ensure_asset_path(&app, &path).await;
@@ -1212,16 +1307,19 @@ async fn serve(app: Arc<App>, method: Method, uri: Uri) -> Response {
         if ensure_asset_path(&app, &path).await && fp.is_file() {
             // file materialized at expected path; serve normally below
         } else {
-            return (
-                StatusCode::NOT_FOUND,
-                [
-                    ("Content-Type", "text/plain"),
-                    ("Access-Control-Allow-Origin", "*"),
-                    ("Connection", "close"),
-                ],
-                "File not found",
-            )
-                .into_response();
+            if path == "/assets/libs/p5.js"
+                || path == "/p5.js"
+                || path == "/p5.min.js"
+                || path == "/lib/p5.js"
+                || path == "/lib/p5.min.js"
+                || path == "/libraries/p5.js"
+            {
+                return plain_status(
+                    StatusCode::NOT_FOUND,
+                    "p5.js not found in sketch or cache and could not be downloaded. Check p5.json version and network, then run :P5 setup.",
+                );
+            }
+            return plain_status(StatusCode::NOT_FOUND, "File not found");
         }
     }
     match tokio::fs::read(&fp).await {
@@ -1239,12 +1337,10 @@ async fn serve(app: Arc<App>, method: Method, uri: Uri) -> Response {
                 .body(Body::from(b))
                 .unwrap()
         }
-        Err(_) => (
+        Err(_) => plain_status(
             StatusCode::INTERNAL_SERVER_ERROR,
-            [("Connection", "close")],
             "An error occurred while processing your request",
-        )
-            .into_response(),
+        ),
     }
 }
 
@@ -1870,6 +1966,9 @@ async fn root(
     uri: Uri,
     body: bytes::Bytes,
 ) -> Response {
+    if method == Method::OPTIONS {
+        return cors_preflight();
+    }
     let path = uri.path();
     if method == Method::POST && path == "/api/console/log" {
         return console_log(State(app), body).await;
