@@ -10,6 +10,17 @@ _No unreleased changes._
 
 ---
 
+## v0.8.21
+
+### Fixed
+- **Live reload** — file watcher now detects new and modified watched files in sketchspaces, avoids initial-scan reload bursts, and reliably broadcasts reloads on save (with debounce/stability handling)
+- **CDP stream events** — connected `/api/cdp/stream` NDJSON events now include the event `type` in payloads so clients receive correctly typed console/network/debugger/perf/status events
+
+### Added
+- **Grimoire tasks** — `Grimoire.toml` with sigils for build, release build, install, check, Rust tests, Lua tests, and all tests (`grimoire cast ...`)
+
+---
+
 ## v0.7.13
 
 ### Added
