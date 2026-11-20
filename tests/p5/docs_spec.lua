@@ -10,10 +10,22 @@ describe("docs artifacts", function()
 		assert.matches("p5%-nvim%-commands", text)
 	end)
 
-	it("ships tags file for help navigation", function()
-		assert.is_true(core.is_file(doc .. "/tags"), "doc/tags missing")
-		local tags = vim.fn.readfile(doc .. "/tags")
-		assert.is_true(#tags > 0, "doc/tags should not be empty")
+	it("does not ship generated tags file and help tags can be generated", function()
+		-- Generated doc/tags should not be tracked (avoids stale/duplicate tag conflicts on update)
+		local tracked = vim.fn.system({ "git", "-C", root, "ls-files", "--error-unmatch", "doc/tags" })
+		assert.is_true(vim.v.shell_error ~= 0, "doc/tags should not be tracked in git")
+
+		-- Help navigation should work via generated tags without duplicate tag errors
+		local tmp = vim.fn.tempname()
+		vim.fn.mkdir(tmp .. "/doc", "p")
+		for _, f in ipairs(vim.fn.glob(doc .. "/*.txt", false, true)) do
+			vim.fn.writefile(vim.fn.readfile(f), tmp .. "/doc/" .. vim.fn.fnamemodify(f, ":t"))
+		end
+		vim.cmd("silent! helptags " .. vim.fn.fnameescape(tmp .. "/doc"))
+		assert.is_true(core.is_file(tmp .. "/doc/tags"), "generated doc/tags missing")
+		local tags = vim.fn.readfile(tmp .. "/doc/tags")
+		assert.is_true(#tags > 0, "generated doc/tags should not be empty")
+		vim.fn.delete(tmp, "rf")
 	end)
 
 	it("does not ship local doc generation pipeline", function()
