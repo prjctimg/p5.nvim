@@ -10,6 +10,22 @@ _No unreleased changes._
 
 ---
 
+## v0.8.22
+
+### Fixed
+- **Live reload** — embedded console/livereload inject scripts in `p5d` (with on-disk overrides) so live reload and browser hooks work with standalone/prebuilt binaries; `p5d` now accepts `--dir`/`--watch-dir` and the plugin starts it against the current sketchspace so the daemon serves/watches the correct directory
+- **Sketch assets & serving** — materialize/refresh essential sketch assets (`p5.json`, `tsconfig.json`, bundled types, `assets/libs/libs.js`, favicon) at expected paths, avoid runtime fallbacks, add CORS/OPTIONS preflight and common p5 path aliases, and auto-fetch/cache the resolved **unminified** `p5.js` release with validation/replacement of truncated/invalid copies
+- **Browser logs** — forward browser console output as `[browser] [LEVEL] ...` and echo it in Neovim
+- **IntelliSense/types** — generate global-mode p5 declarations from `p5.d.ts` at runtime (Lua/`p5d`) instead of shipping a static `global.d.ts`, keeping types in sync with automata-updated `p5.d.ts`; generated `libs.js` includes `// @ts-nocheck`
+- **p5.js version handling** — prefer valid cached/latest p5.js releases and remove hardcoded default p5.js version fallbacks
+- **Gists** — prefer the first comment by the gist author as the sketch description/title when a gist has no description (clone/list), instead of relying on a commit/gist-id fallback
+- **Cross-platform & Windows** — platform-aware cache dirs and browser detection, `p5d`/`p5d.exe` discovery, Windows-aware install flow, and improved path/OS handling for Windows compatibility
+
+### Changed
+- **Release/build** — build x86_64 targets with baseline `-C target-cpu=x86-64` for legacy hardware compatibility; expand release matrix (add `x86_64-windows`, `x86_64-darwin`) with Windows artifact packaging/checksums
+
+---
+
 ## v0.8.21
 
 ### Fixed
