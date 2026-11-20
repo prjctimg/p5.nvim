@@ -831,6 +831,98 @@ fn sketch_p5_version(dir: &FsPath) -> String {
     "2.3.1".to_string()
 }
 
+fn default_p5_json() -> String {
+    // Keep in sync with sketchspace defaults; version uses the server fallback.
+    r#"{
+  "version": "2.3.1",
+  "mode": "global",
+  "libs": {},
+  "includes": [
+    "sketch.js"
+  ]
+}
+"#
+    .to_string()
+}
+
+fn default_tsconfig_json() -> String {
+    r#"{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["DOM", "ES2022"],
+    "strict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.js",
+    "assets/types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ]
+}
+"#
+    .to_string()
+}
+
+async fn ensure_sketch_essentials(dir: &FsPath) {
+    // Ensure minimal sketchspace files exist at expected paths (do not overwrite existing).
+    let p5_json = dir.join("p5.json");
+    if !p5_json.is_file() {
+        let _ = tokio::fs::write(&p5_json, default_p5_json()).await;
+    }
+    let tsconfig = dir.join("tsconfig.json");
+    if !tsconfig.is_file() {
+        let _ = tokio::fs::write(&tsconfig, default_tsconfig_json()).await;
+    }
+    let sketch = dir.join("sketch.js");
+    if !sketch.is_file() {
+        let _ = tokio::fs::write(
+            &sketch,
+            "function setup() {\n  createCanvas(400, 400);\n}\n\nfunction draw() {\n  background(220);\n  circle(mouseX, mouseY, 50);\n}\n",
+        )
+        .await;
+    }
+    // Ensure bundled type definitions are available for IntelliSense.
+    let types_src = plugin_root().join("assets/types");
+    let types_dest = dir.join("assets/types");
+    if types_src.is_dir() {
+        let _ = tokio::fs::create_dir_all(&types_dest).await;
+        if let Ok(mut rd) = tokio::fs::read_dir(&types_src).await {
+            while let Ok(Some(e)) = rd.next_entry().await {
+                let p = e.path();
+                let Ok(ft) = e.file_type().await else { continue; };
+                if !ft.is_file() {
+                    continue;
+                }
+                let Some(name) = p.file_name() else { continue; };
+                let dest = types_dest.join(name);
+                if !dest.is_file() {
+                    let _ = tokio::fs::copy(&p, &dest).await;
+                }
+            }
+        }
+    }
+    // Ensure generated loader exists (content is deterministic).
+    let libs_js = dir.join("assets/libs/libs.js");
+    if !libs_js.is_file() {
+        if let Some(parent) = libs_js.parent() {
+            let _ = tokio::fs::create_dir_all(parent).await;
+        }
+        let _ = tokio::fs::write(&libs_js, libs_loader_js()).await;
+    }
+}
+
 fn is_valid_p5_js(path: &FsPath) -> bool {
     let Ok(md) = std::fs::metadata(path) else {
         return false;
@@ -909,6 +1001,16 @@ fn libs_loader_js() -> &'static str {
 }
 
 async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
+    if req_path == "/p5.json" {
+        let dest = app.dir.join("p5.json");
+        if dest.is_file() {
+            return true;
+        }
+        return tokio::fs::write(&dest, default_p5_json())
+            .await
+            .is_ok();
+    }
+
     let (dest, src, allow_rewrite_empty) = match req_path {
         "/assets/libs/p5.js" => {
             let ver = sketch_p5_version(&app.dir);
@@ -1097,7 +1199,8 @@ async fn serve(app: Arc<App>, method: Method, uri: Uri) -> Response {
     }
     let managed = matches!(
         path.as_str(),
-        "/assets/libs/p5.js"
+        "/p5.json"
+            | "/assets/libs/p5.js"
             | "/assets/libs/libs.js"
             | "/assets/favicon.ico"
             | "/favicon.ico"
@@ -1801,6 +1904,8 @@ async fn main() {
         dir: dir.clone(),
         cfg: Arc::new(RwLock::new(cfg.clone())),
     });
+    // Ensure essential sketch files/types exist so the sketch and IntelliSense can work.
+    ensure_sketch_essentials(&dir).await;
     if cfg.lr_enabled {
         if let Some((l, p)) = try_bind(cfg.lr_port).await {
             *app.lr_port.write().await = p;
