@@ -172,7 +172,11 @@ jobs:
                 [ "$attempt" -lt 5 ] || exit 1
                 sleep 10
               done
-              pacman -S --noconfirm --needed rust cmake clang lld mold git
+              for attempt in 1 2 3 4 5; do
+                pacman -S --noconfirm --needed rust cmake clang lld mold git && break
+                [ "$attempt" -lt 5 ] || exit 1
+                sleep 10
+              done
               export RUSTFLAGS="-C linker=gcc -C link-arg=-fuse-ld=mold"
               cargo build --manifest-path srv/Cargo.toml --release
             '
