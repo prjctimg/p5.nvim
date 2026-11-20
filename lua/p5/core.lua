@@ -153,8 +153,28 @@ C.write_workspace_config = function(config, project_dir)
 	C.write_json(config_file, config)
 end
 
-C.DEFAULT_P5_VERSION = "2.3.1"
 C.CDN = "https://cdn.jsdelivr.net/npm/p5"
+
+-- List cached p5.js versions that are valid, sorted newest-first.
+C.cached_p5_versions = function()
+	local dir = C.versions_dir()
+	local entries = fn.readdir(dir) or {}
+	local versions = {}
+	for _, name in ipairs(entries) do
+		if name:match("^%d+%.%d+%.%d+") and C.is_valid_p5_file(C.versioned_p5_path(name)) then
+			table.insert(versions, name)
+		end
+	end
+	table.sort(versions, function(a, b)
+		return C.cmp_version(a, b) > 0
+	end)
+	return versions
+end
+
+C.latest_cached_p5_version = function()
+	local versions = C.cached_p5_versions()
+	return versions[1]
+end
 
 C.notify = function(msg, level)
 	local level_map = {
@@ -340,7 +360,7 @@ C.fetch_latest_p5_version = function(callback)
 	end, { cache = false, timeout = 8 })
 end
 
--- Get p5 version (from override, project config, plugin config, or fallback)
+-- Get p5 version (from override, project config, plugin config, cache, or metadata)
 C.p5_version = function(override_version)
 	if override_version then
 		return override_version
@@ -352,48 +372,47 @@ C.p5_version = function(override_version)
 	if C.config and C.config.p5 and C.config.p5.version then
 		return C.config.p5.version
 	end
+	local cached_latest = C.latest_cached_p5_version()
+	if cached_latest then
+		return cached_latest
+	end
 	local meta = C.read_meta()
 	if meta.latest then
 		return meta.latest
 	end
-	return C.DEFAULT_P5_VERSION
+	return nil
 end
 
 -- Resolve version for create/setup. opts: { preferred, prompt, on_done(version, online) }
+-- Uses latest cached/known version automatically; does not prompt to select/upgrade.
 C.resolve_p5_version = function(opts)
 	opts = opts or {}
 	local preferred = opts.preferred or C.p5_version()
-	local do_prompt = opts.prompt
-	if do_prompt == nil then
-		do_prompt = not (C.config and C.config.p5 and C.config.p5.check_update == false)
-	end
 	local on_done = opts.on_done or function() end
 
-	local function finish(version, online)
-		on_done(version or preferred or C.DEFAULT_P5_VERSION, online)
+	local cached_latest = C.latest_cached_p5_version()
+	if cached_latest then
+		preferred = cached_latest
 	end
 
 	C.fetch_latest_p5_version(function(latest, online)
-		if not online or not latest then
-			finish(preferred, false)
+		if online and latest then
+			-- if latest is already cached, use it silently
+			if C.is_file(C.versioned_p5_path(latest)) and C.is_valid_p5_file(C.versioned_p5_path(latest)) then
+				on_done(latest, true)
+				return
+			end
+			-- prefer latest known release
+			on_done(latest, true)
 			return
 		end
-		if do_prompt and C.cmp_version(latest, preferred) > 0 then
-			vim.schedule(function()
-				vim.ui.select({
-					"Keep " .. preferred,
-					"Upgrade to " .. latest,
-				}, { prompt = "Newer p5.js available:" }, function(choice)
-					if choice and choice:find("Upgrade", 1, true) then
-						finish(latest, true)
-					else
-						finish(preferred, true)
-					end
-				end)
-			end)
-		else
-			finish(preferred, true)
+		-- offline: prefer valid cached latest, then preferred/known
+		local fallback = cached_latest or C.latest_cached_p5_version() or preferred
+		if not fallback then
+			local meta = C.read_meta()
+			fallback = meta.latest
 		end
+		on_done(fallback, false)
 	end)
 end
 
@@ -431,7 +450,18 @@ end
 
 -- Ensure versioned p5.js is in cache and copied to dest. callback(ok, from_cache)
 C.ensure_cached_p5 = function(version, dest, callback)
-	version = version or C.DEFAULT_P5_VERSION
+	version = version or C.p5_version() or C.latest_cached_p5_version()
+	if not version then
+		-- try to resolve latest online
+		C.fetch_latest_p5_version(function(latest)
+			if latest then
+				C.ensure_cached_p5(latest, dest, callback)
+			elseif callback then
+				callback(false, false)
+			end
+		end)
+		return
+	end
 	local cached = C.versioned_p5_path(version)
 	C.mkdir(vim.fs.dirname(cached))
 

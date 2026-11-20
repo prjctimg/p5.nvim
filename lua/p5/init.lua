@@ -32,7 +32,7 @@ I.config = {
 		mode = nil,
 	},
 	p5 = {
-		version = nil, -- default pin for new projects (nil => DEFAULT_P5_VERSION / cache)
+		version = nil, -- default pin for new projects (nil => auto/cache/latest)
 		check_update = true, -- prompt on create/setup when a newer p5.js exists
 	},
 	cdp = {

@@ -127,7 +127,7 @@ end
 P.scaffold = function(path, opts)
 	opts = opts or {}
 	local mode = opts.mode == "global" and "global" or "instance"
-	local version = opts.version or core.DEFAULT_P5_VERSION
+	local version = opts.version or core.p5_version() or core.latest_cached_p5_version() or "latest"
 
 	core.mkdir(path)
 	core.mkdir(path .. "/assets/libs")
@@ -198,7 +198,7 @@ P.create_project = function(name, opts)
 	end
 
 	local function run(mode)
-		local preferred = (P.config and P.config.p5 and P.config.p5.version) or core.DEFAULT_P5_VERSION
+		local preferred = (P.config and P.config.p5 and P.config.p5.version) or core.p5_version() or core.latest_cached_p5_version()
 		P.scaffold(path, { mode = mode, version = preferred })
 		after_scaffold(path, name, mode, preferred)
 	end
@@ -231,7 +231,7 @@ function P.create_project_continue(name, override_version)
 	if P.config and P.config.sketch and P.config.sketch.mode then
 		mode = P.config.sketch.mode
 	end
-	P.scaffold(path, { mode = mode, version = override_version or core.DEFAULT_P5_VERSION })
+	P.scaffold(path, { mode = mode, version = override_version or core.p5_version() or core.latest_cached_p5_version() or "latest" })
 	open_project(path, name)
 	if override_version then
 		P.hydrate_assets(path, override_version)
@@ -240,7 +240,7 @@ end
 
 P.ensure_assets = function(project_path, callback)
 	local config = core.read_workspace_config()
-	local version = (config and config.version) or core.DEFAULT_P5_VERSION
+	local version = (config and config.version) or core.p5_version() or core.latest_cached_p5_version() or "latest"
 	local p5_file = project_path .. "/assets/libs/p5.js"
 	local check = not (P.config and P.config.p5 and P.config.p5.check_update == false)
 

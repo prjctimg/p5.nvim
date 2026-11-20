@@ -125,6 +125,27 @@ S.start = function(port)
 	S.server_job = vim.fn.jobstart(cmd, {
 		detach = true,
 		cwd = buffer_dir,
+		on_stdout = function(_, data)
+			if not data then
+				return
+			end
+			for _, line in ipairs(data) do
+				if line ~= "" and line:match("^%[browser%]") then
+					local level = (line:match("^%[browser%]%s+%[(%w+)%]") or "LOG"):upper()
+					local hl = "Normal"
+					if level == "ERROR" then
+						hl = "ErrorMsg"
+					elseif level == "WARN" or level == "WARNING" then
+						hl = "WarningMsg"
+					elseif level == "INFO" then
+						hl = "MoreMsg"
+					end
+					vim.schedule(function()
+						pcall(vim.api.nvim_echo, { { line, hl } }, true, {})
+					end)
+				end
+			end
+		end,
 		on_stderr = function(_, data)
 			if data and #data > 0 and data[1] ~= "" then
 				local error_msg = table.concat(data, " ")

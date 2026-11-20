@@ -138,6 +138,17 @@ fn format_log(level: &str, msg: &str, src: &str) -> String {
     )
 }
 
+fn print_browser_log(level: &str, msg: &str) {
+    let lvl = match level.to_lowercase().as_str() {
+        "warning" => "warn",
+        "assert" => "error",
+        "debug" => "log",
+        other => other,
+    }
+    .to_uppercase();
+    println!("[browser] [{}] {}", lvl, msg);
+}
+
 struct ConsoleBuf {
     q: VecDeque<Value>,
     max: usize,
@@ -512,6 +523,8 @@ async fn cdp_msg(app: Arc<App>, d: Value) {
                 "info" => "info",
                 _ => "log",
             };
+            let msg = msgs.join(" ");
+            print_browser_log(level, &msg);
             let stack = frames(
                 p.get("stackTrace")
                     .and_then(|v| v.get("callFrames"))
@@ -519,7 +532,7 @@ async fn cdp_msg(app: Arc<App>, d: Value) {
             );
             let mut g = app.cdp.lock().await;
             if let Some(c) = g.as_mut() {
-                c.emit("console", json!({"level":level,"message":msgs.join(" "),"timestamp":now_ts(),"stack":stack}));
+                c.emit("console", json!({"level":level,"message":msg,"timestamp":now_ts(),"stack":stack}));
             }
         }
         "Runtime.exceptionThrown" => {
@@ -531,6 +544,7 @@ async fn cdp_msg(app: Arc<App>, d: Value) {
                 .or_else(|| exc.get("value").and_then(|v| v.as_str()))
                 .unwrap_or("Unknown error")
                 .to_string();
+            print_browser_log("error", &msg);
             let stack = frames(
                 ed.get("stackTrace")
                     .and_then(|v| v.get("callFrames"))
@@ -843,31 +857,98 @@ fn cache_dir() -> Option<PathBuf> {
         .map(|h| PathBuf::from(h).join(".cache/p5.nvim"))
 }
 
-fn sketch_p5_version(dir: &FsPath) -> String {
-    if let Ok(s) = std::fs::read_to_string(dir.join("p5.json")) {
+fn cmp_versions(a: &str, b: &str) -> std::cmp::Ordering {
+    let pa: Vec<u64> = a
+        .split(|c: char| !c.is_ascii_digit())
+        .filter(|s| !s.is_empty())
+        .filter_map(|s| s.parse().ok())
+        .collect();
+    let pb: Vec<u64> = b
+        .split(|c: char| !c.is_ascii_digit())
+        .filter(|s| !s.is_empty())
+        .filter_map(|s| s.parse().ok())
+        .collect();
+    let n = pa.len().max(pb.len());
+    for i in 0..n {
+        let x = *pa.get(i).unwrap_or(&0);
+        let y = *pb.get(i).unwrap_or(&0);
+        if x != y {
+            return x.cmp(&y);
+        }
+    }
+    std::cmp::Ordering::Equal
+}
+
+fn latest_cached_p5_version() -> Option<String> {
+    let cd = cache_dir()?;
+    let versions_dir = cd.join("versions");
+    let rd = std::fs::read_dir(versions_dir).ok()?;
+    let mut best: Option<String> = None;
+    for e in rd.flatten() {
+        let name = e.file_name().to_string_lossy().to_string();
+        if !name.chars().next().map(|c| c.is_ascii_digit()).unwrap_or(false) {
+            continue;
+        }
+        let p = e.path().join("p5.js");
+        if !is_valid_p5_js(&p) {
+            continue;
+        }
+        if let Some(ref b) = best {
+            if cmp_versions(&name, b) == std::cmp::Ordering::Greater {
+                best = Some(name);
+            }
+        } else {
+            best = Some(name);
+        }
+    }
+    best
+}
+
+async fn fetch_latest_p5_version_online() -> Option<String> {
+    let client = reqwest::Client::builder()
+        .timeout(Duration::from_secs(8))
+        .build()
+        .ok()?;
+    let resp = client
+        .get("https://registry.npmjs.org/p5/latest")
+        .send()
+        .await
+        .ok()?;
+    if !resp.status().is_success() {
+        return None;
+    }
+    let v: Value = resp.json().await.ok()?;
+    v.get("version")
+        .and_then(|x| x.as_str())
+        .map(|s| s.to_string())
+}
+
+async fn resolve_p5_version(dir: &FsPath) -> Option<String> {
+    if let Ok(s) = tokio::fs::read_to_string(dir.join("p5.json")).await {
         if let Ok(v) = serde_json::from_str::<Value>(&s) {
             if let Some(ver) = v.get("version").and_then(|x| x.as_str()) {
-                if !ver.is_empty() {
-                    return ver.to_string();
+                if !ver.is_empty() && ver != "latest" {
+                    return Some(ver.to_string());
                 }
             }
         }
     }
-    "2.3.1".to_string()
+    if let Some(v) = latest_cached_p5_version() {
+        return Some(v);
+    }
+    fetch_latest_p5_version_online().await
 }
 
 fn default_p5_json() -> String {
-    // Keep in sync with sketchspace defaults; version uses the server fallback.
-    r#"{
-  "version": "2.3.1",
-  "mode": "global",
-  "libs": {},
-  "includes": [
-    "sketch.js"
-  ]
-}
-"#
+    let version = latest_cached_p5_version().unwrap_or_default();
+    json!({
+        "version": version,
+        "mode": "global",
+        "libs": {},
+        "includes": ["sketch.js"]
+    })
     .to_string()
+        + "\n"
 }
 
 fn default_tsconfig_json() -> String {
@@ -1088,40 +1169,39 @@ async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
         "/p5.js" | "/p5.min.js" | "/lib/p5.js" | "/lib/p5.min.js" | "/libraries/p5.js"
     );
 
-    let (dest, src, allow_rewrite_empty) = match req_path {
-        "/assets/libs/p5.js" => {
-            let ver = sketch_p5_version(&app.dir);
-            let Some(cd) = cache_dir() else { return false; };
-            (
-                app.dir.join("assets/libs/p5.js"),
-                Some(cd.join("versions").join(ver).join("p5.js")),
-                false,
-            )
-        }
-        p if is_p5_alias => {
-            let ver = sketch_p5_version(&app.dir);
-            let Some(cd) = cache_dir() else { return false; };
-            let rel = p.trim_start_matches('/');
-            (
-                app.dir.join(rel),
-                Some(cd.join("versions").join(ver).join("p5.js")),
-                false,
-            )
-        }
-        "/assets/libs/libs.js" => (app.dir.join("assets/libs/libs.js"), None, true),
-        "/assets/favicon.ico" | "/favicon.ico" => (
-            app.dir.join(if req_path == "/favicon.ico" {
-                "favicon.ico"
-            } else {
-                "assets/favicon.ico"
-            }),
-            Some(plugin_root().join("assets/favicon.ico")),
-            true,
-        ),
-        _ => return false,
-    };
-
     let is_p5 = req_path == "/assets/libs/p5.js" || is_p5_alias;
+
+    let (dest, cached_src, allow_rewrite_empty) = if is_p5 {
+        let ver = match resolve_p5_version(&app.dir).await {
+            Some(v) => v,
+            None => return false,
+        };
+        let Some(cd) = cache_dir() else { return false; };
+        let rel = if req_path == "/assets/libs/p5.js" {
+            "assets/libs/p5.js".to_string()
+        } else {
+            req_path.trim_start_matches('/').to_string()
+        };
+        (
+            app.dir.join(rel),
+            Some((cd.join("versions").join(&ver).join("p5.js"), ver)),
+            false,
+        )
+    } else {
+        match req_path {
+            "/assets/libs/libs.js" => (app.dir.join("assets/libs/libs.js"), None, true),
+            "/assets/favicon.ico" | "/favicon.ico" => (
+                app.dir.join(if req_path == "/favicon.ico" {
+                    "favicon.ico"
+                } else {
+                    "assets/favicon.ico"
+                }),
+                Some((plugin_root().join("assets/favicon.ico"), String::new())),
+                true,
+            ),
+            _ => return false,
+        }
+    };
 
     let needs_write = if !dest.is_file() {
         true
@@ -1149,9 +1229,8 @@ async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
             .map(|_| true)
             .unwrap_or(false);
     }
-    if let Some(src) = src {
+    if let Some((src, ver)) = cached_src {
         if is_p5 {
-            let ver = sketch_p5_version(&app.dir);
             if !src.is_file() || !is_valid_p5_js(&src) {
                 // Fetch correct unminified release into cache if missing/invalid.
                 let _ = download_p5_js_to_cache(&ver, &src).await;
@@ -1365,6 +1444,15 @@ async fn console_log(State(app): State<Arc<App>>, body: bytes::Bytes) -> Respons
                         if e.get("timestamp").is_none() {
                             e["timestamp"] = json!(now_iso());
                         }
+                        let level = e
+                            .get("level")
+                            .and_then(|x| x.as_str())
+                            .unwrap_or("log");
+                        let msg = e
+                            .get("message")
+                            .and_then(|x| x.as_str())
+                            .unwrap_or("");
+                        print_browser_log(level, msg);
                         b.push(e.clone());
                     }
                 }
@@ -1372,6 +1460,9 @@ async fn console_log(State(app): State<Arc<App>>, body: bytes::Bytes) -> Respons
                 if v.get("timestamp").is_none() {
                     v["timestamp"] = json!(now_iso());
                 }
+                let level = v.get("level").and_then(|x| x.as_str()).unwrap_or("log");
+                let msg = v.get("message").and_then(|x| x.as_str()).unwrap_or("");
+                print_browser_log(level, msg);
                 b.push(v);
             }
             jok(json!({"status":"received"}))
