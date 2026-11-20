@@ -189,7 +189,13 @@ C.notify = function(msg, level)
 end
 
 C.cache_dir = function()
-	local cache_home = os.getenv("XDG_CACHE_HOME") or fn.expand("~/.cache")
+	local cache_home = os.getenv("XDG_CACHE_HOME")
+	if (not cache_home or cache_home == "") and fn.has("win32") == 1 then
+		cache_home = os.getenv("LOCALAPPDATA") or os.getenv("TEMP") or fn.stdpath("cache")
+	end
+	if not cache_home or cache_home == "" then
+		cache_home = fn.expand("~/.cache")
+	end
 	local dir = cache_home .. "/p5.nvim"
 	fn.mkdir(dir, "p")
 	return dir
@@ -555,7 +561,12 @@ end
 
 -- Find Chrome/Chromium browser in PATH
 C.find_chrome = function()
-	local candidates = { "chromium", "chromium-browser", "google-chrome", "chrome" }
+	local candidates
+	if fn.has("win32") == 1 then
+		candidates = { "chrome", "msedge", "chromium", "google-chrome" }
+	else
+		candidates = { "chromium", "chromium-browser", "google-chrome", "chrome", "google-chrome-stable" }
+	end
 	for _, c in ipairs(candidates) do
 		if C.is_cmd(c) then
 			return c

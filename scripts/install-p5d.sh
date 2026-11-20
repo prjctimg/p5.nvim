@@ -4,31 +4,24 @@ set -euo pipefail
 PLUGIN_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BIN_NAME="p5d"
 INSTALL_DIR="${HOME}/.local/bin"
-DEST_LOCAL="$PLUGIN_ROOT/$BIN_NAME"
-DEST_PATH="$INSTALL_DIR/$BIN_NAME"
 
 log() { printf '[p5.nvim] %s\n' "$*" >&2; }
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
-install_copy() {
-  local src="$1"
-  chmod +x "$src"
-  mkdir -p "$INSTALL_DIR"
-  rm -f "$DEST_PATH" "$DEST_LOCAL"
-  cp "$src" "$DEST_PATH"
-  cp "$src" "$DEST_LOCAL"
-  chmod +x "$DEST_PATH" "$DEST_LOCAL"
-  log "Installed $BIN_NAME to $DEST_PATH and $DEST_LOCAL"
-}
-
 detect_platform() {
-  local os arch musl
-  os="$(uname -s 2>/dev/null || echo unknown)"
+  local os arch musl uname_s
+  uname_s="$(uname -s 2>/dev/null || echo unknown)"
+  case "$uname_s" in
+    Linux*)   os="Linux" ;;
+    Darwin*)  os="Darwin" ;;
+    MINGW*|MSYS*|CYGWIN*) os="Windows" ;;
+    *)        os="$uname_s" ;;
+  esac
   arch="$(uname -m 2>/dev/null || echo unknown)"
   case "$arch" in
-    amd64) arch="x86_64" ;;
-    arm64) arch="aarch64" ;;
+    amd64|x86_64) arch="x86_64" ;;
+    arm64|aarch64) arch="aarch64" ;;
   esac
   musl=""
   if [ "$os" = "Linux" ]; then
@@ -45,15 +38,39 @@ detect_platform() {
     Linux:aarch64:1) echo "aarch64-linux-musl" ;;
     Linux:aarch64:)  echo "aarch64-linux" ;;
     Darwin:aarch64:) echo "aarch64-darwin" ;;
+    Windows:x86_64:) echo "x86_64-windows" ;;
     *)               echo "" ;;
   esac
+}
+
+EXE_SUFFIX=""
+case "$(uname -s 2>/dev/null || echo unknown)" in
+  MINGW*|MSYS*|CYGWIN*) EXE_SUFFIX=".exe" ;;
+esac
+DEST_LOCAL="$PLUGIN_ROOT/${BIN_NAME}${EXE_SUFFIX}"
+DEST_PATH="$INSTALL_DIR/${BIN_NAME}${EXE_SUFFIX}"
+
+install_copy() {
+  local src="$1"
+  chmod +x "$src" 2>/dev/null || true
+  mkdir -p "$INSTALL_DIR"
+  rm -f "$DEST_PATH" "$DEST_LOCAL"
+  cp "$src" "$DEST_PATH"
+  cp "$src" "$DEST_LOCAL"
+  chmod +x "$DEST_PATH" "$DEST_LOCAL" 2>/dev/null || true
+  log "Installed ${BIN_NAME}${EXE_SUFFIX} to $DEST_PATH and $DEST_LOCAL"
 }
 
 download_prebuilt() {
   local platform="$1"
   [ -n "$platform" ] || return 1
 
-  local url="https://github.com/prjctimg/p5.nvim/releases/latest/download/${BIN_NAME}-${platform}.tar.gz"
+  local ext="tar.gz"
+  if [[ "$platform" == *windows* ]]; then
+    ext="zip"
+  fi
+  local archive="${BIN_NAME}-${platform}.${ext}"
+  local url="https://github.com/prjctimg/p5.nvim/releases/latest/download/${archive}"
   local tmp
   tmp="$(mktemp -d 2>/dev/null || mktemp -d -t p5d)"
 
@@ -62,20 +79,31 @@ download_prebuilt() {
 
   log "Trying prebuilt binary: $platform"
   if have curl; then
-    curl -fsSL "$url" -o "$tmp/p5d.tar.gz" || return 1
+    curl -fsSL "$url" -o "$tmp/$archive" || return 1
   elif have wget; then
-    wget -qO "$tmp/p5d.tar.gz" "$url" || return 1
+    wget -qO "$tmp/$archive" "$url" || return 1
   else
     return 1
   fi
 
-  have tar || return 1
-  tar -xzf "$tmp/p5d.tar.gz" -C "$tmp" || return 1
+  if [[ "$ext" == "zip" ]]; then
+    if have unzip; then
+      unzip -q "$tmp/$archive" -d "$tmp" || return 1
+    elif have 7z; then
+      7z x "$tmp/$archive" -o"$tmp" >/dev/null || return 1
+    else
+      return 1
+    fi
+  else
+    have tar || return 1
+    tar -xzf "$tmp/$archive" -C "$tmp" || return 1
+  fi
 
-  local extracted="$tmp/${BIN_NAME}-${platform}/${BIN_NAME}"
+  local binfile="${BIN_NAME}${EXE_SUFFIX}"
+  local extracted="$tmp/${BIN_NAME}-${platform}/${binfile}"
   if [ ! -f "$extracted" ]; then
     # fallback: search for binary in extracted contents
-    extracted="$(find "$tmp" -type f -name "$BIN_NAME" | head -n 1 || true)"
+    extracted="$(find "$tmp" -type f \( -name "$BIN_NAME" -o -name "${BIN_NAME}.exe" \) | head -n 1 || true)"
   fi
   [ -n "$extracted" ] && [ -f "$extracted" ] || return 1
 
@@ -90,11 +118,12 @@ build_local() {
     exit 1
   fi
   (cd "$PLUGIN_ROOT/srv" && cargo build --release)
-  if [ ! -f "$PLUGIN_ROOT/srv/target/release/$BIN_NAME" ]; then
-    log "Build finished but binary not found at srv/target/release/$BIN_NAME"
+  local binfile="${BIN_NAME}${EXE_SUFFIX}"
+  if [ ! -f "$PLUGIN_ROOT/srv/target/release/$binfile" ]; then
+    log "Build finished but binary not found at srv/target/release/$binfile"
     exit 1
   fi
-  install_copy "$PLUGIN_ROOT/srv/target/release/$BIN_NAME"
+  install_copy "$PLUGIN_ROOT/srv/target/release/$binfile"
 }
 
 main() {

@@ -52,6 +52,7 @@ jobs:
     env:
       RUSTFLAGS: >-
         ${{ contains(matrix.platform, 'musl') && '-C target-feature=-crt-static' || '' }}
+        ${{ startsWith(matrix.platform, 'x86_64') && '-C target-cpu=x86-64' || '' }}
         ${{ matrix.link_override }}
         ${{ matrix.mold_arg }}
     strategy:
@@ -72,6 +73,12 @@ jobs:
             mold_arg: -C link-arg=-fuse-ld=mold
           - os: macos-latest
             platform: aarch64-darwin
+            container: null
+            family: macos
+            link_override: null
+            mold_arg: null
+          - os: macos-15-intel
+            platform: x86_64-darwin
             container: null
             family: macos
             link_override: null
@@ -100,6 +107,12 @@ jobs:
             family: musl
             link_override: -C linker=gcc
             mold_arg: -C link-arg=-fuse-ld=mold
+          - os: windows-latest
+            platform: x86_64-windows
+            container: null
+            family: windows
+            link_override: null
+            mold_arg: null
     steps:
       - name: Bootstrap tooling (Debian 12 container)
         if: matrix.container == 'debian:12'
@@ -142,6 +155,10 @@ jobs:
         run: |
           set -euo pipefail
           platform="${{ matrix.platform }}"
+          cpu_flag=""
+          if [[ "$platform" == x86_64* ]]; then
+            cpu_flag="-C target-cpu=x86-64"
+          fi
           docker run --rm \
             -v "$PWD":/work \
             -w /work \
@@ -150,7 +167,7 @@ jobs:
               apk add --no-cache bash curl build-base cmake pkgconfig clang lld mold git
               curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
               export PATH="$HOME/.cargo/bin:$PATH"
-              export RUSTFLAGS="-C target-feature=-crt-static -C linker=gcc -C link-arg=-fuse-ld=mold"
+              export RUSTFLAGS="-C target-feature=-crt-static '"$cpu_flag"' -C linker=gcc -C link-arg=-fuse-ld=mold"
               cargo build --manifest-path srv/Cargo.toml --release
             '
 
@@ -187,16 +204,24 @@ jobs:
           set -euo pipefail
           platform="${{ matrix.platform }}"
           mkdir -p dist "p5d-${platform}"
-          cp srv/target/release/p5d "p5d-${platform}/p5d"
-          chmod +x "p5d-${platform}/p5d"
+          bin="p5d"
+          if [[ "$platform" == *windows* ]]; then
+            bin="p5d.exe"
+          fi
+          cp "srv/target/release/${bin}" "p5d-${platform}/${bin}"
+          chmod +x "p5d-${platform}/${bin}" 2>/dev/null || true
           cp LICENSE README.md "p5d-${platform}/" 2>/dev/null || true
-          tar czf "dist/p5d-${platform}.tar.gz" "p5d-${platform}"
+          if [[ "$platform" == *windows* ]]; then
+            (cd dist && 7z a "p5d-${platform}.zip" "../p5d-${platform}" >/dev/null)
+          else
+            tar czf "dist/p5d-${platform}.tar.gz" "p5d-${platform}"
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
           name: p5d-${{ matrix.platform }}
-          path: dist/p5d-${{ matrix.platform }}.tar.gz
+          path: dist/p5d-${{ matrix.platform }}.*
           if-no-files-found: error
 
   release:
@@ -215,7 +240,7 @@ jobs:
       - name: Generate checksums
         run: |
           cd artifacts
-          sha256sum p5d-*.tar.gz > checksums.txt
+          sha256sum p5d-*.tar.gz p5d-*.zip > checksums.txt
           ls -lh
           cat checksums.txt
 
@@ -227,7 +252,7 @@ jobs:
         run: |
           set -euo pipefail
           shopt -s nullglob
-          files=(artifacts/p5d-*.tar.gz artifacts/checksums.txt)
+          files=(artifacts/p5d-*.tar.gz artifacts/p5d-*.zip artifacts/checksums.txt)
           args=(--generate-notes)
           if [[ "$TAG" == *nightly* ]]; then
             args+=(--prerelease)

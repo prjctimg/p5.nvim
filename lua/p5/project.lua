@@ -86,6 +86,97 @@ P.copy_favicon = function(project_path)
 	end
 end
 
+local function generate_global_dts(p5_dts_path, out_path)
+	if not core.is_file(p5_dts_path) then
+		return false
+	end
+	local ok_read, lines = pcall(vim.fn.readfile, p5_dts_path)
+	if not ok_read or type(lines) ~= "table" then
+		return false
+	end
+	local content = table.concat(lines, "\n")
+
+	-- Find "declare class p5 {" block
+	local s, e = content:find("declare class p5%s*{")
+	if not s then
+		return false
+	end
+	local i = e -- position of '{'
+	local depth = 0
+	local class_end = nil
+	while i <= #content do
+		local c = content:sub(i, i)
+		if c == "{" then
+			depth = depth + 1
+		elseif c == "}" then
+			depth = depth - 1
+			if depth == 0 then
+				class_end = i
+				break
+			end
+		end
+		i = i + 1
+	end
+	if not class_end then
+		return false
+	end
+	local class_body = content:sub(s, class_end)
+
+	local skip = {
+		setup = true, draw = true, preload = true, remove = true,
+		mousePressed = true, mouseReleased = true, mouseClicked = true, mouseMoved = true,
+		mouseDragged = true, mouseWheel = true, doubleClicked = true,
+		keyPressed = true, keyReleased = true, keyTyped = true,
+		touchStarted = true, touchMoved = true, touchEnded = true,
+		windowResized = true, deviceMoved = true, deviceTurned = true, deviceShaken = true,
+		deviceOrientationChanged = true,
+	}
+	local mutable = {
+		mouseX = true, mouseY = true, pmouseX = true, pmouseY = true, winMouseX = true, winMouseY = true,
+		pwinMouseX = true, pwinMouseY = true, mouseButton = true, mouseIsPressed = true, key = true,
+		keyCode = true, keyIsPressed = true, touches = true, pointers = true, frameCount = true,
+		deltaTime = true, focused = true, displayWidth = true, displayHeight = true, windowWidth = true,
+		windowHeight = true, width = true, height = true, drawingContext = true, deviceOrientation = true,
+		accelerationX = true, accelerationY = true, accelerationZ = true, pAccelerationX = true,
+		pAccelerationY = true, pAccelerationZ = true, rotationX = true, rotationY = true, rotationZ = true,
+		pRotationX = true, pRotationY = true, pRotationZ = true, pixels = true, textFont = true,
+		textSize = true, textLeading = true, textAlign = true, textStyle = true, textWrap = true,
+		rectMode = true, ellipseMode = true, imageMode = true, colorMode = true, angleMode = true,
+		frameRate = true,
+	}
+
+	local members = {}
+	local seen = {}
+	for line in class_body:gmatch("[^\n]+") do
+		-- match class member declarations like "  name(...)" or "  name:" or "  name?:"
+		local name = line:match("^  [%w%s]*([A-Za-z_$][A-Za-z0-9_$]*)%s*[<(%?:]")
+		if name and name ~= "constructor" and not name:match("^_") and not seen[name] then
+			seen[name] = true
+			table.insert(members, name)
+		end
+	end
+
+	local out = {
+		"// Auto-generated from p5.d.ts: p5.js global mode declarations",
+		'import type _p5 from "./p5";',
+		"",
+		"declare global {",
+	}
+	for _, name in ipairs(members) do
+		if not skip[name] then
+			local decl = mutable[name] and "var" or "const"
+			table.insert(out, string.format('  %s %s: _p5["%s"];', decl, name, name))
+		end
+	end
+	table.insert(out, "}")
+	table.insert(out, "")
+	table.insert(out, "export {};")
+	table.insert(out, "")
+
+	local ok_write = pcall(vim.fn.writefile, out, out_path)
+	return ok_write
+end
+
 P.copy_types = function(project_path)
 	local src_dir = core.asset_dir() .. "/types"
 	local dest_dir = project_path .. "/assets/types"
@@ -96,12 +187,21 @@ P.copy_types = function(project_path)
 	local files = vim.fn.readdir(src_dir) or {}
 	local copied = 0
 	for _, name in ipairs(files) do
-		if name:match("%.d%.ts$") then
+		if name:match("%.d%.ts$") and name ~= "global.d.ts" then
 			local ok = vim.uv.fs_copyfile(src_dir .. "/" .. name, dest_dir .. "/" .. name)
 			if ok then
 				copied = copied + 1
 			end
 		end
+	end
+	-- Generate global.d.ts from p5.d.ts (do not hardcode; stays in sync with automata updates)
+	local p5_dts = dest_dir .. "/p5.d.ts"
+	if not core.is_file(p5_dts) then
+		p5_dts = src_dir .. "/p5.d.ts"
+	end
+	if core.is_file(p5_dts) then
+		generate_global_dts(p5_dts, dest_dir .. "/global.d.ts")
+		copied = copied + 1
 	end
 	return copied > 0
 end

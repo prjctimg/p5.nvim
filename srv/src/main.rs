@@ -852,9 +852,28 @@ fn cache_dir() -> Option<PathBuf> {
             return Some(PathBuf::from(xdg).join("p5.nvim"));
         }
     }
+    #[cfg(windows)]
+    {
+        if let Ok(local) = std::env::var("LOCALAPPDATA") {
+            if !local.is_empty() {
+                return Some(PathBuf::from(local).join("p5.nvim"));
+            }
+        }
+        if let Ok(tmp) = std::env::var("TEMP") {
+            if !tmp.is_empty() {
+                return Some(PathBuf::from(tmp).join("p5.nvim"));
+            }
+        }
+        if let Ok(profile) = std::env::var("USERPROFILE") {
+            if !profile.is_empty() {
+                return Some(PathBuf::from(profile).join(".cache").join("p5.nvim"));
+            }
+        }
+    }
     std::env::var("HOME")
         .ok()
-        .map(|h| PathBuf::from(h).join(".cache/p5.nvim"))
+        .or_else(|| std::env::var("USERPROFILE").ok())
+        .map(|h| PathBuf::from(h).join(".cache").join("p5.nvim"))
 }
 
 fn cmp_versions(a: &str, b: &str) -> std::cmp::Ordering {
@@ -981,6 +1000,80 @@ fn default_tsconfig_json() -> String {
     .to_string()
 }
 
+fn generate_global_dts(p5_dts: &FsPath, out_path: &FsPath) -> bool {
+    let Ok(content) = std::fs::read_to_string(p5_dts) else {
+        return false;
+    };
+    let Some(start) = content.find("declare class p5") else {
+        return false;
+    };
+    let Some(brace_rel) = content[start..].find('{') else {
+        return false;
+    };
+    let brace = start + brace_rel;
+    let mut depth = 0i32;
+    let mut end = None;
+    for (idx, ch) in content[brace..].char_indices() {
+        match ch {
+            '{' => depth += 1,
+            '}' => {
+                depth -= 1;
+                if depth == 0 {
+                    end = Some(brace + idx + 1);
+                    break;
+                }
+            }
+            _ => {}
+        }
+    }
+    let Some(end) = end else {
+        return false;
+    };
+    let class_body = &content[start..end];
+
+    let skip: std::collections::HashSet<&str> = [
+        "setup", "draw", "preload", "remove",
+        "mousePressed", "mouseReleased", "mouseClicked", "mouseMoved", "mouseDragged", "mouseWheel", "doubleClicked",
+        "keyPressed", "keyReleased", "keyTyped",
+        "touchStarted", "touchMoved", "touchEnded",
+        "windowResized", "deviceMoved", "deviceTurned", "deviceShaken", "deviceOrientationChanged",
+    ].into_iter().collect();
+    let mutable: std::collections::HashSet<&str> = [
+        "mouseX","mouseY","pmouseX","pmouseY","winMouseX","winMouseY","pwinMouseX","pwinMouseY",
+        "mouseButton","mouseIsPressed","key","keyCode","keyIsPressed","touches","pointers",
+        "frameCount","deltaTime","focused","displayWidth","displayHeight","windowWidth","windowHeight",
+        "width","height","drawingContext","deviceOrientation","accelerationX","accelerationY","accelerationZ",
+        "pAccelerationX","pAccelerationY","pAccelerationZ","rotationX","rotationY","rotationZ",
+        "pRotationX","pRotationY","pRotationZ","pixels","textFont","textSize","textLeading","textAlign",
+        "textStyle","textWrap","rectMode","ellipseMode","imageMode","colorMode","angleMode","frameRate",
+    ].into_iter().collect();
+
+    let re = match regex::Regex::new(r"(?m)^  (?:[A-Za-z]+\s+)*([A-Za-z_$][A-Za-z0-9_$]*)\s*[<(\?:]") {
+        Ok(r) => r,
+        Err(_) => return false,
+    };
+    let mut out = String::from("// Auto-generated from p5.d.ts: p5.js global mode declarations\n");
+    out.push_str("import type _p5 from \"./p5\";\n\n");
+    out.push_str("declare global {\n");
+    let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
+    for cap in re.captures_iter(class_body) {
+        let Some(m) = cap.get(1) else { continue; };
+        let name = m.as_str();
+        if name == "constructor" || name.starts_with('_') || skip.contains(name) || seen.contains(name) {
+            continue;
+        }
+        seen.insert(name.to_string());
+        let decl = if mutable.contains(name) { "var" } else { "const" };
+        out.push_str(&format!("  {} {}: _p5[\"{}\"];\n", decl, name, name));
+    }
+    out.push_str("}\n\nexport {};\n");
+
+    if let Some(parent) = out_path.parent() {
+        let _ = std::fs::create_dir_all(parent);
+    }
+    std::fs::write(out_path, out).is_ok()
+}
+
 async fn ensure_sketch_essentials(dir: &FsPath) {
     // Ensure minimal sketchspace files exist at expected paths (do not overwrite existing).
     let p5_json = dir.join("p5.json");
@@ -1012,16 +1105,36 @@ async fn ensure_sketch_essentials(dir: &FsPath) {
                     continue;
                 }
                 let Some(name) = p.file_name() else { continue; };
+                if name == "global.d.ts" {
+                    continue; // generated from p5.d.ts; do not copy/hardcode
+                }
                 let dest = types_dest.join(name);
                 if !dest.is_file() {
                     let _ = tokio::fs::copy(&p, &dest).await;
                 }
             }
         }
+        // Always (re)generate global.d.ts from p5.d.ts so it stays in sync with automata updates.
+        let p5_dts = if types_dest.join("p5.d.ts").is_file() {
+            types_dest.join("p5.d.ts")
+        } else {
+            types_src.join("p5.d.ts")
+        };
+        if p5_dts.is_file() {
+            let _ = generate_global_dts(&p5_dts, &types_dest.join("global.d.ts"));
+        }
     }
     // Ensure generated loader exists (content is deterministic).
     let libs_js = dir.join("assets/libs/libs.js");
-    if !libs_js.is_file() {
+    let libs_needs_write = if !libs_js.is_file() {
+        true
+    } else {
+        tokio::fs::read_to_string(&libs_js)
+            .await
+            .map(|s| !s.starts_with("// @ts-nocheck"))
+            .unwrap_or(true)
+    };
+    if libs_needs_write {
         if let Some(parent) = libs_js.parent() {
             let _ = tokio::fs::create_dir_all(parent).await;
         }
@@ -1057,7 +1170,8 @@ fn is_valid_p5_js(path: &FsPath) -> bool {
 }
 
 fn libs_loader_js() -> &'static str {
-    r#"// Auto-generated - reads libraries from p5.json at runtime
+    r#"// @ts-nocheck
+// Auto-generated - reads libraries from p5.json at runtime
 (function() {
   function loadLibs() {
     fetch('p5.json')

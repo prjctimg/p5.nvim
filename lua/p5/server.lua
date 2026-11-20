@@ -26,15 +26,19 @@ S.config = {
 
 local function server_bin()
 	local root = core.plugin_root()
-	local candidates = {
-		root .. "/p5d",
-		root .. "/srv/target/release/p5d",
-		root .. "/srv/target/debug/p5d",
-		root .. "/srv/p5d",
+	local names = { "p5d", "p5d.exe" }
+	local bases = {
+		root .. "/",
+		root .. "/srv/target/release/",
+		root .. "/srv/target/debug/",
+		root .. "/srv/",
 	}
-	for _, p in ipairs(candidates) do
-		if core.is_file(p) then
-			return p
+	for _, base in ipairs(bases) do
+		for _, name in ipairs(names) do
+			local p = base .. name
+			if core.is_file(p) then
+				return p
+			end
 		end
 	end
 	local in_path = vim.fn.exepath("p5d")

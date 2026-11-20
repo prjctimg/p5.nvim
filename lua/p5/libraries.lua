@@ -213,6 +213,7 @@ L.generate_libs_js = function(project_path)
 	local libs_js = l_dir .. "/libs.js"
 
 	local js_content = [[
+// @ts-nocheck
 // Auto-generated - reads libraries from p5.json at runtime
 (function() {
   function loadLibs() {
