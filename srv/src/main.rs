@@ -842,8 +842,19 @@ fn is_valid_p5_js(path: &FsPath) -> bool {
     let Ok(b) = std::fs::read(path) else {
         return false;
     };
-    let end = String::from_utf8_lossy(&b[len.saturating_sub(64) as usize..]);
+    let head = String::from_utf8_lossy(&b[..b.len().min(256)]);
+    if head.contains("<!DOCTYPE html>")
+        || head.contains("<html")
+        || head.trim_start().starts_with("Not found")
+    {
+        return false;
+    }
+    let start = len.saturating_sub(256) as usize;
+    let end = String::from_utf8_lossy(&b[start..]);
     let trimmed = end.trim_end();
+    if trimmed.is_empty() {
+        return false;
+    }
     trimmed.ends_with(';') || trimmed.ends_with('}') || trimmed.ends_with(')')
 }
 

@@ -397,13 +397,45 @@ C.resolve_p5_version = function(opts)
 	end)
 end
 
+-- Validate core p5.js file (unminified preferred). Rejects obvious truncation/corruption.
+C.is_valid_p5_file = function(path)
+	if not path or not C.is_file(path) then
+		return false
+	end
+	local size = fn.getfsize(path)
+	if not size or size < 50000 then
+		return false
+	end
+	local fp = io.open(path, "rb")
+	if not fp then
+		return false
+	end
+	local head = fp:read(256) or ""
+	fp:seek("end", -256)
+	local tail = fp:read(256) or ""
+	fp:close()
+	-- reject HTML/error pages
+	if head:match("<!DOCTYPE html>") or head:match("<html") or head:match("^%s*Not found") then
+		return false
+	end
+	local trimmed = tail:gsub("%s+$", "")
+	if trimmed == "" then
+		return false
+	end
+	local last = trimmed:sub(-1)
+	if last ~= ";" and last ~= "}" and last ~= ")" then
+		return false
+	end
+	return true
+end
+
 -- Ensure versioned p5.js is in cache and copied to dest. callback(ok, from_cache)
 C.ensure_cached_p5 = function(version, dest, callback)
 	version = version or C.DEFAULT_P5_VERSION
 	local cached = C.versioned_p5_path(version)
 	C.mkdir(vim.fs.dirname(cached))
 
-	local function copy_to_dest(ok)
+	local function copy_to_dest(ok, from_cache)
 		if not ok then
 			if callback then
 				callback(false, false)
@@ -412,40 +444,36 @@ C.ensure_cached_p5 = function(version, dest, callback)
 		end
 		if dest then
 			C.mkdir(vim.fs.dirname(dest))
-			local coped = vim.uv.fs_copyfile(cached, dest)
+			local copied = vim.uv.fs_copyfile(cached, dest)
 			if callback then
-				callback(coped and true or false, true)
+				callback(copied and true or false, from_cache ~= false)
 			end
 		else
 			if callback then
-				callback(true, true)
+				callback(true, from_cache ~= false)
 			end
 		end
 	end
 
-	if C.is_file(cached) then
-		copy_to_dest(true)
+	if C.is_file(cached) and C.is_valid_p5_file(cached) then
+		copy_to_dest(true, true)
 		return
 	end
+	if C.is_file(cached) then
+		pcall(fn.delete, cached)
+	end
 
-	local url = C.CDN .. "@" .. version .. "/lib/p5.min.js"
+	local url = C.CDN .. "@" .. version .. "/lib/p5.js"
 	C.fetch(url, cached, function(ok)
-		if ok then
-			local libraries = require("p5.libraries")
-			if not libraries.validate_download(cached) then
-				pcall(fn.delete, cached)
-				if callback then
-					callback(false, false)
-				end
-				return
-			end
-			copy_to_dest(true)
+		if ok and C.is_valid_p5_file(cached) then
+			copy_to_dest(true, false)
 		else
+			pcall(fn.delete, cached)
 			if callback then
 				callback(false, false)
 			end
 		end
-	end, { cache = true })
+	end, { cache = false })
 end
 
 -- Add recent sketchspaces
