@@ -882,16 +882,17 @@ fn libs_loader_js() -> &'static str {
 }
 
 async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
-    let (dest, src) = match req_path {
+    let (dest, src, allow_rewrite_empty) = match req_path {
         "/assets/libs/p5.js" => {
             let ver = sketch_p5_version(&app.dir);
             let Some(cd) = cache_dir() else { return false; };
             (
                 app.dir.join("assets/libs/p5.js"),
                 Some(cd.join("versions").join(ver).join("p5.js")),
+                false,
             )
         }
-        "/assets/libs/libs.js" => (app.dir.join("assets/libs/libs.js"), None),
+        "/assets/libs/libs.js" => (app.dir.join("assets/libs/libs.js"), None, true),
         "/assets/favicon.ico" | "/favicon.ico" => (
             app.dir.join(if req_path == "/favicon.ico" {
                 "favicon.ico"
@@ -899,12 +900,22 @@ async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
                 "assets/favicon.ico"
             }),
             Some(plugin_root().join("assets/favicon.ico")),
+            true,
         ),
         _ => return false,
     };
 
     if dest.is_file() {
-        return true;
+        if allow_rewrite_empty {
+            if let Ok(md) = tokio::fs::metadata(&dest).await {
+                if md.len() > 0 {
+                    return true;
+                }
+            }
+            // empty file: fall through to rewrite
+        } else {
+            return true;
+        }
     }
     if let Some(parent) = dest.parent() {
         let _ = tokio::fs::create_dir_all(parent).await;
