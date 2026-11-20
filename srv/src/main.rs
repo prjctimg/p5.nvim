@@ -881,27 +881,46 @@ fn libs_loader_js() -> &'static str {
 "#
 }
 
-fn asset_fallback_bytes(app: &App, req_path: &str) -> Option<(Vec<u8>, &'static str)> {
-    if req_path == "/assets/favicon.ico" || req_path == "/favicon.ico" {
-        let root = plugin_root();
-        let p = root.join("assets/favicon.ico");
-        if let Ok(b) = std::fs::read(p) {
-            return Some((b, "image/x-icon"));
+async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
+    let (dest, src) = match req_path {
+        "/assets/libs/p5.js" => {
+            let ver = sketch_p5_version(&app.dir);
+            let Some(cd) = cache_dir() else { return false; };
+            (
+                app.dir.join("assets/libs/p5.js"),
+                Some(cd.join("versions").join(ver).join("p5.js")),
+            )
         }
+        "/assets/libs/libs.js" => (app.dir.join("assets/libs/libs.js"), None),
+        "/assets/favicon.ico" | "/favicon.ico" => (
+            app.dir.join(if req_path == "/favicon.ico" {
+                "favicon.ico"
+            } else {
+                "assets/favicon.ico"
+            }),
+            Some(plugin_root().join("assets/favicon.ico")),
+        ),
+        _ => return false,
+    };
+
+    if dest.is_file() {
+        return true;
+    }
+    if let Some(parent) = dest.parent() {
+        let _ = tokio::fs::create_dir_all(parent).await;
     }
     if req_path == "/assets/libs/libs.js" {
-        return Some((libs_loader_js().as_bytes().to_vec(), "text/javascript"));
+        return tokio::fs::write(&dest, libs_loader_js())
+            .await
+            .map(|_| true)
+            .unwrap_or(false);
     }
-    if req_path == "/assets/libs/p5.js" {
-        let ver = sketch_p5_version(&app.dir);
-        if let Some(cd) = cache_dir() {
-            let p = cd.join("versions").join(ver).join("p5.js");
-            if let Ok(b) = std::fs::read(p) {
-                return Some((b, "text/javascript"));
-            }
+    if let Some(src) = src {
+        if src.is_file() {
+            return tokio::fs::copy(&src, &dest).await.is_ok();
         }
     }
-    None
+    false
 }
 
 async fn gen_index(dir: &FsPath) -> String {
@@ -1026,27 +1045,20 @@ async fn serve(app: Arc<App>, method: Method, uri: Uri) -> Response {
             .unwrap();
     }
     if !fp.is_file() {
-        if let Some((b, ct)) = asset_fallback_bytes(&app, &path) {
-            return Response::builder()
-                .status(200)
-                .header("Content-Type", ct)
-                .header("Content-Length", b.len())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Cache-Control", "no-store")
-                .header("Connection", "close")
-                .body(Body::from(b))
-                .unwrap();
+        if ensure_asset_path(&app, &path).await && fp.is_file() {
+            // file materialized at expected path; serve normally below
+        } else {
+            return (
+                StatusCode::NOT_FOUND,
+                [
+                    ("Content-Type", "text/plain"),
+                    ("Access-Control-Allow-Origin", "*"),
+                    ("Connection", "close"),
+                ],
+                "File not found",
+            )
+                .into_response();
         }
-        return (
-            StatusCode::NOT_FOUND,
-            [
-                ("Content-Type", "text/plain"),
-                ("Access-Control-Allow-Origin", "*"),
-                ("Connection", "close"),
-            ],
-            "File not found",
-        )
-            .into_response();
     }
     match tokio::fs::read(&fp).await {
         Ok(mut b) => {
