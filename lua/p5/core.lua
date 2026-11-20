@@ -464,6 +464,7 @@ C.ensure_cached_p5 = function(version, dest, callback)
 	end
 
 	local url = C.CDN .. "@" .. version .. "/lib/p5.js"
+	-- unminified p5.js can be several MB; allow enough time on slower connections
 	C.fetch(url, cached, function(ok)
 		if ok and C.is_valid_p5_file(cached) then
 			copy_to_dest(true, false)
@@ -473,7 +474,7 @@ C.ensure_cached_p5 = function(version, dest, callback)
 				callback(false, false)
 			end
 		end
-	end, { cache = false })
+	end, { cache = false, timeout = 180 })
 end
 
 -- Add recent sketchspaces
