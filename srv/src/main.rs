@@ -1064,7 +1064,12 @@ async fn cdp_stream_h(State(app): State<Arc<App>>) -> Response {
                 };
                 if !evs.is_empty() {
                     let mut out = String::new();
-                    for (_, d) in evs {
+                    for (t, mut d) in evs {
+                        if let Some(o) = d.as_object_mut() {
+                            o.entry("type").or_insert(Value::String(t));
+                        } else {
+                            d = json!({"type": t, "data": d});
+                        }
                         out.push_str(&d.to_string());
                         out.push('\n');
                     }
@@ -1477,6 +1482,7 @@ async fn watch(app: Arc<App>, dir: PathBuf) {
     let mut last: HashMap<PathBuf, std::time::SystemTime> = HashMap::new();
     let mut pending: HashMap<PathBuf, f64> = HashMap::new();
     let mut last_fire = 0.0;
+    let mut initialized = false;
     loop {
         let mut cur: HashMap<PathBuf, std::time::SystemTime> = HashMap::new();
         let mut st = vec![dir.clone()];
@@ -1498,13 +1504,13 @@ async fn watch(app: Arc<App>, dir: PathBuf) {
                     }
                     st.push(p);
                 } else if ft.is_file() {
-                    let ps = p.to_string_lossy();
                     if ex.iter().any(|x| {
                         p.components()
                             .any(|c| c.as_os_str().to_string_lossy() == *x)
                     }) {
                         continue;
                     }
+                    let ps = p.to_string_lossy().to_string();
                     if ext.iter().any(|x| ps.ends_with(x)) {
                         if let Ok(md) = e.metadata().await {
                             if let Ok(mt) = md.modified() {
@@ -1516,41 +1522,56 @@ async fn watch(app: Arc<App>, dir: PathBuf) {
             }
         }
         let now = epoch();
-        for (p, mt) in &cur {
-            if let Some(prev) = last.get(p) {
-                if prev != mt {
-                    pending.entry(p.clone()).or_insert(now);
+        if initialized {
+            for (p, mt) in &cur {
+                match last.get(p) {
+                    Some(prev) if prev != mt => {
+                        pending.entry(p.clone()).or_insert(now);
+                    }
+                    None => {
+                        pending.entry(p.clone()).or_insert(now);
+                    }
+                    _ => {}
                 }
             }
-        }
-        let mut fire = vec![];
-        let keys: Vec<_> = pending.keys().cloned().collect();
-        for p in keys {
-            let ct = *pending.get(&p).unwrap_or(&now);
-            match (cur.get(&p), last.get(&p)) {
-                (None, _) => {
+            let pending_keys: Vec<_> = pending.keys().cloned().collect();
+            for p in pending_keys {
+                if !cur.contains_key(&p) {
                     pending.remove(&p);
                 }
-                (Some(cu), Some(pr)) => {
-                    if cu == pr && (now - ct) >= debounce {
+            }
+            let mut fire = vec![];
+            if now - last_fire >= debounce {
+                let keys: Vec<_> = pending.keys().cloned().collect();
+                for p in keys {
+                    let ct = *pending.get(&p).unwrap_or(&now);
+                    let stable = match (cur.get(&p), last.get(&p)) {
+                        (Some(cu), Some(pr)) => cu == pr,
+                        (Some(_), None) => true,
+                        _ => false,
+                    };
+                    if stable && (now - ct) >= debounce {
                         pending.remove(&p);
-                        if now - last_fire > debounce {
-                            last_fire = now;
-                            fire.push(p);
-                        }
+                        fire.push(p);
                     }
                 }
-                _ => {}
+                if !fire.is_empty() {
+                    last_fire = now;
+                }
             }
-        }
-        for p in fire {
-            let msg = json!({"type":"reload","file":p.to_string_lossy(),"timestamp":now_iso()})
-                .to_string();
-            {
-                let mut cs = app.lr_clients.lock().await;
-                cs.retain(|tx| tx.send(msg.clone()).is_ok());
+            for p in fire {
+                let msg =
+                    json!({"type":"reload","file":p.to_string_lossy(),"timestamp":now_iso()})
+                        .to_string();
+                {
+                    let mut cs = app.lr_clients.lock().await;
+                    cs.retain(|tx| tx.send(msg.clone()).is_ok());
+                }
+                println!("Reload triggered for: {}", p.to_string_lossy());
             }
-            println!("Reload triggered for: {}", p.to_string_lossy());
+        } else {
+            initialized = true;
+            last_fire = now;
         }
         last = cur;
         sleep(Duration::from_millis(300)).await;

@@ -1,0 +1,36 @@
+version = "1"
+
+[sigil.build]
+description = "Build p5d (debug)"
+language = "shell"
+run = "cargo build --manifest-path srv/Cargo.toml"
+
+[sigil.build-release]
+description = "Build p5d (release)"
+language = "shell"
+run = "cargo build --manifest-path srv/Cargo.toml --release"
+
+[sigil.install]
+description = "Install p5d locally (download prebuilt or build)"
+language = "shell"
+run = "./scripts/install-p5d.sh"
+
+[sigil.test-rust]
+description = "Run Rust tests"
+language = "shell"
+run = "cargo test --manifest-path srv/Cargo.toml"
+
+[sigil.test-lua]
+description = "Run Lua tests (PlenaryBusted)"
+language = "shell"
+run = "PLENARY=\"${PLENARY:-}\"; [ -z \"$PLENARY\" ] && [ -d \"$HOME/.local/share/nvim/site/pack/vendor/start/plenary.nvim\" ] && PLENARY=\"$HOME/.local/share/nvim/site/pack/vendor/start/plenary.nvim\"; [ -z \"$PLENARY\" ] && [ -d \"$HOME/.config/SpaceVim/bundle/plenary.nvim\" ] && PLENARY=\"$HOME/.config/SpaceVim/bundle/plenary.nvim\"; if [ -n \"$PLENARY\" ]; then nvim --headless -u tests/init.lua +\"set rtp+=$PLENARY\" +\"runtime! plugin/plenary.vim\" -c \"PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}\" -c \"qa!\"; else nvim --headless -u tests/init.lua -c \"PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}\" -c \"qa!\"; fi"
+
+[sigil.test]
+description = "Run all tests"
+language = "shell"
+run = "cargo test --manifest-path srv/Cargo.toml && PLENARY=\"${PLENARY:-}\"; [ -z \"$PLENARY\" ] && [ -d \"$HOME/.local/share/nvim/site/pack/vendor/start/plenary.nvim\" ] && PLENARY=\"$HOME/.local/share/nvim/site/pack/vendor/start/plenary.nvim\"; [ -z \"$PLENARY\" ] && [ -d \"$HOME/.config/SpaceVim/bundle/plenary.nvim\" ] && PLENARY=\"$HOME/.config/SpaceVim/bundle/plenary.nvim\"; if [ -n \"$PLENARY\" ]; then nvim --headless -u tests/init.lua +\"set rtp+=$PLENARY\" +\"runtime! plugin/plenary.vim\" -c \"PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}\" -c \"qa!\"; else nvim --headless -u tests/init.lua -c \"PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}\" -c \"qa!\"; fi"
+
+[sigil.check]
+description = "Check Rust code"
+language = "shell"
+run = "cargo check --manifest-path srv/Cargo.toml"
