@@ -34,3 +34,8 @@ run = "cargo test --manifest-path srv/Cargo.toml && PLENARY=\"${PLENARY:-}\"; [ 
 description = "Check Rust code"
 language = "shell"
 run = "cargo check --manifest-path srv/Cargo.toml"
+
+[sigil.check-help]
+description = "Validate help docs (no duplicate tags, helptags generation)"
+language = "shell"
+run = "./scripts/check-help-tags.sh"

@@ -63,7 +63,7 @@ Maps to Array.push().
 
     void
 
-📂 *Sub-module: array_functions*
+📂 Sub-module: array_functions
 
 ---
 
@@ -92,7 +92,7 @@ copying each element individually.
 
     void
 
-📂 *Sub-module: array_functions*
+📂 Sub-module: array_functions
 
 ---
 
@@ -111,7 +111,7 @@ arrays.
 
     void
 
-📂 *Sub-module: array_functions*
+📂 Sub-module: array_functions
 
 ---
 
@@ -128,7 +128,7 @@ Reverses the order of an array, maps to Array.reverse()
 
     void
 
-📂 *Sub-module: array_functions*
+📂 Sub-module: array_functions
 
 ---
 
@@ -146,7 +146,7 @@ Array.pop().
 
     void
 
-📂 *Sub-module: array_functions*
+📂 Sub-module: array_functions
 
 ---
 
@@ -164,7 +164,7 @@ Shuffle Algorithm.
 
     void
 
-📂 *Sub-module: array_functions*
+📂 Sub-module: array_functions
 
 ---
 
@@ -185,7 +185,7 @@ first 5 elements in the array will be sorted.
 
     void
 
-📂 *Sub-module: array_functions*
+📂 Sub-module: array_functions
 
 ---
 
@@ -209,7 +209,7 @@ position is 1, and so on.)
 
     void
 
-📂 *Sub-module: array_functions*
+📂 Sub-module: array_functions
 
 ---
 
@@ -232,7 +232,7 @@ function does not change the source array.
 
     void
 
-📂 *Sub-module: array_functions*
+📂 Sub-module: array_functions
 
 ---
 
@@ -253,7 +253,7 @@ the same length is returned.
 
     void
 
-📂 *Sub-module: conversion*
+📂 Sub-module: conversion
 
 ---
 
@@ -272,7 +272,7 @@ returned.
 
     void
 
-📂 *Sub-module: conversion*
+📂 Sub-module: conversion
 
 ---
 
@@ -291,7 +291,7 @@ returned.
 
     void
 
-📂 *Sub-module: conversion*
+📂 Sub-module: conversion
 
 ---
 
@@ -312,7 +312,7 @@ in, then a array of booleans of the same length is returned.
 
     void
 
-📂 *Sub-module: conversion*
+📂 Sub-module: conversion
 
 ---
 
@@ -333,7 +333,7 @@ values is passed in, then an array of bytes the same length is returned.
 
     void
 
-📂 *Sub-module: conversion*
+📂 Sub-module: conversion
 
 ---
 
@@ -354,7 +354,7 @@ strings of the same length is returned.
 
     void
 
-📂 *Sub-module: conversion*
+📂 Sub-module: conversion
 
 ---
 
@@ -373,7 +373,7 @@ then an array of integers of the same length is returned.
 
     void
 
-📂 *Sub-module: conversion*
+📂 Sub-module: conversion
 
 ---
 
@@ -393,7 +393,7 @@ strings in hexadecimal notation of the same length is returned.
 
     void
 
-📂 *Sub-module: conversion*
+📂 Sub-module: conversion
 
 ---
 
@@ -412,7 +412,7 @@ an array of integers of the same length is returned.
 
     void
 
-📂 *Sub-module: conversion*
+📂 Sub-module: conversion
 
 ---
 
@@ -432,7 +432,7 @@ floats, it's necessary to first convert them to Strings using nf() or nfs().
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -461,7 +461,7 @@ group is [1], the second [2], and so on).
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -491,7 +491,7 @@ is [i][1], the second [i][2], and so on).
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -515,7 +515,7 @@ parameter i.e. if right is 3 than the result will be 123.200.
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -535,7 +535,7 @@ should always be a positive integer.
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -556,7 +556,7 @@ integers.
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -586,7 +586,7 @@ parameter i.e. if right is 3 than the result will be 123.200.
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -609,7 +609,7 @@ characters instead of a specific character or sequence.
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -630,7 +630,7 @@ character is used to split. Whitespace characters include tab (\t), line feed
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -649,7 +649,7 @@ tab, this function also removes the Unicode "nbsp" character.
 
     void
 
-📂 *Sub-module: string_functions*
+📂 Sub-module: string_functions
 
 ---
 
@@ -663,7 +663,7 @@ the current day as a value from 1 - 31.
 
     void
 
-📂 *Sub-module: time_date*
+📂 Sub-module: time_date
 
 ---
 
@@ -677,7 +677,7 @@ returns the current hour as a value from 0 - 23.
 
     void
 
-📂 *Sub-module: time_date*
+📂 Sub-module: time_date
 
 ---
 
@@ -691,7 +691,7 @@ returns the current minute as a value from 0 - 59.
 
     void
 
-📂 *Sub-module: time_date*
+📂 Sub-module: time_date
 
 ---
 
@@ -706,7 +706,7 @@ events and animation sequences.
 
     void
 
-📂 *Sub-module: time_date*
+📂 Sub-module: time_date
 
 ---
 
@@ -720,7 +720,7 @@ returns the current month as a value from 1 - 12.
 
     void
 
-📂 *Sub-module: time_date*
+📂 Sub-module: time_date
 
 ---
 
@@ -734,7 +734,7 @@ returns the current second as a value from 0 - 59.
 
     void
 
-📂 *Sub-module: time_date*
+📂 Sub-module: time_date
 
 ---
 
@@ -748,7 +748,7 @@ returns the current year as an integer (2014, 2015, 2016, etc).
 
     void
 
-📂 *Sub-module: time_date*
+📂 Sub-module: time_date
 
 ---
 

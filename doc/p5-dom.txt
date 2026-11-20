@@ -74,7 +74,7 @@ createAudio, and createCapture.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -87,7 +87,7 @@ Play an HTML5 media element. @chainable
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -100,7 +100,7 @@ Stops an HTML5 media element (sets current time to zero). @chainable
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -113,7 +113,7 @@ Pauses an HTML5 media element. @chainable
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -126,7 +126,7 @@ Set 'loop' to true for an HTML5 media element, and starts playing. @chainable
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -140,7 +140,7 @@ reaches the end. @chainable
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -154,7 +154,7 @@ default it will autoplay.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -168,7 +168,7 @@ current volume.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -185,7 +185,7 @@ even if they do, playback might not be smooth.)
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -199,7 +199,7 @@ argument is given the current time of the element is set to it.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -212,7 +212,7 @@ Returns the duration of the HTML5 media element.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -231,7 +231,7 @@ in as the argument to the onended callback.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -245,7 +245,7 @@ you want to re-route the output through audio effects, for example.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -258,7 +258,7 @@ Show the default MediaElement controls, as determined by the web browser.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -271,7 +271,7 @@ Hide the default mediaElement controls.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -293,7 +293,7 @@ the second parameter.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -307,7 +307,7 @@ method.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -333,7 +333,7 @@ specify a container to search within.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -353,7 +353,7 @@ array if none found. You can also specify a container to search within.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -368,7 +368,7 @@ element is removed from the DOM.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -387,7 +387,7 @@ can be used to attach an element specific event listener.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -401,7 +401,7 @@ length text.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -414,7 +414,7 @@ Creates a <span></span> element in the DOM with given inner HTML.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -432,7 +432,7 @@ Creates an <img> element in the DOM with given src and alternate text.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -453,7 +453,7 @@ Creates an <img> element in the DOM with given src and alternate text.
 
     pointer to p5.Element holding created node
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -472,7 +472,7 @@ display length of the slider.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -490,7 +490,7 @@ size of the button. Use .mousePressed() to specify behavior on press.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -504,7 +504,7 @@ checkbox returns a boolean indicating whether it is checked or not.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -529,7 +529,7 @@ option as enable if the initial option is disabled.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -556,7 +556,7 @@ method will enable/disable the whole radio button element.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -571,7 +571,7 @@ return a p5.Color object with the current chosen color.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -589,7 +589,7 @@ set the display length of the box.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -610,7 +610,7 @@ users to select local files for use in a sketch.
 
     pointer to video p5.MediaElement
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -623,7 +623,7 @@ Adds specified class to the element.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -636,7 +636,7 @@ Removes specified class from the element.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -653,7 +653,7 @@ Checks if specified class is already applied to element.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -666,7 +666,7 @@ Toggles element class.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -681,7 +681,7 @@ children DOM nodes is returned.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -696,7 +696,7 @@ argument is passed the p5.Element is aligned both vertically and horizontally.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -712,7 +712,7 @@ inner HTML of the element.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -732,7 +732,7 @@ https://stackoverflow.com/questions/14714314/how-do-i-comment-object-literals-in
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -752,7 +752,7 @@ the given property; however, if a single argument is given in CSS syntax
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -767,7 +767,7 @@ attribute, or null if the attribute is not set.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -780,7 +780,7 @@ Removes an attribute on the specified element.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -794,7 +794,7 @@ value of the element.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -808,7 +808,7 @@ Shows the current element. Essentially, setting display:block for the style.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -822,7 +822,7 @@ Hides the current element. Essentially, setting display:none for the style.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -839,7 +839,7 @@ element has finished loading.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 
@@ -852,7 +852,7 @@ Removes the element, stops all media streams, and deregisters all listeners.
 
     void
 
-📂 *Sub-module: dom*
+📂 Sub-module: dom
 
 ---
 

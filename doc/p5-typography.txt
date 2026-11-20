@@ -46,7 +46,7 @@ value.
 
     void
 
-📂 *Sub-module: attributes*
+📂 Sub-module: attributes
 
 ---
 
@@ -60,7 +60,7 @@ used in all subsequent calls to the text() function.
 
     void
 
-📂 *Sub-module: attributes*
+📂 Sub-module: attributes
 
 ---
 
@@ -74,7 +74,7 @@ calls to the text() function. Font size is measured in pixels.
 
     void
 
-📂 *Sub-module: attributes*
+📂 Sub-module: attributes
 
 ---
 
@@ -89,7 +89,7 @@ fonts (opentype, truetype, etc.) please load styled fonts instead.
 
     void
 
-📂 *Sub-module: attributes*
+📂 Sub-module: attributes
 
 ---
 
@@ -106,7 +106,7 @@ Calculates and returns the width of any character or text string.
 
     void
 
-📂 *Sub-module: attributes*
+📂 Sub-module: attributes
 
 ---
 
@@ -121,7 +121,7 @@ baseline.
 
     void
 
-📂 *Sub-module: attributes*
+📂 Sub-module: attributes
 
 ---
 
@@ -136,7 +136,7 @@ descender below the baseline.
 
     void
 
-📂 *Sub-module: attributes*
+📂 Sub-module: attributes
 
 ---
 
@@ -162,7 +162,7 @@ within the text area will not be drawn to the screen.
 
     void
 
-📂 *Sub-module: attributes*
+📂 Sub-module: attributes
 
 ---
 
@@ -187,7 +187,7 @@ security.
 
     p5.Font object
 
-📂 *Sub-module: loading_displaying*
+📂 Sub-module: loading_displaying
 
 ---
 
@@ -204,7 +204,7 @@ object. WEBGL: Only fonts loaded via loadFont() are supported.
 
     void
 
-📂 *Sub-module: loading_displaying*
+📂 Sub-module: loading_displaying
 
 ---
 
@@ -217,7 +217,7 @@ Base class for font handling
 
     void
 
-📂 *Sub-module: p5.Font*
+📂 Sub-module: p5.Font
 
 ---
 
@@ -236,7 +236,7 @@ Returns a tight bounding box for the given text string using this font
 
     void
 
-📂 *Sub-module: p5.Font*
+📂 Sub-module: p5.Font
 
 ---
 
@@ -256,7 +256,7 @@ Computes an array of points following the path for specified text
 
     void
 
-📂 *Sub-module: p5.Font*
+📂 Sub-module: p5.Font
 
 ---
 

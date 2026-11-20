@@ -88,7 +88,7 @@ absolute value of a number is always positive.
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -107,7 +107,7 @@ the parameter. Maps to Math.ceil(). For example, ceil(9.03) returns the value
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -126,7 +126,7 @@ Constrains a value between a minimum and maximum value.
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -147,7 +147,7 @@ If you looking for distance between two vectors see p5.Vector.dist()
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -165,7 +165,7 @@ Maps to Math.exp().
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -183,7 +183,7 @@ the parameter. Maps to Math.floor().
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -208,7 +208,7 @@ motion along a straight path and for drawing dotted lines.
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -227,7 +227,7 @@ Math.log().
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -249,7 +249,7 @@ writing dist(0, 0, x, y).
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -272,7 +272,7 @@ ranges from the left edge of the window (0) to the right edge (width).
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -292,7 +292,7 @@ length.
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -312,7 +312,7 @@ length.
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -334,7 +334,7 @@ the example above.)
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -355,7 +355,7 @@ pow(3, -5) is equivalent to 1 / 3 × 3 × 3 × 3 × 3. Maps to Math.pow().
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -373,7 +373,7 @@ returns the value 134. Maps to Math.round().
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -392,7 +392,7 @@ result. For example, -1 * -1 = 1.
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -412,7 +412,7 @@ Math.sqrt().
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -429,7 +429,7 @@ Calculates the fractional part of a number.
 
     void
 
-📂 *Sub-module: calculation*
+📂 Sub-module: calculation
 
 ---
 
@@ -445,7 +445,7 @@ direction.
 
     void
 
-📂 *Sub-module: math*
+📂 Sub-module: math
 
 ---
 
@@ -484,7 +484,7 @@ depending on use.
 
     void
 
-📂 *Sub-module: noise*
+📂 Sub-module: noise
 
 ---
 
@@ -513,7 +513,7 @@ function can be adapted to fit very specific needs and characteristics.
 
     void
 
-📂 *Sub-module: noise*
+📂 Sub-module: noise
 
 ---
 
@@ -528,7 +528,7 @@ return the same pseudo-random numbers each time the software is run.
 
     void
 
-📂 *Sub-module: noise*
+📂 Sub-module: noise
 
 ---
 
@@ -543,7 +543,7 @@ return the same pseudo-random numbers each time the software is run.
 
     void
 
-📂 *Sub-module: random*
+📂 Sub-module: random
 
 ---
 
@@ -562,7 +562,7 @@ second argument.
 
     void
 
-📂 *Sub-module: random*
+📂 Sub-module: random
 
 ---
 
@@ -582,7 +582,7 @@ standard deviation.
 
     void
 
-📂 *Sub-module: random*
+📂 Sub-module: random
 
 ---
 
@@ -602,7 +602,7 @@ DEGREES.
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -621,7 +621,7 @@ to PI/2 if the angleMode is RADIANS or -90 to 90 if the angle mode is DEGREES.
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -641,7 +641,7 @@ values are returned in the range -PI/2 to PI/2 if the angleMode is RADIANS or
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -665,7 +665,7 @@ structure of calculating the tangent.
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -683,7 +683,7 @@ current angleMode. Values are returned in the range -1 to 1.
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -701,7 +701,7 @@ angleMode. Values are returned in the range -1 to 1.
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -719,7 +719,7 @@ current angleMode. Values are returned in the range of all real numbers.
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -739,7 +739,7 @@ This function does not take into account the current angleMode().
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -759,7 +759,7 @@ This function does not take into account the current angleMode.
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -773,7 +773,7 @@ Calling angleMode() with no arguments returns current anglemode.
 
     void
 
-📂 *Sub-module: trigonometry*
+📂 Sub-module: trigonometry
 
 ---
 
@@ -799,7 +799,7 @@ which is made easy by the methods inside the p5.Vector class.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -863,7 +863,7 @@ Gets a copy of the vector, returns a p5.Vector object.
 
     the copy of the p5.Vector object
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -877,7 +877,7 @@ variables, the data from a p5.Vector, or the values from a float array.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -890,7 +890,7 @@ Gets a copy of the vector, returns a p5.Vector object.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -911,7 +911,7 @@ as an array. See the examples for more context.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -930,7 +930,7 @@ examples for more context.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -951,7 +951,7 @@ method as an array. See the examples for more context.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -972,7 +972,7 @@ to this function as an array. See the examples for more context.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -997,21 +997,21 @@ examples for more context.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
 
-`mag()`                                            *p5-math-mag*
+`mag()`                                            p5-math-mag
 
 Calculates the magnitude (length) of the vector and returns the result as a
-float. (This is simply the equation sqrt(x*x + y*y + z*z).)
+float. (This is simply the equation sqrt(xx + yy + z*z).)
 
 #### Returns:
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1019,14 +1019,14 @@ float. (This is simply the equation sqrt(x*x + y*y + z*z).)
 `magSq()`                                            *p5-math-magSq*
 
 Calculates the squared magnitude of the vector and returns the result as a
-float. (This is simply the equation x*x + y*y + z*z.) Faster if the real
+float. (This is simply the equation xx + yy + z*z.) Faster if the real
 length is not required in the case of comparing vectors, etc.
 
 #### Returns:
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1045,7 +1045,7 @@ the examples for more context.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1064,12 +1064,12 @@ the examples for more context.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
 
-`dist()`                                            *p5-math-dist*
+`dist()`                                            p5-math-dist
 
 Calculates the Euclidean distance between two points (considering a point as a
 vector object). If you are looking to calculate distance between 2 points see
@@ -1083,7 +1083,7 @@ dist()
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1096,7 +1096,7 @@ Normalize the vector to length 1 (make it a unit vector).
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1109,7 +1109,7 @@ Limit the magnitude of this vector to the value used for the max parameter.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1122,7 +1122,7 @@ Set the magnitude of this vector to the value used for the len parameter.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1137,7 +1137,7 @@ consideration, and give the angle in radians or degrees accordingly.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1151,7 +1151,7 @@ same.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1164,7 +1164,7 @@ Rotate the vector by an angle (only 2D vectors); magnitude remains the same.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1183,12 +1183,12 @@ degrees accordingly.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
 
-`lerp()`                                            *p5-math-lerp*
+`lerp()`                                            p5-math-lerp
 
 Linear interpolate the vector to another vector.
 
@@ -1202,7 +1202,7 @@ Linear interpolate the vector to another vector.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1221,7 +1221,7 @@ slerping between 2D vectors is always a 2D vector.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1235,7 +1235,7 @@ in 3D.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1250,7 +1250,7 @@ using the p5.Vector.copy() method to copy into your own vector.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 
@@ -1263,7 +1263,7 @@ Equality check against a p5.Vector.
 
     void
 
-📂 *Sub-module: p5.Vector*
+📂 Sub-module: p5.Vector
 
 ---
 

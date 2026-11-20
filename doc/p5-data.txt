@@ -51,7 +51,7 @@ should not be stored in local storage.
 
     void
 
-📂 *Sub-module: local_storage*
+📂 Sub-module: local_storage
 
 ---
 
@@ -69,7 +69,7 @@ storeItem()
 
     void
 
-📂 *Sub-module: local_storage*
+📂 Sub-module: local_storage
 
 ---
 
@@ -82,7 +82,7 @@ Clears all local storage items set with storeItem() for the current domain.
 
     void
 
-📂 *Sub-module: local_storage*
+📂 Sub-module: local_storage
 
 ---
 
@@ -95,7 +95,7 @@ Removes an item that was stored with storeItem()
 
     void
 
-📂 *Sub-module: local_storage*
+📂 Sub-module: local_storage
 
 ---
 
@@ -109,7 +109,7 @@ inherit from this class.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -122,7 +122,7 @@ Returns the number of key-value pairs currently stored in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -140,7 +140,7 @@ false.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -157,7 +157,7 @@ Returns the value stored at the given key.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -171,7 +171,7 @@ the Dictionary. Otherwise a new key-value pair is added.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -184,7 +184,7 @@ Creates a new key-value pair in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -197,7 +197,7 @@ Removes all previously stored key-value pairs from the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -210,7 +210,7 @@ Removes the key-value pair stored at the given key from the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -223,7 +223,7 @@ Logs the set of items currently stored in the Dictionary to the console.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -236,7 +236,7 @@ Converts the Dictionary into a CSV file for local download.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -249,7 +249,7 @@ Converts the Dictionary into a JSON file for local download.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -267,7 +267,7 @@ then replaces the value previously stored in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -285,7 +285,7 @@ The difference then replaces the value previously stored in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -303,7 +303,7 @@ The product then replaces the value previously stored in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -321,7 +321,7 @@ quotient then replaces the value previously stored in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -334,7 +334,7 @@ Return the lowest number currently stored in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -347,7 +347,7 @@ Return the highest number currently stored in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -360,7 +360,7 @@ Return the lowest key currently used in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -373,7 +373,7 @@ Return the highest key currently used in the Dictionary.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -387,7 +387,7 @@ you provide.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 
@@ -401,7 +401,7 @@ provide.
 
     void
 
-📂 *Sub-module: p5.TypedDict*
+📂 Sub-module: p5.TypedDict
 
 ---
 

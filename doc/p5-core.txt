@@ -845,7 +845,7 @@ Convert an HSBA array to HSLA.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -858,7 +858,7 @@ Convert an HSBA array to RGBA.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -871,7 +871,7 @@ Convert an HSLA array to HSBA.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -887,7 +887,7 @@ brightness as our first two components, and pick a convenient third one
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -900,7 +900,7 @@ Convert an RGBA array to HSBA.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -913,7 +913,7 @@ Convert an RGBA array to HSLA.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -954,7 +954,7 @@ called myElement .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -967,7 +967,7 @@ Returns a Float32Array window sized to the exact length of the data
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -981,7 +981,7 @@ the contents of its dataArray()
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -994,7 +994,7 @@ Can be used to scale a DataArray back down to fit its contents.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1008,7 +1008,7 @@ length
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1022,7 +1022,7 @@ the new items.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1036,7 +1036,7 @@ exclusive
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1050,7 +1050,7 @@ index to , exclusive
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1063,7 +1063,7 @@ Expand capacity of the internal storage until it can fit a target size
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1076,7 +1076,7 @@ Expand capacity of the internal storage until it can fit a target size
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1097,7 +1097,7 @@ lifecycles hooks.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1117,7 +1117,7 @@ Returns a Quaternion for the axis angle representation of the rotation
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1134,7 +1134,7 @@ Creates a new FilterRenderer2D instance.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1154,7 +1154,7 @@ that overrides the operation-based shader.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1169,7 +1169,7 @@ available, or creates a new one, caches it, and sets it as current.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1183,7 +1183,7 @@ also updates or initializes the data associated with the buffer
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1196,7 +1196,7 @@ Prepares and runs the full-screen quad draw call.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1211,7 +1211,7 @@ called before applyFilter().
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1235,7 +1235,7 @@ there (like rendering a whole ellipse instead).
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1248,7 +1248,7 @@ Helper function for select and selectAll
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1261,7 +1261,7 @@ Helper function for getElement and getElements.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1275,7 +1275,7 @@ possibility of the window being resized when no sketch is active.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1290,7 +1290,7 @@ the element we must assume all keys currently down have been released.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1303,7 +1303,7 @@ ensures that p5 is using a 3d renderer. throws an error if not.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1316,7 +1316,7 @@ Returns the current day as a number from 1–31.
 
     current day between 1 and 31.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1333,7 +1333,7 @@ Multiplies a quaternion with other quaternion.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1347,7 +1347,7 @@ functions.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1372,12 +1372,12 @@ argument returns the element's parent.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`parent()`                                            *p5-core-parent*
+`parent()`                                            p5-core-parent
 
 
 
@@ -1385,7 +1385,7 @@ argument returns the element's parent.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1401,12 +1401,12 @@ of children DOM nodes is returned.
 
     an array of child nodes.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`child()`                                            *p5-core-child*
+`child()`                                            p5-core-child
 
 
 
@@ -1418,7 +1418,7 @@ of children DOM nodes is returned.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1435,12 +1435,12 @@ returned.
 
     the inner HTML of the element
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`html()`                                            *p5-core-html*
+`html()`                                            p5-core-html
 
 
 
@@ -1453,7 +1453,7 @@ returned.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1471,12 +1471,12 @@ argument returns its ID as a string.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`id()`                                            *p5-core-id*
+`id()`                                            p5-core-id
 
 
 
@@ -1484,7 +1484,7 @@ argument returns its ID as a string.
 
     ID of the element.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1505,12 +1505,12 @@ current classes.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`class()`                                            *p5-core-class*
+`class()`                                            p5-core-class
 
 
 
@@ -1518,7 +1518,7 @@ current classes.
 
     element's classes, if any.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1535,7 +1535,7 @@ Adds a class to the element.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1552,7 +1552,7 @@ Removes a class from the element.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1569,7 +1569,7 @@ Checks if a class is already applied to element.
 
     a boolean value if element has specified class.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1586,7 +1586,7 @@ Toggles whether a class is applied to the element.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1606,7 +1606,7 @@ the element is aligned both vertically and horizontally.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1627,12 +1627,12 @@ object, as in { x: 0, y: 0 } .
 
     object of form `{ x: 0, y: 0 }` containing the element's position.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`position()`                                            *p5-core-position*
+`position()`                                            p5-core-position
 
 
 
@@ -1646,7 +1646,7 @@ object, as in { x: 0, y: 0 } .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1659,7 +1659,7 @@ Shows the current element.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1672,7 +1672,7 @@ Hides the current element.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1697,12 +1697,12 @@ call myElement.size() until after the data loads.
 
     width and height of the element in an object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`size()`                                            *p5-core-size*
+`size()`                                            p5-core-size
 
 
 
@@ -1715,7 +1715,7 @@ call myElement.size() until after the data loads.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1742,12 +1742,12 @@ myColor) .
 
     value of the property.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`style()`                                            *p5-core-style*
+`style()`                                            p5-core-style
 
 
 
@@ -1760,7 +1760,7 @@ myColor) .
 
     value of the property.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1784,12 +1784,12 @@ to center .
 
     value of the attribute.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`attribute()`                                            *p5-core-attribute*
+`attribute()`                                            p5-core-attribute
 
 
 
@@ -1802,7 +1802,7 @@ to center .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1821,7 +1821,7 @@ removes its align attribute if it's been set.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1837,12 +1837,12 @@ element's value.
 
     value of the element.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`value()`                                            *p5-core-value*
+`value()`                                            p5-core-value
 
 
 
@@ -1854,7 +1854,7 @@ element's value.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1873,7 +1873,7 @@ browsers may also trigger this event when the element receives a quick tap.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1891,7 +1891,7 @@ myElement.doubleClicked(false) disables the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1914,7 +1914,7 @@ disables the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1933,7 +1933,7 @@ browsers may also trigger this event when the element receives a quick tap.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1953,7 +1953,7 @@ tap.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1971,7 +1971,7 @@ myElement.mouseMoved(false) disables the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -1989,7 +1989,7 @@ myElement.mouseOver(false) disables the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2007,7 +2007,7 @@ myElement.mouseOut(false) disables the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2025,7 +2025,7 @@ myElement.dragOver(false) disables the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2043,7 +2043,7 @@ myElement.dragLeave(false) disables the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2061,7 +2061,7 @@ disables the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2080,7 +2080,7 @@ the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2106,7 +2106,7 @@ href="https://developer.mozilla.org/en-US/docs/Web/API/DragEvent"> DragEvent
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2125,7 +2125,7 @@ myElement.draggable(otherElement) , the other element will become draggable.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2143,7 +2143,7 @@ dimentions are the same.
 
     The resulting matrix after addition.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2174,12 +2174,12 @@ entire structure.
 
     The current instance of the Matrix, allowing for method chaining.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`reset()`                                            *p5-core-reset*
+`reset()`                                            p5-core-reset
 
 Resets the current matrix to an identity matrix. This method replaces the
 current matrix with an identity matrix of the same dimensions. An identity
@@ -2191,7 +2191,7 @@ matrix.
 
     The current instance of the Matrix class, allowing for method chaining.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2214,7 +2214,7 @@ current matrix, an error will be thrown to ensure consistency.
 
     The current instance of the Matrix class, allowing for method chaining.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2232,7 +2232,7 @@ duplicate.
 
     A new instance of the `Matrix` class containing the same values as the original matrix.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2250,7 +2250,7 @@ affect the original matrix.
 
     The result matrix.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2264,7 +2264,7 @@ need a duplicate of the matrix without modifying the original one.
 
     A new matrix instance that is a copy of the current matrix.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2283,7 +2283,7 @@ verifying if a matrix is diagonal.
 
     An array obtained by arranging the diagonal elements of the matrix in ascending order of index.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2305,7 +2305,7 @@ or dot products.
 
     A `p5.Vector` representing the extracted row of the matrix.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2326,7 +2326,7 @@ columns of a matrix, such as column transformations or dot products.
 
     A `p5.Vector` representing the extracted column of the matrix.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2349,7 +2349,7 @@ and updates the current matrix.
 
     The current instance of the Matrix class, allowing for method chaining.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2372,7 +2372,7 @@ matrix and the input matrix. It supports 3x3, 4x4, and NxN matrices.
 
     The resulting matrix after multiplication, or undefined if the input is invalid.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2394,7 +2394,7 @@ a new vector or stored in the provided target vector.
 
     The transformed vector after applying the matrix.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2416,7 +2416,7 @@ algorithm optimized for smaller matrices. If the matrix is singular
 
     The inverted matrix, or `null` if the matrix is singular.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2436,7 +2436,7 @@ changes to the new matrix will not affect the original.
 
     A new 3x3 matrix containing the top-left portion of the original 4x4 matrix.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2457,7 +2457,7 @@ singular (non-invertible), the resulting matrix will be zeroed out.
 
     The current instance of the Matrix class, allowing for method chaining.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2480,7 +2480,7 @@ matrix, you can modify the current matrix to represent a new transformation.
 
     The current matrix after applying the transformation.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2503,7 +2503,7 @@ scaling along the z-axis).
 
     The current instance of the Matrix class, allowing for method chaining.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2525,7 +2525,7 @@ components of the axis. Rotate our Matrix around an axis by the given angle.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2546,7 +2546,7 @@ translation along the z-axis.
 
     The current instance of the Matrix class, allowing for method chaining.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2568,7 +2568,7 @@ transformations along the X-axis.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2590,7 +2590,7 @@ used in 3D graphics to create animations or transformations along the Y-axis.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2612,7 +2612,7 @@ remain unchanged.
 
     The current instance of the Matrix class, allowing for method chaining.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2638,7 +2638,7 @@ that will be rendered, with anything outside this range being clipped.
 
     The current instance of the Matrix class, allowing for method chaining.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2664,7 +2664,7 @@ parameters.
 
     The current matrix instance, updated with the orthographic projection.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2689,7 +2689,7 @@ representing the transformed x, y, z, and w components.
 
     An array containing the transformed [x, y, z, w] components.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2712,7 +2712,7 @@ space.
 
     A new `p5.Vector` instance representing the transformed point.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2735,7 +2735,7 @@ projection to a point in 3D space.
 
     A new `p5.Vector` instance representing the transformed and normalized point.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2757,7 +2757,7 @@ transforming direction vectors (e.g., normals) without applying translation.
 
     A new `p5.Vector` instance representing the transformed direction.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2781,7 +2781,7 @@ operations such as transforming points or directions in 2D or 3D space using a
 
     The transformed vector after applying the matrix.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2795,7 +2795,7 @@ object.
 
     parent element.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2810,7 +2810,7 @@ language .
 
     name of the element.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2831,7 +2831,7 @@ calling myXML.setName('planet') will make the element's new tag name
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2844,7 +2844,7 @@ Returns true if the element has child elements and false if not.
 
     whether the element has children.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2857,7 +2857,7 @@ Returns an array with the names of the element's child elements as String s.
 
     names of the child elements.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2877,7 +2877,7 @@ elements with the tag <cat> .
 
     child elements.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2898,7 +2898,7 @@ element at that index will be returned.
 
     child element.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2918,7 +2918,7 @@ of myXML .
 
     added child element.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2939,7 +2939,7 @@ will be removed.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2952,7 +2952,7 @@ Returns the number of attributes the element has.
 
     number of attributes.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2967,7 +2967,7 @@ href="#/p5.XML/getNum"> myXML.getNum() </a> to return an attribute's value.
 
     attribute names.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -2987,7 +2987,7 @@ href="#/p5.XML/getNum"> myXML.getNum() </a> to return an attribute's value.
 
     whether the element has the attribute.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3012,7 +3012,7 @@ return an attribute's value.
 
     attribute value as a number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3037,7 +3037,7 @@ value.
 
     attribute value as a string.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3058,7 +3058,7 @@ the id attribute to the value 123.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3077,7 +3077,7 @@ returned if the element has no content.
 
     element's content as a string.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3091,12 +3091,12 @@ element over the network or saving it to a file.
 
     element as a string.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`set()`                                            *p5-core-set*
+`set()`                                            p5-core-set
 
 Stores a value in the TableRow's specified column. The column may be specified
 by either its ID or title.
@@ -3110,7 +3110,7 @@ by either its ID or title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3129,7 +3129,7 @@ specified by either its ID or title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3148,12 +3148,12 @@ specified by either its ID or title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`get()`                                            *p5-core-get*
+`get()`                                            p5-core-get
 
 Retrieves a value from the TableRow's specified column. The column may be
 specified by either its ID or title.
@@ -3166,12 +3166,12 @@ specified by either its ID or title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`getNum()`                                            *p5-core-getNum*
+`getNum()`                                            p5-core-getNum
 
 Retrieves a Float value from the TableRow's specified column. The column may
 be specified by either its ID or title.
@@ -3184,12 +3184,12 @@ be specified by either its ID or title.
 
     Float Floating point number
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`getString()`                                            *p5-core-getString*
+`getString()`                                            p5-core-getString
 
 Retrieves an String value from the TableRow's specified column. The column may
 be specified by either its ID or title.
@@ -3202,7 +3202,7 @@ be specified by either its ID or title.
 
     String
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3225,7 +3225,7 @@ second value 20, and so on.
 
     The value at the specified position in the vector.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3250,7 +3250,7 @@ you would use this method with index 1 (since indexes start at 0) and value
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3264,12 +3264,12 @@ printing vectors to the console while debugging.
 
     string representation of the vector.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`set()`                                            *p5-core-set*
+`set()`                                            p5-core-set
 
 Sets the the vector to a new value. set() can use separate numbers, as in
 v.set(1, 2, 3) , a <a href="#/p5.Vector"> p5.Vector </a> object, as in
@@ -3285,12 +3285,12 @@ v.set(v2) , or an array of numbers, as in v.set([1, 2, 3]) .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`set()`                                            *p5-core-set*
+`set()`                                            p5-core-set
 
 
 
@@ -3302,12 +3302,12 @@ v.set(v2) , or an array of numbers, as in v.set([1, 2, 3]) .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`copy()`                                            *p5-core-copy*
+`copy()`                                            p5-core-copy
 
 Returns a copy of the <a href="#/p5.Vector"> p5.Vector </a> object.
 
@@ -3315,12 +3315,12 @@ Returns a copy of the <a href="#/p5.Vector"> p5.Vector </a> object.
 
     copy of the <a href="#/p5.Vector">p5.Vector</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`add()`                                            *p5-core-add*
+`add()`                                            p5-core-add
 
 Adds to a vector's components. add() can use separate numbers, as in v.add(1,
 2, 3) , another <a href="#/p5.Vector"> p5.Vector </a> object, as in v.add(v2)
@@ -3343,12 +3343,12 @@ object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`add()`                                            *p5-core-add*
+`add()`                                            p5-core-add
 
 
 
@@ -3360,7 +3360,7 @@ object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3390,12 +3390,12 @@ originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rem()`                                            *p5-core-rem*
+`rem()`                                            p5-core-rem
 
 
 
@@ -3407,7 +3407,7 @@ originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3435,12 +3435,12 @@ the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`sub()`                                            *p5-core-sub*
+`sub()`                                            p5-core-sub
 
 
 
@@ -3452,12 +3452,12 @@ the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mult()`                                            *p5-core-mult*
+`mult()`                                            p5-core-mult
 
 Multiplies a vector's components. mult() can use separate numbers, as in
 v.mult(1, 2, 3) , another <a href="#/p5.Vector"> p5.Vector </a> object, as in
@@ -3479,12 +3479,12 @@ p5.Vector </a> object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mult()`                                            *p5-core-mult*
+`mult()`                                            p5-core-mult
 
 
 
@@ -3498,12 +3498,12 @@ p5.Vector </a> object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mult()`                                            *p5-core-mult*
+`mult()`                                            p5-core-mult
 
 
 
@@ -3515,12 +3515,12 @@ p5.Vector </a> object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mult()`                                            *p5-core-mult*
+`mult()`                                            p5-core-mult
 
 
 
@@ -3532,7 +3532,7 @@ p5.Vector </a> object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3559,12 +3559,12 @@ object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`div()`                                            *p5-core-div*
+`div()`                                            p5-core-div
 
 
 
@@ -3578,12 +3578,12 @@ object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`div()`                                            *p5-core-div*
+`div()`                                            p5-core-div
 
 
 
@@ -3595,12 +3595,12 @@ object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`div()`                                            *p5-core-div*
+`div()`                                            p5-core-div
 
 
 
@@ -3612,7 +3612,7 @@ object and doesn't change the originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3627,7 +3627,7 @@ y) .
 
     magnitude of the vector.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3640,7 +3640,7 @@ Calculates the magnitude (length) of the vector squared.
 
     squared magnitude of the vector.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3668,12 +3668,12 @@ calling v1.dot(v2) .
 
     dot product.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`dot()`                                            *p5-core-dot*
+`dot()`                                            p5-core-dot
 
 
 
@@ -3685,7 +3685,7 @@ calling v1.dot(v2) .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3708,7 +3708,7 @@ the same as calling v1.cross(v2) .
 
     cross product as a <a href="#/p5.Vector">p5.Vector</a>.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3730,7 +3730,7 @@ coordinates as in dist(x1, y1, x2, y2) .
 
     distance.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3746,7 +3746,7 @@ object and doesn't change the original.
 
     normalized <a href="#/p5.Vector">p5.Vector</a>.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3765,7 +3765,7 @@ Limits a vector's magnitude to a maximum value. The static version of limit()
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3784,7 +3784,7 @@ as in p5.Vector.setMag(v, 10) , returns a new <a href="#/p5.Vector"> p5.Vector
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3802,7 +3802,7 @@ static version of heading() , as in p5.Vector.heading(v) , works the same way.
 
     angle of rotation.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3823,7 +3823,7 @@ the current <a href="#/p5/angleMode"> angleMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3846,7 +3846,7 @@ in p5.Vector.rotate(v, PI) , returns a new <a href="#/p5.Vector"> p5.Vector
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3867,7 +3867,7 @@ href="#/p5/angleMode"> angleMode() </a> .
 
     angle between the vectors.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3898,12 +3898,12 @@ originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`lerp()`                                            *p5-core-lerp*
+`lerp()`                                            p5-core-lerp
 
 
 
@@ -3916,12 +3916,12 @@ originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`lerp()`                                            *p5-core-lerp*
+`lerp()`                                            p5-core-lerp
 
 
 
@@ -3934,7 +3934,7 @@ originals.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3961,7 +3961,7 @@ p5.Vector </a> object and doesn't change the original.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3982,7 +3982,7 @@ original.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -3995,7 +3995,7 @@ Returns the vector's components as an array of numbers.
 
     array with the vector's components.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -4022,12 +4022,12 @@ parameters as <a href="#/p5.Vector"> p5.Vector </a> objects.
 
     whether the vectors are equal.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`equals()`                                            *p5-core-equals*
+`equals()`                                            p5-core-equals
 
 
 
@@ -4039,7 +4039,7 @@ parameters as <a href="#/p5.Vector"> p5.Vector </a> objects.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -4058,7 +4058,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 
     with components very close to zero replaced with zero.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -4076,7 +4076,7 @@ Creates a new 2D vector from an angle.
 
     new <a href="#/p5.Vector">p5.Vector</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -4095,7 +4095,7 @@ Creates a new 3D vector from a pair of ISO spherical angles.
 
     new <a href="#/p5.Vector">p5.Vector</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -4108,7 +4108,7 @@ Creates a new 2D unit vector with a random heading.
 
     new <a href="#/p5.Vector">p5.Vector</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -4121,12 +4121,12 @@ Creates a new 3D unit vector with a random heading.
 
     new <a href="#/p5.Vector">p5.Vector</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`copy()`                                            *p5-core-copy*
+`copy()`                                            p5-core-copy
 
 
 
@@ -4138,12 +4138,12 @@ Creates a new 3D unit vector with a random heading.
 
     the copy of the <a href="#/p5.Vector">p5.Vector</a> object
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`add()`                                            *p5-core-add*
+`add()`                                            p5-core-add
 
 
 
@@ -4157,12 +4157,12 @@ Creates a new 3D unit vector with a random heading.
 
     resulting <a href="#/p5.Vector">p5.Vector</a>.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rem()`                                            *p5-core-rem*
+`rem()`                                            p5-core-rem
 
 
 
@@ -4175,12 +4175,12 @@ Creates a new 3D unit vector with a random heading.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rem()`                                            *p5-core-rem*
+`rem()`                                            p5-core-rem
 
 
 
@@ -4193,12 +4193,12 @@ Creates a new 3D unit vector with a random heading.
 
     The resulting <a href="#/p5.Vector">p5.Vector</a>
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`sub()`                                            *p5-core-sub*
+`sub()`                                            p5-core-sub
 
 
 
@@ -4212,12 +4212,12 @@ Creates a new 3D unit vector with a random heading.
 
     The resulting <a href="#/p5.Vector">p5.Vector</a>
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mult()`                                            *p5-core-mult*
+`mult()`                                            p5-core-mult
 
 Multiplies a vector by a scalar and returns a new vector.
 
@@ -4225,12 +4225,12 @@ Multiplies a vector by a scalar and returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mult()`                                            *p5-core-mult*
+`mult()`                                            p5-core-mult
 
 
 
@@ -4244,12 +4244,12 @@ Multiplies a vector by a scalar and returns a new vector.
 
     resulting new <a href="#/p5.Vector">p5.Vector</a>.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mult()`                                            *p5-core-mult*
+`mult()`                                            p5-core-mult
 
 
 
@@ -4263,12 +4263,12 @@ Multiplies a vector by a scalar and returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mult()`                                            *p5-core-mult*
+`mult()`                                            p5-core-mult
 
 
 
@@ -4282,12 +4282,12 @@ Multiplies a vector by a scalar and returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mult()`                                            *p5-core-mult*
+`mult()`                                            p5-core-mult
 
 
 
@@ -4301,12 +4301,12 @@ Multiplies a vector by a scalar and returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rotate()`                                            *p5-core-rotate*
+`rotate()`                                            p5-core-rotate
 
 Rotates the vector (only 2D vectors) by the given angle; magnitude remains the
 same. Returns a new vector.
@@ -4315,12 +4315,12 @@ same. Returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rotate()`                                            *p5-core-rotate*
+`rotate()`                                            p5-core-rotate
 
 
 
@@ -4334,12 +4334,12 @@ same. Returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`div()`                                            *p5-core-div*
+`div()`                                            p5-core-div
 
 Divides a vector by a scalar and returns a new vector.
 
@@ -4347,12 +4347,12 @@ Divides a vector by a scalar and returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`div()`                                            *p5-core-div*
+`div()`                                            p5-core-div
 
 
 
@@ -4366,12 +4366,12 @@ Divides a vector by a scalar and returns a new vector.
 
     The resulting new <a href="#/p5.Vector">p5.Vector</a>
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`div()`                                            *p5-core-div*
+`div()`                                            p5-core-div
 
 
 
@@ -4385,12 +4385,12 @@ Divides a vector by a scalar and returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`div()`                                            *p5-core-div*
+`div()`                                            p5-core-div
 
 
 
@@ -4404,12 +4404,12 @@ Divides a vector by a scalar and returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`div()`                                            *p5-core-div*
+`div()`                                            p5-core-div
 
 
 
@@ -4423,12 +4423,12 @@ Divides a vector by a scalar and returns a new vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`dot()`                                            *p5-core-dot*
+`dot()`                                            p5-core-dot
 
 Calculates the dot product of two vectors.
 
@@ -4436,12 +4436,12 @@ Calculates the dot product of two vectors.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`dot()`                                            *p5-core-dot*
+`dot()`                                            p5-core-dot
 
 
 
@@ -4454,12 +4454,12 @@ Calculates the dot product of two vectors.
 
     dot product.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`cross()`                                            *p5-core-cross*
+`cross()`                                            p5-core-cross
 
 Calculates the cross product of two vectors.
 
@@ -4467,12 +4467,12 @@ Calculates the cross product of two vectors.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`cross()`                                            *p5-core-cross*
+`cross()`                                            p5-core-cross
 
 
 
@@ -4485,12 +4485,12 @@ Calculates the cross product of two vectors.
 
     cross product.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`dist()`                                            *p5-core-dist*
+`dist()`                                            p5-core-dist
 
 Calculates the Euclidean distance between two points (considering a point as a
 vector object).
@@ -4499,12 +4499,12 @@ vector object).
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`dist()`                                            *p5-core-dist*
+`dist()`                                            p5-core-dist
 
 
 
@@ -4517,12 +4517,12 @@ vector object).
 
     The distance
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`lerp()`                                            *p5-core-lerp*
+`lerp()`                                            p5-core-lerp
 
 Linear interpolate a vector to another vector and return the result as a new
 vector.
@@ -4531,12 +4531,12 @@ vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`lerp()`                                            *p5-core-lerp*
+`lerp()`                                            p5-core-lerp
 
 
 
@@ -4551,12 +4551,12 @@ vector.
 
     The lerped value
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`slerp()`                                            *p5-core-slerp*
+`slerp()`                                            p5-core-slerp
 
 Performs spherical linear interpolation with the other vector and returns the
 resulting vector. This works in both 3D and 2D. As for 2D, the result of
@@ -4566,12 +4566,12 @@ slerping between 2D vectors is always a 2D vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`slerp()`                                            *p5-core-slerp*
+`slerp()`                                            p5-core-slerp
 
 
 
@@ -4586,12 +4586,12 @@ slerping between 2D vectors is always a 2D vector.
 
     slerped vector between v1 and v2
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mag()`                                            *p5-core-mag*
+`mag()`                                            p5-core-mag
 
 Calculates the magnitude (length) of the vector and returns the result as a
 float (this is simply the equation sqrt(x*x + y*y + z*z) .)
@@ -4600,12 +4600,12 @@ float (this is simply the equation sqrt(x*x + y*y + z*z) .)
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mag()`                                            *p5-core-mag*
+`mag()`                                            p5-core-mag
 
 
 
@@ -4617,27 +4617,27 @@ float (this is simply the equation sqrt(x*x + y*y + z*z) .)
 
     The magnitude of vecT
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`magSq()`                                            *p5-core-magSq*
+`magSq()`                                            p5-core-magSq
 
 Calculates the squared magnitude of the vector and returns the result as a
-float (this is simply the equation <em> (x*x + y*y + z*z) </em> .) Faster if
+float (this is simply the equation <em> (xx + yy + z*z) </em> .) Faster if
 the real length is not required in the case of comparing vectors, etc.
 
 #### Returns:
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`magSq()`                                            *p5-core-magSq*
+`magSq()`                                            p5-core-magSq
 
 
 
@@ -4649,12 +4649,12 @@ the real length is not required in the case of comparing vectors, etc.
 
     the squared magnitude of vecT
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`normalize()`                                            *p5-core-normalize*
+`normalize()`                                            p5-core-normalize
 
 Normalize the vector to length 1 (make it a unit vector).
 
@@ -4662,12 +4662,12 @@ Normalize the vector to length 1 (make it a unit vector).
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`normalize()`                                            *p5-core-normalize*
+`normalize()`                                            p5-core-normalize
 
 
 
@@ -4680,12 +4680,12 @@ Normalize the vector to length 1 (make it a unit vector).
 
     The vector v, normalized to a length of 1
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`limit()`                                            *p5-core-limit*
+`limit()`                                            p5-core-limit
 
 Limit the magnitude of the vector to the value used for the <b> max </b>
 parameter.
@@ -4694,12 +4694,12 @@ parameter.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`limit()`                                            *p5-core-limit*
+`limit()`                                            p5-core-limit
 
 
 
@@ -4713,12 +4713,12 @@ parameter.
 
     v with a magnitude limited to max
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`setMag()`                                            *p5-core-setMag*
+`setMag()`                                            p5-core-setMag
 
 Set the magnitude of the vector to the value used for the <b> len </b>
 parameter.
@@ -4727,12 +4727,12 @@ parameter.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`setMag()`                                            *p5-core-setMag*
+`setMag()`                                            p5-core-setMag
 
 
 
@@ -4746,12 +4746,12 @@ parameter.
 
     v with a magnitude set to len
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`heading()`                                            *p5-core-heading*
+`heading()`                                            p5-core-heading
 
 Calculate the angle of rotation for this vector (only 2D vectors). p5.Vectors
 created using <a href="#/p5/createVector"> createVector() </a> will take the
@@ -4762,12 +4762,12 @@ the angle in radians or degrees accordingly.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`heading()`                                            *p5-core-heading*
+`heading()`                                            p5-core-heading
 
 
 
@@ -4779,12 +4779,12 @@ the angle in radians or degrees accordingly.
 
     the angle of rotation
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`angleBetween()`                                            *p5-core-angleBetween*
+`angleBetween()`                                            p5-core-angleBetween
 
 Calculates and returns the angle between two vectors. This function will take
 the <a href="#/p5/angleMode"> angleMode </a> on v1 into consideration, and
@@ -4794,12 +4794,12 @@ give the angle in radians or degrees accordingly.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`angleBetween()`                                            *p5-core-angleBetween*
+`angleBetween()`                                            p5-core-angleBetween
 
 
 
@@ -4812,12 +4812,12 @@ give the angle in radians or degrees accordingly.
 
     angle between the two vectors.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`reflect()`                                            *p5-core-reflect*
+`reflect()`                                            p5-core-reflect
 
 Reflect a vector about a normal to a line in 2D, or about a normal to a plane
 in 3D.
@@ -4826,12 +4826,12 @@ in 3D.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`reflect()`                                            *p5-core-reflect*
+`reflect()`                                            p5-core-reflect
 
 
 
@@ -4845,12 +4845,12 @@ in 3D.
 
     the reflected vector
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`array()`                                            *p5-core-array*
+`array()`                                            p5-core-array
 
 Return a representation of this vector as a float array. This is only for
 temporary use. If used in any other fashion, the contents should be copied by
@@ -4861,12 +4861,12 @@ to copy into your own vector.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`array()`                                            *p5-core-array*
+`array()`                                            p5-core-array
 
 
 
@@ -4878,12 +4878,12 @@ to copy into your own vector.
 
     an Array with the 3 values
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`equals()`                                            *p5-core-equals*
+`equals()`                                            p5-core-equals
 
 Equality check against a <a href="#/p5.Vector"> p5.Vector </a>
 
@@ -4891,12 +4891,12 @@ Equality check against a <a href="#/p5.Vector"> p5.Vector </a>
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`equals()`                                            *p5-core-equals*
+`equals()`                                            p5-core-equals
 
 
 
@@ -4909,7 +4909,7 @@ Equality check against a <a href="#/p5.Vector"> p5.Vector </a>
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -4929,12 +4929,12 @@ opens the browser's dialog for printing documents.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`print()`                                            *p5-core-print*
+`print()`                                            p5-core-print
 
 Writes data to the print stream with new lines added. The parameter, data , is
 the data to write. data can be a number or string, as in myWriter.print('hi')
@@ -4950,7 +4950,7 @@ print stream.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -4963,7 +4963,7 @@ Returns the current hour as a number from 0–23.
 
     current hour between 0 and 23.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -4992,7 +4992,7 @@ directly pass options as the fourth parameter.
 
     A flat array of path commands.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5027,7 +5027,7 @@ edges are collinear.
 
     array of point objects, each with `x`, `y`, and `alpha` (path angle) properties.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5064,7 +5064,7 @@ edges are collinear.
 
     array of point objects, each with `x`, `y`, and `alpha` (path angle) properties.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5105,7 +5105,7 @@ Higher values result in smoother curves.
 
     A geometry object representing the 3D model of the text.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5127,7 +5127,7 @@ these functions produce the same results each time a sketch is run.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5150,12 +5150,12 @@ value NaN (not a number) will be returned.
 
     converted number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`float()`                                            *p5-core-float*
+`float()`                                            p5-core-float
 
 
 
@@ -5167,7 +5167,7 @@ value NaN (not a number) will be returned.
 
     converted numbers.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5190,7 +5190,7 @@ duplicated and added to the table.
 
     the row that was added
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5207,7 +5207,7 @@ Removes a row from the table object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5225,7 +5225,7 @@ Returns a reference to the specified <a href="#/p5.TableRow"> p5.TableRow </a>
 
     <a href="#/p5.TableRow">p5.TableRow</a> object
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5239,7 +5239,7 @@ p5.TableRow </a> s.
 
     Array of <a href="#/p5.TableRow">p5.TableRow</a>s
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5260,7 +5260,7 @@ either its ID or title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5281,7 +5281,7 @@ be specified by either its ID or title.
 
     An Array of TableRow objects
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5302,7 +5302,7 @@ specified by either its ID or title.
 
     TableRow object
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5323,7 +5323,7 @@ may be specified by either its ID or title.
 
     An Array of TableRow objects
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5341,7 +5341,7 @@ The column may be specified by either its ID or title.
 
     Array of column values
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5355,7 +5355,7 @@ titles are maintained.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5375,7 +5375,7 @@ no title is specified, the new column's title will be null.)
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5388,7 +5388,7 @@ Returns the total number of columns in a Table.
 
     Number of columns in this table
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5401,7 +5401,7 @@ Returns the total number of rows in a Table.
 
     Number of rows in this table
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5421,7 +5421,7 @@ column may be referenced by either its ID or title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5441,7 +5441,7 @@ title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5462,12 +5462,12 @@ the second column, and so on.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`set()`                                            *p5-core-set*
+`set()`                                            p5-core-set
 
 Stores a value in the Table's specified row and column. The row is specified
 by its ID, while the column may be specified by either its ID or title.
@@ -5482,12 +5482,12 @@ by its ID, while the column may be specified by either its ID or title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`setNum()`                                            *p5-core-setNum*
+`setNum()`                                            p5-core-setNum
 
 Stores a Float value in the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -5503,12 +5503,12 @@ title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`setString()`                                            *p5-core-setString*
+`setString()`                                            p5-core-setString
 
 Stores a String value in the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -5524,12 +5524,12 @@ title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`get()`                                            *p5-core-get*
+`get()`                                            p5-core-get
 
 Retrieves a value from the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -5544,12 +5544,12 @@ title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`getNum()`                                            *p5-core-getNum*
+`getNum()`                                            p5-core-getNum
 
 Retrieves a Float value from the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -5564,12 +5564,12 @@ title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`getString()`                                            *p5-core-getString*
+`getString()`                                            p5-core-getString
 
 Retrieves a String value from the Table's specified row and column. The row is
 specified by its ID, while the column may be specified by either its ID or
@@ -5584,7 +5584,7 @@ title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5602,7 +5602,7 @@ in, each row object will be stored with that attribute as its title.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5615,7 +5615,7 @@ Retrieves all table data and returns it as a multidimensional array.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5648,12 +5648,12 @@ CENTER , RADIUS , CORNER , or CORNERS .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ellipseMode()`                                            *p5-core-ellipseMode*
+`ellipseMode()`                                            p5-core-ellipseMode
 
 
 
@@ -5661,7 +5661,7 @@ CENTER , RADIUS , CORNER , or CORNERS .
 
     the current ellipseMode.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5700,7 +5700,7 @@ function draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 
     absolute value of given number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5718,7 +5718,7 @@ roation and angle of rotation
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5755,12 +5755,12 @@ number is negative, for example, calling nf(-123.45, 5, 2) returns the string
 
     formatted string.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`nf()`                                            *p5-core-nf*
+`nf()`                                            p5-core-nf
 
 
 
@@ -5774,7 +5774,7 @@ number is negative, for example, calling nf(-123.45, 5, 2) returns the string
 
     formatted strings.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5798,7 +5798,7 @@ visual quality.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5825,7 +5825,7 @@ target="_blank"> HTMLElement </a> object.
 
     <a href="#/p5.Element">p5.Element</a> containing the element.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5862,7 +5862,7 @@ href="#/p5.Vector"> p5.Vector </a> class.
 
     new <a href="#/p5.Vector">p5.Vector</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5875,7 +5875,7 @@ Returns the current minute as a number from 0–59.
 
     current minute between 0 and 59.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5895,7 +5895,7 @@ isLooping() === true .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5913,7 +5913,7 @@ shaders may use either.
 
     The GLSL version used by the shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -5948,7 +5948,7 @@ texCoord) { return color; } void afterFragment() {}
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6042,12 +6042,12 @@ sphere(50); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`modify()`                                            *p5-core-modify*
+`modify()`                                            p5-core-modify
 
 
 
@@ -6059,7 +6059,7 @@ sphere(50); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6093,7 +6093,7 @@ the same context as the main canvas.
 
     new shader compiled for the target context.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6122,7 +6122,7 @@ setUniform() .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6148,7 +6148,7 @@ href="/learn/accessible-labels.html"> Writing accessible canvas descriptions
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6176,7 +6176,7 @@ personal information shouldn't be stored in localStorage .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6189,7 +6189,7 @@ Plays audio or video from a media element.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6203,7 +6203,7 @@ will restart playing audio/video from the beginning.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6217,7 +6217,7 @@ from the moment it paused.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6230,12 +6230,12 @@ Plays the audio/video repeatedly in a loop.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`noLoop()`                                            *p5-core-noLoop*
+`noLoop()`                                            p5-core-noLoop
 
 Stops the audio/video from playing in a loop. The media will stop when it
 finishes playing.
@@ -6244,7 +6244,7 @@ finishes playing.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6265,7 +6265,7 @@ won't play automatically.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6282,12 +6282,12 @@ to half of its maximum.
 
     current volume.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`volume()`                                            *p5-core-volume*
+`volume()`                                            p5-core-volume
 
 
 
@@ -6299,7 +6299,7 @@ to half of its maximum.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6317,12 +6317,12 @@ they do, playback might not be smooth.
 
     current playback speed.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`speed()`                                            *p5-core-speed*
+`speed()`                                            p5-core-speed
 
 
 
@@ -6334,7 +6334,7 @@ they do, playback might not be smooth.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6355,7 +6355,7 @@ restarts.
 
     current time (in seconds).
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6368,7 +6368,7 @@ Returns the audio/video's duration in seconds.
 
     duration (in seconds).
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6387,7 +6387,7 @@ won't be called if the media is looping.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6408,7 +6408,7 @@ meant to be used with the p5.sound.js addon library.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6422,7 +6422,7 @@ if you want to re-route the output through audio effects, for example.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6438,7 +6438,7 @@ between web browsers.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6453,7 +6453,7 @@ target="_blank"> HTMLMediaElement </a> controls.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6478,7 +6478,7 @@ ID as a string. This is useful for removing the cue later.
 
     id ID of this cue, useful for `media.removeCue(id)`.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6495,7 +6495,7 @@ Removes a callback based on its ID.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6508,7 +6508,7 @@ Removes all functions scheduled with media.addCue() .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6543,7 +6543,7 @@ descriptions </a> to learn more about making sketches accessible.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6579,12 +6579,12 @@ NORMAL
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`blend()`                                            *p5-core-blend*
+`blend()`                                            p5-core-blend
 
 
 
@@ -6604,7 +6604,7 @@ NORMAL
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6646,12 +6646,12 @@ create a WebGL1 context. Note: In WebGPU mode, you must await this function.
 
     new `p5.Renderer` that holds the canvas.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createCanvas()`                                            *p5-core-createCanvas*
+`createCanvas()`                                            p5-core-createCanvas
 
 
 
@@ -6666,12 +6666,12 @@ create a WebGL1 context. Note: In WebGPU mode, you must await this function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createCanvas()`                                            *p5-core-createCanvas*
+`createCanvas()`                                            p5-core-createCanvas
 
 
 
@@ -6685,7 +6685,7 @@ create a WebGL1 context. Note: In WebGPU mode, you must await this function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6699,7 +6699,7 @@ the texture for the first time if data is already available.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6715,7 +6715,7 @@ method simply re-uploads the texture.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6750,7 +6750,7 @@ await . See the examples for the usage syntax.
 
     the <a href="#/p5.Image">p5.Image</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6764,7 +6764,7 @@ anything subsequently drawn.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6808,7 +6808,7 @@ only be used in WebGL mode.
 
     new shader created from the vertex and fragment shader files.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6835,12 +6835,12 @@ The new <a href="#/p5.Image"> p5.Image </a> object is transparent by default.
 
     new <a href="#/p5.Image">p5.Image</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`update()`                                            *p5-core-update*
+`update()`                                            p5-core-update
 
 Updates the data in the buffer with new values. The new data must be in the
 same format as the data originally passed to <a href="#/p5/createStorage">
@@ -6871,12 +6871,12 @@ fill(255, 200, 50); shader(displayShader); instances(numParticles).sphere(2);
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`update()`                                            *p5-core-update*
+`update()`                                            p5-core-update
 
 Replaces the contents of the list with new data from JavaScript, updating the
 element count to match. For a list of numbers, update takes in an array of
@@ -6891,7 +6891,7 @@ objects with the same properties present as when you created the list.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6936,7 +6936,7 @@ false. freeRotation: false }; orbitControl(1, 1, 1, options);
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6954,7 +6954,7 @@ mode, you must await this function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -6993,7 +6993,7 @@ draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 
     rounded up number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7027,12 +7027,12 @@ interpreted using the current <a href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ambientLight()`                                            *p5-core-ambientLight*
+`ambientLight()`                                            p5-core-ambientLight
 
 
 
@@ -7045,12 +7045,12 @@ interpreted using the current <a href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ambientLight()`                                            *p5-core-ambientLight*
+`ambientLight()`                                            p5-core-ambientLight
 
 
 
@@ -7062,12 +7062,12 @@ interpreted using the current <a href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ambientLight()`                                            *p5-core-ambientLight*
+`ambientLight()`                                            p5-core-ambientLight
 
 
 
@@ -7079,12 +7079,12 @@ interpreted using the current <a href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ambientLight()`                                            *p5-core-ambientLight*
+`ambientLight()`                                            p5-core-ambientLight
 
 
 
@@ -7096,7 +7096,7 @@ interpreted using the current <a href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7124,7 +7124,7 @@ that's passed to <a href="#/p5/clip"> clip() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7151,7 +7151,7 @@ target="_blank"> HTMLElement </a> object.
 
     array of <a href="#/p5.Element">p5.Element</a>s containing any elements found.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7172,7 +7172,7 @@ myBuffer.width to 300 and myBuffer.height 500.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7197,7 +7197,7 @@ argument returns its current pixel density.
 
     current pixel density.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7219,7 +7219,7 @@ false if not.
 
     current autosize setting.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7245,12 +7245,12 @@ stuff... myBuffer.end();
 
     new camera.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`remove()`                                            *p5-core-remove*
+`remove()`                                            p5-core-remove
 
 Deletes the framebuffer from GPU memory. Calling myBuffer.remove() frees the
 GPU memory used by the framebuffer. The framebuffer also uses a bit of memory
@@ -7264,7 +7264,7 @@ variable still refers to the framebuffer, then it won't be garbage collected.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7282,7 +7282,7 @@ image or texture.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7300,7 +7300,7 @@ image or texture.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7322,7 +7322,7 @@ myBuffer.begin(); myFunction(); myBuffer.end();
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7338,12 +7338,12 @@ myBuffer.pixels </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`get()`                                            *p5-core-get*
+`get()`                                            p5-core-get
 
 Gets a pixel or a region of pixels from the framebuffer. myBuffer.get() is
 easy to use but it's not as fast as <a href="#/p5.Framebuffer/pixels">
@@ -7370,12 +7370,12 @@ subsection.
 
     subsection as a <a href="#/p5.Image">p5.Image</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`get()`                                            *p5-core-get*
+`get()`                                            p5-core-get
 
 
 
@@ -7383,12 +7383,12 @@ subsection.
 
     entire framebuffer as a <a href="#/p5.Image">p5.Image</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`get()`                                            *p5-core-get*
+`get()`                                            p5-core-get
 
 
 
@@ -7401,12 +7401,12 @@ subsection.
 
     color of the pixel at `(x, y)` as an array of color values `[R, G, B, A]`.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`perspective()`                                            *p5-core-perspective*
+`perspective()`                                            p5-core-perspective
 
 Sets a perspective projection for the camera. In a perspective projection,
 shapes that are further from the camera appear smaller than shapes that are
@@ -7452,12 +7452,12 @@ default distance between the camera and the origin.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ortho()`                                            *p5-core-ortho*
+`ortho()`                                            p5-core-ortho
 
 Sets an orthographic projection for the camera. In an orthographic projection,
 shapes with the same size always appear the same size, regardless of whether
@@ -7491,7 +7491,7 @@ max(width, height) + 800 , respectively.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7532,7 +7532,7 @@ the default distance between the camera and the origin.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7555,7 +7555,7 @@ angleMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7578,7 +7578,7 @@ angleMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7601,7 +7601,7 @@ calling myCamera.lookAt(10, 20, 30) points the camera at the coordinates (10,
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7641,7 +7641,7 @@ is (0, 1, 0) .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7663,7 +7663,7 @@ right, 20 pixels down, and 30 pixels backward in its "local" space.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7685,12 +7685,12 @@ camera at coordinates (10, 20, 30) in "world" space.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`set()`                                            *p5-core-set*
+`set()`                                            p5-core-set
 
 Sets the camera’s position, orientation, and projection by copying another
 camera. The parameter, cam , is the p5.Camera object to copy. For example,
@@ -7704,12 +7704,12 @@ calling cam2.set(cam1) will set cam2 using cam1 ’s configuration.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`slerp()`                                            *p5-core-slerp*
+`slerp()`                                            p5-core-slerp
 
 Sets the camera’s position and orientation to values that are in-between those
 of two other cameras. myCamera.slerp() uses spherical linear interpolation to
@@ -7735,7 +7735,7 @@ use the same projection.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7769,12 +7769,12 @@ has x-, y-, and z-coordinates.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`bezier()`                                            *p5-core-bezier*
+`bezier()`                                            p5-core-bezier
 
 
 
@@ -7797,7 +7797,7 @@ has x-, y-, and z-coordinates.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7841,7 +7841,7 @@ shader(myShader); noStroke(); sphere(30); }
 
     arc cosine of the given value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7867,12 +7867,12 @@ NaN (not a number) will be returned.
 
     converted number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`int()`                                            *p5-core-int*
+`int()`                                            p5-core-int
 
 
 
@@ -7884,7 +7884,7 @@ NaN (not a number) will be returned.
 
     converted numbers.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7908,7 +7908,7 @@ max: { x: 1, y: 2, z: 3}, // // // The size (length) along each axis. // size:
 
     bounding box of the geometry.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7925,7 +7925,7 @@ function to apply color to the geometry.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7953,7 +7953,7 @@ vertices: [0, 0, 1, 0] --> [1, 0, 0, 0] // Bottom vertices: [0, 1, 1, 1] -->
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -7988,7 +7988,7 @@ geometries have four or more vertices.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8028,7 +8028,7 @@ uses 3 decimal places.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8041,12 +8041,12 @@ uses 3 decimal places.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`normalize()`                                            *p5-core-normalize*
+`normalize()`                                            p5-core-normalize
 
 Transforms the geometry's vertices to fit snugly within a 100×100×100 box
 centered at the origin. Calling myGeometry.normalize() translates the
@@ -8060,7 +8060,7 @@ setup() </a> function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8095,12 +8095,12 @@ global <a href="#/p5/vertexProperty"> vertexProperty() </a> function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`copy()`                                            *p5-core-copy*
+`copy()`                                            p5-core-copy
 
 Copies pixels from a source image to a region of the canvas. The first
 parameter, srcImage , is the <a href="#/p5.Image"> p5.Image </a> object to
@@ -8129,12 +8129,12 @@ and dh are the region's width and height.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`copy()`                                            *p5-core-copy*
+`copy()`                                            p5-core-copy
 
 
 
@@ -8153,12 +8153,12 @@ and dh are the region's width and height.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`loop()`                                            *p5-core-loop*
+`loop()`                                            p5-core-loop
 
 Resumes the draw loop after <a href="#/p5/noLoop"> noLoop() </a> has been
 called. By default, <a href="#/p5/draw"> draw() </a> tries to run 60 times per
@@ -8171,7 +8171,7 @@ can be used to check whether a sketch is looping, as in isLooping() === true .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8185,7 +8185,7 @@ beginClip() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8231,12 +8231,12 @@ shapes to transform continuously.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`applyMatrix()`                                            *p5-core-applyMatrix*
+`applyMatrix()`                                            p5-core-applyMatrix
 
 
 
@@ -8253,12 +8253,12 @@ shapes to transform continuously.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`applyMatrix()`                                            *p5-core-applyMatrix*
+`applyMatrix()`                                            p5-core-applyMatrix
 
 
 
@@ -8285,7 +8285,7 @@ shapes to transform continuously.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8314,12 +8314,12 @@ the string '12,345.670' .
 
     formatted string.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`nfc()`                                            *p5-core-nfc*
+`nfc()`                                            p5-core-nfc
 
 
 
@@ -8332,7 +8332,7 @@ the string '12,345.670' .
 
     formatted strings.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8351,12 +8351,12 @@ Constrains a number between a minimum and maximum value.
 
     constrained number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`push()`                                            *p5-core-push*
+`push()`                                            p5-core-push
 
 Appends one element to the list. This can be called from your sketch's
 JavaScript or from within a <a href="#/p5/buildComputeShader"> compute shader.
@@ -8408,12 +8408,12 @@ shader(drawParticles); blendMode(ADD); instances(particles).circle(0, 0, 4); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`push()`                                            *p5-core-push*
+`push()`                                            p5-core-push
 
 Begins a drawing group that contains its own styles and transformations. By
 default, styles such as <a href="#/p5/fill"> fill() </a> and transformations
@@ -8473,7 +8473,7 @@ normalMaterial() </a> <a href="#/p5/shader"> shader() </a>
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8504,12 +8504,12 @@ href="/learn/accessible-labels.html"> Writing accessible canvas descriptions
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`reset()`                                            *p5-core-reset*
+`reset()`                                            p5-core-reset
 
 Resets the graphics buffer's transformations and lighting. By default, the
 main canvas resets certain transformation and lighting values each time <a
@@ -8520,12 +8520,12 @@ values manually by calling myGraphics.reset() .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`remove()`                                            *p5-core-remove*
+`remove()`                                            p5-core-remove
 
 Removes the graphics buffer from the web page. Calling myGraphics.remove()
 removes the graphics buffer's <canvas> element from the web page. The graphics
@@ -8540,7 +8540,7 @@ refers to the graphics buffer, then it won't be garbage collected.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8598,7 +8598,7 @@ must be changed manually.
 
     new framebuffer.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8649,7 +8649,7 @@ draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 
     number of milliseconds since starting the sketch.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8667,7 +8667,7 @@ is looping, as in isLooping() === true .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8704,7 +8704,7 @@ sketches accessible.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8731,12 +8731,12 @@ with a dialogue window.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`saveCanvas()`                                            *p5-core-saveCanvas*
+`saveCanvas()`                                            p5-core-saveCanvas
 
 
 
@@ -8749,7 +8749,7 @@ with a dialogue window.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8762,7 +8762,7 @@ Clears all transformations applied to the coordinate system.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8795,7 +8795,7 @@ finishes executing.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8823,7 +8823,7 @@ information shouldn't be stored in localStorage .
 
     stored item.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8909,7 +8909,7 @@ function draw() { filter(myFilter); }
 
     Perlin noise value at specified coordinates.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8943,7 +8943,7 @@ the arc in WebGL mode. The default value is 25.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8956,7 +8956,7 @@ Returns the current month as a number from 1–12.
 
     current month between 1 and 12.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -8988,12 +8988,12 @@ CENTER , or RADIUS .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rectMode()`                                            *p5-core-rectMode*
+`rectMode()`                                            p5-core-rectMode
 
 
 
@@ -9001,7 +9001,7 @@ CENTER , or RADIUS .
 
     the current rectMode.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9068,12 +9068,12 @@ noStroke(); sphere(30); }
 
     random number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`random()`                                            *p5-core-random*
+`random()`                                            p5-core-random
 
 
 
@@ -9085,7 +9085,7 @@ noStroke(); sphere(30); }
 
     random element from the array.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9115,7 +9115,7 @@ units , silent , notificationDuration , and notificationID .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9157,7 +9157,7 @@ See the examples for the usage syntax.
 
     object containing the loaded data.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9188,12 +9188,12 @@ computeShader = buildComputeShader({ computeDeclarations: `
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`read()`                                            *p5-core-read*
+`read()`                                            p5-core-read
 
 Reads the current contents of the list back to JavaScript. It returns a
 Float32Array for float lists, or an array of plain objects for struct lists.
@@ -9203,7 +9203,7 @@ Note: This is a GPU-to-CPU read. Calling it frequently can be slow.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9224,7 +9224,7 @@ the new element. New elements have no content by default.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9268,7 +9268,7 @@ finalColor.set(mix(green, purple, value)); finalColor.end(); } function draw()
 
     arc sine of the given value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9300,12 +9300,12 @@ type as a string.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`cursor()`                                            *p5-core-cursor*
+`cursor()`                                            p5-core-cursor
 
 
 
@@ -9313,12 +9313,12 @@ type as a string.
 
     the current cursor type
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`dist()`                                            *p5-core-dist*
+`dist()`                                            p5-core-dist
 
 Calculates the distance between two points. The version of dist() with four
 parameters calculates distance in two dimensions. The version of dist() with
@@ -9337,12 +9337,12 @@ between two <a href="#/p5.Vector"> p5.Vector </a> objects.
 
     distance between the two points.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`dist()`                                            *p5-core-dist*
+`dist()`                                            p5-core-dist
 
 
 
@@ -9359,7 +9359,7 @@ between two <a href="#/p5.Vector"> p5.Vector </a> objects.
 
     distance between the two points.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9374,7 +9374,7 @@ noCanvas() removes the default canvas for sketches that don't need it.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9397,7 +9397,7 @@ as in str([12.34, 56.78]) , then an array of strings will be returned.
 
     converted string.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9410,7 +9410,7 @@ Returns the current second as a number from 0–59.
 
     current second between 0 and 59.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9436,7 +9436,7 @@ create the new 3D shape. Note: buildGeometry() can only be used in WebGL mode.
 
     new 3D shape.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9462,12 +9462,12 @@ in byte('giraffe') , then the value NaN (not a number) will be returned.
 
     converted byte value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`byte()`                                            *p5-core-byte*
+`byte()`                                            p5-core-byte
 
 
 
@@ -9479,12 +9479,12 @@ in byte('giraffe') , then the value NaN (not a number) will be returned.
 
     converted byte values.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`resize()`                                            *p5-core-resize*
+`resize()`                                            p5-core-resize
 
 Resize our canvas element.
 
@@ -9492,7 +9492,7 @@ Resize our canvas element.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9524,7 +9524,7 @@ second anchor point, and 0.5 is halfway between them.
 
     coordinate of the point on the curve.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9548,7 +9548,7 @@ default, n is 1.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9566,7 +9566,7 @@ callback.
 
     The index of the current instance.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9592,7 +9592,7 @@ interpolates between 0.0 and 1.0 when x is between them
 
     A value between `0.0` and `1.0`
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9618,12 +9618,12 @@ only available when using p5.strands.
 
     A strands node representing the storage buffer.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`uniformStorage()`                                            *p5-core-uniformStorage*
+`uniformStorage()`                                            p5-core-uniformStorage
 
 
 
@@ -9635,7 +9635,7 @@ only available when using p5.strands.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9653,7 +9653,7 @@ only available when using p5.strands.
 
     The color of the given texture at the given coordinates. This will behave as a vec4 holding components r, g, b, and a (alpha), with each component being in the range 0.0 to 1.0.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9670,7 +9670,7 @@ only available when using p5.strands.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9687,7 +9687,7 @@ only available when using p5.strands.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9704,7 +9704,7 @@ only available when using p5.strands.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9721,7 +9721,7 @@ only available when using p5.strands.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9738,7 +9738,7 @@ only available when using p5.strands.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9755,7 +9755,7 @@ only available when using p5.strands.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9784,7 +9784,7 @@ For regular p5.js code, use <a href="#/p5/lerp"> lerp() </a> instead.
 
     interpolated value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9797,7 +9797,7 @@ Returns the current year as a number such as 1999.
 
     current year.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9813,7 +9813,7 @@ created by <a href="#/p5/createGraphics"> createGraphics() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9831,7 +9831,7 @@ images or fonts.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9867,12 +9867,12 @@ nfp(123.45, 4, 3) returns the string '+0123.450' .
 
     formatted string.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`nfp()`                                            *p5-core-nfp*
+`nfp()`                                            p5-core-nfp
 
 
 
@@ -9886,7 +9886,7 @@ nfp(123.45, 4, 3) returns the string '+0123.450' .
 
     formatted strings.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9906,7 +9906,7 @@ personal information shouldn't be stored in localStorage .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9946,7 +9946,7 @@ rect() </a> , between beginShape() and <a href="#/p5/endShape"> endShape()
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9977,7 +9977,7 @@ as the standard deviation.
 
     random number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -9990,12 +9990,12 @@ Helpers for create methods.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`addElement()`                                            *p5-core-addElement*
+`addElement()`                                            p5-core-addElement
 
 Helpers for create methods.
 
@@ -10003,7 +10003,7 @@ Helpers for create methods.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10033,12 +10033,12 @@ href="#/p5/beginClip"> beginClip() </a> and <a href="#/p5/endClip"> endClip()
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`set()`                                            *p5-core-set*
+`set()`                                            p5-core-set
 
 Updates a single element in the buffer at a given index. Use this when only a
 small number of elements need to change. If you need to replace all the data
@@ -10067,12 +10067,12 @@ createVector(random(-1, 1), random(-1, 1)), }); } return data; }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`set()`                                            *p5-core-set*
+`set()`                                            p5-core-set
 
 Sets the color of a pixel or draws an image to the canvas. set() is easy to
 use but it's not as fast as <a href="#/p5/pixels"> pixels </a> . Use <a
@@ -10095,7 +10095,7 @@ called after using set() for changes to appear.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10142,7 +10142,7 @@ function draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 
     arc tangent of the given value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10170,7 +10170,7 @@ freeGeometry() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10193,12 +10193,12 @@ returned is an approximation.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`frameRate()`                                            *p5-core-frameRate*
+`frameRate()`                                            p5-core-frameRate
 
 
 
@@ -10206,7 +10206,7 @@ returned is an approximation.
 
     current frame rate.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10227,7 +10227,7 @@ way. JavaScript is a case-sensitive language.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10248,7 +10248,7 @@ well as its texture coordinates and normals, if it has them.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10278,7 +10278,7 @@ values greater than 1.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10320,7 +10320,7 @@ shader(myShader); noStroke(); sphere(30); }
 
     e^n
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10361,12 +10361,12 @@ href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`specularColor()`                                            *p5-core-specularColor*
+`specularColor()`                                            p5-core-specularColor
 
 
 
@@ -10378,12 +10378,12 @@ href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`specularColor()`                                            *p5-core-specularColor*
+`specularColor()`                                            p5-core-specularColor
 
 
 
@@ -10395,12 +10395,12 @@ href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`specularColor()`                                            *p5-core-specularColor*
+`specularColor()`                                            p5-core-specularColor
 
 
 
@@ -10412,12 +10412,12 @@ href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`specularColor()`                                            *p5-core-specularColor*
+`specularColor()`                                            p5-core-specularColor
 
 
 
@@ -10429,7 +10429,7 @@ href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10520,12 +10520,12 @@ background.'); }
 
     resulting color.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`color()`                                            *p5-core-color*
+`color()`                                            p5-core-color
 
 
 
@@ -10540,12 +10540,12 @@ background.'); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`color()`                                            *p5-core-color*
+`color()`                                            p5-core-color
 
 
 
@@ -10557,12 +10557,12 @@ background.'); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`color()`                                            *p5-core-color*
+`color()`                                            p5-core-color
 
 
 
@@ -10574,12 +10574,12 @@ background.'); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`color()`                                            *p5-core-color*
+`color()`                                            p5-core-color
 
 
 
@@ -10591,7 +10591,7 @@ background.'); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10632,12 +10632,12 @@ WebGL1 context.
 
     new graphics buffer.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createGraphics()`                                            *p5-core-createGraphics*
+`createGraphics()`                                            p5-core-createGraphics
 
 
 
@@ -10651,7 +10651,7 @@ WebGL1 context.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10670,7 +10670,7 @@ string that sets the inner HTML of the new <div></div> .
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10707,7 +10707,7 @@ See the examples for the usage syntax.
 
     new array containing the loaded text.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10729,12 +10729,12 @@ numeric value will return true . If an array is passed, as in boolean([0, 1,
 
     converted Boolean value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`boolean()`                                            *p5-core-boolean*
+`boolean()`                                            p5-core-boolean
 
 
 
@@ -10746,12 +10746,12 @@ numeric value will return true . If an array is passed, as in boolean([0, 1,
 
     converted Boolean values.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rotate()`                                            *p5-core-rotate*
+`rotate()`                                            p5-core-rotate
 
 Rotates the coordinate system. By default, the positive x-axis points to the
 right and the positive y-axis points downward. The rotate() function changes
@@ -10783,7 +10783,7 @@ spin.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10810,7 +10810,7 @@ personal information shouldn't be stored in localStorage .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10844,7 +10844,7 @@ anchor point, 1 is the second anchor point, and 0.5 is halfway between them.
 
     coordinate of a point on the tangent line.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10871,12 +10871,12 @@ default value is 25.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ellipse()`                                            *p5-core-ellipse*
+`ellipse()`                                            p5-core-ellipse
 
 
 
@@ -10892,7 +10892,7 @@ default value is 25.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10911,7 +10911,7 @@ deviceMoved() </a> function. The default threshold is set to 0.5.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -10930,7 +10930,7 @@ that sets the inner HTML of the new <p></p> .
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11050,12 +11050,12 @@ filter shaders can be used in 2D mode. All shaders can be used in WebGL mode.
 
     new shader object created from the vertex and fragment shaders.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`buildGeometry()`                                            *p5-core-buildGeometry*
+`buildGeometry()`                                            p5-core-buildGeometry
 
 Creates a new <a href="#/p5.Geometry"> p5.Geometry </a> that contains all the
 shapes drawn in a provided callback function. The returned combined shape can
@@ -11072,7 +11072,7 @@ than repeatedly drawing the individual pieces.
 
     The model that was built from the callback function.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11085,7 +11085,7 @@ Get a matrix from world-space to screen-space
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11105,7 +11105,7 @@ Basic fill material for geometry with a given color
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11125,7 +11125,7 @@ Basic stroke material for geometry with a given color
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11149,7 +11149,7 @@ angleMode() </a> is DEGREES , then values are returned in the range -180 to
 
     arc tangent of the given point.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11184,12 +11184,12 @@ nfs(123.45, 4, 3) returns the string ' 0123.450' .
 
     formatted string.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`nfs()`                                            *p5-core-nfs*
+`nfs()`                                            p5-core-nfs
 
 
 
@@ -11203,7 +11203,7 @@ nfs(123.45, 4, 3) returns the string ' 0123.450' .
 
     formatted strings.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11217,7 +11217,7 @@ the last value passed to <a href="#/p5/frameRate"> frameRate() </a> .
 
     _targetFrameRate
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11236,7 +11236,7 @@ deviceShaken() </a> function. The default threshold is set to 30.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11257,7 +11257,7 @@ results each time a sketch is run.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11281,12 +11281,12 @@ position.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`clear()`                                            *p5-core-clear*
+`clear()`                                            p5-core-clear
 
 Empties the list.
 
@@ -11294,12 +11294,12 @@ Empties the list.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`clear()`                                            *p5-core-clear*
+`clear()`                                            p5-core-clear
 
 Clears the pixels on the canvas. clear() makes every pixel 100% transparent.
 Calling clear() doesn't clear objects created by createX() functions such as
@@ -11322,12 +11322,12 @@ renderer, these parameters will have no effect.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`clear()`                                            *p5-core-clear*
+`clear()`                                            p5-core-clear
 
 Clears all data from the print stream.
 
@@ -11335,7 +11335,7 @@ Clears all data from the print stream.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11348,7 +11348,7 @@ Hides the cursor from view.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11387,7 +11387,7 @@ shader(myShader); noStroke(); sphere(30); }
 
     rounded down number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11416,7 +11416,7 @@ fetching files up to size of 64MB.
 
     <a href="#/p5.Table">Table</a> object containing data
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11454,12 +11454,12 @@ information.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`filter()`                                            *p5-core-filter*
+`filter()`                                            p5-core-filter
 
 
 
@@ -11473,12 +11473,12 @@ information.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`filter()`                                            *p5-core-filter*
+`filter()`                                            p5-core-filter
 
 
 
@@ -11490,7 +11490,7 @@ information.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11523,7 +11523,7 @@ Note: plane() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11546,12 +11546,12 @@ style, either MITER , BEVEL , or ROUND .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`strokeJoin()`                                            *p5-core-strokeJoin*
+`strokeJoin()`                                            p5-core-strokeJoin
 
 
 
@@ -11559,7 +11559,7 @@ style, either MITER , BEVEL , or ROUND .
 
     the current stroke join style.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11580,7 +11580,7 @@ of the new <span></span> .
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11605,7 +11605,7 @@ file by passing { binary: true } as a second parameter.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11644,12 +11644,12 @@ loadFilterShader('myShader.js', onLoaded) .
 
     a promise that resolves with a shader object
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rotateX()`                                            *p5-core-rotateX*
+`rotateX()`                                            p5-core-rotateX
 
 Rotates the coordinate system about the x-axis in WebGL mode. The parameter,
 angle , is the amount to rotate. For example, calling rotateX(1) rotates the
@@ -11670,7 +11670,7 @@ href="#/p5/draw"> draw() </a> function won't cause shapes to spin.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11734,12 +11734,12 @@ for colored STL files. STL files with color will be rendered without color.
 
     the <a href="#/p5.Geometry">`p5.Geometry`</a> object
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`loadModel()`                                            *p5-core-loadModel*
+`loadModel()`                                            p5-core-loadModel
 
 
 
@@ -11754,12 +11754,12 @@ for colored STL files. STL files with color will be rendered without color.
 
     new <a href="#/p5.Geometry">p5.Geometry</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`loadModel()`                                            *p5-core-loadModel*
+`loadModel()`                                            p5-core-loadModel
 
 
 
@@ -11778,12 +11778,12 @@ for colored STL files. STL files with color will be rendered without color.
 
     new <a href="#/p5.Geometry">p5.Geometry</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createFramebuffer()`                                            *p5-core-createFramebuffer*
+`createFramebuffer()`                                            p5-core-createFramebuffer
 
 Creates and a new <a href="#/p5.Framebuffer"> p5.Framebuffer </a> object. <a
 href="#/p5.Framebuffer"> p5.Framebuffer </a> objects are separate drawing
@@ -11834,7 +11834,7 @@ mode.
 
     new framebuffer.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11866,12 +11866,12 @@ href="#/p5.Element"> p5.Element </a> object.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createImg()`                                            *p5-core-createImg*
+`createImg()`                                            p5-core-createImg
 
 
 
@@ -11886,7 +11886,7 @@ href="#/p5.Element"> p5.Element </a> object.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11937,7 +11937,7 @@ using only its red channel.'); }
 
     the red value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -11958,12 +11958,12 @@ argument returns the current stroke weight as a number.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`strokeWeight()`                                            *p5-core-strokeWeight*
+`strokeWeight()`                                            p5-core-strokeWeight
 
 
 
@@ -11971,7 +11971,7 @@ argument returns the current stroke weight as a number.
 
     the current stroke weight.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12015,7 +12015,7 @@ shader(myShader); noStroke(); sphere(30); }
 
     cosine of the angle.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12032,7 +12032,7 @@ href="https://p5js.org/reference/p5/setMoveThreshold"> setMoveThreshold() </a>
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12050,7 +12050,7 @@ turnAxis variable to 'X', 'Y' or 'Z'.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12068,7 +12068,7 @@ href="https://p5js.org/reference/p5/setShakeThreshold"> setShakeThreshold()
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12119,12 +12119,12 @@ direction the lightDir vector points with the color value of myColor .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`directionalLight()`                                            *p5-core-directionalLight*
+`directionalLight()`                                            p5-core-directionalLight
 
 
 
@@ -12139,12 +12139,12 @@ direction the lightDir vector points with the color value of myColor .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`directionalLight()`                                            *p5-core-directionalLight*
+`directionalLight()`                                            p5-core-directionalLight
 
 
 
@@ -12159,12 +12159,12 @@ direction the lightDir vector points with the color value of myColor .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`directionalLight()`                                            *p5-core-directionalLight*
+`directionalLight()`                                            p5-core-directionalLight
 
 
 
@@ -12177,7 +12177,7 @@ direction the lightDir vector points with the color value of myColor .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12214,12 +12214,12 @@ href="#/p5/colorMode"> colorMode() </a> . The last parameter sets the alpha
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`background()`                                            *p5-core-background*
+`background()`                                            p5-core-background
 
 
 
@@ -12232,12 +12232,12 @@ href="#/p5/colorMode"> colorMode() </a> . The last parameter sets the alpha
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`background()`                                            *p5-core-background*
+`background()`                                            p5-core-background
 
 
 
@@ -12250,12 +12250,12 @@ href="#/p5/colorMode"> colorMode() </a> . The last parameter sets the alpha
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`background()`                                            *p5-core-background*
+`background()`                                            p5-core-background
 
 
 
@@ -12270,12 +12270,12 @@ href="#/p5/colorMode"> colorMode() </a> . The last parameter sets the alpha
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`background()`                                            *p5-core-background*
+`background()`                                            p5-core-background
 
 
 
@@ -12287,12 +12287,12 @@ href="#/p5/colorMode"> colorMode() </a> . The last parameter sets the alpha
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`background()`                                            *p5-core-background*
+`background()`                                            p5-core-background
 
 
 
@@ -12305,7 +12305,7 @@ href="#/p5/colorMode"> colorMode() </a> . The last parameter sets the alpha
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12333,7 +12333,7 @@ feed ( \n ), carriage return ( \r ), form feed ( \f ), and space.
 
     separated strings.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12364,12 +12364,12 @@ event, add return false; to the end of the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`lerp()`                                            *p5-core-lerp*
+`lerp()`                                            p5-core-lerp
 
 Calculates a number between two numbers at a specific increment. The amt
 parameter is the amount to interpolate between the two numbers. 0.0 is equal
@@ -12416,7 +12416,7 @@ shader(myShader); noStroke(); sphere(30); }
 
     lerped value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12452,7 +12452,7 @@ box() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12479,7 +12479,7 @@ target="_blank"> other options </a> .
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12515,12 +12515,12 @@ argument is passed to <a href="#/p5/beginShape"> beginShape() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`bezierVertex()`                                            *p5-core-bezierVertex*
+`bezierVertex()`                                            p5-core-bezierVertex
 
 
 
@@ -12536,7 +12536,7 @@ argument is passed to <a href="#/p5/beginShape"> beginShape() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12575,7 +12575,7 @@ Frames are downloaded as individual image files by default.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12602,12 +12602,12 @@ line to be drawn in 3D space. Doing so requires adding the WEBGL argument to
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`line()`                                            *p5-core-line*
+`line()`                                            p5-core-line
 
 
 
@@ -12624,12 +12624,12 @@ line to be drawn in 3D space. Doing so requires adding the WEBGL argument to
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`clearDepth()`                                            *p5-core-clearDepth*
+`clearDepth()`                                            p5-core-clearDepth
 
 Clears the depth buffer in WebGL mode. clearDepth() clears information about
 how far objects are from the camera in 3D space. This information is stored in
@@ -12651,7 +12651,7 @@ Note: clearDepth() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12664,7 +12664,7 @@ Helper function for loading GIF-based images
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12690,12 +12690,12 @@ target="_blank"> MDN </a> for more information about conversions.
 
     converted single-character string.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`char()`                                            *p5-core-char*
+`char()`                                            p5-core-char
 
 
 
@@ -12707,7 +12707,7 @@ target="_blank"> MDN </a> for more information about conversions.
 
     converted single-character strings.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12731,12 +12731,12 @@ Note: setup() doesn’t have to be declared, but it’s common practice to do so
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`draw()`                                            *p5-core-draw*
+`draw()`                                            p5-core-draw
 
 A function that's called repeatedly while the sketch runs. Declaring the
 function draw() sets a code block to run repeatedly once the sketch starts.
@@ -12756,7 +12756,7 @@ can be resumed by calling the <a href="#/p5/loop"> loop() </a> function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12777,12 +12777,12 @@ creating libraries </a> to learn more about creating libraries.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rotateY()`                                            *p5-core-rotateY*
+`rotateY()`                                            p5-core-rotateY
 
 Rotates the coordinate system about the y-axis in WebGL mode. The parameter,
 angle , is the amount to rotate. For example, calling rotateY(1) rotates the
@@ -12803,7 +12803,7 @@ href="#/p5/draw"> draw() </a> function won't cause shapes to spin.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12850,12 +12850,12 @@ each axis.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`debugMode()`                                            *p5-core-debugMode*
+`debugMode()`                                            p5-core-debugMode
 
 
 
@@ -12867,12 +12867,12 @@ each axis.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`debugMode()`                                            *p5-core-debugMode*
+`debugMode()`                                            p5-core-debugMode
 
 
 
@@ -12889,12 +12889,12 @@ each axis.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`debugMode()`                                            *p5-core-debugMode*
+`debugMode()`                                            p5-core-debugMode
 
 
 
@@ -12910,12 +12910,12 @@ each axis.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`debugMode()`                                            *p5-core-debugMode*
+`debugMode()`                                            p5-core-debugMode
 
 
 
@@ -12935,7 +12935,7 @@ each axis.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -12966,12 +12966,12 @@ twelve arguments because each point has x-, y-, and z-coordinates.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`spline()`                                            *p5-core-spline*
+`spline()`                                            p5-core-spline
 
 
 
@@ -12994,12 +12994,12 @@ twelve arguments because each point has x-, y-, and z-coordinates.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`get()`                                            *p5-core-get*
+`get()`                                            p5-core-get
 
 Gets a pixel or a region of pixels from the canvas. get() is easy to use but
 it's not as fast as <a href="#/p5/pixels"> pixels </a> . Use <a
@@ -13025,12 +13025,12 @@ with <a href="#/p5.Image"> p5.Image </a> objects.
 
     subsection as a <a href="#/p5.Image">p5.Image</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`get()`                                            *p5-core-get*
+`get()`                                            p5-core-get
 
 
 
@@ -13038,12 +13038,12 @@ with <a href="#/p5.Image"> p5.Image </a> objects.
 
     whole canvas as a <a href="#/p5.Image">p5.Image</a>.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`get()`                                            *p5-core-get*
+`get()`                                            p5-core-get
 
 
 
@@ -13056,7 +13056,7 @@ with <a href="#/p5.Image"> p5.Image </a> objects.
 
     color of the pixel at (x, y) in array format `[R, G, B, A]`.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13100,7 +13100,7 @@ shader(myShader); noStroke(); sphere(30); }
 
     sine of the angle.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13142,7 +13142,7 @@ examples for the usage syntax.
 
     XML data loaded into a <a href="#/p5.XML">p5.XML</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13166,7 +13166,7 @@ angleMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13207,7 +13207,7 @@ draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 
     natural logarithm of n.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13260,7 +13260,7 @@ only its green channel.'); }
 
     the green value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13283,12 +13283,12 @@ the array will be shuffled in place without making a copy.
 
     shuffled array.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`loadPixels()`                                            *p5-core-loadPixels*
+`loadPixels()`                                            p5-core-loadPixels
 
 Loads the current value of each pixel on the canvas into the <a
 href="#/p5/pixels"> pixels </a> array. loadPixels() must be called before
@@ -13298,7 +13298,7 @@ reading from or writing to <a href="#/p5/pixels"> pixels </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13325,7 +13325,7 @@ vertices: [0, 0] <--> [1, 0] // Right vertices: [1, 0] <--> [1, 1]
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13356,7 +13356,7 @@ mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13377,12 +13377,12 @@ of integers is returned.
 
     converted number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`unchar()`                                            *p5-core-unchar*
+`unchar()`                                            p5-core-unchar
 
 
 
@@ -13394,7 +13394,7 @@ of integers is returned.
 
     converted numbers.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13407,7 +13407,7 @@ Turns off <a href="#/p5/debugMode"> debugMode() </a> in a 3D sketch.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13426,7 +13426,7 @@ This method is suitable for fetching files up to size of 64MB.
 
     a Uint8Array containing the loaded buffer
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13452,7 +13452,7 @@ to move smoothly from min to max .
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13538,12 +13538,12 @@ Introduction to Shaders </a> tutorial.
 
     The material shader
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`buildFilterShader()`                                            *p5-core-buildFilterShader*
+`buildFilterShader()`                                            p5-core-buildFilterShader
 
 
 
@@ -13556,7 +13556,7 @@ Introduction to Shaders </a> tutorial.
 
     The material shader
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13578,12 +13578,12 @@ debugging or other purposes.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mag()`                                            *p5-core-mag*
+`mag()`                                            p5-core-mag
 
 Calculates the magnitude, or length, of a vector. A vector can be thought of
 in different ways. In one view, a vector is a point in space. The vector's
@@ -13604,7 +13604,7 @@ href="#/p5.Vector/mag"> p5.Vector.mag() </a> to calculate the magnitude of a
 
     magnitude of vector.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13645,7 +13645,7 @@ function draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 
     tangent of the angle.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13675,12 +13675,12 @@ false; to the end of the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rotateZ()`                                            *p5-core-rotateZ*
+`rotateZ()`                                            p5-core-rotateZ
 
 Rotates the coordinate system about the z-axis in WebGL mode. The parameter,
 angle , is the amount to rotate. For example, calling rotateZ(1) rotates the
@@ -13701,7 +13701,7 @@ href="#/p5/draw"> draw() </a> function won't cause shapes to spin.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13722,7 +13722,7 @@ returns a Promise that resolves to a Blob containing the file data.
 
     A promise that resolves with the loaded Blob.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13752,12 +13752,12 @@ object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`point()`                                            *p5-core-point*
+`point()`                                            p5-core-point
 
 
 
@@ -13769,7 +13769,7 @@ object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13817,12 +13817,12 @@ the position set by the lightPos vector with the color value of myColor .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`pointLight()`                                            *p5-core-pointLight*
+`pointLight()`                                            p5-core-pointLight
 
 
 
@@ -13837,12 +13837,12 @@ the position set by the lightPos vector with the color value of myColor .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`pointLight()`                                            *p5-core-pointLight*
+`pointLight()`                                            p5-core-pointLight
 
 
 
@@ -13857,12 +13857,12 @@ the position set by the lightPos vector with the color value of myColor .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`pointLight()`                                            *p5-core-pointLight*
+`pointLight()`                                            p5-core-pointLight
 
 
 
@@ -13875,7 +13875,7 @@ the position set by the lightPos vector with the color value of myColor .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13897,7 +13897,7 @@ press.
 
     current fullscreen state.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13919,7 +13919,7 @@ target="_blank"> MDN </a> for more details.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -13962,7 +13962,7 @@ Introduction to Shaders </a> tutorial.
 
     new shader object created from the fragment shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14001,7 +14001,7 @@ shader(myShader); noStroke(); sphere(30); }
 
     converted angle.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14046,12 +14046,12 @@ href="#/p5/beginShape"> beginShape() </a> and endShape() .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`endShape()`                                            *p5-core-endShape*
+`endShape()`                                            p5-core-endShape
 
 
 
@@ -14063,7 +14063,7 @@ href="#/p5/beginShape"> beginShape() </a> and endShape() .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14090,12 +14090,12 @@ display. For example, calling hex(20, 2) returns the string '14' .
 
     converted hexadecimal value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`hex()`                                            *p5-core-hex*
+`hex()`                                            p5-core-hex
 
 
 
@@ -14108,7 +14108,7 @@ display. For example, calling hex(20, 2) returns the string '14' .
 
     converted hexadecimal values.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14139,7 +14139,7 @@ is p2, and t = 0.5 is halfway between them.
 
     coordinate of a point on the curve.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14192,7 +14192,7 @@ finalColor.set(mix(cyan, orange, value)); finalColor.end(); } function draw()
 
     remapped number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14216,12 +14216,12 @@ initialize typed arrays (such as Uint8Array).
 
     A promise that resolves with the data when the operation completes successfully or rejects with the error after one occurs.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`httpGet()`                                            *p5-core-httpGet*
+`httpGet()`                                            p5-core-httpGet
 
 
 
@@ -14235,7 +14235,7 @@ initialize typed arrays (such as Uint8Array).
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14259,7 +14259,7 @@ the light source.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14311,7 +14311,7 @@ using only its blue channel.'); }
 
     the blue value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14335,12 +14335,12 @@ calling <a href="#/p5/set"> set() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`updatePixels()`                                            *p5-core-updatePixels*
+`updatePixels()`                                            p5-core-updatePixels
 
 Updates the framebuffer with the RGBA values in the <a
 href="#/p5.Framebuffer/pixels"> pixels </a> array. myBuffer.updatePixels()
@@ -14353,12 +14353,12 @@ myBuffer.loadPixels() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`pixelDensity()`                                            *p5-core-pixelDensity*
+`pixelDensity()`                                            p5-core-pixelDensity
 
 Sets the pixel density or returns the current density. Computer displays are
 grids of little lights called <em> pixels </em> . A display's <em> pixel
@@ -14377,12 +14377,12 @@ returns the current pixel density.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`pixelDensity()`                                            *p5-core-pixelDensity*
+`pixelDensity()`                                            p5-core-pixelDensity
 
 
 
@@ -14390,7 +14390,7 @@ returns the current pixel density.
 
     current pixel density of the sketch.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14425,7 +14425,7 @@ this event, add return false; to the end of the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14465,7 +14465,7 @@ shader(myShader); noStroke(); sphere(30); }
 
     converted angle.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14488,7 +14488,7 @@ It's a boolean that sets the checkbox's value.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14509,7 +14509,7 @@ perspective with functions such as <a href="#/p5/orbitControl"> orbitControl()
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14550,7 +14550,7 @@ is true . Note: cylinder() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14563,12 +14563,12 @@ Returns the display's current pixel density.
 
     current pixel density of the display.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`scale()`                                            *p5-core-scale*
+`scale()`                                            p5-core-scale
 
 Scales the coordinate system. By default, shapes are drawn at their original
 scale. A rectangle that's 50 pixels wide appears to take up half the width of
@@ -14603,12 +14603,12 @@ grow continuously.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`scale()`                                            *p5-core-scale*
+`scale()`                                            p5-core-scale
 
 
 
@@ -14620,7 +14620,7 @@ grow continuously.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14644,12 +14644,12 @@ returned.
 
     converted number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`unhex()`                                            *p5-core-unhex*
+`unhex()`                                            p5-core-unhex
 
 
 
@@ -14661,7 +14661,7 @@ returned.
 
     converted numbers.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14696,12 +14696,12 @@ in the x- and y-directions. They're both 2 by default.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`quad()`                                            *p5-core-quad*
+`quad()`                                            p5-core-quad
 
 
 
@@ -14726,7 +14726,7 @@ in the x- and y-directions. They're both 2 by default.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14749,12 +14749,12 @@ will default to 'text' . This is equivalent to calling <code> httpDo(path,
 
     A promise that resolves with the data when the operation completes successfully or rejects with the error after one occurs.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`httpPost()`                                            *p5-core-httpPost*
+`httpPost()`                                            p5-core-httpPost
 
 
 
@@ -14769,12 +14769,12 @@ will default to 'text' . This is equivalent to calling <code> httpDo(path,
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`httpPost()`                                            *p5-core-httpPost*
+`httpPost()`                                            p5-core-httpPost
 
 
 
@@ -14788,7 +14788,7 @@ will default to 'text' . This is equivalent to calling <code> httpDo(path,
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14832,12 +14832,12 @@ draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 
     maximum number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`max()`                                            *p5-core-max*
+`max()`                                            p5-core-max
 
 
 
@@ -14849,7 +14849,7 @@ draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14864,7 +14864,7 @@ target="_blank"> URL </a> as a String .
 
     url
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14881,7 +14881,7 @@ them to only have an effect the first time through the loop.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14924,7 +14924,7 @@ sphere.'); }
 
     the alpha value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14957,7 +14957,7 @@ them.
 
     coordinate of a point on the tangent line.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -14976,7 +14976,7 @@ https://example.com/sketchbook/monday , getURLPath() returns ['sketchbook',
 
     path components.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15005,7 +15005,7 @@ shear continuously.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15042,12 +15042,12 @@ normal(0.4, -0.4, 0.8); // Add a vertex. vertex(-30, 30, 0); endShape();
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`normal()`                                            *p5-core-normal*
+`normal()`                                            p5-core-normal
 
 
 
@@ -15061,7 +15061,7 @@ normal(0.4, -0.4, 0.8); // Add a vertex. vertex(-30, 30, 0); endShape();
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15124,12 +15124,12 @@ are currently not handled, so results in those cases may be ambiguous.
 
     The current color mode.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`colorMode()`                                            *p5-core-colorMode*
+`colorMode()`                                            p5-core-colorMode
 
 
 
@@ -15145,12 +15145,12 @@ are currently not handled, so results in those cases may be ambiguous.
 
     The current color mode.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`colorMode()`                                            *p5-core-colorMode*
+`colorMode()`                                            p5-core-colorMode
 
 
 
@@ -15158,7 +15158,7 @@ are currently not handled, so results in those cases may be ambiguous.
 
     The current color mode.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15187,7 +15187,7 @@ now map to string values internally rather than numeric codes.
 
     whether the key is down or not.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15205,7 +15205,7 @@ https://p5js.org?year=2014&month=May&day=15 returns { year: 2014, month:
 
     URL params
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15232,12 +15232,12 @@ constant , linear , and quadratic should always be set to values greater than
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mouseMoved()`                                            *p5-core-mouseMoved*
+`mouseMoved()`                                            p5-core-mouseMoved
 
 A function that's called when the mouse moves. Declaring the function
 mouseMoved() sets a code block to run automatically when the user moves the
@@ -15264,7 +15264,7 @@ for this event, add return false; to the end of the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15297,7 +15297,7 @@ behavior for this event, add return false; to the end of the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15380,7 +15380,7 @@ their appearance during rendering. </p> </div>
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15400,7 +15400,7 @@ content.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15449,12 +15449,12 @@ to either LEFT , RIGHT , or CENTER . yAlign can be set to either TOP , BOTTOM
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`image()`                                            *p5-core-image*
+`image()`                                            p5-core-image
 
 
 
@@ -15477,7 +15477,7 @@ to either LEFT , RIGHT , or CENTER . yAlign can be set to either TOP , BOTTOM
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15501,12 +15501,12 @@ RADIANS or DEGREES .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`angleMode()`                                            *p5-core-angleMode*
+`angleMode()`                                            p5-core-angleMode
 
 
 
@@ -15514,7 +15514,7 @@ RADIANS or DEGREES .
 
     mode either RADIANS or DEGREES
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15543,7 +15543,7 @@ shear continuously.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15577,12 +15577,12 @@ set.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`rect()`                                            *p5-core-rect*
+`rect()`                                            p5-core-rect
 
 
 
@@ -15599,7 +15599,7 @@ set.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15644,12 +15644,12 @@ noStroke(); sphere(30); }
 
     minimum number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`min()`                                            *p5-core-min*
+`min()`                                            p5-core-min
 
 
 
@@ -15661,7 +15661,7 @@ noStroke(); sphere(30); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15687,12 +15687,12 @@ parameter. This method is suitable for fetching files up to size of 64MB when
 
     A promise that resolves with the data when the operation completes successfully or rejects with the error after one occurs.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`httpDo()`                                            *p5-core-httpDo*
+`httpDo()`                                            p5-core-httpDo
 
 
 
@@ -15706,12 +15706,12 @@ parameter. This method is suitable for fetching files up to size of 64MB when
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`clearDepth()`                                            *p5-core-clearDepth*
+`clearDepth()`                                            p5-core-clearDepth
 
 Resets all depth information so that nothing previously drawn will occlude
 anything subsequently drawn.
@@ -15720,7 +15720,7 @@ anything subsequently drawn.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15753,12 +15753,12 @@ given option as enabled.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createSelect()`                                            *p5-core-createSelect*
+`createSelect()`                                            p5-core-createSelect
 
 
 
@@ -15770,7 +15770,7 @@ given option as enabled.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15818,7 +15818,7 @@ grayscale based on hue.'); }
 
     the hue value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15855,7 +15855,7 @@ in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15878,7 +15878,7 @@ to 0.2's position in the range [0, 1]. This is the same as calling map(2, 0,
 
     normalized number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15900,7 +15900,7 @@ the screen position of 3D objects.
 
     A vector containing the 2D screen coordinates.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15933,12 +15933,12 @@ set.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`vertexProperty()`                                            *p5-core-vertexProperty*
+`vertexProperty()`                                            p5-core-vertexProperty
 
 Sets the shader's vertex property or attribute variables. A vertex property,
 or vertex attribute, is a variable belonging to a vertex in a shader. p5.js
@@ -15967,7 +15967,7 @@ href="#/p5/Geometry"> Geometry </a> objects.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -15990,12 +15990,12 @@ the input coordinates is treated as "depth", or distance from the camera.
 
     A vector containing the 3D world space coordinates.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mousePressed()`                                            *p5-core-mousePressed*
+`mousePressed()`                                            p5-core-mousePressed
 
 A function that's called once when a mouse button is pressed. Declaring the
 function mousePressed() sets a code block to run automatically when the user
@@ -16029,7 +16029,7 @@ href="#/p5/mouseReleased"> mouseReleased() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16054,7 +16054,7 @@ control over stroke weight, vertex positions, colors, and more.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16092,12 +16092,12 @@ draw() { background(220); shader(myShader); noStroke(); sphere(30); }
 
     n^e.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`translate()`                                            *p5-core-translate*
+`translate()`                                            p5-core-translate
 
 Translates the coordinate system. By default, the origin (0, 0) is at the
 sketch's top-left corner in 2D mode and center in WebGL mode. The translate()
@@ -16134,12 +16134,12 @@ continuously.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`translate()`                                            *p5-core-translate*
+`translate()`                                            p5-core-translate
 
 
 
@@ -16151,7 +16151,7 @@ continuously.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16193,12 +16193,12 @@ concentration of 50. By default, concentration is 100.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`spotLight()`                                            *p5-core-spotLight*
+`spotLight()`                                            p5-core-spotLight
 
 
 
@@ -16214,12 +16214,12 @@ concentration of 50. By default, concentration is 100.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`spotLight()`                                            *p5-core-spotLight*
+`spotLight()`                                            p5-core-spotLight
 
 
 
@@ -16237,12 +16237,12 @@ concentration of 50. By default, concentration is 100.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`spotLight()`                                            *p5-core-spotLight*
+`spotLight()`                                            p5-core-spotLight
 
 
 
@@ -16260,12 +16260,12 @@ concentration of 50. By default, concentration is 100.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`spotLight()`                                            *p5-core-spotLight*
+`spotLight()`                                            p5-core-spotLight
 
 
 
@@ -16283,12 +16283,12 @@ concentration of 50. By default, concentration is 100.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`spotLight()`                                            *p5-core-spotLight*
+`spotLight()`                                            p5-core-spotLight
 
 
 
@@ -16308,12 +16308,12 @@ concentration of 50. By default, concentration is 100.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`spotLight()`                                            *p5-core-spotLight*
+`spotLight()`                                            p5-core-spotLight
 
 
 
@@ -16333,12 +16333,12 @@ concentration of 50. By default, concentration is 100.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`spotLight()`                                            *p5-core-spotLight*
+`spotLight()`                                            p5-core-spotLight
 
 
 
@@ -16358,7 +16358,7 @@ concentration of 50. By default, concentration is 100.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16388,12 +16388,12 @@ as the extension.
 
     stream for writing data.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`fill()`                                            *p5-core-fill*
+`fill()`                                            p5-core-fill
 
 Sets the color used to fill shapes. Calling fill(255, 165, 0) or
 fill('orange') means all shapes drawn after the fill command will be filled
@@ -16421,12 +16421,12 @@ current fill as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`fill()`                                            *p5-core-fill*
+`fill()`                                            p5-core-fill
 
 
 
@@ -16438,12 +16438,12 @@ current fill as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`fill()`                                            *p5-core-fill*
+`fill()`                                            p5-core-fill
 
 
 
@@ -16456,12 +16456,12 @@ current fill as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`fill()`                                            *p5-core-fill*
+`fill()`                                            p5-core-fill
 
 
 
@@ -16473,12 +16473,12 @@ current fill as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`fill()`                                            *p5-core-fill*
+`fill()`                                            p5-core-fill
 
 
 
@@ -16490,12 +16490,12 @@ current fill as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`fill()`                                            *p5-core-fill*
+`fill()`                                            p5-core-fill
 
 
 
@@ -16503,7 +16503,7 @@ current fill as a <a href="#/p5.Color"> p5.Color </a> object.
 
     the current fill color.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16539,7 +16539,7 @@ stroke() </a> has no effect in WEBGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16567,7 +16567,7 @@ arguments returns the current alignment settings.
 
     If no arguments are provided, returns an object with current horizontal and vertical alignment
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16589,7 +16589,7 @@ otherwise, the ascent of the current font is returned.
 
     The ascent value in pixels.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16611,7 +16611,7 @@ specific string; otherwise, the descent of the current font is returned.
 
     The descent value in pixels.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16630,7 +16630,7 @@ an argument returns the current spacing.
 
     If no arguments are provided, the current text leading
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16655,7 +16655,7 @@ href="#/p5/loadFont"> loadFont() </a> .
 
     If no arguments are provided, returns the current font
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16676,12 +16676,12 @@ without an argument, it returns the current text size in pixels.
 
     If no arguments are provided, the current text size in pixels.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`textSize()`                                            *p5-core-textSize*
+`textSize()`                                            p5-core-textSize
 
 
 
@@ -16689,7 +16689,7 @@ without an argument, it returns the current text size in pixels.
 
     The current text size in pixels.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16709,12 +16709,12 @@ doesn't affect fonts loaded with <a href="#/p5/loadFont"> loadFont() </a> .
 
     If no arguments are provided, the current style
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`textStyle()`                                            *p5-core-textStyle*
+`textStyle()`                                            p5-core-textStyle
 
 
 
@@ -16722,7 +16722,7 @@ doesn't affect fonts loaded with <a href="#/p5/loadFont"> loadFont() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16748,7 +16748,7 @@ ignored. textWidth(" Hello ") returns the same width as textWidth("Hello") .
 
     The width of the text
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16772,12 +16772,12 @@ textWrap() without an argument returns the current style.
 
     If no arguments are provided, the current wrapping style
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`textWrap()`                                            *p5-core-textWrap*
+`textWrap()`                                            p5-core-textWrap
 
 
 
@@ -16785,7 +16785,7 @@ textWrap() without an argument returns the current style.
 
     The current wrapping style
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16812,7 +16812,7 @@ and y coordinates along with the width (w) and height (h) of the text block.
 
     An object with properties `x`, `y`, `w`, and `h` that represent the tight bounding box of the rendered text.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16836,12 +16836,12 @@ directions.
 
     If no arguments are provided, the current text direction, either "ltr", "rtl", or "inherit"
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`textDirection()`                                            *p5-core-textDirection*
+`textDirection()`                                            p5-core-textDirection
 
 
 
@@ -16849,7 +16849,7 @@ directions.
 
     The current text direction, either "ltr", "rtl", or "inherit"
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16875,12 +16875,12 @@ the current value of that property.
 
     If no arguments are provided, the current value of the specified text property
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`textProperty()`                                            *p5-core-textProperty*
+`textProperty()`                                            p5-core-textProperty
 
 
 
@@ -16892,7 +16892,7 @@ the current value of that property.
 
     The current value of the specified text property
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16912,12 +16912,12 @@ passed in, an object will be returned with all the current properties.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`textProperties()`                                            *p5-core-textProperties*
+`textProperties()`                                            p5-core-textProperties
 
 
 
@@ -16925,7 +16925,7 @@ passed in, an object will be returned with all the current properties.
 
     An object with all the possible properties and their current values.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16952,7 +16952,7 @@ purposes where a consistent approximation of the text's dimensions is desired.
 
     An object with properties `x`, `y`, `w`, and `h` representing the loose bounding box of the text based on the font's intrinsic metrics.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16976,7 +16976,7 @@ for layout and positioning.
 
     The loose width of the text in pixels.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -16993,7 +16993,7 @@ layout purposes when an approximate vertical measurement is required.
 
     The loose ascent value in pixels.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17010,7 +17010,7 @@ layout purposes when an approximate vertical measurement is required.
 
     The loose descent value in pixels.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17032,12 +17032,12 @@ setting.
 
     If no arguments are provided, the current font weight
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`textWeight()`                                            *p5-core-textWeight*
+`textWeight()`                                            p5-core-textWeight
 
 
 
@@ -17045,7 +17045,7 @@ setting.
 
     The current font weight
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17070,7 +17070,7 @@ parameters specify its third point (x3, y3) .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17111,7 +17111,7 @@ can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17143,12 +17143,12 @@ transparent. Calling tint() without an argument returns the current tint as a
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`tint()`                                            *p5-core-tint*
+`tint()`                                            p5-core-tint
 
 
 
@@ -17160,12 +17160,12 @@ transparent. Calling tint() without an argument returns the current tint as a
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`tint()`                                            *p5-core-tint*
+`tint()`                                            p5-core-tint
 
 
 
@@ -17178,12 +17178,12 @@ transparent. Calling tint() without an argument returns the current tint as a
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`tint()`                                            *p5-core-tint*
+`tint()`                                            p5-core-tint
 
 
 
@@ -17195,12 +17195,12 @@ transparent. Calling tint() without an argument returns the current tint as a
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`tint()`                                            *p5-core-tint*
+`tint()`                                            p5-core-tint
 
 
 
@@ -17212,12 +17212,12 @@ transparent. Calling tint() without an argument returns the current tint as a
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`tint()`                                            *p5-core-tint*
+`tint()`                                            p5-core-tint
 
 
 
@@ -17225,7 +17225,7 @@ transparent. Calling tint() without an argument returns the current tint as a
 
     the current tint color
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17269,7 +17269,7 @@ shader(myShader); noStroke(); sphere(30); }
 
     rounded number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17285,7 +17285,7 @@ drawn to the screen.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17345,7 +17345,7 @@ grayscale based on saturation.'); }
 
     the saturation value
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17405,7 +17405,7 @@ instances(count).sphere(15); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17424,7 +17424,7 @@ new lighting scheme.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17438,7 +17438,7 @@ restores images to their original colors.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17462,12 +17462,12 @@ contexts. Any attempts to use the imageShader in these cases will be ignored.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mouseReleased()`                                            *p5-core-mouseReleased*
+`mouseReleased()`                                            p5-core-mouseReleased
 
 A function that's called once when a mouse button is released. Declaring the
 function mouseReleased() sets a code block to run automatically when the user
@@ -17501,7 +17501,7 @@ mouseReleased() .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17517,7 +17517,7 @@ nothing will be drawn to the screen.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17551,12 +17551,12 @@ passed.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createRadio()`                                            *p5-core-createRadio*
+`createRadio()`                                            p5-core-createRadio
 
 
 
@@ -17568,12 +17568,12 @@ passed.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createRadio()`                                            *p5-core-createRadio*
+`createRadio()`                                            p5-core-createRadio
 
 
 
@@ -17581,7 +17581,7 @@ passed.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17602,7 +17602,7 @@ elements when they're added to the print stream.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17622,7 +17622,7 @@ positive number. The value returned by sq() is always positive.
 
     squared number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17653,7 +17653,7 @@ play.
 
     new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17696,12 +17696,12 @@ loadFont() in <a href="#/p5/setup"> setup() </a> before using the result.
 
     <a href="#/p5.Font">p5.Font</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`loadFont()`                                            *p5-core-loadFont*
+`loadFont()`                                            p5-core-loadFont
 
 
 
@@ -17715,7 +17715,7 @@ loadFont() in <a href="#/p5/setup"> setup() </a> before using the result.
 
     The font.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17748,12 +17748,12 @@ Flips the V texture coordinates of the model.
 
     the <a href="#/p5.Geometry">p5.Geometry</a> object
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createModel()`                                            *p5-core-createModel*
+`createModel()`                                            p5-core-createModel
 
 
 
@@ -17768,12 +17768,12 @@ Flips the V texture coordinates of the model.
 
     the <a href="#/p5.Geometry">p5.Geometry</a> object
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createModel()`                                            *p5-core-createModel*
+`createModel()`                                            p5-core-createModel
 
 
 
@@ -17792,7 +17792,7 @@ Flips the V texture coordinates of the model.
 
     the <a href="#/p5.Geometry">p5.Geometry</a> object
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17821,7 +17821,7 @@ audio is ready to play.
 
     new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17853,7 +17853,7 @@ default, detailY is 16. Note: torus() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17881,12 +17881,12 @@ imageMode() without an argument returns the current image mode, either CORNER
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`imageMode()`                                            *p5-core-imageMode*
+`imageMode()`                                            p5-core-imageMode
 
 
 
@@ -17894,7 +17894,7 @@ imageMode() without an argument returns the current image mode, either CORNER
 
     the current image mode
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17948,7 +17948,7 @@ grayscale based on brightness.'); }
 
     the brightness value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -17994,7 +17994,7 @@ background(220); shader(myShader); noStroke(); drawShape(); }
 
     square root of number.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18007,12 +18007,12 @@ Saves the file and closes the print stream.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mouseClicked()`                                            *p5-core-mouseClicked*
+`mouseClicked()`                                            p5-core-mouseClicked
 
 A function that's called once after a mouse button is pressed and released.
 Declaring the function mouseClicked() sets a code block to run automatically
@@ -18046,7 +18046,7 @@ href="#/p5/mouseReleased"> mouseReleased() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18130,12 +18130,12 @@ href="#/p5.Shader/modify"> reference entry for modify() </a> for more info.
 
     The material shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`buildMaterialShader()`                                            *p5-core-buildMaterialShader*
+`buildMaterialShader()`                                            p5-core-buildMaterialShader
 
 
 
@@ -18148,7 +18148,7 @@ href="#/p5.Shader/modify"> reference entry for modify() </a> for more info.
 
     The material shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18185,7 +18185,7 @@ noStroke(); sphere(30); }
 
     fractional part of n.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18228,7 +18228,7 @@ target="_blank"> here </a> .
 
     new <a href="#/p5.MediaElement">p5.MediaElement</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18251,12 +18251,12 @@ href="#/p5.Color"> p5.Color </a> object.
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`stroke()`                                            *p5-core-stroke*
+`stroke()`                                            p5-core-stroke
 
 Sets the color used to draw points, lines, and the outlines of shapes. Calling
 stroke(255, 165, 0) or stroke('orange') means all shapes drawn after calling
@@ -18286,12 +18286,12 @@ stroke as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`stroke()`                                            *p5-core-stroke*
+`stroke()`                                            p5-core-stroke
 
 
 
@@ -18303,12 +18303,12 @@ stroke as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`stroke()`                                            *p5-core-stroke*
+`stroke()`                                            p5-core-stroke
 
 
 
@@ -18321,12 +18321,12 @@ stroke as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`stroke()`                                            *p5-core-stroke*
+`stroke()`                                            p5-core-stroke
 
 
 
@@ -18338,12 +18338,12 @@ stroke as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`stroke()`                                            *p5-core-stroke*
+`stroke()`                                            p5-core-stroke
 
 
 
@@ -18355,12 +18355,12 @@ stroke as a <a href="#/p5.Color"> p5.Color </a> object.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`stroke()`                                            *p5-core-stroke*
+`stroke()`                                            p5-core-stroke
 
 
 
@@ -18368,7 +18368,7 @@ stroke as a <a href="#/p5.Color"> p5.Color </a> object.
 
     the current stroke color.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18408,7 +18408,7 @@ used as the final return value of loadMaterialShader('myShader.js', onLoaded)
 
     The material shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18438,7 +18438,7 @@ save dialog on every render.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18492,7 +18492,7 @@ grayscale based on lightness.'); }
 
     the lightness value.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18511,12 +18511,12 @@ do with the base material shader.
 
     The base material shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`doubleClicked()`                                            *p5-core-doubleClicked*
+`doubleClicked()`                                            p5-core-doubleClicked
 
 A function that's called once when a mouse button is clicked twice quickly.
 Declaring the function doubleClicked() sets a code block to run automatically
@@ -18545,7 +18545,7 @@ return false; to the end of the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18578,7 +18578,7 @@ href="#/p5/background"> background() </a> functions.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18596,7 +18596,7 @@ the base filter shader.
 
     The base filter shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18620,12 +18620,12 @@ target="_blank"> list of options </a> . The default is 'text' .
 
     new <a href="#/p5.Element">p5.Element</a> object.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createInput()`                                            *p5-core-createInput*
+`createInput()`                                            p5-core-createInput
 
 
 
@@ -18637,7 +18637,7 @@ target="_blank"> list of options </a> . The default is 'text' .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18653,7 +18653,7 @@ prior to calling <a href="#/p5/erase"> erase() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18711,12 +18711,12 @@ href="#/p5.Shader/modify"> reference entry for modify() </a> for more info.
 
     The normal shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`buildNormalShader()`                                            *p5-core-buildNormalShader*
+`buildNormalShader()`                                            p5-core-buildNormalShader
 
 
 
@@ -18729,7 +18729,7 @@ href="#/p5.Shader/modify"> reference entry for modify() </a> for more info.
 
     The normal shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18761,7 +18761,7 @@ either save the file immediately or prompt the user with a dialogue window.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18826,12 +18826,12 @@ normalMaterial() </a> <a href="#/p5/shader"> shader() </a>
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`mouseWheel()`                                            *p5-core-mouseWheel*
+`mouseWheel()`                                            p5-core-mouseWheel
 
 A function that's called once when the mouse wheel moves. Declaring the
 function mouseWheel() sets a code block to run automatically when the user
@@ -18864,7 +18864,7 @@ return false; is added at the end of the function.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18889,7 +18889,7 @@ per file.
 
     The new input element.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -18950,12 +18950,12 @@ a blend of red and blue.'); }
 
     interpolated color.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`lerpColor()`                                            *p5-core-lerpColor*
+`lerpColor()`                                            p5-core-lerpColor
 
 
 
@@ -18972,7 +18972,7 @@ a blend of red and blue.'); }
 
     interpolated color.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19013,7 +19013,7 @@ as the final return value of loadNormalShader('myShader.js', onLoaded) .
 
     The normal shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19037,7 +19037,7 @@ event function such as <a href="#/p5/doubleClicked"> doubleClicked() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19060,7 +19060,7 @@ href="/reference/p5/colorMode/"> colorMode() </a> .
 
     interpolated color.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19079,7 +19079,7 @@ the base normal shader.
 
     The base material shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19112,7 +19112,7 @@ immediately or prompt the user with a dialogue window.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19132,7 +19132,7 @@ event function such as <a href="#/p5/doubleClicked"> doubleClicked() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19176,12 +19176,12 @@ href="#/p5.Shader/modify"> reference entry for modify() </a> for more info.
 
     The color shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`buildColorShader()`                                            *p5-core-buildColorShader*
+`buildColorShader()`                                            p5-core-buildColorShader
 
 
 
@@ -19194,7 +19194,7 @@ href="#/p5.Shader/modify"> reference entry for modify() </a> for more info.
 
     The color shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19216,7 +19216,7 @@ process and location of the saved file will vary between web browsers.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19256,7 +19256,7 @@ as the final return value of loadColorShader('myShader.js', onLoaded) .
 
     The color shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19275,7 +19275,7 @@ the base color shader.
 
     The base color shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19325,12 +19325,12 @@ values from the source and canvas are added.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`blendMode()`                                            *p5-core-blendMode*
+`blendMode()`                                            p5-core-blendMode
 
 
 
@@ -19338,7 +19338,7 @@ values from the source and canvas are added.
 
     the current blend mode.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19371,12 +19371,12 @@ argument returns the current Bézier order.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`bezierOrder()`                                            *p5-core-bezierOrder*
+`bezierOrder()`                                            p5-core-bezierOrder
 
 
 
@@ -19384,7 +19384,7 @@ argument returns the current Bézier order.
 
     The current Bézier order.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19421,12 +19421,12 @@ global webglVersion property.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`setAttributes()`                                            *p5-core-setAttributes*
+`setAttributes()`                                            p5-core-setAttributes
 
 
 
@@ -19438,7 +19438,7 @@ global webglVersion property.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19507,12 +19507,12 @@ href="#/p5.Shader/modify"> reference entry for modify() </a> for more info.
 
     The stroke shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`buildStrokeShader()`                                            *p5-core-buildStrokeShader*
+`buildStrokeShader()`                                            p5-core-buildStrokeShader
 
 
 
@@ -19525,12 +19525,12 @@ href="#/p5.Shader/modify"> reference entry for modify() </a> for more info.
 
     The stroke shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`camera()`                                            *p5-core-camera*
+`camera()`                                            p5-core-camera
 
 Sets the position and orientation of the current camera in a 3D sketch.
 camera() allows objects to be viewed from different angles. It has nine
@@ -19564,7 +19564,7 @@ which is like holding it upside-down. By default, the "up" vector is (0, 1, 0)
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19578,7 +19578,7 @@ from another file, it returns a Promise . Use it in an async function setup ,
 and await its result. let myShader; async function setup() { createCanvas(200,
 200, WEBGL); myShader = await loadStrokeShader('myMaterial.js'); } function
 draw() { background(255); strokeShader(myShader); strokeWeight(30); line(
--width/3, sin(millis()*0.001) * height/4, width/3, sin(millis()*0.001 + 1) *
+-width/3, sin(millis()*0.001) * height/4, width/3, sin(millis()0.001 + 1) 
 height/4 ); } Inside your shader file, you can call p5.strands hooks to change
 parts of the shader. For example, you might use the worldInputs hook to change
 each vertex, or you might use the pixelInputs hook to change each pixel on the
@@ -19604,7 +19604,7 @@ as the final return value of loadStrokeShader('myShader.js', onLoaded) .
 
     The stroke shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19622,7 +19622,7 @@ the base material shader.
 
     The base material shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19685,12 +19685,12 @@ filter(displayShader); }
 
     A storage buffer.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`perspective()`                                            *p5-core-perspective*
+`perspective()`                                            p5-core-perspective
 
 Sets a perspective projection for the current camera in a 3D sketch. In a
 perspective projection, shapes that are further from the camera appear smaller
@@ -19736,7 +19736,7 @@ perspective() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19752,7 +19752,7 @@ Note: Shaders can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19786,12 +19786,12 @@ false if not. Note: linePerspective() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`linePerspective()`                                            *p5-core-linePerspective*
+`linePerspective()`                                            p5-core-linePerspective
 
 
 
@@ -19799,7 +19799,7 @@ false if not. Note: linePerspective() can only be used in WebGL mode.
 
     whether line perspective is enabled.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19842,12 +19842,12 @@ href="#/p5/beginShape"> beginShape() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`splineVertex()`                                            *p5-core-splineVertex*
+`splineVertex()`                                            p5-core-splineVertex
 
 
 
@@ -19861,12 +19861,12 @@ href="#/p5/beginShape"> beginShape() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`splineVertex()`                                            *p5-core-splineVertex*
+`splineVertex()`                                            p5-core-splineVertex
 
 
 
@@ -19881,12 +19881,12 @@ href="#/p5/beginShape"> beginShape() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`splineVertex()`                                            *p5-core-splineVertex*
+`splineVertex()`                                            p5-core-splineVertex
 
 
 
@@ -19902,7 +19902,7 @@ href="#/p5/beginShape"> beginShape() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -19984,7 +19984,7 @@ instances(squareIndices).rect(0, 0, 10, 10); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20002,7 +20002,7 @@ with the base compute shader.
 
     The base compute shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20031,12 +20031,12 @@ texture() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ortho()`                                            *p5-core-ortho*
+`ortho()`                                            p5-core-ortho
 
 Sets an orthographic projection for the current camera in a 3D sketch. In an
 orthographic projection, shapes with the same size always appear the same
@@ -20070,7 +20070,7 @@ ortho() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20091,7 +20091,7 @@ effect in 2D mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20128,12 +20128,12 @@ normalTexture() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`frustum()`                                            *p5-core-frustum*
+`frustum()`                                            p5-core-frustum
 
 Sets the frustum of the current camera in a 3D sketch. In a frustum
 projection, shapes that are further from the camera appear smaller than shapes
@@ -20170,7 +20170,7 @@ in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20191,7 +20191,7 @@ per-instance data from an instanced attribute buffer.
 
     an object with methods `sphere`, `box`, `plane`, `ellipsoid`, `cylinder`, `cone`, `torus`, `triangle`, `rect`, `quad`, `ellipse`, `arc`, `model`, `line`, `point`, `bezier`, and `spline`. Call one of these to draw `count` instances of that primitive.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20263,12 +20263,12 @@ instances(numParticles).sphere(3); }
 
     The compute shader.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`createCamera()`                                            *p5-core-createCamera*
+`createCamera()`                                            p5-core-createCamera
 
 Creates a new <a href="#/p5.Camera"> p5.Camera </a> object. The new camera is
 initialized with a default position (0, 0, 800) and a default perspective
@@ -20284,7 +20284,7 @@ the scene. Note: createCamera() can only be used in WebGL mode.
 
     the new camera.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20322,7 +20322,7 @@ stopping at the edge. Note: bumpTexture() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20370,12 +20370,12 @@ Catmull-Rom splines </a>
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`splineProperty()`                                            *p5-core-splineProperty*
+`splineProperty()`                                            p5-core-splineProperty
 
 
 
@@ -20387,7 +20387,7 @@ Catmull-Rom splines </a>
 
     The current value for the given property.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20406,7 +20406,7 @@ createCamera() </a> . Note: setCamera() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20434,7 +20434,7 @@ used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20499,7 +20499,7 @@ cells] = [cells, nextCells]; filter(displayShader); }
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20532,7 +20532,7 @@ splineProperties() or <a href="#/p5/splineProperty"> splineProperty() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20560,7 +20560,7 @@ ambientTexture() can only be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20588,7 +20588,7 @@ href="#/p5/loadModel"> loadModel() </a> apply their own shininess map from the
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20613,12 +20613,12 @@ href="#/p5/endShape"> endShape() </a> . By default, u and v are both 0.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`vertex()`                                            *p5-core-vertex*
+`vertex()`                                            p5-core-vertex
 
 
 
@@ -20633,12 +20633,12 @@ href="#/p5/endShape"> endShape() </a> . By default, u and v are both 0.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`vertex()`                                            *p5-core-vertex*
+`vertex()`                                            p5-core-vertex
 
 
 
@@ -20654,7 +20654,7 @@ href="#/p5/endShape"> endShape() </a> . By default, u and v are both 0.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20703,12 +20703,12 @@ texture mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`textureMode()`                                            *p5-core-textureMode*
+`textureMode()`                                            p5-core-textureMode
 
 
 
@@ -20716,7 +20716,7 @@ texture mode.
 
     The current texture mode, either IMAGE or NORMAL.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20745,7 +20745,7 @@ for the negative space in counter-clockwise order.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20779,7 +20779,7 @@ for the negative space in counter-clockwise order.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20836,12 +20836,12 @@ CLAMP, wrapY: REPEAT } .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`textureWrap()`                                            *p5-core-textureWrap*
+`textureWrap()`                                            p5-core-textureWrap
 
 
 
@@ -20849,7 +20849,7 @@ CLAMP, wrapY: REPEAT } .
 
     The current texture wrapping for x and y.
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20866,7 +20866,7 @@ be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20901,12 +20901,12 @@ be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ambientMaterial()`                                            *p5-core-ambientMaterial*
+`ambientMaterial()`                                            p5-core-ambientMaterial
 
 
 
@@ -20918,12 +20918,12 @@ be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`ambientMaterial()`                                            *p5-core-ambientMaterial*
+`ambientMaterial()`                                            p5-core-ambientMaterial
 
 
 
@@ -20935,7 +20935,7 @@ be used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -20972,12 +20972,12 @@ used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`emissiveMaterial()`                                            *p5-core-emissiveMaterial*
+`emissiveMaterial()`                                            p5-core-emissiveMaterial
 
 
 
@@ -20989,12 +20989,12 @@ used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`emissiveMaterial()`                                            *p5-core-emissiveMaterial*
+`emissiveMaterial()`                                            p5-core-emissiveMaterial
 
 
 
@@ -21006,7 +21006,7 @@ used in WebGL mode.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -21046,12 +21046,12 @@ href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`specularMaterial()`                                            *p5-core-specularMaterial*
+`specularMaterial()`                                            p5-core-specularMaterial
 
 
 
@@ -21066,12 +21066,12 @@ href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
 
-`specularMaterial()`                                            *p5-core-specularMaterial*
+`specularMaterial()`                                            p5-core-specularMaterial
 
 
 
@@ -21083,7 +21083,7 @@ href="#/p5/colorMode"> colorMode() </a> .
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -21106,7 +21106,7 @@ shininess. shine must be greater than 1, which is its default value.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 
@@ -21132,7 +21132,7 @@ metallic.
 
     void
 
-📂 *Sub-module: main*
+📂 Sub-module: main
 
 ---
 

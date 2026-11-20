@@ -51,7 +51,7 @@ components, or CSS color string.
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -69,7 +69,7 @@ CSS color string.
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -87,7 +87,7 @@ components, or CSS color string.
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -115,7 +115,7 @@ current colorMode(). The last parameter sets the alpha (transparency) value.
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -133,7 +133,7 @@ CSS color string.
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -154,7 +154,7 @@ HSB-normalized hue.
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -180,7 +180,7 @@ colorMode().
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -198,7 +198,7 @@ components, or CSS color string.
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -216,7 +216,7 @@ CSS color string.
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -236,7 +236,7 @@ is set to HSB, it returns the HSB saturation.
 
     void
 
-📂 *Sub-module: creating_reading*
+📂 Sub-module: creating_reading
 
 ---
 
@@ -264,7 +264,7 @@ yellow color.
 
     void
 
-📂 *Sub-module: setting*
+📂 Sub-module: setting
 
 ---
 
@@ -290,7 +290,7 @@ parameters will have no effect.
 
     void
 
-📂 *Sub-module: setting*
+📂 Sub-module: setting
 
 ---
 
@@ -315,7 +315,7 @@ doesn't affect their appearance.
 
     void
 
-📂 *Sub-module: setting*
+📂 Sub-module: setting
 
 ---
 
@@ -341,7 +341,7 @@ with each value in the range from 0 to 255.
 
     void
 
-📂 *Sub-module: setting*
+📂 Sub-module: setting
 
 ---
 
@@ -356,7 +356,7 @@ nothing will be drawn to the screen. @chainable
 
     void
 
-📂 *Sub-module: setting*
+📂 Sub-module: setting
 
 ---
 
@@ -370,7 +370,7 @@ called, nothing will be drawn to the screen. @chainable
 
     void
 
-📂 *Sub-module: setting*
+📂 Sub-module: setting
 
 ---
 
@@ -401,7 +401,7 @@ last parameter sets the alpha (transparency) value.
 
     void
 
-📂 *Sub-module: setting*
+📂 Sub-module: setting
 
 ---
 
@@ -426,7 +426,7 @@ on drawing done with the image() and background() functions.
 
     void
 
-📂 *Sub-module: setting*
+📂 Sub-module: setting
 
 ---
 
@@ -441,7 +441,7 @@ blendMode() settings will return to what they were prior to calling erase().
 
     void
 
-📂 *Sub-module: setting*
+📂 Sub-module: setting
 
 ---
 
@@ -455,7 +455,7 @@ or for using p5.js with other libraries.
 
     void
 
-📂 *Sub-module: p5.Color*
+📂 Sub-module: p5.Color
 
 ---
 
@@ -469,7 +469,7 @@ the default RGB mode it's between 0 and 255.
 
     void
 
-📂 *Sub-module: p5.Color*
+📂 Sub-module: p5.Color
 
 ---
 
@@ -483,7 +483,7 @@ the default RGB mode it's between 0 and 255.
 
     void
 
-📂 *Sub-module: p5.Color*
+📂 Sub-module: p5.Color
 
 ---
 
@@ -497,7 +497,7 @@ the default RGB mode it's between 0 and 255.
 
     void
 
-📂 *Sub-module: p5.Color*
+📂 Sub-module: p5.Color
 
 ---
 
@@ -511,7 +511,7 @@ colorMode(). In the default RGB mode it's between 0 and 255.
 
     void
 
-📂 *Sub-module: p5.Color*
+📂 Sub-module: p5.Color
 
 ---
 

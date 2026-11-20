@@ -31,6 +31,9 @@ jobs:
           git clone --depth 1 https://github.com/nvim-lua/plenary.nvim \
             ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
 
+      - name: Check help docs
+        run: ./scripts/check-help-tags.sh
+
       - name: Run Lua tests
         run: nvim --headless -u tests/init.lua -c "PlenaryBustedDirectory tests/p5/ {init='tests/init.lua', sequential=true}" -c "qa!"
 

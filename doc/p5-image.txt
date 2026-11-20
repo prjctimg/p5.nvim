@@ -69,7 +69,7 @@ run to update the changes.
 
     void
 
-📂 *Sub-module: image*
+📂 Sub-module: image
 
 ---
 
@@ -87,7 +87,7 @@ immediately, or prompt the user with a dialogue window.
 
     void
 
-📂 *Sub-module: image*
+📂 Sub-module: image
 
 ---
 
@@ -114,7 +114,7 @@ to add "data:image/png;base64," in front of the string.
 
     the p5.Image object
 
-📂 *Sub-module: loading_displaying*
+📂 Sub-module: loading_displaying
 
 ---
 
@@ -147,7 +147,7 @@ destination box.
 
     void
 
-📂 *Sub-module: loading_displaying*
+📂 Sub-module: loading_displaying
 
 ---
 
@@ -172,7 +172,7 @@ value is 255.
 
     void
 
-📂 *Sub-module: loading_displaying*
+📂 Sub-module: loading_displaying
 
 ---
 
@@ -186,7 +186,7 @@ images with their original hues.
 
     void
 
-📂 *Sub-module: loading_displaying*
+📂 Sub-module: loading_displaying
 
 ---
 
@@ -208,7 +208,7 @@ specified, they are used to set the image's width and height.
 
     void
 
-📂 *Sub-module: loading_displaying*
+📂 Sub-module: loading_displaying
 
 ---
 
@@ -234,7 +234,7 @@ mode to do the operation.
 
     void
 
-📂 *Sub-module: pixels*
+📂 Sub-module: pixels
 
 ---
 
@@ -262,7 +262,7 @@ pixels to fit the specified target region.
 
     void
 
-📂 *Sub-module: pixels*
+📂 Sub-module: pixels
 
 ---
 
@@ -295,7 +295,7 @@ effects present in the filter examples.
 
     void
 
-📂 *Sub-module: pixels*
+📂 Sub-module: pixels
 
 ---
 
@@ -328,7 +328,7 @@ an p5.Image object, take a look at p5.Image.get()
 
     void
 
-📂 *Sub-module: pixels*
+📂 Sub-module: pixels
 
 ---
 
@@ -344,7 +344,7 @@ occur.
 
     void
 
-📂 *Sub-module: pixels*
+📂 Sub-module: pixels
 
 ---
 
@@ -374,7 +374,7 @@ the reference for pixels[] for more information.
 
     void
 
-📂 *Sub-module: pixels*
+📂 Sub-module: pixels
 
 ---
 
@@ -392,7 +392,7 @@ changes to pixels[] will occur.
 
     void
 
-📂 *Sub-module: pixels*
+📂 Sub-module: pixels
 
 ---
 
@@ -413,12 +413,12 @@ method on the image to make sure that the pixel data is properly loaded.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
 
-`loadPixels()`                                            *p5-image-loadPixels*
+`loadPixels()`                                            p5-image-loadPixels
 
 Loads the pixels data for this image into the [pixels] attribute.
 
@@ -426,12 +426,12 @@ Loads the pixels data for this image into the [pixels] attribute.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
 
-`updatePixels()`                                            *p5-image-updatePixels*
+`updatePixels()`                                            p5-image-updatePixels
 
 Updates the backing canvas for this image with the contents of the [pixels]
 array. If this image is an animated GIF then the pixels will be updated in the
@@ -447,12 +447,12 @@ frame that is currently displayed.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
 
-`get()`                                            *p5-image-get*
+`get()`                                            p5-image-get
 
 Get a region of pixels from an image. If no params are passed, the whole image
 is returned. If x and y are the only params passed a single pixel is
@@ -470,12 +470,12 @@ p5.Image is returned.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
 
-`set()`                                            *p5-image-set*
+`set()`                                            p5-image-set
 
 Set the color of a single pixel or write an image into this p5.Image. Note
 that for a large number of pixels this will be slower than directly
@@ -490,7 +490,7 @@ manipulating the pixels array and then calling updatePixels().
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -510,12 +510,12 @@ using the same proportion, use resize(150, 0).
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
 
-`copy()`                                            *p5-image-copy*
+`copy()`                                            p5-image-copy
 
 Copies a region of pixels from one image to another. If no srcImage is
 specified this is used as the source. If the source and destination regions
@@ -537,7 +537,7 @@ specified target region.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -552,12 +552,12 @@ applied to an image object, they cannot be removed.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
 
-`filter()`                                            *p5-image-filter*
+`filter()`                                            p5-image-filter
 
 Applies an image filter to a p5.Image THRESHOLD Converts the image to black
 and white pixels depending if they are above or below the threshold defined by
@@ -585,12 +585,12 @@ effects present in the filter examples.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
 
-`blend()`                                            *p5-image-blend*
+`blend()`                                            p5-image-blend
 
 Copies a region of pixels from one image to another, using a specified blend
 mode to do the operation.
@@ -611,7 +611,7 @@ mode to do the operation.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -631,7 +631,7 @@ was loaded from a GIF file.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -644,7 +644,7 @@ Starts an animated GIF over at the beginning state.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -657,7 +657,7 @@ Gets the index for the frame that is currently visible in an animated GIF.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -670,7 +670,7 @@ Sets the index of the frame that is currently visible in an animated GIF
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -683,7 +683,7 @@ Returns the number of frames in an animated GIF
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -696,7 +696,7 @@ Plays an animated GIF that was paused with pause()
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -709,7 +709,7 @@ Pauses an animated GIF.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 
@@ -728,7 +728,7 @@ its delay modified. If no index is given, all frames will have the new delay.
 
     void
 
-📂 *Sub-module: p5.Image*
+📂 Sub-module: p5.Image
 
 ---
 

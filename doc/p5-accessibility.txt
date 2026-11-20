@@ -38,7 +38,7 @@ description will only be available to screen-reader users.
 
     void
 
-📂 *Sub-module: describe*
+📂 Sub-module: describe
 
 ---
 
@@ -67,7 +67,7 @@ screen-reader users.
 
     void
 
-📂 *Sub-module: describe*
+📂 Sub-module: describe
 
 ---
 
@@ -97,7 +97,7 @@ users.
 
     void
 
-📂 *Sub-module: outputs*
+📂 Sub-module: outputs
 
 ---
 
@@ -128,7 +128,7 @@ before publishing or sharing with screen reader users.
 
     void
 
-📂 *Sub-module: outputs*
+📂 Sub-module: outputs
 
 ---
 

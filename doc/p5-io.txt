@@ -81,7 +81,7 @@ Writes data to the PrintWriter stream
 
     void
 
-📂 *Sub-module: files*
+📂 Sub-module: files
 
 ---
 
@@ -94,7 +94,7 @@ Writes data to the PrintWriter stream, and adds a new line at the end
 
     void
 
-📂 *Sub-module: files*
+📂 Sub-module: files
 
 ---
 
@@ -107,7 +107,7 @@ Clears the data already written to the PrintWriter object
 
     void
 
-📂 *Sub-module: files*
+📂 Sub-module: files
 
 ---
 
@@ -120,7 +120,7 @@ Closes the PrintWriter
 
     void
 
-📂 *Sub-module: files*
+📂 Sub-module: files
 
 ---
 
@@ -164,7 +164,7 @@ fetching files up to size of 64MB.
 
     JSON data
 
-📂 *Sub-module: files*
+📂 Sub-module: files
 
 ---
 
@@ -178,7 +178,7 @@ saving process and location of the saved file will vary between web browsers.
 
     void
 
-📂 *Sub-module: files*
+📂 Sub-module: files
 
 ---
 
@@ -197,7 +197,7 @@ saving process and location of the saved file will vary between web browsers.
 
     void
 
-📂 *Sub-module: files*
+📂 Sub-module: files
 
 ---
 
@@ -218,7 +218,7 @@ saved file will vary between web browsers.
 
     void
 
-📂 *Sub-module: files*
+📂 Sub-module: files
 
 ---
 
@@ -233,7 +233,7 @@ using data from an existing file.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -250,7 +250,7 @@ that row is duplicated and added to the table.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -263,7 +263,7 @@ Removes a row from the table object.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -281,7 +281,7 @@ used to get and set values of the selected row.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -294,7 +294,7 @@ Gets all rows from the table. Returns an array of p5.TableRows.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -314,7 +314,7 @@ either its ID or title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -335,7 +335,7 @@ be specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -356,7 +356,7 @@ specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -376,7 +376,7 @@ may be specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -394,7 +394,7 @@ The column may be specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -408,7 +408,7 @@ titles are maintained.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -423,7 +423,7 @@ want to specify a title, so the column may be easily referenced later by name.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -436,7 +436,7 @@ Returns the total number of columns in a Table.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -449,7 +449,7 @@ Returns the total number of rows in a Table.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -468,7 +468,7 @@ column may be referenced by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -484,7 +484,7 @@ title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -500,7 +500,7 @@ removeColumn(1) would remove the second column, and so on.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -519,7 +519,7 @@ by its ID, while the column may be specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -539,7 +539,7 @@ title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -559,7 +559,7 @@ title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -578,7 +578,7 @@ title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -597,7 +597,7 @@ title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -616,7 +616,7 @@ title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -630,7 +630,7 @@ in, each row object will be stored with that attribute as its title.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
@@ -643,12 +643,12 @@ Retrieves all table data and returns it as a multidimensional array.
 
     void
 
-📂 *Sub-module: p5.Table*
+📂 Sub-module: p5.Table
 
 ---
 
 
-`constructor()`                                            *p5-io-constructor*
+`constructor()`                                            p5-io-constructor
 
 A TableRow object represents a single row of data values, stored in columns,
 from a table. A Table Row contains both an ordered array, and an unordered
@@ -658,12 +658,12 @@ JSON object.
 
     void
 
-📂 *Sub-module: p5.TableRow*
+📂 Sub-module: p5.TableRow
 
 ---
 
 
-`set()`                                            *p5-io-set*
+`set()`                                            p5-io-set
 
 Stores a value in the TableRow's specified column. The column may be specified
 by either its ID or title.
@@ -676,12 +676,12 @@ by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.TableRow*
+📂 Sub-module: p5.TableRow
 
 ---
 
 
-`setNum()`                                            *p5-io-setNum*
+`setNum()`                                            p5-io-setNum
 
 Stores a Float value in the TableRow's specified column. The column may be
 specified by either its ID or title.
@@ -694,12 +694,12 @@ specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.TableRow*
+📂 Sub-module: p5.TableRow
 
 ---
 
 
-`setString()`                                            *p5-io-setString*
+`setString()`                                            p5-io-setString
 
 Stores a String value in the TableRow's specified column. The column may be
 specified by either its ID or title.
@@ -712,12 +712,12 @@ specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.TableRow*
+📂 Sub-module: p5.TableRow
 
 ---
 
 
-`get()`                                            *p5-io-get*
+`get()`                                            p5-io-get
 
 Retrieves a value from the TableRow's specified column. The column may be
 specified by either its ID or title.
@@ -726,12 +726,12 @@ specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.TableRow*
+📂 Sub-module: p5.TableRow
 
 ---
 
 
-`getNum()`                                            *p5-io-getNum*
+`getNum()`                                            p5-io-getNum
 
 Retrieves a Float value from the TableRow's specified column. The column may
 be specified by either its ID or title.
@@ -744,12 +744,12 @@ be specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.TableRow*
+📂 Sub-module: p5.TableRow
 
 ---
 
 
-`getString()`                                            *p5-io-getString*
+`getString()`                                            p5-io-getString
 
 Retrieves an String value from the TableRow's specified column. The column may
 be specified by either its ID or title.
@@ -762,12 +762,12 @@ be specified by either its ID or title.
 
     void
 
-📂 *Sub-module: p5.TableRow*
+📂 Sub-module: p5.TableRow
 
 ---
 
 
-`constructor()`                                            *p5-io-constructor*
+`constructor()`                                            p5-io-constructor
 
 XML is a representation of an XML object, able to parse XML code. Use
 loadXML() to load external XML files and create XML objects.
@@ -776,7 +776,7 @@ loadXML() to load external XML files and create XML objects.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -790,7 +790,7 @@ object.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -803,7 +803,7 @@ Gets the element's full name, which is returned as a String.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -816,7 +816,7 @@ Sets the element's name, which is specified as a String.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -830,7 +830,7 @@ a boolean.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -845,7 +845,7 @@ each child element individually.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -860,7 +860,7 @@ name.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -875,7 +875,7 @@ found.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -891,7 +891,7 @@ an p5.XML object.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -904,7 +904,7 @@ Removes the element specified by name or index.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -917,7 +917,7 @@ Counts the specified element's number of attributes, returned as an Number.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -931,7 +931,7 @@ of Strings.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -948,12 +948,12 @@ Checks whether or not an element has the specified attribute.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
 
-`getNum()`                                            *p5-io-getNum*
+`getNum()`                                            p5-io-getNum
 
 Returns an attribute value of the element as an Number. If the defaultValue
 parameter is specified and the attribute doesn't exist, then defaultValue is
@@ -968,12 +968,12 @@ value 0 is returned.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
 
-`getString()`                                            *p5-io-getString*
+`getString()`                                            p5-io-getString
 
 Returns an attribute value of the element as an String. If the defaultValue
 parameter is specified and the attribute doesn't exist, then defaultValue is
@@ -988,7 +988,7 @@ null is returned.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -1006,7 +1006,7 @@ attribute name, while the second specifies the new content.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -1020,7 +1020,7 @@ is returned if specified, otherwise null is returned.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -1033,7 +1033,7 @@ Sets the element's content.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 
@@ -1047,7 +1047,7 @@ the content to be sent over a http request or saved to file.
 
     void
 
-📂 *Sub-module: p5.XML*
+📂 Sub-module: p5.XML
 
 ---
 

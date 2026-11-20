@@ -44,7 +44,7 @@ deviceMoved() function. The default threshold is set to 0.5.
 
     void
 
-📂 *Sub-module: acceleration*
+📂 Sub-module: acceleration
 
 ---
 
@@ -58,7 +58,7 @@ deviceShaken() function. The default threshold is set to 30.
 
     void
 
-📂 *Sub-module: acceleration*
+📂 Sub-module: acceleration
 
 ---
 
@@ -73,7 +73,7 @@ threshold value can be changed using setMoveThreshold().
 
     void
 
-📂 *Sub-module: acceleration*
+📂 Sub-module: acceleration
 
 ---
 
@@ -90,7 +90,7 @@ or 'Z'.
 
     void
 
-📂 *Sub-module: acceleration*
+📂 Sub-module: acceleration
 
 ---
 
@@ -106,7 +106,7 @@ using setShakeThreshold().
 
     void
 
-📂 *Sub-module: acceleration*
+📂 Sub-module: acceleration
 
 ---
 
@@ -132,7 +132,7 @@ to the end of the method.
 
     void
 
-📂 *Sub-module: keyboard*
+📂 Sub-module: keyboard
 
 ---
 
@@ -148,7 +148,7 @@ this event, add "return false" to the end of the function.
 
     void
 
-📂 *Sub-module: keyboard*
+📂 Sub-module: keyboard
 
 ---
 
@@ -170,7 +170,7 @@ to the end of the function.
 
     void
 
-📂 *Sub-module: keyboard*
+📂 Sub-module: keyboard
 
 ---
 
@@ -191,7 +191,7 @@ use any of the variable keyCode names listed here.
 
     void
 
-📂 *Sub-module: keyboard*
+📂 Sub-module: keyboard
 
 ---
 
@@ -207,7 +207,7 @@ to various mouse events. To prevent any default behavior for this event, add
 
     void
 
-📂 *Sub-module: mouse*
+📂 Sub-module: mouse
 
 ---
 
@@ -225,7 +225,7 @@ function.
 
     void
 
-📂 *Sub-module: mouse*
+📂 Sub-module: mouse
 
 ---
 
@@ -244,7 +244,7 @@ false" to the end of the function.
 
     void
 
-📂 *Sub-module: mouse*
+📂 Sub-module: mouse
 
 ---
 
@@ -261,7 +261,7 @@ event, add "return false" to the end of the function.
 
     void
 
-📂 *Sub-module: mouse*
+📂 Sub-module: mouse
 
 ---
 
@@ -280,7 +280,7 @@ various mouse events. To prevent any default behavior for this event, add
 
     void
 
-📂 *Sub-module: mouse*
+📂 Sub-module: mouse
 
 ---
 
@@ -298,7 +298,7 @@ https://developer.mozilla.org/en-US/docs/Web/Events/dblclick
 
     void
 
-📂 *Sub-module: mouse*
+📂 Sub-module: mouse
 
 ---
 
@@ -319,7 +319,7 @@ only work as expected if "return false" is included while using Safari.
 
     void
 
-📂 *Sub-module: mouse*
+📂 Sub-module: mouse
 
 ---
 
@@ -337,7 +337,7 @@ direction. For example, a first person perspective experience.
 
     void
 
-📂 *Sub-module: mouse*
+📂 Sub-module: mouse
 
 ---
 
@@ -351,7 +351,7 @@ example to make ui elements usable etc
 
     void
 
-📂 *Sub-module: mouse*
+📂 Sub-module: mouse
 
 ---
 
@@ -368,7 +368,7 @@ behavior for this event, add "return false" to the end of the method.
 
     void
 
-📂 *Sub-module: touch*
+📂 Sub-module: touch
 
 ---
 
@@ -385,7 +385,7 @@ event, add "return false" to the end of the method.
 
     void
 
-📂 *Sub-module: touch*
+📂 Sub-module: touch
 
 ---
 
@@ -402,7 +402,7 @@ event, add "return false" to the end of the method.
 
     void
 
-📂 *Sub-module: touch*
+📂 Sub-module: touch
 
 ---
 

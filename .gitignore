@@ -27,3 +27,6 @@ opencode.json
 .opencode/
 .entire/
 .agents/opencode/node_modules
+
+# Generated help tags
+doc/tags
