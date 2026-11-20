@@ -831,6 +831,22 @@ fn sketch_p5_version(dir: &FsPath) -> String {
     "2.3.1".to_string()
 }
 
+fn is_valid_p5_js(path: &FsPath) -> bool {
+    let Ok(md) = std::fs::metadata(path) else {
+        return false;
+    };
+    let len = md.len();
+    if len < 50_000 {
+        return false;
+    }
+    let Ok(b) = std::fs::read(path) else {
+        return false;
+    };
+    let end = String::from_utf8_lossy(&b[len.saturating_sub(64) as usize..]);
+    let trimmed = end.trim_end();
+    trimmed.ends_with(';') || trimmed.ends_with('}') || trimmed.ends_with(')')
+}
+
 fn libs_loader_js() -> &'static str {
     r#"// Auto-generated - reads libraries from p5.json at runtime
 (function() {
@@ -905,18 +921,25 @@ async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
         _ => return false,
     };
 
-    if dest.is_file() {
-        if allow_rewrite_empty {
-            if let Ok(md) = tokio::fs::metadata(&dest).await {
-                if md.len() > 0 {
-                    return true;
-                }
-            }
-            // empty file: fall through to rewrite
-        } else {
-            return true;
-        }
+    let is_p5 = req_path == "/assets/libs/p5.js";
+
+    let needs_write = if !dest.is_file() {
+        true
+    } else if is_p5 {
+        // Replace clearly broken/truncated sketch p5.js with a valid cached copy if available.
+        !is_valid_p5_js(&dest)
+    } else if allow_rewrite_empty {
+        tokio::fs::metadata(&dest)
+            .await
+            .map(|m| m.len() == 0)
+            .unwrap_or(true)
+    } else {
+        false
+    };
+    if !needs_write {
+        return true;
     }
+
     if let Some(parent) = dest.parent() {
         let _ = tokio::fs::create_dir_all(parent).await;
     }
@@ -927,6 +950,12 @@ async fn ensure_asset_path(app: &App, req_path: &str) -> bool {
             .unwrap_or(false);
     }
     if let Some(src) = src {
+        if is_p5 {
+            if src.is_file() && is_valid_p5_js(&src) {
+                return tokio::fs::copy(&src, &dest).await.is_ok();
+            }
+            return false;
+        }
         if src.is_file() {
             return tokio::fs::copy(&src, &dest).await.is_ok();
         }
@@ -1054,6 +1083,16 @@ async fn serve(app: Arc<App>, method: Method, uri: Uri) -> Response {
             .header("Connection", "close")
             .body(Body::from(out))
             .unwrap();
+    }
+    let managed = matches!(
+        path.as_str(),
+        "/assets/libs/p5.js"
+            | "/assets/libs/libs.js"
+            | "/assets/favicon.ico"
+            | "/favicon.ico"
+    );
+    if managed {
+        let _ = ensure_asset_path(&app, &path).await;
     }
     if !fp.is_file() {
         if ensure_asset_path(&app, &path).await && fp.is_file() {
