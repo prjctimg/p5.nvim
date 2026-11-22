@@ -457,13 +457,18 @@ end
 			end
 
 			-- Resolve sketch description: prefer gist description, else first comment by gist author.
+			local function desc_str(v)
+				return type(v) == "string" and vim.trim(v) or ""
+			end
+
 			local function resolved_desc(g)
-				local d = g.description
-				if d and vim.trim(d) ~= "" then
-					return vim.trim(d)
+				local d = desc_str(g.description)
+				if d ~= "" then
+					return d
 				end
-				if g._author_desc and vim.trim(g._author_desc) ~= "" then
-					return vim.trim(g._author_desc)
+				local a = desc_str(g._author_desc)
+				if a ~= "" then
+					return a
 				end
 				return ""
 			end
@@ -471,8 +476,7 @@ end
 			local function enrich_missing(callback)
 				local need = {}
 				for _, g in ipairs(gists) do
-					local d = g.description
-					if not d or vim.trim(d) == "" then
+					if desc_str(g.description) == "" then
 						table.insert(need, g)
 					end
 				end
@@ -484,8 +488,9 @@ end
 				for _, g in ipairs(need) do
 					local owner = g.owner and g.owner.login or username
 					G.get_comment(g.id, owner, function(cm)
-						if cm and cm.body and vim.trim(cm.body) ~= "" then
-							g._author_desc = vim.split(cm.body, "\n")[1]
+						local body = cm and desc_str(cm.body) or ""
+						if body ~= "" then
+							g._author_desc = vim.split(body, "\n")[1]
 						end
 						pending = pending - 1
 						if pending == 0 then

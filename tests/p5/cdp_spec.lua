@@ -295,29 +295,18 @@ describe("cdp", function()
 	end)
 
 	describe("debug commands", function()
-		it("pause does not crash without a port", function()
-			cdp.state.port = nil
-			local ok, err = pcall(cdp.pause)
-			assert.is_true(ok, "pause without port: " .. tostring(err))
-		end)
-
-		it("pause_exceptions does not crash without a port", function()
-			cdp.state.port = nil
-			local ok, err = pcall(cdp.pause_exceptions, "uncaught")
-			assert.is_true(ok, "pause_exceptions without port: " .. tostring(err))
-		end)
-
-		it("reload does not crash without a port", function()
-			cdp.state.port = nil
-			local ok, err = pcall(cdp.reload)
-			assert.is_true(ok, "reload without port: " .. tostring(err))
-		end)
-
-		it("screenshot does not crash without a port", function()
-			cdp.state.port = nil
-			local ok, err = pcall(cdp.screenshot, "/tmp/shot.png")
-			assert.is_true(ok, "screenshot without port: " .. tostring(err))
-		end)
+		for _, tc in ipairs({
+			{ "pause", function() return cdp.pause() end },
+			{ "pause_exceptions", function() return cdp.pause_exceptions("uncaught") end },
+			{ "reload", function() return cdp.reload() end },
+			{ "screenshot", function() return cdp.screenshot("/tmp/shot.png") end },
+		}) do
+			it(tc[1] .. " does not crash without a port", function()
+				cdp.state.port = nil
+				local ok, err = pcall(tc[2])
+				assert.is_true(ok, tc[1] .. " without port: " .. tostring(err))
+			end)
+		end
 	end)
 
 	describe("_decode_screenshot", function()

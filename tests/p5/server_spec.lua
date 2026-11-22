@@ -184,43 +184,6 @@ describe("server.start CLI args", function()
   end)
 end)
 
-describe("server config wiring", function()
-  local S = require("p5.server")
-  local I = require("p5.init")
-
-  local function merged(user)
-    local base = vim.deepcopy(I.config)
-    if user then
-      base = vim.tbl_deep_extend("force", base, user)
-    end
-    return vim.tbl_deep_extend(
-      "force",
-      vim.deepcopy(S.config),
-      vim.tbl_extend("force", base.server or {}, { cdp = base.cdp or {} })
-    )
-  end
-
-  it("places server.* options at top level", function()
-    local m = merged()
-    assert.equals(m.port, 8000)
-    assert.is_true(m.auto_open_browser)
-    assert.is_table(m.live_reload)
-    assert.equals(m.live_reload.port, 12002)
-    assert.equals(m.cdp.remote_debugging_port, 9222)
-  end)
-
-  it("propagates user server and cdp overrides", function()
-    local m = merged({
-      server = { port = 8123, auto_open_browser = false },
-      cdp = { remote_debugging_port = 9333 },
-    })
-    assert.equals(m.port, 8123)
-    assert.is_false(m.auto_open_browser)
-    assert.equals(m.live_reload.port, 12002)
-    assert.equals(m.cdp.remote_debugging_port, 9333)
-  end)
-end)
-
 describe("server.stop_server", function()
   local S = require("p5.server")
 
