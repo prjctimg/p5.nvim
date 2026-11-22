@@ -39,7 +39,7 @@ struct Cfg {
     cdp_port: u16,
 }
 
-fn parse_args() -> Cfg {
+fn parse_args_from(args: impl IntoIterator<Item = String>) -> Cfg {
     let mut c = Cfg {
         port: 8000,
         dir: None,
@@ -55,7 +55,7 @@ fn parse_args() -> Cfg {
         ],
         cdp_port: 9222,
     };
-    let mut a = std::env::args().skip(1);
+    let mut a = args.into_iter();
     while let Some(x) = a.next() {
         match x.as_str() {
             "--dir" | "--watch-dir" => {
@@ -100,6 +100,10 @@ fn parse_args() -> Cfg {
         }
     }
     c
+}
+
+fn parse_args() -> Cfg {
+    parse_args_from(std::env::args().skip(1))
 }
 
 fn now_iso() -> String {
@@ -2211,6 +2215,10 @@ async fn root(
     serve(app, method, uri).await
 }
 
+fn app_router(app: Arc<App>) -> Router {
+    Router::new().fallback(root).with_state(app)
+}
+
 #[tokio::main]
 async fn main() {
     let cfg = parse_args();
@@ -2258,7 +2266,7 @@ async fn main() {
             watch(a, watch_dir).await;
         });
     }
-    let router = Router::new().fallback(root).with_state(app.clone());
+    let router = app_router(app.clone());
     let srv = axum::serve(l, router).with_graceful_shutdown(async {
         let ctrl = async {
             let _ = tokio::signal::ctrl_c().await;
@@ -2283,4 +2291,499 @@ async fn main() {
     println!("Closing connections...");
     cdp_disconnect(app).await;
     println!("Server stopped");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use axum::http::{Request, StatusCode};
+    use futures_util::StreamExt;
+    use std::sync::{Mutex, OnceLock};
+    use tokio::sync::Mutex as MutexTokio;
+    use tower::ServiceExt;
+
+    static ENV_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
+
+    fn env_lock() -> &'static Mutex<()> {
+        ENV_LOCK.get_or_init(|| Mutex::new(()))
+    }
+
+    fn test_cfg(dir: PathBuf) -> Cfg {
+        Cfg {
+            port: 8000,
+            dir: Some(dir.clone()),
+            lr_enabled: false,
+            lr_port: 12002,
+            lr_debounce: 0,
+            lr_ext: vec![".js".into(), ".css".into(), ".html".into(), ".json".into()],
+            lr_ex: vec![".git".into(), "node_modules".into()],
+            cdp_port: 9222,
+        }
+    }
+
+    fn test_app(dir: PathBuf) -> Arc<App> {
+        let cfg = test_cfg(dir.clone());
+        Arc::new(App {
+            lr_port: Arc::new(RwLock::new(cfg.lr_port)),
+            lr_clients: Arc::new(MutexTokio::new(vec![])),
+            console: Arc::new(MutexTokio::new(ConsoleBuf::new(1000))),
+            cdp: Arc::new(MutexTokio::new(None)),
+            inj_console: Arc::new(String::new()),
+            inj_lr: Arc::new(String::new()),
+            dir,
+            cfg: Arc::new(RwLock::new(cfg)),
+        })
+    }
+
+    async fn body_bytes(resp: Response) -> Vec<u8> {
+        axum::body::to_bytes(resp.into_body(), usize::MAX)
+            .await
+            .unwrap()
+            .to_vec()
+    }
+
+    async fn body_json(resp: Response) -> Value {
+        serde_json::from_slice(&body_bytes(resp).await).unwrap()
+    }
+
+    async fn first_chunk(resp: Response) -> String {
+        let mut s = resp.into_body().into_data_stream();
+        let b = tokio::time::timeout(Duration::from_secs(3), s.next())
+            .await
+            .expect("stream timeout")
+            .expect("stream ended")
+            .expect("stream err");
+        String::from_utf8(b.to_vec()).unwrap()
+    }
+
+    fn tmp(name: &str) -> PathBuf {
+        let p = std::env::temp_dir().join(format!(
+            "p5d-test-{}-{}-{}",
+            name,
+            std::process::id(),
+            epoch().to_bits()
+        ));
+        let _ = std::fs::remove_dir_all(&p);
+        std::fs::create_dir_all(&p).unwrap();
+        p
+    }
+
+    fn valid_p5_js() -> Vec<u8> {
+        let mut s = String::from("/* p5.js v1.2.3 */\n");
+        while s.len() < 50_100 {
+            s.push_str("var _p5_pad = 0;\n");
+        }
+        s.push_str("})();");
+        s.into_bytes()
+    }
+
+    #[test]
+    fn parse_args_defaults_and_flags() {
+        let c = parse_args_from(Vec::<String>::new());
+        assert_eq!(c.port, 8000);
+        assert_eq!(c.lr_port, 12002);
+        assert_eq!(c.lr_debounce, 300);
+        assert!(c.lr_enabled);
+        assert_eq!(c.cdp_port, 9222);
+
+        let c = parse_args_from(
+            [
+                "8123",
+                "--dir",
+                "/tmp/x",
+                "--lr-port",
+                "13000",
+                "--lr-debounce",
+                "500",
+                "--lr-extensions",
+                ".js,.html",
+                "--lr-exclude",
+                ".git,dist",
+                "--cdp-port",
+                "9333",
+                "--lr-disabled",
+            ]
+            .into_iter()
+            .map(String::from),
+        );
+        assert_eq!(c.port, 8123);
+        assert_eq!(c.dir, Some(PathBuf::from("/tmp/x")));
+        assert_eq!(c.lr_port, 13000);
+        assert_eq!(c.lr_debounce, 500);
+        assert_eq!(c.lr_ext, vec![".js", ".html"]);
+        assert_eq!(c.lr_ex, vec![".git", "dist"]);
+        assert_eq!(c.cdp_port, 9333);
+        assert!(!c.lr_enabled);
+    }
+
+    #[test]
+    fn cmp_versions_orders_numeric() {
+        use std::cmp::Ordering::*;
+        assert_eq!(cmp_versions("1.2.3", "1.2.3"), Equal);
+        assert_eq!(cmp_versions("1.2.10", "1.2.3"), Greater);
+        assert_eq!(cmp_versions("2.0.0", "1.9.9"), Greater);
+        assert_eq!(cmp_versions("1.9.0", "1.10.0"), Less);
+    }
+
+    #[test]
+    fn mime_known_and_default() {
+        assert_eq!(mime("x.html"), "text/html");
+        assert_eq!(mime("x.js"), "text/javascript");
+        assert_eq!(mime("x.css"), "text/css");
+        assert_eq!(mime("x.json"), "application/json");
+        assert_eq!(mime("x.png"), "image/png");
+        assert_eq!(mime("x.woff2"), "font/woff2");
+        assert_eq!(mime("x.unknown"), "application/octet-stream");
+    }
+
+    #[test]
+    fn abs_url_resolves() {
+        assert_eq!(
+            abs_url("http://localhost:8000/index.html", "sketch.js"),
+            "http://localhost:8000/sketch.js"
+        );
+        assert_eq!(
+            abs_url("", "/sketch.js"),
+            "http://localhost:8000/sketch.js"
+        );
+        assert_eq!(
+            abs_url("http://localhost:8000/", "http://x/y.js"),
+            "http://x/y.js"
+        );
+    }
+
+    #[test]
+    fn resolve_script_matches_tail() {
+        let mut c = Cdp::default();
+        c.scripts.insert("http://localhost:8000/sketch.js".into(), "42".into());
+        assert_eq!(resolve_script(&c, "sketch.js"), Some("42".into()));
+        assert_eq!(
+            resolve_script(&c, "http://localhost:8000/sketch.js"),
+            Some("42".into())
+        );
+        assert_eq!(resolve_script(&c, "other.js"), None);
+    }
+
+    #[test]
+    fn valid_p5_js_checks() {
+        let d = tmp("p5valid");
+        let p = d.join("p5.js");
+        std::fs::write(&p, valid_p5_js()).unwrap();
+        assert!(is_valid_p5_js(&p));
+        std::fs::write(&p, b"short").unwrap();
+        assert!(!is_valid_p5_js(&p));
+        let mut bad = valid_p5_js();
+        bad[..20].copy_from_slice(b"<!DOCTYPE html><html");
+        std::fs::write(&p, bad).unwrap();
+        assert!(!is_valid_p5_js(&p));
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[test]
+    fn console_buf_drops_oldest() {
+        let mut b = ConsoleBuf::new(2);
+        b.push(json!(1));
+        b.push(json!(2));
+        b.push(json!(3));
+        let v = b.drain();
+        assert_eq!(v, vec![json!(2), json!(3)]);
+        assert_eq!(b.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn gen_index_includes_scripts_and_title() {
+        let d = tmp("genindex");
+        std::fs::write(
+            d.join("p5.json"),
+            r#"{"gist":{"title":"T"},"libs":{"p5.sound":{}}}"#,
+        )
+        .unwrap();
+        let html = gen_index(&d).await;
+        assert!(html.contains("<title>T</title>"));
+        assert!(html.contains("assets/libs/p5.js"));
+        assert!(html.contains("assets/libs/p5.sound.js"));
+        assert!(html.contains("assets/libs/libs.js"));
+        assert!(html.contains("sketch.js"));
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[test]
+    fn default_p5_json_shape() {
+        let _g = env_lock().lock().unwrap();
+        let v: Value = serde_json::from_str(&default_p5_json()).unwrap();
+        assert_eq!(v["mode"], "global");
+        assert!(v["libs"].is_object());
+        assert_eq!(v["includes"][0], "sketch.js");
+    }
+
+    #[test]
+    fn generate_global_dts_outputs_declarations() {
+        let d = tmp("gents");
+        let p5 = d.join("p5.d.ts");
+        std::fs::write(
+            &p5,
+            r#"declare class p5 {
+  constructor();
+  mouseX: number;
+  createCanvas(w: number, h: number): p5.Renderer;
+  setup(): void;
+}
+"#,
+        )
+        .unwrap();
+        let out = d.join("global.d.ts");
+        assert!(generate_global_dts(&p5, &out));
+        let s = std::fs::read_to_string(out).unwrap();
+        assert!(s.contains("declare global"));
+        assert!(s.contains("mouseX"));
+        assert!(s.contains("createCanvas"));
+        assert!(!s.contains("setup"));
+        assert!(!s.contains("constructor"));
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[tokio::test(flavor = "current_thread")]
+    async fn ensure_sketch_essentials_creates_files() {
+        let _g = env_lock().lock().unwrap();
+        let d = tmp("essentials");
+        ensure_sketch_essentials(&d).await;
+        assert!(d.join("p5.json").is_file());
+        assert!(d.join("tsconfig.json").is_file());
+        assert!(d.join("sketch.js").is_file());
+        assert!(d.join("assets/libs/libs.js").is_file());
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[tokio::test]
+    async fn health_and_cors_and_method_guard() {
+        let d = tmp("health");
+        let app = test_app(d.clone());
+        let r = app_router(app.clone());
+        let resp = r
+            .clone()
+            .oneshot(Request::builder().uri("/api/health").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::OK);
+        let j = body_json(resp).await;
+        assert_eq!(j["status"], "ok");
+        assert_eq!(j["server"], "p5.nvim asyncio");
+
+        let resp = r
+            .clone()
+            .oneshot(
+                Request::builder()
+                    .method("OPTIONS")
+                    .uri("/anything")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::NO_CONTENT);
+        assert_eq!(
+            resp.headers().get("access-control-allow-origin").unwrap(),
+            "*"
+        );
+
+        let resp = r
+            .oneshot(
+                Request::builder()
+                    .method("PUT")
+                    .uri("/sketch.js")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::METHOD_NOT_ALLOWED);
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[tokio::test]
+    async fn serve_blocks_traversal_and_serves_files() {
+        let d = tmp("serve");
+        std::fs::write(d.join("sketch.js"), "function setup(){}").unwrap();
+        let app = test_app(d.clone());
+        let r = app_router(app);
+
+        let resp = r
+            .clone()
+            .oneshot(
+                Request::builder()
+                    .uri("/../../etc/passwd")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::FORBIDDEN);
+
+        let resp = r
+            .clone()
+            .oneshot(Request::builder().uri("/sketch.js").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::OK);
+        let b = body_bytes(resp).await;
+        assert_eq!(b, b"function setup(){}");
+
+        let resp = r
+            .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::OK);
+        let s = String::from_utf8(body_bytes(resp).await).unwrap();
+        assert!(s.contains("<!DOCTYPE html>"));
+        assert!(s.contains("assets/libs/p5.js"));
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[tokio::test]
+    async fn console_log_and_stream() {
+        let d = tmp("console");
+        let app = test_app(d.clone());
+        let r = app_router(app.clone());
+
+        let body = json!({"type":"console_batch","logs":[{"level":"error","message":"boom","source":"browser"}]});
+        let resp = r
+            .clone()
+            .oneshot(
+                Request::builder()
+                    .method("POST")
+                    .uri("/api/console/log")
+                    .header("content-type", "application/json")
+                    .body(Body::from(body.to_string()))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::OK);
+        let j = body_json(resp).await;
+        assert_eq!(j["status"], "received");
+        assert_eq!(app.console.lock().await.len(), 1);
+
+        let resp = r
+            .oneshot(
+                Request::builder()
+                    .uri("/api/console/stream")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::OK);
+        let chunk = first_chunk(resp).await;
+        assert!(chunk.contains("data:"));
+        assert!(chunk.contains("boom"));
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[tokio::test]
+    async fn cdp_endpoints_without_connection() {
+        let d = tmp("cdp");
+        let app = test_app(d.clone());
+        let r = app_router(app);
+
+        let resp = r
+            .clone()
+            .oneshot(Request::builder().uri("/api/cdp/status").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(body_json(resp).await["connected"], false);
+
+        let resp = r
+            .clone()
+            .oneshot(
+                Request::builder()
+                    .method("POST")
+                    .uri("/api/cdp/evaluate")
+                    .header("content-type", "application/json")
+                    .body(Body::from("{\"expression\":\"1+1\"}"))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::SERVICE_UNAVAILABLE);
+
+        let resp = r
+            .clone()
+            .oneshot(
+                Request::builder()
+                    .method("DELETE")
+                    .uri("/api/cdp/connect")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(body_json(resp).await["status"], "not_connected");
+
+        let resp = r
+            .oneshot(Request::builder().uri("/api/cdp/stream").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::OK);
+        let chunk = first_chunk(resp).await;
+        let v: Value = serde_json::from_str(chunk.trim()).unwrap();
+        assert_eq!(v["type"], "status");
+        assert_eq!(v["state"], "disconnected");
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[tokio::test(flavor = "current_thread")]
+    async fn p5_alias_served_from_cache() {
+        let _g = env_lock().lock().unwrap();
+        let old = std::env::var_os("XDG_CACHE_HOME");
+        let d = tmp("p5cache");
+        let cache = d.join("cache");
+        let ver_dir = cache.join("p5.nvim/versions/1.2.3");
+        std::fs::create_dir_all(&ver_dir).unwrap();
+        std::fs::write(ver_dir.join("p5.js"), valid_p5_js()).unwrap();
+        std::env::set_var("XDG_CACHE_HOME", &cache);
+
+        let proj = d.join("proj");
+        std::fs::create_dir_all(&proj).unwrap();
+        std::fs::write(proj.join("p5.json"), r#"{"version":"1.2.3","libs":{},"includes":["sketch.js"]}"#).unwrap();
+        let app = test_app(proj.clone());
+        let r = app_router(app);
+        let resp = r
+            .oneshot(Request::builder().uri("/p5.js").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::OK);
+        let b = body_bytes(resp).await;
+        assert!(b.len() >= 50_000);
+
+        if let Some(v) = old {
+            std::env::set_var("XDG_CACHE_HOME", v);
+        } else {
+            std::env::remove_var("XDG_CACHE_HOME");
+        }
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[tokio::test]
+    async fn watch_broadcasts_reload() {
+        let d = tmp("watch");
+        std::fs::write(d.join("sketch.js"), "old").unwrap();
+        let app = test_app(d.clone());
+        let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel::<String>();
+        app.lr_clients.lock().await.push(tx);
+
+        let w = tokio::spawn(watch(app.clone(), d.clone()));
+        tokio::time::sleep(Duration::from_millis(450)).await;
+        std::fs::write(d.join("sketch.js"), "new").unwrap();
+
+        let msg = tokio::time::timeout(Duration::from_secs(5), rx.recv())
+            .await
+            .expect("reload timeout")
+            .expect("channel closed");
+        let v: Value = serde_json::from_str(&msg).unwrap();
+        assert_eq!(v["type"], "reload");
+        assert!(v["file"].as_str().unwrap().contains("sketch.js"));
+
+        w.abort();
+        let _ = std::fs::remove_dir_all(&d);
+    }
 }
