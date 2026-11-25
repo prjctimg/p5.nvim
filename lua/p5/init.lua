@@ -233,6 +233,10 @@ I.setup = function(opts)
 		end,
 		config = I.config,
 	})
+
+	vim.defer_fn(function()
+		server.ensure_binary()
+	end, 100)
 end
 
 return I

@@ -327,7 +327,13 @@ fn plain_status(status: StatusCode, body: &'static str) -> Response {
 }
 
 async fn http_json(port: u16, path: &str) -> Option<String> {
-    reqwest::get(format!("http://127.0.0.1:{}{}", port, path))
+    let client = reqwest::Client::builder()
+        .timeout(Duration::from_millis(1500))
+        .build()
+        .ok()?;
+    client
+        .get(format!("http://127.0.0.1:{}{}", port, path))
+        .send()
         .await
         .ok()?
         .text()
@@ -589,6 +595,9 @@ async fn cdp_msg(app: Arc<App>, d: Value) {
             let req = p.get("request").cloned().unwrap_or(json!({}));
             let mut g = app.cdp.lock().await;
             if let Some(c) = g.as_mut() {
+                if c.reqs.len() >= 2000 {
+                    c.reqs.clear();
+                }
                 c.reqs.insert(id, json!({"method":req.get("method").and_then(|v|v.as_str()).unwrap_or("GET"),"url":req.get("url").and_then(|v|v.as_str()).unwrap_or(""),"start_time":epoch(),"status":Value::Null,"status_text":Value::Null,"size":Value::Null,"error":Value::Null}));
             }
         }
@@ -2077,6 +2086,7 @@ async fn lr_conn(mut s: WebSocket, app: Arc<App>) {
     loop {
         tokio::select! { m=rx.recv()=>{ match m{ Some(m)=>{ if s.send(Message::Text(m)).await.is_err(){break;} }, None=>break } }, i=s.recv()=>{ match i{ Some(Ok(_))=>{}, _=>break } } }
     }
+    app.lr_clients.lock().await.retain(|c| !c.is_closed());
 }
 
 async fn watch(app: Arc<App>, dir: PathBuf) {

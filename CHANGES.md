@@ -10,6 +10,17 @@ _No unreleased changes._
 
 ---
 
+## v0.8.23
+
+### Fixed
+- **Server robustness** — `p5d` CDP connect HTTP probe now times out; CDP in-flight request tracking capped to prevent unbounded growth; live reload WS disconnect cleans closed clients
+- **p5d auto-install** — missing `p5d` is auto-installed during plugin setup and on server start using `scripts/install-p5d.sh` (lazy.nvim `build` hook script)
+
+### Changed
+- **Gist clone** — normalize `vim.NIL`/empty gist descriptions before trimming to avoid errors
+
+---
+
 ## v0.8.22
 
 ### Fixed

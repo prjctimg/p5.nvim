@@ -7,6 +7,7 @@ local notify = core.notify
 
 local user_stopped = false
 local server_starting = false
+local install_job = nil
 
 S.config = {
 	port = 8000,
@@ -46,6 +47,64 @@ local function server_bin()
 		return in_path
 	end
 	return nil
+end
+
+local function install_binary(cb)
+	if install_job then
+		if cb then
+			cb(false, "install in progress")
+		end
+		return
+	end
+	local script = core.plugin_root() .. "/scripts/install-p5d.sh"
+	if not core.is_file(script) then
+		if cb then
+			cb(false, "install script not found")
+		end
+		return
+	end
+	local cmd
+	if vim.fn.has("win32") == 1 then
+		cmd = { "bash", script }
+	else
+		cmd = { script }
+	end
+	notify("Installing p5d server binary...", "info")
+	install_job = vim.fn.jobstart(cmd, {
+		cwd = core.plugin_root(),
+		on_exit = function(_, code)
+			install_job = nil
+			vim.schedule(function()
+				if code == 0 and server_bin() then
+					notify("p5d installed", "ok")
+					if cb then
+						cb(true)
+					end
+				else
+					notify("p5d install failed (exit " .. tostring(code) .. "). Run ./scripts/install-p5d.sh manually.", "warn")
+					if cb then
+						cb(false, "exit " .. tostring(code))
+					end
+				end
+			end)
+		end,
+	})
+	if install_job <= 0 then
+		install_job = nil
+		if cb then
+			cb(false, "failed to start install")
+		end
+	end
+end
+
+S.ensure_binary = function(cb)
+	if server_bin() then
+		if cb then
+			cb(true)
+		end
+		return
+	end
+	install_binary(cb)
 end
 
 S.start = function(port)
@@ -92,7 +151,13 @@ S.start = function(port)
 	local bin = server_bin()
 	if not bin then
 		server_starting = false
-		notify("Server binary 'p5d' not found. Run ./scripts/install-p5d.sh in the plugin directory (downloads prebuilt or builds locally) and ensure 'p5d' is in PATH.", "warn")
+		S.ensure_binary(function(ok)
+			if ok then
+				vim.schedule(function()
+					S.start(port)
+				end)
+			end
+		end)
 		return
 	end
 
