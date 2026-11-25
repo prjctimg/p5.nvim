@@ -12,6 +12,7 @@ I.config = {
 	server = {
 		port = 8000,
 		auto_open_browser = true,
+		verbose = false,
 		live_reload = {
 			enabled = true,
 			port = 12002,

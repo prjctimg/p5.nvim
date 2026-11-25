@@ -6,7 +6,8 @@ All notable changes since v0.5.0.
 
 ## Unreleased
 
-_No unreleased changes._
+### Added
+- **Verbose server logging** — `server.verbose` config / `p5d --verbose`; p5d emits structured colored logs for startup, reload, CDP, shutdown; Neovim echoes and colorizes server output lines
 
 ---
 

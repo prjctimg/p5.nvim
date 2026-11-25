@@ -157,6 +157,7 @@ Configure p5.nvim using the setup function: >
        port = 8000,
        auto_start = false,
        auto_open_browser = true,
+       verbose = false,
        live_reload = {
          enabled = true,
          port = 12002,

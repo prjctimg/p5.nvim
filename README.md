@@ -185,6 +185,8 @@ Start/stop the development server (toggle). Opens browser automatically and enab
 :P5 server 8080
 ```
 
+Set `server.verbose = true` in setup (or pass `--verbose` to `p5d`) to see pretty, color-coded daemon logs, reload state, and browser console/error output in the terminal.
+
 ---
 
 ### :P5 cdp [subcommand]
@@ -441,6 +443,7 @@ require("p5").setup({
   server = {
     port = 8000,                    -- Server port
     auto_open_browser = true,      -- Open browser automatically
+    verbose = false,               -- Pretty p5d logs in terminal (--verbose)
 
     -- Live reload settings
     live_reload = {

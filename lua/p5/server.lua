@@ -12,6 +12,7 @@ local install_job = nil
 S.config = {
 	port = 8000,
 	auto_open_browser = true,
+	verbose = false,
 	live_reload = {
 		enabled = true,
 		port = 12002,
@@ -188,6 +189,10 @@ S.start = function(port)
 		table.insert(cmd, tostring(S.config.cdp.remote_debugging_port or 9222))
 	end
 
+	if S.config.verbose then
+		table.insert(cmd, "--verbose")
+	end
+
 	S.port = port
 	S.type = "native"
 
@@ -199,20 +204,30 @@ S.start = function(port)
 				return
 			end
 			for _, line in ipairs(data) do
-				if line ~= "" and line:match("^%[browser%]") then
-					local level = (line:match("^%[browser%]%s+%[(%w+)%]") or "LOG"):upper()
-					local hl = "Normal"
-					if level == "ERROR" then
-						hl = "ErrorMsg"
-					elseif level == "WARN" or level == "WARNING" then
-						hl = "WarningMsg"
-					elseif level == "INFO" then
-						hl = "MoreMsg"
-					end
-					vim.schedule(function()
-						pcall(vim.api.nvim_echo, { { line, hl } }, true, {})
-					end)
+				if line == "" then
+					goto continue
 				end
+				local level = line:match("%f[%w](ERROR)%f[%W]")
+					or line:match("%f[%w](WARN)%f[%W]")
+					or line:match("%f[%w](INFO)%f[%W]")
+					or line:match("%f[%w](DEBUG)%f[%W]")
+					or line:match("%f[%w](LOG)%f[%W]")
+					or line:match("^%[browser%]%s+%[(%w+)%]")
+				level = (level or ""):upper()
+				local hl = "Normal"
+				if level == "ERROR" then
+					hl = "ErrorMsg"
+				elseif level == "WARN" or level == "WARNING" then
+					hl = "WarningMsg"
+				elseif level == "INFO" then
+					hl = "MoreMsg"
+				elseif level == "DEBUG" then
+					hl = "Comment"
+				end
+				vim.schedule(function()
+					pcall(vim.api.nvim_echo, { { line, hl } }, true, {})
+				end)
+				::continue::
 			end
 		end,
 		on_stderr = function(_, data)

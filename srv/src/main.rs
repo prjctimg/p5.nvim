@@ -17,7 +17,10 @@ use std::{
     collections::{HashMap, VecDeque},
     net::SocketAddr,
     path::{Path as FsPath, PathBuf},
-    sync::Arc,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc,
+    },
     time::Duration,
 };
 use tokio::{
@@ -26,6 +29,43 @@ use tokio::{
     time::sleep,
 };
 use tokio_tungstenite::{connect_async, tungstenite::Message as WsMessage};
+
+static VERBOSE: AtomicBool = AtomicBool::new(false);
+static COLOR: AtomicBool = AtomicBool::new(false);
+
+fn verbose() -> bool {
+    VERBOSE.load(Ordering::Relaxed)
+}
+
+fn color() -> bool {
+    COLOR.load(Ordering::Relaxed)
+}
+
+fn vlog(emoji: &str, label: &str, msg: &str) {
+    println!("{} {:<7} {}", emoji, label, msg);
+}
+
+fn log_info(msg: &str) {
+    vlog("ℹ️ ", "info", msg);
+}
+
+fn log_ok(msg: &str) {
+    vlog("✅", "ok", msg);
+}
+
+fn log_warn(msg: &str) {
+    vlog("⚠️ ", "warn", msg);
+}
+
+fn log_error(msg: &str) {
+    vlog("❌", "error", msg);
+}
+
+fn log_debug(msg: &str) {
+    if verbose() {
+        vlog("🔍", "debug", msg);
+    }
+}
 
 #[derive(Clone, Debug)]
 struct Cfg {
@@ -37,6 +77,7 @@ struct Cfg {
     lr_ext: Vec<String>,
     lr_ex: Vec<String>,
     cdp_port: u16,
+    verbose: bool,
 }
 
 fn parse_args_from(args: impl IntoIterator<Item = String>) -> Cfg {
@@ -54,6 +95,7 @@ fn parse_args_from(args: impl IntoIterator<Item = String>) -> Cfg {
             "build".into(),
         ],
         cdp_port: 9222,
+        verbose: false,
     };
     let mut a = args.into_iter();
     while let Some(x) = a.next() {
@@ -89,6 +131,7 @@ fn parse_args_from(args: impl IntoIterator<Item = String>) -> Cfg {
                     c.cdp_port = v.parse().unwrap_or(c.cdp_port);
                 }
             }
+            "--verbose" | "--debug" | "-v" => c.verbose = true,
             s if s.starts_with("--") => {
                 let _ = a.next();
             }
@@ -99,6 +142,8 @@ fn parse_args_from(args: impl IntoIterator<Item = String>) -> Cfg {
             }
         }
     }
+    VERBOSE.store(c.verbose, Ordering::Relaxed);
+    COLOR.store(std::io::IsTerminal::is_terminal(&std::io::stdout()), Ordering::Relaxed);
     c
 }
 
@@ -119,45 +164,65 @@ fn epoch() -> f64 {
         .as_secs_f64()
 }
 
-fn ansi(c: &str) -> &str {
+fn ansi(c: &str) -> &'static str {
+    if !color() {
+        return "";
+    }
     match c {
         "reset" => "\x1b[0m",
-        "error" => "\x1b[1;31m",
-        "warn" => "\x1b[1;33m",
-        "info" => "\x1b[1;36m",
-        "log" => "\x1b[0;37m",
-        "timestamp" => "\x1b[0;90m",
-        "source" => "\x1b[0;90m",
+        "bold" => "\x1b[1m",
+        "dim" => "\x1b[2m",
+        "red" => "\x1b[1;31m",
+        "yellow" => "\x1b[1;33m",
+        "cyan" => "\x1b[1;36m",
+        "green" => "\x1b[1;32m",
+        "magenta" => "\x1b[1;35m",
+        "gray" => "\x1b[0;90m",
+        "white" => "\x1b[0;37m",
         _ => "\x1b[0;37m",
     }
 }
-fn format_log(level: &str, msg: &str, src: &str) -> String {
-    let l = level.to_lowercase();
+
+fn level_style(level: &str) -> (&'static str, &'static str, &'static str) {
+    match level.to_lowercase().as_str() {
+        "error" | "assert" => ("❌", "red", "ERROR"),
+        "warn" | "warning" => ("⚠️ ", "yellow", "WARN"),
+        "info" => ("ℹ️ ", "cyan", "INFO"),
+        "debug" => ("🐛", "magenta", "DEBUG"),
+        _ => ("📝", "white", "LOG"),
+    }
+}
+
+fn format_log(level: &str, msg: &str, _src: &str) -> String {
+    let (emoji, color, label) = level_style(level);
     format!(
-        "{}[{}]{} {} {}{:5}{} {}[{}]{}: {}",
-        ansi("timestamp"),
+        "{}[{}]{} {} {}{:<5}{} {}",
+        ansi("gray"),
         now_ts(),
         ansi("reset"),
-        "📝",
-        ansi(&l),
-        l,
-        ansi("reset"),
-        ansi("source"),
-        src,
+        emoji,
+        ansi(color),
+        label,
         ansi("reset"),
         msg
     )
 }
 
 fn print_browser_log(level: &str, msg: &str) {
-    let lvl = match level.to_lowercase().as_str() {
-        "warning" => "warn",
-        "assert" => "error",
-        "debug" => "log",
-        other => other,
-    }
-    .to_uppercase();
-    println!("[browser] [{}] {}", lvl, msg);
+    let (emoji, color, label) = level_style(level);
+    println!(
+        "{}[{}]{} {} {}{:<5}{} {}{}{}",
+        ansi("gray"),
+        now_ts(),
+        ansi("reset"),
+        emoji,
+        ansi(color),
+        label,
+        ansi("reset"),
+        ansi(color),
+        msg,
+        ansi("reset")
+    );
 }
 
 struct ConsoleBuf {
@@ -453,6 +518,7 @@ async fn cdp_connect(app: Arc<App>) -> Result<Value, String> {
     ] {
         let _ = cdp_cmd(app.clone(), m, None).await;
     }
+    log_ok(&format!("cdp connected {}:{}", page_url, cdp_port));
     Ok(json!({"status":"connected","url":page_url,"port":cdp_port}))
 }
 
@@ -813,6 +879,7 @@ async fn paused(app: Arc<App>, p: Value) {
 async fn cdp_disconnect(app: Arc<App>) {
     let mut g = app.cdp.lock().await;
     if let Some(c) = g.as_mut() {
+        let was_connected = c.connected;
         c.connected = false;
         c.paused = None;
         c.prev_frames = None;
@@ -823,6 +890,9 @@ async fn cdp_disconnect(app: Arc<App>) {
             let _ = t.send(());
         }
         c.emit("status", json!({"state":"disconnected"}));
+        if was_connected {
+            log_info("cdp disconnected");
+        }
     }
 }
 
@@ -2179,14 +2249,14 @@ async fn watch(app: Arc<App>, dir: PathBuf) {
                 }
             }
             for p in fire {
-                let msg =
-                    json!({"type":"reload","file":p.to_string_lossy(),"timestamp":now_iso()})
-                        .to_string();
-                {
+                let file = p.to_string_lossy().to_string();
+                let msg = json!({"type":"reload","file":file,"timestamp":now_iso()}).to_string();
+                let clients = {
                     let mut cs = app.lr_clients.lock().await;
                     cs.retain(|tx| tx.send(msg.clone()).is_ok());
-                }
-                println!("Reload triggered for: {}", p.to_string_lossy());
+                    cs.len()
+                };
+                log_ok(&format!("reload {} ({} client{})", file, clients, if clients == 1 { "" } else { "s" }));
             }
         } else {
             initialized = true;
@@ -2237,6 +2307,11 @@ async fn main() {
     } else {
         std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."))
     };
+    println!("🌸 p5d    A friendly daemon for reloading and debugging your sketches");
+    if cfg.verbose {
+        log_info("verbose logging enabled");
+    }
+    log_debug(&format!("serving directory: {}", dir.display()));
     let proot = plugin_root();
     let app = Arc::new(App {
         lr_port: Arc::new(RwLock::new(cfg.lr_port)),
@@ -2254,21 +2329,23 @@ async fn main() {
         if let Some((l, p)) = try_bind(cfg.lr_port).await {
             *app.lr_port.write().await = p;
             app.cfg.write().await.lr_port = p;
-            println!("Live reload WebSocket running on ws://localhost:{}", p);
+            log_ok(&format!("live reload ws://localhost:{}", p));
             let r = Router::new().route("/", get(lr_ws)).with_state(app.clone());
             tokio::spawn(async move {
                 let _ = axum::serve(l, r).await;
             });
         } else {
-            println!("Warning: Could not start live reload server");
+            log_warn("could not start live reload server");
         }
+    } else {
+        log_debug("live reload disabled");
     }
     let Some((l, p)) = try_bind(cfg.port).await else {
-        println!("Error starting server on port {}", cfg.port);
+        log_error(&format!("could not bind server on port {}", cfg.port));
         std::process::exit(1);
     };
     app.cfg.write().await.port = p;
-    println!("Server running at http://localhost:{}/", p);
+    log_ok(&format!("server http://localhost:{}/", p));
     if cfg.lr_enabled {
         let watch_dir = dir.clone();
         let a = app.clone();
@@ -2293,14 +2370,14 @@ async fn main() {
         #[cfg(not(unix))]
         let term = std::future::pending::<()>();
         tokio::select! { _=ctrl=>{}, _=term=>{} }
-        println!("\nShutting down server...");
+        log_info("shutting down...");
     });
     if let Err(e) = srv.await {
-        eprintln!("server error: {}", e);
+        log_error(&format!("server error: {}", e));
     }
-    println!("Closing connections...");
+    log_debug("closing connections");
     cdp_disconnect(app).await;
-    println!("Server stopped");
+    log_ok("server stopped");
 }
 
 #[cfg(test)]
@@ -2328,6 +2405,7 @@ mod tests {
             lr_ext: vec![".js".into(), ".css".into(), ".html".into(), ".json".into()],
             lr_ex: vec![".git".into(), "node_modules".into()],
             cdp_port: 9222,
+            verbose: false,
         }
     }
 
