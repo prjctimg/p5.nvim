@@ -83,12 +83,10 @@ COMMANDS                                            *p5-nvim-commands*
    Open the interactive menu. This is the default when running `:P5`
    without arguments.
 
-:P5 create [name] [--1.x]
-   Create a new sketchspace. If [name] is omitted, prompts for one.
-   Pass --1.x to create a p5.js 1.x project instead of 2.x. >
+:P5 create [name]
+   Create a new sketchspace. If [name] is omitted, prompts for one. >
    :P5 create my-sketch
    :P5 create
-   :P5 create --1.x
 
 :P5 setup
    Set up assets in the current sketchspace. Downloads gist files (if

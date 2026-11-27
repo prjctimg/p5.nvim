@@ -10,6 +10,13 @@ _No unreleased changes._
 
 ---
 
+## v0.8.25
+
+### Fixed
+- **Docs** — update p5 help page version headers to 2.4.0; remove stale `:P5 create --1.x` reference from `doc/p5-nvim.txt`
+
+---
+
 ## v0.8.24
 
 ### Added
